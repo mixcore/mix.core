@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Database.EntityConfigurations.Base;
 using Mix.Database.Services;
-using Mix.Mixdb;
 
 namespace Mix.Mixdb.Entities.EntityConfigurations
 {

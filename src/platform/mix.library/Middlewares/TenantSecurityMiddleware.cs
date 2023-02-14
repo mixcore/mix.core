@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Mix.Lib.Models;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 
 namespace Mix.Lib.Middlewares
@@ -15,7 +15,7 @@ namespace Mix.Lib.Middlewares
 
         public async Task InvokeAsync(
             HttpContext context,
-            MixTenantService mixTenantService,
+            IMixTenantService mixTenantService,
             MixConfigurationService configService,
             MixEndpointService mixEndpointService)
         {

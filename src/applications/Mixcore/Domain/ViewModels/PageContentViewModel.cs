@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Helpers;
 using Mix.RepoDb.Repositories;
-using Mix.Services.Databases.Lib.Services;
+using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Models;
 
 namespace Mixcore.Domain.ViewModels
@@ -53,7 +53,7 @@ namespace Mixcore.Domain.ViewModels
 
         #region Public Method
 
-        public async Task LoadDataAsync(MixRepoDbRepository mixRepoDbRepository, MixMetadataService metadataService, PagingRequestModel pagingModel)
+        public async Task LoadDataAsync(MixRepoDbRepository mixRepoDbRepository, IMixMetadataService metadataService, PagingRequestModel pagingModel)
         {
             await LoadAdditionalDataAsync(mixRepoDbRepository);
             await LoadModulesAsync(mixRepoDbRepository, metadataService);
@@ -84,7 +84,7 @@ namespace Mixcore.Domain.ViewModels
                 AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
             }
         }
-        private async Task LoadModulesAsync(MixRepoDbRepository mixRepoDbRepository, MixMetadataService metadataService)
+        private async Task LoadModulesAsync(MixRepoDbRepository mixRepoDbRepository, IMixMetadataService metadataService)
         {
             var moduleIds = await Context.MixPageModuleAssociation
                     .AsNoTracking()
@@ -100,7 +100,7 @@ namespace Mixcore.Domain.ViewModels
                 await item.LoadData(paging, mixRepoDbRepository, metadataService);
             }
         }
-        private async Task LoadPostsAsync(PagingRequestModel pagingModel, MixRepoDbRepository mixRepoDbRepository, MixMetadataService metadataService)
+        private async Task LoadPostsAsync(PagingRequestModel pagingModel, MixRepoDbRepository mixRepoDbRepository, IMixMetadataService metadataService)
         {
             Posts = await PagePostAssociationViewModel.GetRepository(UowInfo).GetPagingAsync(m => m.ParentId == Id, pagingModel);
             foreach (var item in Posts.Items)

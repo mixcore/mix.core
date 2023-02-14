@@ -5,15 +5,16 @@ using Mix.Identity.Models.AccountViewModels;
 using Mix.Shared.Extensions;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
-using Mix.Quartz.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
 using Mix.Tenancy.Domain.Dtos;
-using Mix.Tenancy.Domain.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Mix.Lib.Interfaces;
+using Mix.Tenancy.Domain.Interfaces;
+using Mix.Quartz.Interfaces;
 
 namespace Mix.Tenancy.Controllers
 {
@@ -22,10 +23,10 @@ namespace Mix.Tenancy.Controllers
     public class InitController : MixTenantApiControllerBase
     {
         private readonly MixEndpointService _mixEndpointService;
-        private readonly MixTenantService _mixTenantService;
-        private readonly InitCmsService _initCmsService;
+        private readonly IMixTenantService _mixTenantService;
+        private readonly IInitCmsService _initCmsService;
         private readonly IQuartzService _quartzService;
-        private readonly MixThemeImportService _importService;
+        private readonly IMixThemeImportService _importService;
         private readonly MixConfigurationService _configService;
         private readonly HttpService _httpService;
         private readonly UnitOfWorkInfo<MixCmsContext> _uow;
@@ -37,14 +38,14 @@ namespace Mix.Tenancy.Controllers
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            InitCmsService initCmsService,
+            IInitCmsService initCmsService,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
-            MixThemeImportService importService,
+            IMixThemeImportService importService,
             IQuartzService quartzService,
             HttpService httpService,
             IHubContext<MixThemeHub> hubContext = null,
-            MixTenantService mixTenantService = null,
+            IMixTenantService mixTenantService = null,
             MixEndpointService mixEndpointService = null,
             MixConfigurationService configService = null,
             UnitOfWorkInfo<MixCmsContext> uow = null)

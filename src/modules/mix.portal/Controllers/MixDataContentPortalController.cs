@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
@@ -8,23 +9,22 @@ namespace Mix.Portal.Controllers
     public class MixDataContentPortalController
         : MixRestfulApiControllerBase<MixDataContentViewModel, MixCmsContext, MixDataContent, Guid>
     {
-        private readonly Repository<MixCmsContext, MixDatabaseColumn, int, MixDatabaseColumnViewModel> _colRepository;
-        private readonly MixDataService _mixDataService;
+        private readonly IMixDataService _mixDataService;
 
         public MixDataContentPortalController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            MixDataService mixDataService,
+            IMixDataService mixDataService,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
             _mixDataService = mixDataService;
             _mixDataService.SetUnitOfWork(Uow);
-            _colRepository = MixDatabaseColumnViewModel.GetRootRepository(cmsUOW.DbContext);
+            MixDatabaseColumnViewModel.GetRootRepository(cmsUow.DbContext);
         }
         protected override async Task<PagingResponseModel<MixDataContentViewModel>> SearchHandler(
             [FromQuery] SearchRequestDto req, CancellationToken cancellationToken = default)
@@ -66,12 +66,12 @@ namespace Mix.Portal.Controllers
         {
             int.TryParse(databaseName, out int id);
             var dbRepo = MixDatabaseViewModel.GetRepository(Uow);
-            var mixdb = await dbRepo.GetSingleAsync(m => m.Id == id || m.SystemName == databaseName, cancellationToken);
+            var mixDb = await dbRepo.GetSingleAsync(m => m.Id == id || m.SystemName == databaseName, cancellationToken);
             var mixData = new MixDataContentViewModel(Lang, Culture.Id, databaseName, new JObject())
             {
-                Columns = mixdb.Columns,
-                MixDatabaseId = mixdb.Id,
-                MixDatabaseName = mixdb.SystemName
+                Columns = mixDb.Columns,
+                MixDatabaseId = mixDb.Id,
+                MixDatabaseName = mixDb.SystemName
             };
             return Ok(mixData);
         }

@@ -1,20 +1,14 @@
-﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using FirebaseAdmin.Auth;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Azure.Amqp.Framing;
-using Microsoft.Extensions.Azure;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
-using Mix.Heart.Repository;
+using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
-using Mix.RepoDb.Services;
+using Mix.Service.Interfaces;
 using Mix.Shared.Models;
-using Org.BouncyCastle.Ocsp;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
-using System.Reflection;
 
 namespace Mix.Portal.Controllers
 {
@@ -23,47 +17,45 @@ namespace Mix.Portal.Controllers
     [ApiController]
     public class MixDbController : MixTenantApiControllerBase
     {
-        private const string createdByFieldName = "CreatedBy";
-        private const string createdDateFieldName = "CreatedDateTime";
-        private const string priorityFieldName = "Priority";
-        private const string idFieldName = "Id";
-        private const string parentIdFieldName = "ParentId";
-        private const string childIdFieldName = "ChildId";
-        private const string tenantIdFieldName = "MixTenantId";
-        private const string statusFieldName = "Status";
-        private const string isDeletedFieldName = "IsDeleted";
-        private UnitOfWorkInfo<MixCmsContext> _cmsUOW;
+        private const string CreatedByFieldName = "CreatedBy";
+        private const string CreatedDateFieldName = "CreatedDateTime";
+        private const string PriorityFieldName = "Priority";
+        private const string IdFieldName = "Id";
+        private const string ParentIdFieldName = "ParentId";
+        private const string ChildIdFieldName = "ChildId";
+        private const string TenantIdFieldName = "MixTenantId";
+        private const string StatusFieldName = "Status";
+        private const string IsDeletedFieldName = "IsDeleted";
+        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private readonly MixRepoDbRepository _repository;
-        private readonly MixMemoryCacheService _memoryCache;
+        private readonly IMixMemoryCacheService _memoryCache;
         private readonly MixRepoDbRepository _associationRepository;
-        private readonly MixCmsContext _context;
         private string _tableName;
         private MixDatabaseViewModel _database;
         private readonly MixIdentityService _idService;
-        private readonly MixDbService _mixDbService;
-        private static string _associationTableName = nameof(MixDatabaseAssociation);
+        private readonly IMixDbService _mixDbService;
+        private const string AssociationTableName = nameof(MixDatabaseAssociation);
+
         public MixDbController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixCmsContext context,
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
             MixRepoDbRepository repository,
-            MixMemoryCacheService memoryCache,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            IMixMemoryCacheService memoryCache,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             ICache cache,
             DatabaseService databaseService,
             MixIdentityService idService,
-            MixDbService mixDbService)
+            IMixDbService mixDbService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
-            _context = context;
             _repository = repository;
-            _associationRepository = new(cache, databaseService, cmsUOW);
-            _associationRepository.InitTableName(_associationTableName);
-            _cmsUOW = cmsUOW;
+            _associationRepository = new(cache, databaseService, cmsUow);
+            _associationRepository.InitTableName(AssociationTableName);
+            _cmsUow = cmsUow;
             _memoryCache = memoryCache;
             _idService = idService;
             _mixDbService = mixDbService;
@@ -116,7 +108,7 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult<FileModel>> Export([FromBody] SearchMixDbRequestDto req)
         {
             var result = await SearchHandler(req);
-            string filename = $"{_tableName}_{DateTime.UtcNow.ToString("dd-MM-yyyy-hh-mm-ss")}";
+            string filename = $"{_tableName}_{DateTime.UtcNow:dd-MM-yyyy-hh-mm-ss}";
             string exportPath = $"{MixFolders.ExportFolder}/mix-db/{_tableName}/";
             var file = MixCmsHelper.ExportJObjectToExcel(result.Items.ToList(), _tableName, exportPath, filename, null);
             return Ok(file);
@@ -143,15 +135,18 @@ namespace Mix.Portal.Controllers
                     if (loadNestedData)
                     {
 
-                        List<QueryField> queries = GetAssociatoinQueries(item.SourceDatabaseName, item.DestinateDatabaseName, data.id);
+                        List<QueryField> queries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, data.id);
                         var associations = await _associationRepository.GetListByAsync(queries);
-                        if (associations.Count > 0)
+                        if (associations is { Count: > 0 })
                         {
-                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(childIdFieldName)).ToList();
+                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
                             _repository.InitTableName(item.DestinateDatabaseName);
-                            List<QueryField> query = new() { new(idFieldName, Operation.In, nestedIds) };
+                            List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
                             var nestedData = await _repository.GetListByAsync(query);
-                            data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
+                            if (nestedData != null)
+                            {
+                                data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
+                            }
                         }
                     }
                     else
@@ -174,27 +169,27 @@ namespace Mix.Portal.Controllers
             {
                 obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
             }
-            if (!obj.ContainsKey(createdDateFieldName))
+            if (!obj.ContainsKey(CreatedDateFieldName))
             {
-                obj.Add(new JProperty(createdDateFieldName, DateTime.UtcNow));
+                obj.Add(new JProperty(CreatedDateFieldName, DateTime.UtcNow));
             }
-            if (!obj.ContainsKey(priorityFieldName))
+            if (!obj.ContainsKey(PriorityFieldName))
             {
-                obj.Add(new JProperty(priorityFieldName, 0));
+                obj.Add(new JProperty(PriorityFieldName, 0));
             }
-            if (!obj.ContainsKey(tenantIdFieldName))
+            if (!obj.ContainsKey(TenantIdFieldName))
             {
-                obj.Add(new JProperty(tenantIdFieldName, CurrentTenant.Id));
-            }
-
-            if (!obj.ContainsKey(statusFieldName))
-            {
-                obj.Add(new JProperty(statusFieldName, MixContentStatus.Published.ToString()));
+                obj.Add(new JProperty(TenantIdFieldName, CurrentTenant.Id));
             }
 
-            if (!obj.ContainsKey(isDeletedFieldName))
+            if (!obj.ContainsKey(StatusFieldName))
             {
-                obj.Add(new JProperty(isDeletedFieldName, false));
+                obj.Add(new JProperty(StatusFieldName, MixContentStatus.Published.ToString()));
+            }
+
+            if (!obj.ContainsKey(IsDeletedFieldName))
+            {
+                obj.Add(new JProperty(IsDeletedFieldName, false));
             }
             var data = await _repository.InsertAsync(obj);
 
@@ -215,9 +210,9 @@ namespace Mix.Portal.Controllers
             {
                 obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
             }
-            if (!obj.ContainsKey(tenantIdFieldName))
+            if (!obj.ContainsKey(TenantIdFieldName))
             {
-                obj.Add(new JProperty(tenantIdFieldName, CurrentTenant.Id));
+                obj.Add(new JProperty(TenantIdFieldName, CurrentTenant.Id));
             }
             var data = await _repository.UpdateAsync(obj);
             if (data != null)
@@ -255,9 +250,9 @@ namespace Mix.Portal.Controllers
             //Expression<Func<MixDatabaseAssociation, bool>> associationPredicate = m => m.ParentDatabaseName == _tableName && m.ParentId == id;
             //associationPredicate = associationPredicate.Or(m => m.ChildDatabaseName == _tableName && m.ChildId == id);
             //await _associationRepository.DeleteManyAsync(associationPredicate);
-            var childAssociationsQueries = GetAssociatoinQueries(parentDatabaseName: _tableName, parentId: id);
-            var parentAssociationsQueries = GetAssociatoinQueries(childDatabaseName: _tableName, childId: id);
-            _repository.InitTableName(_associationTableName);
+            var childAssociationsQueries = GetAssociationQueries(parentDatabaseName: _tableName, parentId: id);
+            var parentAssociationsQueries = GetAssociationQueries(childDatabaseName: _tableName, childId: id);
+            _repository.InitTableName(AssociationTableName);
             await _repository.DeleteAsync(childAssociationsQueries);
             await _repository.DeleteAsync(parentAssociationsQueries);
             return data > 0 ? Ok() : NotFound();
@@ -297,13 +292,13 @@ namespace Mix.Portal.Controllers
                     {
                         var id = data.Value<int>("id");
 
-                        List<QueryField> nestedQueries = GetAssociatoinQueries(rel.SourceDatabaseName, rel.DestinateDatabaseName, id);
+                        List<QueryField> nestedQueries = GetAssociationQueries(rel.SourceDatabaseName, rel.DestinateDatabaseName, id);
                         var associations = await _associationRepository.GetListByAsync(nestedQueries);
-                        if (associations.Count > 0)
+                        if (associations is { Count: > 0 })
                         {
-                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(childIdFieldName)).ToList();
+                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
                             _repository.InitTableName(rel.DestinateDatabaseName);
-                            List<QueryField> query = new() { new(idFieldName, Operation.In, nestedIds) };
+                            List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
                             var nestedData = await _repository.GetListByAsync(query);
                             data.Add(new JProperty(rel.DisplayName, ReflectionHelper.ParseArray(nestedData)));
                         }
@@ -319,11 +314,11 @@ namespace Mix.Portal.Controllers
             var queries = BuildSearchPredicate(request).ToList();
             if (request.ParentId.HasValue)
             {
-                _database = await MixDatabaseViewModel.GetRepository(_cmsUOW).GetSingleAsync(m => m.SystemName == _tableName);
-                
+                _database = await MixDatabaseViewModel.GetRepository(_cmsUow).GetSingleAsync(m => m.SystemName == _tableName);
+
                 if (_database.Type == MixDatabaseType.AdditionalData || _database.Type == MixDatabaseType.GuidAdditionalData)
                 {
-                    queries.Add(new(parentIdFieldName, request.ParentId));
+                    queries.Add(new(ParentIdFieldName, request.ParentId));
                 }
                 else
                 {
@@ -333,10 +328,10 @@ namespace Mix.Portal.Controllers
                     }
                     else
                     {
-                        var allowsIds = _cmsUOW.DbContext.MixDatabaseAssociation
+                        var allowsIds = _cmsUow.DbContext.MixDatabaseAssociation
                                 .Where(m => m.ParentDatabaseName == request.ParentName && m.ParentId == request.ParentId.Value && m.ChildDatabaseName == _tableName)
                                 .Select(m => m.ChildId).ToList();
-                        queries.Add(new(idFieldName, Operation.In, allowsIds));
+                        queries.Add(new(IdFieldName, Operation.In, allowsIds));
                     }
                 }
             }
@@ -387,7 +382,7 @@ namespace Mix.Portal.Controllers
         {
             var queries = new List<QueryField>()
             {
-                new QueryField(tenantIdFieldName, CurrentTenant.Id)
+                new QueryField(TenantIdFieldName, CurrentTenant.Id)
             };
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword))
             {
@@ -434,7 +429,7 @@ namespace Mix.Portal.Controllers
 
         #region Private
 
-        private List<QueryField> GetAssociatoinQueries(string parentDatabaseName = null, string childDatabaseName = null, int? parentId = null, int? childId = null)
+        private List<QueryField> GetAssociationQueries(string parentDatabaseName = null, string childDatabaseName = null, int? parentId = null, int? childId = null)
         {
             var queries = new List<QueryField>();
             if (!string.IsNullOrEmpty(parentDatabaseName))
@@ -447,11 +442,11 @@ namespace Mix.Portal.Controllers
             }
             if (parentId.HasValue)
             {
-                queries.Add(new QueryField(parentIdFieldName, parentId));
+                queries.Add(new QueryField(ParentIdFieldName, parentId));
             }
             if (childId.HasValue)
             {
-                queries.Add(new QueryField(childIdFieldName, parentId));
+                queries.Add(new QueryField(ChildIdFieldName, parentId));
             }
             return queries;
         }
@@ -464,11 +459,10 @@ namespace Mix.Portal.Controllers
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return MixDatabaseViewModel.GetRepository(_cmsUOW).GetSingleAsync(m => m.SystemName == _tableName);
+                    return MixDatabaseViewModel.GetRepository(_cmsUow).GetSingleAsync(m => m.SystemName == _tableName);
                 }
                 );
         }
-
 
         #endregion
     }

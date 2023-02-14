@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Models.AccountViewModels;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
 using System.Security.Claims;
@@ -17,17 +18,16 @@ namespace Mixcore.Controllers
         private readonly ILogger<ExternalLoginModel> _logger;
         private readonly MixIdentityService _idService;
         private readonly MixEndpointService _mixEndpointService;
-        private readonly MixCmsContext _cmsContext;
+
         public SecurityController(
             IHttpContextAccessor httpContextAccessor,
             MixService mixService,
-            MixCmsService mixCmsService,
+            IMixCmsService mixCmsService,
             IPSecurityConfigService ipSecurityConfigService,
             SignInManager<MixUser> signInManager,
             ILogger<ExternalLoginModel> logger,
             MixIdentityService idService,
             TenantUserManager userManager,
-            MixCmsContext cmsContext,
             MixEndpointService mixEndpointService)
             : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
@@ -35,7 +35,6 @@ namespace Mixcore.Controllers
             _logger = logger;
             _idService = idService;
             _userManager = userManager;
-            _cmsContext = cmsContext;
             _mixEndpointService = mixEndpointService;
         }
 

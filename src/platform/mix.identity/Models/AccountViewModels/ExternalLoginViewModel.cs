@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Mix.Identity.Constants;
-using Newtonsoft.Json.Linq;
 
 namespace Mix.Identity.Models.AccountViewModels
 {

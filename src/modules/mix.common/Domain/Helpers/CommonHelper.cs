@@ -1,5 +1,4 @@
 ﻿using Mix.Common.Models;
-using Mix.Lib.Models;
 using Mix.Service.Models;
 using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
@@ -8,7 +7,7 @@ namespace Mix.Common.Domain.Helpers
 {
     public class CommonHelper
     {
-        internal static GlobalSettings GetAppSettings(MixAuthenticationConfigurations _authConfigurations, MixTenantSystemModel currentTenant)
+        internal static GlobalSettings GetAppSettings(MixAuthenticationConfigurations authConfigurations, MixTenantSystemModel currentTenant)
         {
             //var cultures = _cultureService.Cultures;
             //var culture = _cultureService.LoadCulture(lang);
@@ -30,10 +29,10 @@ namespace Mix.Common.Domain.Helpers
                 RSAKeys = RSAEncryptionHelper.GenerateKeys(),
                 ExternalLoginProviders = new JObject()
                 {
-                    new JProperty("Facebook", _authConfigurations.Facebook?.AppId),
-                    new JProperty("Google", _authConfigurations.Google?.AppId),
-                    new JProperty("Twitter", _authConfigurations.Twitter?.AppId),
-                    new JProperty("Microsoft", _authConfigurations.Microsoft?.AppId),
+                    new JProperty("Facebook", authConfigurations.Facebook?.AppId),
+                    new JProperty("Google", authConfigurations.Google?.AppId),
+                    new JProperty("Twitter", authConfigurations.Twitter?.AppId),
+                    new JProperty("Microsoft", authConfigurations.Microsoft?.AppId),
                 }
             };
         }

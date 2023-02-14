@@ -24,6 +24,7 @@ using Newtonsoft.Json.Linq;
 using System.Web;
 using Mix.Identity.Models.ManageViewModels;
 using Mix.Mixdb.Entities;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Account.Controllers
 {
@@ -33,60 +34,55 @@ namespace Mix.Account.Controllers
         private readonly TenantUserManager _userManager;
         private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<MixRole> _roleManager;
-        private readonly ILogger<MixUserController> _logger;
         private readonly MixIdentityService _idService;
         private readonly EmailService _emailService;
-        private readonly MixEdmService _edmService;
+        private readonly IMixEdmService _edmService;
         private readonly EntityRepository<MixCmsAccountContext, MixUser, Guid> _repository;
-        protected readonly MixIdentityService _mixIdentityService;
         private readonly MixRepoDbRepository _repoDbRepository;
-        protected UnitOfWorkInfo _accUOW;
-        protected UnitOfWorkInfo<MixDbDbContext> _dbUOW;
-        protected UnitOfWorkInfo<MixCmsContext> _cmsUOW;
+        protected readonly MixIdentityService _mixIdentityService;
+        protected UnitOfWorkInfo AccountUow;
+        protected UnitOfWorkInfo<MixDbDbContext> MixDbUow;
+        protected UnitOfWorkInfo<MixCmsContext> CmsUow;
         private readonly MixCmsAccountContext _accContext;
-        private readonly MixCmsContext _cmsContext;
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
         private readonly AuthConfigService _authConfigService;
 
         public MixUserController(
              TenantUserManager userManager,
-            SignInManager<MixUser> signInManager,
-            RoleManager<MixRole> roleManager,
-            ILogger<MixUserController> logger,
-            MixIdentityService idService,
-            EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
-            MixCmsAccountContext accContext,
-            MixCmsContext cmsContext,
-            MixRepoDbRepository repoDbRepository,
-            EmailService emailService,
-            IHttpContextAccessor httpContextAccessor,
-            IConfiguration configuration,
-            MixService mixService,
-            TranslatorService translator,
-            MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService,
-            UnitOfWorkInfo<MixDbDbContext> dbUOW,
-            AuthConfigService authConfigService,
-            MixEdmService edmService)
+             SignInManager<MixUser> signInManager,
+             RoleManager<MixRole> roleManager,
+             MixIdentityService idService,
+             EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
+             MixCmsAccountContext accContext,
+             MixCmsContext cmsContext,
+             MixRepoDbRepository repoDbRepository,
+             EmailService emailService,
+             IHttpContextAccessor httpContextAccessor,
+             IConfiguration configuration,
+             MixService mixService,
+             TranslatorService translator,
+             MixIdentityService mixIdentityService,
+             IQueueService<MessageQueueModel> queueService,
+             UnitOfWorkInfo<MixDbDbContext> mixDbUow, 
+             AuthConfigService authConfigService, 
+             IMixEdmService edmService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
-            _logger = logger;
             _idService = idService;
             _refreshTokenRepo = refreshTokenRepo;
             _mixIdentityService = mixIdentityService;
-            _accUOW = new(accContext);
-            _cmsUOW = new(cmsContext);
-            _repository = new(_accUOW);
-            _cmsContext = cmsContext;
+            AccountUow = new(accContext);
+            CmsUow = new(cmsContext);
+            _repository = new(AccountUow);
             _accContext = accContext;
 
 
             _repoDbRepository = repoDbRepository;
             _emailService = emailService;
-            _dbUOW = dbUOW;
+            MixDbUow = mixDbUow;
             _authConfigService = authConfigService;
             _edmService = edmService;
         }
@@ -95,14 +91,14 @@ namespace Mix.Account.Controllers
 
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            if (_accUOW.ActiveTransaction != null)
+            if (AccountUow.ActiveTransaction != null)
             {
-                _accUOW.Complete();
+                AccountUow.Complete();
             }
 
-            if (_cmsUOW.ActiveTransaction != null)
+            if (CmsUow.ActiveTransaction != null)
             {
-                _cmsUOW.Complete();
+                CmsUow.Complete();
             }
 
             base.OnActionExecuted(context);
@@ -117,7 +113,7 @@ namespace Mix.Account.Controllers
         {
             var userId = Guid.Parse(_idService.GetClaim(User, MixClaims.Id));
             var tenantIds = await _accContext.MixUserTenants.Where(m => m.MixUserId == userId).Select(m => m.TenantId).ToListAsync();
-            var tenants = await MixTenantSystemViewModel.GetRepository(_cmsUOW).GetListAsync(m => tenantIds.Contains(m.Id));
+            var tenants = await MixTenantSystemViewModel.GetRepository(CmsUow).GetListAsync(m => tenantIds.Contains(m.Id));
             return Ok(tenants);
         }
 
@@ -126,10 +122,10 @@ namespace Mix.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Register([FromBody] RegisterViewModel model)
         {
-            await _idService.RegisterAsync(model, CurrentTenant.Id, _cmsUOW);
+            await _idService.RegisterAsync(model, CurrentTenant.Id, CmsUow);
             var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
             var result = _idService.GetAuthData(user, true, CurrentTenant.Id);
-            if (result != null)
+            if (result != null && user != null)
             {
                 if (_authConfigService.AppSettings.RequireConfirmedEmail)
                 {
@@ -230,7 +226,7 @@ namespace Mix.Account.Controllers
         [Route("login-unsecure")]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> LoginUnsecure(LoginViewModel model)
+        public async Task<ActionResult> LoginUnSecure(LoginViewModel model)
         {
             var loginResult = await _idService.LoginAsync(model);
             return Ok(loginResult);
@@ -238,7 +234,7 @@ namespace Mix.Account.Controllers
 
         [AllowAnonymous]
         [HttpPost("external-login-unsecure")]
-        public async Task<ActionResult> ExternalLoginUnsecure(RegisterExternalBindingModel model)
+        public async Task<ActionResult> ExternalLoginUnSecure(RegisterExternalBindingModel model)
         {
             var loginResult = await _idService.ExternalLogin(model);
             return Ok(loginResult);
@@ -270,7 +266,7 @@ namespace Mix.Account.Controllers
 
             if (user != null)
             {
-                var result = new MixUserViewModel(user, _cmsUOW);
+                var result = new MixUserViewModel(user, CmsUow);
                 await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext);
                 return Ok(result);
             }
@@ -286,7 +282,7 @@ namespace Mix.Account.Controllers
 
             if (user != null)
             {
-                var result = new MixUserViewModel(user, _cmsUOW);
+                var result = new MixUserViewModel(user, CmsUow);
                 await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext);
                 return Ok(result);
             }
@@ -310,8 +306,8 @@ namespace Mix.Account.Controllers
                         Console.WriteLine(result.Errors);
                     }
                 }
-                var idRresult = await _userManager.DeleteAsync(user);
-                if (idRresult.Succeeded)
+                var idResult = await _userManager.DeleteAsync(user);
+                if (idResult.Succeeded)
                 {
                     _repoDbRepository.InitTableName(MixDatabaseNames.SYSTEM_USER_DATA);
                     await _repoDbRepository.DeleteAsync(new List<QueryField>()
@@ -447,16 +443,16 @@ namespace Mix.Account.Controllers
             //if (!await _userManager.IsEmailConfirmedAsync(user))
             //    result.Data = "Invalid Email";
 
-            var confrimationCode =
+            var confirmationCode =
                     await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            var callbackurl = $"{Request.Scheme}://{Request.Host}/security/reset-password/?token={System.Web.HttpUtility.UrlEncode(confrimationCode)}";
-            var edmTemplate = await MixTemplateViewModel.GetRepository(_cmsUOW).GetSingleAsync(
+            var callbackUrl = $"{Request.Scheme}://{Request.Host}/security/reset-password/?token={System.Web.HttpUtility.UrlEncode(confirmationCode)}";
+            var edmTemplate = await MixTemplateViewModel.GetRepository(CmsUow).GetSingleAsync(
                 m => m.FolderType == MixTemplateFolderType.Edms && m.FileName == "ForgotPassword");
-            string content = callbackurl;
+            string content = callbackUrl;
             if (edmTemplate != null)
             {
-                content = edmTemplate.Content.Replace("[URL]", callbackurl);
+                content = edmTemplate.Content.Replace("[URL]", callbackUrl);
             }
             EmailMessageModel msg = new()
             {
@@ -464,7 +460,8 @@ namespace Mix.Account.Controllers
                 Message = content,
                 To = user.Email
             };
-            _emailService.SendMail(msg);
+
+            await _emailService.SendMail(msg);
 
             return Ok();
         }
@@ -478,12 +475,12 @@ namespace Mix.Account.Controllers
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Invalid User");
             }
-            string code = System.Web.HttpUtility.UrlDecode(model.Code).Replace(' ', '+');
-            var idRresult = await _userManager.ResetPasswordAsync(
+            string code = HttpUtility.UrlDecode(model.Code)?.Replace(' ', '+');
+            var idResult = await _userManager.ResetPasswordAsync(
                                         user, model.Code, model.Password);
-            if (!idRresult.Succeeded)
+            if (!idResult.Succeeded)
             {
-                var errors = idRresult.Errors.Select(m => m.Description);
+                var errors = idResult.Errors.Select(m => m.Description);
                 throw new MixException(MixErrorStatus.Badrequest, errors);
             }
 
@@ -500,8 +497,6 @@ namespace Mix.Account.Controllers
             return result.Succeeded ? Ok() : BadRequest(result.Errors.Select(m => m.Description).ToList());
         }
         #region Helpers
-
-
 
         #endregion
     }

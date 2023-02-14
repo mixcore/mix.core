@@ -3,8 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mix.Database.Entities.Account;
-using Mix.Lib.Helpers;
 using Mix.Shared.Helpers;
+using Mix.Tenancy.Domain.Interfaces;
 using Mix.Tenancy.Domain.Services;
 using System.Reflection;
 
@@ -42,7 +42,7 @@ namespace Mix.XUnittest
             {
 
                 services.AddMixDbContexts();
-                services.AddScoped<InitCmsService>();
+                services.AddScoped<IInitCmsService, InitCmsService>();
                 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                 services.AddMixTestServices(Assembly.GetExecutingAssembly(), Configuration);
                 services.AddMixAuthorize<MixCmsAccountContext>();

@@ -4,8 +4,8 @@ using Mix.Heart.Helpers;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
+using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Services.Databases.Lib.Models;
-using Mix.Services.Databases.Lib.Services;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Newtonsoft.Json.Linq;
 
@@ -54,7 +54,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         public async Task LoadAdditionalDataAsync(
             UnitOfWorkInfo<EcommerceDbContext> ecommerceUow,
-            MixMetadataService metadataService,
+            IMixMetadataService metadataService,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();

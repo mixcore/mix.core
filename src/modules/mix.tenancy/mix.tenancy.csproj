@@ -53,8 +53,6 @@
 
 	<ItemGroup>
 		<Compile Include="Domain\Services\ImportSiteService.cs" />
-		<Compile Include="Domain\Services\InitCmsService.Account.cs" />
-		<Compile Include="Domain\Services\InitCmsService.Site.cs" />
 		<Compile Include="Domain\Services\InitCmsService.cs" />
 		<Compile Include="Domain\ViewModels\Init\InitDomainViewModel.cs" />
 		<Compile Include="Domain\ViewModels\Init\InitCultureViewModel.cs" />

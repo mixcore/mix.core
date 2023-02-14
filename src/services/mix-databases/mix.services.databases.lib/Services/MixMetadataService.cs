@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
 using Mix.Identity.Constants;
-using Mix.Lib.Base;
 using Mix.Lib.Services;
 using Mix.Services.Databases.Lib.Dtos;
 using System.Linq.Expressions;
@@ -14,13 +12,14 @@ using Mix.Services.Databases.Lib.Models;
 using Mix.Heart.Extensions;
 using Mix.Mixdb.ViewModels;
 using Mix.Constant.Enums;
+using Mix.Service.Services;
+using Mix.Services.Databases.Lib.Interfaces;
 
 namespace Mix.Services.Databases.Lib.Services
 {
-    public sealed class MixMetadataService : TenantServiceBase
+    public sealed class MixMetadataService : TenantServiceBase, IMixMetadataService
     {
         private readonly MixIdentityService _identityService;
-        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private readonly UnitOfWorkInfo<MixDbDbContext> _uow;
 
         public MixMetadataService(
@@ -32,7 +31,6 @@ namespace Mix.Services.Databases.Lib.Services
         {
             _uow = uow;
             _identityService = identityService;
-            _cmsUow = cmsUow;
         }
 
 
@@ -129,7 +127,7 @@ namespace Mix.Services.Databases.Lib.Services
 
         public async Task DeleteMetadataContentAssociation(int id, CancellationToken cancellationToken = default)
         {
-            var association = await MixMetadataContentAsscociationViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == id);
+            var association = await MixMetadataContentAsscociationViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == id, cancellationToken);
             if (association != null)
             {
                 await association.DeleteAsync(cancellationToken);

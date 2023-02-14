@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
-using Mix.Lib.Models;
-using Mix.Lib.Services;
 using System.Globalization;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Lib.Base
 {
@@ -18,7 +17,7 @@ namespace Mix.Lib.Base
         protected bool IsValid = true;
         protected string RedirectUrl;
         protected readonly IPSecurityConfigService IpSecurityConfigService;
-        protected readonly MixCmsService MixCmsService;
+        protected readonly IMixCmsService MixCmsService;
         protected readonly MixService MixService;
         protected MixTenantSystemModel CurrentTenant => Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
         protected bool ForbiddenPortal
@@ -38,10 +37,10 @@ namespace Mix.Lib.Base
         protected IConfiguration Configuration;
 
         protected MixControllerBase(
-             IHttpContextAccessor httpContextAccessor,
-            MixService mixService,
-            MixCmsService mixCmsService,
-            IPSecurityConfigService ipSecurityConfigService)
+             IHttpContextAccessor httpContextAccessor, 
+             MixService mixService, 
+             IMixCmsService mixCmsService, 
+             IPSecurityConfigService ipSecurityConfigService)
         {
             MixService = mixService;
             Session = httpContextAccessor.HttpContext?.Session;

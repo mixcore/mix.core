@@ -4,7 +4,6 @@ using Mix.Shared.Commands;
 using Mix.Shared.Models;
 using System;
 using System.Threading.Tasks;
-using Mix.Quartz.Models;
 
 namespace Mix.Quartz.Jobs
 {

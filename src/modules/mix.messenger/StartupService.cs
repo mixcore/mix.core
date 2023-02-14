@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Shared.Interfaces;
 
-namespace Mix.Messenger.Domain
+namespace Mix.Messenger
 {
     public class StartupService : IStartupService
     {

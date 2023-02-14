@@ -13,9 +13,9 @@ namespace Mix.Portal.Controllers
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
 
         }
@@ -59,10 +59,8 @@ namespace Mix.Portal.Controllers
                 await moduleData.ExpandView(cancellationToken);
                 return Ok(moduleData);
             }
-            else
-            {
-                return BadRequest();
-            }
+
+            return BadRequest();
         }
     }
 }

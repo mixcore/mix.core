@@ -1,10 +1,4 @@
-﻿using Mix.Constant.Enums;
-using Mix.Heart.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Mix.Heart.Entities;
 
 namespace Mix.Services.Ecommerce.Lib.Entities
 {

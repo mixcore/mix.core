@@ -1,9 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Mix.Communicator.Models;
-using Mix.Heart.Extensions;
-using Mix.Heart.UnitOfWork;
 using Mix.Service.Services;
-using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Mail;
 

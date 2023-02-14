@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
 using Mix.Heart.Extensions;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.RepoDb.Repositories;
-using Mix.Services.Databases.Lib.Services;
+using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Services;
 using Mixcore.Domain.Bases;
 using System.Linq.Expressions;
@@ -12,23 +13,21 @@ namespace Mixcore.Controllers
 {
     public class HomeController : MvcBaseController
     {
-        private readonly MixMetadataService _metadataService;
+        private readonly IMixMetadataService _metadataService;
         private readonly MixRepoDbRepository _repoDbRepository;
-        private readonly ILogger<HomeController> _logger;
+
         public HomeController(
             IHttpContextAccessor httpContextAccessor,
-            ILogger<HomeController> logger,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
-            MixCmsService mixCmsService,
+            IMixCmsService mixCmsService,
             TranslatorService translator,
             DatabaseService databaseService,
             UnitOfWorkInfo<MixCmsContext> uow,
             MixRepoDbRepository repoDbRepository,
-            MixMetadataService metadataService)
+            IMixMetadataService metadataService)
             : base(httpContextAccessor, ipSecurityConfigService, mixService, mixCmsService, translator, databaseService, uow)
         {
-            _logger = logger;
             _repoDbRepository = repoDbRepository;
             _metadataService = metadataService;
         }
@@ -41,7 +40,7 @@ namespace Mixcore.Controllers
             if (GlobalConfigService.Instance.AppSettings.IsInit)
             {
                 IsValid = false;
-                if (string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
+                if (string.IsNullOrEmpty(DatabaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
                     RedirectUrl = "Init";
                 }
@@ -72,7 +71,7 @@ namespace Mixcore.Controllers
 
         private async Task<PageContentViewModel> LoadPage(string seoName = null)
         {
-            var pageRepo = PageContentViewModel.GetRepository(_uow);
+            var pageRepo = PageContentViewModel.GetRepository(Uow);
             Expression<Func<MixPageContent, bool>> predicate = p => p.MixTenantId == CurrentTenant.Id
                     && p.Specificulture == Culture;
             predicate = predicate.AndAlsoIf(string.IsNullOrEmpty(seoName), m => m.Type == MixPageType.Home);
@@ -102,13 +101,13 @@ namespace Mixcore.Controllers
         }
         private async Task<IActionResult> LoadAlias(string seoName)
         {
-            var alias = await MixUrlAliasViewModel.GetRepository(_uow).GetSingleAsync(m => m.MixTenantId == CurrentTenant.Id && m.Alias == seoName);
+            var alias = await MixUrlAliasViewModel.GetRepository(Uow).GetSingleAsync(m => m.MixTenantId == CurrentTenant.Id && m.Alias == seoName);
             if (alias != null)
             {
                 switch (alias.Type)
                 {
                     case MixUrlAliasType.Page:
-                        var page = await PageContentViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == alias.SourceContentId);
+                        var page = await PageContentViewModel.GetRepository(Uow).GetSingleAsync(m => m.Id == alias.SourceContentId);
                         if (page != null)
                         {
                             await page.LoadDataAsync(_repoDbRepository, _metadataService, new(Request)
@@ -130,7 +129,7 @@ namespace Mixcore.Controllers
                         }
                         break;
                     case MixUrlAliasType.Post:
-                        var post = await PostContentViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == alias.SourceContentId);
+                        var post = await PostContentViewModel.GetRepository(Uow).GetSingleAsync(m => m.Id == alias.SourceContentId);
                         if (post != null)
                             return View("Post", post);
                         break;
@@ -139,7 +138,7 @@ namespace Mixcore.Controllers
                     case MixUrlAliasType.ModuleData:
                         break;
                     case MixUrlAliasType.MixApplication:
-                        var app = await ApplicationViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == alias.SourceContentId);
+                        var app = await ApplicationViewModel.GetRepository(Uow).GetSingleAsync(m => m.Id == alias.SourceContentId);
                         if (app != null)
                             return View("App", app);
                         break;

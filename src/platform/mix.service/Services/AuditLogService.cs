@@ -5,6 +5,7 @@ using Mix.Constant.Constants;
 using Mix.Database.Entities.AuditLog;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
+using Mix.Service.Interfaces;
 using Mix.Shared.Commands;
 using Mix.Shared.Models;
 using Newtonsoft.Json.Linq;
@@ -12,7 +13,7 @@ using System.Text;
 
 namespace Mix.Service.Services
 {
-    public class AuditLogService
+    public class AuditLogService : IAuditLogService
     {
         private readonly IServiceProvider _servicesProvider;
         protected readonly IQueueService<MessageQueueModel> QueueService;
@@ -56,7 +57,7 @@ namespace Mix.Service.Services
                         dbContext.SaveChanges();
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {

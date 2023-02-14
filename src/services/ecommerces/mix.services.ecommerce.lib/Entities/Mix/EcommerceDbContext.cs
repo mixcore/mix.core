@@ -4,8 +4,6 @@ using Mix.Database.Base;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
-using Mix.Services.Ecommerce.Lib.Entities.Mix;
-using RepoDb.Enumerations;
 
 namespace Mix.Services.Ecommerce.Lib.Entities.Mix
 {

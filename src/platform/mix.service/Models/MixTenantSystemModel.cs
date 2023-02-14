@@ -1,9 +1,4 @@
 ﻿using Mix.Database.Entities.Cms;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Service.Models
 {

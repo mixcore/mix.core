@@ -1,7 +1,6 @@
 ﻿using Mix.Constant.Enums;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
-using Mix.Mixdb.Entities;
 
 namespace Mix.Mixdb.ViewModels
 {

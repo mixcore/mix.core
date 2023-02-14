@@ -16,11 +16,11 @@ namespace Mix.Portal.Controllers
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService)
             : base(MixContentType.Page, identityService, userManager, httpContextAccessor, 
                   configuration, mixService, 
-                  translator, mixIdentityService, cmsUOW, queueService)
+                  translator, mixIdentityService, cmsUow, queueService)
         {
 
         }

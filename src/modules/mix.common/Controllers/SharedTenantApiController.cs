@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Mix.Common.Domain.Helpers;
 using Mix.Common.Domain.ViewModels;
 using Mix.Common.Models;
@@ -16,32 +15,27 @@ namespace Mix.Common.Controllers
     [ApiController]
     public class SharedTenantApiController : MixTenantApiControllerBase
     {
-        private readonly ApplicationLifetime _applicationLifetime;
-        protected UnitOfWorkInfo _uow;
-        protected readonly MixCmsContext _context;
+        protected UnitOfWorkInfo Uow;
+        protected readonly MixCmsContext Context;
         private readonly ViewQueryRepository<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel> _configRepo;
         private readonly ViewQueryRepository<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel> _langRepo;
-        private readonly AuthConfigService _authConfigService;
         private readonly MixAuthenticationConfigurations _authConfigurations;
-        private readonly IActionDescriptorCollectionProvider _routeProvider;
         public SharedTenantApiController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            IActionDescriptorCollectionProvider routeProvider,
-            MixIdentityService mixIdentityService, AuthConfigService authConfigService,
-            MixCmsContext context, IQueueService<MessageQueueModel> queueService, ApplicationLifetime applicationLifetime)
+            MixIdentityService mixIdentityService,
+            AuthConfigService authConfigService,
+            MixCmsContext context,
+            IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
             _authConfigurations = authConfigService.AppSettings;
-            _context = context;
-            _uow = new(_context);
-            _configRepo = MixConfigurationContentViewModel.GetRepository(_uow);
-            _langRepo = MixLanguageContentViewModel.GetRepository(_uow);
-            _routeProvider = routeProvider;
-            _authConfigService = authConfigService;
-            _applicationLifetime = applicationLifetime;
+            Context = context;
+            Uow = new(Context);
+            _configRepo = MixConfigurationContentViewModel.GetRepository(Uow);
+            _langRepo = MixLanguageContentViewModel.GetRepository(Uow);
         }
 
         #region Routes
@@ -57,7 +51,7 @@ namespace Mix.Common.Controllers
         // GET api/v1/portal/check-config
         [HttpGet]
         [Route("check-config/{lastSync}")]
-        public ActionResult<JObject> checkConfig(DateTime lastSync)
+        public ActionResult<JObject> CheckConfig(DateTime lastSync)
         {
             var lastUpdate = CurrentTenant.Configurations.LastUpdateConfiguration;
             if (lastSync.ToUniversalTime() < lastUpdate)

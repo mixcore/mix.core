@@ -1,24 +1,12 @@
-﻿using Mix.Tenancy.Domain.ViewModels;
+﻿using Mix.Tenancy.Domain.Interfaces;
+using Mix.Tenancy.Domain.ViewModels;
 
 namespace Mix.Tenancy.Domain.Services
 {
-    public class ImportSiteService
+    public class ImportSiteService : IImportSiteService
     {
         private readonly EntityRepository<MixCmsContext, MixConfiguration, int> _configRepo;
         private readonly EntityRepository<MixCmsContext, MixLanguage, int> _languageRepo;
-        private readonly EntityRepository<MixCmsContext, MixPost, int> _postRepo;
-        private readonly EntityRepository<MixCmsContext, MixPage, int> _pageRepo;
-        private readonly EntityRepository<MixCmsContext, MixModule, int> _moduleRepo;
-        private readonly UnitOfWorkInfo _uowInfo;
-
-        private readonly Dictionary<int, int> dicConfigurationIds = new();
-        private readonly Dictionary<int, int> dicLanguageIds = new();
-        private readonly Dictionary<int, int> dicModuleIds = new();
-        private readonly Dictionary<int, int> dicPostIds = new();
-        private readonly Dictionary<int, int> dicPageIds = new();
-        private readonly Dictionary<int, int> dicFieldIds = new();
-        private readonly Dictionary<int, int> dicMixDatabaseIds = new();
-        private readonly Dictionary<int, int> dicMixDatabaseContextIds = new();
 
         public ImportSiteService(
             MixCmsContext dbContext,
@@ -30,16 +18,13 @@ namespace Mix.Tenancy.Domain.Services
         {
             _configRepo = configRepo;
             _languageRepo = languageRepo;
-            _postRepo = postRepo;
-            _pageRepo = pageRepo;
-            _moduleRepo = moduleRepo;
 
-            _uowInfo = new UnitOfWorkInfo(dbContext);
-            _configRepo.SetUowInfo(_uowInfo);
-            _languageRepo.SetUowInfo(_uowInfo);
-            _postRepo.SetUowInfo(_uowInfo);
-            _pageRepo.SetUowInfo(_uowInfo);
-            _moduleRepo.SetUowInfo(_uowInfo);
+            var uowInfo = new UnitOfWorkInfo(dbContext);
+            _configRepo.SetUowInfo(uowInfo);
+            _languageRepo.SetUowInfo(uowInfo);
+            postRepo.SetUowInfo(uowInfo);
+            pageRepo.SetUowInfo(uowInfo);
+            moduleRepo.SetUowInfo(uowInfo);
         }
         #region Import
 

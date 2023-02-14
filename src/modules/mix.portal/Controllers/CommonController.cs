@@ -10,7 +10,7 @@ namespace Mix.Portal.Controllers
     [ApiController]
     public class CommonController : MixTenantApiControllerBase
     {
-        protected readonly TenantUserManager _userManager;
+        protected readonly TenantUserManager UserManager;
         private readonly MixRepoDbRepository _repoDbRepository;
         private readonly MixCmsContext _context;
         public CommonController(
@@ -26,7 +26,7 @@ namespace Mix.Portal.Controllers
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
             _context = context;
-            _userManager = userManager;
+            UserManager = userManager;
             _repoDbRepository = repoDbRepository;
         }
 
@@ -42,8 +42,8 @@ namespace Mix.Portal.Controllers
         [HttpGet("portal-menus")]
         public async Task<ActionResult<JArray?>> PortalMenus()
         {
-            var user = await _userManager.GetUserAsync(User);
-            var roles = await _userManager.GetRolesAsync(user);
+            var user = await UserManager.GetUserAsync(User);
+            var roles = await UserManager.GetRolesAsync(user);
             var menus = await LoadUserPortalMenus(roles.ToArray());
             return Ok(menus);
         }

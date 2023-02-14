@@ -2,9 +2,11 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Communicator.Services;
 using Mix.Database.Services;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Publishers;
 using Mix.Lib.Services;
 using Mix.Lib.Subscribers;
+using Mix.Service.Interfaces;
 using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -15,24 +17,24 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddSingleton<HttpService>();
             services.TryAddSingleton<DatabaseService>();
-            services.TryAddSingleton<AuditLogService>();
+            services.TryAddSingleton<IAuditLogService, AuditLogService>();
             services.TryAddSingleton<MixEndpointService>();
-           
+
 
             services.TryAddScoped<MixHeartConfigService>();
             services.TryAddScoped<AuthConfigService>();
             services.TryAddScoped<SmtpConfigService>();
             services.TryAddScoped<IPSecurityConfigService>();
 
-            services.TryAddScoped<MixDataService>();
+            services.TryAddScoped<IMixDataService, MixDataService>();
 
             services.TryAddScoped<MixService>();
             services.TryAddSingleton<MixConfigurationService>();
-            services.TryAddScoped<MixCmsService>();
+            services.TryAddScoped<IMixCmsService, MixCmsService>();
             services.TryAddScoped<TranslatorService>();
 
             services.TryAddScoped<EmailService>();
-            services.TryAddScoped<MixEdmService>();
+            services.TryAddScoped<IMixEdmService, MixEdmService>();
 
             services.AddHostedService<MixBackgroundTaskPublisher>();
             services.AddHostedService<MixBackgroundTaskSubscriber>();

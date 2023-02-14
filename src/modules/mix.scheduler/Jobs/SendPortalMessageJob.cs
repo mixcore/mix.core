@@ -1,22 +1,22 @@
 ﻿using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.SignalR.Models;
-using Mix.SignalR.Services;
 using Newtonsoft.Json.Linq;
 using Quartz;
 using System;
 using System.Threading.Tasks;
 using Mix.Quartz.Jobs;
+using Mix.SignalR.Interfaces;
 
 namespace Mix.Scheduler.Jobs
 {
     public class SendPortalMessageJob : MixJobBase
     {
-        private readonly PortalHubClientService _portalHub;
+        private readonly IPortalHubClientService _portalHub;
         public SendPortalMessageJob(
             IServiceProvider serviceProvider,
             IQueueService<MessageQueueModel> queueService,
-            PortalHubClientService portalHub)
+            IPortalHubClientService portalHub)
             : base(serviceProvider, queueService)
         {
             _portalHub = portalHub;

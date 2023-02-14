@@ -28,12 +28,18 @@ namespace Mix.Grpc
         [Authorize]
         public override Task<MixGrpcReply> SendAuthorized(MixGrpcRequest request, ServerCallContext context)
         {
-            return Task.FromResult(new MixGrpcReply
+            var userIdentity = context.GetHttpContext().User.Identity;
+            if (userIdentity != null)
             {
-                Message = @$"Hello {request.Type} from {Assembly.GetEntryAssembly().FullName} 
-                                    by {context.GetHttpContext().User.Identity.Name} <br>
+                return Task.FromResult(new MixGrpcReply
+                {
+                    Message = @$"Hello {request.Type} from {Assembly.GetEntryAssembly()?.FullName} 
+                                    by {userIdentity.Name} <br>
                             Please Override MixGrpcService to handle message"
-            });
+                });
+            }
+
+            return Task.FromResult(new MixGrpcReply());
         }
 
         public override Task<MixGrpcReply> SendStream(IAsyncStreamReader<MixGrpcRequest> requestStream, ServerCallContext context)
@@ -46,8 +52,7 @@ namespace Mix.Grpc
             IServerStreamWriter<MixGrpcReply> responseStream,
             ServerCallContext context)
         {
-            var i = 0;
-            while (!context.CancellationToken.IsCancellationRequested && i < 20)
+            while (!context.CancellationToken.IsCancellationRequested)
             {
                 await Task.Delay(1000);
 

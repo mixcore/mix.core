@@ -1,8 +1,6 @@
 using Mix.Heart.Helpers;
 using System;
 using System.Collections.Generic;
-using Mix.Quartz.Enums;
-using Mix.Quartz.Models;
 
 namespace Mix.Quartz.Extensions
 {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Mix.Service.Services;
+using Mix.Service.Interfaces;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Models;
 using Newtonsoft.Json.Linq;
@@ -8,7 +8,7 @@ namespace Mix.SignalR.Hubs
 {
     public class HighFrequencyHub : BaseSignalRHub
     {
-        public HighFrequencyHub(AuditLogService auditLogService) : base(auditLogService)
+        public HighFrequencyHub(IAuditLogService auditLogService) : base(auditLogService)
         {
         }
         public async Task UploadStream(IAsyncEnumerable<string> stream, string room)

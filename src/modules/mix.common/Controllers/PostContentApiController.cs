@@ -15,7 +15,7 @@ namespace Mix.Common.Controllers
     public class PostContentApiController : MixQueryApiControllerBase<PostContentViewModel, MixCmsContext, MixPostContent, int>
     {
         private readonly MixRepoDbRepository _mixRepoDbRepository;
-        protected MixCacheService _cacheService;
+        protected MixCacheService CacheService;
         public PostContentApiController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -28,7 +28,7 @@ namespace Mix.Common.Controllers
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
             _mixRepoDbRepository = mixRepoDbRepository;
-            _cacheService = new();
+            CacheService = new();
         }
 
 
@@ -62,7 +62,7 @@ namespace Mix.Common.Controllers
             if (result.AdditionalData == null)
             {
                 await result.LoadAdditionalDataAsync(_mixRepoDbRepository);
-                await _cacheService.SetAsync($"{id}/{typeof(PostContentViewModel).FullName}", result, typeof(MixPostContent).FullName, "full");
+                await CacheService.SetAsync($"{id}/{typeof(PostContentViewModel).FullName}", result, typeof(MixPostContent).FullName, "full");
             }
             return result;
         }

@@ -5,9 +5,6 @@ using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
-using Mix.Lib.Base;
-using Mix.Lib.Services;
-using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Entities.Onepay;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Ecommerce.Lib.Interfaces;
@@ -16,25 +13,26 @@ using Mix.Services.Ecommerce.Lib.ViewModels;
 using Mix.Services.Ecommerce.Lib.ViewModels.Onepay;
 using Mix.Shared.Services;
 using Newtonsoft.Json.Linq;
-using RepoDb.Enumerations;
 using System.Security.Cryptography;
 using System.Text;
+using Mix.Service.Services;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
     public sealed class OnepayService : TenantServiceBase, IPaymentService
     {
         private readonly UnitOfWorkInfo<OnepayDbContext> _cmsUow;
-        private readonly UnitOfWorkInfo<EcommerceDbContext> _ecommerceUow;
         private readonly HttpService _httpService;
         private MixOnepayConfigurations Settings { get; set; } = new MixOnepayConfigurations();
-        public OnepayService(IHttpContextAccessor httpContextAccessor, HttpService httpService, IConfiguration configuration, UnitOfWorkInfo<OnepayDbContext> cmsUow,
-            UnitOfWorkInfo<EcommerceDbContext> ecommerceUow)
+        public OnepayService(
+            IHttpContextAccessor httpContextAccessor, 
+            HttpService httpService, 
+            IConfiguration configuration, 
+            UnitOfWorkInfo<OnepayDbContext> cmsUow)
             : base(httpContextAccessor)
         {
             _httpService = httpService;
             _cmsUow = cmsUow;
-            _ecommerceUow = ecommerceUow;
 
             var session = configuration.GetSection(MixAppSettingsSection.Payments).GetSection("Onepay");
             session.Bind(Settings);

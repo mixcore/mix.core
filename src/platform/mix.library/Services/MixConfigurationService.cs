@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Services;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Lib.Services
 {
-    public sealed class MixConfigurationService : TenantServiceBase
+    public sealed class MixConfigurationService : TenantServiceBase, IMixConfigurationService
     {
         private readonly DatabaseService _databaseService;
+
         public List<MixConfigurationContentViewModel> Configs { get; private set; }
 
         public MixConfigurationService(IHttpContextAccessor httpContextAccessor, DatabaseService databaseService) : base(httpContextAccessor)

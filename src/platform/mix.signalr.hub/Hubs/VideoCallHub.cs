@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Mix.Service.Interfaces;
 using Mix.Service.Services;
 using Mix.Signalr.Hub.Models;
 using Mix.SignalR.Hubs;
@@ -20,7 +21,7 @@ namespace Mix.Signalr.Hub.Hubs
         private static readonly List<UserCall> UserCalls = new List<UserCall>();
         private static readonly List<CallOffer> CallOffers = new List<CallOffer>();
 
-        public VideoCallHub(AuditLogService auditLogService) : base(auditLogService)
+        public VideoCallHub(IAuditLogService auditLogService) : base(auditLogService)
         {
         }
 

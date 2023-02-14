@@ -1,15 +1,10 @@
-﻿using Google.Api;
-using Google.Protobuf.WellKnownTypes;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
 using Mix.Communicator.Models;
-using Mix.Communicator.Services;
-using MySqlX.XDevAPI.Relational;
-using System.Net.WebSockets;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Lib.Services
 {
-    public sealed class MixEdmService : TenantServiceBase
+    public sealed class MixEdmService : TenantServiceBase, IMixEdmService
     {
         private readonly IQueueService<MessageQueueModel> _queueService;
         private readonly UnitOfWorkInfo<MixCmsContext> _uow;

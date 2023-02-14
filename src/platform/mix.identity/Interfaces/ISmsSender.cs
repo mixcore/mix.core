@@ -4,7 +4,7 @@
 
 using System.Threading.Tasks;
 
-namespace Mix.Identity.Services
+namespace Mix.Identity.Interfaces
 {
     public interface ISmsSender
     {

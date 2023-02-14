@@ -1,23 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
-using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Dtos;
-using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Enums;
+using Mix.Services.Ecommerce.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.Models;
-using Mix.Services.Ecommerce.Lib.Services;
 using Mix.Services.Ecommerce.Lib.ViewModels;
-using Mix.Services.Payments.Lib.Constants;
-using Mix.Shared.Dtos;
 using Newtonsoft.Json.Linq;
 using System.Web;
 
@@ -28,21 +23,24 @@ namespace Mix.Services.ecommerce.Controllers
     public class ApiEcommerceController : MixTenantApiControllerBase
     {
         private readonly PaymentConfigurationModel _paymentConfiguration = new();
-        private readonly EcommerceService _ecommerceService;
-        private readonly OrderService _orderService;
-        protected UnitOfWorkInfo<MixCmsContext> _cmsUOW;
+        private readonly IEcommerceService _ecommerceService;
+        private readonly IOrderService _orderService;
+        protected UnitOfWorkInfo<MixCmsContext> CmsUow;
+
         public ApiEcommerceController(
             IHttpContextAccessor httpContextAccessor,
-            IConfiguration configuration, 
+            IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
-            EcommerceService ecommerceService, UnitOfWorkInfo<MixCmsContext> cmsUOW, OrderService orderService)
+            IEcommerceService ecommerceService,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
+            IOrderService orderService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
             _ecommerceService = ecommerceService;
-            _cmsUOW = cmsUOW;
+            CmsUow = cmsUow;
             _orderService = orderService;
             var session = configuration.GetSection(MixAppSettingsSection.Payments);
             session.Bind(_paymentConfiguration);
@@ -67,7 +65,7 @@ namespace Mix.Services.ecommerce.Controllers
             var cart = await _orderService.GetUserOrders(User, request, cancellationToken);
             return Ok(cart);
         }
-        
+
         [MixAuthorize]
         [HttpGet]
         [Route("my-orders/{id}")]
@@ -76,7 +74,7 @@ namespace Mix.Services.ecommerce.Controllers
             var order = await _orderService.GetUserOrder(User, id, cancellationToken);
             return Ok(order);
         }
-        
+
         [MixAuthorize]
         [HttpGet]
         [Route("cancel-order/{id}")]
@@ -137,7 +135,7 @@ namespace Mix.Services.ecommerce.Controllers
             }
             var query = HttpUtility.ParseQueryString(Request.QueryString.Value);
             var paymentResponse = JObject.FromObject(query!.AllKeys.ToDictionary(k => k, k => query[k]));
-            
+
             var result = await _ecommerceService.ProcessPaymentResponse(orderId, paymentResponse, cancellationToken);
             string url =
             result == OrderStatus.PAID
