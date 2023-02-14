@@ -3,13 +3,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Database.Base;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
-using Mix.Services.Payments.Lib.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
 {

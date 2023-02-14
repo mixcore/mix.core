@@ -7,6 +7,21 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Domain\Helpers\**" />
+	  <Compile Remove="Domain\Models\**" />
+	  <Compile Remove="Domain\Services\**" />
+	  <Content Remove="Domain\Helpers\**" />
+	  <Content Remove="Domain\Models\**" />
+	  <Content Remove="Domain\Services\**" />
+	  <EmbeddedResource Remove="Domain\Helpers\**" />
+	  <EmbeddedResource Remove="Domain\Models\**" />
+	  <EmbeddedResource Remove="Domain\Services\**" />
+	  <None Remove="Domain\Helpers\**" />
+	  <None Remove="Domain\Models\**" />
+	  <None Remove="Domain\Services\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Using Include="System" />
 		<Using Include="System.Threading.Tasks" />
 		<Using Include="Mix.Lib.Base" />
@@ -32,12 +47,6 @@
 		<ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
 		<ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
 		<ProjectReference Include="..\mix.grpc\mix.grpc.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Domain\Helpers\" />
-		<Folder Include="Domain\Models\" />
-		<Folder Include="Domain\Services\" />
 	</ItemGroup>
 
 	<ItemGroup>

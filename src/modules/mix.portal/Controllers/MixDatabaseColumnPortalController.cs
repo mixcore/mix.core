@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Shared.Services;
 using System.Linq.Expressions;
 
 namespace Mix.Portal.Controllers
@@ -10,23 +9,16 @@ namespace Mix.Portal.Controllers
     public class MixDatabaseColumnPortalController
         : MixRestfulApiControllerBase<MixDatabaseColumnViewModel, MixCmsContext, MixDatabaseColumn, int>
     {
-        private readonly MixDataService _mixDataService;
-        private readonly MixEndpointService _endpointService;
-
         public MixDatabaseColumnPortalController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            MixDataService mixDataService,
             MixIdentityService mixIdentityService,
-            MixEndpointService endpointService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
-            _mixDataService = mixDataService;
-            _endpointService = endpointService;
         }
 
         [HttpGet("init/{mixDatabase}")]

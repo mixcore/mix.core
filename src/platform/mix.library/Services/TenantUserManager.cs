@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Mix.Database.Entities.Account;
-using Mix.Lib.Models;
 
 namespace Mix.Lib.Services
 {

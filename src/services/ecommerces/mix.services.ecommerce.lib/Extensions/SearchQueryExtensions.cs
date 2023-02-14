@@ -4,9 +4,7 @@ using Mix.Heart.UnitOfWork;
 using Mix.Lib.Models.Common;
 using Mix.Services.Ecommerce.Lib.Constants;
 using Mix.Services.Ecommerce.Lib.Dtos;
-using Mix.Services.Ecommerce.Lib.Entities;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
-using System.Linq.Expressions;
 
 namespace Mix.Services.Ecommerce.Lib.Extensions
 {

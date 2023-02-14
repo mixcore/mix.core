@@ -1,6 +1,6 @@
 
 using Mix.Tenancy.Domain.Dtos;
-using Mix.Tenancy.Domain.Services;
+using Mix.Tenancy.Domain.Interfaces;
 
 namespace Mix.Xunittest.Domain.Tests
 {
@@ -8,11 +8,10 @@ namespace Mix.Xunittest.Domain.Tests
     public class c0_InitCmsTest
         : TestBase<SharedMixCmsDbFixture, MixCmsContext>
     {
-        private readonly InitCmsService _initCmsService;
+        private readonly IInitCmsService _initCmsService;
         public c0_InitCmsTest(
             SharedMixCmsDbFixture fixture,
-            InitCmsService initCmsService
-            ) : base(fixture)
+            IInitCmsService initCmsService) : base(fixture)
         {
             _initCmsService = initCmsService;
             model = new()
@@ -39,7 +38,7 @@ namespace Mix.Xunittest.Domain.Tests
         public async Task Step_1_Init_Site()
         {
             DbFixture.Context = new(DbFixture.ConnectionString, DbFixture.DbProvider);
-            DbFixture.Context.Database.EnsureDeleted();
+            await DbFixture.Context.Database.EnsureDeletedAsync();
             model.PrimaryDomain = "localhost";
             await _initCmsService.InitDbContext(model);
             await _initCmsService.InitTenantAsync(model);

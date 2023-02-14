@@ -1,7 +1,7 @@
 ﻿
 using Mix.Database.Entities.Account;
 
-namespace Mix.Portal.Domain.ViewModels
+namespace Mix.Account.Domain.ViewModels
 {
     public class MixRoleViewModel
         : ViewModelBase<MixCmsAccountContext, MixRole, Guid, MixRoleViewModel>

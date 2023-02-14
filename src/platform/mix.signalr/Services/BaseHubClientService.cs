@@ -38,6 +38,7 @@ namespace Mix.SignalR.Services
             {
                 Init();
             }
+
             while (Connection != null && Connection.State != HubConnectionState.Connected)
             {
                 try
@@ -53,7 +54,8 @@ namespace Mix.SignalR.Services
             }
             await Connection.InvokeAsync(HubMethods.SendMessage, message);
         }
-        public void Init()
+
+        private void Init()
         {
             if (!string.IsNullOrEmpty(MixEndpointService.Messenger))
             {

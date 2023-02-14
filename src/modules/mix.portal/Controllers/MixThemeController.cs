@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Heart.Constants;
-using Mix.Portal.Domain.Services;
+using Mix.Lib.Interfaces;
+using Mix.Portal.Domain.Interfaces;
 using Mix.Shared.Helpers;
 using Mix.Shared.Services;
 using Mix.SignalR.Constants;
@@ -16,10 +17,10 @@ namespace Mix.Portal.Controllers
     public class MixThemeController
         : MixRestfulApiControllerBase<MixThemeViewModel, MixCmsContext, MixTheme, int>
     {
-        protected readonly IHubContext<MixThemeHub> _hubContext;
+        protected readonly IHubContext<MixThemeHub> HubContext;
         private readonly HttpService _httpService;
-        private readonly MixThemeExportService _exportService;
-        private readonly MixThemeImportService _importService;
+        private readonly IMixThemeExportService _exportService;
+        private readonly IMixThemeImportService _importService;
         private readonly MixConfigurationService _configService;
 
         public MixThemeController(
@@ -28,20 +29,20 @@ namespace Mix.Portal.Controllers
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            MixThemeImportService importService,
-            MixThemeExportService exportService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            IMixThemeImportService importService,
+            IMixThemeExportService exportService,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService,
             HttpService httpService,
             IHubContext<MixThemeHub> hubContext,
             MixConfigurationService configService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
 
             _exportService = exportService;
             _importService = importService;
             _httpService = httpService;
-            _hubContext = hubContext;
+            HubContext = hubContext;
             _configService = configService;
         }
 
@@ -97,7 +98,7 @@ namespace Mix.Portal.Controllers
                 if (value > percent)
                 {
                     percent = value;
-                    _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Downloading", 200, value);
+                    _ = AlertAsync(HubContext.Clients.Group("Theme"), "Downloading", 200, value);
 
                 }
             };
@@ -110,7 +111,7 @@ namespace Mix.Portal.Controllers
 
         [HttpPost]
         [Route("install-portal")]
-        public async Task<ActionResult<string>> InstallPortal([FromBody] JObject theme, [FromServices] ThemeService themeService)
+        public async Task<ActionResult<string>> InstallPortal([FromBody] JObject theme, [FromServices] IThemeService themeService)
         {
             var progress = new Progress<int>();
             var percent = 0;
@@ -119,14 +120,14 @@ namespace Mix.Portal.Controllers
                 if (value > percent)
                 {
                     percent = value;
-                    _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Downloading", 200, value);
+                    _ = AlertAsync(HubContext.Clients.Group("Theme"), "Downloading", 200, value);
 
                 }
             };
 
             string name = SeoHelper.GetSEOString(theme.Value<string>("title"));
             string folder = $"{MixFolders.WebRootPath}/{MixFolders.PortalApps}/{name}";
-            string appfolder = $"{MixFolders.PortalApps}/{name}";
+            string appFolder = $"{MixFolders.PortalApps}/{name}";
             await _importService.DownloadThemeAsync(theme, progress, _httpService, folder);
             Thread.Sleep(300);
             var indexFile = MixFileHelper.GetFileByFullName($"{folder}/index.html");
@@ -134,8 +135,8 @@ namespace Mix.Portal.Controllers
 
             if (indexFile.Content != null && regex.IsMatch(indexFile.Content))
             {
-                indexFile.Content = regex.Replace(indexFile.Content, $"/{appfolder}/$3$4")
-                    .Replace("options['baseHref']", $"'{appfolder}'");
+                indexFile.Content = regex.Replace(indexFile.Content, $"/{appFolder}/$3$4")
+                    .Replace("options['baseHref']", $"'{appFolder}'");
 
                 var activeTheme = await themeService.GetActiveTheme();
                 MixTemplateViewModel template = new(Uow)
@@ -154,7 +155,7 @@ namespace Mix.Portal.Controllers
             }
 
             MixFileHelper.SaveFile(indexFile);
-            return Ok(appfolder);
+            return Ok(appFolder);
         }
 
         #endregion

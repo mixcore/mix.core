@@ -6,13 +6,14 @@ using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
-using Mix.Lib.Base;
 using Mix.Lib.Services;
+using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Dtos;
+using Mix.Services.Databases.Lib.Interfaces;
 
 namespace Mix.Services.Databases.Lib.Services
 {
-    public sealed class MixUserDataService : TenantServiceBase
+    public sealed class MixUserDataService : TenantServiceBase, IMixUserDataService
     {
         private readonly TenantUserManager _userManager;
         private readonly UnitOfWorkInfo<MixDbDbContext> _uow;

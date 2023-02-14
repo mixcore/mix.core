@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using System.Data;
 using System.Text.RegularExpressions;
 
 namespace Mix.Lib.Helpers

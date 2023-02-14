@@ -17,21 +17,21 @@
 </head>
 <body class="antialiased border-top-wide border-primary d-flex flex-column" ng-app="MixInit">
     <style>
-        :root
-        {
-            --primary-color-hue : {{globalSettings.portalThemeSettings.primaryColorHue}};
-            --primary-color-saturation : {{globalSettings.portalThemeSettings.primaryColorSaturation}}%;
-            --primary-color-brightness : {{globalSettings.portalThemeSettings.primaryColorBrightness}}%;
+        :root {
+            --primary-color-hue: {{globalSettings.portalThemeSettings.primaryColorHue}};
+            --primary-color-saturation: {{globalSettings.portalThemeSettings.primaryColorSaturation}}%;
+            --primary-color-brightness: {{globalSettings.portalThemeSettings.primaryColorBrightness}}%;
             --bg-color: {{globalSettings.portalThemeSettings.bgColor}};
             --text-color: {{globalSettings.portalThemeSettings.textColor}};
         }
-        
-    .bd-sidebar{
-        width: 100%;
-    }
-    mix-store .page-wrapper{
-        padding-top: 0 !important;
-    }
+
+        .bd-sidebar {
+            width: 100%;
+        }
+
+        mix-store .page-wrapper {
+            padding-top: 0 !important;
+        }
     </style>
     <mix-loader ng-show="isBusy"></mix-loader>
     <div class="page page-center d-block">
@@ -61,8 +61,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
-
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">I have read and understand!</button>

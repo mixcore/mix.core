@@ -1,7 +1,7 @@
 ﻿using Mix.Heart.Helpers;
 using Mix.RepoDb.Repositories;
+using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Services.Databases.Lib.Models;
-using Mix.Services.Databases.Lib.Services;
 using RepoDb;
 using RepoDb.Enumerations;
 
@@ -54,7 +54,7 @@ namespace Mixcore.Domain.ViewModels
                 : default;
         }
 
-        public async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository, MixMetadataService metadataService)
+        public async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository, IMixMetadataService metadataService)
         {
             bool isChanged = false;
             if (AdditionalData == null && !string.IsNullOrEmpty(MixDatabaseName))

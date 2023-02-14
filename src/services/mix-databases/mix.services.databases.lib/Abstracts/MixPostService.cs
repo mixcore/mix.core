@@ -8,30 +8,33 @@ using Mix.Heart.Models;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
-using Mix.Lib.Base;
 using Mix.Lib.Models.Common;
-using Mix.Services.Databases.Lib.Services;
 using System.Linq.Expressions;
+using Mix.Service.Services;
+using Mix.Services.Databases.Lib.Interfaces;
 
-namespace Mix.Services.Databases.Lib.Abtracts
+namespace Mix.Services.Databases.Lib.Abstracts
 {
     public abstract class MixPostServiceBase<TView> : TenantServiceBase
         where TView : ViewModelBase<MixCmsContext, MixPostContent, int, TView>
     {
-        protected readonly UnitOfWorkInfo<MixCmsContext> _uow;
-        protected readonly MixMetadataService _metadataService;
+        protected readonly UnitOfWorkInfo<MixCmsContext> Uow;
+        protected readonly IMixMetadataService MetadataService;
 
-        protected MixPostServiceBase(UnitOfWorkInfo<MixCmsContext> uow, MixMetadataService metadataService, IHttpContextAccessor httpContextAccessor)
+        protected MixPostServiceBase(
+            UnitOfWorkInfo<MixCmsContext> uow, 
+            IMixMetadataService metadataService, 
+            IHttpContextAccessor httpContextAccessor)
             : base(httpContextAccessor)
         {
-            _uow = uow;
-            _metadataService = metadataService;
+            Uow = uow;
+            MetadataService = metadataService;
         }
 
         public virtual async Task<List<TView>> GetRelatedPosts(int postId, CancellationToken cancellationToken = default)
         {
-            using var postRepo = new Repository<MixCmsContext, MixPostContent, int, TView>(_uow);
-            var relatedIds = from links in _uow.DbContext.MixPostPostAssociation
+            using var postRepo = new Repository<MixCmsContext, MixPostContent, int, TView>(Uow);
+            var relatedIds = from links in Uow.DbContext.MixPostPostAssociation
                              where links.ParentId == postId && links.MixTenantId == CurrentTenant.Id
                              select links.ChildId;
             var result = await postRepo.GetListAsync(m => relatedIds.Contains(m.Id), cancellationToken);
@@ -48,9 +51,9 @@ namespace Mix.Services.Databases.Lib.Abtracts
             try
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                using var postRepo = new Repository<MixCmsContext, MixPostContent, int, TView>(_uow);
+                using var postRepo = new Repository<MixCmsContext, MixPostContent, int, TView>(Uow);
                 searchRequest.Predicate = searchRequest.Predicate.AndAlso(ApplyMetadataQueries(searchRequest));
-                var result = await postRepo.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+                var result = await postRepo.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, cancellationToken);
                 return result;
             }
             catch (Exception ex)
@@ -70,11 +73,11 @@ namespace Mix.Services.Databases.Lib.Abtracts
             IQueryable<int>? allowedIdQuery = default;
             if (searchRequest.OrMetadataQueries.Any())
             {
-                allowedIdQuery = _metadataService.GetQueryableContentIdByMetadataSeoContent(searchRequest.OrMetadataQueries, MixContentType.Post, false);
+                allowedIdQuery = MetadataService.GetQueryableContentIdByMetadataSeoContent(searchRequest.OrMetadataQueries, MixContentType.Post, false);
             }
             if (searchRequest.AndMetadataQueries.Any())
             {
-                var andQuery = _metadataService.GetQueryableContentIdByMetadataSeoContent(searchRequest.AndMetadataQueries, MixContentType.Post, true);
+                var andQuery = MetadataService.GetQueryableContentIdByMetadataSeoContent(searchRequest.AndMetadataQueries, MixContentType.Post, true);
                 allowedIdQuery = allowedIdQuery != default ? allowedIdQuery.Where(m => andQuery.Contains(m)) : andQuery;
             }
             predicate = predicate.AndAlsoIf(allowedIdQuery != null, m => allowedIdQuery!.ToList().Contains(m.Id));

@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Constant.Enums;
-using Mix.Database.Base;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.Helpers;
 using Mix.Heart.Models;
 using Mix.Heart.UnitOfWork;
-using Mix.Lib.Base;
-using Mix.RepoDb.Entities;
 using Mix.RepoDb.Repositories;
 using Mix.RepoDb.ViewModels;
 using Mix.Service.Services;
@@ -17,39 +14,32 @@ using Mix.Shared.Models;
 using Newtonsoft.Json.Linq;
 using RepoDb.Interfaces;
 using RepoDb;
-using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RepoDb.Enumerations;
 using Mix.Heart.Extensions;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Mix.RepoDb.Interfaces;
+using Mix.Service.Interfaces;
 
 namespace Mix.RepoDb.Services
 {
-    public class MixDbDataService : TenantServiceBase
+    public class MixDbDataService : TenantServiceBase, IMixDbDataService
     {
-        private readonly IDatabaseConstants _databaseConstant;
         private readonly MixRepoDbRepository _repository;
         private readonly MixRepoDbRepository _associationRepository;
-        private readonly MixMemoryCacheService _memoryCache;
+        private readonly IMixMemoryCacheService _memoryCache;
 
         #region Properties
 
-        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
-        private readonly DatabaseService _databaseService;
+        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
 
-        private const string createdDateFieldName = "CreatedDateTime";
-        private const string createdByFieldName = "CreatedBy";
-        private const string priorityFieldName = "Priority";
-        private const string idFieldName = "Id";
-        private const string parentIdFieldName = "ParentId";
-        private const string childIdFieldName = "ChildId";
-        private const string tenantIdFieldName = "MixTenantId";
-        private const string statusFieldName = "Status";
-        private const string isDeletedFieldName = "IsDeleted";
+        private const string CreatedDateFieldName = "CreatedDateTime";
+        private const string CreatedByFieldName = "CreatedBy";
+        private const string PriorityFieldName = "Priority";
+        private const string IdFieldName = "Id";
+        private const string ParentIdFieldName = "ParentId";
+        private const string ChildIdFieldName = "ChildId";
+        private const string TenantIdFieldName = "MixTenantId";
+        private const string StatusFieldName = "Status";
+        private const string IsDeletedFieldName = "IsDeleted";
 
         #endregion
 
@@ -59,22 +49,13 @@ namespace Mix.RepoDb.Services
             DatabaseService databaseService,
             MixRepoDbRepository repository,
             ICache cache,
-            MixMemoryCacheService memoryCache)
+            IMixMemoryCacheService memoryCache)
             : base(httpContextAccessor)
         {
-            _cmsUOW = uow;
-            _databaseService = databaseService;
+            _cmsUow = uow;
             _repository = repository;
             _associationRepository = new MixRepoDbRepository(cache, databaseService, uow);
             _associationRepository.InitTableName(nameof(MixDatabaseAssociation));
-            _databaseConstant = _databaseService.DatabaseProvider switch
-            {
-                MixDatabaseProvider.SQLSERVER => new SqlServerDatabaseConstants(),
-                MixDatabaseProvider.MySQL => new MySqlDatabaseConstants(),
-                MixDatabaseProvider.PostgreSQL => new PostgresDatabaseConstants(),
-                MixDatabaseProvider.SQLITE => new SqliteDatabaseConstants(),
-                _ => throw new NotImplementedException()
-            };
             _memoryCache = memoryCache;
         }
 
@@ -89,7 +70,8 @@ namespace Mix.RepoDb.Services
             if (data != null)
             {
                 JObject result = ReflectionHelper.ParseObject(data);
-                if (loadNestedData) {
+                if (loadNestedData)
+                {
                     await LoadNestedData(tableName, result);
                 }
                 return result;
@@ -107,7 +89,7 @@ namespace Mix.RepoDb.Services
                 SortDirection = req.Direction
             };
             var queries = await BuildSearchQueryAsync(tableName, req);
-            queries.Add(new(createdByFieldName, Operation.Equal, username));
+            queries.Add(new(CreatedByFieldName, Operation.Equal, username));
             return await GetResult(tableName, queries, paging, req.LoadNestedData);
         }
 
@@ -116,9 +98,9 @@ namespace Mix.RepoDb.Services
             _repository.InitTableName(tableName);
             var queries = new List<QueryField>()
             {
-                new QueryField(tenantIdFieldName, CurrentTenant.Id),
-                new QueryField(idFieldName, id),
-                new QueryField(createdByFieldName, username)
+                new QueryField(TenantIdFieldName, CurrentTenant.Id),
+                new QueryField(IdFieldName, id),
+                new QueryField(CreatedByFieldName, username)
             };
 
             var obj = await _repository.GetSingleByAsync(queries);
@@ -131,13 +113,13 @@ namespace Mix.RepoDb.Services
                     if (loadNestedData)
                     {
 
-                        List<QueryField> associationQueries = GetAssociatoinQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
+                        List<QueryField> associationQueries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
                         var associations = await _associationRepository.GetListByAsync(associationQueries);
                         if (associations.Count > 0)
                         {
-                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(childIdFieldName)).ToList();
+                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
                             _repository.InitTableName(item.DestinateDatabaseName);
-                            List<QueryField> query = new() { new(idFieldName, Operation.In, nestedIds) };
+                            List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
                             var nestedData = await _repository.GetListByAsync(query);
                             data.Add(new JProperty(item.DisplayName, ReflectionHelper.ParseArray(nestedData)));
                         }
@@ -167,7 +149,7 @@ namespace Mix.RepoDb.Services
             return default;
         }
 
-        
+
         public async Task<JObject?> GetSingleBy(string tableName, List<QueryField> queries)
         {
             _repository.InitTableName(tableName);
@@ -188,27 +170,27 @@ namespace Mix.RepoDb.Services
             {
                 obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
             }
-            if (!obj.ContainsKey(createdDateFieldName))
+            if (!obj.ContainsKey(CreatedDateFieldName))
             {
-                obj.Add(new JProperty(createdDateFieldName, DateTime.UtcNow));
+                obj.Add(new JProperty(CreatedDateFieldName, DateTime.UtcNow));
             }
-            if (!obj.ContainsKey(priorityFieldName))
+            if (!obj.ContainsKey(PriorityFieldName))
             {
-                obj.Add(new JProperty(priorityFieldName, 0));
+                obj.Add(new JProperty(PriorityFieldName, 0));
             }
-            if (!obj.ContainsKey(tenantIdFieldName))
+            if (!obj.ContainsKey(TenantIdFieldName))
             {
-                obj.Add(new JProperty(tenantIdFieldName, CurrentTenant?.Id ?? 1));
-            }
-
-            if (!obj.ContainsKey(statusFieldName))
-            {
-                obj.Add(new JProperty(statusFieldName, MixContentStatus.Published.ToString()));
+                obj.Add(new JProperty(TenantIdFieldName, CurrentTenant?.Id ?? 1));
             }
 
-            if (!obj.ContainsKey(isDeletedFieldName))
+            if (!obj.ContainsKey(StatusFieldName))
             {
-                obj.Add(new JProperty(isDeletedFieldName, false));
+                obj.Add(new JProperty(StatusFieldName, MixContentStatus.Published.ToString()));
+            }
+
+            if (!obj.ContainsKey(IsDeletedFieldName))
+            {
+                obj.Add(new JProperty(IsDeletedFieldName, false));
             }
             return await _repository.InsertAsync(obj);
         }
@@ -222,14 +204,13 @@ namespace Mix.RepoDb.Services
             var database = await GetMixDatabase(tableName);
             foreach (var item in database.Relationships)
             {
-
-                List<QueryField> queries = GetAssociatoinQueries(item.SourceDatabaseName, item.DestinateDatabaseName, data.Value<int>("id"));
+                List<QueryField> queries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, data.Value<int>("id"));
                 var associations = await _associationRepository.GetListByAsync(queries);
-                if (associations.Count > 0)
+                if (associations is { Count: > 0 })
                 {
-                    var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(childIdFieldName)).ToList();
+                    var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
                     _repository.InitTableName(item.DestinateDatabaseName);
-                    List<QueryField> query = new() { new(idFieldName, Operation.In, nestedIds) };
+                    List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
                     var nestedData = await _repository.GetListByAsync(query);
                     data.Add(new JProperty(item.DisplayName, ReflectionHelper.ParseArray(nestedData)));
                 }
@@ -237,8 +218,7 @@ namespace Mix.RepoDb.Services
         }
 
 
-        private async Task<PagingResponseModel<JObject>> GetResult(string tableName,
-            IEnumerable<QueryField> queries, PagingRequestModel paging, bool loadNestedData)
+        private async Task<PagingResponseModel<JObject>> GetResult(string tableName, IEnumerable<QueryField> queries, PagingRequestModel paging, bool loadNestedData)
         {
             var result = await _repository.GetPagingAsync(queries, paging);
 
@@ -254,13 +234,13 @@ namespace Mix.RepoDb.Services
                     {
                         var id = data.Value<int>("id");
 
-                        List<QueryField> nestedQueries = GetAssociatoinQueries(rel.SourceDatabaseName, rel.DestinateDatabaseName, id);
+                        List<QueryField> nestedQueries = GetAssociationQueries(rel.SourceDatabaseName, rel.DestinateDatabaseName, id);
                         var associations = await _associationRepository.GetListByAsync(nestedQueries);
-                        if (associations.Count > 0)
+                        if (associations is { Count: > 0 })
                         {
-                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(childIdFieldName)).ToList();
+                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
                             _repository.InitTableName(rel.DestinateDatabaseName);
-                            List<QueryField> query = new() { new(idFieldName, Operation.In, nestedIds) };
+                            List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
                             var nestedData = await _repository.GetListByAsync(query);
                             data.Add(new JProperty(rel.DisplayName, ReflectionHelper.ParseArray(nestedData)));
                         }
@@ -271,7 +251,7 @@ namespace Mix.RepoDb.Services
             return new PagingResponseModel<JObject> { Items = items, PagingData = result.PagingData };
         }
 
-        private List<QueryField> GetAssociatoinQueries(string parentDatabaseName = null, string childDatabaseName = null, int? parentId = null, int? childId = null)
+        private List<QueryField> GetAssociationQueries(string parentDatabaseName = null, string childDatabaseName = null, int? parentId = null, int? childId = null)
         {
             var queries = new List<QueryField>();
             if (!string.IsNullOrEmpty(parentDatabaseName))
@@ -284,11 +264,11 @@ namespace Mix.RepoDb.Services
             }
             if (parentId.HasValue)
             {
-                queries.Add(new QueryField(parentIdFieldName, parentId));
+                queries.Add(new QueryField(ParentIdFieldName, parentId));
             }
             if (childId.HasValue)
             {
-                queries.Add(new QueryField(childIdFieldName, parentId));
+                queries.Add(new QueryField(ChildIdFieldName, parentId));
             }
             return queries;
         }
@@ -300,7 +280,7 @@ namespace Mix.RepoDb.Services
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return MixDatabaseViewModel.GetRepository(_cmsUOW).GetSingleAsync(m => m.SystemName == tableName);
+                    return MixDatabaseViewModel.GetRepository(_cmsUow).GetSingleAsync(m => m.SystemName == tableName);
                 }
                 );
         }
@@ -313,14 +293,14 @@ namespace Mix.RepoDb.Services
                 var database = await GetMixDatabase(tableName);
                 if (database.Type == MixDatabaseType.AdditionalData || database.Type == MixDatabaseType.GuidAdditionalData)
                 {
-                    queries.Add(new(parentIdFieldName, request.ParentId));
+                    queries.Add(new(ParentIdFieldName, request.ParentId));
                 }
                 else
                 {
-                    var allowsIds = _cmsUOW.DbContext.MixDatabaseAssociation
+                    var allowsIds = _cmsUow.DbContext.MixDatabaseAssociation
                             .Where(m => m.ParentDatabaseName == request.ParentName && m.ParentId == request.ParentId.Value && m.ChildDatabaseName == tableName)
                             .Select(m => m.ChildId).ToList();
-                    queries.Add(new(idFieldName, Operation.In, allowsIds));
+                    queries.Add(new(IdFieldName, Operation.In, allowsIds));
                 }
             }
 
@@ -339,7 +319,7 @@ namespace Mix.RepoDb.Services
         {
             var queries = new List<QueryField>()
             {
-                new QueryField(tenantIdFieldName, CurrentTenant.Id)
+                new QueryField(TenantIdFieldName, CurrentTenant.Id)
             };
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword))
             {
@@ -423,7 +403,7 @@ namespace Mix.RepoDb.Services
         public void Dispose()
         {
             _repository.Dispose();
-            _cmsUOW.Dispose();
+            _cmsUow.Dispose();
         }
         #endregion
     }

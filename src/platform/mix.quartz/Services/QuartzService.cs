@@ -13,8 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Mix.Quartz.Jobs;
-using Mix.Quartz.Models;
+using Mix.Quartz.Interfaces;
 
 namespace Mix.Quartz.Services
 {
@@ -153,7 +152,6 @@ namespace Mix.Quartz.Services
                     throw new Exception($"No type found {schedule.JobName}");
                 }
 
-                var jobKey = new JobKey(jobType.FullName);
                 var job = await GetJob(jobType.FullName, cancellationToken);
                 if (job == null)
                 {
@@ -235,28 +233,28 @@ namespace Mix.Quartz.Services
 
         private static void LogException(Exception ex = null, MixErrorStatus? status = null, string message = null)
         {
-            string fullPath = $"{Environment.CurrentDirectory}/logs/{DateTime.Now:dd-MM-yyyy}";
+            var fullPath = $"{Environment.CurrentDirectory}/logs/{DateTime.Now:dd-MM-yyyy}";
             if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))
             {
                 Directory.CreateDirectory(fullPath);
             }
-            string filePath = $"{fullPath}/log_exceptions.json";
+            var filePath = $"{fullPath}/log_exceptions.json";
 
             try
             {
-                FileInfo file = new(filePath);
-                string content = "[]";
+                var file = new FileInfo(filePath);
+                var content = "[]";
                 if (file.Exists)
                 {
-                    using (StreamReader s = file.OpenText())
+                    using (var s = file.OpenText())
                     {
                         content = s.ReadToEnd();
                     }
                     File.Delete(filePath);
                 }
 
-                JArray arrExceptions = JArray.Parse(content);
-                JObject jex = new()
+                var arrExceptions = JArray.Parse(content);
+                var jex = new JObject()
                 {
                     new JProperty("CreatedDateTime", DateTime.UtcNow),
                     new JProperty("Status", status?.ToString()),

@@ -1,13 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Heart.Extensions;
-using Mix.Heart.Helpers;
 using Mix.Lib.Dtos;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
-using Mix.RepoDb.Repositories;
-using Mix.Services.Databases.Lib.Services;
-using System.Threading;
 
 namespace Mixcore.Controllers
 {

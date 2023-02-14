@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualBasic;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
 using Mix.Database.Services;
@@ -14,9 +13,8 @@ using Mix.Identity.ViewModels;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Models;
 using Mix.Mixdb.Entities;
-using Mix.Mixdb.ViewModels;
+using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
-using Mix.RepoDb.Services;
 using Mix.Shared.Models.Configurations;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
@@ -32,7 +30,7 @@ namespace Mix.Lib.Services
         protected const string datetimeFormat = "yyyy-MM-ddTHH:mm:ss.FFFZ";
         protected readonly UnitOfWorkInfo<MixCmsAccountContext> AccountUow;
         protected readonly UnitOfWorkInfo<MixCmsContext> CmsUow;
-        protected readonly UnitOfWorkInfo<MixDbDbContext> MixdbUow;
+        protected readonly UnitOfWorkInfo<MixDbDbContext> MixDbUow;
         protected readonly MixCacheService CacheService;
         protected readonly TenantUserManager UserManager;
         protected readonly SignInManager<MixUser> SignInManager;
@@ -40,7 +38,7 @@ namespace Mix.Lib.Services
         protected readonly AuthConfigService AuthConfigService;
         protected readonly FirebaseService FirebaseService;
         protected readonly MixService MixService;
-        protected readonly MixDbDataService MixDbDataService;
+        protected readonly IMixDbDataService MixDbDataService;
         protected readonly MixRepoDbRepository RepoDbRepository;
         protected readonly MixCmsContext CmsContext;
         private readonly MixCmsAccountContext _accContext;
@@ -71,7 +69,11 @@ namespace Mix.Lib.Services
             UnitOfWorkInfo<MixCmsAccountContext> accountUow,
             MixCacheService cacheService,
             FirebaseService firebaseService, MixRepoDbRepository repoDbRepository,
-            MixService mixService, DatabaseService databaseService, MixCmsAccountContext accContext, UnitOfWorkInfo<MixDbDbContext> mixdbUow, MixDbDataService mixDbDataService)
+            MixService mixService, 
+            DatabaseService databaseService, 
+            MixCmsAccountContext accContext, 
+            UnitOfWorkInfo<MixDbDbContext> mixDbUow, 
+            IMixDbDataService mixDbDataService)
         {
             Session = httpContextAccessor.HttpContext?.Session;
             CmsUow = cmsUow;
@@ -89,7 +91,7 @@ namespace Mix.Lib.Services
             MixService = mixService;
             DatabaseService = databaseService;
             _accContext = accContext;
-            MixdbUow = mixdbUow;
+            MixDbUow = mixDbUow;
             MixDbDataService = mixDbDataService;
         }
 

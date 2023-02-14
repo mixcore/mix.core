@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Mix.Identity.Constants;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Models.Common;
 
 namespace Mix.Lib.Services
 {
-    public class RestApiService<TView, TDbContext, TEntity, TPrimaryKey> : TenantServiceBase
+    public class RestApiService<TView, TDbContext, TEntity, TPrimaryKey> : TenantServiceBase, IRestApiService<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
         where TEntity : EntityBase<TPrimaryKey>

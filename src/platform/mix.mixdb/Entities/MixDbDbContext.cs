@@ -2,11 +2,6 @@
 using Mix.Constant.Constants;
 using Mix.Database.Base;
 using Mix.Database.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Mixdb.Entities
 {

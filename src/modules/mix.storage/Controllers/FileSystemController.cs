@@ -9,8 +9,6 @@ namespace Mix.Storage.Controllers
     [MixAuthorize(roles: MixRoles.Owner)]
     public class FileSystemController : MixTenantApiControllerBase
     {
-        private MixStorageService _storageService;
-
         public FileSystemController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -21,7 +19,6 @@ namespace Mix.Storage.Controllers
             MixStorageService storageService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
-            _storageService = storageService;
         }
 
         #region Routes

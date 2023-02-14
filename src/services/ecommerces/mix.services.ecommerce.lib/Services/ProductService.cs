@@ -3,24 +3,24 @@ using Mix.Database.Entities.Cms;
 using Mix.Heart.Models;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Models.Common;
-using Mix.Services.Databases.Lib.Abtracts;
-using Mix.Services.Databases.Lib.Services;
+using Mix.Services.Databases.Lib.Abstracts;
+using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
+using Mix.Services.Ecommerce.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
-    public sealed class ProductService : MixPostServiceBase<ProductViewModel>
+    public sealed class ProductService : MixPostServiceBase<ProductViewModel>, IProductService
     {
-        private readonly UnitOfWorkInfo<EcommerceDbContext> _ecommerceUOW;
-        public ProductService(UnitOfWorkInfo<MixCmsContext> uow, MixMetadataService metadataService, IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<EcommerceDbContext> ecommerceDbContext) : base(uow, metadataService, httpContextAccessor)
+        private readonly UnitOfWorkInfo<EcommerceDbContext> _ecommerceUow;
+        public ProductService(
+            UnitOfWorkInfo<MixCmsContext> uow, 
+            IMixMetadataService metadataService, 
+            IHttpContextAccessor httpContextAccessor, 
+            UnitOfWorkInfo<EcommerceDbContext> ecommerceDbContext) : base(uow, metadataService, httpContextAccessor)
         {
-            _ecommerceUOW = ecommerceDbContext;
+            _ecommerceUow = ecommerceDbContext;
         }
 
         public override async Task<PagingResponseModel<ProductViewModel>> SearchPosts(SearchPostQueryModel searchRequest, CancellationToken cancellationToken = default)
@@ -28,7 +28,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             var result = await base.SearchPosts(searchRequest, cancellationToken);
             foreach (var item in result.Items)
             {
-                await item.LoadAdditionalDataAsync(_ecommerceUOW, _metadataService, cancellationToken);
+                await item.LoadAdditionalDataAsync(_ecommerceUow, MetadataService, cancellationToken);
             }
             return result;
         }
@@ -38,7 +38,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             var result = await base.GetRelatedPosts(postId, cancellationToken);
             foreach (var item in result)
             {
-                await item.LoadAdditionalDataAsync(_ecommerceUOW, _metadataService, cancellationToken);
+                await item.LoadAdditionalDataAsync(_ecommerceUow, MetadataService, cancellationToken);
             }
             return result;
         }

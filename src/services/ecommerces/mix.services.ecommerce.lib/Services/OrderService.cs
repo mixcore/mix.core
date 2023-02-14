@@ -1,39 +1,32 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
-using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
-using Mix.Lib.Base;
 using Mix.Lib.Services;
 using Mix.Services.Ecommerce.Lib.Dtos;
 using Mix.Services.Ecommerce.Lib.Enums;
-using Mix.Services.Ecommerce.Lib.Providers;
 using Mix.Services.Ecommerce.Lib.ViewModels;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
-using Newtonsoft.Json.Linq;
 using System.Security.Claims;
-using Mix.Database.Entities.Cms;
 using Mix.Lib.Models.Common;
 using Mix.Heart.Models;
 using Mix.Heart.Extensions;
-using Mix.Shared.Dtos;
+using Mix.Service.Services;
+using Mix.Services.Ecommerce.Lib.Interfaces;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
-    public class OrderService : TenantServiceBase
+    public class OrderService : TenantServiceBase, IOrderService
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly TenantUserManager _userManager;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _uow;
         public OrderService(
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<EcommerceDbContext> uow,
-            TenantUserManager userManager,
-            IServiceProvider serviceProvider) : base(httpContextAccessor)
+            TenantUserManager userManager) : base(httpContextAccessor)
         {
             _uow = uow;
             _userManager = userManager;
-            _serviceProvider = serviceProvider;
         }
 
         public async Task<PagingResponseModel<OrderViewModel>> GetUserOrders(
@@ -84,7 +77,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             var user = await _userManager.GetUserAsync(principal);
 
-            var order = await OrderViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == id && m.UserId == user!.Id);
+            var order = await OrderViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == id && m.UserId == user!.Id, cancellationToken);
             if (order == null)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Invalid Order");

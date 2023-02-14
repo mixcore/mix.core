@@ -61,7 +61,6 @@ namespace Mix.Common.Domain.ViewModels
 
                 foreach (var item in relationships)
                 {
-
                     mixRepoDbRepository.InitTableName(item.DestinateDatabaseName);
                     var allowsIds = Context.MixDatabaseAssociation
                             .Where(m => m.ParentDatabaseName == MixDatabaseName

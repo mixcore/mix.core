@@ -5,17 +5,17 @@ namespace Mixcore.Domain.Services
 {
     public class MixNavigationService
     {
-        private UnitOfWorkInfo uow;
-        private MixCmsContext _dbContext;
+        private readonly UnitOfWorkInfo _uow;
+        private readonly MixCmsContext _dbContext;
         public MixNavigationService(MixCmsContext context)
         {
             _dbContext = context;
-            uow = new(_dbContext);
+            _uow = new(_dbContext);
         }
 
         public async Task<MixNavigation> GetNavigationAsync(string name, string culture, IUrlHelper Url)
         {
-            var repo = NavigationViewModel.GetRepository(uow);
+            var repo = NavigationViewModel.GetRepository(_uow);
             string columnName = "name";
             Expression<Func<MixDataContentValue, bool>> keywordPredicate =
                            m => m.MixDatabaseColumnName == columnName && m.StringValue == name;

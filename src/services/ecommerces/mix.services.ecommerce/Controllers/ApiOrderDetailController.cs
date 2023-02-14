@@ -1,20 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Mix.Database.Entities.Cms;
-using Mix.Heart.Enums;
-using Mix.Heart.Exceptions;
+﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Heart.UnitOfWork;
-using Mix.Identity.Constants;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
 using Mix.Lib.Services;
-using Mix.Lib.ViewModels;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Dtos;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
-using Mix.Services.Ecommerce.Lib.Services;
+using Mix.Services.Ecommerce.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.ViewModels;
 
 namespace Mix.Services.Ecommerce.Controllers
@@ -25,7 +19,7 @@ namespace Mix.Services.Ecommerce.Controllers
     public class OrderDetailController
         : MixRestfulApiControllerBase<OrderViewModel, EcommerceDbContext, OrderDetail, int>
     {
-        private readonly EcommerceService _ecommerceService;
+        private readonly IEcommerceService _ecommerceService;
         public OrderDetailController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -34,7 +28,7 @@ namespace Mix.Services.Ecommerce.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<EcommerceDbContext> uow,
             IQueueService<MessageQueueModel> queueService,
-            EcommerceService ecommerceService)
+            IEcommerceService ecommerceService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
             Repository.IsCache = false;

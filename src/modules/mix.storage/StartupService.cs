@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Mix.Shared.Interfaces;
+﻿using Mix.Shared.Interfaces;
 
-namespace Mix.Scheduler.Domain
+namespace Mix.Storage
 {
     public class StartupService : IStartupService
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMixQuartzServices(configuration);
+            services.TryAddScoped<MixStorageService>();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

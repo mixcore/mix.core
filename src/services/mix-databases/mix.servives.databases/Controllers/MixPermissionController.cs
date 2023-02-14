@@ -8,8 +8,8 @@ using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Dtos;
-using Mix.Services.Databases.Lib.Services;
 using Mix.Mixdb.ViewModels;
+using Mix.Services.Databases.Lib.Interfaces;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -17,14 +17,16 @@ namespace Mix.Services.Databases.Controllers
     public sealed class MixPermissionController :
         MixRestfulApiControllerBase<MixPermissionViewModel, MixDbDbContext, MixPermission, int>
     {
-        private readonly MixPermissionService _permissionService;
+        private readonly IMixPermissionService _permissionService;
         public MixPermissionController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixDbDbContext> uow, IQueueService<MessageQueueModel> queueService, MixPermissionService permissionService)
+            UnitOfWorkInfo<MixDbDbContext> uow, 
+            IQueueService<MessageQueueModel> queueService, 
+            IMixPermissionService permissionService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
             _permissionService = permissionService;

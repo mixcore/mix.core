@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Ecommerce.Lib.Interfaces;
-using Mix.Services.Ecommerce.Lib.Services;
 
 namespace Mix.Services.Ecommerce.Lib.Providers
 {
@@ -14,7 +13,7 @@ namespace Mix.Services.Ecommerce.Lib.Providers
             switch (provider)
             {
                 case PaymentGateway.Onepay:
-                    return serviceProvider.GetRequiredService<OnepayService>();
+                    return serviceProvider.GetRequiredService<IPaymentService>();
                 case PaymentGateway.Momo:
                     break;
             }

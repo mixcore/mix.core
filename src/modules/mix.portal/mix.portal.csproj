@@ -7,6 +7,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Domain\Helpers\**" />
+	  <Compile Remove="Domain\Subscribers\**" />
+	  <Content Remove="Domain\Helpers\**" />
+	  <Content Remove="Domain\Subscribers\**" />
+	  <EmbeddedResource Remove="Domain\Helpers\**" />
+	  <EmbeddedResource Remove="Domain\Subscribers\**" />
+	  <None Remove="Domain\Helpers\**" />
+	  <None Remove="Domain\Subscribers\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Using Include="System" />
 		<Using Include="System.Threading.Tasks" />
 		<Using Include="System.ComponentModel.DataAnnotations" />
@@ -56,11 +67,6 @@
 		<ProjectReference Include="..\mix.grpc\mix.grpc.csproj" />
 		<ProjectReference Include="..\mix.messenger\mix.messenger.csproj" />
 		<ProjectReference Include="..\mix.scheduler\mix.scheduler.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Domain\Helpers\" />
-		<Folder Include="Domain\Subscribers\" />
 	</ItemGroup>
 
 	<ItemGroup>

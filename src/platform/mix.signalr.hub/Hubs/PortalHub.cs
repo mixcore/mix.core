@@ -1,10 +1,10 @@
-﻿using Mix.Service.Services;
+﻿using Mix.Service.Interfaces;
 
 namespace Mix.SignalR.Hubs
 {
     public class PortalHub : BaseSignalRHub
     {
-        public PortalHub(AuditLogService auditLogService) : base(auditLogService)
+        public PortalHub(IAuditLogService auditLogService) : base(auditLogService)
         {
         }
     }

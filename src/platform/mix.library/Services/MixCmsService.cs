@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Lib.Services
 {
-    public sealed class MixCmsService : TenantServiceBase
+    public sealed class MixCmsService : TenantServiceBase, IMixCmsService
     {
         private readonly MixConfigurationService _configService;
         public MixCmsService(IHttpContextAccessor httpContextAccessor, MixConfigurationService configService) : base(httpContextAccessor)

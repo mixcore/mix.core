@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using Mix.RepoDb.Repositories;
-using Mix.Services.Databases.Lib.Services;
+using Mix.Services.Databases.Lib.Interfaces;
 
 namespace Mixcore.Controllers
 {
@@ -15,9 +13,20 @@ namespace Mixcore.Controllers
     {
         private readonly MixRepoDbRepository _repoDbRepository;
         private readonly MixRepoDbRepository _mixRepoDbRepository;
-        private readonly MixMetadataService _metadataService;
+        private readonly IMixMetadataService _metadataService;
         private readonly MixcorePostService _postService;
-        public PostContentApiController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixService mixService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> uow, IQueueService<MessageQueueModel> queueService, MixcorePostService postService, MixRepoDbRepository mixRepoDbRepository, MixMetadataService metadataService, MixRepoDbRepository repoDbRepository) : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
+        public PostContentApiController(
+            IHttpContextAccessor httpContextAccessor, 
+            IConfiguration configuration, 
+            MixService mixService, 
+            TranslatorService translator, 
+            MixIdentityService mixIdentityService, 
+            UnitOfWorkInfo<MixCmsContext> uow, 
+            IQueueService<MessageQueueModel> queueService, 
+            MixcorePostService postService, 
+            MixRepoDbRepository mixRepoDbRepository,
+            IMixMetadataService metadataService, 
+            MixRepoDbRepository repoDbRepository) : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
             _postService = postService;
             _mixRepoDbRepository = mixRepoDbRepository;

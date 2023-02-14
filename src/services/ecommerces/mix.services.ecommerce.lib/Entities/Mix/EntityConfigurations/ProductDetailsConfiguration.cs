@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Constant.Enums;
 using Mix.Database.Base;
-using Mix.Database.Extensions;
 using Mix.Database.Services;
 using Mix.Services.Ecommerce.Lib.Constants;
 

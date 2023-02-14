@@ -7,10 +7,10 @@ using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Dtos;
-using Mix.Services.Databases.Lib.Services;
 using Mix.Shared.Dtos;
 using Mix.Heart.Extensions;
 using Mix.Mixdb.ViewModels;
+using Mix.Services.Databases.Lib.Interfaces;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -18,14 +18,16 @@ namespace Mix.Services.Databases.Controllers
     public sealed class MixMetadataController :
         MixRestfulApiControllerBase<MixMetadataViewModel, MixDbDbContext, MixMetadata, int>
     {
-        private readonly MixMetadataService _metadataService;
+        private readonly IMixMetadataService _metadataService;
         public MixMetadataController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixDbDbContext> uow, IQueueService<MessageQueueModel> queueService, MixMetadataService metadataService)
+            UnitOfWorkInfo<MixDbDbContext> uow, 
+            IQueueService<MessageQueueModel> queueService,
+            IMixMetadataService metadataService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
             _metadataService = metadataService;

@@ -20,8 +20,7 @@ namespace Mix.Queue.Engines
         private readonly MixMemoryMessageQueue<MessageQueueModel> _queueService;
         private readonly string _topicId;
 
-        protected readonly IServiceProvider _servicesProvider;
-        private IServiceScope _serviceScope;
+        protected readonly IServiceProvider ServicesProvider;
         protected IServiceScope ServiceScope { get; set ; }
         protected SubscriberBase(
             string topicId,
@@ -34,7 +33,7 @@ namespace Mix.Queue.Engines
             _queueService = queueService;
             _topicId = topicId;
             _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{moduleName}");
-            _servicesProvider = servicesProvider;
+            ServicesProvider = servicesProvider;
         }
 
         public Task StartAsync(CancellationToken cancellationToken = default)

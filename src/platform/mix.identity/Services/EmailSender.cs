@@ -3,10 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Threading.Tasks;
+using Mix.Identity.Interfaces;
 
 namespace Mix.Identity.Services
 {
-    public class EmailSender
+    public class EmailSender: IEmailSender
     {
         public Task SendEmailAsync(string email, string subject, string message)
         {

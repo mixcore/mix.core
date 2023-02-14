@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
-using Mix.Lib;
+using Mix.Service.Interfaces;
 using Mix.Shared;
 using Mix.Shared.Interfaces;
+using Mix.SignalR.Interfaces;
 using Mix.SignalR.Services;
 using System.Reflection;
 
@@ -57,9 +58,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddResponseCompression(options => options.EnableForHttps = true);
             services.AddResponseCaching();
 
-            services.TryAddSingleton<AuditLogService>();
-            services.TryAddSingleton<MixMemoryCacheService>();
-            services.TryAddSingleton<PortalHubClientService>();
+            services.TryAddSingleton<IAuditLogService, AuditLogService>();
+            services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
+            services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
 
             services.AddMixRepoDb();
             return services;
@@ -100,9 +101,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddResponseCompression(options => options.EnableForHttps = true);
             services.AddResponseCaching();
 
-            services.TryAddSingleton<AuditLogService>();
-            services.TryAddSingleton<MixMemoryCacheService>();
-            services.TryAddSingleton<PortalHubClientService>();
+            services.TryAddSingleton<IAuditLogService, AuditLogService>();
+            services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
+            services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
             services.AddMixRepoDb();
             return services;
         }

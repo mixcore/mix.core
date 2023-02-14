@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
-using Mix.Lib.Services;
+using Mix.Lib.Interfaces;
 using Mix.Mixdb.Entities;
 using Mix.RepoDb.Repositories;
-using Mix.Services.Databases.Lib.Services;
+using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
@@ -11,38 +11,30 @@ namespace Mixcore.Controllers
     [Route("{controller}")]
     public class PostController : MixControllerBase
     {
-        protected UnitOfWorkInfo _uow;
-        protected readonly MixCmsContext _context;
-        private readonly UnitOfWorkInfo<MixDbDbContext> _dbUow;
-        private readonly ILogger<HomeController> _logger;
-        private readonly TranslatorService _translator;
+        protected UnitOfWorkInfo Uow;
+        protected readonly MixCmsContext CmsContext;
         private readonly DatabaseService _databaseService;
         private readonly MixRepoDbRepository _repoDbRepository;
-        private readonly MixMetadataService _metadataService;
+        private readonly IMixMetadataService _metadataService;
         public PostController(
             IHttpContextAccessor httpContextAccessor,
-            ILogger<HomeController> logger,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
-            MixCmsService mixCmsService,
-            TranslatorService translator,
+            IMixCmsService mixCmsService,
             DatabaseService databaseService,
-            MixCmsContext context,
+            MixCmsContext cmsContext,
             MixRepoDbRepository repoDbRepository,
-            MixMetadataService metadataService,
+            IMixMetadataService metadataService,
             UnitOfWorkInfo<MixDbDbContext> dbUow)
             : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
-            _context = context;
-            _uow = new(_context);
-            _logger = logger;
-            _translator = translator;
+            CmsContext = cmsContext;
+            Uow = new(CmsContext);
             _databaseService = databaseService;
-            _context = context;
+            CmsContext = cmsContext;
             _repoDbRepository = repoDbRepository;
             _metadataService = metadataService;
-            _dbUow = dbUow;
-            _repoDbRepository.SetDbConnection(_dbUow);
+            _repoDbRepository.SetDbConnection(dbUow);
         }
 
         protected override void ValidateRequest()
@@ -86,7 +78,7 @@ namespace Mixcore.Controllers
         protected async Task<IActionResult> Post(int postId, string keyword = null)
         {
             // Home Post
-            var postRepo = PostContentViewModel.GetRepository(_uow);
+            var postRepo = PostContentViewModel.GetRepository(Uow);
             var post = await postRepo.GetSingleAsync(m => m.Id == postId && m.MixTenantId == CurrentTenant.Id);
             if (post == null)
             {

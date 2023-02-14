@@ -5,12 +5,12 @@ namespace Mixcore.Domain.Subscribers
 {
     public sealed class ThemeSubscriber : SubscriberBase
     {
-        static string topicId = typeof(MixThemeViewModel).FullName;
+        private static readonly string TopicId = typeof(MixThemeViewModel).FullName;
         public ThemeSubscriber(
             IServiceProvider serviceProvider,
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService) 
-            : base(topicId, MixModuleNames.Mixcore, serviceProvider, configuration, queueService)
+            : base(TopicId, MixModuleNames.Mixcore, serviceProvider, configuration, queueService)
         {
         }
 
