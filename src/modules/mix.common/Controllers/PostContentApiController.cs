@@ -62,7 +62,7 @@ namespace Mix.Common.Controllers
             if (result.AdditionalData == null)
             {
                 await result.LoadAdditionalDataAsync(_mixRepoDbRepository);
-                await _cacheService.SetAsync($"{id}/{typeof(PostContentViewModel).FullName}", result, typeof(MixPostContent), "full");
+                await _cacheService.SetAsync($"{id}/{typeof(PostContentViewModel).FullName}", result, typeof(MixPostContent).FullName, "full");
             }
             return result;
         }
