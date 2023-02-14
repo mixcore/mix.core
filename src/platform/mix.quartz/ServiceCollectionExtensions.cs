@@ -4,6 +4,7 @@ using Mix.Quartz.Services;
 using Mix.Shared;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -12,8 +13,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMixQuartzServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSchedulerJobs();
-            services.AddSingleton<IJobFactory, SingletonJobFactory>();
-            services.AddSingleton<IQuartzService, QuartzService>();
+            services.TryAddSingleton<IJobFactory, SingletonJobFactory>();
+            services.TryAddSingleton<IQuartzService, QuartzService>();
             services.AddHostedService<QuartzHostedService>();
             return services;
         }
