@@ -501,7 +501,7 @@ namespace Mix.RepoDb.Services
         private async Task<bool> Migrate(MixDatabaseViewModel database, MixDatabaseProvider databaseProvider, MixRepoDbRepository repo)
         {
             var colsSql = new List<string>();
-            var tableName = database.SystemName.ToLower();
+            var tableName = database.SystemName.ToTitleCase();
 
             foreach (var col in database.Columns)
             {
@@ -522,15 +522,15 @@ namespace Mix.RepoDb.Services
         private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, List<string> colsSql)
         {
             return $"CREATE TABLE {_databaseConstant.BacktickOpen}{tableName}{_databaseConstant.BacktickClose} " +
-                $"(Id {GetAutoIncreaseIdSyntax(databaseProvider)}, " +
-                $"CreatedDateTime {GetColumnType(MixDataType.DateTime)}, " +
-                $"LastModified {GetColumnType(MixDataType.DateTime)} NULL, " +
-                $"MixTenantId {GetColumnType(MixDataType.Integer)} NULL, " +
-                $"CreatedBy {GetColumnType(MixDataType.Text)} NULL, " +
-                $"ModifiedBy {GetColumnType(MixDataType.Text)} NULL, " +
-                $"Priority {GetColumnType(MixDataType.Integer)} NOT NULL, " +
-                $"Status {GetColumnType(MixDataType.Text)} NULL, " +
-                $"IsDeleted {GetColumnType(MixDataType.Boolean)} NOT NULL, " +
+                $"({_databaseConstant.BacktickOpen}Id{_databaseConstant.BacktickClose} {GetAutoIncreaseIdSyntax(databaseProvider)}, " +
+                $"{_databaseConstant.BacktickOpen}CreatedDateTime{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.DateTime)}, " +
+                $"{_databaseConstant.BacktickOpen}LastModified{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.DateTime)} NULL, " +
+                $"{_databaseConstant.BacktickOpen}MixTenantId{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Integer)} NULL, " +
+                $"{_databaseConstant.BacktickOpen}CreatedBy{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NULL, " +
+                $"{_databaseConstant.BacktickOpen}ModifiedBy{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NULL, " +
+                $"{_databaseConstant.BacktickOpen}Priority{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Integer)} NOT NULL, " +
+                $"{_databaseConstant.BacktickOpen}Status{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NULL, " +
+                $"{_databaseConstant.BacktickOpen}IsDeleted{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Boolean)} NOT NULL, " +
                 $" {string.Join(",", colsSql.ToArray())})";
         }
 

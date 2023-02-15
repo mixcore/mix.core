@@ -137,6 +137,7 @@ namespace Mix.Lib.ViewModels
             }
             catch (Exception ex)
             {
+                MixService.LogException(ex);
                 PortalMenus = new();
             }
         }
