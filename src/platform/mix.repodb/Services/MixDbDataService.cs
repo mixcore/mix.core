@@ -18,6 +18,7 @@ using RepoDb.Enumerations;
 using Mix.Heart.Extensions;
 using Mix.RepoDb.Interfaces;
 using Mix.Service.Interfaces;
+using Mix.Constant.Constants;
 
 namespace Mix.RepoDb.Services
 {

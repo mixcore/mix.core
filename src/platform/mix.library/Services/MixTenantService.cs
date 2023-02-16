@@ -7,6 +7,7 @@ namespace Mix.Lib.Services
     public sealed class MixTenantService : IMixTenantService
     {
         private readonly DatabaseService _databaseService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public List<MixTenantSystemModel> AllTenants { get; set; }
 
