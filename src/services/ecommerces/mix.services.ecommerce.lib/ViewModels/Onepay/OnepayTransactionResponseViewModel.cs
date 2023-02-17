@@ -40,7 +40,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels.Onepay
         {
         }
 
-        public OnepayTransactionResponseViewModel(OnepayTransactionResponse entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public OnepayTransactionResponseViewModel(OnepayTransactionResponse entity, UnitOfWorkInfo? uowInfo = null) : base(entity, uowInfo)
         {
         }
         #endregion
