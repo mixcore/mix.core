@@ -71,7 +71,7 @@ namespace Mix.Lib.Services
             }
             data.SetUowInfo(Uow);
             await data.SaveAsync(cancellationToken);
-            await CacheService.RemoveCacheAsync(id, typeof(TView), cancellationToken);
+            await CacheService.RemoveCacheAsync(id, typeof(TEntity).FullName, cancellationToken);
             QueueService.PushMessage(data, MixRestAction.Put.ToString(), true);
         }
 
@@ -80,7 +80,7 @@ namespace Mix.Lib.Services
             cancellationToken.ThrowIfCancellationRequested();
             data.SetUowInfo(Uow);
             await data.DeleteAsync(cancellationToken);
-            await CacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TView), cancellationToken);
+            await CacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TEntity).FullName, cancellationToken);
             QueueService.PushMessage(data, MixRestAction.Delete.ToString(), true);
         }
 
@@ -90,7 +90,7 @@ namespace Mix.Lib.Services
             cancellationToken.ThrowIfCancellationRequested();
             data.SetUowInfo(Uow);
             await data.SaveFieldsAsync(properties, cancellationToken);
-            await CacheService.RemoveCacheAsync(id.ToString(), typeof(TView), cancellationToken);
+            await CacheService.RemoveCacheAsync(id.ToString(), typeof(TEntity).FullName, cancellationToken);
             QueueService.PushMessage(data, MixRestAction.Patch.ToString(), true);
         }
 

@@ -109,14 +109,14 @@ namespace Mix.Lib.Base
         protected virtual async Task UpdateHandler(string id, TEntity data)
         {
             await Repository.UpdateAsync(data);
-            await CacheService.RemoveCacheAsync(id, typeof(TEntity));
+            await CacheService.RemoveCacheAsync(id, typeof(TEntity).FullName);
             QueueService.PushMessage(data, MixRestAction.Put.ToString(), true);
         }
 
         protected virtual async Task DeleteHandler(TEntity data)
         {
             await Repository.DeleteAsync(data);
-            await CacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TEntity));
+            await CacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TEntity).FullName);
             QueueService.PushMessage(data, MixRestAction.Delete.ToString(), true);
         }
 
@@ -124,7 +124,7 @@ namespace Mix.Lib.Base
         protected virtual async Task PatchHandler(TPrimaryKey id, TEntity data, IEnumerable<EntityPropertyModel> properties)
         {
             await Repository.SaveFieldsAsync(data, properties);
-            await CacheService.RemoveCacheAsync(id.ToString(), typeof(TEntity));
+            await CacheService.RemoveCacheAsync(id.ToString(), typeof(TEntity).FullName);
             QueueService.PushMessage(data, MixRestAction.Patch.ToString(), true);
         }
 

@@ -68,7 +68,7 @@ namespace Mix.Lib.Attributes
 
         private bool CheckByPassAuthenticate(string method, string path, MixDatabase database)
         {
-            return 
+            return
                 (method == "GET" && (string.IsNullOrEmpty(database.ReadPermissions) || JArray.Parse(database.ReadPermissions).Count == 0))
                 || (method == "GET" && path.EndsWith("filter") && (string.IsNullOrEmpty(database.ReadPermissions) || JArray.Parse(database.ReadPermissions).Count == 0))
                 || (method == "POST" && (string.IsNullOrEmpty(database.CreatePermissions) || JArray.Parse(database.CreatePermissions).Count == 0))
@@ -93,8 +93,15 @@ namespace Mix.Lib.Attributes
 
         private bool IsInRoles(string method, MixDatabase database)
         {
+
             var userRoles = _idService.GetClaim(userPrinciple, MixClaims.Role).Split(',', StringSplitOptions.RemoveEmptyEntries)
                 .Select(r => r.Trim()).ToArray();
+
+            if (userRoles.Any(m => m == MixRoles.SuperAdmin))
+            {
+                return true;
+            }
+
             switch (method)
             {
                 case "GET": return CheckUserInRoles(database.ReadPermissions, userRoles);

@@ -38,7 +38,7 @@ namespace Mixcore.Domain.Subscribers
 
         private async Task DeleteCacheAsync(MixPageContentViewModel data)
         {
-            await _cacheService.RemoveCacheAsync(data.Id.ToString(), typeof(PageContentViewModel));
+            await _cacheService.RemoveCacheAsync(data.Id.ToString(), typeof(MixPageContent).FullName);
         }
     }
 }
