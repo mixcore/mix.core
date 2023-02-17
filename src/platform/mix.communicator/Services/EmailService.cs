@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Mix.Communicator.Models;
-using Mix.Heart.Exceptions;
+using Mix.Service.Services;
 using System.Net;
 using System.Net.Mail;
 

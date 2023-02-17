@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Mix.Database.Services;
 using Mix.Lib.Interfaces;
 
@@ -7,7 +8,6 @@ namespace Mix.Lib.Services
     public sealed class MixTenantService : IMixTenantService
     {
         private readonly DatabaseService _databaseService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public List<MixTenantSystemModel> AllTenants { get; set; }
 
