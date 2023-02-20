@@ -18,6 +18,7 @@ using RepoDb.Enumerations;
 using Mix.Heart.Extensions;
 using Mix.RepoDb.Interfaces;
 using Mix.Service.Interfaces;
+using Mix.Constant.Constants;
 
 namespace Mix.RepoDb.Services
 {
@@ -199,6 +200,12 @@ namespace Mix.RepoDb.Services
         #endregion
 
         #region Helper
+
+        public static string GetCacheFolder(string databaseName)
+        {
+            return $"{MixFolders.MixDbCacheFolder}/{databaseName}";
+        }
+
         private async Task LoadNestedData(string tableName, JObject data)
         {
             var database = await GetMixDatabase(tableName);

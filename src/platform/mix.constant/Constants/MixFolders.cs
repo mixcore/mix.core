@@ -13,6 +13,7 @@
         public const string AppConfigFolder = "MixContent/Shared/AppConfigs";
         public const string JsonDataFolder = "MixContent/Shared/Json";
         public const string MixCacheFolder = "MixContent/cache";
+        public const string MixDbCacheFolder = "MixDb";
         public const string MixLogsFolder = "MixContent/logs";
         public const string ExportFolder = "MixContent/StaticFiles/exports";
         public const string ImportFolder = "MixContent/StaticFiles/imports/themes";
