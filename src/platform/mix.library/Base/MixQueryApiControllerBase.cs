@@ -48,7 +48,7 @@ namespace Mix.Lib.Base
 
 
         [HttpGet("default")]
-        public ActionResult<TView> GetDefault()
+        public async Task<ActionResult<TView>> GetDefaultAsync()
         {
             var result = (TView)Activator.CreateInstance(typeof(TView), Uow);
             if (result == null)
@@ -57,7 +57,7 @@ namespace Mix.Lib.Base
             }
 
             result.InitDefaultValues(Culture?.Specificulture, Culture?.Id);
-            result.ExpandView();
+            await result.ExpandView();
             return Ok(result);
         }
 
