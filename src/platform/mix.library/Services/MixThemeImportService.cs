@@ -15,7 +15,6 @@ namespace Mix.Lib.Services
         private readonly CancellationTokenSource _cts;
         private readonly DatabaseService _databaseService;
         private readonly IDatabaseConstants _databaseConstant;
-        private readonly IMixDbService _mixDbService;
         private UnitOfWorkInfo<MixCmsContext> _uow { get; set; }
         private MixCmsContext _context { get; set; }
         private SiteDataViewModel _siteData;
@@ -54,8 +53,6 @@ namespace Mix.Lib.Services
         public MixThemeImportService(
             IHttpContextAccessor httpContext,
             DatabaseService databaseService,
-            IMixDbService mixDbService,
-            MixRepoDbRepository repository,
             IServiceProvider serviceProvider)
         {
             _cts = new CancellationTokenSource();

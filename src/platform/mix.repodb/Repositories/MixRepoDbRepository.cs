@@ -10,8 +10,10 @@ using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Extensions;
 using Mix.Heart.Models;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.RepoDb.Models;
+using Mix.RepoDb.Services;
 using Mix.Service.Services;
 using Mix.Shared.Dtos;
 using Mix.Shared.Models;
@@ -359,9 +361,12 @@ namespace Mix.RepoDb.Repositories
             try
             {
                 BeginTransaction();
-                if (_connection.Exists(_tableName, new { Id = entity.Value<int>("Id") }, transaction: _dbTransaction))
+                int id = entity.Value<int>("Id");
+                if (_connection.Exists(_tableName, new { Id = id }, transaction: _dbTransaction))
                 {
                     object obj = entity.ToObject<Dictionary<string, object>>()!;
+                    var cacheFolder = MixDbDataService.GetCacheFolder(_tableName);
+                    MixFileHelper.EmptyFolder($"{MixFolders.MixCacheFolder}/{cacheFolder}/{id}");
                     return await _connection.UpdateAsync(_tableName, obj,
                         commandTimeout: _settings.CommandTimeout,
                         trace: Trace,

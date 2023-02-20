@@ -33,7 +33,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             IsCache = false;
         }
 
-        public OrderTrackingViewModel(OrderTracking entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public OrderTrackingViewModel(OrderTracking entity, UnitOfWorkInfo? uowInfo = null) : base(entity, uowInfo)
         {
             IsCache = false;
         }

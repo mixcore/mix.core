@@ -57,7 +57,7 @@ namespace Mix.Lib.Base
 
         private async Task RemoveCacheHandler(MixCacheService cacheService, TPrimaryKey id)
         {
-            await cacheService.RemoveCacheAsync(id, typeof(TEntity));
+            await cacheService.RemoveCacheAsync(id, typeof(TEntity).FullName);
         }
 
         [HttpDelete("{id}")]

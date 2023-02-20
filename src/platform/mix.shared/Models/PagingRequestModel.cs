@@ -7,7 +7,6 @@ namespace Mix.Shared.Models
 {
     public class PagingRequestModel : PagingModel
     {
-        public int Page { get; set; }
         protected readonly int DefaultPageSize;
 
         public PagingRequestModel(int defaultPageSize = MixConstants.CONST_DEFAULT_PAGESIZE)
