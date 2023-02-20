@@ -63,8 +63,8 @@ namespace Mix.Account.Controllers
              TranslatorService translator,
              MixIdentityService mixIdentityService,
              IQueueService<MessageQueueModel> queueService,
-             UnitOfWorkInfo<MixDbDbContext> mixDbUow, 
-             AuthConfigService authConfigService, 
+             UnitOfWorkInfo<MixDbDbContext> mixDbUow,
+             AuthConfigService authConfigService,
              IMixEdmService edmService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
@@ -398,8 +398,8 @@ namespace Mix.Account.Controllers
             {
                 var user = await _userManager.FindByIdAsync(model.Id.ToString());
                 user.Email = model.Email;
+                user.PhoneNumber = model.PhoneNumber;
                 var updInfo = await _userManager.UpdateAsync(user);
-                //var saveData = await model.UserData.SaveAsync();
                 if (model.IsChangePassword)
                 {
                     var changePwd = await _userManager.ChangePasswordAsync(
