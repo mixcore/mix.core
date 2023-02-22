@@ -70,7 +70,7 @@ namespace Mix.Lib.Attributes
         {
             return
                 (method == "GET" && (string.IsNullOrEmpty(database.ReadPermissions) || JArray.Parse(database.ReadPermissions).Count == 0))
-                || (method == "GET" && path.EndsWith("filter") && (string.IsNullOrEmpty(database.ReadPermissions) || JArray.Parse(database.ReadPermissions).Count == 0))
+                || (method == "POST" && path.EndsWith("filter") && (string.IsNullOrEmpty(database.ReadPermissions) || JArray.Parse(database.ReadPermissions).Count == 0))
                 || (method == "POST" && (string.IsNullOrEmpty(database.CreatePermissions) || JArray.Parse(database.CreatePermissions).Count == 0))
                 || ((method == "PUT" || method == "PATCH") && (string.IsNullOrEmpty(database.UpdatePermissions) || JArray.Parse(database.UpdatePermissions).Count == 0))
                 || (method == "DELETE" && (string.IsNullOrEmpty(database.DeletePermissions) || JArray.Parse(database.DeletePermissions).Count == 0));
