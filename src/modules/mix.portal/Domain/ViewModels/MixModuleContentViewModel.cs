@@ -79,7 +79,6 @@
             Context.MixPageModuleAssociation.RemoveRange(Context.MixPageModuleAssociation.Where(m => m.ChildId == Id));
             Context.MixModuleData.RemoveRange(Context.MixModuleData.Where(m => m.ParentId == Id));
             Context.MixModulePostAssociation.RemoveRange(Context.MixModulePostAssociation.Where(m => m.ParentId == Id));
-            Context.MixDataContentAssociation.RemoveRange(Context.MixDataContentAssociation.Where(m => m.ParentType == MixDatabaseParentType.Module && m.IntParentId == Id));
 
             if (Repository.GetListQuery(m => m.ParentId == ParentId, cancellationToken).Count() == 1)
             {

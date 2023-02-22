@@ -1,4 +1,5 @@
 ﻿using Mix.Database.Services;
+using Newtonsoft.Json.Linq;
 
 namespace Mix.Database.Base.Cms
 {
@@ -21,6 +22,10 @@ namespace Mix.Database.Base.Cms
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
 
+            //builder.Property(e => e.ExtraData)
+            //.HasConversion(
+            //    v => v.ToString(Newtonsoft.Json.Formatting.None),
+            //    v => JObject.Parse(v ?? "{}"));
         }
 
     }

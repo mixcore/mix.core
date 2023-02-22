@@ -56,21 +56,6 @@ namespace Mix.Lib.ViewModels
             _cmsUow = uow;
         }
 
-
-        public async Task<AdditionalDataContentViewModel> CreatetUserData(int tenantId, JObject userData)
-        {
-            var data = new AdditionalDataContentViewModel(_cmsUow)
-            {
-                MixTenantId = tenantId,
-                Data = userData,
-                GuidParentId = Id,
-                MixDatabaseName = MixDatabaseNames.SYSTEM_USER_DATA,
-                ParentType = MixDatabaseParentType.User
-            };
-            await data.SaveAsync();
-            return data;
-        }
-
         public async Task LoadUserDataAsync(int tenantId, MixRepoDbRepository repoDbRepository, MixCmsAccountContext accContext)
         {
             if (!GlobalConfigService.Instance.IsInit)

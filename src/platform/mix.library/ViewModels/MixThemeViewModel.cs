@@ -9,7 +9,8 @@
         public string PreviewUrl { get; set; }
         public string ImageUrl { get; set; }
         public string MixDatabaseName { get; set; }
-        public Guid? MixDataContentId { get; set; }
+        public int? MixDbId { get; set; }
+        public JObject ExtraData { get; set; }
         public string AssetFolder { get; set; }
         public string TemplateFolder { get; set; }
 
@@ -43,14 +44,6 @@
             }
 
             return base.ParseEntity(cancellationToken);
-        }
-
-        protected override Task SaveEntityRelationshipAsync(MixTheme parentEntity, CancellationToken cancellationToken = default)
-        {
-            // Create default extra data
-            MixDataContentViewModel extraData = new();
-
-            return base.SaveEntityRelationshipAsync(parentEntity, cancellationToken);
         }
 
         #endregion
