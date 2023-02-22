@@ -216,14 +216,6 @@ namespace Mix.Lib.Services
 
         #region Export Database Data
 
-        private async Task ExportDatabaseDatas()
-        {
-            await ExportMixDatasAsync();
-            await ExportDataContentsAsync();
-            await ExportValuesAsync();
-            await ExportDataAssociationsAsync();
-        }
-
         private async Task ExportMixDbAsync()
         {
             foreach (var database in _siteData.MixDatabases)
@@ -241,37 +233,6 @@ namespace Mix.Lib.Services
             }
         }
 
-        private async Task ExportMixDatasAsync()
-        {
-            var datas = await _context.MixData
-                .Where(m => _dto.Associations.MixDatabaseIds.Any(p => p == m.MixDatabaseId))
-                .AsNoTracking()
-                .ToListAsync();
-            _siteData.Datas = _siteData.Datas.Union(datas).ToList();
-        }
-
-        private async Task ExportDataContentsAsync()
-        {
-            _siteData.DataContents = await _context.MixDataContent
-                .Where(m => _dto.Associations.MixDatabaseIds.Any(p => p == m.MixDatabaseId))
-                .AsNoTracking()
-                .ToListAsync();
-        }
-        private async Task ExportValuesAsync()
-        {
-            _siteData.DataContentValues = await _context.MixDataContentValue
-                .Where(m => _dto.Associations.MixDatabaseIds.Any(n => n == m.MixDatabaseId))
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
-        private async Task ExportDataAssociationsAsync()
-        {
-            Expression<Func<MixDataContentAssociation, bool>> predicate = m => _dto.Associations.MixDatabaseIds.Any(p => p == m.MixDatabaseId);
-
-            _siteData.DataContentAssociations = await _context.MixDataContentAssociation
-                .Where(predicate).ToListAsync();
-        }
         #endregion Export Module
 
         #region Export Configurations

@@ -34,9 +34,9 @@ namespace Mixcore.Domain.ViewModels
         public string BaseApiUrl { get; set; }
         public int? TemplateId { get; set; }
         public string MixDatabaseName { get; set; }
-        public Guid? MixDataContentId { get; set; }
+        public int? MixDbId { get; set; }
 
-        public JObject AdditionalData { get; set; }
+        public JObject ExtraData { get; set; }
         public TemplateViewModel Template { get; set; }
         #endregion
 
@@ -57,8 +57,8 @@ namespace Mixcore.Domain.ViewModels
 
         public T Property<T>(string fieldName)
         {
-            return AdditionalData != null
-                ? AdditionalData.Value<T>(fieldName)
+            return ExtraData != null
+                ? ExtraData.Value<T>(fieldName)
                 : default;
         }
 
@@ -69,7 +69,7 @@ namespace Mixcore.Domain.ViewModels
         {
             mixRepoDbRepository.InitTableName(MixDatabaseName);
             var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Page, Id);
-            AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
+            ExtraData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
         }
 
         #endregion

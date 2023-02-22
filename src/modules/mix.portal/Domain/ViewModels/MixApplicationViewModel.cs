@@ -11,7 +11,7 @@
         public string BaseApiUrl { get; set; }
         public int? TemplateId { get; set; }
         public string MixDatabaseName { get; set; }
-        public Guid? MixDataContentId { get; set; }
+        public int? MixDbId { get; set; }
 
         public string DetailUrl { get; set; }
         public string PackateFilePath { get; set; }

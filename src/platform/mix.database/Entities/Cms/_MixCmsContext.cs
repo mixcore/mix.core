@@ -19,60 +19,6 @@ namespace Mix.Database.Entities.Cms
         {
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!string.IsNullOrEmpty(_connectionString))
-        //    {
-        //        switch (_databaseProvider)
-        //        {
-        //            case MixDatabaseProvider.SQLSERVER:
-        //                optionsBuilder.UseSqlServer(_connectionString);
-        //                break;
-
-        //            case MixDatabaseProvider.MySQL:
-        //                optionsBuilder.UseMySql(_connectionString, ServerVersion.AutoDetect(_connectionString));
-        //                break;
-
-        //            case MixDatabaseProvider.SQLITE:
-        //                optionsBuilder.UseSqlite(_connectionString);
-        //                break;
-
-        //            case MixDatabaseProvider.PostgreSQL:
-        //                optionsBuilder.UseNpgsql(_connectionString);
-        //                AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-        //                AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
-        //                break;
-
-        //            default:
-        //                break;
-        //        }
-        //    }
-        //}
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    string ns = _databaseProvider switch
-        //    {
-        //        MixDatabaseProvider.SQLSERVER
-        //             => typeof(SqlServerDatabaseConstants).Namespace,
-
-        //        MixDatabaseProvider.MySQL
-        //            => typeof(MySqlDatabaseConstants).Namespace,
-
-        //        MixDatabaseProvider.SQLITE
-        //            => typeof(SqliteDatabaseConstants).Namespace,
-
-        //        MixDatabaseProvider.PostgreSQL
-        //            => typeof(PostgresDatabaseConstants).Namespace,
-        //        _ => string.Empty
-        //    };
-        //    base.OnModelCreating(modelBuilder);
-        //    modelBuilder.Entity<MixDataContentValue>().HasOne(m => m.MixDatabaseColumn).WithMany().OnDelete(DeleteBehavior.NoAction);
-        //    modelBuilder.ApplyConfigurationsFromAssembly(
-        //        this.GetType().Assembly,
-        //        m => m.Namespace == ns);
-        //}
-
         public override void Dispose()
         {
             switch (_databaseProvider)
@@ -114,11 +60,7 @@ namespace Mix.Database.Entities.Cms
         public virtual DbSet<MixLanguageContent> MixLanguageContent { get; set; }
         public virtual DbSet<MixDatabaseColumn> MixDatabaseColumn { get; set; }
         public virtual DbSet<MixDatabaseAssociation> MixDatabaseAssociation { get; set; }
-        public virtual DbSet<MixData> MixData { get; set; }
-        public virtual DbSet<MixDataContent> MixDataContent { get; set; }
-        public virtual DbSet<MixDataContentValue> MixDataContentValue { get; set; }
         public virtual DbSet<MixDatabaseContextDatabaseAssociation> MixDatabaseContextDatabaseAssociation { get; set; }
-        public virtual DbSet<MixDataContentAssociation> MixDataContentAssociation { get; set; }
         public virtual DbSet<MixPagePostAssociation> MixPagePostAssociation { get; set; }
         public virtual DbSet<MixPostPostAssociation> MixPostPostAssociation { get; set; }
         public virtual DbSet<MixPageModuleAssociation> MixPageModuleAssociation { get; set; }

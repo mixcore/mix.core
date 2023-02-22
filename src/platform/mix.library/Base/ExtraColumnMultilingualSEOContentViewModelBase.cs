@@ -29,7 +29,7 @@
         #region Properties
 
         public string MixDatabaseName { get; set; }
-        public Guid? MixDataContentId { get; set; }
+        public int? MixDbId { get; set; }
 
         #endregion
     }

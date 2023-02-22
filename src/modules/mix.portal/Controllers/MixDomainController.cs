@@ -4,7 +4,7 @@ namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/mix-domain")]
     [ApiController]
-    [MixAuthorize($"{MixRoles.SuperAdmin}, {MixRoles.Owner}")]
+    [MixAuthorize(MixRoles.Owner)]
     public class MixDomainController
         : MixRestfulApiControllerBase<MixDomainViewModel, MixCmsContext, MixDomain, int>
     {

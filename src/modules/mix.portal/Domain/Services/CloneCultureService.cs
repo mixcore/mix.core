@@ -51,11 +51,6 @@ namespace Mix.Portal.Domain.Services
                 await CloneAssociations<MixPageModuleAssociation>(_pageIds, _moduleIds);
                 await CloneAssociations<MixPagePostAssociation>(_pageIds, _postIds);
                 await CloneAssociations<MixModulePostAssociation>(_moduleIds, _postIds);
-
-                await CloneGuidData<MixDataContent>(_dataIds);
-                await CloneDataValues<MixDataContentValue>(_valueIds);
-
-                await CloneDataAssociations();
             }
             catch (Exception ex)
             {
@@ -176,44 +171,6 @@ namespace Mix.Portal.Domain.Services
                 await _cmsUow.DbContext.SaveChangesAsync();
             }
         }
-        private async Task CloneDataAssociations()
-        {
-            Expression<Func<MixDataContentAssociation, bool>> predicate = m => false;
-            predicate = predicate.OrIf(_postIds.Count > 0, m => m.ParentType == MixDatabaseParentType.Post && m.IntParentId.HasValue && _postIds.Keys.Contains(m.IntParentId.Value));
-            predicate = predicate.OrIf(_pageIds.Count > 0, m => m.ParentType == MixDatabaseParentType.Page && m.IntParentId.HasValue && _pageIds.Keys.Contains(m.IntParentId.Value));
-            predicate = predicate.OrIf(_moduleIds.Count > 0, m => m.ParentType == MixDatabaseParentType.Module && m.IntParentId.HasValue && _moduleIds.Keys.Contains(m.IntParentId.Value));
-            predicate = predicate.OrIf(_dataIds.Count > 0, m => m.ParentType == MixDatabaseParentType.MixDatabse && m.GuidParentId.HasValue && _dataIds.Keys.Contains(m.GuidParentId.Value));
-            predicate = predicate.AndAlso(m => m.MixTenantId == CurrentTenant.Id && m.Specificulture == _srcCulture.Specificulture);
-            var data = _cmsUow.DbContext.MixDataContentAssociation
-                .Where(predicate)
-                .AsNoTracking()
-                .ToList();
-            if (data.Count > 0)
-            {
-                foreach (var item in data)
-                {
-                    item.Id = Guid.NewGuid();
-                    item.DataContentId = _dataIds[item.DataContentId];
-                    item.IntParentId = GetIntegerParentId(item);
-                    item.MixCultureId = _destCulture.Id;
-                    item.Specificulture = _destCulture.Specificulture;
-                    await _cmsUow.DbContext.MixDataContentAssociation.AddAsync(item);
-                }
-                await _cmsUow.DbContext.SaveChangesAsync();
-            }
-        }
-
-        private int? GetIntegerParentId(MixDataContentAssociation item)
-        {
-            return item.ParentType switch
-            {
-                MixDatabaseParentType.Page => _pageIds[item.IntParentId.Value],
-                MixDatabaseParentType.Post => _postIds[item.IntParentId.Value],
-                MixDatabaseParentType.Module => _moduleIds[item.IntParentId.Value],
-                _ => null
-            };
-        }
-
         private int GetStartIntegerId<T>()
             where T : MultilingualContentBase<int>
         {

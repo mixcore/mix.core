@@ -1,3 +1,6 @@
+## 6.Add migration
+** Move to mix.database folder
+** dotnet ef --startup-project ../../applications/Mixcore migrations add Init --context PostgresqlmixcmsContext --output-dir Migrations/Cms/PostgresqlMixCms
 
 # Update DatabaseService -> GetConnectionstring
 # Sample Connection String:
@@ -22,5 +25,5 @@ return "Server=localhost;port=3306;Database=mixcore_structure;User=root;Password
 - SqlServer: "Server=localhost;Database=mixcore_structure;UID=sa;Pwd=myPassword;MultipleActiveResultSets=true;"
 ```
 DatabaseProvider = MixDatabaseProvider.SQLSERVER;
-return "Server=localhost;Database=mixcore_structure;UID=sa;Pwd=myPassword;MultipleActiveResultSets=true;";
+return "Server=localhost;Database=mixcore_structure;UID=sa;Pwd=myPassword;MultipleActiveResultSets=true;TrustServerCertificate=True;";
 ```

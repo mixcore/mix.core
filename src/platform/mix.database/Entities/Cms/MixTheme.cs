@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Cms
 {
@@ -9,8 +10,8 @@ namespace Mix.Database.Entities.Cms
         public string AssetFolder { get; set; }
         public string TemplateFolder { get; set; }
         public string MixDatabaseName { get; set; }
-        public Guid? MixDataContentId { get; set; }
-        public MixDataContent MixDataContent { get; set; }
+        public int? MixDbId { get; set; }
+        //public JObject? ExtraData { get; set; }
         public virtual ICollection<MixTemplate> MixViewTemplates { get; set; }
     }
 }

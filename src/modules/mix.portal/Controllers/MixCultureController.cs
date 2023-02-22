@@ -5,7 +5,7 @@ namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/culture")]
     [ApiController]
-    [MixAuthorize($"{MixRoles.SuperAdmin}, {MixRoles.Owner}")]
+    [MixAuthorize(MixRoles.Owner)]
     public class MixCultureController
         : MixRestfulApiControllerBase<MixCultureViewModel, MixCmsContext, MixCulture, int>
     {

@@ -30,7 +30,6 @@ namespace Mix.Tenancy.Domain.Services
             DatabaseService databaseService,
             RoleManager<MixRole> roleManager,
             UnitOfWorkInfo<MixCmsContext> cmsUow, 
-            IMixDataService mixDataService,
             IMixTenantService mixTenantService)
         {
             _userManager = userManager;
@@ -39,7 +38,6 @@ namespace Mix.Tenancy.Domain.Services
             _cmsUow = cmsUow;
             _context = cmsUow.DbContext;
             _databaseService = databaseService;
-            mixDataService.SetUnitOfWork(_cmsUow);
             _mixTenantService = mixTenantService;
         }
 

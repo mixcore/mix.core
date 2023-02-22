@@ -16,9 +16,7 @@
         public List<MixPost> Posts { get; set; }
         public List<MixDatabase> Databases { get; set; }
         public List<MixDatabaseColumn> DatabaseColumns { get; set; }
-        public List<MixData> MixDatas { get; set; }
-        //TODO : double check mixdata content
-
+        
         public TenantDataViewModel()
         {
         }

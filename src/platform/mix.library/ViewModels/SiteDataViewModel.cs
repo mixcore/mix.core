@@ -50,14 +50,7 @@
 
         public List<MixLanguageContent> LanguageContents { get; set; }
 
-        public List<MixData> Datas { get; set; } = new();
         public List<MixDbModel> MixDbModels { get; set; } = new();
-
-        public List<MixDataContent> DataContents { get; set; } = new();
-
-        public List<MixDataContentValue> DataContentValues { get; set; } = new();
-
-        public List<MixDataContentAssociation> DataContentAssociations { get; set; } = new();
 
         public List<MixModuleData> ModuleDatas { get; set; } = new();
 
