@@ -30,7 +30,8 @@ namespace Mix.Database.Base
 
 
             builder.Property(e => e.IsDeleted)
-                .HasColumnType(Config.Boolean);
+                .HasColumnType(Config.Boolean)
+                .HasDefaultValue(false);
             
             builder.Property(e => e.CreatedDateTime)
                 .HasColumnType(Config.DateTime);

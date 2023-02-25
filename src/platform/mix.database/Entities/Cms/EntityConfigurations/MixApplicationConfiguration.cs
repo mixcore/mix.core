@@ -31,10 +31,6 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
             builder.Property(e => e.MixDatabaseName)
                 .HasColumnType($"{Config.String}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet);
-            //builder.Property(e => e.ExtraData)
-            // .HasConversion(
-            //     v => v.ToString(Newtonsoft.Json.Formatting.None),
-            //     v => JObject.Parse(v ?? "{}"));
         }
     }
 }

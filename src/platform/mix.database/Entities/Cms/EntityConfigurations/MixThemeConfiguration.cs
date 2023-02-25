@@ -33,10 +33,8 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
                .HasCharSet(Config.CharSet)
                .UseCollation(Config.DatabaseCollation);
 
-            //builder.Property(e => e.ExtraData)
-            // .HasConversion(
-            //     v => v.ToString(Newtonsoft.Json.Formatting.None),
-            //     v => JObject.Parse(v ?? "{}"));
+
+           
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Cms;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mix.Database.Migrations.MySqlMixCms
 {
     [DbContext(typeof(MySqlMixCmsContext))]
-    partial class MySqlMixCmsContextModelSnapshot : ModelSnapshot
+    [Migration("20230225045839_RemoveOldMixDb")]
+    partial class RemoveOldMixDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,14 +53,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
@@ -92,7 +95,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -126,14 +129,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
@@ -152,7 +155,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -163,7 +166,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
 
@@ -184,13 +187,13 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Category")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Category"), "utf8");
 
                     b.Property<string>("Content")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
@@ -203,32 +206,32 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("DataType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DataType"), "utf8");
 
                     b.Property<string>("DefaultContent")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DefaultContent"), "utf8");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
 
@@ -259,12 +262,12 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Specificulture"), "utf8");
 
@@ -277,7 +280,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
 
@@ -334,7 +337,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -360,7 +363,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Alias")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Alias"), "utf8");
 
@@ -372,14 +375,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
@@ -398,7 +401,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Lcid")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Lcid"), "utf8");
 
@@ -409,11 +412,11 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Specificulture"), "utf8");
 
@@ -456,14 +459,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
@@ -485,7 +488,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("ReadPermissions")
                         .HasColumnType("varchar(250)");
@@ -504,7 +507,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
 
@@ -534,7 +537,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(newid())");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("ChildDatabaseName")
                         .HasColumnType("varchar(250)");
@@ -566,7 +569,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("ParentDatabaseName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ParentDatabaseName"), "utf8");
 
@@ -574,7 +577,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -596,8 +599,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Configurations")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("longtext")
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Configurations"), "utf8");
 
@@ -614,15 +617,15 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DataType"), "utf8");
 
                     b.Property<string>("DefaultValue")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("longtext")
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DefaultValue"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
@@ -640,7 +643,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("MixDatabaseName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("MixDatabaseName"), "utf8");
 
@@ -648,7 +651,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int?>("ReferenceId")
                         .HasColumnType("int");
@@ -662,7 +665,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
 
@@ -701,14 +704,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
@@ -730,7 +733,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -741,7 +744,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
 
@@ -839,7 +842,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("SourceDatabaseName")
                         .IsRequired()
@@ -878,7 +881,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("ntext");
+                        .HasColumnType("longtext");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
@@ -918,7 +921,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -950,21 +953,21 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
                     b.Property<string>("Host")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Host"), "utf8");
 
@@ -983,7 +986,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1014,14 +1017,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
@@ -1040,7 +1043,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1051,7 +1054,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
 
@@ -1072,13 +1075,13 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Category")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Category"), "utf8");
 
                     b.Property<string>("Content")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
@@ -1091,32 +1094,32 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("DataType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DataType"), "utf8");
 
                     b.Property<string>("DefaultContent")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DefaultContent"), "utf8");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
 
@@ -1147,12 +1150,12 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Specificulture"), "utf8");
 
@@ -1165,7 +1168,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
 
@@ -1184,7 +1187,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(newid())");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -1194,20 +1197,20 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
                     b.Property<string>("Extension")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Extension"), "utf8");
 
@@ -1218,13 +1221,13 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("FileName")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FileName"), "utf8");
 
                     b.Property<string>("FileProperties")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FileProperties"), "utf8");
 
@@ -1233,7 +1236,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("FileType")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FileType"), "utf8");
 
@@ -1252,11 +1255,11 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Source"), "utf8");
 
@@ -1268,19 +1271,19 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Tags")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Tags"), "utf8");
 
                     b.Property<string>("TargetUrl")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("TargetUrl"), "utf8");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Title"), "utf8");
 
@@ -1307,14 +1310,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
@@ -1333,7 +1336,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1344,7 +1347,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
 
@@ -1375,8 +1378,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClassName"), "utf8");
 
                     b.Property<string>("Content")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("longtext")
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
@@ -1388,19 +1391,19 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Excerpt"), "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Image"), "utf8");
 
@@ -1416,7 +1419,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("datetime");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("int");
@@ -1443,26 +1446,26 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("PublishedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("SeoDescription")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoDescription"), "utf8");
 
                     b.Property<string>("SeoKeywords")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoKeywords"), "utf8");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoName"), "utf8");
 
@@ -1474,14 +1477,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Source"), "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Specificulture"), "utf8");
 
@@ -1497,11 +1500,11 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Title"), "utf8");
 
@@ -1529,8 +1532,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Content")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("longtext")
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
@@ -1542,19 +1545,19 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Excerpt"), "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Image"), "utf8");
 
@@ -1570,7 +1573,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("datetime");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("int");
@@ -1588,26 +1591,26 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("PublishedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("SeoDescription")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoDescription"), "utf8");
 
                     b.Property<string>("SeoKeywords")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoKeywords"), "utf8");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoName"), "utf8");
 
@@ -1616,20 +1619,20 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("SimpleDataColumns")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SimpleDataColumns"), "utf8");
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Source"), "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Specificulture"), "utf8");
 
@@ -1640,17 +1643,17 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Title"), "utf8");
 
                     b.Property<string>("Value")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Value"), "utf8");
 
@@ -1725,14 +1728,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
@@ -1754,7 +1757,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1785,8 +1788,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClassName"), "utf8");
 
                     b.Property<string>("Content")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("longtext")
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
@@ -1798,19 +1801,19 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Excerpt"), "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Image"), "utf8");
 
@@ -1826,7 +1829,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("datetime");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("int");
@@ -1853,26 +1856,26 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("PublishedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("SeoDescription")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoDescription"), "utf8");
 
                     b.Property<string>("SeoKeywords")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoKeywords"), "utf8");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoName"), "utf8");
 
@@ -1881,14 +1884,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Source"), "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Specificulture"), "utf8");
 
@@ -1899,11 +1902,11 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Title"), "utf8");
 
@@ -2049,7 +2052,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -2078,8 +2081,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClassName"), "utf8");
 
                     b.Property<string>("Content")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("longtext")
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
@@ -2091,19 +2094,19 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Excerpt"), "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Image"), "utf8");
 
@@ -2119,7 +2122,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("datetime");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("int");
@@ -2146,26 +2149,26 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("PublishedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("SeoDescription")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoDescription"), "utf8");
 
                     b.Property<string>("SeoKeywords")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoKeywords"), "utf8");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoName"), "utf8");
 
@@ -2174,14 +2177,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Source"), "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Specificulture"), "utf8");
 
@@ -2192,11 +2195,11 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Title"), "utf8");
 
@@ -2261,8 +2264,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Content")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("longtext")
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
@@ -2275,28 +2278,28 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("Extension")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Extension"), "utf8");
 
                     b.Property<string>("FileFolder")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FileFolder"), "utf8");
 
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FileName"), "utf8");
 
                     b.Property<string>("FolderType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FolderType"), "utf8");
 
@@ -2317,7 +2320,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("MixThemeName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("MixThemeName"), "utf8");
 
@@ -2325,12 +2328,12 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Scripts")
                         .IsRequired()
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("longtext")
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Scripts"), "utf8");
 
@@ -2342,8 +2345,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Styles")
                         .IsRequired()
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("longtext")
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Styles"), "utf8");
 
@@ -2370,14 +2373,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
@@ -2395,12 +2398,12 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("PrimaryDomain")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("PrimaryDomain"), "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -2411,7 +2414,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
 
@@ -2430,7 +2433,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("AssetFolder")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("AssetFolder"), "utf8");
 
@@ -2442,20 +2445,20 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ImageUrl"), "utf8");
 
@@ -2481,12 +2484,12 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("PreviewUrl")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("PreviewUrl"), "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -2499,7 +2502,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("TemplateFolder")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("TemplateFolder"), "utf8");
 
@@ -2529,14 +2532,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE");
+                        .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
@@ -2555,7 +2558,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("SourceContentGuidId")
                         .HasColumnType("char(36)");

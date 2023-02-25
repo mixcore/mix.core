@@ -46,7 +46,7 @@ namespace Mix.Tenancy.Domain.Services
         {
             _databaseService.InitConnectionStrings(model.ConnectionString, model.DatabaseProvider);
 
-            await _databaseService.UpdateMixCmsContextAsync();
+            _databaseService.UpdateMixCmsContext();
         }
 
         public async Task InitTenantAsync(InitCmsDto model)
