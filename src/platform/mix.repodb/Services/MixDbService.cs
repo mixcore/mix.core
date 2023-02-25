@@ -157,16 +157,13 @@ namespace Mix.RepoDb.Services
                 {
                     if (loadNestedData)
                     {
-
-                        List<QueryField> queries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
+                        string parentIdName = $"{item.SourceDatabaseName.ToTitleCase()}Id";
+                        _associationRepository.InitTableName(item.DestinateDatabaseName);
+                        List<QueryField> queries = new() { new(parentIdName, id) }; //GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
                         var associations = await _associationRepository.GetListByAsync(queries);
-                        if (associations.Count > 0)
+                        if (associations != null && associations.Count > 0)
                         {
-                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
-                            _repository.InitTableName(item.DestinateDatabaseName);
-                            List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
-                            var nestedData = await _repository.GetListByAsync(query);
-                            data.Add(new JProperty(item.DisplayName, ReflectionHelper.ParseArray(nestedData)));
+                            data.Add(new JProperty(item.DisplayName, ReflectionHelper.ParseArray(associations)));
                         }
                     }
                     else
