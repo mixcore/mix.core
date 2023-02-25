@@ -9,10 +9,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
+namespace Mix.Database.Migrations.PostgresqlMixCms
 {
     [DbContext(typeof(PostgresqlMixCmsContext))]
-    [Migration("20230222064640_RemoveOldMixDb")]
+    [Migration("20230225060550_RemoveOldMixDb")]
     partial class RemoveOldMixDb
     {
         /// <inheritdoc />
@@ -49,17 +49,17 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Domain")
@@ -70,10 +70,12 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("varchar(250)")
@@ -89,7 +91,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -119,24 +121,26 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
@@ -145,7 +149,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -155,7 +159,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -176,55 +180,57 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("Category")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Content")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DataType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DefaultContent")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("MixConfigurationId")
                         .HasColumnType("integer");
@@ -242,12 +248,12 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -258,7 +264,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -288,7 +294,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("GuidContentId")
                         .HasColumnType("uuid");
@@ -297,13 +303,15 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("IsOwner")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
@@ -312,7 +320,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -338,24 +346,24 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("Alias")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
@@ -363,14 +371,16 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Lcid")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("MixTenantId")
@@ -380,11 +390,11 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -416,7 +426,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletePermissions")
                         .HasColumnType("varchar(250)")
@@ -424,20 +434,22 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("MixDatabaseContextDatabaseAssociationId")
                         .HasColumnType("integer");
@@ -449,7 +461,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("ReadPermissions")
                         .HasColumnType("varchar(250)")
@@ -466,7 +478,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Type")
@@ -493,7 +505,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasDefaultValueSql("(newid())");
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("ChildDatabaseName")
                         .HasColumnType("varchar(250)")
@@ -506,13 +518,15 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
@@ -522,14 +536,14 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("ParentDatabaseName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("ParentId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -551,15 +565,15 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Configurations")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
+                        .HasColumnType("text")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DataType")
                         .IsRequired()
@@ -567,21 +581,23 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DefaultValue")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
+                        .HasColumnType("text")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MixDatabaseId")
                         .HasColumnType("integer");
@@ -589,14 +605,14 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     b.Property<string>("MixDatabaseName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int?>("ReferenceId")
                         .HasColumnType("integer");
@@ -609,7 +625,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -637,7 +653,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DatabaseProvider")
                         .IsRequired()
@@ -646,20 +662,22 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("MixDatabaseContextDatabaseAssociationId")
                         .HasColumnType("integer");
@@ -671,7 +689,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -681,7 +699,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -752,7 +770,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DestinateDatabaseName")
                         .IsRequired()
@@ -765,10 +783,12 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -777,7 +797,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("SourceDatabaseName")
                         .IsRequired()
@@ -814,7 +834,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("ntext")
+                        .HasColumnType("text")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ContentType")
@@ -826,7 +846,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("GuidContentId")
                         .HasColumnType("uuid");
@@ -835,10 +855,12 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
@@ -850,7 +872,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -878,30 +900,32 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Host")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
@@ -910,7 +934,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -937,24 +961,26 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
@@ -963,7 +989,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -973,7 +999,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -994,55 +1020,57 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("Category")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Content")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DataType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DefaultContent")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("integer");
@@ -1060,12 +1088,12 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -1076,7 +1104,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -1094,28 +1122,28 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasDefaultValueSql("(newid())");
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Extension")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileFolder")
@@ -1124,12 +1152,12 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("FileName")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileProperties")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<long>("FileSize")
@@ -1137,14 +1165,16 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("FileType")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
@@ -1153,11 +1183,11 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -1167,17 +1197,17 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("Tags")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("TargetUrl")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -1200,24 +1230,26 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
@@ -1226,7 +1258,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1236,7 +1268,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Type")
@@ -1265,42 +1297,44 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Content")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
+                        .HasColumnType("text")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("integer");
@@ -1327,24 +1361,24 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("PublishedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SeoDescription")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoKeywords")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoTitle")
@@ -1355,13 +1389,13 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -1374,11 +1408,11 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Type")
@@ -1405,42 +1439,44 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
+                        .HasColumnType("text")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("integer");
@@ -1458,24 +1494,24 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("PublishedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SeoDescription")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoKeywords")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoTitle")
@@ -1483,18 +1519,18 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("SimpleDataColumns")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -1503,16 +1539,16 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Value")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -1585,24 +1621,26 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("MixPostContentId")
                         .HasColumnType("integer");
@@ -1614,7 +1652,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1644,42 +1682,44 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Content")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
+                        .HasColumnType("text")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("integer");
@@ -1706,24 +1746,24 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("PublishedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SeoDescription")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoKeywords")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoTitle")
@@ -1731,13 +1771,13 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -1746,11 +1786,11 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Type")
@@ -1876,7 +1916,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -1885,10 +1925,12 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
@@ -1897,7 +1939,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1925,42 +1967,44 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Content")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
+                        .HasColumnType("text")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("integer");
@@ -1987,24 +2031,24 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("PublishedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SeoDescription")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoKeywords")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoTitle")
@@ -2012,13 +2056,13 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -2027,11 +2071,11 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -2098,45 +2142,47 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
+                        .HasColumnType("text")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Extension")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileFolder")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FolderType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
@@ -2147,19 +2193,19 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     b.Property<string>("MixThemeName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Scripts")
                         .IsRequired()
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
+                        .HasColumnType("text")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -2169,8 +2215,8 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("Styles")
                         .IsRequired()
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
+                        .HasColumnType("text")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -2193,24 +2239,26 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -2218,11 +2266,11 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     b.Property<string>("PrimaryDomain")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -2232,7 +2280,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -2251,36 +2299,38 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("AssetFolder")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("text");
@@ -2296,11 +2346,11 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("PreviewUrl")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -2312,7 +2362,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 
                     b.Property<string>("TemplateFolder")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -2338,24 +2388,26 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
@@ -2364,7 +2416,7 @@ namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("SourceContentGuidId")
                         .HasColumnType("uuid");
