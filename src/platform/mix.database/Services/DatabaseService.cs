@@ -140,15 +140,14 @@ namespace Mix.Database.Services
             //MixAppSettingService.Instance.SetConfig<string>(MixAppSettingsSection.GlobalSettings, WebConfiguration.MixCacheDbProvider, model.DatabaseProvider.ToString());
             SaveSettings();
         }
-
-        public async Task UpdateMixCmsContextAsync()
+        public void UpdateMixCmsContext()
         {
             using var ctx = GetDbContext();
-            await ctx.Database.MigrateAsync();
+            ctx.Database.Migrate();
             using var cacheCtx = GetCacheDbContext();
-            await cacheCtx.Database.MigrateAsync();
+            cacheCtx.Database.Migrate();
             using var accCtx = GetAccountDbContext();
-            await accCtx.Database.MigrateAsync();
+            accCtx.Database.Migrate();
         }
 
         public async Task InitQuartzContextAsync()
