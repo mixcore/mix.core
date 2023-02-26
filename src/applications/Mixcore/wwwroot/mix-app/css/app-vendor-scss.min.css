@@ -1,4 +1,4 @@
-/* Sun Feb 26 2023 12:33:39 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
+/* Sun Feb 26 2023 20:47:34 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
   max-width: 100%; }
 
 fb-login {
@@ -115,6 +115,10 @@ div[dnd-list] .dnd-item.selected {
   background-color: #dff0d8;
   color: #3c763d; }
 
+.table-data td.preview {
+  max-width: 120px;
+  overflow: hidden; }
+
 .mouse {
   z-index: 9999999;
   width: 70px;
@@ -165,10 +169,6 @@ mix-database-nav-values mix-column-preview .rowx {
   #modal-content-filter .modal-lg,
   #modal-content-filter .modal-xl {
     max-width: 80vw; } }
-
-.table-data td.preview {
-  max-width: 120px;
-  overflow: hidden; }
 
 .content {
   width: 100%;
