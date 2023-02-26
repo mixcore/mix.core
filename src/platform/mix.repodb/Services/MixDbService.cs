@@ -157,9 +157,7 @@ namespace Mix.RepoDb.Services
                 {
                     if (loadNestedData)
                     {
-                        string parentIdName = $"{item.SourceDatabaseName.ToTitleCase()}Id";
-                        _associationRepository.InitTableName(item.DestinateDatabaseName);
-                        List<QueryField> queries = new() { new(parentIdName, id) }; //GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
+                        List<QueryField> queries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
                         var associations = await _associationRepository.GetListByAsync(queries);
                         if (associations != null && associations.Count > 0)
                         {
