@@ -1,0 +1,23 @@
+{
+  "devDependencies": {
+    "browser-sync": "^2.26.7",
+    "gulp": "^3.9.1",
+    "gulp-babel": "",
+    "gulp-concat": "",
+    "gulp-cssmin": "",
+    "gulp-htmlmin": "",
+    "gulp-uglify": "",
+    "gulp-uglify-es": "",
+    "pump": "",
+    "rimraf": "",
+    "uglify-es": ""
+  },
+  "dependencies": {
+    "3": "^2.1.0",
+    "bundle": "^2.1.0",
+    "clean-css": "^4.2.1",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-uglify-es": "^1.0.4",
+    "monaco-editor": "^0.17.0"
+  }
+}
