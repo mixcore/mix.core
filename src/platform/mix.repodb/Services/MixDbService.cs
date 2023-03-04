@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Mix.Constant.Enums;
 using Mix.Database.Base;
 using Mix.Database.Entities.Cms;
@@ -105,7 +106,7 @@ namespace Mix.RepoDb.Services
             return await GetResult(tableName, queries, paging, req.LoadNestedData);
         }
 
-        public async Task<JObject> GetMyDataById(string tableName, string username, int id, bool loadNestedData)
+        public async Task<JObject?> GetMyDataById(string tableName, string username, int id, bool loadNestedData)
         {
             _repository.InitTableName(tableName);
             var queries = new List<QueryField>()
@@ -119,55 +120,25 @@ namespace Mix.RepoDb.Services
             if (obj != null)
             {
                 var data = ReflectionHelper.ParseObject(obj);
-                var database = await GetMixDatabase(tableName);
-                foreach (var item in database.Relationships)
+                if (loadNestedData)
                 {
-                    if (loadNestedData)
-                    {
-
-                        List<QueryField> associationQueries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
-                        var associations = await _associationRepository.GetListByAsync(associationQueries);
-                        if (associations.Count > 0)
-                        {
-                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
-                            _repository.InitTableName(item.DestinateDatabaseName);
-                            List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
-                            var nestedData = await _repository.GetListByAsync(query);
-                            data.Add(new JProperty(item.DisplayName, ReflectionHelper.ParseArray(nestedData)));
-                        }
-                    }
-                    else
-                    {
-                        data.Add(new JProperty($"{item.DisplayName}Url", $"{CurrentTenant.Configurations.Domain}/api/v2/rest/mix-portal/mix-db/{item.DestinateDatabaseName}?ParentId={id}&ParentName={item.SourceDatabaseName}"));
-                    }
+                    await LoadNestedData(id, data, tableName);
                 }
                 return data;
             }
             return default;
         }
-        public async Task<JObject> GetById(string tableName, int id, bool loadNestedData)
+
+        public async Task<JObject?> GetById(string tableName, int id, bool loadNestedData)
         {
             _repository.InitTableName(tableName);
             var obj = await _repository.GetSingleAsync(id);
             if (obj != null)
             {
                 var data = ReflectionHelper.ParseObject(obj);
-                var database = await GetMixDatabase(tableName);
-                foreach (var item in database.Relationships)
+                if (loadNestedData)
                 {
-                    if (loadNestedData)
-                    {
-                        List<QueryField> queries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
-                        var associations = await _associationRepository.GetListByAsync(queries);
-                        if (associations != null && associations.Count > 0)
-                        {
-                            data.Add(new JProperty(item.DisplayName, ReflectionHelper.ParseArray(associations)));
-                        }
-                    }
-                    else
-                    {
-                        data.Add(new JProperty($"{item.DisplayName}Url", $"{CurrentTenant.Configurations.Domain}/api/v2/rest/mix-portal/mix-db/{item.DestinateDatabaseName}?ParentId={id}&ParentName={item.SourceDatabaseName}"));
-                    }
+                    await LoadNestedData(id, data, tableName);
                 }
                 return data;
             }
@@ -212,6 +183,31 @@ namespace Mix.RepoDb.Services
         #endregion
 
         #region Helper
+
+        private async Task LoadNestedData(int id, JObject data, string tableName)
+        {
+            var database = await GetMixDatabase(tableName);
+            _repository.InitTableName(tableName);
+            foreach (var item in database.Relationships)
+            {
+
+
+                List<QueryField> associationQueries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
+                var associations = await _associationRepository.GetListByAsync(associationQueries);
+                if (associations.Count > 0)
+                {
+                    var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
+                    _repository.InitTableName(item.DestinateDatabaseName);
+                    List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
+                    var nestedData = await _repository.GetListByAsync(query);
+                    data.Add(new JProperty(item.DisplayName, ReflectionHelper.ParseArray(nestedData)));
+                }
+                else
+                {
+                    data.Add(new JProperty(item.DisplayName, new JArray()));
+                }
+            }
+        }
 
         private async Task<PagingResponseModel<JObject>> GetResult(string tableName,
             IEnumerable<QueryField> queries, PagingRequestModel paging, bool loadNestedData)

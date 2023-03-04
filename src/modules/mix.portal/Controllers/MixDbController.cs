@@ -302,6 +302,10 @@ namespace Mix.Portal.Controllers
                             var nestedData = await _repository.GetListByAsync(query);
                             data.Add(new JProperty(rel.DisplayName, ReflectionHelper.ParseArray(nestedData)));
                         }
+                        else
+                        {
+                            data.Add(new JProperty(rel.DisplayName, new JArray()));
+                        }
                     }
                 }
                 items.Add(data);
@@ -322,17 +326,10 @@ namespace Mix.Portal.Controllers
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(request.ParentName))
-                    {
-                        queries.Add(new($"{request.ParentName}Id", request.ParentId));
-                    }
-                    else
-                    {
-                        var allowsIds = _cmsUow.DbContext.MixDatabaseAssociation
-                                .Where(m => m.ParentDatabaseName == request.ParentName && m.ParentId == request.ParentId.Value && m.ChildDatabaseName == _tableName)
-                                .Select(m => m.ChildId).ToList();
-                        queries.Add(new(IdFieldName, Operation.In, allowsIds));
-                    }
+                    var allowsIds = _cmsUow.DbContext.MixDatabaseAssociation
+                            .Where(m => m.ParentDatabaseName == request.ParentName && m.ParentId == request.ParentId.Value && m.ChildDatabaseName == _tableName)
+                            .Select(m => m.ChildId).ToList();
+                    queries.Add(new(IdFieldName, Operation.In, allowsIds));
                 }
             }
 

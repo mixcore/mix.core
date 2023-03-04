@@ -1,5 +1,6 @@
 ﻿namespace Mix.Lib.ViewModels
 {
+    [GenerateRestApiController(Route = "api/v2/rest/mix-portal/mix-database-association", IsAuthorized = true)]
     public sealed class MixDatabaseAssociationViewModel
         : ViewModelBase<MixCmsContext, MixDatabaseAssociation, Guid, MixDatabaseAssociationViewModel>
     {
