@@ -1,6 +1,5 @@
 ﻿namespace Mix.Lib.ViewModels
 {
-    [GenerateRestApiController(Route = "api/v2/rest/mix-portal/mix-database-association", IsAuthorized = true)]
     public sealed class MixDatabaseAssociationViewModel
         : ViewModelBase<MixCmsContext, MixDatabaseAssociation, Guid, MixDatabaseAssociationViewModel>
     {
@@ -18,7 +17,7 @@
         {
         }
 
-        public MixDatabaseAssociationViewModel(MixDatabaseAssociation entity, UnitOfWorkInfo uowInfo = null) 
+        public MixDatabaseAssociationViewModel(MixDatabaseAssociation entity, UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {
         }
@@ -30,6 +29,23 @@
         #endregion
 
         #region Overrides
+
+        public override async Task Validate(CancellationToken cancellationToken)
+        {
+            await base.Validate(cancellationToken);
+            if (Context.MixDatabaseAssociation.Any(
+                    m =>
+                        m.Id != Id
+                        && m.ParentDatabaseName == ParentDatabaseName
+                        && m.ChildDatabaseName == ChildDatabaseName
+                        && m.ParentId == ParentId
+                        && m.ChildId == ChildId
+                ))
+            {
+                IsValid = false;
+                Errors.Add(new("This association is existed"));
+            }
+        }
         public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
             base.InitDefaultValues(language, cultureId);
