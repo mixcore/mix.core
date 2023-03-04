@@ -15,6 +15,8 @@ namespace Mix.Service.Services
 
         public static void LogException(Exception ex = null, MixErrorStatus? status = null, string message = null)
         {
+            Console.Error.WriteLine(ex);
+
             string fullPath = $"{Environment.CurrentDirectory}/logs/{DateTime.Now:dd-MM-yyyy}";
             if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))
             {
