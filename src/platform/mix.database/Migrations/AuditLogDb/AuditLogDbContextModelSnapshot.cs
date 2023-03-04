@@ -44,6 +44,23 @@ namespace Mix.Database.Migrations.AuditLogDb
                     b.Property<string>("RequestIp")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<bool>("Success")
                         .HasColumnType("INTEGER");
 

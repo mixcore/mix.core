@@ -1,10 +1,14 @@
-﻿namespace Mix.Database.Entities.AuditLog
+﻿using Mix.Heart.Services;
+
+namespace Mix.Database.Entities.AuditLog
 {
     public class AuditLogDbContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string cnn = $"Data Source=MixContent/auditlog_{DateTime.Now.ToString("MM_yyyy")}.db";
+            MixFileHelper.CreateFolderIfNotExist(MixFolders.MixAuditLogFolder);
+
+            string cnn = $"Data Source={MixFolders.MixAuditLogFolder}/auditlog_{DateTime.Now.ToString("MM_yyyy")}.db";
             optionsBuilder.UseSqlite(cnn);
         }
 

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.AuditLog;
+using Mix.Heart.Enums;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Service.Interfaces;
@@ -46,7 +47,8 @@ namespace Mix.Service.Services
                             RequestIp = request.RequestIp,
                             Endpoint = request.Endpoint,
                             Method = request.Method,
-                            CreatedBy = createdBy
+                            CreatedBy = createdBy,
+                            Status = MixContentStatus.Published
                         };
                         if (exception != null)
                         {

@@ -374,6 +374,11 @@
           "path": "/admin/file/list?folder=logs",
           "title": "Logs",
           "icon": "mi mi-Error"
+        },
+        {
+          "path": "/admin/audit-log/list",
+          "title": "Audit Logs",
+          "icon": "mi mi-Error"
         }
       ]
     }
@@ -436,6 +441,46 @@
           "path": "/admin/json-data/create",
           "templatePath": "/mix-app/views/app-portal/pages/json-data/details.html",
           "controller": "JsonDataController"
+        },
+        {
+          "path": "/admin/floralpunk/membership/list",
+          "templatePath": "/mix-app/views/app-portal/pages/floralpunk/membership/list.html",
+          "controller": "FloralpunkMembershipController"
+        },
+        {
+          "path": "/admin/floralpunk/membership/create",
+          "templatePath": "/mix-app/views/app-portal/pages/floralpunk/membership/details.html",
+          "controller": "FloralpunkMembershipController"
+        },
+        {
+          "path": "/admin/floralpunk/membership/details/:id",
+          "templatePath": "/mix-app/views/app-portal/pages/floralpunk/membership/details.html",
+          "controller": "FloralpunkMembershipController"
+        },
+        {
+          "path": "/admin/floralpunk/coupon/list",
+          "templatePath": "/mix-app/views/app-portal/pages/floralpunk/coupon/list.html",
+          "controller": "FloralpunkCouponController"
+        },
+        {
+          "path": "/admin/floralpunk/coupon/create",
+          "templatePath": "/mix-app/views/app-portal/pages/floralpunk/coupon/details.html",
+          "controller": "FloralpunkCouponController"
+        },
+        {
+          "path": "/admin/floralpunk/coupon/details/:id",
+          "templatePath": "/mix-app/views/app-portal/pages/floralpunk/coupon/details.html",
+          "controller": "FloralpunkCouponController"
+        },
+        {
+          "path": "/admin/floralpunk/coupon-rule/create",
+          "templatePath": "/mix-app/views/app-portal/pages/floralpunk/coupon-rule/details.html",
+          "controller": "FloralpunkCouponRuleController"
+        },
+        {
+          "path": "/admin/floralpunk/coupon-rule/details/:id",
+          "templatePath": "/mix-app/views/app-portal/pages/floralpunk/coupon-rule/details.html",
+          "controller": "FloralpunkCouponRuleController"
         }
       ]
     },
@@ -496,6 +541,26 @@
           "path": "/admin/domain/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/domain/details.html",
           "controller": "DomainController"
+        }
+      ]
+    },
+    {
+      "cate": "audit-log",
+      "items": [
+        {
+          "path": "/admin/audit-log/create",
+          "templatePath": "/mix-app/views/app-portal/pages/audit-log/details.html",
+          "controller": "AuditLogController"
+        },
+        {
+          "path": "/admin/audit-log/list",
+          "templatePath": "/mix-app/views/app-portal/pages/audit-log/list.html",
+          "controller": "AuditLogController"
+        },
+        {
+          "path": "/admin/audit-log/details/:id",
+          "templatePath": "/mix-app/views/app-portal/pages/audit-log/details.html",
+          "controller": "AuditLogController"
         }
       ]
     },

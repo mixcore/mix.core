@@ -19,8 +19,13 @@ namespace Mix.Database.Migrations.AuditLogDb
                     Body = table.Column<string>(type: "TEXT", nullable: true),
                     Success = table.Column<bool>(type: "INTEGER", nullable: false),
                     Exception = table.Column<string>(type: "TEXT", nullable: true),
-                    CreatedBy = table.Column<string>(type: "TEXT", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
