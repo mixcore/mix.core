@@ -95,5 +95,21 @@ namespace Mix.Portal.Controllers
             return base.DeleteHandler(data, cancellationToken);
         }
         #endregion
+
+        [HttpGet("duplicate/{id}")]
+        public async Task<ActionResult<MixDatabaseViewModel>> Duplicate(int id, CancellationToken cancellationToken = default)
+        {
+            var data = await GetById(id);
+            if (data != null)
+            {
+                data.Id = default;
+                data.SystemName = $"duplicate { data.SystemName}";
+                data.DisplayName = $"duplicate{ data.DisplayName}";
+                var newId = await CreateHandlerAsync(data, cancellationToken);
+                var result = await GetById(newId);
+                return Ok(result);
+            }
+            throw new MixException(MixErrorStatus.NotFound, id);
+        }
     }
 }
