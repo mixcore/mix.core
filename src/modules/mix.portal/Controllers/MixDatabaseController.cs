@@ -17,7 +17,7 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IQueueService<MessageQueueModel> queueService, 
+            IQueueService<MessageQueueModel> queueService,
             IMixDbService mixDbService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
@@ -103,8 +103,8 @@ namespace Mix.Portal.Controllers
             if (data != null)
             {
                 data.Id = default;
-                data.SystemName = $"duplicate { data.SystemName}";
-                data.DisplayName = $"duplicate{ data.DisplayName}";
+                data.SystemName = $"duplicate{data.SystemName}";
+                data.DisplayName = $"duplicate {data.DisplayName}";
                 var newId = await CreateHandlerAsync(data, cancellationToken);
                 var result = await GetById(newId);
                 return Ok(result);
