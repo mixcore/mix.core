@@ -74,6 +74,7 @@
 		<ProjectReference Include="..\..\modules\mix.storage\mix.storage.csproj" />
 		<ProjectReference Include="..\..\modules\mix.tenancy\mix.tenancy.csproj" />
 		<ProjectReference Include="..\..\services\ecommerces\mix.services.ecommerce\mix.services.ecommerce.csproj" />
+		<ProjectReference Include="..\..\services\graphql\mix.services.graphql\mix.services.graphql.csproj" />
 		<ProjectReference Include="..\..\services\mix-databases\mix.servives.databases\mix.services.databases.csproj" />
 	</ItemGroup>
 	<ItemGroup>

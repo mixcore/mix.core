@@ -1,6 +1,8 @@
-﻿using HotChocolate;
+﻿using Grpc.Net.Client.Balancer;
+using HotChocolate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Mix.Database.Services;
 using Mix.Mixdb.Entities;
 using Mix.Services.Graphql.Lib.Interfaces;
 using Mix.Services.Graphql.Lib.Models;
@@ -12,9 +14,12 @@ namespace Mix.Services.Graphql.Lib
     {
         public static IServiceCollection AddMixGraphQL(this IServiceCollection services)
         {
+            var dbService = services.GetService<DatabaseService>();
             services.AddDbContext<MixDbDbContext>();
             services.AddGraphQLServer()
-                    .AddQueryType<Query>();
+                    //.AddQueryType<GraphQLQuery<MixUserData, int>>()
+                    .AddQueryType<GraphQLQuery<MixMedia, int>>()
+                    ;
 
 
             //services.AddScoped<ITableNameLookup, TableNameLookup>();
