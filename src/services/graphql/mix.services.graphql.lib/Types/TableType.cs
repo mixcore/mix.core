@@ -27,6 +27,7 @@ namespace Mix.Services.Graphql.Lib.Types
                     { "nvarchar(50)", typeof(string) },
                     { "text", typeof(string) },
                     { "int", typeof(int) },
+                    { "integer", typeof(int) },
                     { "decimal", typeof(decimal) },
                     { "bit", typeof(bool) }
                 };
@@ -58,9 +59,11 @@ namespace Mix.Services.Graphql.Lib.Types
             var dataType = ReflectionHelper.GetPropertyType(_type, columnName);
             if (TableArgs == null)
             {
-                TableArgs = new QueryArguments();
-                TableArgs.Add(new QueryArgument<IntGraphType> { Name = "first" });
-                TableArgs.Add(new QueryArgument<IntGraphType> { Name = "offset" });
+                TableArgs = new QueryArguments
+                {
+                    new QueryArgument<IntGraphType> { Name = "first" },
+                    new QueryArgument<IntGraphType> { Name = "offset" }
+                };
             }
             if (dataType != null)
             {
@@ -87,8 +90,8 @@ namespace Mix.Services.Graphql.Lib.Types
         }
         private Type ResolveColumnMetaType(string dbType)
         {
-            if (DatabaseTypeToSystemType.ContainsKey(dbType))
-                return DatabaseTypeToSystemType[dbType]; return typeof(string);
+            if (DatabaseTypeToSystemType.ContainsKey(dbType.ToLower()))
+                return DatabaseTypeToSystemType[dbType.ToLower()]; return typeof(string);
         }
     }
 }

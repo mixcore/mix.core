@@ -1,6 +1,7 @@
 ﻿using GraphQL;
 using GraphQL.Resolvers;
 using Microsoft.EntityFrameworkCore;
+using Mix.Database.Base;
 using Mix.Heart.Extensions;
 using Mix.Services.Graphql.Lib;
 using Mix.Services.Graphql.Lib.Models;
@@ -11,8 +12,8 @@ namespace Mix.Services.Graphql.Lib.Resolvers
     public class MyFieldResolver : IFieldResolver
     {
         private TableMetadata _tableMetadata;
-        private DbContext _dbContext;
-        public MyFieldResolver(TableMetadata tableMetadata, DbContext dbContext)
+        private BaseDbContext _dbContext;
+        public MyFieldResolver(TableMetadata tableMetadata, BaseDbContext dbContext)
         {
             _tableMetadata = tableMetadata;
             _dbContext = dbContext;
@@ -28,14 +29,14 @@ namespace Mix.Services.Graphql.Lib.Resolvers
             object[] args = new object[filters.Count()];
             int paramsCount = -1;
 
-            foreach (var item in filters)
+            foreach (var item in filters.Where(f => f.Value.Value != null))
             {
                 paramsCount++;
                 if (!string.IsNullOrEmpty(predicates))
                 {
                     predicates += " and ";
                 }
-                args[paramsCount] = item.Value;
+                args[paramsCount] = item.Value!.Value;
                 // Note: check for like function https://github.com/StefH/System.Linq.Dynamic.Core/issues/105                
                 predicates += $"{item.Key.ToTitleCase()} == @{paramsCount}";
             }
@@ -51,11 +52,12 @@ namespace Mix.Services.Graphql.Lib.Resolvers
                     queryable = queryable.Where(predicates, args);
                 }
 
-                return await queryable.Skip(offset).Take(first).ToDynamicListAsync<object>();
+                var result = await queryable.Skip(offset).Take(first).ToDynamicListAsync<object>();
+                return result;
             }
             else
             {
-                return paramsCount >= 0 ? queryable.FirstOrDefault(predicates, args) : null;
+                return paramsCount >= 0 ? queryable?.FirstOrDefault(predicates, args) : null;
             }
         }
     }

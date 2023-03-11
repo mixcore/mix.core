@@ -8,8 +8,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="GraphQL.Server.Ui.Playground" Version="7.3.0" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\mix.database\mix.database.csproj" />
-		<Using Include="Mix.Mixdb.Entities"/>
+		<Using Include="Mix.Mixdb.Entities" />
 		<Using Include="Mix.Mixdb.Entities" />
 	</ItemGroup>
 

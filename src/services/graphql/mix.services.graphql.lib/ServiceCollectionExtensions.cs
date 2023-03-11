@@ -1,12 +1,11 @@
-﻿using Grpc.Net.Client.Balancer;
-using HotChocolate;
+﻿using GraphQL;
+using GraphQL.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Database.Services;
-using Mix.Mixdb.Entities;
+using Mix.Services.Graphql.Lib.Entities;
 using Mix.Services.Graphql.Lib.Interfaces;
 using Mix.Services.Graphql.Lib.Models;
-using Mix.Services.Graphql.Lib.Queries;
 
 namespace Mix.Services.Graphql.Lib
 {
@@ -15,37 +14,29 @@ namespace Mix.Services.Graphql.Lib
         public static IServiceCollection AddMixGraphQL(this IServiceCollection services)
         {
             var dbService = services.GetService<DatabaseService>();
-            services.AddDbContext<MixDbDbContext>();
-            services.AddGraphQLServer()
-                    //.AddQueryType<GraphQLQuery<MixUserData, int>>()
-                    .AddQueryType<GraphQLQuery<MixMedia, int>>()
-                    ;
+            services.AddSingleton<GraphQLDbContext>();
+            services.AddGraphQL(c =>
+            {
+                c.AddSystemTextJson();
+            });
 
 
-            //services.AddScoped<ITableNameLookup, TableNameLookup>();
-            //services.AddScoped<IDatabaseMetadata, DatabaseMetadata>();
-            //services.AddScoped((resolver) =>
-            //{
-            //    var dbContext = resolver.GetRequiredService<MixDbDbContext>();
-            //    var metaDatabase = resolver.GetRequiredService<IDatabaseMetadata>();
-            //    var tableNameLookup = resolver.GetRequiredService<ITableNameLookup>();
-            //    //var schema = new Schema { Query = new GraphQLQuery(dbContext, metaDatabase, tableNameLookup) };
-            //    var schema = SchemaBuilder.New();
-            //    schema.AddQueryType<GraphQLQuery>();
-            //    return schema;
-            //});
-            ////add schema provider so we don't need to create it everytime
-            //// Also for this demo we expose all fields on MyDbContext.See below for details on building custom fields etc.
-            //services.AddSingleton(SchemaBuilder.New().BindRuntimeType< MixDbDbContext>());
+            services.AddSingleton<ITableNameLookup, TableNameLookup>();
+            services.AddSingleton<IDatabaseMetadata, DatabaseMetadata>();
+            services.AddSingleton<ISchema>((resolver) =>
+            {
+                var dbContext = resolver.GetRequiredService<GraphQLDbContext>();
+                var metaDatabase = resolver.GetRequiredService<IDatabaseMetadata>();
+                var tableNameLookup = resolver.GetRequiredService<ITableNameLookup>();
+                var schema = new Schema { Query = new GraphQLQuery(dbContext, metaDatabase, tableNameLookup) };
+                return schema;
+            });
             return services;
         }
 
         public static void UseMixGraphQL(this IApplicationBuilder app)
         {
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGraphQL();
-            });
+            app.UseGraphQLGraphiQL();
         }
     }
 }

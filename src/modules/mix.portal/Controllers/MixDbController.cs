@@ -169,6 +169,10 @@ namespace Mix.Portal.Controllers
             {
                 obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
             }
+            if (!obj.ContainsKey(IdFieldName))
+            {
+                obj.Add(new JProperty(IdFieldName, null));
+            }
             if (!obj.ContainsKey(CreatedDateFieldName))
             {
                 obj.Add(new JProperty(CreatedDateFieldName, DateTime.UtcNow));

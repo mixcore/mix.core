@@ -8,13 +8,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Queries\**" />
+    <EmbeddedResource Remove="Queries\**" />
+    <None Remove="Queries\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Base\MixQueryApiControllerBase.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="GraphQL" Version="7.3.0" />
-    <PackageReference Include="HotChocolate.AspNetCore" Version="13.0.5" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.1" />
+    <PackageReference Include="GraphQL.Server.All" Version="7.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\platform\mix.library\mix.library.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Base\" />
   </ItemGroup>
 
 </Project>

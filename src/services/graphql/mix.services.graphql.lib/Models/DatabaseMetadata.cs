@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Mix.Mixdb.Entities;
+using Mix.Services.Graphql.Lib.Entities;
 using Mix.Services.Graphql.Lib.Interfaces;
 
 namespace Mix.Services.Graphql.Lib.Models
@@ -11,7 +12,7 @@ namespace Mix.Services.Graphql.Lib.Models
         private readonly ITableNameLookup _tableNameLookup;
         private string _databaseName;
         private IEnumerable<TableMetadata> _tables;
-        public DatabaseMetadata(MixDbDbContext dbContext, ITableNameLookup tableNameLookup)
+        public DatabaseMetadata(GraphQLDbContext dbContext, ITableNameLookup tableNameLookup)
         {
             _dbContext = dbContext;
             _tableNameLookup = tableNameLookup;
