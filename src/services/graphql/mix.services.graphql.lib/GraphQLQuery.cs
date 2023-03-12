@@ -21,7 +21,7 @@ namespace Mix.Services.Graphql.Lib
             _tableNameLookup = tableNameLookup;
             _dbContext = dbContext;
             Name = "GraphQLQuery";
-            var assem = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.ManifestModule.Name == "mix.services.graphql.lib.dll");
+            var assem = GetType().Assembly;
 
             foreach (var metaTable in _dbMetadata.GetTableMetadatas())
             {
