@@ -12,7 +12,7 @@ namespace Mix.Services.Graphql.Lib.Models
         private readonly ITableNameLookup _tableNameLookup;
         private string _databaseName;
         private IEnumerable<TableMetadata> _tables;
-        public DatabaseMetadata(GraphQLDbContext dbContext, ITableNameLookup tableNameLookup)
+        public DatabaseMetadata(DbContext dbContext, ITableNameLookup tableNameLookup)
         {
             _dbContext = dbContext;
             _tableNameLookup = tableNameLookup;

@@ -6,12 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySql.Data" Version="8.0.31" />
-    <PackageReference Include="Quartz" Version="3.6.0" />
-    <PackageReference Include="Quartz.AspNetCore" Version="3.6.0" />
-    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.6.0" />
-    <PackageReference Include="Quartz.Serialization.Json" Version="3.6.0" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.116" />
+    <PackageReference Include="MySql.Data" Version="8.0.32.1" />
+    <PackageReference Include="Quartz" Version="3.6.2" />
+    <PackageReference Include="Quartz.AspNetCore" Version="3.6.2" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.6.2" />
+    <PackageReference Include="Quartz.Serialization.Json" Version="3.6.2" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.117" />
   </ItemGroup>
 
 	<ItemGroup>
