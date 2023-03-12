@@ -11,9 +11,9 @@ namespace Mix.Services.Graphql.Lib
     {
         private IDatabaseMetadata _dbMetadata;
         private ITableNameLookup _tableNameLookup;
-        private BaseDbContext _dbContext;
+        private DbContext _dbContext;
         public GraphQLQuery(
-         BaseDbContext dbContext,
+         DbContext dbContext,
          IDatabaseMetadata dbMetadata,
          ITableNameLookup tableNameLookup)
         {
@@ -21,7 +21,7 @@ namespace Mix.Services.Graphql.Lib
             _tableNameLookup = tableNameLookup;
             _dbContext = dbContext;
             Name = "GraphQLQuery";
-            var assem = GetType().Assembly;
+            var assem = _dbContext.GetType().Assembly;
 
             foreach (var metaTable in _dbMetadata.GetTableMetadatas())
             {

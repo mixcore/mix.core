@@ -12,8 +12,8 @@ namespace Mix.Services.Graphql.Lib.Resolvers
     public class MyFieldResolver : IFieldResolver
     {
         private TableMetadata _tableMetadata;
-        private BaseDbContext _dbContext;
-        public MyFieldResolver(TableMetadata tableMetadata, BaseDbContext dbContext)
+        private DbContext _dbContext;
+        public MyFieldResolver(TableMetadata tableMetadata, DbContext dbContext)
         {
             _tableMetadata = tableMetadata;
             _dbContext = dbContext;
