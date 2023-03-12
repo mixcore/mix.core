@@ -195,14 +195,8 @@ namespace Mix.Portal.Controllers
             {
                 obj.Add(new JProperty(IsDeletedFieldName, false));
             }
-            var data = await _repository.InsertAsync(obj);
-
-            if (data > 0)
-            {
-                var result = await _repository.GetSingleAsync(data);
-                return Ok(ReflectionHelper.ParseObject(result));
-            }
-            return BadRequest();
+            await _repository.InsertAsync(obj);
+            return Ok(ReflectionHelper.ParseObject(obj));
         }
 
         [PreventDuplicateFormSubmission]
