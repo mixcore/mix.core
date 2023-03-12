@@ -18,8 +18,8 @@ namespace Mix.Services.Graphql.Lib
             services.AddGraphQL(c =>
             {
                 c.AddSystemTextJson();
+                c.AddScopedSubscriptionExecutionStrategy();
             });
-
 
             services.AddSingleton<ITableNameLookup, TableNameLookup>();
             services.AddSingleton<IDatabaseMetadata, DatabaseMetadata>();
@@ -36,7 +36,15 @@ namespace Mix.Services.Graphql.Lib
 
         public static void UseMixGraphQL(this IApplicationBuilder app)
         {
-            app.UseGraphQLGraphiQL();
+            app.UseWebSockets();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGraphQL("graphql");
+                endpoints.MapGraphQLVoyager("ui/voyager");
+                endpoints.MapGraphQLGraphiQL("ui/graphiql");
+                endpoints.MapGraphQLPlayground("ui/playground");
+                endpoints.MapGraphQLAltair("ui/altair");
+            });
         }
     }
 }

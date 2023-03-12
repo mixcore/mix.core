@@ -1,8 +1,12 @@
 ﻿using GraphQL;
+using GraphQL.Builders;
 using GraphQL.Resolvers;
 using GraphQL.Types;
+using GraphQL.Utilities.Federation;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Mix.Heart.Helpers;
 using Mix.Services.Graphql.Lib.Models;
+using Newtonsoft.Json.Linq;
 
 namespace Mix.Services.Graphql.Lib.Types
 {
@@ -12,29 +16,7 @@ namespace Mix.Services.Graphql.Lib.Types
         {
             get; set;
         }
-        private IDictionary<string, Type> _databaseTypeToSystemType;
         public Type _type { get; set; }
-        protected IDictionary<string, Type> DatabaseTypeToSystemType
-        {
-            get
-            {
-                if (_databaseTypeToSystemType == null)
-                {
-                    _databaseTypeToSystemType = new Dictionary<string, Type> {
-                    { "uniqueidentifier", typeof(string) },
-                    { "char", typeof(string) },
-                    { "nvarchar(250)", typeof(string) },
-                    { "nvarchar(50)", typeof(string) },
-                    { "text", typeof(string) },
-                    { "int", typeof(int) },
-                    { "integer", typeof(int) },
-                    { "decimal", typeof(decimal) },
-                    { "bit", typeof(bool) }
-                };
-                }
-                return _databaseTypeToSystemType;
-            }
-        }
         public TableType(TableMetadata tableMetadata, Type type)
         {
             _type = type;
@@ -46,17 +28,13 @@ namespace Mix.Services.Graphql.Lib.Types
         }
         private void InitGraphTableColumn(ColumnMetadata columnMetadata)
         {
-            var graphQLType = ResolveColumnMetaType(columnMetadata.DataType).GetGraphTypeFromType(true);
-            var columnField = Field(
-                graphQLType,
-                columnMetadata.ColumnName
-            );
-            columnField.Resolver = NameFieldResolver.Instance;
-            FillArgs(columnMetadata.ColumnName);
+            var dataType = ReflectionHelper.GetPropertyType(_type, columnMetadata.ColumnName);
+            var graphQLType = ResolveColumnMetaType(dataType).GetGraphTypeFromType(true);
+            Field(columnMetadata.ColumnName, graphQLType);
+            FillArgs(dataType, columnMetadata.ColumnName);
         }
-        private void FillArgs(string columnName)
+        private void FillArgs(Type dataType, string columnName)
         {
-            var dataType = ReflectionHelper.GetPropertyType(_type, columnName);
             if (TableArgs == null)
             {
                 TableArgs = new QueryArguments
@@ -68,30 +46,48 @@ namespace Mix.Services.Graphql.Lib.Types
             if (dataType != null)
             {
 
-                switch (dataType.Name)
+                switch (dataType)
                 {
-                    case "Int32":
+                    case var n when n == typeof(Enum):
+                        TableArgs.Add(new QueryArgument<EnumerationGraphType> { Name = columnName });
+                        break;
+                    case var n when n == typeof(JArray):
+                        TableArgs.Add(new QueryArgument<AnyScalarGraphType> { Name = columnName });
+                        break;
+                    case var n when n == typeof(JObject):
+                        TableArgs.Add(new QueryArgument<ObjectGraphType> { Name = columnName });
+                        break;
+                    case var n when n == typeof(Guid) || n == typeof(Guid?):
+                        TableArgs.Add(new QueryArgument<GuidGraphType> { Name = columnName });
+                        break;
+                    case var n when n == typeof(long) || n == typeof(long?):
+                        TableArgs.Add(new QueryArgument<LongGraphType> { Name = columnName });
+                        break;
+                    case var n when n == typeof(int) || n == typeof(int?):
                         TableArgs.Add(new QueryArgument<IntGraphType> { Name = columnName });
                         break;
-                    case "DateTime":
-                        TableArgs.Add(new QueryArgument<DateGraphType> { Name = columnName });
+                    case var n when n == typeof(DateTime) || n == typeof(DateTime?):
+                        TableArgs.Add(new QueryArgument<DateTimeGraphType> { Name = columnName });
                         break;
-                    case "Boolean":
+                    case var n when n == typeof(bool) || n == typeof(bool?):
                         TableArgs.Add(new QueryArgument<BooleanGraphType> { Name = columnName });
+                        break;
+                    case var n when n == typeof(double) || n == typeof(double?) || n == typeof(decimal) || n == typeof(decimal?):
+                        TableArgs.Add(new QueryArgument<DecimalGraphType> { Name = columnName });
                         break;
                     default:
                         TableArgs.Add(new QueryArgument<StringGraphType> { Name = columnName });
                         break;
                 }
             }
-            //TableArgs.Add(new QueryArgument<IntGraphType> { Name = "id" });
-            //TableArgs.Add(new QueryArgument<IntGraphType> { Name = "first" });
-            //TableArgs.Add(new QueryArgument<IntGraphType> { Name = "offset" });
         }
-        private Type ResolveColumnMetaType(string dbType)
+        private Type ResolveColumnMetaType(Type dataType)
         {
-            if (DatabaseTypeToSystemType.ContainsKey(dbType.ToLower()))
-                return DatabaseTypeToSystemType[dbType.ToLower()]; return typeof(string);
+            if (dataType == typeof(JArray) || dataType == typeof(JObject))
+            {
+                return typeof(string);
+            }
+            return dataType;
         }
     }
 }
