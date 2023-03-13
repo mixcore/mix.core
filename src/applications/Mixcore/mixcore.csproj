@@ -52,12 +52,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3">
 		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.3">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -74,6 +73,7 @@
 		<ProjectReference Include="..\..\modules\mix.storage\mix.storage.csproj" />
 		<ProjectReference Include="..\..\modules\mix.tenancy\mix.tenancy.csproj" />
 		<ProjectReference Include="..\..\services\ecommerces\mix.services.ecommerce\mix.services.ecommerce.csproj" />
+		<ProjectReference Include="..\..\services\graphql\mix.services.graphql\mix.services.graphql.csproj" />
 		<ProjectReference Include="..\..\services\mix-databases\mix.servives.databases\mix.services.databases.csproj" />
 	</ItemGroup>
 	<ItemGroup>

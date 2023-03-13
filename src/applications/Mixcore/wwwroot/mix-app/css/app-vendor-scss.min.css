@@ -1,4 +1,4 @@
-/* Sat Mar 04 2023 20:22:29 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
+/* Thu Mar 09 2023 15:32:53 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
   max-width: 100%; }
 
 fb-login {
@@ -169,6 +169,61 @@ ul[dnd-list] li.selected,
 div[dnd-list] .dnd-item.selected {
   background-color: #dff0d8;
   color: #3c763d; }
+
+.mouse {
+  z-index: 9999999;
+  width: 70px;
+  height: 70px;
+  background-color: transparent;
+  color: #fff;
+  position: absolute; }
+
+hub-messages .nav-link {
+  position: relative; }
+  hub-messages .nav-link .new-msg-count {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    top: -5px;
+    right: 5px;
+    background-color: red;
+    padding: 2px 4px 0; }
+
+main-side-bar-dynamic .sw-sidebar .sw-toc-item {
+  position: relative; }
+  main-side-bar-dynamic .sw-sidebar .sw-toc-item .sw-toc-link .sw-toc-link {
+    padding-left: 0; }
+  main-side-bar-dynamic .sw-sidebar .sw-toc-item .btn-group {
+    right: 20px;
+    opacity: 1; }
+
+main-side-bar-dynamic .sw-sidebar ul {
+  padding-left: 15px; }
+
+main-side-bar-dynamic .sw-sidebar .sw-toc-sub-link .btn-group {
+  padding: 2px 0; }
+
+.custom-image {
+  max-width: 30vw; }
+
+.attr-set-value-item:last-child {
+  border-bottom: 0 !important; }
+
+mix-database-nav-values .row {
+  padding: 10px 0; }
+
+mix-database-nav-values mix-column-preview .rowx {
+  max-height: 110px;
+  overflow: hidden; }
+
+@media (min-width: 992px) {
+  #modal-content-filter .modal-lg,
+  #modal-content-filter .modal-xl {
+    max-width: 80vw; } }
+
+.table-data td.preview {
+  max-width: 120px;
+  overflow: hidden; }
 
 .content {
   width: 100%;

@@ -18,6 +18,6 @@ namespace Mix.RepoDb.Interfaces
 
         public Task<JObject?> GetSingleBy(string tableName, List<QueryField> queries);
 
-        public Task<int> CreateData(string tableName, JObject data);
+        public Task CreateData(string tableName, JObject data);
     }
 }

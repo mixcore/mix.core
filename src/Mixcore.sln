@@ -90,6 +90,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.databases", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.mixdb", "platform\mix.mixdb\mix.mixdb.csproj", "{356FB416-1C32-4B59-91B4-62F62CBE394E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "graphql", "graphql", "{7212EE31-82F0-4741-B55F-7BCE0A3DFC5A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.graphql.lib", "services\graphql\mix.services.graphql.lib\mix.services.graphql.lib.csproj", "{4C1341A9-F5E2-4AB1-A504-5D815CAEEAF3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.graphql", "services\graphql\mix.services.graphql\mix.services.graphql.csproj", "{4C7CFA3D-355B-434F-8442-2B0970BF02C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -212,6 +218,14 @@ Global
 		{356FB416-1C32-4B59-91B4-62F62CBE394E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{356FB416-1C32-4B59-91B4-62F62CBE394E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{356FB416-1C32-4B59-91B4-62F62CBE394E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C1341A9-F5E2-4AB1-A504-5D815CAEEAF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C1341A9-F5E2-4AB1-A504-5D815CAEEAF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C1341A9-F5E2-4AB1-A504-5D815CAEEAF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C1341A9-F5E2-4AB1-A504-5D815CAEEAF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C7CFA3D-355B-434F-8442-2B0970BF02C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C7CFA3D-355B-434F-8442-2B0970BF02C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C7CFA3D-355B-434F-8442-2B0970BF02C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C7CFA3D-355B-434F-8442-2B0970BF02C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -255,6 +269,10 @@ Global
 		{973AC418-7E56-44F0-83B8-C316565BB0E5} = {9052327F-0A55-43C2-808A-B315D12A1EB1}
 		{309813E4-D6E9-4B25-949F-49B808F4DFF7} = {362A9E6F-A253-4D17-B164-C037609DD67B}
 		{53FDEAC2-ADEB-4E02-AF44-DC986672A02E} = {9052327F-0A55-43C2-808A-B315D12A1EB1}
+		{356FB416-1C32-4B59-91B4-62F62CBE394E} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
+		{7212EE31-82F0-4741-B55F-7BCE0A3DFC5A} = {C0A05428-767E-46C5-A31F-0D220E41F7C5}
+		{4C1341A9-F5E2-4AB1-A504-5D815CAEEAF3} = {7212EE31-82F0-4741-B55F-7BCE0A3DFC5A}
+		{4C7CFA3D-355B-434F-8442-2B0970BF02C5} = {7212EE31-82F0-4741-B55F-7BCE0A3DFC5A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0143C230-7F40-44B2-8BA3-EF5B92D55848}

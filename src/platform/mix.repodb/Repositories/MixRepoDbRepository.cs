@@ -24,6 +24,7 @@ using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
 using System.Data;
+using System.Reflection.Metadata;
 
 namespace Mix.RepoDb.Repositories
 {
@@ -301,7 +302,7 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<int> InsertAsync(JObject entity)
+        public async Task InsertAsync(JObject entity)
         {
             try
             {
@@ -312,15 +313,13 @@ namespace Mix.RepoDb.Repositories
                     obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
                 }
                 var dicObj = obj.ToObject<Dictionary<string, object>>();
-                var result = await _connection.InsertAsync(
+                var result = await _connection.InsertAsync<int?>(
                         _tableName,
                         entity: dicObj,
                         fields: null,
                         commandTimeout: _settings.CommandTimeout,
                         transaction: _dbTransaction,
                         trace: Trace);
-
-                return int.Parse(result?.ToString() ?? "0");
             }
             catch (Exception ex)
             {
@@ -518,7 +517,7 @@ namespace Mix.RepoDb.Repositories
 
         public void SetDbConnection(UnitOfWorkInfo dbUow)
         {
-            
+
             if (DatabaseProvider == MixDatabaseProvider.SQLITE)
             {
 

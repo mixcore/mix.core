@@ -163,7 +163,7 @@ namespace Mix.RepoDb.Services
         }
 
 
-        public async Task<int> CreateData(string tableName, JObject data)
+        public async Task CreateData(string tableName, JObject data)
         {
             _repository.InitTableName(tableName);
             JObject obj = new JObject();
@@ -193,7 +193,7 @@ namespace Mix.RepoDb.Services
             {
                 obj.Add(new JProperty(IsDeletedFieldName, false));
             }
-            return await _repository.InsertAsync(obj);
+            await _repository.InsertAsync(obj);
         }
 
 
