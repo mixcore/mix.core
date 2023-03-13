@@ -177,6 +177,10 @@ namespace Mix.Portal.Controllers
             {
                 obj.Add(new JProperty(CreatedDateFieldName, DateTime.UtcNow));
             }
+            if (!obj.ContainsKey(CreatedByFieldName))
+            {
+                obj.Add(new JProperty(CreatedByFieldName, _idService.GetClaim(User, MixClaims.Username)));
+            }
             if (!obj.ContainsKey(PriorityFieldName))
             {
                 obj.Add(new JProperty(PriorityFieldName, 0));
