@@ -30,9 +30,6 @@ namespace Mixcore
             services.AddMixCors();
             services.AddScoped<MixNavigationService>();
 
-            // Queue Subscribers
-            services.AddMixMvcServices();
-
             services.AddMixAuthorize<MixCmsAccountContext>();
             services.AddMixRoutes();
 

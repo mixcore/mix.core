@@ -2,7 +2,6 @@
 
 namespace Mix.Lib.ViewModels
 {
-    [GeneratePublisher]
     public sealed class MixTemplateViewModel
         : ViewModelBase<MixCmsContext, MixTemplate, int, MixTemplateViewModel>
     {
