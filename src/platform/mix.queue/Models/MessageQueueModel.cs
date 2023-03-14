@@ -10,6 +10,7 @@ namespace Mix.Queue.Models
         public bool Success { get; set; }
         public string TopicId { get; set; }
         public string Data { get; set; }
+        public string DataTypeFullName { get; set; }
 
         public List<MixSubscribtionModel> Subscriptions { get; set; } = new();
 
@@ -26,6 +27,7 @@ namespace Mix.Queue.Models
             {
                 try
                 {
+                    DataTypeFullName = data.GetType().FullName;
                     Data = ReflectionHelper.ParseObject(data).ToString(Newtonsoft.Json.Formatting.None);
                 }
                 catch

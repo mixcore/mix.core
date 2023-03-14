@@ -88,21 +88,25 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
+		<Compile Remove="Domain\Helpers\**" />
 		<Compile Remove="logs\**" />
 		<Compile Remove="MixContent\cache\**" />
 		<Compile Remove="MixContent\Templates\**" />
 		<Compile Remove="Models\Cms\**" />
+		<Content Remove="Domain\Helpers\**" />
 		<Content Remove="logs\**" />
 		<Content Remove="MixContent\cache\**" />
 		<Content Remove="MixContent\Templates\**" />
 		<Content Remove="Models\Cms\**" />
 		<Content Remove="wwwroot\mix-content\**" />
 		<EmbeddedResource Remove="..\..\shared\MixContent\**" />
+		<EmbeddedResource Remove="Domain\Helpers\**" />
 		<EmbeddedResource Remove="logs\**" />
 		<EmbeddedResource Remove="MixContent\cache\**" />
 		<EmbeddedResource Remove="MixContent\Templates\**" />
 		<EmbeddedResource Remove="Models\Cms\**" />
 		<EmbeddedResource Remove="wwwroot\mix-content\**" />
+		<None Remove="Domain\Helpers\**" />
 		<None Remove="logs\**" />
 		<None Remove="MixContent\cache\**" />
 		<None Remove="MixContent\Templates\**" />
@@ -113,9 +117,5 @@
 		<Content Update="wwwroot\mix-app\css\swagger.css">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Content>
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Domain\Dtos\" />
-	  <Folder Include="Domain\Helpers\" />
 	</ItemGroup>
 </Project>

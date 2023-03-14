@@ -57,7 +57,7 @@ namespace Mix.Lib.Services
             data.CreatedBy = MixIdentityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username);
             data.ModifiedBy = data.CreatedBy;
             var id = await data.SaveAsync(cancellationToken);
-            QueueService.PushMessage(data, MixRestAction.Post.ToString(), true);
+            QueueService.PushQueue(MixQueueTopics.MixViewModelChanged, MixRestAction.Put.ToString(), data);
             return id;
         }
 
@@ -72,7 +72,7 @@ namespace Mix.Lib.Services
             data.SetUowInfo(Uow);
             await data.SaveAsync(cancellationToken);
             await CacheService.RemoveCacheAsync(id, Repository.CacheFolder, cancellationToken);
-            QueueService.PushMessage(data, MixRestAction.Put.ToString(), true);
+            QueueService.PushQueue(MixQueueTopics.MixViewModelChanged, MixRestAction.Put.ToString(), data);
         }
 
         public virtual async Task DeleteHandler(TView data, CancellationToken cancellationToken = default)
@@ -81,7 +81,7 @@ namespace Mix.Lib.Services
             data.SetUowInfo(Uow);
             await data.DeleteAsync(cancellationToken);
             await CacheService.RemoveCacheAsync(data.Id.ToString(), Repository.CacheFolder, cancellationToken);
-            QueueService.PushMessage(data, MixRestAction.Delete.ToString(), true);
+            QueueService.PushQueue(MixQueueTopics.MixViewModelChanged, MixRestAction.Put.ToString(), data);
         }
 
 
@@ -91,7 +91,7 @@ namespace Mix.Lib.Services
             data.SetUowInfo(Uow);
             await data.SaveFieldsAsync(properties, cancellationToken);
             await CacheService.RemoveCacheAsync(id.ToString(), Repository.CacheFolder, cancellationToken);
-            QueueService.PushMessage(data, MixRestAction.Patch.ToString(), true);
+            QueueService.PushQueue(MixQueueTopics.MixViewModelChanged, MixRestAction.Put.ToString(), data);
         }
 
         public virtual async Task SaveManyHandler(List<TView> data, CancellationToken cancellationToken = default)

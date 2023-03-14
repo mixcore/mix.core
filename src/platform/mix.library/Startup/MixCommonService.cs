@@ -34,6 +34,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<EmailService>();
             services.TryAddScoped<IMixEdmService, MixEdmService>();
 
+            services.AddHostedService<MixViewModelChangedPublisher>();
+            services.AddHostedService<MixViewModelChangedSubscriber>();
+
             services.AddHostedService<MixBackgroundTaskPublisher>();
             services.AddHostedService<MixBackgroundTaskSubscriber>();
             return services;
