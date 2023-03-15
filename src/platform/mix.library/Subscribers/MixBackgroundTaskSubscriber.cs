@@ -74,7 +74,6 @@ namespace Mix.Lib.Subscribers
                 Type = result ? MessageType.Success : MessageType.Error,
                 Title = message,
                 From = new(GetType().FullName),
-                Data = result,
                 Message = ex == null ? message : ex!.Message
             };
             await PortalHub.SendMessageAsync(msg);

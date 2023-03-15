@@ -63,7 +63,7 @@ namespace Mix.Service.Services
             }
             catch (Exception ex)
             {
-                MixLogService.LogExceptionAsync(ex);
+                 MixLogService.LogExceptionAsync(ex).GetAwaiter().GetResult();
             }
         }
 

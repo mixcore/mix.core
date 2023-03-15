@@ -36,9 +36,13 @@ namespace Mix.Service.Services
         {
             if (!string.IsNullOrEmpty(MixEndpointService.Messenger))
             {
-                if (Connection == null)
+                while (Connection == null)
                 {
                     Init();
+                    if (Connection == null)
+                    {
+                        await Task.Delay(5000);
+                    }
                 }
 
                 while (Connection != null && Connection.State != HubConnectionState.Connected)
