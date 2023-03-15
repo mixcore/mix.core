@@ -57,7 +57,7 @@ namespace Mix.Lib.Services
             data.CreatedBy = MixIdentityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username);
             data.ModifiedBy = data.CreatedBy;
             var id = await data.SaveAsync(cancellationToken);
-            QueueService.PushQueue(MixQueueTopics.MixViewModelChanged, MixRestAction.Put.ToString(), data);
+            QueueService.PushQueue(MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), data);
             return id;
         }
 
@@ -81,7 +81,7 @@ namespace Mix.Lib.Services
             data.SetUowInfo(Uow);
             await data.DeleteAsync(cancellationToken);
             await CacheService.RemoveCacheAsync(data.Id.ToString(), Repository.CacheFolder, cancellationToken);
-            QueueService.PushQueue(MixQueueTopics.MixViewModelChanged, MixRestAction.Put.ToString(), data);
+            QueueService.PushQueue(MixQueueTopics.MixViewModelChanged, MixRestAction.Delete.ToString(), data);
         }
 
 
@@ -91,7 +91,7 @@ namespace Mix.Lib.Services
             data.SetUowInfo(Uow);
             await data.SaveFieldsAsync(properties, cancellationToken);
             await CacheService.RemoveCacheAsync(id.ToString(), Repository.CacheFolder, cancellationToken);
-            QueueService.PushQueue(MixQueueTopics.MixViewModelChanged, MixRestAction.Put.ToString(), data);
+            QueueService.PushQueue(MixQueueTopics.MixViewModelChanged, MixRestAction.Patch.ToString(), data);
         }
 
         public virtual async Task SaveManyHandler(List<TView> data, CancellationToken cancellationToken = default)
