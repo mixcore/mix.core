@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Mix.Communicator.Models;
+using Mix.Heart.Exceptions;
 using Mix.Service.Services;
 using System.Net;
 using System.Net.Mail;
@@ -41,9 +42,9 @@ namespace Mix.Communicator.Services
 
                 await client.SendMailAsync(mailMessage);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MixService.LogException(e);
+                throw new MixException(Heart.Enums.MixErrorStatus.ServerError, ex);
             }
         }
 

@@ -9,7 +9,6 @@ using Mix.Service.Interfaces;
 using Mix.Shared;
 using Mix.Shared.Interfaces;
 using Mix.SignalR.Interfaces;
-using Mix.SignalR.Services;
 using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -104,6 +103,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<IAuditLogService, AuditLogService>();
             services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
             services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
+            services.TryAddSingleton<ILogStreamHubClientService, LogStreamHubClientService>();
             services.AddMixRepoDb();
             return services;
         }

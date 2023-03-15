@@ -74,7 +74,7 @@ namespace Mix.Lib.Middlewares
             }
             catch (Exception ex)
             {
-                MixService.LogException(ex, message: "Cannot share connections");
+                MixLogService.LogExceptionAsync(ex, message: "Cannot share connections");
             }
         }
 

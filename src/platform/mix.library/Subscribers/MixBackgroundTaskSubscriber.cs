@@ -37,6 +37,7 @@ namespace Mix.Lib.Subscribers
                 case MixQueueActions.AuditLog:
                     var cmd = model.ParseData<LogAuditLogCommand>();
                     AuditLogService.SaveToDatabase(cmd.UserName, cmd.Request, true, null);
+                    await MixLogService.LogMessageAsync(cmd.UserName, data: cmd.Request);
                     break;
                 case MixQueueActions.SendMail:
                     await SendMail(model);
@@ -59,7 +60,7 @@ namespace Mix.Lib.Subscribers
             }
             catch (Exception ex)
             {
-                MixService.LogException(ex);
+                MixLogService.LogExceptionAsync(ex);
                 await SendMessage($"Error {model.Action}: {model.Data}", false, ex);
             }
 

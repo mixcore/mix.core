@@ -10,14 +10,14 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseDeveloperExceptionPage();
             app.UseExceptionHandler(appError =>
             {
-                appError.Run((context) =>
+                appError.Run(async (context) =>
                 {
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if (contextFeature != null)
                     {
                         throw new MixException(MixErrorStatus.ServerError, contextFeature.Error);
                     }
-                    return Task.CompletedTask;
+                    await MixLogService.LogExceptionAsync(contextFeature.Error);
                 });
             });
         }

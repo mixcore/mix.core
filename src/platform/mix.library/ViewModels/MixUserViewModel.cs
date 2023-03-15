@@ -99,7 +99,7 @@ namespace Mix.Lib.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    MixService.LogException(ex);
+                    MixLogService.LogExceptionAsync(ex);
                 }
             }
         }
@@ -122,7 +122,7 @@ namespace Mix.Lib.ViewModels
             }
             catch (Exception ex)
             {
-                MixService.LogException(ex);
+                MixLogService.LogExceptionAsync(ex);
                 PortalMenus = new();
             }
         }

@@ -4,12 +4,12 @@ using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
 using System;
 
-namespace Mix.SignalR.Services
+namespace Mix.Service.Services
 {
-    public class PortalHubClientService : BaseHubClientService, IPortalHubClientService
+    public class LogStreamHubClientService : BaseHubClientService, ILogStreamHubClientService
     {
-        public PortalHubClientService(MixEndpointService mixEndpointService)
-            : base(HubEndpoints.PortalHub, mixEndpointService)
+        public LogStreamHubClientService(MixEndpointService mixEndpointService)
+            : base(HubEndpoints.LogStreamHub, mixEndpointService)
         {
         }
 

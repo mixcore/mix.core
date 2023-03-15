@@ -46,6 +46,7 @@ namespace Mix.Lib.Filters
                 context.Result = new BadRequestObjectResult(context.Exception.Message?.Split('\n'));
             }
             context.ExceptionHandled = true;
+            MixLogService.LogExceptionAsync(context.Exception).GetAwaiter().GetResult();
         }
     }
 }

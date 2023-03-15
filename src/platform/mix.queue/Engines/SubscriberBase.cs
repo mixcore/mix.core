@@ -21,7 +21,7 @@ namespace Mix.Queue.Engines
         private readonly string _topicId;
 
         protected readonly IServiceProvider ServicesProvider;
-        protected IServiceScope ServiceScope { get; set ; }
+        protected IServiceScope ServiceScope { get; set; }
         protected SubscriberBase(
             string topicId,
             string moduleName,
@@ -92,15 +92,6 @@ namespace Mix.Queue.Engines
             return default;
         }
 
-        //protected IServiceScope GetServiceScope()
-        //{
-        //    if (_serviceScope == null)
-        //    {
-        //        _serviceScope = _servicesProvider.CreateScope();
-        //    }
-        //    return _serviceScope;
-        //}
-
         protected T GetScopedService<T>()
         {
             return ServiceScope.ServiceProvider.GetRequiredService<T>();
@@ -108,25 +99,20 @@ namespace Mix.Queue.Engines
 
         public Task MessageHandler(MessageQueueModel data)
         {
-            
-                try
-                {
-                    if (_topicId != data.TopicId)
-                    {
-                        return Task.CompletedTask;
-                    }
 
-                    return Handler(data);
-                }
-                catch (Exception ex)
+            try
+            {
+                if (_topicId != data.TopicId)
                 {
-                    MixService.LogException(ex);
                     return Task.CompletedTask;
                 }
-                //finally
-                //{
-                //    _serviceScope?.Dispose();
-                //}
+
+                return Handler(data);
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(Heart.Enums.MixErrorStatus.ServerError, ex);
+            }
         }
 
         public abstract Task Handler(MessageQueueModel model);

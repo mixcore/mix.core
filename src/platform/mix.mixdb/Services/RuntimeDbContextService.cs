@@ -71,7 +71,7 @@ namespace Mix.Mixdb.Services
 
                     var error = failures.FirstOrDefault();
                     //throw new Exception($"{error?.Id}: {error?.GetMessage()}");
-                    MixService.LogException(new Exception($"{error?.Id}: {error?.GetMessage()}"));
+                    MixLogService.LogExceptionAsync(new Exception($"{error?.Id}: {error?.GetMessage()}"));
                 }
                 _assemblyLoadContext = new AssemblyLoadContext("DataContext", isCollectible: true);
 

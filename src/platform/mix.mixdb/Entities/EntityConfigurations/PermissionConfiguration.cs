@@ -21,7 +21,7 @@ namespace Mix.Mixdb.Entities.EntityConfigurations
             }
             catch (Exception ex)
             {
-                MixService.LogException(ex);
+                MixLogService.LogExceptionAsync(ex);
             }
         }
     }
