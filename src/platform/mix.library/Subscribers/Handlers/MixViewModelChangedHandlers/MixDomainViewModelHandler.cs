@@ -21,7 +21,6 @@ namespace Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers
                 case "Patch":
                 case "Delete":
                     return mixTenantService.Reload();
-                    break;
                 default:
                     break;
             }

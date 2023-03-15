@@ -8,7 +8,7 @@ namespace Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers
 {
     public class TemplateHandler
     {
-        public static void MessageQueueHandler(MessageQueueModel data)
+        public static Task MessageQueueHandler(MessageQueueModel data)
         {
             var template = data.ParseData<MixTemplateViewModel>();
             switch (data.Action)
@@ -26,6 +26,7 @@ namespace Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers
                 default:
                     break;
             }
+            return Task.CompletedTask;
         }
         private static void DeleteTemplate(MixTemplateViewModel template)
         {
