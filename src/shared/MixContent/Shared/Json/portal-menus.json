@@ -548,18 +548,13 @@
       "cate": "audit-log",
       "items": [
         {
-          "path": "/admin/audit-log/create",
-          "templatePath": "/mix-app/views/app-portal/pages/audit-log/details.html",
-          "controller": "AuditLogController"
-        },
-        {
           "path": "/admin/audit-log/list",
           "templatePath": "/mix-app/views/app-portal/pages/audit-log/list.html",
           "controller": "AuditLogController"
         },
         {
-          "path": "/admin/audit-log/details/:id",
-          "templatePath": "/mix-app/views/app-portal/pages/audit-log/details.html",
+          "path": "/admin/audit-log/stream",
+          "templatePath": "/mix-app/views/app-portal/pages/audit-log/stream.html",
           "controller": "AuditLogController"
         }
       ]

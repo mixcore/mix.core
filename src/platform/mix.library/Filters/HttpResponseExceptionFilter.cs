@@ -40,12 +40,15 @@ namespace Mix.Lib.Filters
                     },
                 };
                 context.ExceptionHandled = true;
+                MixLogService.LogExceptionAsync(context.Exception).GetAwaiter().GetResult();
             }
             else if (context.Exception != null)
             {
                 context.Result = new BadRequestObjectResult(context.Exception.Message?.Split('\n'));
+                MixLogService.LogExceptionAsync(context.Exception).GetAwaiter().GetResult();
             }
             context.ExceptionHandled = true;
+            
         }
     }
 }

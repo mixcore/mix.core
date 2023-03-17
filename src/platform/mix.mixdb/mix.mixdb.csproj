@@ -18,6 +18,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\mix.database\mix.database.csproj" />
+		<ProjectReference Include="..\mix.service\mix.service.csproj" />
 		<Using Include="Mix.Mixdb.Entities" />
 		<Using Include="Mix.Mixdb.Entities" />
 	</ItemGroup>

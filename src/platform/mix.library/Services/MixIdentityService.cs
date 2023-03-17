@@ -267,7 +267,7 @@ namespace Mix.Lib.Services
             }
             catch (Exception ex)
             {
-                MixService.LogException(ex);
+                MixLogService.LogExceptionAsync(ex);
                 return ReflectionHelper.ParseObject(new
                 {
                     ParentId = user.Id,

@@ -215,7 +215,7 @@ namespace Mix.RepoDb.Repositories
             }
             catch (Exception ex)
             {
-                MixService.LogException(ex);
+                await MixLogService.LogExceptionAsync(ex);
                 return default;
             }
             finally
@@ -238,7 +238,7 @@ namespace Mix.RepoDb.Repositories
             }
             catch (Exception ex)
             {
-                MixService.LogException(ex);
+                await MixLogService.LogExceptionAsync(ex);
                 return default;
             }
             finally
@@ -265,7 +265,7 @@ namespace Mix.RepoDb.Repositories
             }
             catch (Exception ex)
             {
-                MixService.LogException(ex);
+                await MixLogService.LogExceptionAsync(ex);
                 return default;
             }
             finally
@@ -293,7 +293,7 @@ namespace Mix.RepoDb.Repositories
             }
             catch (Exception ex)
             {
-                MixService.LogException(ex);
+                await MixLogService.LogExceptionAsync(ex);
                 return default;
             }
             finally
@@ -323,7 +323,7 @@ namespace Mix.RepoDb.Repositories
             }
             catch (Exception ex)
             {
-                throw new MixException(MixErrorStatus.Badrequest, ex.Message);
+                throw new MixException(MixErrorStatus.Badrequest, ex);
             }
             finally
             {
@@ -346,7 +346,7 @@ namespace Mix.RepoDb.Repositories
             }
             catch (Exception ex)
             {
-                MixService.LogException(ex);
+                await MixLogService.LogExceptionAsync(ex);
                 return default;
             }
             finally
@@ -375,7 +375,7 @@ namespace Mix.RepoDb.Repositories
             }
             catch (Exception ex)
             {
-                MixService.LogException(ex);
+                await MixLogService.LogExceptionAsync(ex);
                 return default;
             }
             finally
@@ -400,7 +400,7 @@ namespace Mix.RepoDb.Repositories
             }
             catch (Exception ex)
             {
-                MixService.LogException(ex);
+                await MixLogService.LogExceptionAsync(ex);
                 return default;
             }
             finally
@@ -425,7 +425,7 @@ namespace Mix.RepoDb.Repositories
             }
             catch (Exception ex)
             {
-                MixService.LogException(ex);
+                await MixLogService.LogExceptionAsync(ex);
                 return default;
             }
             finally
