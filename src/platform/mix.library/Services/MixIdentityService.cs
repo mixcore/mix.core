@@ -254,6 +254,7 @@ namespace Mix.Lib.Services
                 {
                     u = new JObject()
                     {
+                        new JProperty("Id", null),
                         new JProperty("ParentId", user.Id),
                         new JProperty("ParentType", MixContentType.User.ToString()),
                         new JProperty("Username", user.UserName),
