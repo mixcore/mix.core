@@ -1,4 +1,4 @@
-/* Mon Mar 13 2023 12:22:49 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
+/* Sat Mar 18 2023 13:26:11 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
   max-width: 100%; }
 
 fb-login {
@@ -126,6 +126,21 @@ div[dnd-list] .dnd-item.selected {
 hub-messages .nav-link {
   position: relative; }
   hub-messages .nav-link .new-msg-count {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    top: -5px;
+    right: 5px;
+    background-color: red;
+    padding: 2px 4px 0; }
+
+log-stream #modal-log-stream .modal-body {
+  max-height: 80vh;
+  overflow-y: scroll; }
+
+log-stream .nav-link {
+  position: relative; }
+  log-stream .nav-link .new-msg-count {
     position: absolute;
     color: white;
     font-weight: bold;
