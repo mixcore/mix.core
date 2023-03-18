@@ -19,6 +19,7 @@ namespace Mix.Service.Services
         {
             HubName = hub;
             MixEndpointService = mixEndpointService;
+            Init();
         }
 
         public Task SendMessageAsync(string title, string description, object data, MessageType messageType = MessageType.Info)
@@ -34,35 +35,21 @@ namespace Mix.Service.Services
 
         public async Task SendMessageAsync(SignalRMessageModel message)
         {
-            if (!string.IsNullOrEmpty(MixEndpointService.Messenger))
+            if (Connection!= null && Connection.State == HubConnectionState.Connected)
             {
-                while (Connection == null)
+                try
                 {
-                    Init();
-                    if (Connection == null)
-                    {
-                        await Task.Delay(5000);
-                    }
+                    await Connection.InvokeAsync(HubMethods.SendMessage, message);
                 }
 
-                while (Connection != null && Connection.State != HubConnectionState.Connected)
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        await Task.Delay(new Random().Next(0, 5) * 1000);
-                        await Connection.StartAsync();
-                    }
-
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex);
-                    }
+                    Console.Error.WriteLine(ex);
                 }
-                await Connection.InvokeAsync(HubMethods.SendMessage, message);
             }
             else
             {
-                Console.WriteLine("Cannot Start SignalR Hub: MixEndpointService.Messenger is null or empty");
+                Console.Error.WriteLine($"Cannot Start SignalR Hub: {HubName}");
             }
 
         }
@@ -71,7 +58,6 @@ namespace Mix.Service.Services
         {
             if (!string.IsNullOrEmpty(MixEndpointService.Messenger))
             {
-
                 string endpoint = $"{MixEndpointService.Messenger}{HubName}";
                 Connection = new HubConnectionBuilder()
                    .WithUrl(endpoint, options =>
@@ -100,6 +86,22 @@ namespace Mix.Service.Services
 
                     return Task.CompletedTask;
                 };
+
+                int tried = 0;
+                while (Connection != null && Connection.State != HubConnectionState.Connected && tried < 5)
+                {
+                    try
+                    {
+                        tried++;
+                        Thread.Sleep(2000);
+                        Connection.StartAsync().GetAwaiter().GetResult();
+                    }
+                    catch(Exception cex)
+                    {
+                        Console.Error.WriteLine(cex);
+                    }
+
+                }
 
             }
         }
