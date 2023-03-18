@@ -38,7 +38,7 @@ namespace Mix.Quartz.Jobs
         private void LogJobData(IJobExecutionContext context)
         {
             var request = new ParsedRequestModel("localhost", JobName, "Quartz", context.Trigger.JobDataMap.GetString("data"));
-            var cmd = new LogAuditLogCommand(JobName, request);
+            var cmd = new LogAuditLogCommand(Guid.NewGuid(), JobName, request);
             QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.AuditLog, cmd);
 
         }

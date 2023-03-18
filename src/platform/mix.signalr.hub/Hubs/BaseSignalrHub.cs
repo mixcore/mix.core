@@ -32,17 +32,6 @@ namespace Mix.SignalR.Hubs
             await Clients.All.SendAsync(HubMethods.ReceiveMethod, message);
         }
 
-        private void LogMessage(SignalRMessageModel message)
-        {
-            AuditLogService.LogRequest(Context.User?.Identity?.Name, new ParsedRequestModel()
-            {
-                RequestIp = GetIPAddress(),
-                Endpoint = GetType().Name,
-                Method = "SignalR",
-                Body = message.ToString()
-            });
-        }
-
         private string? GetIPAddress()
         {
             var feature = Context.Features.Get<IHttpConnectionFeature>();

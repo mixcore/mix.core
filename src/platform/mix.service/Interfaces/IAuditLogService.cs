@@ -5,10 +5,12 @@ namespace Mix.Service.Interfaces
 {
     public interface IAuditLogService
     {
-        public void SaveToDatabase(string createdBy, ParsedRequestModel request, bool isSucceed, Exception exception);
+        public Task SaveRequestAsync(Guid id, string createdBy, ParsedRequestModel request);
+        public Task SaveResponseAsync(Guid id, int statusCode, Exception ex);
 
-        public void LogRequest(HttpContext context);
+        public void LogRequest(Guid id, HttpContext context);
 
-        public void LogRequest(string createdBy, ParsedRequestModel request);
+        public void LogRequest(Guid id, string createdBy, ParsedRequestModel request);
+        public void LogResponse(Guid id, HttpResponse response, Exception? ex);
     }
 }

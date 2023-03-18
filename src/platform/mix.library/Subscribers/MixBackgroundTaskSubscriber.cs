@@ -36,8 +36,16 @@ namespace Mix.Lib.Subscribers
             {
                 case MixQueueActions.AuditLog:
                     var cmd = model.ParseData<LogAuditLogCommand>();
-                    AuditLogService.SaveToDatabase(cmd.UserName, cmd.Request, true, null);
-                    await MixLogService.LogMessageAsync(cmd.UserName, data: cmd.Request);
+                    if (cmd.Request!= null)
+                    {
+                        await AuditLogService.SaveRequestAsync(cmd.LogId, cmd.UserName, cmd.Request);
+
+                    }
+                    else
+                    {
+                        await AuditLogService.SaveResponseAsync(cmd.LogId, cmd.StatusCode, cmd.Exception);
+                    }
+                    await MixLogService.LogMessageAsync(cmd.UserName, data: cmd);
                     break;
                 case MixQueueActions.SendMail:
                     await SendMail(model);
@@ -60,7 +68,7 @@ namespace Mix.Lib.Subscribers
             }
             catch (Exception ex)
             {
-                MixLogService.LogExceptionAsync(ex);
+                await MixLogService.LogExceptionAsync(ex);
                 await SendMessage($"Error {model.Action}: {model.Data}", false, ex);
             }
 

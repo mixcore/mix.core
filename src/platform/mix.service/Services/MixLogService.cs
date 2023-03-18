@@ -120,16 +120,19 @@ namespace Mix.Service.Services
         private static async Task SendMessage(string? message, object? data = default, Exception? ex = null, MessageType msgType = MessageType.Info)
         {
             var obj = ReflectionHelper.ParseObject(data ?? ex);
-            SignalRMessageModel msg = new()
+            if (obj != null)
             {
-                Action = MessageAction.NewMessage,
-                Type = msgType,
-                Title = message,
-                From = new("Log Stream Service"),
-                Data = obj.ToString(Newtonsoft.Json.Formatting.None),
-                Message = ex == null ? message : ex!.Message
-            };
-            await _logStreamHub.SendMessageAsync(msg);
+                SignalRMessageModel msg = new()
+                {
+                    Action = MessageAction.NewMessage,
+                    Type = msgType,
+                    Title = message,
+                    From = new("Log Stream Service"),
+                    Data = obj.ToString(Newtonsoft.Json.Formatting.None),
+                    Message = ex == null ? message : ex!.Message
+                };
+                await _logStreamHub.SendMessageAsync(msg);
+            }
         }
 
     }
