@@ -3,7 +3,6 @@ using Mix.Lib.Services;
 
 namespace Mix.Lib.ViewModels
 {
-    [GeneratePublisher]
     public sealed class MixTenantSystemViewModel
         : ViewModelBase<MixCmsContext, MixTenant, int, MixTenantSystemViewModel>
     {

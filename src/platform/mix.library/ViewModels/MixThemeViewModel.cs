@@ -1,6 +1,5 @@
 ﻿namespace Mix.Lib.ViewModels
 {
-    [GeneratePublisher]
     public sealed class MixThemeViewModel
         : TenantDataViewModelBase<MixCmsContext, MixTheme, int, MixThemeViewModel>
     {
