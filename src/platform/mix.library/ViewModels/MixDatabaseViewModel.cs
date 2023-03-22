@@ -3,8 +3,7 @@
 namespace Mix.Lib.ViewModels
 {
     [GenerateRestApiController]
-    public sealed class MixDatabaseViewModel
-        : TenantDataViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
+    public sealed class MixDatabaseViewModel : TenantDataViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
     {
         #region Properties
         [Required]
@@ -114,5 +113,15 @@ namespace Mix.Lib.ViewModels
         }
 
         #endregion
+
+        public override void Duplicate()
+        {
+            Id = default;
+            DisplayName = $"Duplicated {DisplayName}";
+            SystemName = $"duplicated{SystemName}";
+
+            Columns.ForEach(p => p.Id = 0);
+            Relationships.ForEach(p => p.Id = 0);
+        }
     }
 }
