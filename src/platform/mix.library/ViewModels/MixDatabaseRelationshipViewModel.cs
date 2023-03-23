@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Lib.ViewModels
 {
@@ -81,20 +82,21 @@ namespace Mix.Lib.ViewModels
             }
         }
 
-        //protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
-        //{
-        //    var leftDb = Context.MixDatabase.Find(ParentId);
-        //    string leftColName = $"{leftDb.SystemName}Id";
-        //    var rightDb = Context.MixDatabase.Find(ChildId);
-        //    string rightColName = $"{rightDb.SystemName}Id";
-        //    await MixDatabaseColumnViewModel.GetRepository(UowInfo)
-        //        .DeleteManyAsync(m =>
-        //        (m.MixDatabaseId == ParentId && m.SystemName == rightColName)
-        //        || (m.MixDatabaseId == ChildId && m.SystemName == leftColName),
-        //        cancellationToken);
+        protected override async Task DeleteEntityRelationshipAsync(CancellationToken cancellationToken = default)
+        {
+            string parentColIdName = $"{SourceDatabaseName.ToTitleCase()}Id";
+            var refColumn = await Context.MixDatabaseColumn
+                .FirstOrDefaultAsync(m => 
+                    m.MixDatabaseName == DestinateDatabaseName 
+                    && m.SystemName == parentColIdName 
+                    && m.DataType == MixDataType.Reference,
+                    cancellationToken);
 
-        //    await base.DeleteHandlerAsync(cancellationToken);
-        //}
+            if (refColumn != null)
+            {
+                Context.MixDatabaseColumn.Remove(refColumn);
+            }
+        }
 
         #endregion
     }
