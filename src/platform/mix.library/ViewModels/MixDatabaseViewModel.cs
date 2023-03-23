@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Lib.ViewModels
 {
     [GenerateRestApiController]
-    public sealed class MixDatabaseViewModel
-        : TenantDataViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
+    public sealed class MixDatabaseViewModel : TenantDataViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
     {
         #region Properties
         [Required]
@@ -25,7 +25,6 @@ namespace Mix.Lib.ViewModels
 
         public MixDatabaseViewModel()
         {
-
         }
 
         public MixDatabaseViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
@@ -40,6 +39,18 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Overrides
+
+        public override async Task Validate(CancellationToken cancellationToken)
+        {
+            if (await Context.MixDatabase.AnyAsync(p => p.Id != Id && p.SystemName == SystemName, cancellationToken))
+            {
+                IsValid = false;
+                Errors.Add(new ValidationResult("Database name must be unique."));
+            }
+
+            await base.Validate(cancellationToken);
+        }
+
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             Columns = await MixDatabaseColumnViewModel.GetRepository(UowInfo).GetListAsync(c => c.MixDatabaseId == Id, cancellationToken);
@@ -114,5 +125,15 @@ namespace Mix.Lib.ViewModels
         }
 
         #endregion
+
+        public override void Duplicate()
+        {
+            Id = default;
+            DisplayName = $"Duplicated {DisplayName}";
+            SystemName = $"duplicated{SystemName}";
+
+            Columns.ForEach(p => p.Id = default);
+            Relationships.ForEach(p => p.Id = default);
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IQueueService<MessageQueueModel> queueService, 
+            IQueueService<MessageQueueModel> queueService,
             IMixDbService mixDbService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
@@ -33,6 +33,21 @@ namespace Mix.Portal.Controllers
             if (result != null)
                 return Ok(result);
             return NotFound();
+        }
+
+        [MixAuthorize(MixRoles.Owner)]
+        [HttpGet("duplicate/{id}")]
+        public async Task<ActionResult<MixDatabaseViewModel>> Duplicate(int id, CancellationToken cancellationToken = default)
+        {
+            var data = await GetById(id);
+            if (data != null)
+            {
+                data.Duplicate();
+                var newId = await CreateHandlerAsync(data, cancellationToken);
+                var result = await GetById(newId);
+                return Ok(result);
+            }
+            throw new MixException(MixErrorStatus.NotFound, id);
         }
 
         [MixAuthorize(MixRoles.Owner)]

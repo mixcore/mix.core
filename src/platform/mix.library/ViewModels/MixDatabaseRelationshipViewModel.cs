@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Mix.Lib.ViewModels
 {
@@ -12,6 +14,9 @@ namespace Mix.Lib.ViewModels
         public string SourceDatabaseName { get; set; }
         public string DestinateDatabaseName { get; set; }
         public MixDatabaseRelationshipType Type { get; set; }
+
+        [JsonIgnore]
+        public string ReferenceColumnName => $"{SourceDatabaseName.ToTitleCase()}Id";
         #endregion
 
         #region Constructors
@@ -35,7 +40,6 @@ namespace Mix.Lib.ViewModels
         #region Overrides
         public override async Task Validate(CancellationToken cancellationToken)
         {
-
             if (Repository.Table.Any(m => !m.Id.Equals(Id) && m.ParentId.Equals(ParentId) && m.ChildId.Equals(ChildId)))
             {
                 IsValid = false;
@@ -62,8 +66,7 @@ namespace Mix.Lib.ViewModels
 
         protected override async Task SaveEntityRelationshipAsync(MixDatabaseRelationship parentEntity, CancellationToken cancellationToken = default)
         {
-            string parentColIdName = $"{SourceDatabaseName.ToTitleCase()}Id";
-            if (!Context.MixDatabaseColumn.Any(m => m.MixDatabaseName == DestinateDatabaseName && m.SystemName == parentColIdName))
+            if (!Context.MixDatabaseColumn.Any(m => m.MixDatabaseName == DestinateDatabaseName && m.SystemName == ReferenceColumnName))
             {
                 var srcDb = Context.MixDatabase.FirstOrDefault(m => m.SystemName == SourceDatabaseName);
                 var destDb = Context.MixDatabase.FirstOrDefault(m => m.SystemName == DestinateDatabaseName);
@@ -73,28 +76,13 @@ namespace Mix.Lib.ViewModels
                     MixDatabaseId = destDb.Id,
                     DataType = MixDataType.Reference,
                     CreatedBy = CreatedBy,
-                    DisplayName = parentColIdName.ToTitleCase(),
-                    SystemName = parentColIdName
+                    DisplayName = ReferenceColumnName.ToTitleCase(),
+                    SystemName = ReferenceColumnName
                 };
 
                 await refCol.SaveAsync(cancellationToken);
             }
         }
-
-        //protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
-        //{
-        //    var leftDb = Context.MixDatabase.Find(ParentId);
-        //    string leftColName = $"{leftDb.SystemName}Id";
-        //    var rightDb = Context.MixDatabase.Find(ChildId);
-        //    string rightColName = $"{rightDb.SystemName}Id";
-        //    await MixDatabaseColumnViewModel.GetRepository(UowInfo)
-        //        .DeleteManyAsync(m =>
-        //        (m.MixDatabaseId == ParentId && m.SystemName == rightColName)
-        //        || (m.MixDatabaseId == ChildId && m.SystemName == leftColName),
-        //        cancellationToken);
-
-        //    await base.DeleteHandlerAsync(cancellationToken);
-        //}
 
         #endregion
     }
