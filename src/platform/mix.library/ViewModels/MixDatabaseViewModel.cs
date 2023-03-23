@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Lib.ViewModels
 {
@@ -24,7 +25,6 @@ namespace Mix.Lib.ViewModels
 
         public MixDatabaseViewModel()
         {
-
         }
 
         public MixDatabaseViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
@@ -39,6 +39,18 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Overrides
+
+        public override async Task Validate(CancellationToken cancellationToken)
+        {
+            if (await Context.MixDatabase.AnyAsync(p => p.SystemName == SystemName, cancellationToken))
+            {
+                IsValid = false;
+                Errors.Add(new ValidationResult("Database Existed"));
+            }
+
+            await base.Validate(cancellationToken);
+        }
+
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             Columns = await MixDatabaseColumnViewModel.GetRepository(UowInfo).GetListAsync(c => c.MixDatabaseId == Id, cancellationToken);
@@ -120,8 +132,8 @@ namespace Mix.Lib.ViewModels
             DisplayName = $"Duplicated {DisplayName}";
             SystemName = $"duplicated{SystemName}";
 
-            Columns.ForEach(p => p.Id = 0);
-            Relationships.ForEach(p => p.Id = 0);
+            Columns.ForEach(p => p.Id = default);
+            Relationships.ForEach(p => p.Id = default);
         }
     }
 }
