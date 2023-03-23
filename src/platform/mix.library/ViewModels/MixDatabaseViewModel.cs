@@ -40,6 +40,17 @@ namespace Mix.Lib.ViewModels
 
         #region Overrides
 
+        public override async Task Validate(CancellationToken cancellationToken)
+        {
+            if (await Context.MixDatabase.AnyAsync(p => p.Id != Id && p.SystemName == SystemName, cancellationToken))
+            {
+                IsValid = false;
+                Errors.Add(new ValidationResult("Database name must be unique."));
+            }
+
+            await base.Validate(cancellationToken);
+        }
+
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             Columns = await MixDatabaseColumnViewModel.GetRepository(UowInfo).GetListAsync(c => c.MixDatabaseId == Id, cancellationToken);
