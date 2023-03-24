@@ -442,6 +442,10 @@ namespace Mix.RepoDb.Repositories
             if (_connection.State != ConnectionState.Open)
             {
                 _connection.Open();
+
+            }
+            if (_dbTransaction == null || _dbTransaction.Connection == null)
+            {
                 _dbTransaction = _connection.BeginTransaction();
             }
         }

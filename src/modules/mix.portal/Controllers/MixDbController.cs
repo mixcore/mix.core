@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Azure.Amqp.Framing;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
 using Mix.RepoDb.Interfaces;
@@ -18,6 +19,8 @@ namespace Mix.Portal.Controllers
     public class MixDbController : MixTenantApiControllerBase
     {
         private const string CreatedByFieldName = "CreatedBy";
+        private const string ModifiedByFieldName = "ModifiedBy";
+        private const string LastModifiedFieldName = "LastModified";
         private const string CreatedDateFieldName = "CreatedDateTime";
         private const string PriorityFieldName = "Priority";
         private const string IdFieldName = "Id";
@@ -165,6 +168,7 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult<object>> Create(JObject dto)
         {
             JObject obj = new JObject();
+            string username = _idService.GetClaim(User, MixClaims.Username);
             foreach (var pr in dto.Properties())
             {
                 obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
@@ -172,6 +176,10 @@ namespace Mix.Portal.Controllers
             if (!obj.ContainsKey(IdFieldName))
             {
                 obj.Add(new JProperty(IdFieldName, null));
+            }
+            if (!obj.ContainsKey(CreatedByFieldName))
+            {
+                obj.Add(new JProperty(CreatedByFieldName, username));
             }
             if (!obj.ContainsKey(CreatedDateFieldName))
             {
@@ -208,18 +216,44 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult<object>> Update(int id, [FromBody] JObject dto)
         {
             JObject obj = new JObject();
+            string username = _idService.GetClaim(User, MixClaims.Username);
             foreach (var pr in dto.Properties())
             {
                 obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
             }
-            if (!obj.ContainsKey(TenantIdFieldName))
+            if (!obj.ContainsKey(ModifiedByFieldName))
+            {
+                obj.Add(new JProperty(ModifiedByFieldName, username));
+            }
+            else
+            {
+                obj[ModifiedByFieldName] = username;
+            }
+            if (!obj.ContainsKey(ModifiedByFieldName))
+            {
+                obj.Add(new JProperty(ModifiedByFieldName, username));
+            }
+            else
+            {
+                obj[ModifiedByFieldName] = username;
+            }
+            if (!obj.ContainsKey(LastModifiedFieldName))
+            {
+                obj.Add(new JProperty(LastModifiedFieldName, DateTime.UtcNow));
+            }
+            else
+            {
+                obj[LastModifiedFieldName] = DateTime.UtcNow;
+            }
+            if (!obj.ContainsKey(CreatedByFieldName))
             {
                 obj.Add(new JProperty(TenantIdFieldName, CurrentTenant.Id));
             }
             var data = await _repository.UpdateAsync(obj);
             if (data != null)
             {
-                return Ok(ReflectionHelper.ParseObject(await _repository.GetSingleAsync(id)));
+                var result = await _repository.GetSingleAsync(id);
+                return Ok(ReflectionHelper.ParseObject(result));
             }
             return BadRequest();
         }

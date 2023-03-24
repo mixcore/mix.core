@@ -194,7 +194,7 @@ namespace Mix.RepoDb.Services
 
                 List<QueryField> associationQueries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
                 var associations = await _associationRepository.GetListByAsync(associationQueries);
-                if (associations.Count > 0)
+                if (associations != null && associations.Count > 0)
                 {
                     var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
                     _repository.InitTableName(item.DestinateDatabaseName);
