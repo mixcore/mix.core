@@ -34,7 +34,7 @@ namespace Mix.RepoDb.Repositories
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private IDbConnection _connection;
         private IDbTransaction _dbTransaction;
-        public ITrace Trace { get; }
+        private MixdbTrace _trace;
 
         public ICache Cache { get; }
 
@@ -211,7 +211,7 @@ namespace Mix.RepoDb.Repositories
                     },
                     commandTimeout: _settings.CommandTimeout,
                     transaction: _dbTransaction,
-                    trace: Trace))?.SingleOrDefault();
+                    trace: _trace))?.SingleOrDefault();
             }
             catch (Exception ex)
             {
@@ -234,7 +234,7 @@ namespace Mix.RepoDb.Repositories
                     queries,
                     commandTimeout: _settings.CommandTimeout,
                     transaction: _dbTransaction,
-                    trace: Trace))?.SingleOrDefault();
+                    trace: _trace))?.SingleOrDefault();
             }
             catch (Exception ex)
             {
@@ -261,7 +261,7 @@ namespace Mix.RepoDb.Repositories
                     },
                     commandTimeout: _settings.CommandTimeout,
                     transaction: _dbTransaction,
-                    trace: Trace))?.ToList();
+                    trace: _trace))?.ToList();
             }
             catch (Exception ex)
             {
@@ -276,7 +276,7 @@ namespace Mix.RepoDb.Repositories
 
         // Get
 
-        public async Task<dynamic?> GetSingleAsync(int id)
+        public async Task<dynamic?> GetSingleAsync(long id)
         {
             try
             {
@@ -289,7 +289,7 @@ namespace Mix.RepoDb.Repositories
                     },
                     commandTimeout: _settings.CommandTimeout,
                     transaction: _dbTransaction,
-                    trace: Trace))?.SingleOrDefault();
+                    trace: _trace))?.SingleOrDefault();
             }
             catch (Exception ex)
             {
@@ -302,7 +302,7 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task InsertAsync(JObject entity)
+        public async Task<long> InsertAsync(JObject entity)
         {
             try
             {
@@ -313,13 +313,15 @@ namespace Mix.RepoDb.Repositories
                     obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
                 }
                 var dicObj = obj.ToObject<Dictionary<string, object>>();
-                var result = await _connection.InsertAsync<int?>(
+                var fields = dicObj!.Keys.Select(m => new Field(m)).ToList();
+                var result = await _connection.InsertAsync<long>(
                         _tableName,
                         entity: dicObj,
-                        fields: null,
+                        fields: fields,
                         commandTimeout: _settings.CommandTimeout,
                         transaction: _dbTransaction,
-                        trace: Trace);
+                        trace: _trace);
+                return result;
             }
             catch (Exception ex)
             {
@@ -341,7 +343,7 @@ namespace Mix.RepoDb.Repositories
                         entities: entities,
                         commandTimeout: _settings.CommandTimeout,
                         transaction: _dbTransaction,
-                        trace: Trace);
+                        trace: _trace);
                 return result;
             }
             catch (Exception ex)
@@ -368,7 +370,7 @@ namespace Mix.RepoDb.Repositories
                     MixFileHelper.EmptyFolder($"{MixFolders.MixCacheFolder}/{cacheFolder}/{id}");
                     return await _connection.UpdateAsync(_tableName, obj,
                         commandTimeout: _settings.CommandTimeout,
-                        trace: Trace,
+                        trace: _trace,
                         transaction: _dbTransaction);
                 }
                 return null;
@@ -394,7 +396,7 @@ namespace Mix.RepoDb.Repositories
                     return await _connection.DeleteAsync(_tableName, id,
                         commandTimeout: _settings.CommandTimeout,
                         transaction: _dbTransaction,
-                        trace: Trace);
+                        trace: _trace);
                 }
                 return 0;
             }
@@ -419,7 +421,7 @@ namespace Mix.RepoDb.Repositories
                     return await _connection.DeleteAsync(_tableName, queries,
                         commandTimeout: _settings.CommandTimeout,
                         transaction: _dbTransaction,
-                        trace: Trace);
+                        trace: _trace);
                 }
                 return 0;
             }
@@ -442,6 +444,7 @@ namespace Mix.RepoDb.Repositories
             if (_connection.State != ConnectionState.Open)
             {
                 _connection.Open();
+                _dbTransaction = _connection.BeginTransaction();
 
             }
             if (_dbTransaction == null || _dbTransaction.Connection == null)
@@ -540,6 +543,8 @@ namespace Mix.RepoDb.Repositories
 
         public IDbConnection CreateConnection(bool isRoot = false, bool isRenew = false)
         {
+            _trace = new();
+
             if (!isRenew && _connection != null)
             {
                 return _connection;

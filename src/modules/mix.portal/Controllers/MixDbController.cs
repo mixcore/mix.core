@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Azure.Amqp.Framing;
 using Mix.Database.Services;
@@ -163,7 +164,7 @@ namespace Mix.Portal.Controllers
             //throw new MixException(MixErrorStatus.NotFound, id);
         }
 
-        [PreventDuplicateFormSubmission]
+        //[PreventDuplicateFormSubmission]
         [HttpPost]
         public async Task<ActionResult<object>> Create(JObject dto)
         {
@@ -207,8 +208,9 @@ namespace Mix.Portal.Controllers
             {
                 obj.Add(new JProperty(IsDeletedFieldName, false));
             }
-            await _repository.InsertAsync(obj);
-            return Ok(ReflectionHelper.ParseObject(obj));
+            var id = await _repository.InsertAsync(obj);
+            var result = await _repository.GetSingleAsync(id);
+            return Ok(ReflectionHelper.ParseObject(result));
         }
 
         [PreventDuplicateFormSubmission]
