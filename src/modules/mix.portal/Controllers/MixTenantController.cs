@@ -18,17 +18,17 @@ namespace Mix.Portal.Controllers
         private readonly MixCmsAccountContext _accContext;
         private readonly IMixTenantService _mixTenantService;
         public MixTenantController(
+            IMixTenantService mixTenantService, 
+            MixCmsAccountContext accContext,
+            TenantUserManager userManager,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            TenantUserManager userManager,
-            MixCmsAccountContext accContext,
-            UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IQueueService<MessageQueueModel> queueService,
-            IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
+            UnitOfWorkInfo<MixCmsContext> uow,
+            IQueueService<MessageQueueModel> queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
         {
             _userManager = userManager;
             _accContext = accContext;

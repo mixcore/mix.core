@@ -54,7 +54,7 @@ namespace Mix.Mixdb.ViewModels
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Metadata = await MixMetadataViewModel.GetRepository(UowInfo).GetSingleAsync(m => m.Id == MetadataId, cancellationToken);
+            Metadata = await MixMetadataViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(m => m.Id == MetadataId, cancellationToken);
         }
 
         #endregion

@@ -8,10 +8,12 @@ namespace Mix.Lib.Services
     {
         private readonly IQueueService<MessageQueueModel> _queueService;
         private readonly UnitOfWorkInfo<MixCmsContext> _uow;
+        
         public MixEdmService(
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<MixCmsContext> uow,
-            IQueueService<MessageQueueModel> queueService) : base(httpContextAccessor)
+            IQueueService<MessageQueueModel> queueService,
+            MixCacheService cacheService) : base(httpContextAccessor, cacheService)
         {
             _uow = uow;
             _queueService = queueService;
@@ -19,7 +21,7 @@ namespace Mix.Lib.Services
 
         public async Task<string?> GetEdmTemplate(string filename)
         {
-            var edmTemplate = await MixTemplateViewModel.GetRepository(_uow).GetSingleAsync(
+            var edmTemplate = await MixTemplateViewModel.GetRepository(_uow, CacheService).GetSingleAsync(
                m => m.MixTenantId == CurrentTenant.Id
                         && m.FolderType == MixTemplateFolderType.Edms
                         && m.FileName == filename);

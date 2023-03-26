@@ -11,21 +11,23 @@ namespace Mixcore.Controllers
     {
         protected UnitOfWorkInfo Uow;
         protected readonly MixCmsContext CmsContext;
+        private readonly MixCacheService _cacheService;
         private readonly DatabaseService _databaseService;
 
         public AppController(
             IHttpContextAccessor httpContextAccessor,
             IPSecurityConfigService ipSecurityConfigService,
-            MixService mixService,
             IMixCmsService mixCmsService,
             DatabaseService databaseService,
-            MixCmsContext cmsContext)
-            : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
+            MixCmsContext cmsContext,
+            MixCacheService cacheService)
+            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService)
         {
             CmsContext = cmsContext;
             Uow = new(CmsContext);
             _databaseService = databaseService;
             CmsContext = cmsContext;
+            _cacheService = cacheService;
         }
 
         protected override void ValidateRequest()
@@ -68,7 +70,7 @@ namespace Mixcore.Controllers
         protected async Task<IActionResult> App(string baseRoute)
         {
             // Home App
-            var pageRepo = ApplicationViewModel.GetRepository(Uow);
+            var pageRepo = ApplicationViewModel.GetRepository(Uow, _cacheService);
             var page = await pageRepo.GetSingleAsync(m => m.BaseRoute == baseRoute && m.MixTenantId == CurrentTenant.Id);
             if (page == null)
                 return NotFound();

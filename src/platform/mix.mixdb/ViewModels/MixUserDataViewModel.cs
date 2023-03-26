@@ -45,7 +45,7 @@ namespace Mix.Mixdb.ViewModels
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Addresses = await MixContactAddressViewModel.GetRepository(UowInfo)
+            Addresses = await MixContactAddressViewModel.GetRepository(UowInfo, CacheService)
                         .GetListAsync(m => m.SysUserDataId == Id && m.MixTenantId == MixTenantId);
         }
 

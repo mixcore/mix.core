@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers;
@@ -11,16 +12,13 @@ namespace Mix.Lib.Subscribers
     public sealed class MixViewModelChangedSubscriber : SubscriberBase
     {
         private static readonly string TopicId = MixQueueTopics.MixViewModelChanged;
-        private readonly MixCacheService _cacheService;
         private readonly IMixTenantService _mixTenantService;
         public MixViewModelChangedSubscriber(
             IServiceProvider serviceProvider,
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService,
-            MixCacheService cacheService,
             IMixTenantService mixTenantService) : base(TopicId, MixModuleNames.Mixcore, serviceProvider, configuration, queueService)
         {
-            _cacheService = cacheService;
             _mixTenantService = mixTenantService;
         }
 
@@ -32,7 +30,7 @@ namespace Mix.Lib.Subscribers
                     await TemplateHandler.MessageQueueHandler(data);
                     break;
                 case var m when m == typeof(MixPageContentViewModel).FullName:
-                    await PageContentHandler.MessageQueueHandler(data, _cacheService);
+                    await PageContentHandler.MessageQueueHandler(data, CacheService);
                     break;
                 case var m when m == typeof(MixTenantSystemViewModel).FullName:
                     await MixTenantSystemViewModelHandler.MessageQueueHandler(data, _mixTenantService);

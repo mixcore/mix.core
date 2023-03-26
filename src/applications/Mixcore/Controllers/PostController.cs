@@ -14,19 +14,20 @@ namespace Mixcore.Controllers
         protected UnitOfWorkInfo Uow;
         protected readonly MixCmsContext CmsContext;
         private readonly DatabaseService _databaseService;
+        private readonly MixCacheService _cacheService;
         private readonly MixRepoDbRepository _repoDbRepository;
         private readonly IMixMetadataService _metadataService;
         public PostController(
             IHttpContextAccessor httpContextAccessor,
             IPSecurityConfigService ipSecurityConfigService,
-            MixService mixService,
             IMixCmsService mixCmsService,
             DatabaseService databaseService,
             MixCmsContext cmsContext,
             MixRepoDbRepository repoDbRepository,
             IMixMetadataService metadataService,
-            UnitOfWorkInfo<MixDbDbContext> dbUow)
-            : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
+            UnitOfWorkInfo<MixDbDbContext> dbUow,
+            MixCacheService cacheService)
+            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService)
         {
             CmsContext = cmsContext;
             Uow = new(CmsContext);
@@ -35,6 +36,7 @@ namespace Mixcore.Controllers
             _repoDbRepository = repoDbRepository;
             _metadataService = metadataService;
             _repoDbRepository.SetDbConnection(dbUow);
+            _cacheService = cacheService;
         }
 
         protected override void ValidateRequest()
@@ -78,13 +80,13 @@ namespace Mixcore.Controllers
         protected async Task<IActionResult> Post(int postId, string keyword = null)
         {
             // Home Post
-            var postRepo = PostContentViewModel.GetRepository(Uow);
+            var postRepo = PostContentViewModel.GetRepository(Uow, _cacheService);
             var post = await postRepo.GetSingleAsync(m => m.Id == postId && m.MixTenantId == CurrentTenant.Id);
             if (post == null)
             {
                 return NotFound();
             }
-            await post.LoadAdditionalDataAsync(_repoDbRepository, _metadataService);
+            await post.LoadAdditionalDataAsync(_repoDbRepository, _metadataService, _cacheService);
             
             ViewData["Title"] = post.SeoTitle;
             ViewData["Description"] = post.SeoDescription;

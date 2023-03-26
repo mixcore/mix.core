@@ -12,12 +12,12 @@ namespace Mix.Storage.Controllers
         public FileSystemController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
             MixStorageService storageService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
         }
 

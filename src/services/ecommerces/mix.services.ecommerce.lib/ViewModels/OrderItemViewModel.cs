@@ -91,7 +91,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         private  async Task<MixDatabaseAssociationViewModel> GetCurrentAssociation()
         {
-            return await MixDatabaseAssociationViewModel.GetRepository(UowInfo).GetSingleAsync(m =>
+            return await MixDatabaseAssociationViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(m =>
                         m.ParentId == OrderDetailId
                         && m.ChildId == Id
                         && m.ChildDatabaseName == EcommerceConstants.DataTableNameOrderItem);

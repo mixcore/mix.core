@@ -11,12 +11,12 @@ namespace Mixcore.Controllers
     {
         public ModuleDataController(IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> uow,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
         {
         }
 

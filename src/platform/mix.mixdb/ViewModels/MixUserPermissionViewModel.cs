@@ -34,7 +34,7 @@ namespace Mix.Mixdb.ViewModels
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Permission = await MixPermissionViewModel.GetRepository(UowInfo)
+            Permission = await MixPermissionViewModel.GetRepository(UowInfo, CacheService)
                         .GetSingleAsync(m => m.Id == PermissionId && m.MixTenantId == MixTenantId);
         }
 

@@ -82,7 +82,7 @@
 
             if (Repository.GetListQuery(m => m.ParentId == ParentId, cancellationToken).Count() == 1)
             {
-                var mdlRepo = MixModuleViewModel.GetRepository(UowInfo);
+                var mdlRepo = MixModuleViewModel.GetRepository(UowInfo, CacheService);
 
                 await Repository.DeleteAsync(Id, cancellationToken);
                 await mdlRepo.DeleteAsync(ParentId, cancellationToken);

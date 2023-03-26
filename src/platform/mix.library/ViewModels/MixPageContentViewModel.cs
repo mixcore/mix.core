@@ -38,7 +38,7 @@ namespace Mix.Lib.ViewModels
 
         private async Task LoadAliasAsync(CancellationToken cancellationToken = default)
         {
-            var aliasRepo = MixUrlAliasViewModel.GetRepository(UowInfo);
+            var aliasRepo = MixUrlAliasViewModel.GetRepository(UowInfo, CacheService);
             UrlAliases = await aliasRepo.GetListAsync(m => m.Type == MixUrlAliasType.Page && m.SourceContentId == Id, cancellationToken);
             DetailUrl = UrlAliases.Count > 0 ? UrlAliases[0].Alias : $"/page/{Id}";
         }
@@ -61,7 +61,7 @@ namespace Mix.Lib.ViewModels
 
             if (Repository.GetListQuery(m => m.ParentId == ParentId, cancellationToken).Count() == 1)
             {
-                var pageRepo = MixPageViewModel.GetRepository(UowInfo);
+                var pageRepo = MixPageViewModel.GetRepository(UowInfo, CacheService);
 
                 await Repository.DeleteAsync(Id, cancellationToken);
                 await pageRepo.DeleteAsync(ParentId, cancellationToken);

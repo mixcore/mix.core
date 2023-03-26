@@ -16,6 +16,7 @@ using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Mix.Service.Services;
+using Mix.Heart.Services;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
@@ -28,8 +29,9 @@ namespace Mix.Services.Ecommerce.Lib.Services
             IHttpContextAccessor httpContextAccessor, 
             HttpService httpService, 
             IConfiguration configuration, 
-            UnitOfWorkInfo<OnepayDbContext> cmsUow)
-            : base(httpContextAccessor)
+            UnitOfWorkInfo<OnepayDbContext> cmsUow,
+            MixCacheService cacheService)
+            : base(httpContextAccessor, cacheService)
         {
             _httpService = httpService;
             _cmsUow = cmsUow;
@@ -114,7 +116,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
         private async Task SaveRequest(PaymentRequest request, OrderStatus paymentStatus, CancellationToken cancellationToken)
         {
-            var vm = await OnepayTransactionRequestViewModel.GetRepository(_cmsUow).GetSingleAsync(m => m.vpc_OrderInfo == request.vpc_OrderInfo);
+            var vm = await OnepayTransactionRequestViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.vpc_OrderInfo == request.vpc_OrderInfo);
             if (vm == null)
             {
                 OnepayTransactionRequest onepayRequest = new();

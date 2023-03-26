@@ -16,13 +16,13 @@ namespace Mix.Lib.Base
         public MixRestEntityApiControllerBase(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             MixCacheDbContext cacheDbContext,
             TDbContext context,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, context, queueService, cacheDbContext)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, context, queueService, cacheDbContext)
         {
         }
 

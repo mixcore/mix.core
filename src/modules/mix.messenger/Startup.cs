@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Mix.Heart.Entities.Cache;
+using Mix.Heart.UnitOfWork;
+using Mix.Lib.Middlewares;
 
 namespace Mix.Messenger
 {
@@ -17,9 +20,11 @@ namespace Mix.Messenger
         {
             services.AddMixCors();
             services.AddMixDbContexts();
-            services.AddMixCache();
+            services.AddMixCache(Configuration);
             services.AddMixSignalR(Configuration);
             services.AddMixCommunicators();
+
+            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCacheDbContext>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

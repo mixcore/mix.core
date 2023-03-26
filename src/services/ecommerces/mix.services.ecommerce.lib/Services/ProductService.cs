@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Models;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Models.Common;
 using Mix.Services.Databases.Lib.Abstracts;
@@ -18,7 +19,9 @@ namespace Mix.Services.Ecommerce.Lib.Services
             UnitOfWorkInfo<MixCmsContext> uow, 
             IMixMetadataService metadataService, 
             IHttpContextAccessor httpContextAccessor, 
-            UnitOfWorkInfo<EcommerceDbContext> ecommerceDbContext) : base(uow, metadataService, httpContextAccessor)
+            UnitOfWorkInfo<EcommerceDbContext> ecommerceDbContext,
+            MixCacheService cacheService) 
+            : base(uow, metadataService, httpContextAccessor, cacheService)
         {
             _ecommerceUow = ecommerceDbContext;
         }
@@ -28,7 +31,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             var result = await base.SearchPosts(searchRequest, cancellationToken);
             foreach (var item in result.Items)
             {
-                await item.LoadAdditionalDataAsync(_ecommerceUow, MetadataService, cancellationToken);
+                await item.LoadAdditionalDataAsync(_ecommerceUow, MetadataService, CacheService, cancellationToken);
             }
             return result;
         }
@@ -38,7 +41,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             var result = await base.GetRelatedPosts(postId, cancellationToken);
             foreach (var item in result)
             {
-                await item.LoadAdditionalDataAsync(_ecommerceUow, MetadataService, cancellationToken);
+                await item.LoadAdditionalDataAsync(_ecommerceUow, MetadataService, CacheService, cancellationToken);
             }
             return result;
         }

@@ -19,20 +19,21 @@ namespace Mix.Lib.Base
         protected readonly RestApiService<TView, TDbContext, TEntity, TPrimaryKey> RestApiService;
 
         public MixRestHandlerApiControllerBase(
-             IHttpContextAccessor httpContextAccessor,
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<TDbContext> uow,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
             Context = (TDbContext)uow.ActiveDbContext;
             Uow = uow;
-            Repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(Uow);
-            RestApiService = new(httpContextAccessor, mixIdentityService, uow, queueService);
+            Repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(Uow, CacheService);
+            RestApiService = new(httpContextAccessor, mixIdentityService, uow, queueService, CacheService);
             RestApiService.Repository = Repository;
+            Repository.CacheService = CacheService;
         }
 
         #region Command Handlers

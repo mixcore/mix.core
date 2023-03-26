@@ -2,11 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mix.Heart.Exceptions;
+using Mix.Heart.Services;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
-using Mix.Service.Services;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,6 +20,7 @@ namespace Mix.Queue.Engines
         private readonly MixMemoryMessageQueue<MessageQueueModel> _queueService;
         private readonly string _topicId;
 
+        protected MixCacheService CacheService;
         protected readonly IServiceProvider ServicesProvider;
         protected IServiceScope ServiceScope { get; set; }
         protected SubscriberBase(
@@ -94,6 +95,7 @@ namespace Mix.Queue.Engines
 
         protected T GetScopedService<T>()
         {
+            ServiceScope ??= ServicesProvider.CreateScope();
             return ServiceScope.ServiceProvider.GetRequiredService<T>();
         }
 
@@ -107,6 +109,7 @@ namespace Mix.Queue.Engines
                     return Task.CompletedTask;
                 }
 
+                CacheService = GetScopedService<MixCacheService>();
                 return Handler(data);
             }
             catch (Exception ex)

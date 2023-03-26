@@ -47,7 +47,7 @@ namespace Mix.Lib.Base
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            using (var contentRepository = ViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>.GetRepository(UowInfo))
+            using (var contentRepository = ViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>.GetRepository(UowInfo, CacheService))
             {
                 Contents = await contentRepository.GetListAsync(m => m.ParentId.Equals(Id), cancellationToken);
             }
@@ -68,7 +68,7 @@ namespace Mix.Lib.Base
 
         protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
-            using (var contentRepository = ViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>.GetRepository(UowInfo))
+            using (var contentRepository = ViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>.GetRepository(UowInfo, CacheService))
             {
                 await contentRepository.DeleteManyAsync(m => m.ParentId.Equals(Id), cancellationToken);
                 await base.DeleteHandlerAsync(cancellationToken);

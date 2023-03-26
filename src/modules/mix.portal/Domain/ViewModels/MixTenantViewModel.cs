@@ -36,7 +36,7 @@
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Domains = await MixDomainViewModel.GetRepository(UowInfo).GetAllAsync(m => m.MixTenantId == Id, cancellationToken);
+            Domains = await MixDomainViewModel.GetRepository(UowInfo, CacheService).GetAllAsync(m => m.MixTenantId == Id, cancellationToken);
         }
 
         public override async Task Validate(CancellationToken cancellationToken)
@@ -65,6 +65,7 @@
 
         private async Task SaveCultureAsync(MixTenant parent, CancellationToken cancellationToken = default)
         {
+            Culture.SetCacheService(CacheService);
             Culture.MixTenantId = parent.Id;
             Culture.SetUowInfo(UowInfo);
             await Culture.SaveAsync(cancellationToken);
@@ -75,6 +76,7 @@
             foreach (var domain in Domains)
             {
                 domain.MixTenantId = parent.Id;
+                domain.SetCacheService(CacheService);
                 domain.SetUowInfo(UowInfo);
                 await domain.SaveAsync(cancellationToken);
             }

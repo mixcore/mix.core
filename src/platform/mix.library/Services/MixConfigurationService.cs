@@ -11,7 +11,8 @@ namespace Mix.Lib.Services
 
         public List<MixConfigurationContentViewModel> Configs { get; private set; }
 
-        public MixConfigurationService(IHttpContextAccessor httpContextAccessor, DatabaseService databaseService) : base(httpContextAccessor)
+        public MixConfigurationService(IHttpContextAccessor httpContextAccessor, DatabaseService databaseService, MixCacheService cacheService) 
+            : base(httpContextAccessor, cacheService)
         {
             _databaseService = databaseService;
         }
@@ -22,12 +23,12 @@ namespace Mix.Lib.Services
             {
                 if (uow != null)
                 {
-                    Configs = await MixConfigurationContentViewModel.GetRepository(uow).GetAllAsync(m => m.MixTenantId == CurrentTenant.Id);
+                    Configs = await MixConfigurationContentViewModel.GetRepository(uow, CacheService).GetAllAsync(m => m.MixTenantId == CurrentTenant.Id);
                 }
                 else
                 {
                     uow = new(new MixCmsContext(_databaseService));
-                    Configs = await MixConfigurationContentViewModel.GetRepository(uow).GetAllAsync(m => m.MixTenantId == CurrentTenant.Id);
+                    Configs = await MixConfigurationContentViewModel.GetRepository(uow, CacheService).GetAllAsync(m => m.MixTenantId == CurrentTenant.Id);
                     uow.Dispose();
                 }
             }

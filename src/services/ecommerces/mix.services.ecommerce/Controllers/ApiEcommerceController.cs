@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Cms;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
@@ -28,16 +29,16 @@ namespace Mix.Services.ecommerce.Controllers
         protected UnitOfWorkInfo<MixCmsContext> CmsUow;
 
         public ApiEcommerceController(
-            IHttpContextAccessor httpContextAccessor,
-            IConfiguration configuration,
-            MixService mixService,
-            TranslatorService translator,
-            MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService,
-            IEcommerceService ecommerceService,
-            UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IOrderService orderService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
+            IHttpContextAccessor httpContextAccessor, 
+            IConfiguration configuration, 
+            MixCacheService cacheService, 
+            TranslatorService translator, 
+            MixIdentityService mixIdentityService, 
+            IQueueService<MessageQueueModel> queueService, 
+            IEcommerceService ecommerceService, 
+            UnitOfWorkInfo<MixCmsContext> cmsUow, 
+            IOrderService orderService) 
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
             _ecommerceService = ecommerceService;
             CmsUow = cmsUow;

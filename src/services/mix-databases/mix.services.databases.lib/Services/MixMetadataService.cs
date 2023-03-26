@@ -14,6 +14,7 @@ using Mix.Mixdb.ViewModels;
 using Mix.Constant.Enums;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Interfaces;
+using Mix.Heart.Services;
 
 namespace Mix.Services.Databases.Lib.Services
 {
@@ -26,8 +27,9 @@ namespace Mix.Services.Databases.Lib.Services
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<MixDbDbContext> uow,
             MixIdentityService identityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUow)
-            : base(httpContextAccessor)
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
+            MixCacheService cacheService)
+            : base(httpContextAccessor, cacheService)
         {
             _uow = uow;
             _identityService = identityService;
@@ -39,7 +41,7 @@ namespace Mix.Services.Databases.Lib.Services
             Expression<Func<MixMetadata, bool>> predicate = m => m.MixTenantId == CurrentTenant.Id;
             predicate = predicate.AndAlsoIf(includes != null, m => includes!.Contains(m.Type));
             predicate = predicate.AndAlsoIf(excepts != null, m => !excepts!.Contains(m.Type));
-            var data = await MixMetadataViewModel.GetRepository(_uow).GetAllAsync(predicate);
+            var data = await MixMetadataViewModel.GetRepository(_uow, CacheService).GetAllAsync(predicate);
             return data.GroupBy(m => m.Type)
                     .Select(m => new PostMetadata()
                     {
@@ -73,7 +75,7 @@ namespace Mix.Services.Databases.Lib.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var metadata = await MixMetadataViewModel.GetRepository(_uow).GetSingleAsync(m => m.Content == dto.Content && m.Type == dto.Type, cancellationToken);
+            var metadata = await MixMetadataViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.Content == dto.Content && m.Type == dto.Type, cancellationToken);
             if (metadata == null)
             {
                 return await CreateMetadata(dto, cancellationToken);
@@ -116,7 +118,7 @@ namespace Mix.Services.Databases.Lib.Services
             var query = GetQueryableMetadataByContentId(intContentId, contentType, metadataType);
             if (query != null)
             {
-                return await MixMetadataContentAsscociationViewModel.GetRepository(_uow)
+                return await MixMetadataContentAsscociationViewModel.GetRepository(_uow, CacheService)
                             .GetPagingAsync(
                                 m => m.MixTenantId == CurrentTenant.Id
                                         && query.Any(n => n == m.Id),
@@ -127,7 +129,7 @@ namespace Mix.Services.Databases.Lib.Services
 
         public async Task DeleteMetadataContentAssociation(int id, CancellationToken cancellationToken = default)
         {
-            var association = await MixMetadataContentAsscociationViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == id, cancellationToken);
+            var association = await MixMetadataContentAsscociationViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.Id == id, cancellationToken);
             if (association != null)
             {
                 await association.DeleteAsync(cancellationToken);
@@ -150,10 +152,10 @@ namespace Mix.Services.Databases.Lib.Services
                 var allowMetadata = _uow.DbContext.MixMetadata.Where(predicate);
 
                 var allowedContentIds = from metadata in allowMetadata
-                        join association in _uow.DbContext.MixMetadataContentAssociation
-                        on metadata.Id equals association.MetadataId
-                        where association.MixTenantId == CurrentTenant.Id && association.ContentType == contentType
-                        select association.ContentId;
+                                        join association in _uow.DbContext.MixMetadataContentAssociation
+                                        on metadata.Id equals association.MetadataId
+                                        where association.MixTenantId == CurrentTenant.Id && association.ContentType == contentType
+                                        select association.ContentId;
                 if (query == null)
                 {
                     query = allowedContentIds.Distinct();

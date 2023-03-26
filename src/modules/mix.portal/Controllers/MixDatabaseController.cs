@@ -13,13 +13,13 @@ namespace Mix.Portal.Controllers
         public MixDatabaseController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService,
             IMixDbService mixDbService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cmsUow, queueService)
         {
             _mixDbService = mixDbService;
         }
@@ -88,6 +88,7 @@ namespace Mix.Portal.Controllers
         }
 
         #endregion
+
         #region Overrides
         protected override async Task UpdateHandler(int id, MixDatabaseViewModel data, CancellationToken cancellationToken = default)
         {

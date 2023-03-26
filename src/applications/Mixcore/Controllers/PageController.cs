@@ -13,19 +13,20 @@ namespace Mixcore.Controllers
         protected UnitOfWorkInfo Uow;
         protected readonly MixCmsContext CmsContext;
         private readonly DatabaseService _databaseService;
+        private readonly MixCacheService _cacheService;
         private readonly MixRepoDbRepository _repoDbRepository;
         private readonly IMixMetadataService _metadataService;
 
         public PageController(
             IHttpContextAccessor httpContextAccessor,
             IPSecurityConfigService ipSecurityConfigService,
-            MixService mixService,
             IMixCmsService mixCmsService,
             DatabaseService databaseService,
             MixCmsContext cmsContext,
             MixRepoDbRepository repoDbRepository,
-            IMixMetadataService metadataService)
-            : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
+            IMixMetadataService metadataService,
+            MixCacheService cacheService)
+            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService)
         {
             CmsContext = cmsContext;
             Uow = new(CmsContext);
@@ -33,6 +34,7 @@ namespace Mixcore.Controllers
             CmsContext = cmsContext;
             _repoDbRepository = repoDbRepository;
             _metadataService = metadataService;
+            _cacheService = cacheService;
         }
 
         protected override void ValidateRequest()
@@ -75,7 +77,7 @@ namespace Mixcore.Controllers
         protected async Task<IActionResult> Page(int pageId, string keyword = null)
         {
             // Home Page
-            var pageRepo = PageContentViewModel.GetRepository(Uow);
+            var pageRepo = PageContentViewModel.GetRepository(Uow, _cacheService);
             var page = await pageRepo.GetSingleAsync(m => m.Id == pageId && m.MixTenantId == CurrentTenant.Id);
             if (page == null)
                 return NotFound();
@@ -83,7 +85,7 @@ namespace Mixcore.Controllers
             await page.LoadDataAsync(_repoDbRepository, _metadataService, new(Request)
             {
                 SortBy = MixQueryColumnName.Priority
-            });
+            }, _cacheService);
             page.Posts.Items.Take(2);
             
 

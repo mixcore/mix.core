@@ -59,7 +59,7 @@ namespace Mix.Account.Controllers
              EmailService emailService,
              IHttpContextAccessor httpContextAccessor,
              IConfiguration configuration,
-             MixService mixService,
+             MixCacheService mixService,
              TranslatorService translator,
              MixIdentityService mixIdentityService,
              IQueueService<MessageQueueModel> queueService,
@@ -113,7 +113,7 @@ namespace Mix.Account.Controllers
         {
             var userId = Guid.Parse(_idService.GetClaim(User, MixClaims.Id));
             var tenantIds = await _accContext.MixUserTenants.Where(m => m.MixUserId == userId).Select(m => m.TenantId).ToListAsync();
-            var tenants = await MixTenantSystemViewModel.GetRepository(CmsUow).GetListAsync(m => tenantIds.Contains(m.Id));
+            var tenants = await MixTenantSystemViewModel.GetRepository(CmsUow, CacheService).GetListAsync(m => tenantIds.Contains(m.Id));
             return Ok(tenants);
         }
 
@@ -267,7 +267,7 @@ namespace Mix.Account.Controllers
             if (user != null)
             {
                 var result = new MixUserViewModel(user, CmsUow);
-                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext);
+                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext, CacheService);
                 return Ok(result);
             }
             return BadRequest();
@@ -283,7 +283,7 @@ namespace Mix.Account.Controllers
             if (user != null)
             {
                 var result = new MixUserViewModel(user, CmsUow);
-                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext);
+                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext, CacheService);
                 return Ok(result);
             }
             return BadRequest();
@@ -447,7 +447,7 @@ namespace Mix.Account.Controllers
                     await _userManager.GeneratePasswordResetTokenAsync(user);
 
             var callbackUrl = $"{Request.Scheme}://{Request.Host}/security/reset-password/?token={System.Web.HttpUtility.UrlEncode(confirmationCode)}";
-            var edmTemplate = await MixTemplateViewModel.GetRepository(CmsUow).GetSingleAsync(
+            var edmTemplate = await MixTemplateViewModel.GetRepository(CmsUow, CacheService).GetSingleAsync(
                 m => m.FolderType == MixTemplateFolderType.Edms && m.FileName == "ForgotPassword");
             string content = callbackUrl;
             if (edmTemplate != null)

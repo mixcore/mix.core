@@ -37,7 +37,6 @@ namespace Mix.Lib.Services
         protected readonly RoleManager<MixRole> RoleManager;
         protected readonly AuthConfigService AuthConfigService;
         protected readonly FirebaseService FirebaseService;
-        protected readonly MixService MixService;
         protected readonly IMixDbDataService MixDbDataService;
         protected readonly MixRepoDbRepository RepoDbRepository;
         protected readonly MixCmsContext CmsContext;
@@ -69,7 +68,6 @@ namespace Mix.Lib.Services
             UnitOfWorkInfo<MixCmsAccountContext> accountUow,
             MixCacheService cacheService,
             FirebaseService firebaseService, MixRepoDbRepository repoDbRepository,
-            MixService mixService, 
             DatabaseService databaseService, 
             MixCmsAccountContext accContext, 
             UnitOfWorkInfo<MixDbDbContext> mixDbUow, 
@@ -84,11 +82,10 @@ namespace Mix.Lib.Services
             SignInManager = signInManager;
             RoleManager = roleManager;
             AuthConfigService = authConfigService;
-            RoleRepo = RoleViewModel.GetRepository(AccountUow);
-            RefreshTokenRepo = RefreshTokenViewModel.GetRepository(AccountUow);
+            RoleRepo = RoleViewModel.GetRepository(AccountUow, CacheService);
+            RefreshTokenRepo = RefreshTokenViewModel.GetRepository(AccountUow, CacheService);
             FirebaseService = firebaseService;
             RepoDbRepository = repoDbRepository;
-            MixService = mixService;
             DatabaseService = databaseService;
             _accContext = accContext;
             MixDbUow = mixDbUow;
@@ -108,7 +105,7 @@ namespace Mix.Lib.Services
             {
                 var userInfo = new MixUserViewModel(user, CmsUow);
                 var roles = await UserManager.GetRolesAsync(user);
-                await userInfo.LoadUserDataAsync(CurrentTenant.Id, RepoDbRepository, _accContext);
+                await userInfo.LoadUserDataAsync(CurrentTenant.Id, RepoDbRepository, _accContext, CacheService);
                 await userInfo.LoadUserPortalMenus(roles.ToArray(), CurrentTenant.Id, RepoDbRepository);
 
                 return userInfo;

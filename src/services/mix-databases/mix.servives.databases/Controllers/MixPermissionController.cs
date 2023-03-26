@@ -10,6 +10,8 @@ using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Dtos;
 using Mix.Mixdb.ViewModels;
 using Mix.Services.Databases.Lib.Interfaces;
+using Mix.Heart.Services;
+using Mix.Database.Entities.Cms;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -19,15 +21,15 @@ namespace Mix.Services.Databases.Controllers
     {
         private readonly IMixPermissionService _permissionService;
         public MixPermissionController(
+            IMixPermissionService permissionService, 
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixDbDbContext> uow, 
-            IQueueService<MessageQueueModel> queueService, 
-            IMixPermissionService permissionService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
+            UnitOfWorkInfo<MixDbDbContext> uow,
+            IQueueService<MessageQueueModel> queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
         {
             _permissionService = permissionService;
             Repository.IsCache = false;

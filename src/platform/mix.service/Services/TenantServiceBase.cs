@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Constant.Constants;
+using Mix.Heart.Services;
 using Mix.Service.Models;
 using Mix.Shared.Extensions;
 
@@ -8,10 +9,11 @@ namespace Mix.Service.Services
     public abstract class TenantServiceBase
     {
         protected IHttpContextAccessor HttpContextAccessor;
-
-        protected TenantServiceBase(IHttpContextAccessor httpContextAccessor)
+        protected readonly MixCacheService CacheService;
+        protected TenantServiceBase(IHttpContextAccessor httpContextAccessor, MixCacheService cacheService)
         {
             HttpContextAccessor = httpContextAccessor;
+            CacheService = cacheService;
         }
 
         private MixTenantSystemModel _currentTenant;

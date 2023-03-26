@@ -32,7 +32,7 @@
         #region Overrides
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            var dbRepo = MixDatabaseViewModel.GetRepository(UowInfo);
+            var dbRepo = MixDatabaseViewModel.GetRepository(UowInfo, CacheService);
             var associations = Context.MixDatabaseContextDatabaseAssociation.Where(m => m.ParentId == Id).Select(m => m.ChildId);
             Databases = await dbRepo.GetListAsync(m => associations.Any(a => a == m.Id), cancellationToken);
         }

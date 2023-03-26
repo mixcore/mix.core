@@ -18,7 +18,6 @@ namespace Mix.Lib.Base
         protected string RedirectUrl;
         protected readonly IPSecurityConfigService IpSecurityConfigService;
         protected readonly IMixCmsService MixCmsService;
-        protected readonly MixService MixService;
         protected MixTenantSystemModel CurrentTenant => Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
         protected bool ForbiddenPortal
         {
@@ -38,11 +37,9 @@ namespace Mix.Lib.Base
 
         protected MixControllerBase(
              IHttpContextAccessor httpContextAccessor, 
-             MixService mixService, 
              IMixCmsService mixCmsService, 
              IPSecurityConfigService ipSecurityConfigService)
         {
-            MixService = mixService;
             Session = httpContextAccessor.HttpContext?.Session;
             IpSecurityConfigService = ipSecurityConfigService;
             ViewData[MixRequestQueryKeywords.Tenant] = CurrentTenant;

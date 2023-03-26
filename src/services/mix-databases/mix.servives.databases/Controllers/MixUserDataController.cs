@@ -9,6 +9,8 @@ using Mix.Queue.Models;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Dtos;
 using Mix.Services.Databases.Lib.Interfaces;
+using Mix.Heart.Services;
+using Mix.Database.Entities.Cms;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -19,16 +21,16 @@ namespace Mix.Services.Databases.Controllers
         private readonly TenantUserManager _userManager;
         private readonly IMixUserDataService _userDataService;
         public MixUserDataController(
+            IMixUserDataService metadataService, 
+            TenantUserManager userManager, 
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixDbDbContext> uow, 
-            IQueueService<MessageQueueModel> queueService, 
-            IMixUserDataService metadataService, 
-            TenantUserManager userManager)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
+            UnitOfWorkInfo<MixDbDbContext> uow,
+            IQueueService<MessageQueueModel> queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
         {
             _userDataService = metadataService;
             _userManager = userManager;

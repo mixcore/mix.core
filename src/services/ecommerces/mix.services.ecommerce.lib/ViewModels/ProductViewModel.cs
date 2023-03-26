@@ -55,13 +55,15 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public async Task LoadAdditionalDataAsync(
             UnitOfWorkInfo<EcommerceDbContext> ecommerceUow,
             IMixMetadataService metadataService,
+            MixCacheService cacheService,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             bool isChanged = false;
             if (ProductDetails == null)
             {
-                ProductDetails = await ProductDetailsViewModel.GetRepository(ecommerceUow)
+                CacheService ??= cacheService;
+                ProductDetails = await ProductDetailsViewModel.GetRepository(ecommerceUow, CacheService)
                     .GetSingleAsync(m =>
                         m.MixTenantId == MixTenantId &&
                         m.ParentId == Id &&
@@ -87,10 +89,9 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
                 isChanged = true;
             }
 
-            if (isChanged)
-            {
-                var cacheService = new MixCacheService();
-                await cacheService.SetAsync($"{Id}/{GetType().FullName}", this, typeof(MixPostContent).FullName, "full");
+            if (isChanged && CacheService != null)
+            {             
+                await CacheService.SetAsync($"{Id}/{GetType().FullName}", this, typeof(MixPostContent).FullName, "full");
             }
         }
         #endregion

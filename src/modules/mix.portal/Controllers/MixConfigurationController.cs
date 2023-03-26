@@ -12,17 +12,17 @@ namespace Mix.Portal.Controllers
         private readonly MixConfigurationService _configService;
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         public MixConfigurationController(
+            MixConfigurationService configService,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IQueueService<MessageQueueModel> queueService,
-            MixConfigurationService configService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
+            UnitOfWorkInfo<MixCmsContext> uow,
+            IQueueService<MessageQueueModel> queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
         {
-            _cmsUow = cmsUow;
+            _cmsUow = uow;
             _configService = configService;
         }
 

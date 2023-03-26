@@ -8,6 +8,7 @@ using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Models;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.RepoDb.Entities;
 using Mix.RepoDb.Interfaces;
@@ -68,8 +69,9 @@ namespace Mix.RepoDb.Services
             DatabaseService databaseService,
             MixRepoDbRepository repository,
             ICache cache,
-            IMixMemoryCacheService memoryCache)
-            : base(httpContextAccessor)
+            IMixMemoryCacheService memoryCache,
+            MixCacheService cacheService)
+            : base(httpContextAccessor, cacheService)
         {
             _cmsUow = uow;
             _databaseService = databaseService;
@@ -272,7 +274,7 @@ namespace Mix.RepoDb.Services
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return MixDatabaseViewModel.GetRepository(_cmsUow).GetSingleAsync(m => m.SystemName == tableName);
+                    return MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
                 }
                 );
         }
@@ -390,7 +392,7 @@ namespace Mix.RepoDb.Services
         // TODO: check why need to restart application to load new database schema for Repo Db Context !important
         public async Task<bool> MigrateDatabase(string name)
         {
-            MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow).GetSingleAsync(m => m.SystemName == name);
+            MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == name);
             if (database is { Columns.Count: > 0 })
             {
                 //await BackupDatabase(database.SystemName);
@@ -404,7 +406,7 @@ namespace Mix.RepoDb.Services
         // TODO: check why need to restart application to load new database schema for Repo Db Context !important
         public async Task<bool> RestoreFromLocal(string name)
         {
-            MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow).GetSingleAsync(m => m.SystemName == name);
+            MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == name);
             if (database is { Columns.Count: > 0 })
             {
                 return await RestoreFromLocal(database);
@@ -414,7 +416,7 @@ namespace Mix.RepoDb.Services
 
         public async Task<bool> BackupDatabase(string databaseName, CancellationToken cancellationToken = default)
         {
-            var database = await MixDatabaseViewModel.GetRepository(_cmsUow).GetSingleAsync(m => m.SystemName == databaseName, cancellationToken);
+            var database = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == databaseName, cancellationToken);
             if (database != null)
             {
                 return await BackupToLocal(database, cancellationToken);

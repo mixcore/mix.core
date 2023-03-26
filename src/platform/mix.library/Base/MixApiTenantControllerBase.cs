@@ -8,6 +8,7 @@ namespace Mix.Lib.Base
 {
     public abstract class MixTenantApiControllerBase : Controller
     {
+        protected readonly MixCacheService CacheService;
         protected IHttpContextAccessor HttpContextAccessor;
         protected ISession Session;
         protected string Lang;
@@ -15,13 +16,12 @@ namespace Mix.Lib.Base
         protected readonly IQueueService<MessageQueueModel> QueueService;
         protected readonly IConfiguration Configuration;
         protected readonly MixIdentityService MixIdentityService;
-        protected readonly MixService MixService;
         protected readonly TranslatorService Translator;
         protected MixTenantSystemModel CurrentTenant => Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
         protected MixTenantApiControllerBase(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService)
@@ -29,7 +29,7 @@ namespace Mix.Lib.Base
             HttpContextAccessor = httpContextAccessor;
             Session = httpContextAccessor.HttpContext?.Session;
             Configuration = configuration;
-            MixService = mixService;
+            CacheService = cacheService;
             Translator = translator;
             MixIdentityService = mixIdentityService;
             QueueService = queueService;

@@ -65,7 +65,7 @@ namespace Mix.Lib.Base
             Expression<Func<MixContributor, bool>> expression = m => m.ContentType == contentType;
             expression = expression.AndAlsoIf(Guid.TryParse(Id.ToString(), out var guidId), m => m.GuidContentId == guidId);
             expression = expression.AndAlsoIf(int.TryParse(Id.ToString(), out var integerId), m => m.IntContentId == integerId);
-            Contributors = await MixContributorViewModel.GetRepository(UowInfo).GetAllAsync(expression);
+            Contributors = await MixContributorViewModel.GetRepository(UowInfo, CacheService).GetAllAsync(expression);
             foreach (var item in Contributors)
             {
                 await item.LoadUserDataAsync(identityService);

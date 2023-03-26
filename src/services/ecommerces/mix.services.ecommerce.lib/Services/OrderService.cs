@@ -13,6 +13,7 @@ using Mix.Heart.Models;
 using Mix.Heart.Extensions;
 using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Interfaces;
+using Mix.Heart.Services;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
@@ -23,7 +24,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
         public OrderService(
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<EcommerceDbContext> uow,
-            TenantUserManager userManager) : base(httpContextAccessor)
+            TenantUserManager userManager,
+            MixCacheService cacheService) : base(httpContextAccessor, cacheService)
         {
             _uow = uow;
             _userManager = userManager;
@@ -47,7 +49,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(request.Statuses.Count == 0, m => m.UserId == user.Id && m.OrderStatus != OrderStatus.NEW);
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(request.Statuses.Count > 0, m => m.UserId == user.Id && request.Statuses.Contains(m.OrderStatus));
-            return await OrderViewModel.GetRepository(_uow)
+            return await OrderViewModel.GetRepository(_uow, CacheService)
                             .GetPagingAsync(
                                 searchRequest.Predicate,
                                 searchRequest.PagingData,
@@ -65,7 +67,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 throw new MixException(MixErrorStatus.UnAuthorized);
             }
 
-            return await OrderViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == orderId && m.UserId == user.Id, cancellationToken);
+            return await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.Id == orderId && m.UserId == user.Id, cancellationToken);
         }
 
         public async Task CancelOrder(
@@ -77,7 +79,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             var user = await _userManager.GetUserAsync(principal);
 
-            var order = await OrderViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == id && m.UserId == user!.Id, cancellationToken);
+            var order = await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.Id == id && m.UserId == user!.Id, cancellationToken);
             if (order == null)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Invalid Order");

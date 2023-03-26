@@ -10,14 +10,14 @@ namespace Mix.Portal.Controllers
         : MixRestfulApiControllerBase<MixDatabaseColumnViewModel, MixCmsContext, MixDatabaseColumn, int>
     {
         public MixDatabaseColumnPortalController(
-            IHttpContextAccessor httpContextAccessor,
+            IHttpContextAccessor httpContextAccessor, 
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUow,
+            UnitOfWorkInfo<MixCmsContext> uow,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
         {
         }
 

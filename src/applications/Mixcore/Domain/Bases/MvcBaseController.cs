@@ -9,20 +9,22 @@ namespace Mixcore.Domain.Bases
     public class MvcBaseController : MixControllerBase
     {
         protected UnitOfWorkInfo<MixCmsContext> Uow;
+        protected readonly MixCacheService CacheService;
         protected readonly TranslatorService Translator;
         protected readonly DatabaseService DatabaseService;
         public MvcBaseController(
             IHttpContextAccessor httpContextAccessor,
             IPSecurityConfigService ipSecurityConfigService,
-            MixService mixService,
             IMixCmsService mixCmsService,
             TranslatorService translator,
             DatabaseService databaseService,
-            UnitOfWorkInfo<MixCmsContext> uow) : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
+            UnitOfWorkInfo<MixCmsContext> uow,
+            MixCacheService cacheService) : base(httpContextAccessor, mixCmsService, ipSecurityConfigService)
         {
             Translator = translator;
             DatabaseService = databaseService;
             Uow = uow;
+            CacheService = cacheService;
         }
 
         protected override void ValidateRequest()
@@ -49,7 +51,7 @@ namespace Mixcore.Domain.Bases
         protected async Task<IActionResult> Page(int pageId, string keyword = null)
         {
             // Home Page
-            var pageRepo = PageContentViewModel.GetRepository(Uow);
+            var pageRepo = PageContentViewModel.GetRepository(Uow, CacheService);
             var page = await pageRepo.GetSingleAsync(pageId);
             ViewData["Title"] = page.SeoTitle;
             ViewData["Description"] = page.SeoDescription;

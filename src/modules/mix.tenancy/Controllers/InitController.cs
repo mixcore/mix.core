@@ -36,7 +36,7 @@ namespace Mix.Tenancy.Controllers
         public InitController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             IInitCmsService initCmsService,
             MixIdentityService mixIdentityService,
@@ -49,7 +49,7 @@ namespace Mix.Tenancy.Controllers
             MixEndpointService mixEndpointService = null,
             MixConfigurationService configService = null,
             UnitOfWorkInfo<MixCmsContext> uow = null)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
 
             _initCmsService = initCmsService;

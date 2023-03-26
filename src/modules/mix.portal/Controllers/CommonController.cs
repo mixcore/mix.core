@@ -17,13 +17,13 @@ namespace Mix.Portal.Controllers
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCmsContext context,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
             TenantUserManager userManager,
             MixRepoDbRepository repoDbRepository)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
             _context = context;
             UserManager = userManager;
