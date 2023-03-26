@@ -60,11 +60,11 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         #endregion
 
         #region Overrides
-        
+
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            OrderItems = await OrderItemViewModel.GetRepository(UowInfo).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderDetailId == Id, cancellationToken);
-            OrderTrackings = await OrderTrackingViewModel.GetRepository(UowInfo).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderDetailId == Id, cancellationToken);
+            OrderItems = await OrderItemViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderDetailId == Id, cancellationToken);
+            OrderTrackings = await OrderTrackingViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderDetailId == Id, cancellationToken);
             Address = !string.IsNullOrEmpty(ShippingAddress) ? JObject.Parse(ShippingAddress).ToObject<OrderAddress>() : new();
             PaymentRequestData = !string.IsNullOrEmpty(PaymentRequest) ? JObject.Parse(PaymentRequest) : new();
             PaymentResponseData = !string.IsNullOrEmpty(PaymentResponse) ? JObject.Parse(PaymentResponse) : new();

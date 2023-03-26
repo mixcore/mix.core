@@ -24,22 +24,20 @@ namespace Mix.Services.ecommerce.Controllers
         private readonly IMixMetadataService _metadataService;
         private readonly IProductService _productService;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _ecommerceUow;
-        protected MixCacheService CacheService;
         public ProductController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> uow,
             UnitOfWorkInfo<EcommerceDbContext> ecommerceUow,
             IQueueService<MessageQueueModel> queueService,
             IMixMetadataService metadataService,
-            IProductService productService, MixCacheService cacheService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService, cacheService)
+            IProductService productService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
         {
             _ecommerceUow = ecommerceUow;
-            CacheService = new();
             _metadataService = metadataService;
             _productService = productService;
         }
@@ -47,7 +45,7 @@ namespace Mix.Services.ecommerce.Controllers
         protected override async Task<ProductViewModel> GetById(int id)
         {
             var result = await base.GetById(id);
-            await result.LoadAdditionalDataAsync(_ecommerceUow, _metadataService);
+            await result.LoadAdditionalDataAsync(_ecommerceUow, _metadataService, CacheService);
             return result;
         }
 
@@ -60,7 +58,7 @@ namespace Mix.Services.ecommerce.Controllers
             {
                 if (item.ProductDetails == null)
                 {
-                    await item.LoadAdditionalDataAsync(_ecommerceUow, _metadataService, cancellationToken);
+                    await item.LoadAdditionalDataAsync(_ecommerceUow, _metadataService, CacheService, cancellationToken);
                 }
             }
 

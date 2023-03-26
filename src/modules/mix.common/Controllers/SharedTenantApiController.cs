@@ -23,19 +23,19 @@ namespace Mix.Common.Controllers
         public SharedTenantApiController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             AuthConfigService authConfigService,
             MixCmsContext context,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
             _authConfigurations = authConfigService.AppSettings;
             Context = context;
             Uow = new(Context);
-            _configRepo = MixConfigurationContentViewModel.GetRepository(Uow);
-            _langRepo = MixLanguageContentViewModel.GetRepository(Uow);
+            _configRepo = MixConfigurationContentViewModel.GetRepository(Uow, CacheService);
+            _langRepo = MixLanguageContentViewModel.GetRepository(Uow, CacheService);
         }
 
         #region Routes

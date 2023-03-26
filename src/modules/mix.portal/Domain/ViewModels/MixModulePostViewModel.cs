@@ -29,7 +29,7 @@
         #region Overrides
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Post = await MixPostContentViewModel.GetRepository(UowInfo).GetSingleAsync(ChildId);
+            Post = await MixPostContentViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(ChildId);
         }
         #endregion
 

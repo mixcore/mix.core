@@ -94,7 +94,7 @@ namespace Mixcore.Domain.ViewModels
                     .OrderBy(m => m.Priority)
                     .Select(m => m.ChildId)
                     .ToListAsync();
-            var moduleRepo = ModuleContentViewModel.GetRepository(UowInfo);
+            var moduleRepo = ModuleContentViewModel.GetRepository(UowInfo, CacheService);
             Modules = await moduleRepo.GetListAsync(m => moduleIds.Contains(m.Id));
             var paging = new PagingModel();
             foreach (var item in Modules)
@@ -104,7 +104,7 @@ namespace Mixcore.Domain.ViewModels
         }
         private async Task LoadPostsAsync(PagingRequestModel pagingModel, MixRepoDbRepository mixRepoDbRepository, IMixMetadataService metadataService, MixCacheService cacheService)
         {
-            Posts = await PagePostAssociationViewModel.GetRepository(UowInfo).GetPagingAsync(m => m.ParentId == Id, pagingModel);
+            Posts = await PagePostAssociationViewModel.GetRepository(UowInfo, CacheService).GetPagingAsync(m => m.ParentId == Id, pagingModel);
             foreach (var item in Posts.Items)
             {
                 item.SetUowInfo(UowInfo);

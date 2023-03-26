@@ -28,7 +28,7 @@
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            var repo = MixPageContentViewModel.GetRepository(UowInfo);
+            var repo = MixPageContentViewModel.GetRepository(UowInfo, CacheService);
             Contents = await repo.GetListAsync(m => m.ParentId == Id, cancellationToken);
         }
 

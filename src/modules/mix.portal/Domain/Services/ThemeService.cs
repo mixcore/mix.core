@@ -6,7 +6,7 @@ namespace Mix.Portal.Domain.Services
     public sealed class ThemeService : TenantServiceBase, IThemeService
     {
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
-        public ThemeService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUow) : base(httpContextAccessor)
+        public ThemeService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUow, MixCacheService cacheService) : base(httpContextAccessor, cacheService)
         {
             _cmsUow = cmsUow;
         }

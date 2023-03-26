@@ -19,6 +19,7 @@ namespace Mix.Common.Controllers
     [ApiController]
     public class SharedApiController : MixApiControllerBase
     {
+        private readonly MixCacheService _cacheService;
         private readonly ApplicationLifetime _applicationLifetime;
         protected UnitOfWorkInfo Uow;
         protected readonly MixCmsContext Context;
@@ -28,17 +29,17 @@ namespace Mix.Common.Controllers
 
         public SharedApiController(
             IConfiguration configuration,
-            MixService mixService,
             TranslatorService translator,
             IActionDescriptorCollectionProvider routeProvider,
             MixIdentityService mixIdentityService,
-            MixCmsContext context, IQueueService<MessageQueueModel> queueService, ApplicationLifetime applicationLifetime)
-            : base(configuration, mixService, translator, mixIdentityService, queueService)
+            MixCmsContext context, IQueueService<MessageQueueModel> queueService, ApplicationLifetime applicationLifetime, MixCacheService cacheService)
+            : base(configuration, translator, mixIdentityService, queueService)
         {
             Context = context;
+            _cacheService = cacheService;
             Uow = new(Context);
-            _configRepo = MixConfigurationContentViewModel.GetRepository(Uow);
-            _langRepo = MixLanguageContentViewModel.GetRepository(Uow);
+            _configRepo = MixConfigurationContentViewModel.GetRepository(Uow, _cacheService);
+            _langRepo = MixLanguageContentViewModel.GetRepository(Uow, _cacheService);
             _routeProvider = routeProvider;
             _applicationLifetime = applicationLifetime;
         }
@@ -100,9 +101,9 @@ namespace Mix.Common.Controllers
         [MixAuthorize(roles: MixRoles.SuperAdmin)]
         [HttpGet]
         [Route("clear-cache")]
-        public ActionResult ClearCache()
+        public async Task<ActionResult> ClearCacheAsync(CancellationToken cancellationToken = default)
         {
-            MixFileHelper.EmptyFolder(MixFolders.MixCacheFolder);
+            await _cacheService.ClearAllCacheAsync(cancellationToken);
             return Ok();
         }
 

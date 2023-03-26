@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.RepoDb.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
@@ -8,14 +9,15 @@ namespace Mix.Portal.Controllers
         : MixRestfulApiControllerBase<MixModuleDataViewModel, MixCmsContext, MixModuleData, int>
     {
         public MixModuleDataController(
-            IHttpContextAccessor httpContextAccessor,
+           IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IQueueService<MessageQueueModel> queueService, MixCacheService cacheService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService, cacheService)
+            IQueueService<MessageQueueModel> queueService,
+            IMixDbService mixDbService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cmsUow, queueService)
         {
 
         }
@@ -47,7 +49,7 @@ namespace Mix.Portal.Controllers
         [Route("init-form/{moduleId}")]
         public async Task<ActionResult<MixModuleDataViewModel>> InitByIdAsync(int moduleId, CancellationToken cancellationToken = default)
         {
-            var getModule = await MixModuleContentViewModel.GetRepository(Uow).GetSingleAsync(m => m.Id == moduleId, cancellationToken)
+            var getModule = await MixModuleContentViewModel.GetRepository(Uow, CacheService).GetSingleAsync(m => m.Id == moduleId, cancellationToken)
                 .ConfigureAwait(false);
             if (getModule != null)
             {

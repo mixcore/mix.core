@@ -43,7 +43,7 @@ namespace Mix.Portal.Controllers
         public MixDbController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
@@ -54,7 +54,7 @@ namespace Mix.Portal.Controllers
             DatabaseService databaseService,
             MixIdentityService idService,
             IMixDbService mixDbService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
             _repository = repository;
             _associationRepository = new(cache, databaseService, cmsUow);
@@ -356,7 +356,7 @@ namespace Mix.Portal.Controllers
             var queries = BuildSearchPredicate(request).ToList();
             if (request.ParentId.HasValue)
             {
-                _database = await MixDatabaseViewModel.GetRepository(_cmsUow).GetSingleAsync(m => m.SystemName == _tableName);
+                _database = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == _tableName);
 
                 if (_database.Type == MixDatabaseType.AdditionalData || _database.Type == MixDatabaseType.GuidAdditionalData)
                 {
@@ -494,7 +494,7 @@ namespace Mix.Portal.Controllers
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return MixDatabaseViewModel.GetRepository(_cmsUow).GetSingleAsync(m => m.SystemName == _tableName);
+                    return MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == _tableName);
                 }
                 );
         }

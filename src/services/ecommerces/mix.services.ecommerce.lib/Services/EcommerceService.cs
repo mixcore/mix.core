@@ -17,11 +17,13 @@ using Microsoft.Extensions.Configuration;
 using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Interfaces;
 using Mix.Lib.Interfaces;
+using Mix.Heart.Services;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
     public sealed class EcommerceService : TenantServiceBase, IEcommerceService
     {
+        private readonly MixCacheService CacheService;
         private readonly IServiceProvider _serviceProvider;
         private readonly TenantUserManager _userManager;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _uow;
@@ -33,7 +35,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
             UnitOfWorkInfo<EcommerceDbContext> uow,
             TenantUserManager userManager,
             IServiceProvider serviceProvider,
-            IMixEdmService edmService) : base(httpContextAccessor)
+            IMixEdmService edmService,
+            MixCacheService cacheService) : base(httpContextAccessor, cacheService)
         {
             _uow = uow;
             _userManager = userManager;
@@ -47,7 +50,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
         public async Task<OrderViewModel?> GetShoppingOrder(Guid userId, CancellationToken cancellationToken = default)
         {
             return await OrderViewModel
-                .GetRepository(_uow)
+                .GetRepository(_uow, CacheService)
                 .GetSingleAsync(
                     m => m.MixTenantId == CurrentTenant.Id
                          && m.OrderStatus == OrderStatus.NEW
@@ -85,7 +88,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var order = await OrderViewModel.GetRepository(_uow).GetSingleAsync(orderId, cancellationToken);
+            var order = await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(orderId, cancellationToken);
             if (order == null)
             {
                 throw new MixException(MixErrorStatus.NotFound);
@@ -141,7 +144,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             }
             else
             {
-                var product = await ProductVariantViewModel.GetRepository(_uow).GetSingleAsync(
+                var product = await ProductVariantViewModel.GetRepository(_uow, CacheService).GetSingleAsync(
                     m => m.MixTenantId == CurrentTenant.Id && m.Sku == item.Sku,
                     cancellationToken);
 
@@ -302,7 +305,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var order = await OrderViewModel.GetRepository(_uow).GetSingleAsync(orderId, cancellationToken);
+            var order = await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(orderId, cancellationToken);
             if (order == null)
             {
                 throw new MixException(MixErrorStatus.ServerError, $"Invalid Order");

@@ -20,14 +20,13 @@ namespace Mixcore.Controllers
         public PageController(
             IHttpContextAccessor httpContextAccessor,
             IPSecurityConfigService ipSecurityConfigService,
-            MixService mixService,
             IMixCmsService mixCmsService,
             DatabaseService databaseService,
             MixCmsContext cmsContext,
             MixRepoDbRepository repoDbRepository,
             IMixMetadataService metadataService,
             MixCacheService cacheService)
-            : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
+            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService)
         {
             CmsContext = cmsContext;
             Uow = new(CmsContext);
@@ -78,8 +77,7 @@ namespace Mixcore.Controllers
         protected async Task<IActionResult> Page(int pageId, string keyword = null)
         {
             // Home Page
-            var pageRepo = PageContentViewModel.GetRepository(Uow);
-            pageRepo.CacheService = _cacheService;
+            var pageRepo = PageContentViewModel.GetRepository(Uow, _cacheService);
             var page = await pageRepo.GetSingleAsync(m => m.Id == pageId && m.MixTenantId == CurrentTenant.Id);
             if (page == null)
                 return NotFound();

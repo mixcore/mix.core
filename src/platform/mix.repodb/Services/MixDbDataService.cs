@@ -19,6 +19,7 @@ using Mix.Heart.Extensions;
 using Mix.RepoDb.Interfaces;
 using Mix.Service.Interfaces;
 using Mix.Constant.Constants;
+using Mix.Heart.Services;
 
 namespace Mix.RepoDb.Services
 {
@@ -50,8 +51,9 @@ namespace Mix.RepoDb.Services
             DatabaseService databaseService,
             MixRepoDbRepository repository,
             ICache cache,
-            IMixMemoryCacheService memoryCache)
-            : base(httpContextAccessor)
+            IMixMemoryCacheService memoryCache,
+            MixCacheService cacheService)
+            : base(httpContextAccessor, cacheService)
         {
             _cmsUow = uow;
             _repository = repository;
@@ -287,7 +289,7 @@ namespace Mix.RepoDb.Services
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return MixDatabaseViewModel.GetRepository(_cmsUow).GetSingleAsync(m => m.SystemName == tableName);
+                    return MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
                 }
                 );
         }

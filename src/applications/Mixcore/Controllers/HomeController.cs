@@ -15,12 +15,10 @@ namespace Mixcore.Controllers
     {
         private readonly IMixMetadataService _metadataService;
         private readonly MixRepoDbRepository _repoDbRepository;
-        private readonly MixCacheService _cacheService;
 
         public HomeController(
             IHttpContextAccessor httpContextAccessor,
             IPSecurityConfigService ipSecurityConfigService,
-            MixService mixService,
             IMixCmsService mixCmsService,
             TranslatorService translator,
             DatabaseService databaseService,
@@ -28,11 +26,10 @@ namespace Mixcore.Controllers
             MixRepoDbRepository repoDbRepository,
             IMixMetadataService metadataService,
             MixCacheService cacheService)
-            : base(httpContextAccessor, ipSecurityConfigService, mixService, mixCmsService, translator, databaseService, uow)
+            : base(httpContextAccessor, ipSecurityConfigService, mixCmsService, translator, databaseService, uow, cacheService)
         {
             _repoDbRepository = repoDbRepository;
             _metadataService = metadataService;
-            _cacheService = cacheService;
         }
 
         protected override void ValidateRequest()
@@ -74,8 +71,7 @@ namespace Mixcore.Controllers
 
         private async Task<PageContentViewModel> LoadPage(string seoName = null)
         {
-            var pageRepo = PageContentViewModel.GetRepository(Uow);
-            pageRepo.CacheService = _cacheService;
+            var pageRepo = PageContentViewModel.GetRepository(Uow, CacheService);
             Expression<Func<MixPageContent, bool>> predicate = p => p.MixTenantId == CurrentTenant.Id
                     && p.Specificulture == Culture;
             predicate = predicate.AndAlsoIf(string.IsNullOrEmpty(seoName), m => m.Type == MixPageType.Home);
@@ -87,7 +83,7 @@ namespace Mixcore.Controllers
                 await page.LoadDataAsync(_repoDbRepository, _metadataService, new(Request)
                 {
                     SortBy = MixQueryColumnName.Priority
-                }, _cacheService);
+                }, CacheService);
 
                 ViewData["Tenant"] = CurrentTenant;
                 ViewData["Title"] = page.SeoTitle;
@@ -105,21 +101,21 @@ namespace Mixcore.Controllers
         }
         private async Task<IActionResult> LoadAlias(string seoName)
         {
-            var alias = await MixUrlAliasViewModel.GetRepository(Uow).GetSingleAsync(m => m.MixTenantId == CurrentTenant.Id && m.Alias == seoName);
+            var alias = await MixUrlAliasViewModel.GetRepository(Uow, CacheService).GetSingleAsync(m => m.MixTenantId == CurrentTenant.Id && m.Alias == seoName);
             if (alias != null)
             {
                 switch (alias.Type)
                 {
                     case MixUrlAliasType.Page:
-                        var pageRepo = PageContentViewModel.GetRepository(Uow);
-                        pageRepo.CacheService = _cacheService;
+                        var pageRepo = PageContentViewModel.GetRepository(Uow, CacheService);
+                        pageRepo.CacheService = CacheService;
                         var page = await pageRepo.GetSingleAsync(m => m.Id == alias.SourceContentId);
                         if (page != null)
                         {
                             await page.LoadDataAsync(_repoDbRepository, _metadataService, new(Request)
                             {
                                 SortBy = MixQueryColumnName.Priority
-                            }, _cacheService);
+                            }, CacheService);
                             ViewData["Tenant"] = CurrentTenant;
                             ViewData["Title"] = page.SeoTitle;
                             ViewData["Description"] = page.SeoDescription;
@@ -135,8 +131,8 @@ namespace Mixcore.Controllers
                         }
                         break;
                     case MixUrlAliasType.Post:
-                        var postRepo = PostContentViewModel.GetRepository(Uow);
-                        postRepo.CacheService = _cacheService;
+                        var postRepo = PostContentViewModel.GetRepository(Uow, CacheService);
+                        postRepo.CacheService = CacheService;
                         var post = await postRepo.GetSingleAsync(m => m.Id == alias.SourceContentId);
                         if (post != null)
                             return View("Post", post);
@@ -146,8 +142,8 @@ namespace Mixcore.Controllers
                     case MixUrlAliasType.ModuleData:
                         break;
                     case MixUrlAliasType.MixApplication:
-                        var appRepo = ApplicationViewModel.GetRepository(Uow);
-                        appRepo.CacheService = _cacheService;
+                        var appRepo = ApplicationViewModel.GetRepository(Uow, CacheService);
+                        appRepo.CacheService = CacheService;
                         var app = await appRepo.GetSingleAsync(m => m.Id == alias.SourceContentId);
                         if (app != null)
                             return View("App", app);

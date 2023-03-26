@@ -56,13 +56,13 @@ namespace Mix.Lib.ViewModels
             _cmsUow = uow;
         }
 
-        public async Task LoadUserDataAsync(int tenantId, MixRepoDbRepository repoDbRepository, MixCmsAccountContext accContext)
+        public async Task LoadUserDataAsync(int tenantId, MixRepoDbRepository repoDbRepository, MixCmsAccountContext accContext, MixCacheService cacheService)
         {
             if (!GlobalConfigService.Instance.IsInit)
             {
                 try
                 {
-                    var database = await MixDatabaseViewModel.GetRepository(_cmsUow)
+                    var database = await MixDatabaseViewModel.GetRepository(_cmsUow, cacheService)
                         .GetSingleAsync(m => m.SystemName == MixDatabaseNames.SYSTEM_USER_DATA);
                     repoDbRepository.InitTableName(MixDatabaseNames.SYSTEM_USER_DATA);
                     dynamic data = await repoDbRepository.GetSingleByParentAsync(MixContentType.User, Id);

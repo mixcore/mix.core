@@ -16,14 +16,14 @@ namespace Mix.Portal.Controllers
             TenantUserManager userManager,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService,
-            MixRepoDbRepository mixRepoDbRepository, MixCacheService cacheService)
-            : base(MixContentType.Post, identityService, userManager, httpContextAccessor, configuration, mixService, translator,
-                  mixIdentityService, cmsUow, queueService, cacheService)
+            MixRepoDbRepository mixRepoDbRepository)
+            : base(MixContentType.Post, identityService, userManager, httpContextAccessor, configuration, cacheService, translator,
+                  mixIdentityService, cmsUow, queueService)
         {
             _mixRepoDbRepository = mixRepoDbRepository;
         }

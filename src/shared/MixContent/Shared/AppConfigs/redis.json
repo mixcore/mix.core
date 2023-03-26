@@ -1,0 +1,8 @@
+{
+  "Redis": {
+    "ConnectionString": null,
+    "SlidingExpirationInMinute": 20,
+    "AbsoluteExpirationInMinute": null,
+    "AbsoluteExpirationRelativeToNowInMinute": null
+  }
+}

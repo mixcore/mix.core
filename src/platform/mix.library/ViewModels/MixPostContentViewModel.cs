@@ -59,7 +59,7 @@ namespace Mix.Lib.ViewModels
 
             if (Repository.GetListQuery(m => m.ParentId == ParentId, cancellationToken).Count() == 1)
             {
-                var postRepo = MixPostViewModel.GetRepository(UowInfo);
+                var postRepo = MixPostViewModel.GetRepository(UowInfo, CacheService);
                 await Repository.DeleteAsync(Id, cancellationToken);
                 await postRepo.DeleteAsync(ParentId, cancellationToken);
             }
@@ -71,7 +71,7 @@ namespace Mix.Lib.ViewModels
 
         public async Task LoadContributorsAsync(MixIdentityService identityService, CancellationToken cancellationToken = default)
         {
-            Contributors = await MixContributorViewModel.GetRepository(UowInfo).GetAllAsync(m => m.ContentType == MixContentType.Post && m.IntContentId == Id, cancellationToken);
+            Contributors = await MixContributorViewModel.GetRepository(UowInfo, CacheService).GetAllAsync(m => m.ContentType == MixContentType.Post && m.IntContentId == Id, cancellationToken);
             foreach (var item in Contributors)
             {
                 await item.LoadUserDataAsync(identityService);
@@ -80,7 +80,7 @@ namespace Mix.Lib.ViewModels
 
         private async Task LoadAliasAsync(CancellationToken cancellationToken = default)
         {
-            var aliasRepo = MixUrlAliasViewModel.GetRepository(UowInfo);
+            var aliasRepo = MixUrlAliasViewModel.GetRepository(UowInfo, CacheService);
             UrlAliases = await aliasRepo.GetListAsync(m => m.Type == MixUrlAliasType.Post && m.SourceContentId == Id, cancellationToken);
             DetailUrl = UrlAliases.Count > 0 ? UrlAliases[0].Alias : $"/post/{Id}/{SeoName}";
         }

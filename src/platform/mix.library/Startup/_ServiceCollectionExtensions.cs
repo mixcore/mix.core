@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
+using Mix.Lib.Middlewares;
 using Mix.Service.Interfaces;
 using Mix.Shared;
 using Mix.Shared.Interfaces;
@@ -62,6 +63,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
 
             services.AddMixRepoDb();
+
+            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCacheDbContext>>();
             return services;
         }
 
@@ -105,6 +108,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
             services.TryAddSingleton<ILogStreamHubClientService, LogStreamHubClientService>();
             services.AddMixRepoDb();
+
+            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCacheDbContext>>();
             return services;
         }
 

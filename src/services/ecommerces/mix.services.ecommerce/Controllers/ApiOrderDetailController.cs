@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Database.Entities.Cms;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
@@ -22,15 +23,15 @@ namespace Mix.Services.Ecommerce.Controllers
     {
         private readonly IEcommerceService _ecommerceService;
         public OrderDetailController(
+            IEcommerceService ecommerceService, 
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<EcommerceDbContext> uow,
-            IQueueService<MessageQueueModel> queueService,
-            IEcommerceService ecommerceService, MixCacheService cacheService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService, cacheService)
+            IQueueService<MessageQueueModel> queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
         {
             Repository.IsCache = false;
             _ecommerceService = ecommerceService;

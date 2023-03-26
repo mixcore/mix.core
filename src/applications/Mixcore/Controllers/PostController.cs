@@ -20,7 +20,6 @@ namespace Mixcore.Controllers
         public PostController(
             IHttpContextAccessor httpContextAccessor,
             IPSecurityConfigService ipSecurityConfigService,
-            MixService mixService,
             IMixCmsService mixCmsService,
             DatabaseService databaseService,
             MixCmsContext cmsContext,
@@ -28,7 +27,7 @@ namespace Mixcore.Controllers
             IMixMetadataService metadataService,
             UnitOfWorkInfo<MixDbDbContext> dbUow,
             MixCacheService cacheService)
-            : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
+            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService)
         {
             CmsContext = cmsContext;
             Uow = new(CmsContext);
@@ -81,8 +80,7 @@ namespace Mixcore.Controllers
         protected async Task<IActionResult> Post(int postId, string keyword = null)
         {
             // Home Post
-            var postRepo = PostContentViewModel.GetRepository(Uow);
-            postRepo.CacheService = _cacheService;
+            var postRepo = PostContentViewModel.GetRepository(Uow, _cacheService);
             var post = await postRepo.GetSingleAsync(m => m.Id == postId && m.MixTenantId == CurrentTenant.Id);
             if (post == null)
             {

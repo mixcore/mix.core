@@ -33,7 +33,7 @@
 
         public async Task LoadPost()
         {
-            Post = await MixPostContentViewModel.GetRepository(UowInfo).GetSingleAsync(ChildId);
+            Post = await MixPostContentViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(ChildId);
         }
         #endregion
     }

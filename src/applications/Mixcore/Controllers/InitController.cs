@@ -10,11 +10,10 @@ namespace Mixcore.Controllers
         private readonly MixEndpointService _mixEndpointService;
         public InitController(
             IHttpContextAccessor httpContextAccessor,
-            MixService mixService,
             IMixCmsService mixCmsService,
             IPSecurityConfigService ipSecurityConfigService,
             MixEndpointService mixEndpointService)
-            : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
+            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService)
         {
             _mixEndpointService = mixEndpointService;
         }

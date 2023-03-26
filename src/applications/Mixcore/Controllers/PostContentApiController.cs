@@ -18,7 +18,7 @@ namespace Mixcore.Controllers
         public PostContentApiController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> uow,
@@ -26,14 +26,13 @@ namespace Mixcore.Controllers
             MixcorePostService postService,
             MixRepoDbRepository mixRepoDbRepository,
             IMixMetadataService metadataService,
-            MixRepoDbRepository repoDbRepository,
-            MixCacheService cacheService) : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService, cacheService)
+            MixRepoDbRepository repoDbRepository) 
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
         {
             _postService = postService;
             _mixRepoDbRepository = mixRepoDbRepository;
             _metadataService = metadataService;
             _repoDbRepository = repoDbRepository;
-            _cacheService = cacheService;
         }
 
         [HttpPost("filter")]
@@ -59,7 +58,7 @@ namespace Mixcore.Controllers
             var result = await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
             foreach (var item in result.Items)
             {
-                await item.LoadAdditionalDataAsync(_repoDbRepository, _metadataService, _cacheService);
+                await item.LoadAdditionalDataAsync(_repoDbRepository, _metadataService, CacheService);
             }
             return Ok(ParseSearchResult(req, result));
         }
@@ -71,7 +70,7 @@ namespace Mixcore.Controllers
             var result= await _postService.SearchPosts(searchPostQuery, cancellationToken);
             foreach (var item in result.Items)
             {
-                await item.LoadAdditionalDataAsync(_mixRepoDbRepository, _metadataService, _cacheService);
+                await item.LoadAdditionalDataAsync(_mixRepoDbRepository, _metadataService, CacheService);
             }
 
             return RestApiService.ParseSearchResult(req, result);
@@ -80,7 +79,7 @@ namespace Mixcore.Controllers
         protected override async Task<PostContentViewModel> GetById(int id)
         {
             var result = await base.GetById(id);
-            await result.LoadAdditionalDataAsync(_mixRepoDbRepository, _metadataService, _cacheService);
+            await result.LoadAdditionalDataAsync(_mixRepoDbRepository, _metadataService, CacheService);
             return result;
         }
     }

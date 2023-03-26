@@ -93,7 +93,7 @@ namespace Mix.RepoDb.ViewModels
             string leftColName = $"{leftDb.SystemName}Id";
             var rightDb = Context.MixDatabase.Find(ChildId);
             string rightColName = $"{rightDb.SystemName}Id";
-            await MixDatabaseColumnViewModel.GetRepository(UowInfo)
+            await MixDatabaseColumnViewModel.GetRepository(UowInfo, CacheService)
                 .DeleteManyAsync(m =>
                 (m.MixDatabaseId == ParentId && m.SystemName == rightColName)
                 || (m.MixDatabaseId == ChildId && m.SystemName == leftColName),

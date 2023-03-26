@@ -20,24 +20,22 @@ namespace Mix.Lib.Base
         protected UnitOfWorkInfo Uow;
         protected UnitOfWorkInfo CacheUow;
         protected MixCacheDbContext CacheDbContext;
-        protected MixCacheService CacheService;
 
         public MixQueryEntityApiControllerBase(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             TDbContext context,
             IQueueService<MessageQueueModel> queueService, MixCacheDbContext cacheDbContext)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
             Context = context;
             Uow = new(Context);
             Repository = new(Uow);
             CacheDbContext = cacheDbContext;
             CacheUow = new(CacheDbContext);
-            CacheService = new();
         }
 
         #region Overrides

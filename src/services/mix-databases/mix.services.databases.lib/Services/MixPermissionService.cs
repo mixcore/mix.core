@@ -9,6 +9,7 @@ using Mix.Services.Databases.Lib.Dtos;
 using System.Linq.Expressions;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Interfaces;
+using Mix.Heart.Services;
 
 namespace Mix.Services.Databases.Lib.Services
 {
@@ -21,8 +22,9 @@ namespace Mix.Services.Databases.Lib.Services
         public MixPermissionService(
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<MixDbDbContext> uow,
-            MixIdentityService identityService)
-            : base(httpContextAccessor)
+            MixIdentityService identityService,
+            MixCacheService cacheService)
+            : base(httpContextAccessor, cacheService)
         {
             _uow = uow;
             _permissionDbContext = _uow.DbContext;
@@ -33,7 +35,7 @@ namespace Mix.Services.Databases.Lib.Services
         {
             var permissions = _permissionDbContext.UserPermission.Where(m => m.MixTenantId == CurrentTenant.Id && m.UserId == userId);
             Expression<Func<MixPermission, bool>> predicate = m => m.MixTenantId == CurrentTenant.Id && permissions.Any(p => p.PermissionId == m.Id);
-            var result = await MixPermissionViewModel.GetRepository(_uow).GetAllAsync(predicate);
+            var result = await MixPermissionViewModel.GetRepository(_uow, CacheService).GetAllAsync(predicate);
             return result;
         }
 

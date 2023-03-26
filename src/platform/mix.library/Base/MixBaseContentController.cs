@@ -24,12 +24,12 @@ namespace Mix.Portal.Controllers
             TenantUserManager userManager,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IQueueService<MessageQueueModel> queueService, MixCacheService cacheService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService, cacheService)
+            IQueueService<MessageQueueModel> queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cmsUow, queueService)
         {
             ContentType = contentType;
             CmsUow = cmsUow;
@@ -59,10 +59,10 @@ namespace Mix.Portal.Controllers
         protected override async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req, CancellationToken cancellationToken)
         {
             var result = await base.SearchHandler(req, cancellationToken);
-            foreach (var item in result.Items)
-            {
-                await item.LoadContributorsAsync(ContentType, IdentityService);
-            }
+            //foreach (var item in result.Items)
+            //{
+            //    await item.LoadContributorsAsync(ContentType, IdentityService);
+            //}
             return result;
         }
         protected override async Task<TPrimaryKey> CreateHandlerAsync(TView data, CancellationToken cancellationToken = default)

@@ -19,7 +19,9 @@ namespace Mix.Portal.Domain.Services
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         public CloneCultureService(
             IHttpContextAccessor httpContextAccessor,
-            UnitOfWorkInfo<MixCmsContext> cmsUow) : base(httpContextAccessor)
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
+            MixCacheService cacheService)
+            : base(httpContextAccessor, cacheService)
         {
             _cmsUow = cmsUow;
         }

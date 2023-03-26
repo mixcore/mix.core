@@ -6,7 +6,11 @@ namespace Mix.Lib.Services
     public sealed class MixCmsService : TenantServiceBase, IMixCmsService
     {
         private readonly MixConfigurationService _configService;
-        public MixCmsService(IHttpContextAccessor httpContextAccessor, MixConfigurationService configService) : base(httpContextAccessor)
+        public MixCmsService(
+            IHttpContextAccessor httpContextAccessor, 
+            MixConfigurationService configService,
+            MixCacheService cacheService)
+            : base(httpContextAccessor, cacheService)
         {
             _configService = configService;
         }

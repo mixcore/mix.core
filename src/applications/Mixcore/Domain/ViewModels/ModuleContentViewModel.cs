@@ -73,10 +73,10 @@ namespace Mixcore.Domain.ViewModels
             MixCacheService cacheService)
         {
             await LoadAdditionalDataAsync(mixRepoDbRepository);
-            Data = await ModuleDataViewModel.GetRepository(UowInfo).GetPagingAsync(
+            Data = await ModuleDataViewModel.GetRepository(UowInfo, CacheService).GetPagingAsync(
                 m => m.ParentId == Id,
                 pagingModel);
-            Posts = await ModulePostAssociationViewModel.GetRepository(UowInfo).GetPagingAsync(
+            Posts = await ModulePostAssociationViewModel.GetRepository(UowInfo, CacheService).GetPagingAsync(
                 m => m.ParentId == Id,
                 pagingModel);
             foreach (var item in Posts.Items)

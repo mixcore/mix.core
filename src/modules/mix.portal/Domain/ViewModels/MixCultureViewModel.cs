@@ -34,9 +34,9 @@
         protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
             await base.DeleteHandlerAsync(cancellationToken);
-            await MixPageContentViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.Specificulture == Specificulture, cancellationToken);
-            await MixModuleContentViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.Specificulture == Specificulture, cancellationToken);
-            await MixPostContentViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.Specificulture == Specificulture, cancellationToken);
+            await MixPageContentViewModel.GetRepository(UowInfo, CacheService).DeleteManyAsync(m => m.Specificulture == Specificulture, cancellationToken);
+            await MixModuleContentViewModel.GetRepository(UowInfo, CacheService).DeleteManyAsync(m => m.Specificulture == Specificulture, cancellationToken);
+            await MixPostContentViewModel.GetRepository(UowInfo, CacheService).DeleteManyAsync(m => m.Specificulture == Specificulture, cancellationToken);
         }
 
         #endregion

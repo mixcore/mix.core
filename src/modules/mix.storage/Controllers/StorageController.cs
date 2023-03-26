@@ -9,16 +9,7 @@ namespace Mix.Storage.Controllers
     {
         private readonly MixStorageService _storageService;
 
-        public StorageController(MixStorageService storageService,
-            IHttpContextAccessor httpContextAccessor,
-            IConfiguration configuration,
-            MixService mixService,
-            TranslatorService translator,
-            MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCmsContext> uow,
-            IQueueService<MessageQueueModel> queueService, MixCacheService cacheService) 
-            : base(httpContextAccessor, configuration, mixService, translator, 
-                mixIdentityService, uow, queueService, cacheService)
+        public StorageController(MixStorageService storageService, IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> uow, IQueueService<MessageQueueModel> queueService) : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
         {
             _storageService = storageService;
         }

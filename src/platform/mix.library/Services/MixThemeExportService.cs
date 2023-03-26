@@ -10,6 +10,7 @@ namespace Mix.Lib.Services
     public class MixThemeExportService : IMixThemeExportService
     {
         private readonly Repository<MixCmsContext, MixTheme, int, MixThemeViewModel> _themeRepository;
+        private readonly MixCacheService _cacheService;
         private readonly MixCmsContext _context;
         private readonly MixRepoDbRepository _repository;
         private SiteDataViewModel _siteData;
@@ -32,11 +33,12 @@ namespace Mix.Lib.Services
             }
         }
         private MixTenantSystemModel _currentTenant;
-        public MixThemeExportService(IHttpContextAccessor httpContext, MixCmsContext context, MixRepoDbRepository repository)
+        public MixThemeExportService(IHttpContextAccessor httpContext, MixCmsContext context, MixRepoDbRepository repository, MixCacheService cacheService)
         {
             _session = httpContext.HttpContext?.Session;
             _context = context;
-            _themeRepository = MixThemeViewModel.GetRepository(new UnitOfWorkInfo(_context));
+            _cacheService = cacheService;
+            _themeRepository = MixThemeViewModel.GetRepository(new UnitOfWorkInfo(_context), _cacheService);
             _repository = repository;
         }
 

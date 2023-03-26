@@ -12,6 +12,7 @@ using Mix.Lib.Models.Common;
 using System.Linq.Expressions;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Interfaces;
+using Mix.Heart.Services;
 
 namespace Mix.Services.Databases.Lib.Abstracts
 {
@@ -24,8 +25,9 @@ namespace Mix.Services.Databases.Lib.Abstracts
         protected MixPostServiceBase(
             UnitOfWorkInfo<MixCmsContext> uow, 
             IMixMetadataService metadataService, 
-            IHttpContextAccessor httpContextAccessor)
-            : base(httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            MixCacheService cacheService)
+            : base(httpContextAccessor, cacheService)
         {
             Uow = uow;
             MetadataService = metadataService;

@@ -17,13 +17,13 @@ namespace Mix.Account.Controllers
         public MixRoleController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixService mixService,
+            MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             MixCacheDbContext cacheDbContext,
             MixCmsAccountContext context,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheDbContext, context, queueService)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cacheDbContext, context, queueService)
         {
 
         }

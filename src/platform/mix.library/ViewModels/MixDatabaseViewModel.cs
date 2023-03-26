@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Lib.ViewModels
 {
-    [GenerateRestApiController]
     public sealed class MixDatabaseViewModel : TenantDataViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
     {
         #region Properties
@@ -53,8 +52,9 @@ namespace Mix.Lib.ViewModels
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Columns = await MixDatabaseColumnViewModel.GetRepository(UowInfo).GetListAsync(c => c.MixDatabaseId == Id, cancellationToken);
-            Relationships = await MixDatabaseRelationshipViewModel.GetRepository(UowInfo).GetListAsync(c => c.ParentId == Id, cancellationToken);
+            var columnRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo, CacheService);
+            Columns = await columnRepo.GetListAsync(c => c.MixDatabaseId == Id, cancellationToken);
+            Relationships = await MixDatabaseRelationshipViewModel.GetRepository(UowInfo, CacheService).GetListAsync(c => c.ParentId == Id, cancellationToken);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity, CancellationToken cancellationToken = default)

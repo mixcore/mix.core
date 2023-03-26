@@ -37,7 +37,7 @@ namespace Mixcore.Domain.ViewModels
             IMixMetadataService metadataService,
             MixCacheService cacheService)
         {
-            Post = await PostContentViewModel.GetRepository(UowInfo).GetSingleAsync(ChildId);
+            Post = await PostContentViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(ChildId);
             await Post.LoadAdditionalDataAsync(mixRepoDbRepository, metadataService, cacheService);
         }
         #endregion

@@ -24,8 +24,9 @@ namespace Mix.Portal.Domain.Services
             HttpService httpService, 
             MixIdentityService mixIdentityService,
             IThemeService themeService, 
-            IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor)
+            IQueueService<MessageQueueModel> queueService,
+            MixCacheService cacheService)
+            : base(httpContextAccessor, cacheService)
         {
             _cmsUow = cmsUow;
             _hubContext = hubContext;

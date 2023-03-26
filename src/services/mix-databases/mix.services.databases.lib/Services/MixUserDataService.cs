@@ -10,6 +10,7 @@ using Mix.Lib.Services;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Dtos;
 using Mix.Services.Databases.Lib.Interfaces;
+using Mix.Heart.Services;
 
 namespace Mix.Services.Databases.Lib.Services
 {
@@ -21,8 +22,9 @@ namespace Mix.Services.Databases.Lib.Services
         public MixUserDataService(
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<MixDbDbContext> uow,
-            TenantUserManager userManager)
-            : base(httpContextAccessor)
+            TenantUserManager userManager,
+            MixCacheService cacheService)
+            : base(httpContextAccessor, cacheService)
         {
             _uow = uow;
             _userManager = userManager;
@@ -32,7 +34,7 @@ namespace Mix.Services.Databases.Lib.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var data = await MixUserDataViewModel.GetRepository(_uow).GetSingleAsync(m => m.ParentId == userId, cancellationToken);
+            var data = await MixUserDataViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.ParentId == userId, cancellationToken);
             if (data == null)
             {
                 data = await CreateDefaultUserData(userId, cancellationToken);
