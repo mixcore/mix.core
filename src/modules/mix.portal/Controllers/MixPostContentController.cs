@@ -21,9 +21,9 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService,
-            MixRepoDbRepository mixRepoDbRepository)
+            MixRepoDbRepository mixRepoDbRepository, MixCacheService cacheService)
             : base(MixContentType.Post, identityService, userManager, httpContextAccessor, configuration, mixService, translator,
-                  mixIdentityService, cmsUow, queueService)
+                  mixIdentityService, cmsUow, queueService, cacheService)
         {
             _mixRepoDbRepository = mixRepoDbRepository;
         }

@@ -13,6 +13,7 @@ namespace Mixcore.Controllers
         protected UnitOfWorkInfo Uow;
         protected readonly MixCmsContext CmsContext;
         private readonly DatabaseService _databaseService;
+        private readonly MixCacheService _cacheService;
         private readonly MixRepoDbRepository _repoDbRepository;
         private readonly IMixMetadataService _metadataService;
 
@@ -24,7 +25,8 @@ namespace Mixcore.Controllers
             DatabaseService databaseService,
             MixCmsContext cmsContext,
             MixRepoDbRepository repoDbRepository,
-            IMixMetadataService metadataService)
+            IMixMetadataService metadataService,
+            MixCacheService cacheService)
             : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
             CmsContext = cmsContext;
@@ -33,6 +35,7 @@ namespace Mixcore.Controllers
             CmsContext = cmsContext;
             _repoDbRepository = repoDbRepository;
             _metadataService = metadataService;
+            _cacheService = cacheService;
         }
 
         protected override void ValidateRequest()
@@ -76,6 +79,7 @@ namespace Mixcore.Controllers
         {
             // Home Page
             var pageRepo = PageContentViewModel.GetRepository(Uow);
+            pageRepo.CacheService = _cacheService;
             var page = await pageRepo.GetSingleAsync(m => m.Id == pageId && m.MixTenantId == CurrentTenant.Id);
             if (page == null)
                 return NotFound();
@@ -83,7 +87,7 @@ namespace Mixcore.Controllers
             await page.LoadDataAsync(_repoDbRepository, _metadataService, new(Request)
             {
                 SortBy = MixQueryColumnName.Priority
-            });
+            }, _cacheService);
             page.Posts.Items.Take(2);
             
 

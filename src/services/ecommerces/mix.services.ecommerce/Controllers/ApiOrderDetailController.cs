@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
@@ -28,8 +29,8 @@ namespace Mix.Services.Ecommerce.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<EcommerceDbContext> uow,
             IQueueService<MessageQueueModel> queueService,
-            IEcommerceService ecommerceService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
+            IEcommerceService ecommerceService, MixCacheService cacheService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService, cacheService)
         {
             Repository.IsCache = false;
             _ecommerceService = ecommerceService;

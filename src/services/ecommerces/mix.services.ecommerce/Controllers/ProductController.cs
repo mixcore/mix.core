@@ -35,8 +35,8 @@ namespace Mix.Services.ecommerce.Controllers
             UnitOfWorkInfo<EcommerceDbContext> ecommerceUow,
             IQueueService<MessageQueueModel> queueService,
             IMixMetadataService metadataService,
-            IProductService productService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
+            IProductService productService, MixCacheService cacheService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService, cacheService)
         {
             _ecommerceUow = ecommerceUow;
             CacheService = new();

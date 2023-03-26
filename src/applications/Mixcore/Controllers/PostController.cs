@@ -14,6 +14,7 @@ namespace Mixcore.Controllers
         protected UnitOfWorkInfo Uow;
         protected readonly MixCmsContext CmsContext;
         private readonly DatabaseService _databaseService;
+        private readonly MixCacheService _cacheService;
         private readonly MixRepoDbRepository _repoDbRepository;
         private readonly IMixMetadataService _metadataService;
         public PostController(
@@ -25,7 +26,8 @@ namespace Mixcore.Controllers
             MixCmsContext cmsContext,
             MixRepoDbRepository repoDbRepository,
             IMixMetadataService metadataService,
-            UnitOfWorkInfo<MixDbDbContext> dbUow)
+            UnitOfWorkInfo<MixDbDbContext> dbUow,
+            MixCacheService cacheService)
             : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
             CmsContext = cmsContext;
@@ -35,6 +37,7 @@ namespace Mixcore.Controllers
             _repoDbRepository = repoDbRepository;
             _metadataService = metadataService;
             _repoDbRepository.SetDbConnection(dbUow);
+            _cacheService = cacheService;
         }
 
         protected override void ValidateRequest()
@@ -79,12 +82,13 @@ namespace Mixcore.Controllers
         {
             // Home Post
             var postRepo = PostContentViewModel.GetRepository(Uow);
+            postRepo.CacheService = _cacheService;
             var post = await postRepo.GetSingleAsync(m => m.Id == postId && m.MixTenantId == CurrentTenant.Id);
             if (post == null)
             {
                 return NotFound();
             }
-            await post.LoadAdditionalDataAsync(_repoDbRepository, _metadataService);
+            await post.LoadAdditionalDataAsync(_repoDbRepository, _metadataService, _cacheService);
             
             ViewData["Title"] = post.SeoTitle;
             ViewData["Description"] = post.SeoDescription;

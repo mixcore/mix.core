@@ -54,7 +54,10 @@ namespace Mixcore.Domain.ViewModels
                 : default;
         }
 
-        public async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository, IMixMetadataService metadataService)
+        public async Task LoadAdditionalDataAsync(
+                MixRepoDbRepository mixRepoDbRepository, 
+                IMixMetadataService metadataService,
+                MixCacheService cacheService)
         {
             bool isChanged = false;
             if (AdditionalData == null && !string.IsNullOrEmpty(MixDatabaseName))
@@ -109,7 +112,6 @@ namespace Mixcore.Domain.ViewModels
 
             if (isChanged)
             {
-                var cacheService = new MixCacheService();
                 await cacheService.SetAsync($"{Id}/{GetType().FullName}", this, typeof(MixPostContent).FullName, "full");
             }
 

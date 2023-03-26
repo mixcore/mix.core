@@ -11,6 +11,7 @@ using Mix.Shared.Dtos;
 using Mix.Heart.Extensions;
 using Mix.Mixdb.ViewModels;
 using Mix.Services.Databases.Lib.Interfaces;
+using Mix.Heart.Services;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -27,8 +28,8 @@ namespace Mix.Services.Databases.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixDbDbContext> uow, 
             IQueueService<MessageQueueModel> queueService,
-            IMixMetadataService metadataService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
+            IMixMetadataService metadataService, MixCacheService cacheService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService, cacheService)
         {
             _metadataService = metadataService;
             Repository.IsCache = false;

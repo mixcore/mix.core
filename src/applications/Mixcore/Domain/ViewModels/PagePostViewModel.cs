@@ -33,10 +33,12 @@ namespace Mixcore.Domain.ViewModels
 
         #region Expands
 
-        public async Task LoadPost(Mix.RepoDb.Repositories.MixRepoDbRepository mixRepoDbRepository, IMixMetadataService metadataService)
+        public async Task LoadPost(Mix.RepoDb.Repositories.MixRepoDbRepository mixRepoDbRepository, 
+            IMixMetadataService metadataService,
+            MixCacheService cacheService)
         {
             Post = await PostContentViewModel.GetRepository(UowInfo).GetSingleAsync(ChildId);
-            await Post.LoadAdditionalDataAsync(mixRepoDbRepository, metadataService);
+            await Post.LoadAdditionalDataAsync(mixRepoDbRepository, metadataService, cacheService);
         }
         #endregion
     }

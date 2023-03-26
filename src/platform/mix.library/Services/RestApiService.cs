@@ -24,15 +24,16 @@ namespace Mix.Lib.Services
             IHttpContextAccessor httpContextAccessor,
             MixIdentityService identityService,
             UnitOfWorkInfo<TDbContext> uow,
-            IQueueService<MessageQueueModel> queueService)
+            IQueueService<MessageQueueModel> queueService,
+            MixCacheService cacheService)
             : base(httpContextAccessor)
         {
             MixIdentityService = identityService;
             Uow = uow;
-            CacheService = new();
             QueueService = queueService;
             Context = (TDbContext)uow.ActiveDbContext;
             Repository ??= ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(Uow);
+            CacheService = cacheService;
         }
 
         #region Command Handlers

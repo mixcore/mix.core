@@ -93,7 +93,7 @@ namespace Mix.SignalR.Hubs
                 Rooms.Add(roomName, new List<HubUserModel>());
             }
 
-            var users = Rooms[roomName];
+            var users = Rooms[roomName] ?? new();
             if (!users.Any(u => u.ConnectionId == Context.ConnectionId))
             {
                 var user = GetCurrentUser();

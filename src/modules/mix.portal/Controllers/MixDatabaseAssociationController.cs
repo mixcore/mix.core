@@ -15,8 +15,8 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
-            IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
+            IQueueService<MessageQueueModel> queueService, MixCacheService cacheService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService, cacheService)
         {
 
         }

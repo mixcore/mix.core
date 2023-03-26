@@ -9,6 +9,7 @@ using Mix.Queue.Models;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Dtos;
 using Mix.Services.Databases.Lib.Interfaces;
+using Mix.Heart.Services;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -27,8 +28,8 @@ namespace Mix.Services.Databases.Controllers
             UnitOfWorkInfo<MixDbDbContext> uow, 
             IQueueService<MessageQueueModel> queueService, 
             IMixUserDataService metadataService, 
-            TenantUserManager userManager)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
+            TenantUserManager userManager, MixCacheService cacheService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService, cacheService)
         {
             _userDataService = metadataService;
             _userManager = userManager;

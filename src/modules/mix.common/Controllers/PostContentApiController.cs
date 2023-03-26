@@ -16,16 +16,7 @@ namespace Mix.Common.Controllers
     {
         private readonly MixRepoDbRepository _mixRepoDbRepository;
         protected MixCacheService CacheService;
-        public PostContentApiController(
-            IHttpContextAccessor httpContextAccessor,
-            IConfiguration configuration,
-            MixService mixService,
-            TranslatorService translator,
-            MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCmsContext> uow,
-            IQueueService<MessageQueueModel> queueService,
-            MixRepoDbRepository mixRepoDbRepository)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
+        public PostContentApiController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixService mixService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> uow, IQueueService<MessageQueueModel> queueService, MixRepoDbRepository mixRepoDbRepository, MixCacheService cacheService) : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService, cacheService)
         {
             _mixRepoDbRepository = mixRepoDbRepository;
             CacheService = new();

@@ -17,10 +17,10 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IQueueService<MessageQueueModel> queueService)
+            IQueueService<MessageQueueModel> queueService, MixCacheService cacheService)
             : base(MixContentType.Page, identityService, userManager, httpContextAccessor, 
                   configuration, mixService, 
-                  translator, mixIdentityService, cmsUow, queueService)
+                  translator, mixIdentityService, cmsUow, queueService, cacheService)
         {
 
         }

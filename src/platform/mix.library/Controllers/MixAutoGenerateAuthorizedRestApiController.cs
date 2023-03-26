@@ -15,15 +15,7 @@ namespace Mix.Lib.Controllers
         where TEntity : EntityBase<TPrimaryKey>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
-        public MixAutoGenerateAuthorizedRestApiController(
-            IHttpContextAccessor httpContextAccessor,
-            IConfiguration configuration,
-            MixService mixService,
-            TranslatorService translator,
-            MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<TDbContext> uow,
-            IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
+        public MixAutoGenerateAuthorizedRestApiController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixService mixService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService, MixCacheService cacheService) : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService, cacheService)
         {
         }
     }

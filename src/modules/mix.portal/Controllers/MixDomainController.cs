@@ -8,15 +8,7 @@ namespace Mix.Portal.Controllers
     public class MixDomainController
         : MixRestfulApiControllerBase<MixDomainViewModel, MixCmsContext, MixDomain, int>
     {
-        public MixDomainController(
-            IHttpContextAccessor httpContextAccessor,
-            IConfiguration configuration,
-            MixService mixService,
-            TranslatorService translator,
-            MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
-            IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
+        public MixDomainController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixService mixService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> cmsUOW, IQueueService<MessageQueueModel> queueService, MixCacheService cacheService) : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService, cacheService)
         {
 
         }

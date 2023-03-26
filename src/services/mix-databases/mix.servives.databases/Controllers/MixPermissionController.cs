@@ -10,6 +10,7 @@ using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Dtos;
 using Mix.Mixdb.ViewModels;
 using Mix.Services.Databases.Lib.Interfaces;
+using Mix.Heart.Services;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -26,8 +27,8 @@ namespace Mix.Services.Databases.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixDbDbContext> uow, 
             IQueueService<MessageQueueModel> queueService, 
-            IMixPermissionService permissionService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
+            IMixPermissionService permissionService, MixCacheService cacheService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService, cacheService)
         {
             _permissionService = permissionService;
             Repository.IsCache = false;

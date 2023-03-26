@@ -30,7 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddMixCommonServices(executingAssembly, configuration);
             services.AddMixDbContexts();
             services.AddUoWs();
-            services.AddMixCache();
+            services.AddMixCache(configuration);
             services.CustomValidationResponse();
             services.AddHttpClient();
             services.AddLogging();
@@ -74,7 +74,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddMixCommonServices(executingAssembly, configuration);
             services.AddMixDbContexts();
             services.AddUoWs();
-            services.AddMixCache();
+            services.AddMixCache(configuration);
             services.CustomValidationResponse();
             services.AddHttpClient();
             services.AddLogging();

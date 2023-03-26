@@ -35,6 +35,7 @@ namespace Mix.Lib.Helpers
                        .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/google_firebase.json", true, true)
                        .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/smtp.json", true, true)
                        .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/payments.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/redis.json", true, true)
                        .AddEnvironmentVariables();
                })
                 .ConfigureWebHostDefaults(webBuilder =>

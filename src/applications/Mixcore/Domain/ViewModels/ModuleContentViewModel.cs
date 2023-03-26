@@ -69,7 +69,8 @@ namespace Mixcore.Domain.ViewModels
             }
         }
 
-        public async Task LoadData(PagingModel pagingModel, MixRepoDbRepository mixRepoDbRepository, IMixMetadataService metadataService)
+        public async Task LoadData(PagingModel pagingModel, MixRepoDbRepository mixRepoDbRepository, IMixMetadataService metadataService,
+            MixCacheService cacheService)
         {
             await LoadAdditionalDataAsync(mixRepoDbRepository);
             Data = await ModuleDataViewModel.GetRepository(UowInfo).GetPagingAsync(
@@ -80,7 +81,7 @@ namespace Mixcore.Domain.ViewModels
                 pagingModel);
             foreach (var item in Posts.Items)
             {
-                await item.Post.LoadAdditionalDataAsync(mixRepoDbRepository, metadataService);
+                await item.Post.LoadAdditionalDataAsync(mixRepoDbRepository, metadataService, cacheService);
             }
         }
         #endregion
