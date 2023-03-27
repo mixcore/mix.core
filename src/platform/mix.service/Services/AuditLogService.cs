@@ -36,9 +36,12 @@ namespace Mix.Service.Services
             // AND, the most important: keep stream opened
             try
             {
-                using (var reader = new StreamReader(request.BodyReader.AsStream(), Encoding.UTF8, true, 1024, true))
+                if (request.ContentType == null || !request.ContentType.StartsWith("multipart/form-data"))
                 {
-                    bodyStr = reader.ReadToEnd();
+                    using (var reader = new StreamReader(request.BodyReader.AsStream(), Encoding.UTF8, true, 1024, true))
+                    {
+                        bodyStr = reader.ReadToEnd();
+                    }
                 }
             }
             catch

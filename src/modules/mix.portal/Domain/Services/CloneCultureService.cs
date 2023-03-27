@@ -165,10 +165,13 @@ namespace Mix.Portal.Domain.Services
             {
                 foreach (var item in data)
                 {
-                    item.Id = 0;
-                    item.ParentId = leftDic[item.ParentId];
-                    item.ChildId = rightDic[item.ChildId];
-                    await _cmsUow.DbContext.Set<T>().AddAsync(item);
+                    if (leftDic.ContainsKey(item.ParentId) && rightDic.ContainsKey(item.ChildId))
+                    {
+                        item.Id = 0;
+                        item.ParentId = leftDic[item.ParentId];
+                        item.ChildId = rightDic[item.ChildId];
+                        await _cmsUow.DbContext.Set<T>().AddAsync(item);
+                    }
                 }
                 await _cmsUow.DbContext.SaveChangesAsync();
             }

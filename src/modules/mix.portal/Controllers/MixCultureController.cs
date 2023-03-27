@@ -35,7 +35,7 @@ namespace Mix.Portal.Controllers
             var result = await base.CreateHandlerAsync(data, cancellationToken);
             if (result > 0)
             {
-                await _cloneCultureService.CloneDefaultCulture(CurrentTenant.Configurations.DefaultCulture, data.Specificulture, cancellationToken);
+                await _cloneCultureService.CloneDefaultCulture(CurrentTenant.Cultures[0]?.Specificulture, data.Specificulture, cancellationToken);
             }
             return result;
         }

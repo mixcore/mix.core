@@ -131,7 +131,10 @@ namespace Mix.Service.Services
                     Data = obj.ToString(Newtonsoft.Json.Formatting.None),
                     Message = ex == null ? message : ex!.Message
                 };
-                await _logStreamHub.SendMessageAsync(msg);
+                if (GlobalConfigService.Instance.IsLogStream)
+                {
+                    await _logStreamHub.SendMessageAsync(msg);
+                }
             }
         }
 

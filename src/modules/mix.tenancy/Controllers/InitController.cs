@@ -180,7 +180,7 @@ namespace Mix.Tenancy.Controllers
         [HttpPost("import-theme")]
         public async Task<ActionResult<SiteDataViewModel>> ImportThemeAsync([FromBody] SiteDataViewModel siteData)
         {
-            if (!ModelState.IsValid || !GlobalConfigService.Instance.IsInit)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
