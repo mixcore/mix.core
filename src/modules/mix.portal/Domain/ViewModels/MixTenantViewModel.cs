@@ -67,7 +67,7 @@
         {
             Culture.SetCacheService(CacheService);
             Culture.MixTenantId = parent.Id;
-            Culture.SetUowInfo(UowInfo);
+            Culture.SetUowInfo(UowInfo, CacheService);
             await Culture.SaveAsync(cancellationToken);
         }
 
@@ -77,7 +77,7 @@
             {
                 domain.MixTenantId = parent.Id;
                 domain.SetCacheService(CacheService);
-                domain.SetUowInfo(UowInfo);
+                domain.SetUowInfo(UowInfo, CacheService);
                 await domain.SaveAsync(cancellationToken);
             }
         }

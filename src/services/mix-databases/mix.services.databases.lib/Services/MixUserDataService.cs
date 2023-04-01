@@ -103,7 +103,7 @@ namespace Mix.Services.Databases.Lib.Services
             {
                 throw new MixException(MixErrorStatus.Badrequest);
             }
-            address.SetUowInfo(_uow);
+            address.SetUowInfo(_uow, CacheService);
             await address.SaveAsync(cancellationToken);
         }
 

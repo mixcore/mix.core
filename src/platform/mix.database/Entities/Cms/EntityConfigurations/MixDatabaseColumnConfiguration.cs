@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Services;
+using Newtonsoft.Json.Linq;
 
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
@@ -47,6 +48,13 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
                .HasConversion(new EnumToStringConverter<MixDataType>())
                .HasColumnType($"{Config.NString}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
+
+            builder.Property(e => e.Configurations)
+               .HasConversion(
+                   v => v.ToString(Newtonsoft.Json.Formatting.None),
+                   v => JObject.Parse(v ?? "{}"))
+               .IsRequired(false)
+               .HasColumnType($"{Config.String}{Config.MaxLength}");
         }
     }
 }

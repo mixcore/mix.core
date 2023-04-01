@@ -15,8 +15,7 @@ namespace Mix.Lib.ViewModels
 
         public string DefaultValue { get; set; }
         public int MixDatabaseId { get; set; }
-        [JsonIgnore]
-        public string Configurations { get; set; }
+        public JObject Configurations { get; set; }
         public ColumnConfigurations ColumnConfigurations { get; set; }
         #endregion
 
@@ -41,13 +40,7 @@ namespace Mix.Lib.ViewModels
         public override Task<MixDatabaseColumn> ParseEntity(CancellationToken cancellationToken = default)
         {
             ColumnConfigurations ??= new();
-            Configurations = JsonConvert.SerializeObject(
-                ColumnConfigurations,
-                new JsonSerializerSettings
-                {
-                    NullValueHandling = NullValueHandling.Ignore
-                });
-
+            Configurations = ReflectionHelper.ParseObject(ColumnConfigurations);
             return base.ParseEntity(cancellationToken);
         }
 
@@ -55,7 +48,7 @@ namespace Mix.Lib.ViewModels
         {
             base.ParseView(sourceObject, cancellationToken);
             ColumnConfigurations = Configurations != null
-                        ? JsonConvert.DeserializeObject<ColumnConfigurations>(Configurations)
+                        ? Configurations.ToObject<ColumnConfigurations>()
                         : new();
         }
 

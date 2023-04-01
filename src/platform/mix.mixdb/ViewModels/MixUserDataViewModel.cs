@@ -65,7 +65,7 @@ namespace Mix.Mixdb.ViewModels
             {
                 foreach (var item in Addresses)
                 {
-                    item.SetUowInfo(UowInfo);
+                    item.SetUowInfo(UowInfo, CacheService);
                     item.SysUserDataId = parentEntity.Id;
                     await item.SaveAsync(cancellationToken);
                 }

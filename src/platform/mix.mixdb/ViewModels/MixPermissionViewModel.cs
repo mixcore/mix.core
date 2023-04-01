@@ -45,7 +45,7 @@ namespace Mix.Mixdb.ViewModels
             {
                 foreach (var endpoint in Endpoints)
                 {
-                    endpoint.SetUowInfo(UowInfo);
+                    endpoint.SetUowInfo(UowInfo, CacheService);
                     endpoint.SysPermissionId = parentEntity.Id;
                     endpoint.CreatedBy = ModifiedBy;
                     endpoint.ModifiedBy = ModifiedBy;

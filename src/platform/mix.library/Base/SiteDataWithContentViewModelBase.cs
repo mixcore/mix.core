@@ -59,7 +59,7 @@ namespace Mix.Lib.Base
             {
                 foreach (var item in Contents)
                 {
-                    item.SetUowInfo(UowInfo);
+                    item.SetUowInfo(UowInfo, CacheService);
                     item.ParentId = parentEntity.Id;
                     await item.SaveAsync(cancellationToken);
                 }

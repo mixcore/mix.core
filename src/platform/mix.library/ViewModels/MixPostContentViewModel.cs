@@ -46,7 +46,7 @@ namespace Mix.Lib.ViewModels
                 MixTenantId = MixTenantId
             };
 
-            parent.SetUowInfo(UowInfo);
+            parent.SetUowInfo(UowInfo, CacheService);
             return await parent.SaveAsync(cancellationToken);
         }
 

@@ -207,7 +207,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             var currentItem = cart.OrderItems.FirstOrDefault(m => m.Id == itemId);
             if (currentItem != null)
             {
-                currentItem.SetUowInfo(_uow);
+                currentItem.SetUowInfo(_uow, CacheService);
                 await currentItem.DeleteAsync(cancellationToken);
                 cart.OrderItems.Remove(currentItem);
             }
@@ -267,7 +267,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
         private async Task FilterCheckoutCartAsync(OrderViewModel checkoutCart, OrderViewModel myCart)
         {
-            myCart.SetUowInfo(_uow);
+            myCart.SetUowInfo(_uow, CacheService);
             myCart.OrderItems = checkoutCart.OrderItems.Where(m => !m.IsActive).ToList();
             checkoutCart.OrderItems = checkoutCart.OrderItems.Where(m => m.IsActive).ToList();
             var skus = checkoutCart.OrderItems.Select(m => m.Sku).ToList();
@@ -287,7 +287,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             myCart.Calculate();
 
-            checkoutCart.SetUowInfo(_uow);
+            checkoutCart.SetUowInfo(_uow, CacheService);
             checkoutCart.Id = _uow.DbContext.OrderDetail.Max(m => m.Id) + 1;
             checkoutCart.LastModified = DateTime.UtcNow;
             checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;

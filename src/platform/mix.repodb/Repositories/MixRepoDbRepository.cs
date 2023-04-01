@@ -302,16 +302,11 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<long> InsertAsync(JObject entity)
+        public async Task<long> InsertAsync(JObject obj)
         {
             try
             {
                 BeginTransaction();
-                JObject obj = new JObject();
-                foreach (var pr in entity.Properties())
-                {
-                    obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
-                }
                 var dicObj = obj.ToObject<Dictionary<string, object>>();
                 var fields = dicObj!.Keys.Select(m => new Field(m)).ToList();
                 var result = await _connection.InsertAsync<long>(

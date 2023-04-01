@@ -8,6 +8,7 @@ using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Service.Interfaces;
 using Mix.Shared.Models;
+using Mix.Shared.Services;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
@@ -170,9 +171,21 @@ namespace Mix.Portal.Controllers
         {
             JObject obj = new JObject();
             string username = _idService.GetClaim(User, MixClaims.Username);
+            var database = await GetMixDatabase();
+            var encryptedColumnNames = database.Columns
+                .Where(m => m.ColumnConfigurations.IsEncrypt)
+                .Select(c => c.SystemName)
+                .ToList();
             foreach (var pr in dto.Properties())
             {
-                obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
+                if (encryptedColumnNames.Contains(pr.Name))
+                {
+                    obj.Add(new JProperty(pr.Name.ToTitleCase(), AesEncryptionHelper.EncryptString(pr.Value.ToString(), GlobalConfigService.Instance.AppSettings.ApiEncryptKey)));
+                }
+                else
+                {
+                    obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
+                }
             }
             if (!obj.ContainsKey(IdFieldName))
             {
@@ -210,7 +223,7 @@ namespace Mix.Portal.Controllers
             }
             var id = await _repository.InsertAsync(obj);
             var result = await _repository.GetSingleAsync(id);
-            return Ok(ReflectionHelper.ParseObject(result));
+            return result != null ? Ok(ReflectionHelper.ParseObject(result)) : Ok(obj);
         }
 
         [PreventDuplicateFormSubmission]

@@ -43,7 +43,7 @@ namespace Mix.Portal.Domain.Services
             var template = await CreateTemplate(name, appFolder, app.BaseRoute);
             if (template != null)
             {
-                app.SetUowInfo(_cmsUow);
+                app.SetUowInfo(_cmsUow, CacheService);
                 app.BaseRoute ??= name;
                 app.BaseHref = appFolder;
                 app.MixTenantId = CurrentTenant.Id;

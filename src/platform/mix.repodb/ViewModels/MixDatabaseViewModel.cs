@@ -82,7 +82,7 @@ namespace Mix.RepoDb.ViewModels
 
                 foreach (var item in Columns)
                 {
-                    item.SetUowInfo(UowInfo);
+                    item.SetUowInfo(UowInfo, CacheService);
                     item.MixDatabaseId = parentEntity.Id;
                     item.MixDatabaseName = parentEntity.SystemName;
                     await item.SaveAsync(cancellationToken);
@@ -93,7 +93,7 @@ namespace Mix.RepoDb.ViewModels
             {
                 foreach (var item in Relationships)
                 {
-                    item.SetUowInfo(UowInfo);
+                    item.SetUowInfo(UowInfo, CacheService);
                     item.ParentId = parentEntity.Id;
                     item.SourceDatabaseName = parentEntity.SystemName;
                     await item.SaveAsync(cancellationToken);
@@ -109,7 +109,7 @@ namespace Mix.RepoDb.ViewModels
             //await MixDatabaseColumnViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.MixDatabaseId == Id);
             foreach (var col in Columns)
             {
-                col.SetUowInfo(UowInfo);
+                col.SetUowInfo(UowInfo, CacheService);
                 await col.DeleteAsync(cancellationToken);
             }
 

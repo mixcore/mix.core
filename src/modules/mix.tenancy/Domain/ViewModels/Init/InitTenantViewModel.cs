@@ -100,14 +100,14 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
         private async Task SaveCultureAsync(MixTenant parent, CancellationToken cancellationToken = default)
         {
             Culture.MixTenantId = parent.Id;
-            Culture.SetUowInfo(UowInfo);
+            Culture.SetUowInfo(UowInfo, CacheService);
             await Culture.SaveAsync(cancellationToken);
         }
 
         private async Task SaveDomainAsync(MixTenant parent)
         {
             Domain.MixTenantId = parent.Id;
-            Domain.SetUowInfo(UowInfo);
+            Domain.SetUowInfo(UowInfo, CacheService);
             await Domain.SaveAsync();
         }
 

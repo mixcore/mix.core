@@ -87,7 +87,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         {
             foreach (var item in OrderItems)
             {
-                item.SetUowInfo(UowInfo);
+                item.SetUowInfo(UowInfo, CacheService);
                 item.OrderDetailId = parentEntity.Id;
                 await item.SaveAsync(cancellationToken);
             }
@@ -97,7 +97,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         {
             foreach (var item in OrderItems)
             {
-                item.SetUowInfo(UowInfo);
+                item.SetUowInfo(UowInfo, CacheService);
                 await item.DeleteAsync(cancellationToken);
             }
             await base.DeleteHandlerAsync(cancellationToken);

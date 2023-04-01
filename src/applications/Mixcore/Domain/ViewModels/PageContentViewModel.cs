@@ -107,7 +107,7 @@ namespace Mixcore.Domain.ViewModels
             Posts = await PagePostAssociationViewModel.GetRepository(UowInfo, CacheService).GetPagingAsync(m => m.ParentId == Id, pagingModel);
             foreach (var item in Posts.Items)
             {
-                item.SetUowInfo(UowInfo);
+                item.SetUowInfo(UowInfo, CacheService);
                 await item.LoadPost(mixRepoDbRepository, metadataService, cacheService);
             }
         }

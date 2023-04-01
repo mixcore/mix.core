@@ -1,5 +1,7 @@
 ﻿
 
+using Newtonsoft.Json.Linq;
+
 namespace Mix.Database.Entities.Cms
 {
     public class MixDatabaseColumn : EntityBase<int>
@@ -8,7 +10,7 @@ namespace Mix.Database.Entities.Cms
         public string DisplayName { get; set; }
         public string MixDatabaseName { get; set; }
         public MixDataType DataType { get; set; }
-        public string Configurations { get; set; }
+        public JObject Configurations { get; set; }
         public int? ReferenceId { get; set; }
 
         public string DefaultValue { get; set; }

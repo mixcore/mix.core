@@ -84,7 +84,7 @@ namespace Mix.Lib.ViewModels
             {
                 foreach (var item in UrlAliases)
                 {
-                    item.SetUowInfo(UowInfo);
+                    item.SetUowInfo(UowInfo, CacheService);
                     item.MixTenantId = MixTenantId;
                     item.SourceContentId = Id;
                     item.Type = MixUrlAliasType.Page;

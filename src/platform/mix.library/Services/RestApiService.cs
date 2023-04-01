@@ -52,8 +52,7 @@ namespace Mix.Lib.Services
                     PropertyValue = CurrentTenant?.Id
                 });
             }
-            data.SetUowInfo(Uow);
-            data.SetCacheService(CacheService);
+            data.SetUowInfo(Uow, CacheService);
             data.CreatedDateTime = DateTime.UtcNow;
             data.CreatedBy = MixIdentityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username);
             data.ModifiedBy = data.CreatedBy;
@@ -70,8 +69,7 @@ namespace Mix.Lib.Services
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Invalid Id");
             }
-            data.SetUowInfo(Uow);
-            data.SetCacheService(CacheService);
+            data.SetUowInfo(Uow, CacheService);
             await data.SaveAsync(cancellationToken);
             await CacheService.RemoveCacheAsync(id, Repository.CacheFolder, cancellationToken);
             QueueService.PushQueue(MixQueueTopics.MixViewModelChanged, MixRestAction.Put.ToString(), data);
@@ -80,8 +78,7 @@ namespace Mix.Lib.Services
         public virtual async Task DeleteHandler(TView data, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            data.SetUowInfo(Uow);
-            data.SetCacheService(CacheService);
+            data.SetUowInfo(Uow, CacheService);
             await data.DeleteAsync(cancellationToken);
             await CacheService.RemoveCacheAsync(data.Id.ToString(), Repository.CacheFolder, cancellationToken);
             QueueService.PushQueue(MixQueueTopics.MixViewModelChanged, MixRestAction.Delete.ToString(), data);
@@ -91,8 +88,7 @@ namespace Mix.Lib.Services
         public virtual async Task PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            data.SetUowInfo(Uow);
-            data.SetCacheService(CacheService);
+            data.SetUowInfo(Uow, CacheService);
             await data.SaveFieldsAsync(properties, cancellationToken);
             await CacheService.RemoveCacheAsync(id.ToString(), Repository.CacheFolder, cancellationToken);
             QueueService.PushQueue(MixQueueTopics.MixViewModelChanged, MixRestAction.Patch.ToString(), data);
@@ -103,7 +99,7 @@ namespace Mix.Lib.Services
             cancellationToken.ThrowIfCancellationRequested();
             foreach (var item in data)
             {
-                item.SetUowInfo(Uow);
+                item.SetUowInfo(Uow, CacheService);
                 await item.SaveAsync(cancellationToken);
             }
         }
