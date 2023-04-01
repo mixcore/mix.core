@@ -1,4 +1,6 @@
-﻿using Mix.Shared.Models;
+﻿using Mix.Heart.Helpers;
+using Mix.Shared.Models;
+using Newtonsoft.Json.Linq;
 
 namespace Mix.Shared.Commands
 {
@@ -13,18 +15,18 @@ namespace Mix.Shared.Commands
             LogId = id;
             UserName = userName;
             Request = request;
-            Exception = ex;
+            Exception = ReflectionHelper.ParseObject(ex);
         } public LogAuditLogCommand(Guid id, int responseStatusCode, Exception ex = null)
         {
             LogId = id;
             StatusCode = responseStatusCode;
-            Exception = ex;
+            Exception = ReflectionHelper.ParseObject(ex);
         }
 
         public Guid LogId { get; set; }
         public int StatusCode { get; set; }
         public string UserName { get; set; }
         public ParsedRequestModel Request { get; set; }
-        public Exception Exception { get; set; }
+        public JObject Exception { get; set; }
     }
 }

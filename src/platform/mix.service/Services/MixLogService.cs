@@ -18,7 +18,7 @@ namespace Mix.Service.Services
             _logStreamHub = new LogStreamHubClientService(enpointSrv);
         }
 
-        public static async Task LogExceptionAsync(Exception? ex = null, MixErrorStatus? status = null, string? message = null)
+        public static async Task LogExceptionAsync(Exception? ex = null, MixErrorStatus? status = MixErrorStatus.ServerError, string? message = null)
         {
             Console.Error.WriteLine(ex);
 

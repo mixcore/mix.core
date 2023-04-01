@@ -99,23 +99,29 @@ namespace Mix.Queue.Engines
             return ServiceScope.ServiceProvider.GetRequiredService<T>();
         }
 
-        public Task MessageHandler(MessageQueueModel data)
+        public async Task MessageHandler(MessageQueueModel data)
         {
 
             try
             {
                 if (_topicId != data.TopicId)
                 {
-                    return Task.CompletedTask;
+                    return;
                 }
 
                 CacheService = GetScopedService<MixCacheService>();
-                return Handler(data);
+                await Handler(data);
             }
             catch (Exception ex)
             {
-                throw new MixException(Heart.Enums.MixErrorStatus.ServerError, ex);
+                await HandleException(ex);
             }
+        }
+
+        public virtual Task HandleException(Exception ex)
+        {
+            Console.Error.WriteLine(ex);
+            return Task.CompletedTask;
         }
 
         public abstract Task Handler(MessageQueueModel model);

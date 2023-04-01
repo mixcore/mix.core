@@ -1,5 +1,6 @@
 {
   "IsInit": true,
+  "IsLogStream": false,
   "IsEncryptApi": false,
   "EnableOcelot": true,
   "PortalThemeSettings": null,

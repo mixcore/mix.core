@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.AuditLog;
 using Mix.Heart.Enums;
+using Mix.Heart.Exceptions;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Service.Interfaces;
@@ -72,6 +73,7 @@ namespace Mix.Service.Services
                     var log = new AuditLog
                     {
                         Id = id,
+                        Success = true,
                         Body = request.Body,
                         CreatedDateTime = DateTime.UtcNow,
                         RequestIp = request.RequestIp,
@@ -89,11 +91,11 @@ namespace Mix.Service.Services
             }
             catch (Exception ex)
             {
-                MixLogService.LogExceptionAsync(ex).GetAwaiter().GetResult();
+                await MixLogService.LogExceptionAsync(ex);
             }
         }
 
-        public async Task SaveResponseAsync(Guid id, int statusCode, Exception ex)
+        public async Task SaveResponseAsync(Guid id, int statusCode, JObject ex)
         {
             try
             {
@@ -118,7 +120,7 @@ namespace Mix.Service.Services
                     }
 
                     request.Success = 200 <= statusCode && statusCode <= 299;
-                    request.Exception = ex is not null ? JObject.FromObject(ex).ToString(Newtonsoft.Json.Formatting.None) : null;
+                    request.Exception = ex is not null ? ex.ToString(Newtonsoft.Json.Formatting.None) : null;
                     dbContext.Update(request);
                     await dbContext.SaveChangesAsync();
                 }
@@ -146,7 +148,16 @@ namespace Mix.Service.Services
         public void LogResponse(Guid id, HttpResponse response, Exception? ex)
         {
             // Log response after executing the action
-            var cmd = new LogAuditLogCommand(id, response.StatusCode, ex);
+            int status = response.StatusCode;
+            if (ex!= null)
+            {
+                status = 500;
+                if (ex is MixException exception)
+                {
+                    status = (int)exception.Status;
+                }
+            }
+            var cmd = new LogAuditLogCommand(id, status, ex);
             _queueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.AuditLog, cmd);
         }
 

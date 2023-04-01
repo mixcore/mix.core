@@ -38,8 +38,7 @@ namespace Mix.Lib.Subscribers
                     var cmd = model.ParseData<LogAuditLogCommand>();
                     if (cmd.Request!= null)
                     {
-                        await AuditLogService.SaveRequestAsync(cmd.LogId, cmd.UserName, cmd.Request);
-
+                            await AuditLogService.SaveRequestAsync(cmd.LogId, cmd.UserName, cmd.Request);
                     }
                     else
                     {
@@ -52,6 +51,11 @@ namespace Mix.Lib.Subscribers
 
                     break;
             }
+        }
+
+        public override Task HandleException(Exception ex)
+        {
+            return MixLogService.LogExceptionAsync(ex);
         }
 
         private async Task SendMail(MessageQueueModel model)
