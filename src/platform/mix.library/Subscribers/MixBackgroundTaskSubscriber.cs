@@ -44,7 +44,6 @@ namespace Mix.Lib.Subscribers
                     {
                         await AuditLogService.SaveResponseAsync(cmd.LogId, cmd.StatusCode, cmd.Exception);
                     }
-                    await MixLogService.LogMessageAsync(cmd.UserName, data: cmd);
                     break;
                 case MixQueueActions.SendMail:
                     await SendMail(model);
