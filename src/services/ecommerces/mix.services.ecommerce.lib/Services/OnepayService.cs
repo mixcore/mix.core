@@ -120,7 +120,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             if (vm == null)
             {
                 OnepayTransactionRequest onepayRequest = new();
-                ReflectionHelper.MapObject(request, onepayRequest);
+                ReflectionHelper.Map(request, onepayRequest);
                 vm = new OnepayTransactionRequestViewModel(onepayRequest, _cmsUow);
             }
             vm.PaymentStatus = paymentStatus;

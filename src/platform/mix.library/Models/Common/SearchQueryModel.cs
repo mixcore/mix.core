@@ -39,7 +39,7 @@ namespace Mix.Lib.Models.Common
 
             if (request != null)
             {
-                ReflectionHelper.MapObject(request, this);
+                ReflectionHelper.Map(request, this);
 
                 PagingData = new PagingRequestModel()
                 {

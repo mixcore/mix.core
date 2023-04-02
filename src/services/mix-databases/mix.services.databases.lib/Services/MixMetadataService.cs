@@ -92,7 +92,7 @@ namespace Mix.Services.Databases.Lib.Services
                 MixTenantId = CurrentTenant.Id,
                 CreatedBy = _identityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username)
             };
-            ReflectionHelper.MapObject(dto, metadata);
+            ReflectionHelper.Map(dto, metadata);
             await metadata.SaveAsync(cancellationToken);
             return metadata;
         }
@@ -106,7 +106,7 @@ namespace Mix.Services.Databases.Lib.Services
                 MixTenantId = CurrentTenant.Id,
                 CreatedBy = _identityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username)
             };
-            ReflectionHelper.MapObject(dto, association);
+            ReflectionHelper.Map(dto, association);
             await association.SaveAsync(cancellationToken);
         }
 

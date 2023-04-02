@@ -3,5 +3,6 @@
     public interface IMixCmsService
     {
         public string GetAssetFolder(string culture, string domain);
+        public MixTenantSystemModel GetCurrentTenant();
     }
 }

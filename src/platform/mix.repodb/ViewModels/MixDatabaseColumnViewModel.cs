@@ -1,9 +1,11 @@
 ﻿using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
+using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Mix.Shared.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Mix.RepoDb.ViewModels
 {
@@ -19,7 +21,7 @@ namespace Mix.RepoDb.ViewModels
 
         public string DefaultValue { get; set; }
         public int MixDatabaseId { get; set; }
-        public string Configurations { get; set; }
+        public JObject Configurations { get; set; }
         public ColumnConfigurations ColumnConfigurations { get; set; } = new();
         #endregion
 
@@ -45,12 +47,7 @@ namespace Mix.RepoDb.ViewModels
             cancellationToken.ThrowIfCancellationRequested();
 
             ColumnConfigurations ??= new();
-            Configurations = JsonConvert.SerializeObject(
-                ColumnConfigurations,
-                new JsonSerializerSettings
-                {
-                    NullValueHandling = NullValueHandling.Ignore
-                });
+            Configurations = ReflectionHelper.ParseObject(ColumnConfigurations);
 
             return base.ParseEntity(cancellationToken);
         }
@@ -60,8 +57,8 @@ namespace Mix.RepoDb.ViewModels
             cancellationToken.ThrowIfCancellationRequested();
             base.ParseView(sourceObject, cancellationToken);
             ColumnConfigurations = Configurations != null
-                        ? JsonConvert.DeserializeObject<ColumnConfigurations>(Configurations)!
-                        : new();
+                       ? Configurations.ToObject<ColumnConfigurations>()
+                       : new();
         }
 
         #endregion

@@ -10,7 +10,7 @@ namespace Mix.Lib.Dtos
         }
         public SearchPostDto(SearchRequestDto req, HttpRequest request)
         {
-            ReflectionHelper.MapObject(req, this);
+            ReflectionHelper.Map(req, this);
             Categories = request.Query[MixRequestQueryKeywords.Categories];
             Tags = request.Query[MixRequestQueryKeywords.Tag];
             if (Enum.TryParse(request.Query["compareKind"], out MixCompareOperator compareKind))

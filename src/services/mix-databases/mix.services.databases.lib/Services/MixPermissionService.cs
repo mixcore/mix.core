@@ -51,7 +51,7 @@ namespace Mix.Services.Databases.Lib.Services
                 MixTenantId = CurrentTenant.Id,
                 CreatedBy = _identityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username)
             };
-            ReflectionHelper.MapObject(dto, userPermission);
+            ReflectionHelper.Map(dto, userPermission);
             await userPermission.SaveAsync();
         }
     }

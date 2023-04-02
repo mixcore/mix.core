@@ -25,7 +25,7 @@
         public string SystemName { get; set; }
         public string ClassName { get; set; }
         public int? PageSize { get; set; }
-        public MixModuleType? Type { get; set; }
+        public MixModuleType Type { get; set; }
         public string SimpleDataColumns { get; set; }
 
         public List<ModuleColumnModel> Columns { get; set; }

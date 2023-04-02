@@ -52,7 +52,7 @@ namespace Mix.Lib.ViewModels
 
         public MixUserViewModel(MixUser user, UnitOfWorkInfo<MixCmsContext> uow)
         {
-            ReflectionHelper.Mapping(user, this);
+            ReflectionHelper.Map(user, this);
             _cmsUow = uow;
         }
 

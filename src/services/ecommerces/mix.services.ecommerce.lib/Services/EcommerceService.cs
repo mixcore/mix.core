@@ -160,7 +160,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                     MixTenantId = CurrentTenant.Id,
                     Price = product.Price.Value
                 };
-                ReflectionHelper.MapObject(item, orderItem);
+                ReflectionHelper.Map(item, orderItem);
                 orderItem.Calculate();
                 cart.OrderItems.Add(orderItem);
             }

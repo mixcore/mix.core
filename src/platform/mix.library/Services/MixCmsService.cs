@@ -21,5 +21,10 @@ namespace Mix.Lib.Services
                 $"{MixFolders.SiteContentAssetsFolder}/" +
                 $"{_configService.GetConfig(MixConfigurationNames.ThemeFolder, culture)}";
         }
+
+        public MixTenantSystemModel GetCurrentTenant()
+        {
+            return CurrentTenant;
+        }
     }
 }

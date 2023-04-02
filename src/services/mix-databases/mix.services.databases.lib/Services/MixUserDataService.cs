@@ -91,7 +91,7 @@ namespace Mix.Services.Databases.Lib.Services
                 SysUserDataId = userData.Id,
                 CreatedBy = user.UserName
             };
-            ReflectionHelper.MapObject(dto, address);
+            ReflectionHelper.Map(dto, address);
             await address.SaveAsync(cancellationToken);
             return userData;
         }

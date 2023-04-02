@@ -29,14 +29,10 @@ namespace Mix.Identity.ViewModels
 
         #region Models
 
-        public string ClientId { get; set; }
-
+        public Guid ClientId { get; set; }
         public string Email { get; set; }
-
         public string Username { get; set; }
-
         public DateTime ExpiresUtc { get; set; }
-
         public DateTime IssuedUtc { get; set; }
 
         #endregion Models
