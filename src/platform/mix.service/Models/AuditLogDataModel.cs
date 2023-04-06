@@ -16,7 +16,7 @@ namespace Mix.Service.Models
         public string RequestIp { get; set; }
         public string Endpoint { get; set; }
         public string Method { get; set; }
-        public string Body { get; set; }
+        public JObject Body { get; set; }
         public JObject Exception { get; set; }
         public string CreatedBy { get; set; }
 
@@ -34,9 +34,9 @@ namespace Mix.Service.Models
             Body = GetBodyAsync(context.Request);
         }
 
-        private static string GetBodyAsync(HttpRequest request)
+        private JObject GetBodyAsync(HttpRequest request)
         {
-            var bodyStr = string.Empty;
+            string bodyStr = null;
 
             // Arguments: Stream, Encoding, detect encoding, buffer size 
             // AND, the most important: keep stream opened
@@ -58,7 +58,7 @@ namespace Mix.Service.Models
                 Console.WriteLine($"{nameof(AuditLogService)}: Cannot read body request");
             }
 
-            return bodyStr;
+            return JObject.Parse(string.IsNullOrEmpty(bodyStr) ? "{}" : bodyStr);
         }
 
     }

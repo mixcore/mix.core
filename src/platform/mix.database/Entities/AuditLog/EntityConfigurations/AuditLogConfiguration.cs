@@ -12,6 +12,13 @@ namespace Mix.Database.Entities.AuditLog.EntityConfigurations
 
         public void Configure(EntityTypeBuilder<AuditLog> builder)
         {
+            builder.Property(e => e.Body)
+             .HasConversion(
+                 v => v.ToString(Newtonsoft.Json.Formatting.None),
+                 v => JObject.Parse(v ?? "{}"))
+             .IsRequired(false)
+             .HasColumnType("ntext");
+            
             builder.Property(e => e.Exception)
              .HasConversion(
                  v => v.ToString(Newtonsoft.Json.Formatting.None),

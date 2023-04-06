@@ -11,6 +11,10 @@ using Mix.Queue.Models;
 using Mix.Service.Commands;
 using Mix.Service.Interfaces;
 using Mix.Service.Models;
+using Mix.Shared.Services;
+using Mix.SignalR.Enums;
+using Mix.SignalR.Interfaces;
+using Mix.SignalR.Models;
 using Newtonsoft.Json.Linq;
 using System.Text;
 
@@ -18,14 +22,16 @@ namespace Mix.Service.Services
 {
     public class AuditLogService : IAuditLogService
     {
+        private readonly ILogStreamHubClientService _logStreamHub;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IQueueService<MessageQueueModel> _queueService;
         private AuditLogDbContext _dbContext;
 
-        public AuditLogService(IServiceScopeFactory serviceScopeFactory, IQueueService<MessageQueueModel> queueService)
+        public AuditLogService(IServiceScopeFactory serviceScopeFactory, IQueueService<MessageQueueModel> queueService, ILogStreamHubClientService logStreamHub)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _queueService = queueService;
+            _logStreamHub = logStreamHub;
         }
 
         public async Task SaveRequestAsync(AuditLogDataModel request)
@@ -54,11 +60,8 @@ namespace Mix.Service.Services
 
                     _dbContext.AuditLog.Add(log);
                     await _dbContext.SaveChangesAsync();
-
-                    if (request.Exception != null)
-                    {
-                        await MixLogService.LogMessageAsync(request.Endpoint, request.Exception, msgType: SignalR.Enums.MessageType.Error);
-                    }
+                    var msgType = request.Exception == null ? MessageType.Success : MessageType.Error;
+                    await SendMessage(request.Endpoint, request.Exception ?? request.Body, msgType: msgType);
                 }
             }
             catch (Exception ex)
@@ -101,7 +104,23 @@ namespace Mix.Service.Services
             return bodyStr;
         }
 
-
+        private async Task SendMessage(string? message, object? data = default, Exception? ex = null, MessageType msgType = MessageType.Info)
+        {
+            if (GlobalConfigService.Instance.IsLogStream)
+            {
+                var obj = ReflectionHelper.ParseObject(data ?? ex);
+                SignalRMessageModel msg = new()
+                {
+                    Action = MessageAction.NewMessage,
+                    Type = msgType,
+                    Title = message,
+                    From = new("Log Stream Service"),
+                    Data = obj?.ToString(Newtonsoft.Json.Formatting.None),
+                    Message = ex == null ? message : ex!.Message
+                };
+                await _logStreamHub.SendMessageAsync(msg);
+            }
+        }
 
         #endregion
     }

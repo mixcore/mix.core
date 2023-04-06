@@ -1,4 +1,5 @@
-﻿using Mix.Shared.Services;
+﻿using Microsoft.AspNetCore.Http;
+using Mix.Shared.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;

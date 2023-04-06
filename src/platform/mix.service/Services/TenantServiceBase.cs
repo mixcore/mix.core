@@ -3,7 +3,6 @@ using Mix.Constant.Constants;
 using Mix.Heart.Services;
 using Mix.Service.Models;
 using Mix.Shared.Extensions;
-
 namespace Mix.Service.Services
 {
     public abstract class TenantServiceBase

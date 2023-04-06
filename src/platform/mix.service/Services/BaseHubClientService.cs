@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR.Client;
+using Mix.Constant.Constants;
+using Mix.Service.Models;
 using Mix.Shared.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
 using System;
 using System.Threading.Tasks;
+using Mix.Shared.Extensions;
+using System.Drawing.Printing;
 
 namespace Mix.Service.Services
 {
@@ -66,7 +71,6 @@ namespace Mix.Service.Services
             }
 
         }
-
         private void Init()
         {
             if (!string.IsNullOrEmpty(MixEndpointService.Messenger))

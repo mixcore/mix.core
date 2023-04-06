@@ -1,4 +1,5 @@
-﻿using Mix.Heart.Enums;
+﻿using Microsoft.AspNetCore.Http;
+using Mix.Heart.Enums;
 using Mix.Heart.Helpers;
 using Mix.Shared.Services;
 using Mix.SignalR.Enums;
@@ -11,11 +12,9 @@ namespace Mix.Service.Services
 {
     public class MixLogService
     {
-        private static readonly ILogStreamHubClientService _logStreamHub;
         static MixLogService()
         {
             MixEndpointService enpointSrv = new();
-            _logStreamHub = new LogStreamHubClientService(enpointSrv);
         }
 
         public static async Task LogExceptionAsync(Exception? ex = null, MixErrorStatus? status = MixErrorStatus.ServerError, string? message = null)
@@ -60,36 +59,6 @@ namespace Mix.Service.Services
             {
                 Console.Write($"Cannot write log file {filePath}");
                 // File invalid
-            }
-            finally
-            {
-                await SendMessage(message, ex: ex, msgType: MessageType.Error);
-            }
-        }
-
-        public static async Task LogMessageAsync(string message, object? data = default, MessageType msgType = MessageType.Info)
-        {
-            await SendMessage(message, data, msgType: msgType);
-        }
-
-        private static async Task SendMessage(string? message, object? data = default, Exception? ex = null, MessageType msgType = MessageType.Info)
-        {
-            if (GlobalConfigService.Instance.IsLogStream)
-            {
-                var obj = ReflectionHelper.ParseObject(data ?? ex);
-                if (obj != null)
-                {
-                    SignalRMessageModel msg = new()
-                    {
-                        Action = MessageAction.NewMessage,
-                        Type = msgType,
-                        Title = message,
-                        From = new("Log Stream Service"),
-                        Data = obj.ToString(Newtonsoft.Json.Formatting.None),
-                        Message = ex == null ? message : ex!.Message
-                    };
-                    await _logStreamHub.SendMessageAsync(msg);
-                }
             }
         }
 
