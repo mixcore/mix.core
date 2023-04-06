@@ -97,8 +97,11 @@ namespace Mix.SignalR.Hubs
             if (!users.Any(u => u.ConnectionId == Context.ConnectionId))
             {
                 var user = GetCurrentUser();
-                users.Add(user);
-                Rooms[roomName] = users;
+                if (user != null)
+                {
+                    users.Add(user);
+                    Rooms[roomName] = users;
+                }
                 await SendMessageToCaller(new(user) { Action = MessageAction.MyConnection });
                 await SendMessageToCaller(new(users) { Action = MessageAction.MemberList });
                 await SendGroupMessage(new(user) { Action = MessageAction.NewMember }, roomName);

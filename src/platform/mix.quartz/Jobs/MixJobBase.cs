@@ -1,7 +1,5 @@
 ﻿using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
-using Mix.Shared.Commands;
-using Mix.Shared.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -25,7 +23,6 @@ namespace Mix.Quartz.Jobs
         {
             try
             {
-                LogJobData(context);
                 return ExecuteHandler(context);
             }
             catch (Exception ex)
@@ -33,14 +30,6 @@ namespace Mix.Quartz.Jobs
                 Console.WriteLine(ex);
                 return Task.CompletedTask;
             }
-        }
-
-        private void LogJobData(IJobExecutionContext context)
-        {
-            var request = new ParsedRequestModel("localhost", JobName, "Quartz", context.Trigger.JobDataMap.GetString("data"));
-            var cmd = new LogAuditLogCommand(Guid.NewGuid(), JobName, request);
-            QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.AuditLog, cmd);
-
         }
 
         public string JobName { get; set; }

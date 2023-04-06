@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Mix.Quartz.Enums;
 using Mix.Quartz.Jobs;
 using Mix.Quartz.Models;
+using NuGet.Packaging.Signing;
 
 namespace Mix.Scheduler.Jobs
 {
@@ -37,9 +38,9 @@ namespace Mix.Scheduler.Jobs
                 try
                 {
                     var now = DateTime.UtcNow;
-                    var ping = await _httpService.GetStringAsync($"{domain.TrimEnd('/')}/api/v2/rest/shared/ping");
-
-                    Console.WriteLine($"Ping at {now}: {(DateTime.Parse(ping) - now).TotalMilliseconds}");
+                    var ping = await _httpService.GetStringAsync($"{domain.TrimEnd('/')}");
+                    
+                    Console.WriteLine($"Ping at {now}: {(DateTime.Now - now).TotalMilliseconds}");
                 }
                 catch (Exception ex)
                 {

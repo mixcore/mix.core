@@ -1,4 +1,5 @@
-﻿using Mix.Heart.Services;
+﻿using Mix.Database.Entities.AuditLog.EntityConfigurations;
+using Mix.Heart.Services;
 
 namespace Mix.Database.Entities.AuditLog
 {
@@ -11,7 +12,10 @@ namespace Mix.Database.Entities.AuditLog
             string cnn = $"Data Source={MixFolders.MixAuditLogFolder}/auditlog_{DateTime.Now.ToString("MM_yyyy")}.db";
             optionsBuilder.UseSqlite(cnn);
         }
-
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration<AuditLog>(new AuditLogConfiguration());
+        }
         public virtual DbSet<AuditLog> AuditLog { get; set; }
 
     }

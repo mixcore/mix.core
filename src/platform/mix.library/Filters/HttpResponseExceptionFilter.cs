@@ -11,43 +11,44 @@ namespace Mix.Lib.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            if (context.Exception is MixException exception)
+            if (context.Exception != null)
             {
-                context.Result = exception.Status switch
+
+                var auditlogData = context.HttpContext.RequestServices.GetService(typeof(AuditLogDataModel)) as AuditLogDataModel;
+                auditlogData.Exception = ReflectionHelper.ParseObject(context.Exception);
+
+                if (context.Exception is MixException exception)
                 {
-                    MixErrorStatus.UnAuthorized => new UnauthorizedObjectResult(exception.Errors)
+                    context.Result = exception.Status switch
                     {
-                        StatusCode = (int)exception.Status,
-                    },
-                    MixErrorStatus.Forbidden => new ForbidResult()
-                    {
-                    },
-                    MixErrorStatus.Badrequest => new BadRequestObjectResult(exception.Errors)
-                    {
-                        StatusCode = (int)exception.Status,
-                    },
-                    MixErrorStatus.ServerError => new ObjectResult(exception.Errors)
-                    {
-                        StatusCode = (int)exception.Status,
-                    },
-                    MixErrorStatus.NotFound => new NotFoundObjectResult(exception.Errors)
-                    {
-                        StatusCode = (int)exception.Status,
-                    },
-                    _ => new ObjectResult(exception.Value)
-                    {
-                        StatusCode = (int)exception.Status,
-                    },
-                };
+                        MixErrorStatus.UnAuthorized => new UnauthorizedObjectResult(exception.Errors)
+                        {
+                            StatusCode = (int)exception.Status,
+                        },
+                        MixErrorStatus.Forbidden => new ForbidResult()
+                        {
+                        },
+                        MixErrorStatus.Badrequest => new BadRequestObjectResult(exception.Errors)
+                        {
+                            StatusCode = (int)exception.Status,
+                        },
+                        MixErrorStatus.ServerError => new ObjectResult(exception.Errors)
+                        {
+                            StatusCode = (int)exception.Status,
+                        },
+                        MixErrorStatus.NotFound => new NotFoundObjectResult(exception.Errors)
+                        {
+                            StatusCode = (int)exception.Status,
+                        },
+                        _ => new ObjectResult(exception.Value)
+                        {
+                            StatusCode = (int)exception.Status,
+                        },
+                    };
+                    context.ExceptionHandled = true;
+                }
                 context.ExceptionHandled = true;
-                MixLogService.LogExceptionAsync(context.Exception).GetAwaiter().GetResult();
             }
-            else if (context.Exception != null)
-            {
-                context.Result = new BadRequestObjectResult(context.Exception.Message?.Split('\n'));
-                MixLogService.LogExceptionAsync(context.Exception).GetAwaiter().GetResult();
-            }
-            context.ExceptionHandled = true;
             
         }
     }

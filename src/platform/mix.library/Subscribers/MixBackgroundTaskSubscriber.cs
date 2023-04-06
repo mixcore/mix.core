@@ -4,6 +4,7 @@ using Mix.Communicator.Models;
 using Mix.Communicator.Services;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
+using Mix.Service.Commands;
 using Mix.Service.Interfaces;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Interfaces;
@@ -36,13 +37,9 @@ namespace Mix.Lib.Subscribers
             {
                 case MixQueueActions.AuditLog:
                     var cmd = model.ParseData<LogAuditLogCommand>();
-                    if (cmd.Request!= null)
+                    if (cmd != null)
                     {
-                            await AuditLogService.SaveRequestAsync(cmd.LogId, cmd.UserName, cmd.Request);
-                    }
-                    else
-                    {
-                        await AuditLogService.SaveResponseAsync(cmd.LogId, cmd.StatusCode, cmd.Exception);
+                        await AuditLogService.SaveRequestAsync(cmd.Request);
                     }
                     break;
                 case MixQueueActions.SendMail:

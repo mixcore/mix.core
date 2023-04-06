@@ -1,4 +1,6 @@
-﻿namespace Mix.Database.Entities.AuditLog
+﻿using Newtonsoft.Json.Linq;
+
+namespace Mix.Database.Entities.AuditLog
 {
     public class AuditLog: EntityBase<Guid>
     {
@@ -7,6 +9,6 @@
         public string Endpoint { get; set; }
         public string Method { get; set; }
         public string Body { get; set; }
-        public string Exception { get; set; }
+        public JObject Exception { get; set; }
     }
 }

@@ -58,6 +58,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddResponseCompression(options => options.EnableForHttps = true);
             services.AddResponseCaching();
 
+            services.TryAddScoped<AuditLogDataModel>();
             services.TryAddSingleton<IAuditLogService, AuditLogService>();
             services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
             services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
@@ -103,6 +104,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddResponseCompression(options => options.EnableForHttps = true);
             services.AddResponseCaching();
 
+            services.TryAddScoped<AuditLogDataModel>();
             services.TryAddSingleton<IAuditLogService, AuditLogService>();
             services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
             services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();

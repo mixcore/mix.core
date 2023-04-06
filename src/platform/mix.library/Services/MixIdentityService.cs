@@ -235,9 +235,7 @@ namespace Mix.Lib.Services
                 await UserManager.AddToTenant(user, tenantId);
 
                 user = await UserManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-                await GetOrCreateUserData(user, cancellationToken);
                 return user;
-                //return await GetAuthData(_cmsContext, user, true, tenantId);
             }
             throw new MixException(MixErrorStatus.Badrequest, createResult.Errors.First().Description);
         }
@@ -265,7 +263,7 @@ namespace Mix.Lib.Services
             }
             catch (Exception ex)
             {
-                MixLogService.LogExceptionAsync(ex);
+                await MixLogService.LogExceptionAsync(ex);
                 return ReflectionHelper.ParseObject(new
                 {
                     ParentId = user.Id,
@@ -574,6 +572,10 @@ namespace Mix.Lib.Services
 
         public string GetClaim(ClaimsPrincipal User, string claimType)
         {
+            if (User == null)
+            {
+                return null;
+            }
             return string.Join(',', User.Claims.Where(c => c.Type == claimType).Select(m => m.Value));
         }
 
