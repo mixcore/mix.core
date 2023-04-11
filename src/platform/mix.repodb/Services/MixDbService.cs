@@ -522,7 +522,7 @@ namespace Mix.RepoDb.Services
                 $"{_databaseConstant.BacktickOpen}CreatedBy{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NULL, " +
                 $"{_databaseConstant.BacktickOpen}ModifiedBy{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NULL, " +
                 $"{_databaseConstant.BacktickOpen}Priority{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Integer)} NOT NULL, " +
-                $"{_databaseConstant.BacktickOpen}Status{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NULL, " +
+                $"{_databaseConstant.BacktickOpen}Status{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NOT NULL, " +
                 $"{_databaseConstant.BacktickOpen}IsDeleted{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Boolean)} NOT NULL, " +
                 $" {string.Join(",", colsSql.ToArray())})";
         }

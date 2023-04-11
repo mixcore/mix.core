@@ -7,7 +7,8 @@ namespace Mix.Database.Entities.AuditLog.EntityConfigurations
     internal class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
 
     {
-        public AuditLogConfiguration()        {
+        public AuditLogConfiguration()
+        {
         }
 
         public void Configure(EntityTypeBuilder<AuditLog> builder)
@@ -15,14 +16,14 @@ namespace Mix.Database.Entities.AuditLog.EntityConfigurations
             builder.Property(e => e.Body)
              .HasConversion(
                  v => v.ToString(Newtonsoft.Json.Formatting.None),
-                 v => JObject.Parse(v ?? "{}"))
+                 v => !string.IsNullOrEmpty(v) ? JObject.Parse(v) : new())
              .IsRequired(false)
              .HasColumnType("ntext");
-            
+
             builder.Property(e => e.Exception)
              .HasConversion(
                  v => v.ToString(Newtonsoft.Json.Formatting.None),
-                 v => JObject.Parse(v ?? "{}"))
+                 v => !string.IsNullOrEmpty(v) ? JObject.Parse(v) : new())
              .IsRequired(false)
              .HasColumnType("ntext");
         }

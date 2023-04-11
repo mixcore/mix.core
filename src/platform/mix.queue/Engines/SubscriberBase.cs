@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Azure.Core;
+using Google.Api;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mix.Heart.Exceptions;
@@ -95,7 +98,7 @@ namespace Mix.Queue.Engines
 
         protected T GetScopedService<T>()
         {
-            ServiceScope ??= ServicesProvider.CreateScope();
+            ServiceScope ??=  ServicesProvider.CreateScope();
             return ServiceScope.ServiceProvider.GetRequiredService<T>();
         }
 
