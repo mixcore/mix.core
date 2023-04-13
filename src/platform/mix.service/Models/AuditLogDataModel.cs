@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace Mix.Service.Models
@@ -34,16 +35,15 @@ namespace Mix.Service.Models
             Body = GetBodyAsync(context.Request);
         }
 
-        private JObject GetBodyAsync(HttpRequest request)
+        private JObject? GetBodyAsync(HttpRequest request)
         {
-            string bodyStr = null;
+            string? bodyStr = null;
 
             // Arguments: Stream, Encoding, detect encoding, buffer size 
             // AND, the most important: keep stream opened
             try
             {
-                if (request.Method != "GET" && request.Method != "DELETE" &&
-                    (request.ContentLength != null || request.ContentType == null || !request.ContentType.StartsWith("multipart/form-data")))
+                if (request.BodyReader != null && request.Method != "GET" && request.Method != "DELETE")
                 {
                     request.EnableBuffering();
                     using (var reader = new StreamReader(request.BodyReader.AsStream(), Encoding.UTF8, true, 1024, true))
@@ -51,14 +51,21 @@ namespace Mix.Service.Models
                         bodyStr = reader.ReadToEnd();
                     }
                     request.Body.Seek(0, SeekOrigin.Begin);
+                    if (bodyStr.StartsWith("{") && bodyStr.EndsWith("}"))
+                    {
+                        return JObject.Parse(bodyStr);
+                    }
+                    else
+                    {
+                        return new JObject(new JProperty("data", bodyStr));
+                    }
                 }
             }
             catch
             {
                 Console.WriteLine($"{nameof(AuditLogService)}: Cannot read body request");
             }
-
-            return JObject.Parse(string.IsNullOrEmpty(bodyStr) ? "{}" : bodyStr);
+            return default;
         }
 
     }
