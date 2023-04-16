@@ -35,7 +35,7 @@ namespace Mix.RepoDb.ViewModels
         {
         }
 
-        public MixDatabaseViewModel(MixDatabase entity, UnitOfWorkInfo uowInfo = null)
+        public MixDatabaseViewModel(MixDatabase entity, UnitOfWorkInfo? uowInfo = null)
             : base(entity, uowInfo)
         {
         }

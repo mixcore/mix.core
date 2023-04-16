@@ -52,6 +52,7 @@ namespace Mix.Service.Services
 
                     var log = new AuditLog()
                     {
+                        Id = Guid.NewGuid(),
                         Success = request.Exception == null,
                         CreatedDateTime = DateTime.UtcNow,
                         Status = MixContentStatus.Published

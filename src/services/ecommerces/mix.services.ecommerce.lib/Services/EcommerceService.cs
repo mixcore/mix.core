@@ -23,7 +23,6 @@ namespace Mix.Services.Ecommerce.Lib.Services
 {
     public sealed class EcommerceService : TenantServiceBase, IEcommerceService
     {
-        private readonly MixCacheService CacheService;
         private readonly IServiceProvider _serviceProvider;
         private readonly TenantUserManager _userManager;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _uow;

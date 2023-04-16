@@ -10,7 +10,7 @@ namespace Mix.RepoDb.Interfaces
 
         public Task<JObject> GetMyDataById(string tableName, string username, int id, bool loadNestedData);
 
-        public Task<JObject> GetById(string tableName, int id, bool loadNestedData);
+        public Task<JObject?> GetById(string tableName, int id, bool loadNestedData);
 
         public Task<bool> MigrateDatabase(string name);
 

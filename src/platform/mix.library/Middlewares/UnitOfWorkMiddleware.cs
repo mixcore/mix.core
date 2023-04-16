@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Identity.Constants;
-using Mix.Lib.Services;
-using Mix.Service.Interfaces;
 using System.Data.Common;
 
 namespace Mix.Lib.Middlewares
@@ -29,11 +26,6 @@ namespace Mix.Lib.Middlewares
             //Dictionary<string, DbConnection> dicConnections = new();
             //await ShareTransaction(context, dicConnections, dicTransactions);
 
-            var auditlogData = context.RequestServices.GetService(typeof(AuditLogDataModel)) as AuditLogDataModel;
-            var auditlogService = context.RequestServices.GetService(typeof(IAuditLogService)) as AuditLogService;
-            var idService = context.RequestServices.GetService(typeof(MixIdentityService)) as MixIdentityService;
-            auditlogData.InitRequest(idService.GetClaim(context.User, MixClaims.Username), context);
-
             if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)
             {
                 await _next.Invoke(context);
@@ -48,7 +40,6 @@ namespace Mix.Lib.Middlewares
                     await CompleteUow(uowService, context.Response.StatusCode);
                 }
             }
-            auditlogService.QueueRequest(auditlogData);
         }
 
         private async Task ShareTransaction(HttpContext context,

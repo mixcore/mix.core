@@ -55,7 +55,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.Configure<GzipCompressionProviderOptions>(
                 options => options.Level = System.IO.Compression.CompressionLevel.Fastest);
-            services.AddResponseCompression(options => options.EnableForHttps = true);
+            //services.AddResponseCompression(options => options.EnableForHttps = true);
             services.AddResponseCaching();
 
             services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
@@ -99,7 +99,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.Configure<GzipCompressionProviderOptions>(
                 options => options.Level = System.IO.Compression.CompressionLevel.Fastest);
-            services.AddResponseCompression(options => options.EnableForHttps = true);
+            //services.AddResponseCompression(options => options.EnableForHttps = true);
             services.AddResponseCaching();
 
             services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
@@ -122,7 +122,8 @@ namespace Microsoft.Extensions.DependencyInjection
             bool isDevelop)
         {
             app.UseSession();
-            app.UseResponseCompression();
+            app.UseHttpLogging();
+            //app.UseResponseCompression();
             app.UseMixResponseCaching();
             app.UseMixTenant();
             app.UseMixStaticFiles(contentRootPath);
