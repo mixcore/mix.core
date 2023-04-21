@@ -85,7 +85,7 @@ namespace Mix.Portal.Domain.Services
                         CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext.User, MixClaims.Username)
                     };
                     await template.SaveAsync();
-                    _queueService.PushMessage(template, MixRestAction.Post.ToString(), true);
+                    _queueService.PushQueue(MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), template);
                     MixFileHelper.SaveFile(indexFile);
 
                     return template;

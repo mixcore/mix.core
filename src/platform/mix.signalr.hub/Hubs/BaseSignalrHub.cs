@@ -94,7 +94,7 @@ namespace Mix.SignalR.Hubs
             }
 
             var users = Rooms[roomName] ?? new();
-            if (!users.Any(u => u.ConnectionId == Context.ConnectionId))
+            if (!users.Any(u => u != null && u.ConnectionId == Context.ConnectionId))
             {
                 var user = GetCurrentUser();
                 if (user != null)
