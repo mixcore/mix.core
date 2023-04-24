@@ -194,7 +194,12 @@ namespace Mix.RepoDb.Repositories
             catch (Exception ex)
             {
                 Console.Error.WriteLine(ex.Message);
+                RollbackTransaction();
                 return default;
+            }
+            finally
+            {
+                CompleteTransaction();
             }
         }
 
@@ -216,6 +221,7 @@ namespace Mix.RepoDb.Repositories
             catch (Exception ex)
             {
                 await MixLogService.LogExceptionAsync(ex);
+                RollbackTransaction();
                 return default;
             }
             finally
@@ -239,6 +245,7 @@ namespace Mix.RepoDb.Repositories
             catch (Exception ex)
             {
                 await MixLogService.LogExceptionAsync(ex);
+                RollbackTransaction();
                 return default;
             }
             finally
@@ -266,6 +273,7 @@ namespace Mix.RepoDb.Repositories
             catch (Exception ex)
             {
                 await MixLogService.LogExceptionAsync(ex);
+                RollbackTransaction();
                 return default;
             }
             finally
@@ -294,6 +302,7 @@ namespace Mix.RepoDb.Repositories
             catch (Exception ex)
             {
                 await MixLogService.LogExceptionAsync(ex);
+                RollbackTransaction();
                 return default;
             }
             finally
@@ -316,15 +325,14 @@ namespace Mix.RepoDb.Repositories
                         commandTimeout: _settings.CommandTimeout,
                         transaction: _dbTransaction,
                         trace: _trace);
+                CompleteTransaction();
                 return result;
             }
             catch (Exception ex)
             {
-                throw new MixException(MixErrorStatus.Badrequest, ex);
-            }
-            finally
-            {
-                CompleteTransaction();
+                await MixLogService.LogExceptionAsync(ex);
+                RollbackTransaction();
+                return default;
             }
         }
 
@@ -339,16 +347,14 @@ namespace Mix.RepoDb.Repositories
                         commandTimeout: _settings.CommandTimeout,
                         transaction: _dbTransaction,
                         trace: _trace);
+                CompleteTransaction();
                 return result;
             }
             catch (Exception ex)
             {
                 await MixLogService.LogExceptionAsync(ex);
+                RollbackTransaction();
                 return default;
-            }
-            finally
-            {
-                CompleteTransaction();
             }
         }
 
@@ -585,6 +591,14 @@ namespace Mix.RepoDb.Repositories
             if ((_isRoot || DatabaseProvider == MixDatabaseProvider.SQLITE) && _dbTransaction?.Connection != null)
             {
                 _dbTransaction.Commit();
+            }
+        }
+        
+        public void RollbackTransaction()
+        {
+            if ((_isRoot || DatabaseProvider == MixDatabaseProvider.SQLITE) && _dbTransaction?.Connection != null)
+            {
+                _dbTransaction.Rollback();
             }
         }
         public void Dispose()

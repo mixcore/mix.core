@@ -39,37 +39,43 @@ namespace Mix.Service.Services
 
         public async Task SendMessageAsync(SignalRMessageModel message)
         {
-            if (!string.IsNullOrEmpty(MixEndpointService.Messenger))
+            try
             {
-                while (Connection == null)
+                if (!string.IsNullOrEmpty(MixEndpointService.Messenger))
                 {
-                    Init();
-                    if (Connection == null)
+                    while (Connection == null)
                     {
-                        await Task.Delay(5000);
-                    }
-                }
-
-                while (Connection != null && Connection.State != HubConnectionState.Connected)
-                {
-                    try
-                    {
-                        await Task.Delay(new Random().Next(0, 5) * 1000);
-                        await Connection.StartAsync();
+                        Init();
+                        if (Connection == null)
+                        {
+                            await Task.Delay(5000);
+                        }
                     }
 
-                    catch (Exception ex)
+                    while (Connection != null && Connection.State != HubConnectionState.Connected)
                     {
-                        Console.WriteLine(ex);
+                        try
+                        {
+                            await Task.Delay(new Random().Next(0, 5) * 1000);
+                            await Connection.StartAsync();
+                        }
+
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
                     }
+                    await Connection.InvokeAsync(HubMethods.SendMessage, message);
                 }
-                await Connection.InvokeAsync(HubMethods.SendMessage, message);
+                else
+                {
+                    Console.WriteLine("Cannot Start SignalR Hub: MixEndpointService.Messenger is null or empty");
+                }
             }
-            else
+            catch(Exception ex)
             {
-                Console.WriteLine("Cannot Start SignalR Hub: MixEndpointService.Messenger is null or empty");
+                await MixLogService.LogExceptionAsync(ex);
             }
-
         }
         private void Init()
         {

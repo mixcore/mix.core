@@ -3,6 +3,7 @@
     public class MixQueueActions
     {
         public const string AuditLog = "AuditLog";
+        public const string MixDbEvent = "MixDbEvent";
         public const string SendMail = "SendMail";
     }
 }
