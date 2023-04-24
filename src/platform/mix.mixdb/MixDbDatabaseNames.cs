@@ -2,6 +2,8 @@
 {
     public sealed class MixDbDatabaseNames
     {
+        public const string DatabaseNameMixDbEvent = "MixDbEvent";
+        public const string DatabaseNameMixDbEventSubscriber = "MixDbEventSubscriber";
         public const string DatabaseNameMetadata = "Metadata";
         public const string DatabaseNameMedia = "SysMedia";
         public const string DatabaseNamePortalMenu = "PortalMenu";

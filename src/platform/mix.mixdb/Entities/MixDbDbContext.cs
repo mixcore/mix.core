@@ -13,6 +13,7 @@ namespace Mix.Mixdb.Entities
             _dbContextType = GetType();
         }
 
+        public DbSet<MixDbEventSubscriber> MixDbEventSubscriber { get; set; }
         public DbSet<MixMedia> MixMedia { get; set; }
         public DbSet<MixMetadata> MixMetadata { get; set; }
         public DbSet<MixMetadataContentAssociation> MixMetadataContentAssociation { get; set; }

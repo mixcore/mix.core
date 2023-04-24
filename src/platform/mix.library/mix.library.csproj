@@ -89,6 +89,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\core\mix.mixdb.event\mix.mixdb.event.csproj" />
 		<ProjectReference Include="..\mix.communicator\mix.communicator.csproj" />
 		<ProjectReference Include="..\mix.mixdb\mix.mixdb.csproj" />
 		<ProjectReference Include="..\mix.repodb\mix.repodb.csproj" />

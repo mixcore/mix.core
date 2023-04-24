@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Mix.Heart.Enums;
+using Mix.Heart.Extensions;
+using Mix.Shared.Models;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http.Headers;
@@ -21,6 +23,20 @@ namespace Mix.Shared.Services
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             };
 
+        }
+        public async Task<JObject?> SendHttpRequestModel(
+           HttpRequestModel request, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            string method = request.Method?.ToUpper();
+            switch (method)
+            {
+                case "GET":
+                    return await GetAsync<JObject>(request.RequestUrl);
+                case "POST":
+                    return await PostAsync<JObject, JObject>(request.RequestUrl, request.Body);
+            }
+            return default;
         }
 
         public async Task<string> DownloadAsync(
@@ -69,21 +85,6 @@ namespace Mix.Shared.Services
                     return fullPath;
                 }
             }
-        }
-
-        public Task<T> GetAsync<T>(
-            string requestUrl,
-            List<KeyValuePair<string, string>> queryParams = null,
-            string bearerToken = null,
-            List<KeyValuePair<string, string>> requestHeaders = null)
-        {
-            var urlQueryParamsPart = queryParams != null
-                ? string.Join("&", queryParams.Select(p => $"{p.Key}={WebUtility.UrlEncode(p.Value)}"))
-                : string.Empty;
-            var requestUrlWithQueryParams = !string.IsNullOrEmpty(urlQueryParamsPart)
-                ? (!requestUrl.Contains('?') ? $"{requestUrl}?{urlQueryParamsPart}" : $"{requestUrl}&{urlQueryParamsPart}")
-                : requestUrl;
-            return SendRequestAsync<T>(client => client.GetAsync(requestUrlWithQueryParams), bearerToken, requestHeaders);
         }
 
         public Task<T> GetAsync<T>(
@@ -141,7 +142,8 @@ namespace Mix.Shared.Services
             return SendRequestAsync<T>(
                 client => client.PostAsync(requestUrl, content), bearerToken, requestHeaders);
         }
-
+        #region Privates
+                
         private HttpContent CreateHttpContent<T>(T content, string contentType)
         {
             switch (contentType)
@@ -178,8 +180,15 @@ namespace Mix.Shared.Services
 
         {
             var data = await GetResponseStringAsync(sendRequestFn, token, requestHeaders);
-            var obj = JObject.Parse(data);
-            return obj.ToObject<T>();
+            if (data.IsJsonString())
+            {
+                var obj = JObject.Parse(data);
+                return obj.ToObject<T>();
+            }
+            else
+            {
+                return new JObject(new JProperty("data", data)).ToObject<T>();
+            }
         }
 
         private async Task<string> GetResponseStringAsync(
@@ -232,5 +241,7 @@ namespace Mix.Shared.Services
                     return Task.CompletedTask;
                 }
             });
+
+        #endregion
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Mix.Lib.Middlewares;
+using Mix.Mixdb.Event.Services;
 using Mix.Service.Interfaces;
 using Mix.Shared;
 using Mix.Shared.Interfaces;
@@ -55,12 +56,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.Configure<GzipCompressionProviderOptions>(
                 options => options.Level = System.IO.Compression.CompressionLevel.Fastest);
-            //services.AddResponseCompression(options => options.EnableForHttps = true);
+            services.AddResponseCompression(options => options.EnableForHttps = true);
             services.AddResponseCaching();
 
             services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
             services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
-
+            services.TryAddSingleton<MixDbEventService>();
             services.AddMixRepoDb();
 
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCacheDbContext>>();

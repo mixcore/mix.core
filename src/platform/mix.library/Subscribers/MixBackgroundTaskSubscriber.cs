@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Communicator.Models;
 using Mix.Communicator.Services;
+using Mix.Mixdb.Event.Services;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Service.Commands;
@@ -16,6 +17,7 @@ namespace Mix.Lib.Subscribers
     {
         protected IPortalHubClientService PortalHub;
         protected IAuditLogService AuditLogService;
+        protected MixDbEventService MixDbEventService;
         private const string TopicId = MixQueueTopics.MixBackgroundTasks;
 
         public MixBackgroundTaskSubscriber(
@@ -23,11 +25,13 @@ namespace Mix.Lib.Subscribers
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService,
             IAuditLogService auditLogService,
-            IPortalHubClientService portalHub)
+            IPortalHubClientService portalHub,
+            MixDbEventService mixDbEventService)
             : base(TopicId, string.Empty, serviceProvider, configuration, queueService)
         {
             AuditLogService = auditLogService;
             PortalHub = portalHub;
+            MixDbEventService = mixDbEventService;
         }
 
         public override async Task Handler(MessageQueueModel model)
@@ -42,9 +46,17 @@ namespace Mix.Lib.Subscribers
                         await AuditLogService.SaveRequestAsync(cmd.Request);
                     }
                     break;
+                
                 case MixQueueActions.SendMail:
                     await SendMail(model);
-
+                    break;
+                
+                case MixQueueActions.MixDbEvent:
+                    var evtCmd = model.ParseData<MixDbEventCommand>();
+                    if (evtCmd != null)
+                    {
+                        await MixDbEventService.HandleMessage(evtCmd);
+                    }
                     break;
             }
         }
