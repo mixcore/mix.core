@@ -5,7 +5,7 @@ using GraphQL.Types;
 using GraphQL.Validation;
 using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Entities.Cms;
-using Mix.Mixdb.Entities;
+
 using Mix.Services.Graphql.Lib;
 using Mix.Services.Graphql.Lib.Models;
 

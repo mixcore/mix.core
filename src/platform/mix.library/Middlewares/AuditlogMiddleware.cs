@@ -1,13 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.IO;
 using Mix.Identity.Constants;
 using Mix.Lib.Services;
 using Mix.Service.Interfaces;
-using Mix.Service.Services;
-using System.Data.Common;
 using System.Text;
 
 namespace Mix.Lib.Middlewares

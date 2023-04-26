@@ -16,7 +16,7 @@ namespace Mix.Lib.Controllers
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         public MixAutoGenerateAuthorizedRestApiController(
-            IHttpContextAccessor httpContextAccessor, 
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
             TranslatorService translator,

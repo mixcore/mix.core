@@ -8,7 +8,7 @@
 
         public string DefaultContent { get; set; }
         public string Category { get; set; }
-        public MixDataType DataType { get; set; }   
+        public MixDataType DataType { get; set; }
 
         #endregion
 

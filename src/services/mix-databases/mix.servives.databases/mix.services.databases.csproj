@@ -9,8 +9,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\mix.services.databases.lib\mix.services.databases.lib.csproj" />
-		<Using Include="Mix.Mixdb.Entities" />
-		<Using Include="Mix.Mixdb.Entities" />
+		<Using Include="Mix.Database.Entities.MixDb" />
+		<Using Include="Mix.Database.Entities.MixDb" />
 	</ItemGroup>
 
 </Project>

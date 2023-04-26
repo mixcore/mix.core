@@ -23,7 +23,7 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixContributorViewModel(MixContributor entity, UnitOfWorkInfo uowInfo = null) 
+        public MixContributorViewModel(MixContributor entity, UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {
         }

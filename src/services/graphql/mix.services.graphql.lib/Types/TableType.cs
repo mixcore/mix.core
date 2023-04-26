@@ -1,9 +1,6 @@
 ﻿using GraphQL;
-using GraphQL.Builders;
-using GraphQL.Resolvers;
 using GraphQL.Types;
 using GraphQL.Utilities.Federation;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Mix.Heart.Helpers;
 using Mix.Services.Graphql.Lib.Models;
 using Newtonsoft.Json.Linq;

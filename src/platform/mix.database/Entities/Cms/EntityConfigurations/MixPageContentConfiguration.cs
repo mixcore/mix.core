@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Mix.Database.Base.Cms;
 using Mix.Database.Services;
 
 namespace Mix.Database.Entities.Cms.EntityConfigurations

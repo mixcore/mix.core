@@ -7,7 +7,6 @@ using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
-using ApplicationLifetime = Microsoft.Extensions.Hosting.IHostApplicationLifetime;
 
 namespace Mix.Common.Controllers
 {

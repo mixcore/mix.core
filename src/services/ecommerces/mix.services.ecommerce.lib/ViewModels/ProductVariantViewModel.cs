@@ -6,7 +6,7 @@ using Mix.Services.Ecommerce.Lib.Entities.Mix;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels
 {
-    public class ProductVariantViewModel: ViewModelBase<EcommerceDbContext, ProductVariant, int, ProductVariantViewModel>
+    public class ProductVariantViewModel : ViewModelBase<EcommerceDbContext, ProductVariant, int, ProductVariantViewModel>
     {
         #region Properties
 

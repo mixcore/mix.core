@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mix.Database.Base;
+using Mix.Database.EntityConfigurations.Base;
 using Mix.Database.Services;
 using Mix.Services.Ecommerce.Lib.Constants;
 

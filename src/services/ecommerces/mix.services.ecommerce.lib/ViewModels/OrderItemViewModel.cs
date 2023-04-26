@@ -86,10 +86,10 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             {
                 await association.DeleteAsync(cancellationToken);
             }
-            
+
         }
 
-        private  async Task<MixDatabaseAssociationViewModel> GetCurrentAssociation()
+        private async Task<MixDatabaseAssociationViewModel> GetCurrentAssociation()
         {
             return await MixDatabaseAssociationViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(m =>
                         m.ParentId == OrderDetailId

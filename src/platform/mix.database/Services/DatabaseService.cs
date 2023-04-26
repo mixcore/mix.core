@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Database.Entities.Account;
+using Mix.Database.Entities.MixDb;
 using Mix.Database.Entities.Quartz;
 using Mix.Heart.Constants;
 using Mix.Heart.Entities.Cache;
@@ -78,6 +79,30 @@ namespace Mix.Database.Services
                 _ => null,
             };
         }
+        
+        public MixDbDbContext GetMixDbDbContext()
+        {
+            return DatabaseProvider switch
+            {
+                MixDatabaseProvider.SQLSERVER => new SqlServerMixDbDbContext(this),
+                MixDatabaseProvider.MySQL => new MySqlMixDbDbContext(this),
+                MixDatabaseProvider.SQLITE => new SqliteMixDbDbContext(this),
+                MixDatabaseProvider.PostgreSQL => new PostgresSqlMixDbDbContext(this),
+                _ => null,
+            };
+        }
+        
+        public MixCmsContext GetMixcmsContext()
+        {
+            return DatabaseProvider switch
+            {
+                MixDatabaseProvider.SQLSERVER => new (this),
+                MixDatabaseProvider.MySQL => new MySqlMixCmsContext(this),
+                MixDatabaseProvider.SQLITE => new SqliteMixCmsContext(this),
+                MixDatabaseProvider.PostgreSQL => new PostgresqlMixCmsContext(this),
+                _ => null,
+            };
+        }
 
         public MixCmsAccountContext GetAccountDbContext()
         {
@@ -148,6 +173,8 @@ namespace Mix.Database.Services
             cacheCtx.Database.Migrate();
             using var accCtx = GetAccountDbContext();
             accCtx.Database.Migrate();
+            //using var mixdbCtx = GetMixDbDbContext();
+            //mixdbCtx.Database.Migrate();
         }
 
         public async Task InitQuartzContextAsync()

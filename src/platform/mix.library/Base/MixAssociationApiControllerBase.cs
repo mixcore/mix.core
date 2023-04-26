@@ -32,7 +32,7 @@ namespace Mix.Lib.Base
         protected override SearchQueryModel<TEntity, int> BuildSearchRequest(SearchRequestDto req)
         {
             var searchRequest = base.BuildSearchRequest(req);
-            
+
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
                 int.TryParse(Request.Query["parentId"], out int parentId),
                 m => m.ParentId == parentId);

@@ -11,7 +11,7 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
 
         public override void Configure(EntityTypeBuilder<MixUser> builder)
         {
-            var filterSql = DatabaseService.DatabaseProvider is MixDatabaseProvider.PostgreSQL 
+            var filterSql = DatabaseService.DatabaseProvider is MixDatabaseProvider.PostgreSQL
                 ? "(\"NormalizedUserName\" IS NOT NULL)" // PostgreSQL syntax
                 : "(NormalizedUserName IS NOT NULL)";
 

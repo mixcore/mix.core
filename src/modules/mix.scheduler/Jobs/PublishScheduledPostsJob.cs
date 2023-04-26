@@ -1,9 +1,9 @@
-﻿using Mix.Queue.Interfaces;
+﻿using Mix.Quartz.Jobs;
+using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Quartz;
 using System;
 using System.Threading.Tasks;
-using Mix.Quartz.Jobs;
 
 namespace Mix.Scheduler.Jobs
 {

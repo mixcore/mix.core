@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Mix.Mixdb.Entities;
+
 using Mix.Services.Graphql.Lib.Entities;
 using Mix.Services.Graphql.Lib.Interfaces;
 

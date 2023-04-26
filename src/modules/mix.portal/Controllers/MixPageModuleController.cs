@@ -10,7 +10,7 @@ namespace Mix.Portal.Controllers
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
 
         public MixPageModuleController(
-            IHttpContextAccessor httpContextAccessor, 
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
             TranslatorService translator,

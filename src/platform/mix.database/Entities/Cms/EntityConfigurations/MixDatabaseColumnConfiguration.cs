@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Mix.Database.EntityConfigurations.Base;
 using Mix.Database.Services;
 using Newtonsoft.Json.Linq;
 

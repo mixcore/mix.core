@@ -6,8 +6,8 @@ namespace Mixcore.Domain.Services
     public sealed class MixcorePostService : MixPostServiceBase<PostContentViewModel>
     {
         public MixcorePostService(
-            UnitOfWorkInfo<MixCmsContext> uow, 
-            IMixMetadataService metadataService, 
+            UnitOfWorkInfo<MixCmsContext> uow,
+            IMixMetadataService metadataService,
             IHttpContextAccessor httpContextAccessor,
             MixCacheService cacheService)
             : base(uow, metadataService, httpContextAccessor, cacheService)

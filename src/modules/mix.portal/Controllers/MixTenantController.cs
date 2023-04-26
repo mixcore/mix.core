@@ -18,7 +18,7 @@ namespace Mix.Portal.Controllers
         private readonly MixCmsAccountContext _accContext;
         private readonly IMixTenantService _mixTenantService;
         public MixTenantController(
-            IMixTenantService mixTenantService, 
+            IMixTenantService mixTenantService,
             MixCmsAccountContext accContext,
             TenantUserManager userManager,
             IHttpContextAccessor httpContextAccessor,

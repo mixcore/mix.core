@@ -6,13 +6,13 @@ using Mix.Heart.Exceptions;
 using Mix.Heart.Extensions;
 using Mix.Heart.Models;
 using Mix.Heart.Repository;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Mix.Lib.Models.Common;
-using System.Linq.Expressions;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Interfaces;
-using Mix.Heart.Services;
+using System.Linq.Expressions;
 
 namespace Mix.Services.Databases.Lib.Abstracts
 {
@@ -23,8 +23,8 @@ namespace Mix.Services.Databases.Lib.Abstracts
         protected readonly IMixMetadataService MetadataService;
 
         protected MixPostServiceBase(
-            UnitOfWorkInfo<MixCmsContext> uow, 
-            IMixMetadataService metadataService, 
+            UnitOfWorkInfo<MixCmsContext> uow,
+            IMixMetadataService metadataService,
             IHttpContextAccessor httpContextAccessor,
             MixCacheService cacheService)
             : base(httpContextAccessor, cacheService)

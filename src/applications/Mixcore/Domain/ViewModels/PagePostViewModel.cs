@@ -33,7 +33,7 @@ namespace Mixcore.Domain.ViewModels
 
         #region Expands
 
-        public async Task LoadPost(Mix.RepoDb.Repositories.MixRepoDbRepository mixRepoDbRepository, 
+        public async Task LoadPost(Mix.RepoDb.Repositories.MixRepoDbRepository mixRepoDbRepository,
             IMixMetadataService metadataService,
             MixCacheService cacheService)
         {

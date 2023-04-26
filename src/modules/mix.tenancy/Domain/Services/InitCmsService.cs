@@ -29,7 +29,7 @@ namespace Mix.Tenancy.Domain.Services
             MixIdentityService identityService,
             DatabaseService databaseService,
             RoleManager<MixRole> roleManager,
-            UnitOfWorkInfo<MixCmsContext> cmsUow, 
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             IMixTenantService mixTenantService)
         {
             _userManager = userManager;

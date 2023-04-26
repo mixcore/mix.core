@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
+using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
 using Mix.Identity.Constants;
 using Mix.Identity.Domain.Models;
@@ -12,7 +13,7 @@ using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Models;
-using Mix.Mixdb.Entities;
+
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Shared.Models.Configurations;

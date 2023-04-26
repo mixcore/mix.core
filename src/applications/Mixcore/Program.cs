@@ -9,7 +9,7 @@ namespace Mixcore
 
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            var builder =  MixCmsHelper.CreateHostBuilder<Startup>(args);
+            var builder = MixCmsHelper.CreateHostBuilder<Startup>(args);
             builder.ConfigureAppConfiguration((hostingContext, config) =>
             {
                 config.AddJsonFile("MixContent/Shared/AppConfigs/kiotviet.json", true, true);

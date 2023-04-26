@@ -8,7 +8,6 @@ using Mix.Lib.Base;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
-using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Dtos;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Ecommerce.Lib.Interfaces;
@@ -29,15 +28,15 @@ namespace Mix.Services.ecommerce.Controllers
         protected UnitOfWorkInfo<MixCmsContext> CmsUow;
 
         public ApiEcommerceController(
-            IHttpContextAccessor httpContextAccessor, 
-            IConfiguration configuration, 
-            MixCacheService cacheService, 
-            TranslatorService translator, 
-            MixIdentityService mixIdentityService, 
-            IQueueService<MessageQueueModel> queueService, 
-            IEcommerceService ecommerceService, 
-            UnitOfWorkInfo<MixCmsContext> cmsUow, 
-            IOrderService orderService) 
+            IHttpContextAccessor httpContextAccessor,
+            IConfiguration configuration,
+            MixCacheService cacheService,
+            TranslatorService translator,
+            MixIdentityService mixIdentityService,
+            IQueueService<MessageQueueModel> queueService,
+            IEcommerceService ecommerceService,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
+            IOrderService orderService)
             : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
             _ecommerceService = ecommerceService;

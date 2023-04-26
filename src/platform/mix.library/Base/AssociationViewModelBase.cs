@@ -15,7 +15,7 @@ namespace Mix.Lib.Base
         {
         }
 
-        protected AssociationViewModelBase(UnitOfWorkInfo unitOfWorkInfo) 
+        protected AssociationViewModelBase(UnitOfWorkInfo unitOfWorkInfo)
             : base(unitOfWorkInfo)
         {
         }

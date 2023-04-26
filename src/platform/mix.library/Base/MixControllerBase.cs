@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
-using System.Globalization;
 using Mix.Lib.Interfaces;
+using System.Globalization;
 
 namespace Mix.Lib.Base
 {
@@ -36,8 +36,8 @@ namespace Mix.Lib.Base
         protected IConfiguration Configuration;
 
         protected MixControllerBase(
-             IHttpContextAccessor httpContextAccessor, 
-             IMixCmsService mixCmsService, 
+             IHttpContextAccessor httpContextAccessor,
+             IMixCmsService mixCmsService,
              IPSecurityConfigService ipSecurityConfigService)
         {
             Session = httpContextAccessor.HttpContext?.Session;

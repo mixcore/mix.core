@@ -55,7 +55,7 @@ namespace Mixcore.Domain.ViewModels
         }
 
         public async Task LoadAdditionalDataAsync(
-                MixRepoDbRepository mixRepoDbRepository, 
+                MixRepoDbRepository mixRepoDbRepository,
                 IMixMetadataService metadataService,
                 MixCacheService cacheService)
         {

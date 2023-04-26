@@ -1,4 +1,5 @@
-﻿using Mix.Database.Services;
+﻿using Mix.Database.EntityConfigurations.Base;
+using Mix.Database.Services;
 
 namespace Mix.Database.Base.Cms
 {

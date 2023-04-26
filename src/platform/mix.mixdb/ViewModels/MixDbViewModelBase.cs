@@ -3,11 +3,6 @@ using Mix.Constant.Constants;
 using Mix.Heart.Entities;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Mixdb.ViewModels
 {

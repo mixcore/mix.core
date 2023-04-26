@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Mix.Signalr.Hub.Hubs;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
 

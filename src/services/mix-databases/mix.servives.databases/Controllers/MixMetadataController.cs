@@ -13,6 +13,7 @@ using Mix.Mixdb.ViewModels;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Heart.Services;
 using Mix.Database.Entities.Cms;
+using Mix.Database.Entities.MixDb;
 
 namespace Mix.Services.Databases.Controllers
 {

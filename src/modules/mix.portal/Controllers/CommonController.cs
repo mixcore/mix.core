@@ -64,7 +64,7 @@ namespace Mix.Portal.Controllers
                             {
                                 new SearchQueryField("Role", roles, MixCompareOperator.InRange)
                             }
-                        );                    
+                        );
                     foreach (var item in menus)
                     {
                         var obj = ReflectionHelper.ParseObject(item);
@@ -86,7 +86,7 @@ namespace Mix.Portal.Controllers
 
         private async Task LoadNestedData(JObject data)
         {
-            
+
             _repoDbRepository.InitTableName(nameof(MixDatabaseAssociation));
             List<QueryField> queries = GetAssociatoinQueries(MixDatabaseNames.PORTAL_MENU, MixDatabaseNames.PORTAL_MENU, data.Value<int>("id"));
             var associations = await _repoDbRepository.GetListByAsync(queries);

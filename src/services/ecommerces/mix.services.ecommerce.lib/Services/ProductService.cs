@@ -16,11 +16,11 @@ namespace Mix.Services.Ecommerce.Lib.Services
     {
         private readonly UnitOfWorkInfo<EcommerceDbContext> _ecommerceUow;
         public ProductService(
-            UnitOfWorkInfo<MixCmsContext> uow, 
-            IMixMetadataService metadataService, 
-            IHttpContextAccessor httpContextAccessor, 
+            UnitOfWorkInfo<MixCmsContext> uow,
+            IMixMetadataService metadataService,
+            IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<EcommerceDbContext> ecommerceDbContext,
-            MixCacheService cacheService) 
+            MixCacheService cacheService)
             : base(uow, metadataService, httpContextAccessor, cacheService)
         {
             _ecommerceUow = ecommerceDbContext;

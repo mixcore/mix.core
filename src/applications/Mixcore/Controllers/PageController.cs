@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
-using Mix.Lib.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Services;
@@ -87,7 +86,7 @@ namespace Mixcore.Controllers
                 SortBy = MixQueryColumnName.Priority
             }, _cacheService);
             page.Posts.Items.Take(2);
-            
+
 
             ViewData["Title"] = page.SeoTitle;
             ViewData["Description"] = page.SeoDescription;

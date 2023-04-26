@@ -11,6 +11,7 @@ using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Dtos;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Heart.Services;
+using Mix.Database.Entities.MixDb;
 
 namespace Mix.Services.Databases.Lib.Services
 {

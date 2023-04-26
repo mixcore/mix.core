@@ -10,10 +10,11 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
+using Mix.Database.Entities.MixDb;
 using Mix.Identity.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
-using Mix.Mixdb.Entities;
+
 using System.Text;
 namespace Microsoft.Extensions.DependencyInjection
 {

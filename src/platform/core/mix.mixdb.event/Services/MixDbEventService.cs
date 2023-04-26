@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Amqp.Framing;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
+using Mix.Database.Constants;
+using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
 using Mix.Heart.Extensions;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
-using Mix.Mixdb.Entities;
+
 using Mix.Mixdb.Event.ViewModels;
 using Mix.Queue.Models;
 using Mix.RepoDb.Services;

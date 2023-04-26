@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Mix.Lib.Services
+﻿namespace Mix.Lib.Services
 {
     public class TenantConfigService : ConfigurationServiceBase<TenantConfigurationModel>
     {
