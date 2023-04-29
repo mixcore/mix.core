@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-
+using Mix.Database.Extensions;
 #nullable disable
 
 namespace Mix.Mixdb.Migrations.PostgresSqlMixDbDb
@@ -12,7 +12,7 @@ namespace Mix.Mixdb.Migrations.PostgresSqlMixDbDb
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "ContactAddress",
                 columns: table => new
                 {
@@ -39,7 +39,7 @@ namespace Mix.Mixdb.Migrations.PostgresSqlMixDbDb
                     table.PrimaryKey("PK_MixContactAddress", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "Metadata",
                 columns: table => new
                 {
@@ -62,7 +62,7 @@ namespace Mix.Mixdb.Migrations.PostgresSqlMixDbDb
                     table.PrimaryKey("PK_MixMetadata", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "MetadataContentAssociation",
                 columns: table => new
                 {
@@ -87,7 +87,7 @@ namespace Mix.Mixdb.Migrations.PostgresSqlMixDbDb
                     table.PrimaryKey("PK_MixMetadataContentAssociation", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "MixDbEventSubscriber",
                 columns: table => new
                 {
@@ -110,7 +110,7 @@ namespace Mix.Mixdb.Migrations.PostgresSqlMixDbDb
                     table.PrimaryKey("PK_MixDbEventSubscriber", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "PortalMenu",
                 columns: table => new
                 {
@@ -136,7 +136,7 @@ namespace Mix.Mixdb.Migrations.PostgresSqlMixDbDb
                     table.PrimaryKey("PK_MixPortalMenu", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "SysMedia",
                 columns: table => new
                 {
@@ -158,7 +158,7 @@ namespace Mix.Mixdb.Migrations.PostgresSqlMixDbDb
                     table.PrimaryKey("PK_MixMedia", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "sysPermission",
                 columns: table => new
                 {
@@ -181,7 +181,7 @@ namespace Mix.Mixdb.Migrations.PostgresSqlMixDbDb
                     table.PrimaryKey("PK_MixPermission", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "sysPermissionEndpoint",
                 columns: table => new
                 {
@@ -206,7 +206,7 @@ namespace Mix.Mixdb.Migrations.PostgresSqlMixDbDb
                     table.PrimaryKey("PK_MixPermissionEndpoint", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "SysUserData",
                 columns: table => new
                 {
@@ -233,7 +233,7 @@ namespace Mix.Mixdb.Migrations.PostgresSqlMixDbDb
                     table.PrimaryKey("PK_MixUserData", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "sysUserPermission",
                 columns: table => new
                 {

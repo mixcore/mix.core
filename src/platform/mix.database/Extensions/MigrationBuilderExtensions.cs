@@ -11,11 +11,11 @@ namespace Mix.Database.Extensions
 {
     public static class MigrationBuilderExtensions
     {
-        public static CreateTableBuilder<dynamic> TryCreateTable(this MigrationBuilder builder,
+        public static CreateTableBuilder<T> TryCreateTable<T>(this MigrationBuilder builder,
             string name,
-            Func<ColumnsBuilder, dynamic> columns,
+            Func<ColumnsBuilder, T> columns,
             string? schema = null,
-            Action<CreateTableBuilder<dynamic>>? constraints = null,
+            Action<CreateTableBuilder<T>>? constraints = null,
             string? comment = null)
         {
             try

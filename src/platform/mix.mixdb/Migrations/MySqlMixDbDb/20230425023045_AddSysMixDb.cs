@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-
+using Mix.Database.Extensions;
 #nullable disable
 
 namespace Mix.Mixdb.Migrations
@@ -14,7 +14,7 @@ namespace Mix.Mixdb.Migrations
             migrationBuilder.AlterDatabase()
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "ContactAddress",
                 columns: table => new
                 {
@@ -50,7 +50,7 @@ namespace Mix.Mixdb.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "Metadata",
                 columns: table => new
                 {
@@ -80,7 +80,7 @@ namespace Mix.Mixdb.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "MetadataContentAssociation",
                 columns: table => new
                 {
@@ -112,7 +112,7 @@ namespace Mix.Mixdb.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "MixDbEventSubscriber",
                 columns: table => new
                 {
@@ -142,7 +142,7 @@ namespace Mix.Mixdb.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "PortalMenu",
                 columns: table => new
                 {
@@ -177,7 +177,7 @@ namespace Mix.Mixdb.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "SysMedia",
                 columns: table => new
                 {
@@ -206,7 +206,7 @@ namespace Mix.Mixdb.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "sysPermission",
                 columns: table => new
                 {
@@ -236,7 +236,7 @@ namespace Mix.Mixdb.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "sysPermissionEndpoint",
                 columns: table => new
                 {
@@ -269,7 +269,7 @@ namespace Mix.Mixdb.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "SysUserData",
                 columns: table => new
                 {
@@ -305,7 +305,7 @@ namespace Mix.Mixdb.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
+            migrationBuilder.TryCreateTable(
                 name: "sysUserPermission",
                 columns: table => new
                 {
