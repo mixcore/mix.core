@@ -173,8 +173,8 @@ namespace Mix.Database.Services
             cacheCtx.Database.Migrate();
             using var accCtx = GetAccountDbContext();
             accCtx.Database.Migrate();
-            //using var mixdbCtx = GetMixDbDbContext();
-            //mixdbCtx.Database.Migrate();
+            using var mixdbCtx = GetMixDbDbContext();
+            mixdbCtx.Database.Migrate();
         }
 
         public async Task InitQuartzContextAsync()

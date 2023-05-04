@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Database.Base;
+using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
 using Mix.Lib.Interfaces;
 using Mix.RepoDb.Interfaces;
@@ -141,7 +142,9 @@ namespace Mix.Lib.Services
                 using (var serviceScope = _serviceProvider.CreateScope())
                 {
                     _uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
+                    var mixdbUow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixDbDbContext>>();
                     _repository = serviceScope.ServiceProvider.GetRequiredService<MixRepoDbRepository>();
+                    _repository.SetDbConnection(mixdbUow);
                     _context = _uow.DbContext;
                     _uow.Begin();
 
@@ -158,6 +161,7 @@ namespace Mix.Lib.Services
                     await ImportData();
 
                     await _uow.CompleteAsync();
+                    await mixdbUow.CompleteAsync();
                     return _siteData;
                 }
             }

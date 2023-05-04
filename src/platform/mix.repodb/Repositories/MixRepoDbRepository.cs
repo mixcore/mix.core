@@ -525,21 +525,19 @@ namespace Mix.RepoDb.Repositories
 
         public void SetDbConnection(UnitOfWorkInfo dbUow)
         {
+            dbUow.Begin();
 
             if (DatabaseProvider == MixDatabaseProvider.SQLITE)
             {
-
-                dbUow.Begin();
                 if (_connection != null)
                 {
                     _connection.Close();
                     _connection.Dispose();
                 }
-
-                _connection = dbUow.ActiveDbContext.Database.GetDbConnection();
-                _dbTransaction = dbUow.ActiveTransaction.GetDbTransaction();
-                _isRoot = false;
             }
+            _connection = dbUow.ActiveDbContext.Database.GetDbConnection();
+            _dbTransaction = dbUow.ActiveTransaction.GetDbTransaction();
+            _isRoot = false;
         }
 
         public IDbConnection CreateConnection(bool isRoot = false, bool isRenew = false)
@@ -593,7 +591,7 @@ namespace Mix.RepoDb.Repositories
                 _dbTransaction.Commit();
             }
         }
-        
+
         public void RollbackTransaction()
         {
             if ((_isRoot || DatabaseProvider == MixDatabaseProvider.SQLITE) && _dbTransaction?.Connection != null)
