@@ -18,7 +18,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Onepay
         public string? vpc_Locale { get; set; } = "vn";
         public string? vpc_MerchTxnRef { get; set; }
         public string? vpc_Merchant { get; set; }
-        
+
         public string? vpc_OrderInfo { get; set; }
         public string? vpc_ReturnURL { get; set; }
         public string? vpc_TicketNo { get; set; }

@@ -90,7 +90,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             }
 
             if (isChanged && CacheService != null)
-            {             
+            {
                 await CacheService.SetAsync($"{Id}/{GetType().FullName}", this, typeof(MixPostContent).FullName, "full");
             }
         }

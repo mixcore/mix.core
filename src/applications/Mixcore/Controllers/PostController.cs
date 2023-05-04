@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
 using Mix.Lib.Interfaces;
-using Mix.Mixdb.Entities;
+
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Services;

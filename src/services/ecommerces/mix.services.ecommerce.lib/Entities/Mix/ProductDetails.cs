@@ -3,7 +3,7 @@ using Mix.Heart.Entities;
 
 namespace Mix.Services.Ecommerce.Lib.Entities
 {
-    public class ProductDetails: EntityBase<int>
+    public class ProductDetails : EntityBase<int>
     {
         public int MixTenantId { get; set; }
         public MixDatabaseParentType ParentType { get; set; }

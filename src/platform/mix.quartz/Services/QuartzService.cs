@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
-using Mix.Quartz.Extensions;
 using Mix.Quartz.Constants;
+using Mix.Quartz.Extensions;
+using Mix.Quartz.Interfaces;
 using Mix.Shared;
 using Newtonsoft.Json.Linq;
 using Quartz.Impl;
@@ -13,7 +14,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Mix.Quartz.Interfaces;
 
 namespace Mix.Quartz.Services
 {

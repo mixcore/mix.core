@@ -23,8 +23,9 @@ using Mix.Communicator.Models;
 using Newtonsoft.Json.Linq;
 using System.Web;
 using Mix.Identity.Models.ManageViewModels;
-using Mix.Mixdb.Entities;
+
 using Mix.Lib.Interfaces;
+using Mix.Database.Entities.MixDb;
 
 namespace Mix.Account.Controllers
 {

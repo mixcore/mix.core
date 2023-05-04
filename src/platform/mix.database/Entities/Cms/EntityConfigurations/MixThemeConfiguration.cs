@@ -1,4 +1,5 @@
-﻿using Mix.Database.Services;
+﻿using Mix.Database.Base.Cms;
+using Mix.Database.Services;
 using Newtonsoft.Json.Linq;
 
 namespace Mix.Database.Entities.Cms.EntityConfigurations

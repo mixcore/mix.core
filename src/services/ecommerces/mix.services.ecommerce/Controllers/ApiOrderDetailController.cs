@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Database.Entities.Cms;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
@@ -7,7 +6,6 @@ using Mix.Lib.Base;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
-using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Dtos;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Interfaces;
@@ -23,7 +21,7 @@ namespace Mix.Services.Ecommerce.Controllers
     {
         private readonly IEcommerceService _ecommerceService;
         public OrderDetailController(
-            IEcommerceService ecommerceService, 
+            IEcommerceService ecommerceService,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
@@ -39,7 +37,7 @@ namespace Mix.Services.Ecommerce.Controllers
 
         #region Overrides
 
-        
+
         [HttpPost("update-order-status/{id}")]
         public async Task<ActionResult> UpdateStatus(int id, [FromBody] UpdateOrderStatusDto data, CancellationToken cancellationToken = default)
         {

@@ -8,7 +8,7 @@ namespace Mix.Lib.Services
     {
         private readonly IQueueService<MessageQueueModel> _queueService;
         private readonly UnitOfWorkInfo<MixCmsContext> _uow;
-        
+
         public MixEdmService(
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<MixCmsContext> uow,

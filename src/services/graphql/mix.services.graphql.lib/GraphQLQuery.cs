@@ -1,6 +1,5 @@
 ﻿using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
-using Mix.Database.Base;
 using Mix.Services.Graphql.Lib.Interfaces;
 using Mix.Services.Graphql.Lib.Resolvers;
 using Mix.Services.Graphql.Lib.Types;

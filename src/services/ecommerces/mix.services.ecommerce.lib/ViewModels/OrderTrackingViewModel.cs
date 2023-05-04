@@ -5,7 +5,7 @@ using Mix.Services.Ecommerce.Lib.Enums;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels
 {
-    public class OrderTrackingViewModel: ViewModelBase<EcommerceDbContext, OrderTracking, int, OrderTrackingViewModel>
+    public class OrderTrackingViewModel : ViewModelBase<EcommerceDbContext, OrderTracking, int, OrderTrackingViewModel>
     {
         #region Properties
 

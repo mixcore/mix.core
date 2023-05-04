@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mix.Database.Base;
+using Mix.Database.EntityConfigurations.Base;
 using Mix.Database.Services;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Payments.Lib.Constants;
@@ -38,7 +38,7 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
                 .HasConversion(new EnumToStringConverter<OrderStatus>())
                 .HasColumnType($"{Config.String}{Config.SmallLength}")
                 .HasCharSet(Config.CharSet);
-            
+
         }
     }
 }

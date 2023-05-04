@@ -8,7 +8,6 @@ using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
-using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Interfaces;

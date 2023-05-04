@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace Mix.Database.Entities.Cms
+﻿namespace Mix.Database.Entities.Cms
 {
     public class MixApplication : TenantEntityBase<int>
     {

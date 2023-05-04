@@ -35,7 +35,7 @@ namespace Mixcore.Domain.ViewModels
 
         public JObject AdditionalData { get; set; }
         public PagingResponseModel<ModuleDataViewModel> Data { get; set; }
-        public PagingResponseModel<ModulePostAssociationViewModel> Posts{ get; set; }
+        public PagingResponseModel<ModulePostAssociationViewModel> Posts { get; set; }
         #endregion
 
         #region Overrides

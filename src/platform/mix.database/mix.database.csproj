@@ -35,9 +35,9 @@
 		<Using Include="Mix.Constant.Enums" />
 		<Using Include="Mix.Shared.Dtos" />
 		<Using Include="Mix.Database.Entities.Base" />
+		<Using Include="Mix.Database.Constants" />
 
 		<Using Include="Mix.Database.Base" />
-		<Using Include="Mix.Database.Base.Cms" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Mix.Services.Graphql.Lib.Interfaces
+﻿namespace Mix.Services.Graphql.Lib.Interfaces
 {
     public interface ITableNameLookup
     {

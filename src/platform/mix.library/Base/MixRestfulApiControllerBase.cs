@@ -16,10 +16,10 @@ namespace Mix.Lib.Base
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         public MixRestfulApiControllerBase(
-            IHttpContextAccessor httpContextAccessor, 
-            IConfiguration configuration, MixCacheService cacheService, 
-            TranslatorService translator, 
-            MixIdentityService mixIdentityService, 
+            IHttpContextAccessor httpContextAccessor,
+            IConfiguration configuration, MixCacheService cacheService,
+            TranslatorService translator,
+            MixIdentityService mixIdentityService,
             UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
         {
@@ -51,7 +51,7 @@ namespace Mix.Lib.Base
         public async Task<ActionResult> DeleteCache(TPrimaryKey id, [FromServices] MixCacheService cacheService, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await RemoveCacheHandler(cacheService,id);
+            await RemoveCacheHandler(cacheService, id);
             return Ok();
         }
 

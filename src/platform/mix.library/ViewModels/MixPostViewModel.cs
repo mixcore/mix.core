@@ -10,7 +10,7 @@
         {
         }
 
-        public MixPostViewModel(MixPost entity, UnitOfWorkInfo uowInfo = null) 
+        public MixPostViewModel(MixPost entity, UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {
         }

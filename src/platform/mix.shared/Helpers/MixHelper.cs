@@ -32,7 +32,7 @@ namespace Mix.Shared.Helpers
 
         public static bool IsDefaultId<TPrimaryKey>(TPrimaryKey id) =>
             Equals(id, default(TPrimaryKey))
-            || (id is Guid && Guid.Parse(id.ToString()) == Guid.Empty) 
+            || (id is Guid && Guid.Parse(id.ToString()) == Guid.Empty)
             || (id is int && int.Parse(id.ToString()) == 0);
 
         public static string SerializeObject(object obj)

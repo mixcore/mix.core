@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Communicator.Services;
-using Mix.Quartz.Services;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

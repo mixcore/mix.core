@@ -2,7 +2,7 @@
 using Mix.Database.Services;
 using Mix.Heart.Entities;
 using Mix.Heart.Repository;
-using Mix.Mixdb.Entities;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;

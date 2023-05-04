@@ -3,7 +3,7 @@ using Mix.Shared.Dtos;
 
 namespace Mix.Services.Databases.Lib.Dtos
 {
-    public class SearchMetadataDto: SearchRequestDto
+    public class SearchMetadataDto : SearchRequestDto
     {
         public SearchMetadataDto()
         {

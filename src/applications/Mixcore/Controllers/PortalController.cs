@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
-using Mix.Lib.Interfaces;
 using Mix.Shared.Services;
 
 namespace Mixcore.Controllers

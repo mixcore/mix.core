@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Heart.Helpers;
+using Mix.Quartz.Interfaces;
+using Mix.Quartz.Jobs;
+using Mix.Quartz.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Mix.Quartz.Jobs;
-using Mix.Quartz.Models;
-using Mix.Quartz.Interfaces;
 
 namespace Mix.Scheduler.Controllers
 {
