@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Mix.Constant.Constants;
 using Mix.Constant.Enums;
 using Mix.Database.Base;
+using Mix.Database.Constants;
 using Mix.Database.Entities.Cms;
+using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
+using Mix.Heart.Constants;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
@@ -22,6 +26,7 @@ using Newtonsoft.Json.Linq;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
+using System.Collections.Generic;
 using System.Dynamic;
 
 namespace Mix.RepoDb.Services
@@ -532,7 +537,21 @@ namespace Mix.RepoDb.Services
             return await _repository.GetAllAsync(cancellationToken);
         }
 
-        private async Task<bool> Migrate(MixDatabaseViewModel database, MixDatabaseProvider databaseProvider, MixRepoDbRepository repo)
+        private async Task<bool> CheckTableExist(string tableName, MixRepoDbRepository repo)
+        {
+            try
+            {
+                await repo.ExecuteCommand($"SELECT Id FROM {_databaseConstant.BacktickOpen}{tableName}{_databaseConstant.BacktickClose};");
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        private async Task<bool> Migrate(MixDatabaseViewModel database,
+            MixDatabaseProvider databaseProvider,
+            MixRepoDbRepository repo)
         {
             var colsSql = new List<string>();
             var tableName = database.SystemName.ToTitleCase();
