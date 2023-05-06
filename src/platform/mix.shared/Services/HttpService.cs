@@ -5,6 +5,7 @@ using Mix.Shared.Models;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
@@ -168,7 +169,8 @@ namespace Mix.Shared.Services
                         .ToDictionary(prop => prop.Name, prop => (string)prop.GetValue(content, null));
                     return new FormUrlEncodedContent(formData);
                 default:
-                    return new StringContent(JsonSerializer.Serialize(content, _sharedJsonSerializerOptions), Encoding.UTF8, contentType);
+                    return new StringContent(
+                            JObject.FromObject(content).ToString(Newtonsoft.Json.Formatting.None), Encoding.UTF8, contentType);
             }
 
 
