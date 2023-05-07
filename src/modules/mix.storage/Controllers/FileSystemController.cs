@@ -77,15 +77,19 @@ namespace Mix.Storage.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (string.IsNullOrEmpty(folder))
+                using (var fileStream = file.OpenReadStream())
                 {
-                    folder = DateTime.Now.ToString("yyyy-MMM");
-                    folder = $"{MixFolders.StaticFiles}/{MixFolders.UploadsFolder}/{folder.TrimStart('/').TrimEnd('/')}";
-                }
-                var result = MixFileHelper.SaveFile(file, folder);
-                if (result != null)
-                {
-                    return Ok($"{CurrentTenant.Configurations.Domain}/{folder}/{result.Filename}{result.Extension}");
+                    if (string.IsNullOrEmpty(folder))
+                    {
+                        folder = DateTime.Now.ToString("yyyy-MMM");
+                        folder = $"{MixFolders.StaticFiles}/{MixFolders.UploadsFolder}/{folder.TrimStart('/').TrimEnd('/')}";
+                    }
+                    var fileModel = new FileModel(file.FileName, fileStream, folder);
+                    var result = MixFileHelper.SaveFile(fileModel);
+                    if (result)
+                    {
+                        return Ok($"{CurrentTenant.Configurations.Domain}/{folder}/{fileModel.Filename}{fileModel.Extension}");
+                    }
                 }
             }
             return BadRequest();
@@ -104,16 +108,20 @@ namespace Mix.Storage.Controllers
         {
             if (file.FileName.EndsWith(MixFileExtensions.Zip))
             {
-                if (string.IsNullOrEmpty(folder))
+                using (var fileStream = file.OpenReadStream())
                 {
-                    folder = DateTime.Now.ToString("yyyy-MMM");
-                    folder = $"{MixFolders.StaticFiles}/{MixFolders.UploadsFolder}/{folder.TrimStart('/').TrimEnd('/')}";
-                }
-                var result = MixFileHelper.SaveFile(file, folder);
-                MixFileHelper.UnZipFile($"{folder}/{result}", folder);
-                if (result != null)
-                {
-                    return Ok($"{CurrentTenant.Configurations.Domain}/{folder}/{result.Filename}{result.Extension}");
+                    if (string.IsNullOrEmpty(folder))
+                    {
+                        folder = DateTime.Now.ToString("yyyy-MMM");
+                        folder = $"{MixFolders.StaticFiles}/{MixFolders.UploadsFolder}/{folder.TrimStart('/').TrimEnd('/')}";
+                    }
+                    var fileModel = new FileModel(file.FileName, fileStream, folder);
+                    var result = MixFileHelper.SaveFile(fileModel);
+                    MixFileHelper.UnZipFile($"{folder}/{result}", folder);
+                    if (result)
+                    {
+                        return Ok($"{CurrentTenant.Configurations.Domain}/{folder}/{fileModel.Filename}{fileModel.Extension}");
+                    }
                 }
             }
             return BadRequest();

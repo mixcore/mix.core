@@ -28,6 +28,7 @@
         public string Tags { get; set; }
         public string Source { get; set; }
         public string TargetUrl { get; set; }
+        public string FileStream { get; set; }
 
         public string FullPath => $"{FileFolder}/{FileName}{Extension}";
         #endregion

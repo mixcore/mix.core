@@ -106,8 +106,11 @@ namespace Mix.Lib.Services
             MixFileHelper.EmptyFolder(MixFolders.ThemePackage);
             if (themeFile != null)
             {
-                var templateAsset = MixFileHelper.SaveFile(themeFile, MixFolders.ThemePackage);
-                MixFileHelper.UnZipFile(templateAsset.FullPath, MixFolders.ThemePackage);
+                using (var fileStream = themeFile.OpenReadStream()) {
+                    var formFile = new FileModel(themeFile.FileName, fileStream, MixFolders.ThemePackage);
+                    var templateAsset = MixFileHelper.SaveFile(formFile);
+                    MixFileHelper.UnZipFile(formFile.FullPath, MixFolders.ThemePackage);
+                }
             }
             else
             {

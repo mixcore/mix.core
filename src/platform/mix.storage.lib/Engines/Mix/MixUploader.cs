@@ -18,10 +18,10 @@ namespace Mix.Storage.Lib.Engines.Mix
         {
             string? result = null;
             file.FileFolder = GetUploadFolder(file.Extension, file.FolderName, createdBy);
-            var fileModel = MixFileHelper.SaveFile(file);
-            if (fileModel != null)
+            var saveResult = MixFileHelper.SaveFile(file);
+            if (saveResult)
             {
-                result = $"{CurrentTenant.Configurations.Domain}/{file.FileFolder}/{fileModel.Filename}{fileModel.Extension}";
+                result = $"{CurrentTenant.Configurations.Domain}/{file.FileFolder}/{file.Filename}{file.Extension}";
             }
 
             return Task.FromResult(result);
@@ -29,19 +29,23 @@ namespace Mix.Storage.Lib.Engines.Mix
 
         public override Task<string?> Upload(IFormFile file, string? folder, string? createdBy, CancellationToken cancellationToken = default)
         {
-            string? result = null;
-            if (string.IsNullOrEmpty(folder))
+            using (var fileStream = file.OpenReadStream())
             {
-                folder = GetUploadFolder(file.FileName, folder, createdBy);
-            }
+                string? result = null;
+                if (string.IsNullOrEmpty(folder))
+                {
+                    folder = GetUploadFolder(file.FileName, folder, createdBy);
+                }
 
-            var fileModel = MixFileHelper.SaveFile(file, folder);
-            if (fileModel != null)
-            {
-                result = $"{CurrentTenant.Configurations.Domain}/{folder}/{fileModel.Filename}{fileModel.Extension}";
-            }
+                var fileModel = new FileModel(file.FileName, fileStream, folder);
+                var saveResult = MixFileHelper.SaveFile(fileModel);
+                if (saveResult)
+                {
+                    result = $"{CurrentTenant.Configurations.Domain}/{folder}/{fileModel.Filename}{fileModel.Extension}";
+                }
 
-            return Task.FromResult(result);
+                return Task.FromResult(result);
+            }
         }
 
         private string GetUploadFolder(string filename, string? fileFolder, string? createdBy)

@@ -34,7 +34,9 @@ namespace Mix.Storage.Lib.Engines.Base
         public async Task CreateMedia(string fullname, int tenantId, string? createdBy, CancellationToken cancellationToken = default)
         {
             string filePath = fullname.Substring(0, fullname.LastIndexOf('/'));
-            string fileFolder = filePath.Replace(CurrentTenant.Configurations.Domain, string.Empty);
+            string fileFolder = CurrentTenant.Configurations.Domain != null
+                        ? filePath.Replace(CurrentTenant.Configurations.Domain, string.Empty)
+                        : filePath;
             string fileName = fullname.Substring(fullname.LastIndexOf('/') + 1);
             var media = new MixMediaViewModel(CmsUow)
             {
