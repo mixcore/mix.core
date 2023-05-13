@@ -7,15 +7,15 @@ namespace Mix.Queue.Models
     public class MixTopicModel
     {
         public string Id { get; set; }
-        public List<MixSubscribtionModel> Subscriptions { get; set; } = new();
+        public List<MixSubscriptionModel> Subscriptions { get; set; } = new();
         private readonly ConcurrentQueue<MessageQueueModel> _messages = new();
 
-        public MixSubscribtionModel CreateSubscription(string subscriptionId)
+        public MixSubscriptionModel CreateSubscription(string subscriptionId)
         {
             var subscription = Subscriptions.Find(m => m.Id == subscriptionId);
             if (subscription == null)
             {
-                subscription = new MixSubscribtionModel()
+                subscription = new MixSubscriptionModel()
                 {
                     Id = subscriptionId,
                     Status = MixQueueMessageStatus.Nack,
@@ -26,7 +26,7 @@ namespace Mix.Queue.Models
             return subscription;
         }
 
-        public MixSubscribtionModel GetSubscription(string subscriptionId)
+        public MixSubscriptionModel GetSubscription(string subscriptionId)
         {
             return Subscriptions.Find(m => m.Id == subscriptionId);
         }

@@ -61,6 +61,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
             services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
+            services.TryAddSingleton<IMixDbCommandHubClientService, MixDbCommandHubClientService>();
             services.TryAddSingleton<MixDbEventService>();
             services.AddMixRepoDb();
 

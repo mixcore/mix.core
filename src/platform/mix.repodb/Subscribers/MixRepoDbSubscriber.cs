@@ -34,8 +34,8 @@ namespace Mix.RepoDb.Subscribers
             {
                 using (ServiceScope = ServicesProvider.CreateScope())
                 {
-                    _mixDbService = GetScopedService<IMixDbService>();
-                    var cmsUow = GetScopedService<UnitOfWorkInfo<MixCmsContext>>();
+                    _mixDbService = GetRequiredService<IMixDbService>();
+                    var cmsUow = GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
                     switch (model.Action)
                     {
                         case MixRepoDbQueueAction.Backup:

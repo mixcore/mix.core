@@ -95,6 +95,7 @@
 		<ProjectReference Include="..\mix.repodb\mix.repodb.csproj" />
 		<ProjectReference Include="..\mix.service\mix.service.csproj" />
 		<ProjectReference Include="..\mix.shared\mix.shared.csproj" />
+		<ProjectReference Include="..\mix.signalr.hub\mix.signalr.hub.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

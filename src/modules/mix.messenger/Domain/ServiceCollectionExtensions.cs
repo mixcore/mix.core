@@ -11,6 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<PortalHub>(HubEndpoints.PortalHub);
+                endpoints.MapHub<MixDbCommandHub>(HubEndpoints.MixDbCommandHub);
                 endpoints.MapHub<LogStreamHub>(HubEndpoints.LogStreamHub);
                 endpoints.MapHub<EditFileHub>(HubEndpoints.EditFileHub);
                 endpoints.MapHub<MixThemeHub>(HubEndpoints.MixThemeHub);

@@ -12,7 +12,7 @@ namespace Mix.Queue.Models
         public string Data { get; set; }
         public string DataTypeFullName { get; set; }
 
-        public List<MixSubscribtionModel> Subscriptions { get; set; } = new();
+        public List<MixSubscriptionModel> Subscriptions { get; set; } = new();
 
         public MessageQueueModel()
         {

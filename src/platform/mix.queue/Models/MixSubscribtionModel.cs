@@ -2,7 +2,7 @@
 
 namespace Mix.Queue.Models
 {
-    public class MixSubscribtionModel
+    public class MixSubscriptionModel
     {
         public string TopicId { get; set; }
         public string Id { get; set; }
