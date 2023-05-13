@@ -20,15 +20,19 @@ using Mix.RepoDb.Interfaces;
 using Mix.Service.Interfaces;
 using Mix.Constant.Constants;
 using Mix.Heart.Services;
+using Mix.Identity.Constants;
+using Mix.Shared.Services;
+using Mix.Database.Entities.MixDb;
+using Newtonsoft.Json;
 
 namespace Mix.RepoDb.Services
 {
     public class MixDbDataService : TenantServiceBase, IMixDbDataService
     {
+        private const string LastModifiedFieldName = "LastModified";
         private readonly MixRepoDbRepository _repository;
         private readonly MixRepoDbRepository _associationRepository;
         private readonly IMixMemoryCacheService _memoryCache;
-
         #region Properties
 
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
@@ -63,6 +67,11 @@ namespace Mix.RepoDb.Services
         }
 
         #region Methods
+
+        public async void SetUOW(UnitOfWorkInfo<MixDbDbContext> uow)
+        {
+            _repository.SetDbConnection(uow);
+        }
 
         #region CRUD
 
@@ -164,38 +173,11 @@ namespace Mix.RepoDb.Services
             return default;
         }
 
-
-        public async Task CreateData(string tableName, JObject data)
+        public async Task<long> CreateData(string tableName, JObject data)
         {
             _repository.InitTableName(tableName);
-            JObject obj = new JObject();
-            foreach (var pr in data.Properties())
-            {
-                obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
-            }
-            if (!obj.ContainsKey(CreatedDateFieldName))
-            {
-                obj.Add(new JProperty(CreatedDateFieldName, DateTime.UtcNow));
-            }
-            if (!obj.ContainsKey(PriorityFieldName))
-            {
-                obj.Add(new JProperty(PriorityFieldName, 0));
-            }
-            if (!obj.ContainsKey(TenantIdFieldName))
-            {
-                obj.Add(new JProperty(TenantIdFieldName, CurrentTenant?.Id ?? 1));
-            }
-
-            if (!obj.ContainsKey(StatusFieldName))
-            {
-                obj.Add(new JProperty(StatusFieldName, MixContentStatus.Published.ToString()));
-            }
-
-            if (!obj.ContainsKey(IsDeletedFieldName))
-            {
-                obj.Add(new JProperty(IsDeletedFieldName, false));
-            }
-            await _repository.InsertAsync(obj);
+            var obj = await ParseDto(tableName, data);
+            return await _repository.InsertAsync(obj);
         }
 
 
@@ -408,6 +390,72 @@ namespace Mix.RepoDb.Services
         #endregion
 
         #region Private
+        private async Task<JObject> ParseDto(string tableName, JObject dto)
+        {
+            JObject result = new();
+            var database = await GetMixDatabase(tableName);
+            var encryptedColumnNames = database.Columns
+                .Where(m => m.ColumnConfigurations.IsEncrypt)
+                .Select(c => c.SystemName)
+                .ToList();
+            foreach (var pr in dto.Properties())
+            {
+                var col = database.Columns.FirstOrDefault(c => c.SystemName.Equals(pr.Name, StringComparison.InvariantCultureIgnoreCase));
+
+                if (encryptedColumnNames.Contains(pr.Name))
+                {
+                    result.Add(
+                        new JProperty(
+                                pr.Name.ToTitleCase(), AesEncryptionHelper.EncryptString(pr.Value.ToString(),
+                                GlobalConfigService.Instance.AppSettings.ApiEncryptKey)));
+                }
+                else
+                {
+                    if (col != null && (col.DataType == MixDataType.Json || col.DataType == MixDataType.Array))
+                    {
+                        result.Add(new JProperty(pr.Name.ToTitleCase(), JObject.FromObject(pr.Value).ToString(Formatting.None)));
+                    }
+                    else
+                    {
+                        result.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
+                    }
+
+                }
+            }
+
+            if (!result.ContainsKey(IdFieldName))
+            {
+                result.Add(new JProperty(IdFieldName, null));
+                if (!result.ContainsKey(CreatedDateFieldName))
+                {
+                    result.Add(new JProperty(CreatedDateFieldName, DateTime.UtcNow));
+                }
+            }
+            else
+            {
+                result[LastModifiedFieldName] = DateTime.UtcNow;
+            }
+
+            if (!result.ContainsKey(PriorityFieldName))
+            {
+                result.Add(new JProperty(PriorityFieldName, 0));
+            }
+            if (!result.ContainsKey(TenantIdFieldName))
+            {
+                result.Add(new JProperty(TenantIdFieldName, CurrentTenant?.Id ?? 1));
+            }
+
+            if (!result.ContainsKey(StatusFieldName))
+            {
+                result.Add(new JProperty(StatusFieldName, MixContentStatus.Published.ToString()));
+            }
+
+            if (!result.ContainsKey(IsDeletedFieldName))
+            {
+                result.Add(new JProperty(IsDeletedFieldName, false));
+            }
+            return result;
+        }
 
         public void Dispose()
         {

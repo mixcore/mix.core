@@ -96,7 +96,7 @@ namespace Mix.Queue.Engines
             return default;
         }
 
-        protected T GetScopedService<T>()
+        protected T GetRequiredService<T>()
         {
             ServiceScope ??=  ServicesProvider.CreateScope();
             return ServiceScope.ServiceProvider.GetRequiredService<T>();
@@ -112,7 +112,7 @@ namespace Mix.Queue.Engines
                     return;
                 }
 
-                CacheService = GetScopedService<MixCacheService>();
+                CacheService = GetRequiredService<MixCacheService>();
                 await Handler(data);
             }
             catch (Exception ex)

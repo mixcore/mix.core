@@ -73,7 +73,7 @@ namespace Mix.Lib.Subscribers
                 using (ServiceScope = ServicesProvider.CreateScope())
                 {
                     var msg = model.ParseData<EmailMessageModel>();
-                    var emailService = GetScopedService<EmailService>();
+                    var emailService = GetRequiredService<EmailService>();
                     await emailService.SendMail(msg);
                     await SendMessage($"Sent Email {msg.Subject} to {msg.To}", true);
                 }

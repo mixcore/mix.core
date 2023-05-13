@@ -9,5 +9,6 @@ namespace Mix.SignalR.Interfaces
         public Task SendMessageAsync(string title, string description, object data, MessageType messageType = MessageType.Info);
 
         public Task SendMessageAsync(SignalRMessageModel message);
+        public Task SendPrivateMessageAsync(SignalRMessageModel message, string connectionId, bool selfReceive = false);
     }
 }

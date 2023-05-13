@@ -1,4 +1,4 @@
-/* Thu Apr 06 2023 12:25:05 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
+/* Sat May 13 2023 13:40:51 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
   max-width: 100%; }
 
 fb-login {
@@ -37,6 +37,15 @@ qr-code .qr-output canvas {
 /* canvas{width:300px; height:380px;} */
 upload-croppie .cr-boundary {
   overflow: hidden; }
+
+media-file-upload img {
+  max-width: 25vw; }
+
+media-file-upload img {
+  max-width: 25vw; }
+
+media-file-upload img {
+  max-width: 25vw; }
 
 /* GENERAL STYLE */
 html,

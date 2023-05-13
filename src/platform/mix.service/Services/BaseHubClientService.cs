@@ -37,6 +37,47 @@ namespace Mix.Service.Services
             return SendMessageAsync(msg);
         }
 
+        public async Task SendPrivateMessageAsync(SignalRMessageModel message, string connectionId, bool selfReceive = false)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(MixEndpointService.Messenger))
+                {
+                    while (Connection == null)
+                    {
+                        Init();
+                        if (Connection == null)
+                        {
+                            await Task.Delay(5000);
+                        }
+                    }
+
+                    while (Connection != null && Connection.State != HubConnectionState.Connected)
+                    {
+                        try
+                        {
+                            await Task.Delay(new Random().Next(0, 5) * 1000);
+                            await Connection.StartAsync();
+                        }
+
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
+                    }
+                    await Connection.InvokeAsync(HubMethods.SendPrivateMessage, message, connectionId, selfReceive);
+                }
+                else
+                {
+                    Console.WriteLine("Cannot Start SignalR Hub: MixEndpointService.Messenger is null or empty");
+                }
+            }
+            catch(Exception ex)
+            {
+                await MixLogService.LogExceptionAsync(ex);
+            }
+        }
+        
         public async Task SendMessageAsync(SignalRMessageModel message)
         {
             try

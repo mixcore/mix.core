@@ -1,12 +1,14 @@
 ﻿using Mix.Constant.Enums;
+using Mix.Database.Entities.MixDb;
 using Mix.Heart.Models;
+using Mix.Heart.UnitOfWork;
 using Mix.Shared.Dtos;
 using Newtonsoft.Json.Linq;
 using RepoDb;
 
 namespace Mix.RepoDb.Interfaces
 {
-    public interface IMixDbDataService
+    public interface IMixDbDataService: IDisposable
     {
         public Task<JObject?> GetSingleByParent(string tableName, MixContentType parentType, object parentId, bool loadNestedData = false);
 
@@ -18,6 +20,7 @@ namespace Mix.RepoDb.Interfaces
 
         public Task<JObject?> GetSingleBy(string tableName, List<QueryField> queries);
 
-        public Task CreateData(string tableName, JObject data);
+        public Task<long> CreateData(string tableName, JObject data);
+        void SetUOW(UnitOfWorkInfo<MixDbDbContext> uow);
     }
 }
