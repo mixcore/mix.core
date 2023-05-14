@@ -9,15 +9,17 @@ using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Service.Commands;
 using Mix.Service.Interfaces;
+using Mix.Service.Models;
 using Mix.Shared.Models;
 using Mix.Shared.Services;
+using Mix.SignalR.Interfaces;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
-    [MixDatabaseAuthorize("")]
+    //[MixDatabaseAuthorize("")]
     [Route("api/v2/rest/mix-portal/mix-db/{name}")]
     [ApiController]
     public class MixDbController : MixTenantApiControllerBase
@@ -42,7 +44,7 @@ namespace Mix.Portal.Controllers
         private readonly MixIdentityService _idService;
         private readonly IMixDbService _mixDbService;
         private const string AssociationTableName = nameof(MixDatabaseAssociation);
-
+        private IMixDbCommandHubClientService _mixDbCommandHubClientService;
         public MixDbController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -56,7 +58,8 @@ namespace Mix.Portal.Controllers
             ICache cache,
             DatabaseService databaseService,
             MixIdentityService idService,
-            IMixDbService mixDbService)
+            IMixDbService mixDbService,
+            IMixDbCommandHubClientService mixDbCommandHubClientService)
             : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
             _repository = repository;
@@ -66,6 +69,7 @@ namespace Mix.Portal.Controllers
             _memoryCache = memoryCache;
             _idService = idService;
             _mixDbService = mixDbService;
+            _mixDbCommandHubClientService = mixDbCommandHubClientService;
         }
 
         #region Overrides
@@ -171,6 +175,21 @@ namespace Mix.Portal.Controllers
             //throw new MixException(MixErrorStatus.NotFound, id);
         }
 
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        [HttpPost("hub")]
+        public ActionResult CreateHub(object dto)
+        {
+            var obj = new MixDbCommandModel()
+            {
+                RequestedBy = User?.Identity?.Name,
+                Body = JObject.FromObject(dto),
+                MixDbName = _tableName
+            };
+            QueueService.PushQueue(MixQueueTopics.MixDbCommand, MixDbCommandQueueActions.Create, obj);
+
+            return Ok();
+        }
+
         [HttpPost]
         public async Task<ActionResult<object>> Create(JObject dto)
         {
@@ -194,7 +213,7 @@ namespace Mix.Portal.Controllers
             if (data != null)
             {
                 var result = await _repository.GetSingleAsync(id);
-                
+
                 QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
                                             new MixDbEventCommand("PUT", _tableName, obj));
                 return Ok(ReflectionHelper.ParseObject(result));

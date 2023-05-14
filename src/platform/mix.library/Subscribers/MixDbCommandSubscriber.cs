@@ -41,8 +41,11 @@ namespace Mix.Lib.Subscribers
                     if (cmd != null)
                     {
                         var id = await mixDbDataService.CreateData(cmd.MixDbName, cmd.Body);
-                        await mixDbCommandHub.SendPrivateMessageAsync(
-                            new SignalRMessageModel(cmd.Body), cmd.ConnectionId, false);
+                        if (!string.IsNullOrEmpty(cmd.ConnectionId))
+                        {
+                            await mixDbCommandHub.SendPrivateMessageAsync(
+                                new SignalRMessageModel(cmd.Body), cmd.ConnectionId, false);
+                        }
                     }
                     break;
             }

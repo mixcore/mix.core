@@ -94,7 +94,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.graphql.lib", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.graphql", "services\graphql\mix.services.graphql\mix.services.graphql.csproj", "{4C7CFA3D-355B-434F-8442-2B0970BF02C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.mixdb.event", "platform\core\mix.mixdb.event\mix.mixdb.event.csproj", "{9508136B-0879-4BF2-B694-3B6242715BE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.mixdb.event", "platform\core\mix.mixdb.event\mix.mixdb.event.csproj", "{9508136B-0879-4BF2-B694-3B6242715BE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

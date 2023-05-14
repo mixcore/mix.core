@@ -304,7 +304,7 @@ namespace Mix.Account.Controllers
                     var result = await _userManager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey);
                     if (!result.Succeeded)
                     {
-                        Console.WriteLine(result.Errors);
+                        throw new MixException(MixErrorStatus.Badrequest, result.Errors.First());
                     }
                 }
                 var idResult = await _userManager.DeleteAsync(user);

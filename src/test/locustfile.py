@@ -2,13 +2,22 @@ from locust import HttpUser, task, between
 
 class QuickstartUser(HttpUser):
     wait_time = between(1, 2)
-
+    # def on_start(self):
+    #     self.headers =  {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiT3duZXItMSIsIlN1cGVyQWRtaW4iXSwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI1NWFmNjA4OC04MjllLTQ0YWEtODUyYS01YjdiY2NjOGFlM2IiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGlua3UiLCJSZWZyZXNoVG9rZW4iOiIyYzdkODljMi1hNzVlLTRmOGItODMyNC0xZmQyN2JmYjY5Y2MiLCJBdmF0YXIiOiIvbWl4LWFwcC9hc3NldHMvaW1nL3VzZXIucG5nIiwiQUVTS2V5IjoiTkVsVWVtcE9TbXg0UVZsWFJGUm1TeXM1WjBscFp6MDlMRVJCU0VOVFVVbFpXRVZOWVZSSlJsRXJjMjU2YkU5SWJtbzFaMHd3Y201UFJtOWlNRGxYU0VKU00wVTkiLCJSU0FQdWJsaWNLZXkiOiI8P3htbCB2ZXJzaW9uPVwiMS4wXCIgZW5jb2Rpbmc9XCJ1dGYtMTZcIj8-XHJcbjxSU0FQYXJhbWV0ZXJzIHhtbG5zOnhzaT1cImh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlXCIgeG1sbnM6eHNkPVwiaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWFcIj5cclxuICA8RXhwb25lbnQ-QVFBQjwvRXhwb25lbnQ-XHJcbiAgPE1vZHVsdXM-b1hIN09ISUVQdXFRRXVHRk8wRm81dXgyT0NyQTBoclAyeWpBK0FCUUlvV3JTdmMvVkM0T2pZdEpvODhQY2VaR2ZWc0dUaXhkdDlMZ1YrZzZTTVpGMWxIME1BUVRWTzhndGU0YzBvbkdZL09FOFAySDVSZFVQL0E0eVA1Sldjd1VuQ21mSG8ydUJuempPSXF4MnRjaFB4cnR6UmlQZnJkZGp1MHVUcXJJNUwwSVVERTFZSk1rbzFaUDVLY2oyQzBPcnVqd0FCVzBsTitxZXhFTnpidDBZZFoyVzd2UXBrZ0xFcXlVdWJ1RUo0MllieDQzSVBEWWxnY1JNaHZ2YnYxTGl2U3liLzBRZkJSNVhXSFRQYzduMGJZRWpBQkI1RkgrT29YdnlHZXpHSU1qR1FMMnoxVnpiT0lqMzFpS2lCclhrcjBrR2ZJSzRsQzdSNElqdkh1K0FRPT08L01vZHVsdXM-XHJcbjwvUlNBUGFyYW1ldGVycz4iLCJFeHBpcmVBdCI6IjIwMjMtMDUtMTRUMDU6MDA6MzMuNzk0WiIsIm5iZiI6MTY4NDAzOTIzMywiZXhwIjoxNjg0MDQwNDMzLCJpc3MiOiJtaXgtY29yZSIsImF1ZCI6Im1peC1jb3JlIn0.3IARED63s03ZOlCa0olj4sN9V3XFoAej0xS9sJfLL54'}
     @task
     def hello_world(self):
-        self.client.get("/")
-        self.client.get("/post/3/the-future-of-cms-from-mixcore")
+        # self.client.get("/")
+        # self.client.get("/post/3/the-future-of-cms-from-mixcore")
+        self.client.post(
+            url="/api/v2/rest/mix-portal/mix-db/Metadata/hub",
+            json={"type":"testuser", "content":"secret", "seoContent": "asdfa"},
+            auth=None,
+            # headers={"authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiT3duZXItMSIsIlN1cGVyQWRtaW4iXSwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI1NWFmNjA4OC04MjllLTQ0YWEtODUyYS01YjdiY2NjOGFlM2IiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGlua3UiLCJSZWZyZXNoVG9rZW4iOiIyYzdkODljMi1hNzVlLTRmOGItODMyNC0xZmQyN2JmYjY5Y2MiLCJBdmF0YXIiOiIvbWl4LWFwcC9hc3NldHMvaW1nL3VzZXIucG5nIiwiQUVTS2V5IjoiTkVsVWVtcE9TbXg0UVZsWFJGUm1TeXM1WjBscFp6MDlMRVJCU0VOVFVVbFpXRVZOWVZSSlJsRXJjMjU2YkU5SWJtbzFaMHd3Y201UFJtOWlNRGxYU0VKU00wVTkiLCJSU0FQdWJsaWNLZXkiOiI8P3htbCB2ZXJzaW9uPVwiMS4wXCIgZW5jb2Rpbmc9XCJ1dGYtMTZcIj8-XHJcbjxSU0FQYXJhbWV0ZXJzIHhtbG5zOnhzaT1cImh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlXCIgeG1sbnM6eHNkPVwiaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWFcIj5cclxuICA8RXhwb25lbnQ-QVFBQjwvRXhwb25lbnQ-XHJcbiAgPE1vZHVsdXM-b1hIN09ISUVQdXFRRXVHRk8wRm81dXgyT0NyQTBoclAyeWpBK0FCUUlvV3JTdmMvVkM0T2pZdEpvODhQY2VaR2ZWc0dUaXhkdDlMZ1YrZzZTTVpGMWxIME1BUVRWTzhndGU0YzBvbkdZL09FOFAySDVSZFVQL0E0eVA1Sldjd1VuQ21mSG8ydUJuempPSXF4MnRjaFB4cnR6UmlQZnJkZGp1MHVUcXJJNUwwSVVERTFZSk1rbzFaUDVLY2oyQzBPcnVqd0FCVzBsTitxZXhFTnpidDBZZFoyVzd2UXBrZ0xFcXlVdWJ1RUo0MllieDQzSVBEWWxnY1JNaHZ2YnYxTGl2U3liLzBRZkJSNVhXSFRQYzduMGJZRWpBQkI1RkgrT29YdnlHZXpHSU1qR1FMMnoxVnpiT0lqMzFpS2lCclhrcjBrR2ZJSzRsQzdSNElqdkh1K0FRPT08L01vZHVsdXM-XHJcbjwvUlNBUGFyYW1ldGVycz4iLCJFeHBpcmVBdCI6IjIwMjMtMDUtMTRUMDU6MDA6MzMuNzk0WiIsIm5iZiI6MTY4NDAzOTIzMywiZXhwIjoxNjg0MDQwNDMzLCJpc3MiOiJtaXgtY29yZSIsImF1ZCI6Im1peC1jb3JlIn0.3IARED63s03ZOlCa0olj4sN9V3XFoAej0xS9sJfLL54"},
+            name="Metadata/hub",
+        )
+        # self.client.post("/api/v2/rest/mix-portal/mix-db/Metadata/hub", {"type":"testuser", "content":"secret", "seoContent": "asdfa"})
 
-    @task(3)
-    def view_item(self):
-        for item_id in range(1, 3, 1):
-            self.client.get(f"/post/{item_id}/the-future-of-cms-from-mixcore")
+    # @task(3)
+    # def view_item(self):
+    #     for item_id in range(1, 3, 1):
+    #         self.client.get(f"/post/{item_id}/the-future-of-cms-from-mixcore")

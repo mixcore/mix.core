@@ -78,33 +78,6 @@ namespace Mix.Service.Services
         }
 
         #region Helpers
-        private static string GetBodyAsync(HttpRequest request)
-        {
-            var bodyStr = string.Empty;
-
-            // Arguments: Stream, Encoding, detect encoding, buffer size 
-            // AND, the most important: keep stream opened
-            try
-            {
-                if (request.Method != "GET" && request.Method != "DELETE" &&
-                    (request.ContentLength != null || !request.ContentType.StartsWith("multipart/form-data")))
-                {
-                    request.EnableBuffering();
-                    using (var reader = new StreamReader(request.BodyReader.AsStream(), Encoding.UTF8, true, 1024, true))
-                    {
-                        bodyStr = reader.ReadToEnd();
-                    }
-                    request.Body.Seek(0, SeekOrigin.Begin);
-                }
-            }
-            catch
-            {
-                Console.WriteLine($"{nameof(AuditLogService)}: Cannot read body request");
-            }
-
-            return bodyStr;
-        }
-
         private async Task SendMessage(string? message, object? data = default, Exception? ex = null, MessageType msgType = MessageType.Info)
         {
             if (GlobalConfigService.Instance.IsLogStream)

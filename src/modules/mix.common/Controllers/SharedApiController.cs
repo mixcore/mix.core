@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Mix.Common.Domain.Dtos;
 using Mix.Common.Domain.Models;
 using Mix.Common.Domain.ViewModels;
+using Mix.Heart.Exceptions;
 using Mix.Identity.Constants;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
@@ -127,8 +128,7 @@ namespace Mix.Common.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return NotFound();
+                throw new MixException(MixErrorStatus.NotFound, ex);
             }
         }
 
@@ -150,8 +150,7 @@ namespace Mix.Common.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return NotFound();
+                throw new MixException(MixErrorStatus.NotFound, ex);
             }
         }
 
@@ -200,8 +199,7 @@ namespace Mix.Common.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return NotFound();
+                throw new MixException(MixErrorStatus.NotFound, ex);
             }
         }
 
