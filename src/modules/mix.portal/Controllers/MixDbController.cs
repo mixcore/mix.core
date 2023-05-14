@@ -175,7 +175,7 @@ namespace Mix.Portal.Controllers
             //throw new MixException(MixErrorStatus.NotFound, id);
         }
 
-        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        [ResponseCache(Duration = 10, Location = ResponseCacheLocation.Any, NoStore = false)]
         [HttpPost("hub")]
         public ActionResult CreateHub(object dto)
         {

@@ -25,7 +25,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IApplicationBuilder UseUoWs(this IApplicationBuilder app)
         {
-            app.UseMiddleware<AuditlogMiddleware>();
             app.UseMiddleware<UnitOfWorkMiddleware>();
             return app;
         }

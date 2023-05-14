@@ -1,0 +1,5 @@
+{
+  "Redis": {
+    "ConnectionString": "mixcore.redis.cache.windows.net:6380,password=EdJVZpYjN40HkbgKImUzfza5LwAPlb0bWAzCaM5zGsM=,ssl=True,abortConnect=False"
+  }
+}

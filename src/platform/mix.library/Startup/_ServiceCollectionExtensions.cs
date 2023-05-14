@@ -123,12 +123,8 @@ namespace Microsoft.Extensions.DependencyInjection
             string contentRootPath,
             bool isDevelop)
         {
-            app.UseSession();
             app.UseHttpLogging();
-            //app.UseResponseCompression();
-            app.UseMixResponseCaching();
-            app.UseMixTenant();
-            app.UseMixStaticFiles(contentRootPath);
+            
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -146,7 +142,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         #region App
 
-        private static IApplicationBuilder UseMixStaticFiles(this IApplicationBuilder app, string contentRootPath)
+        public static IApplicationBuilder UseMixStaticFiles(this IApplicationBuilder app, string contentRootPath)
         {
             app.UseDefaultFiles();
             var provider = new FileExtensionContentTypeProvider();

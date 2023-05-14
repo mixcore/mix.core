@@ -1,0 +1,7 @@
+{
+  "cacheConnection": "Server=localhost;port=3306;Database=v2-floralpunk;User=root;Password=1234qwe@;",
+  "isCache": true,
+  "cacheMode": "JSON",
+  "databaseProvider": "MySQL",
+  "cacheFolder": "MixContent/cache"
+}

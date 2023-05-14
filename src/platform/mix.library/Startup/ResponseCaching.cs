@@ -6,7 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static partial class ServiceCollectionExtensions
     {
         // Must call after use cors
-        private static void UseMixResponseCaching(this IApplicationBuilder app)
+        public static void UseMixResponseCaching(this IApplicationBuilder app)
         {
             app.UseResponseCaching();
             app.Use(async (context, next) =>

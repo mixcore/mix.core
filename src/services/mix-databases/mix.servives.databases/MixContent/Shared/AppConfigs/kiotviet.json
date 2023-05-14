@@ -1,0 +1,8 @@
+﻿{
+  "Kiotviet": {
+    "StoreUrl": "https://public.kiotapi.com",
+    "ClientId": "112f5536-00d5-480c-aa5d-fe2840372931", // Prod: 8610b97d-1ee4-4b1e-b9bd-52d30b894de2
+    "Retailer": "floralpunktest", // Prod: floralpunkhn
+    "ClientSecret": "0F986DE0A6030E86A57A61A77C42B87FF6D1EEC2" // prod: B877F61B48FF97BEB56A304820E55F5219E5DC74
+  }
+}

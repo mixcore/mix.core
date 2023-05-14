@@ -1,3 +1,4 @@
+using Mix.Lib.Helpers;
 using Mix.Services.Databases;
 
 public class Program
@@ -7,10 +8,13 @@ public class Program
         CreateHostBuilder(args).Build().Run();
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
+    public static IHostBuilder CreateHostBuilder(string[] args)
+    {
+        var builder = MixCmsHelper.CreateHostBuilder<Startup>(args);
+        builder.ConfigureAppConfiguration((hostingContext, config) =>
+        {
+            config.AddJsonFile("MixContent/Shared/AppConfigs/kiotviet.json", true, true);
+        });
+        return builder;
+    }
 }

@@ -1,1 +1,10 @@
-{}
+{
+  "connectionStrings": {
+    "mixAccountConnection": "Server=localhost;port=3306;Database=v2-floralpunk;User=root;Password=1234qwe@;",
+    "mixCmsConnection": "Server=localhost;port=3306;Database=v2-floralpunk;User=root;Password=1234qwe@;",
+    "mixQuartzConnection": "Server=localhost;port=3306;Database=v2-floralpunk;User=root;Password=1234qwe@;",
+    "mixDbConnection": "Server=localhost;port=3306;Database=v2-floralpunk;User=root;Password=1234qwe@;"
+  },
+  "clearDbPool": false,
+  "databaseProvider": "MySQL"
+}

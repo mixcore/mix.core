@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Mix.Database.Entities.Account;
+using Mix.Lib.Middlewares;
 using Mix.Shared.Services;
 using System.Reflection;
 using System.Text.Encodings.Web;
@@ -48,7 +49,15 @@ namespace Mixcore
                 app.UseHsts();
             }
             app.UseMixCors();
+
+            app.UseMixTenant();
+
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.ContentRootPath, env.IsDevelopment());
+
+            app.UseMiddleware<AuditlogMiddleware>();
+            app.UseResponseCompression();
+            app.UseMixResponseCaching();
+            app.UseMixStaticFiles(env.ContentRootPath);
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
