@@ -2,6 +2,7 @@
 {
     public enum MixStorageProvider
     {
+        AZURE_STORAGE_BLOB,
         CLOUDFLARE,
         MIX
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Mix.Storage.Lib.Engines.AzureStorage;
 using Mix.Storage.Lib.Engines.Base;
 using Mix.Storage.Lib.Engines.CloudFlare;
 using Mix.Storage.Lib.Engines.Mix;
@@ -26,6 +27,8 @@ namespace Mix.Storage.Lib.Services
             {
                 case MixStorageProvider.CLOUDFLARE:
                     return new CloudFlareUploader(httpContext, _configuration, cmsUow, _httpService);
+                case MixStorageProvider.AZURE_STORAGE_BLOB:
+                    return new AzureStorageUploader(httpContext, _configuration, cmsUow);
                 case MixStorageProvider.MIX:
                 default:
                     return new MixUploader(httpContext, _configuration, cmsUow);

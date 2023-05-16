@@ -246,7 +246,7 @@ namespace Mix.Lib.Services
             try
             {
                 var u = await MixDbDataService.GetSingleByParent(MixDatabaseNames.SYSTEM_USER_DATA, MixContentType.User, user.Id, true);
-                if (u == null)
+                if (u == null && !GlobalConfigService.Instance.IsInit)
                 {
                     u = new JObject()
                     {

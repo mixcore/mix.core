@@ -11,6 +11,12 @@
       "ZoneId": "",
       "AccountId": ""
     },
+    "AzureStorageSetting": {
+      "CdnUrl": "",
+      "StorageAccountName": "",
+      "AzureWebJobStorage": "",
+      "ContainerName": ""
+    },
     "MixSetting": {
     }
   }
