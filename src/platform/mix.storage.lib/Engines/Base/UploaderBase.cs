@@ -24,9 +24,9 @@ namespace Mix.Storage.Lib.Engines.Base
             }
         }
 
-        protected UploaderBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, UnitOfWorkInfo<MixCmsContext> cmsUOW)
+        protected UploaderBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, UnitOfWorkInfo<MixCmsContext> cmsUow)
         {
-            CmsUow = cmsUOW;
+            CmsUow = cmsUow;
             Configuration = configuration;
             Session = httpContextAccessor?.HttpContext?.Session;
         }
@@ -60,7 +60,7 @@ namespace Mix.Storage.Lib.Engines.Base
             var result = await Upload(file, folder, createdBy, cancellationToken);
             if (!string.IsNullOrEmpty(result))
             {
-                await CreateMedia(result, _currentTenant.Id, createdBy, cancellationToken);
+                await CreateMedia(result, CurrentTenant.Id, createdBy, cancellationToken);
             }
 
             return result;
@@ -71,7 +71,7 @@ namespace Mix.Storage.Lib.Engines.Base
             var result = await UploadStream(file, createdBy, cancellationToken);
             if (!string.IsNullOrEmpty(result))
             {
-                await CreateMedia(result, _currentTenant.Id, createdBy, cancellationToken);
+                await CreateMedia(result, CurrentTenant.Id, createdBy, cancellationToken);
             }
 
             return result;

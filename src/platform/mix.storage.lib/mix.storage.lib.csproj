@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.7.104.15" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\mix.library\mix.library.csproj" />
   </ItemGroup>
 	<ItemGroup>
