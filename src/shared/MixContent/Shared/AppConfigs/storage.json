@@ -17,7 +17,14 @@
       "AzureWebJobStorage": "",
       "ContainerName": ""
     },
-    "MixSetting": {
-    }
+    "AwsSetting": {
+      "BucketName": "",
+      "CloudFrontUrl": "",
+      "BucketUrl": "",
+      "AccessKeyId": "",
+      "SecretAccessKey": "",
+      "Region": ""
+    },
+    "MixSetting": {}
   }
 }
