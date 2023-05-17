@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Amazon.S3;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Mix.Storage.Lib.Engines.Aws;
 using Mix.Storage.Lib.Engines.Base;
 using Mix.Storage.Lib.Engines.CloudFlare;
 using Mix.Storage.Lib.Engines.Mix;
@@ -22,14 +24,14 @@ namespace Mix.Storage.Lib.Services
         {
             var providerSetting = _configuration["StorageSetting:Provider"];
             var provider = Enum.Parse<MixStorageProvider>(providerSetting);
-            switch (provider)
+            return provider switch
             {
-                case MixStorageProvider.CLOUDFLARE:
-                    return new CloudFlareUploader(httpContext, _configuration, cmsUow, _httpService);
-                case MixStorageProvider.MIX:
-                default:
-                    return new MixUploader(httpContext, _configuration, cmsUow);
-            }
+                MixStorageProvider.CLOUDFLARE => new CloudFlareUploader(httpContext, _configuration, cmsUow,
+                    _httpService),
+                MixStorageProvider.AWS => new AwsUploader(httpContext, _configuration, cmsUow),
+                MixStorageProvider.MIX => new MixUploader(httpContext, _configuration, cmsUow),
+                _ => new MixUploader(httpContext, _configuration, cmsUow)
+            };
         }
         #region Methods
 

@@ -3,6 +3,7 @@
     public enum MixStorageProvider
     {
         CLOUDFLARE,
-        MIX
+        MIX,
+        AWS
     }
 }

@@ -61,7 +61,7 @@ namespace Mix.Storage.Lib.Engines.Mix
                 folder = $"{folder}/{createdBy}";
             }
 
-            return $"{folder}/{DateTime.Now.ToString("yyyy-MM")}";
+            return $"{folder}/{DateTime.Now:yyyy-MM}";
         }
     }
 }
