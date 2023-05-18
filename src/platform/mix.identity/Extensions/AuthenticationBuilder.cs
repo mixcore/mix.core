@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Web;
 using Mix.Shared.Models.Configurations;
 
 namespace Mix.Identity.Extensions
@@ -61,6 +63,17 @@ namespace Mix.Identity.Extensions
                 options.ClientSecret = config.AppSecret;
                 options.AccessDeniedPath = accessDeniedPath;
             }) : builder;
+        }
+
+        public static void AddMicrosoftIdentityWebApiIf(
+           this AuthenticationBuilder builder,
+           bool condition,
+           IConfiguration configuration)
+        {
+            if (condition)
+            {
+                builder.AddMicrosoftIdentityWebApi(configuration, "Authentication:AzureAd");
+            }
         }
 
     }

@@ -25,11 +25,19 @@
         public ExternalLogin Google { get; set; } = new ExternalLogin();
         public ExternalLogin Microsoft { get; set; } = new ExternalLogin();
         public ExternalLogin Twitter { get; set; } = new ExternalLogin();
+        public AzureAdLogin AzureAd { get; set; } = new AzureAdLogin();
     }
 
     public class ExternalLogin
     {
         public string AppId { get; set; }
         public string AppSecret { get; set; }
+    }
+    public class AzureAdLogin
+    {
+        public string Instance { get; set; } = "https://login.microsoftonline.com/";
+        public string ClientId { get; set; }
+        public string TenantId { get; set; }
+        public string Scopes { get; set; }
     }
 }

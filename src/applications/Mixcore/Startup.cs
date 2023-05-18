@@ -31,7 +31,7 @@ namespace Mixcore
             services.AddMixCors();
             services.AddScoped<MixNavigationService>();
 
-            services.AddMixAuthorize<MixCmsAccountContext>();
+            services.AddMixAuthorize<MixCmsAccountContext>(Configuration);
             services.AddMixRoutes();
 
             // Must app Auth config after Add mixservice to init App config 

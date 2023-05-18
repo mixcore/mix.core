@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
@@ -21,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
     //Ref: https://www.blinkingcaret.com/2017/09/06/secure-web-api-in-asp-net-core/
     public static class AuthServiceCollectionExtensions
     {
-        public static IServiceCollection AddMixAuthorize<TDbContext>(this IServiceCollection services)
+        public static IServiceCollection AddMixAuthorize<TDbContext>(this IServiceCollection services, IConfiguration configuration)
             where TDbContext : DbContext
         {
             AuthConfigService authConfigService = services.GetService<AuthConfigService>();
@@ -58,7 +60,7 @@ namespace Microsoft.Extensions.DependencyInjection
             .AddRoleManager<TenantRoleManager>()
             .AddEntityFrameworkStores<TDbContext>()
             .AddDefaultTokenProviders();
-            
+
             services.AddAuthorization();
             services.AddAuthentication(
                     opts =>
@@ -79,6 +81,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddMicrosoftAccountIf(
                     !string.IsNullOrEmpty(authConfigurations.Microsoft?.AppId),
                     authConfigurations.Microsoft, accessDeniedPath)
+
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
                     options.RequireHttpsMetadata = false;
@@ -95,7 +98,10 @@ namespace Microsoft.Extensions.DependencyInjection
                                 ValidAudiences = authConfigurations.Audiences.Split(','),
                                 IssuerSigningKey = JwtSecurityKey.Create(authConfigurations.SecretKey)
                             };
-                });
+                })
+                 .AddMicrosoftIdentityWebApiIf(
+                    !string.IsNullOrEmpty(authConfigurations.AzureAd?.ClientId),
+                    configuration);
 
             services.ConfigureApplicationCookie(options =>
             {
