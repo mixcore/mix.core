@@ -18,7 +18,7 @@ namespace Mix.Account
             services.AddMixCors();
 
             // Must app Auth config after Add mixservice to init App config 
-            services.AddMixAuthorize<MixCmsAccountContext>();
+            services.AddMixAuthorize<MixCmsAccountContext>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
