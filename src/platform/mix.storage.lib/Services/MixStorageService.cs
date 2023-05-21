@@ -39,7 +39,14 @@ namespace Mix.Storage.Lib.Services
 
         public async Task<string?> UploadFile(IFormFile file, string? themeName, string? createdBy)
         {
-            return await _uploader.UploadFile(file, themeName, createdBy);
+            try
+            {
+                return await _uploader.UploadFile(file, themeName, createdBy);
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
         }
 
         public async Task<string?> UploadStream(FileModel file, string? createdBy)

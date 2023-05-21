@@ -127,7 +127,7 @@ namespace Mix.Lib.Services
             {
                 user = await UserManager.FindByNameAsync(model.UserName);
                 user ??= await UserManager.FindByEmailAsync(model.UserName);
-                user ??= await UserManager.FindByPhoneNumberAsync(model.PhoneNumber);
+                user ??= await UserManager.FindByPhoneNumberAsync(model.UserName);
             }
             if (user == null && !string.IsNullOrEmpty(model.PhoneNumber))
             {
@@ -511,7 +511,7 @@ namespace Mix.Lib.Services
         {
             var userRoles = await UserManager.GetUserRolesAsync(user);
             List<Claim> claims = await GetClaimsAsync(user, userRoles);
-            if (info.ContainsKey("endpoints"))
+            if (info!= null && info.ContainsKey("endpoints"))
             {
                 var endpoints = info.Values<JArray>("endpoints");
                 foreach (var endpoint in endpoints)
@@ -524,7 +524,7 @@ namespace Mix.Lib.Services
                     CreateClaim(MixClaims.Id, user.Id.ToString()),
                     CreateClaim(MixClaims.Username, user.UserName),
                     CreateClaim(MixClaims.RefreshToken, refreshToken),
-                    CreateClaim(MixClaims.Avatar, info.Value<string>("avatar") ?? MixConstants.CONST_DEFAULT_AVATAR),
+                    CreateClaim(MixClaims.Avatar, info?.Value<string>("avatar") ?? MixConstants.CONST_DEFAULT_AVATAR),
                     CreateClaim(MixClaims.AESKey, aesKey),
                     CreateClaim(MixClaims.RSAPublicKey, rsaPublicKey),
                     CreateClaim(MixClaims.ExpireAt, expires.ToString(datetimeFormat))

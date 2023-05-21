@@ -1,5 +1,7 @@
 ﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Configuration;
 using Mix.Storage.Lib.Engines.Base;
 using Mix.Storage.Lib.Engines.CloudFlare;
@@ -9,6 +11,8 @@ namespace Mix.Storage.Lib.Engines.AzureStorage
 {
     public class AzureStorageUploader : UploaderBase
     {
+        public static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPEG", ".JPE", ".BMP", ".GIF", ".PNG" };
+        public static readonly List<string> VideoExtensions = new List<string> { ".MP4", ".MOV", ".FLV", ".WMV", ".AVI", ".AVCHD", ".WEBM", "MKV" };
         private readonly BlobContainerClient _blobClient;
         private readonly AzureStorageSettings _settings;
         public AzureStorageUploader(
@@ -32,11 +36,26 @@ namespace Mix.Storage.Lib.Engines.AzureStorage
             using (Stream myBlob = file.OpenReadStream())
             {
                 var fileFolder = GetUploadFolder(file.FileName, folder, createdBy);
-                var fileName = $"{fileFolder}/{file.FileName}";
+                var fileName = $"{fileFolder}/{DateTime.Now.Ticks}-{file.FileName}";
                 var blob = _blobClient.GetBlobClient(fileName);
-                await blob.UploadAsync(myBlob);
+                BlobHttpHeaders h = new BlobHttpHeaders();
+                h.ContentType = GetContentType(Path.GetExtension(file.FileName));
+                await blob.UploadAsync(myBlob, h);
                 return $"{_settings.CdnUrl}/{_settings.ContainerName}/{fileName}";
             }
+        }
+
+        private string GetContentType(string fileExtension)
+        {
+            if (ImageExtensions.Contains(fileExtension.ToUpperInvariant()))
+            {
+                return $"image/{fileExtension.Replace(".", string.Empty)}";
+            }
+            if (VideoExtensions.Contains(fileExtension.ToUpperInvariant()))
+            {
+                return $"video/{fileExtension.Replace(".", string.Empty)}";
+            }
+            return "application/octet-stream";
         }
 
         public override async Task<string?> UploadStream(FileModel file, string? createdBy, CancellationToken cancellationToken = default)
@@ -47,7 +66,7 @@ namespace Mix.Storage.Lib.Engines.AzureStorage
                 var bytes = Convert.FromBase64String(file.FileBase64.ToBase64Stream());
                 using (var stream = new MemoryStream(bytes))
                 {
-                    var fileName = $"{fileFolder}/{file.Filename}{file.Extension}";
+                    var fileName = $"{fileFolder}/{DateTime.Now.Ticks}-{file.Filename}{file.Extension}";
                     var blob = _blobClient.GetBlobClient(fileName);
                     await _blobClient.UploadBlobAsync(file.Filename, stream, cancellationToken);
                     return $"{_settings.CdnUrl}/{_settings.ContainerName}/{fileName}";

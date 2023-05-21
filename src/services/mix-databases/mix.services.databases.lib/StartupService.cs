@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Database.Entities.MixDb;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Middlewares;
@@ -6,7 +9,7 @@ using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Services.Databases.Lib.Services;
 using Mix.Shared.Interfaces;
 
-namespace Mix.Services.Databases
+namespace Mix.Services.Databases.Lib
 {
     public class StartupService : IStartupService
     {
