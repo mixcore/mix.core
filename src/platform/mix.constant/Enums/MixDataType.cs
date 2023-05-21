@@ -97,6 +97,7 @@
         BarCode,
         Tag,
         Json,
-        Array
+        Array,
+        ArrayMedia
     }
 }

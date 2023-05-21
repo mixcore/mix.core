@@ -117,7 +117,7 @@ namespace Mix.Storage.Controllers
                     }
                     var fileModel = new FileModel(file.FileName, fileStream, folder);
                     var result = MixFileHelper.SaveFile(fileModel);
-                    MixFileHelper.UnZipFile($"{folder}/{result}", folder);
+                    MixFileHelper.UnZipFile($"{folder}/{fileModel.Filename}.zip", folder);
                     if (result)
                     {
                         return Ok($"{CurrentTenant.Configurations.Domain}/{folder}/{fileModel.Filename}{fileModel.Extension}");

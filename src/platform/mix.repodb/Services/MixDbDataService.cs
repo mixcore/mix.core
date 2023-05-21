@@ -411,7 +411,7 @@ namespace Mix.RepoDb.Services
                 }
                 else
                 {
-                    if (col != null && (col.DataType == MixDataType.Json || col.DataType == MixDataType.Array))
+                    if (col != null && (col.DataType == MixDataType.Json || col.DataType == MixDataType.Array || col.DataType == MixDataType.ArrayMedia))
                     {
                         result.Add(new JProperty(pr.Name.ToTitleCase(), JObject.FromObject(pr.Value).ToString(Formatting.None)));
                     }
