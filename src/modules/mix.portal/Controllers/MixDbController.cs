@@ -19,7 +19,7 @@ using RepoDb.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
-    //[MixDatabaseAuthorize("")]
+    [MixDatabaseAuthorize("")]
     [Route("api/v2/rest/mix-portal/mix-db/{name}")]
     [ApiController]
     public class MixDbController : MixTenantApiControllerBase
