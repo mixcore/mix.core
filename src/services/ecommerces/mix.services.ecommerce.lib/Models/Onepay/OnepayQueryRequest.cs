@@ -1,6 +1,6 @@
 ﻿namespace Mix.Services.Ecommerce.Lib.Models.Onepay
 {
-    public sealed class PaymentQueryRequest
+    public sealed class OnepayQueryRequest
     {
         public string vpc_Command { get; set; } = "queryDR";
         public string vpc_Version { get; set; } = "1";

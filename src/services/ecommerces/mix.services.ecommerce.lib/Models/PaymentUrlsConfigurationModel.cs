@@ -4,7 +4,7 @@ namespace Mix.Services.Ecommerce.Lib.Models
 {
     public sealed class PaymentConfigurationModel
     {
-        public MixOnepayConfigurations Onepay { get; set; }
+        public OnepayConfigurations Onepay { get; set; }
         public PaymentUrls Urls { get; set; }
     }
     public sealed class PaymentUrls

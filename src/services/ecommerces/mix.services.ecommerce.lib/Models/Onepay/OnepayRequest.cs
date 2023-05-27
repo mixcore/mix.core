@@ -2,7 +2,7 @@
 
 namespace Mix.Services.Ecommerce.Lib.Models.Onepay
 {
-    public sealed class PaymentRequest
+    public sealed class OnepayRequest
     {
         public string? vpc_AccessCode { get; set; }
         /*
@@ -38,12 +38,12 @@ namespace Mix.Services.Ecommerce.Lib.Models.Onepay
         public string? vpc_Customer_Email { get; set; }
         public string? vpc_Customer_Id { get; set; }
 
-        public PaymentRequest()
+        public OnepayRequest()
         {
 
         }
 
-        public PaymentRequest(OrderViewModel order)
+        public OnepayRequest(OrderViewModel order)
         {
             vpc_Amount = $"{order.Total}00";
             vpc_Locale = "vn";

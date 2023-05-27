@@ -1,6 +1,6 @@
 ﻿namespace Mix.Services.Ecommerce.Lib.Models.Onepay
 {
-    public sealed class PaymentQueryResponse
+    public sealed class OnepayQueryResponse
     {
         /*
          * Xác định giao dịch tồn tại hay không

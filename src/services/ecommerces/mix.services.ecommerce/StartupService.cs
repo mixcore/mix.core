@@ -15,7 +15,8 @@ namespace Mix.Services.Ecommerce
             services.AddMixEcommerce();
             services.TryAddScoped<IMixMetadataService, MixMetadataService>();
             services.TryAddScoped<IProductService, ProductService>();
-            services.TryAddScoped<IPaymentService, OnepayService>();
+            services.TryAddScoped<OnepayService>();
+            services.TryAddScoped<PaypalService>();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

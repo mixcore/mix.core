@@ -24,7 +24,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
     {
         private readonly UnitOfWorkInfo<OnepayDbContext> _cmsUow;
         private readonly HttpService _httpService;
-        private MixOnepayConfigurations Settings { get; set; } = new MixOnepayConfigurations();
+        private OnepayConfigurations Settings { get; set; } = new OnepayConfigurations();
         public OnepayService(
             IHttpContextAccessor httpContextAccessor,
             HttpService httpService,
@@ -49,7 +49,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
         {
             try
             {
-                PaymentRequest request = new PaymentRequest(order);
+                OnepayRequest request = new OnepayRequest(order);
                 request.vpc_Merchant = Settings.Merchant;
                 request.vpc_AccessCode = Settings.AccessCode;
                 request.vpc_Locale = Settings.Locale;
@@ -114,7 +114,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             await vm.SaveAsync(cancellationToken);
         }
 
-        private async Task SaveRequest(PaymentRequest request, OrderStatus paymentStatus, CancellationToken cancellationToken)
+        private async Task SaveRequest(OnepayRequest request, OrderStatus paymentStatus, CancellationToken cancellationToken)
         {
             var vm = await OnepayTransactionRequestViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.vpc_OrderInfo == request.vpc_OrderInfo);
             if (vm == null)
@@ -128,13 +128,13 @@ namespace Mix.Services.Ecommerce.Lib.Services
             await vm.SaveAsync(cancellationToken);
         }
 
-        public async Task<PaymentQueryResponse> Query(PaymentQueryRequest request, CancellationToken cancellationToken)
+        public async Task<OnepayQueryResponse> Query(OnepayQueryRequest request, CancellationToken cancellationToken)
         {
             try
             {
                 string url = $"{Settings.Endpoint.TrimEnd('/')}/onecomm-pay/Vpcdps.op";
                 Dictionary<string, string> parameters = ReflectionHelper.ConverObjectToDictinary(request);
-                var response = await _httpService.GetAsync<PaymentQueryResponse>(url, parameters);
+                var response = await _httpService.GetAsync<OnepayQueryResponse>(url, parameters);
                 return response;
             }
             catch (Exception ex)
@@ -188,7 +188,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
         public JObject GetPaymentRequest(OrderViewModel order, string againUrl, string returnUrl, CancellationToken cancellationToken)
         {
-            PaymentRequest request = new PaymentRequest(order);
+            OnepayRequest request = new OnepayRequest(order);
             request.vpc_Merchant = Settings.Merchant;
             request.vpc_AccessCode = Settings.AccessCode;
             request.vpc_Locale = Settings.Locale;

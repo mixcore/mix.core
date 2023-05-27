@@ -7,7 +7,7 @@
         Trường hợp vpc_TxnResponsCode <> 0: tham chiếu bảng mã trả lời để hiển thị kết
         quả giao dịch cụ thể cho khách hàng.
      */
-    public sealed class PaymentResponse
+    public sealed class OnepayResponse
     {
         // 
         public string? vpc_Command { get; set; }
@@ -34,7 +34,7 @@
         // 
         public string? vpc_SecureHash { get; set; }
 
-        public PaymentResponse()
+        public OnepayResponse()
         {
 
         }

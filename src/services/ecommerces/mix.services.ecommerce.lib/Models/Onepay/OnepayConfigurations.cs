@@ -1,6 +1,6 @@
 ﻿namespace Mix.Services.Ecommerce.Lib.Models.Onepay
 {
-    public sealed class MixOnepayConfigurations
+    public sealed class OnepayConfigurations
     {
         public int Version { get; set; }
         public string Currency { get; set; }

@@ -3,6 +3,7 @@
     public enum PaymentGateway
     {
         Onepay,
+        Paypal,
         Momo
     }
 }
