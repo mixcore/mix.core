@@ -2,6 +2,8 @@
 using Mix.Heart.ViewModel;
 using Mix.Services.Ecommerce.Lib.Entities.Paypal;
 using Mix.Services.Ecommerce.Lib.Enums;
+using Mix.Services.Ecommerce.Lib.Models.Paypal;
+using Newtonsoft.Json.Linq;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels.Paypal
 {
@@ -9,25 +11,11 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels.Paypal
         : ViewModelBase<PaypalDbContext, PaypalTransactionRequest, int, PaypalTransactionRequestViewModel>
     {
         #region Properties
-        public int vpc_Version { get; set; }
-        public string vpc_Currency { get; set; }
-        public string vpc_Command { get; set; }
-        public string vpc_AccessCode { get; set; }
-        public string vpc_Merchant { get; set; }
-        public string vpc_Locale { get; set; }
-        public string vpc_ReturnURL { get; set; }
-        public string vpc_MerchTxnRef { get; set; }
-        public string vpc_OrderInfo { get; set; }
-        public string vpc_Amount { get; set; }
-        public string vpc_TicketNo { get; set; }
-        public string AgainLink { get; set; }
-        public string Title { get; set; }
-        public string vpc_SecureHash { get; set; }
-        public string vpc_Customer_Phone { get; set; }
-        public string vpc_Customer_Email { get; set; }
-        public string vpc_Customer_Id { get; set; }
-        public int? ResponseId { get; set; }
-        public OrderStatus PaymentStatus { get; set; }
+        public string? Intent { get; set; }
+        public JObject Payer { get; set; }
+        public JObject RedirectUrls { get; set; }
+        public JArray Transactions { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
         public int MixTenantId { get; set; }
 
         #endregion

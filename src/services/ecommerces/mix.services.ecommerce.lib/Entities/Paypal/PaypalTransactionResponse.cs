@@ -1,22 +1,37 @@
-﻿using Mix.Heart.Entities;
+﻿using CommandLine;
+using Mix.Heart.Entities;
 using Mix.Services.Ecommerce.Lib.Enums;
+using Mix.Services.Ecommerce.Lib.Models.Paypal;
+using Newtonsoft.Json.Linq;
 
 namespace Mix.Services.Ecommerce.Lib.Entities.Paypal
 {
     public class PaypalTransactionResponse : EntityBase<int>
     {
-        public string vpc_Command { get; set; }
-        public string vpc_Locale { get; set; }
-        public string vpc_CurrencyCode { get; set; }
-        public string vpc_MerchTxnRef { get; set; }
-        public string vpc_Merchant { get; set; }
-        public string vpc_OrderInfo { get; set; }
-        public string vpc_Amount { get; set; }
-        public string vpc_TxnResponseCode { get; set; }
-        public string vpc_TransactionNo { get; set; }
-        public string vpc_Message { get; set; }
-        public string vpc_AdditionData { get; set; }
-        public string vpc_SecureHash { get; set; }
-        public OrderStatus PaypalStatus { get; set; }
+        public string PaypalId { get; set; }
+        public string Intent { get; set; }
+        public string State { get; set; }
+        public string Cart { get; set; }
+        public JObject Payer { get; set; }
+        public JArray Transactions { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public JArray Links { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
+        public int MixTentantId { get; set; }
+        public PaypalTransactionResponse()
+        {
+            
+        }
+        public PaypalTransactionResponse(PayPalPaymentExecutedResponse response)
+        {
+            PaypalId = response.id;
+            Intent = response.intent;
+            State = response.state;
+            Cart = response.cart;
+            CreatedTime = response.create_time;
+            Payer = response.payer != null ? JObject.FromObject(response.payer) : new();
+            Transactions = response.transactions != null ? JArray.FromObject(response.transactions) : new();
+            Links = response.links != null ? JArray.FromObject(response.links) : new();
+        }
     }
 }

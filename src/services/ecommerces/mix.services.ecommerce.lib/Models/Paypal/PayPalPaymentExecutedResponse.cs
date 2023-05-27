@@ -25,6 +25,10 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
         public string payment_method { get; set; }
         public string status { get; set; }
         public Payer_Info payer_info { get; set; }
+        public Payer()
+        {
+            
+        }
     }
 
     public class Payer_Info

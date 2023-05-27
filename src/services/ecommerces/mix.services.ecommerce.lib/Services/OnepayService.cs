@@ -186,7 +186,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             }
         }
 
-        public JObject GetPaymentRequest(OrderViewModel order, string againUrl, string returnUrl, CancellationToken cancellationToken)
+        public Task<JObject> GetPaymentRequestAsync(OrderViewModel order, string againUrl, string returnUrl, CancellationToken cancellationToken)
         {
             OnepayRequest request = new OnepayRequest(order);
             request.vpc_Merchant = Settings.Merchant;
@@ -195,7 +195,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             request.vpc_TicketNo = HttpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();//"14.241.244.43";// 
             request.AgainLink = againUrl;
             request.vpc_ReturnURL = returnUrl;
-            return request != null ? ReflectionHelper.ParseObject(request) : new();
+            return Task.FromResult(ReflectionHelper.ParseObject(request));
         }
     }
 }

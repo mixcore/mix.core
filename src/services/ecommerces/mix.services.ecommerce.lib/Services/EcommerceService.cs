@@ -254,7 +254,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             string returnUrl = $"{_paymentConfiguration.Urls.PaymentResponseUrl}/{checkoutCart.Id}";
             string againUrl = $"{_paymentConfiguration.Urls.PaymentCartUrl}/{checkoutCart.Id}";
-            var request = paymentService.GetPaymentRequest(checkoutCart, againUrl, returnUrl, cancellationToken);
+            var request = await paymentService.GetPaymentRequestAsync(checkoutCart, againUrl, returnUrl, cancellationToken);
             var url = await paymentService.GetPaymentUrl(checkoutCart, againUrl, returnUrl, cancellationToken);
 
             checkoutCart.PaymentRequestData = request;

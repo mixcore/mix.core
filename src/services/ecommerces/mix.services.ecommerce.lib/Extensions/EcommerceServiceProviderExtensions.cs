@@ -4,6 +4,7 @@ using Mix.Heart.UnitOfWork;
 using Mix.Lib.Middlewares;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Entities.Onepay;
+using Mix.Services.Ecommerce.Lib.Entities.Paypal;
 using Mix.Services.Ecommerce.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.Services;
 using Mix.Shared.Services;
@@ -26,9 +27,32 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<UnitOfWorkInfo<OnepayDbContext>>();
 
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<OnepayDbContext>>();
+            
+            services.TryAddScoped<PaypalDbContext>();
+            services.TryAddScoped<UnitOfWorkInfo<PaypalDbContext>>();
+
+            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<PaypalDbContext>>();
             if (!GlobalConfigService.Instance.IsInit)
             {
                 using (var context = services.GetService<OnepayDbContext>())
+                {
+                    var pendingMigrations = context.Database.GetPendingMigrations();
+                    if (pendingMigrations.Any())
+                    {
+                        context.Database.Migrate();
+                    }
+                }
+            }
+        }
+        public static void AddMixPaypal(this IServiceCollection services)
+        {
+            services.TryAddScoped<PaypalDbContext>();
+            services.TryAddScoped<UnitOfWorkInfo<PaypalDbContext>>();
+
+            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<PaypalDbContext>>();
+            if (!GlobalConfigService.Instance.IsInit)
+            {
+                using (var context = services.GetService<PaypalDbContext>())
                 {
                     var pendingMigrations = context.Database.GetPendingMigrations();
                     if (pendingMigrations.Any())
