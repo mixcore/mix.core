@@ -54,7 +54,6 @@ namespace Mixcore
 
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.ContentRootPath, env.IsDevelopment());
 
-            app.UseMiddleware<AuditlogMiddleware>();
             app.UseResponseCompression();
             app.UseMixResponseCaching();
             app.UseMixStaticFiles(env.ContentRootPath);
@@ -64,7 +63,12 @@ namespace Mixcore
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(env.ContentRootPath, MixFolders.TemplatesFolder))
             });
-
+            
+            if (GlobalConfigService.Instance.EnableAuditLog)
+            {
+                app.UseMiddleware<AuditlogMiddleware>();
+            }
+            
             if (GlobalConfigService.Instance.AppSettings.EnableOcelot)
             {
                 app.UseMixOcelot(Configuration, env.IsDevelopment());

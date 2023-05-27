@@ -266,79 +266,98 @@ namespace Mix.Portal.Controllers
 
         private async Task<JObject> ParseDtoToEntityAsync(JObject dto)
         {
-            string username = _idService.GetClaim(User, MixClaims.Username);
-            JObject result = new();
-            var database = await GetMixDatabase();
-            var encryptedColumnNames = database.Columns
-                .Where(m => m.ColumnConfigurations.IsEncrypt)
-                .Select(c => c.SystemName)
-                .ToList();
-            foreach (var pr in dto.Properties())
+            try
             {
-                var col = database.Columns.FirstOrDefault(c => c.SystemName.Equals(pr.Name, StringComparison.InvariantCultureIgnoreCase));
+                string username = _idService.GetClaim(User, MixClaims.Username);
+                JObject result = new();
+                var database = await GetMixDatabase();
+                var encryptedColumnNames = database.Columns
+                    .Where(m => m.ColumnConfigurations.IsEncrypt)
+                    .Select(c => c.SystemName)
+                    .ToList();
+                foreach (var pr in dto.Properties())
+                {
+                    var col = database.Columns.FirstOrDefault(c => c.SystemName.Equals(pr.Name, StringComparison.InvariantCultureIgnoreCase));
 
-                if (encryptedColumnNames.Contains(pr.Name))
-                {
-                    result.Add(
-                        new JProperty(
-                                pr.Name.ToTitleCase(), AesEncryptionHelper.EncryptString(pr.Value.ToString(),
-                                GlobalConfigService.Instance.AppSettings.ApiEncryptKey)));
-                }
-                else
-                {
-                    if (col != null && (col.DataType == MixDataType.Json || col.DataType == MixDataType.Array || col.DataType == MixDataType.ArrayMedia))
+                    if (encryptedColumnNames.Contains(pr.Name))
                     {
-                        result.Add(new JProperty(pr.Name.ToTitleCase(), JObject.FromObject(pr.Value).ToString(Formatting.None)));
+                        result.Add(
+                            new JProperty(
+                                    pr.Name.ToTitleCase(), AesEncryptionHelper.EncryptString(pr.Value.ToString(),
+                                    GlobalConfigService.Instance.AppSettings.ApiEncryptKey)));
                     }
                     else
                     {
-                        result.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
+                        if (col != null)
+                        {
+                            if (col.DataType == MixDataType.Json)
+                            {
+
+                                result.Add(new JProperty(pr.Name.ToTitleCase(), JObject.FromObject(pr.Value).ToString(Formatting.None)));
+                            }
+                            else if (col.DataType == MixDataType.Array || col.DataType == MixDataType.ArrayMedia)
+                            {
+
+                                result.Add(new JProperty(pr.Name.ToTitleCase(), JArray.FromObject(pr.Value).ToString(Formatting.None)));
+                            }
+                            else
+                            {
+                                result.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
+                            }
+                        }
+                        else
+                        {
+                            result.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
+                        }
                     }
-
                 }
-            }
 
-            if (!result.ContainsKey(IdFieldName))
-            {
-                result.Add(new JProperty(IdFieldName, null));
-                if (!result.ContainsKey(CreatedByFieldName))
+                if (!result.ContainsKey(IdFieldName))
                 {
-                    result.Add(new JProperty(CreatedByFieldName, username));
+                    result.Add(new JProperty(IdFieldName, null));
+                    if (!result.ContainsKey(CreatedByFieldName))
+                    {
+                        result.Add(new JProperty(CreatedByFieldName, username));
+                    }
+                    if (!result.ContainsKey(CreatedDateFieldName))
+                    {
+                        result.Add(new JProperty(CreatedDateFieldName, DateTime.UtcNow));
+                    }
+                    if (!result.ContainsKey(CreatedByFieldName))
+                    {
+                        result.Add(new JProperty(CreatedByFieldName, username));
+                    }
                 }
-                if (!result.ContainsKey(CreatedDateFieldName))
+                else
                 {
-                    result.Add(new JProperty(CreatedDateFieldName, DateTime.UtcNow));
+                    result[ModifiedByFieldName] = username;
+                    result[LastModifiedFieldName] = DateTime.UtcNow;
                 }
-                if (!result.ContainsKey(CreatedByFieldName))
+
+                if (!result.ContainsKey(PriorityFieldName))
                 {
-                    result.Add(new JProperty(CreatedByFieldName, username));
+                    result.Add(new JProperty(PriorityFieldName, 0));
                 }
-            }
-            else
-            {
-                result[ModifiedByFieldName] = username;
-                result[LastModifiedFieldName] = DateTime.UtcNow;
-            }
+                if (!result.ContainsKey(TenantIdFieldName))
+                {
+                    result.Add(new JProperty(TenantIdFieldName, CurrentTenant.Id));
+                }
 
-            if (!result.ContainsKey(PriorityFieldName))
-            {
-                result.Add(new JProperty(PriorityFieldName, 0));
-            }
-            if (!result.ContainsKey(TenantIdFieldName))
-            {
-                result.Add(new JProperty(TenantIdFieldName, CurrentTenant.Id));
-            }
+                if (!result.ContainsKey(StatusFieldName))
+                {
+                    result.Add(new JProperty(StatusFieldName, MixContentStatus.Published.ToString()));
+                }
 
-            if (!result.ContainsKey(StatusFieldName))
-            {
-                result.Add(new JProperty(StatusFieldName, MixContentStatus.Published.ToString()));
+                if (!result.ContainsKey(IsDeletedFieldName))
+                {
+                    result.Add(new JProperty(IsDeletedFieldName, false));
+                }
+                return result;
             }
-
-            if (!result.ContainsKey(IsDeletedFieldName))
+            catch (Exception ex)
             {
-                result.Add(new JProperty(IsDeletedFieldName, false));
+                throw new MixException(MixErrorStatus.Badrequest, ex);
             }
-            return result;
         }
 
         private async Task<PagingResponseModel<JObject>> SearchHandler(SearchMixDbRequestDto request)

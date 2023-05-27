@@ -32,7 +32,19 @@ namespace Mix.Portal.Controllers
                 m => m.ParentDatabaseName == parentDbName && m.ChildDatabaseName == childDbName && m.ParentId == parentId && m.ChildId == childId);
             return Ok();
         }
+
+        [HttpGet("{parentDbName}/{childDbName}/{parentId}/{childId}")]
+        public async Task<ActionResult> GetAssociation(
+          string parentDbName, string childDbName, int parentId, int childId)
+        {
+
+            var result = await Repository.GetSingleAsync(
+                m => m.ParentDatabaseName == parentDbName && m.ChildDatabaseName == childDbName && m.ParentId == parentId && m.ChildId == childId);
+            return result != null ? Ok(result) : NotFound();
+        }
+
         #endregion
+
         #region Overrides
         #endregion
     }

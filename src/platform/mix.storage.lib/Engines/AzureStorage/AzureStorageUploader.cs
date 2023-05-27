@@ -11,7 +11,7 @@ namespace Mix.Storage.Lib.Engines.AzureStorage
 {
     public class AzureStorageUploader : UploaderBase
     {
-        public static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPEG", ".JPE", ".BMP", ".GIF", ".PNG" };
+        public static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPEG", ".JPE", ".BMP", ".GIF", ".PNG", ".SVG" };
         public static readonly List<string> VideoExtensions = new List<string> { ".MP4", ".MOV", ".FLV", ".WMV", ".AVI", ".AVCHD", ".WEBM", "MKV" };
         private readonly BlobContainerClient _blobClient;
         private readonly AzureStorageSettings _settings;
@@ -79,13 +79,15 @@ namespace Mix.Storage.Lib.Engines.AzureStorage
         {
             string ext = filename.Split('.')[1].ToLower();
             string folder = $"{CurrentTenant.SystemName}/{MixFolders.UploadsFolder}/{ext}";
-            if (!string.IsNullOrEmpty(fileFolder))
-            {
-                folder = $"{folder}/{fileFolder}";
-            }
+           
             if (!string.IsNullOrEmpty(createdBy))
             {
                 folder = $"{folder}/{createdBy}";
+            }
+
+            if (!string.IsNullOrEmpty(fileFolder))
+            {
+                folder = $"{folder}/{fileFolder}";
             }
 
             return $"{folder}/{DateTime.Now.ToString("yyyy-MM")}";

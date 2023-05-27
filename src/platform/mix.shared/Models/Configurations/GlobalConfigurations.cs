@@ -3,6 +3,7 @@
     public class GlobalConfigurations
     {
         public bool IsInit { get; set; }
+        public bool EnableAuditLog { get; set; }
         public bool IsLogStream { get; set; }
         public bool AllowAnyOrigin { get; set; }
         public bool IsHttps { get; set; }

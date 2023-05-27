@@ -143,19 +143,39 @@ namespace Mix.RepoDb.Repositories
             List<QueryField> queries = new();
             foreach (var item in searchQueryFields)
             {
-                Operation op = ParseMixOperator(item.CompareOperator);
+                Operation op = ParseMixOperator(item);
                 queries.Add(new QueryField(item.FieldName, op, item.Value));
             }
             return queries;
         }
 
-        private Operation ParseMixOperator(MixCompareOperator compareOperator)
+        private Operation ParseMixOperator(SearchQueryField field)
         {
-            return compareOperator switch
+            switch (field.CompareOperator)
             {
-                MixCompareOperator.InRange => Operation.In,
-                _ => Operation.Equal
-            };
+                case MixCompareOperator.InRange:
+                case MixCompareOperator.Like:
+                case MixCompareOperator.Contain:
+                    field.Value = $"%{field.Value}%";
+                    return Operation.Like;
+                case MixCompareOperator.NotEqual:
+                    return Operation.NotEqual;
+                case MixCompareOperator.NotContain:
+                case MixCompareOperator.NotInRange:
+                    field.Value = $"%{field.Value}%";
+                    return Operation.NotLike;
+                case MixCompareOperator.GreaterThanOrEqual:
+                    return Operation.GreaterThanOrEqual;
+                case MixCompareOperator.GreaterThan:
+                    return Operation.GreaterThan;
+                case MixCompareOperator.LessThanOrEqual:
+                    return Operation.LessThanOrEqual;
+                case MixCompareOperator.LessThan:
+                    return Operation.LessThan;
+                case MixCompareOperator.Equal:
+                default:
+                    return Operation.Equal;
+            }
         }
 
         public async Task<List<dynamic>?> GetListByAsync(List<QueryField> queryFields, string? fields = null)
