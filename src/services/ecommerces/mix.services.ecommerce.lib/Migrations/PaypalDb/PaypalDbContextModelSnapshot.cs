@@ -27,6 +27,9 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.PaypalDb
                         .HasColumnType("int")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("ApplicationContext")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
@@ -45,9 +48,6 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.PaypalDb
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
-                    b.Property<string>("Payer")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
@@ -57,7 +57,7 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.PaypalDb
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
-                    b.Property<string>("RedirectUrls")
+                    b.Property<string>("PurchaseUnits")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Status")
@@ -65,9 +65,6 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.PaypalDb
                         .HasColumnType("varchar(50)");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
-
-                    b.Property<string>("Transactions")
-                        .HasColumnType("longtext");
 
                     b.HasKey("Id")
                         .HasName("PK_PaypalTransactionRequest");
@@ -82,22 +79,11 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.PaypalDb
                         .HasColumnType("int")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("Cart")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
-
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Intent")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
@@ -117,6 +103,9 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.PaypalDb
                     b.Property<string>("Payer")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("PaymentSource")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
@@ -127,11 +116,14 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.PaypalDb
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("PaypalStatus")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
-                    b.Property<string>("State")
-                        .IsRequired()
+                    b.Property<string>("PurchaseUnits")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Status")
@@ -139,9 +131,6 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.PaypalDb
                         .HasColumnType("varchar(50)");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
-
-                    b.Property<string>("Transactions")
-                        .HasColumnType("longtext");
 
                     b.HasKey("Id")
                         .HasName("PK_PaypalTransactionResponse");

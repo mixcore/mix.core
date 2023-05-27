@@ -18,19 +18,13 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Paypal.EntityConfigurations
         {
             builder.ToTable(PaypalConstants.DataTableNameRequest);
             base.Configure(builder);
-            builder.Property(e => e.Payer)
+            builder.Property(e => e.ApplicationContext)
             .HasConversion(
                 v => v.ToString(Newtonsoft.Json.Formatting.None),
                 v => !string.IsNullOrEmpty(v) ? JObject.Parse(v) : new())
             .IsRequired(false)
             .HasColumnType(Config.Text);
-            builder.Property(e => e.RedirectUrls)
-            .HasConversion(
-                v => v.ToString(Newtonsoft.Json.Formatting.None),
-                v => !string.IsNullOrEmpty(v) ? JObject.Parse(v) : new())
-            .IsRequired(false)
-            .HasColumnType(Config.Text);
-            builder.Property(e => e.Transactions)
+            builder.Property(e => e.PurchaseUnits)
             .HasConversion(
                 v => v.ToString(Newtonsoft.Json.Formatting.None),
                 v => !string.IsNullOrEmpty(v) ? JArray.Parse(v) : new())

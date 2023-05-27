@@ -4,5 +4,7 @@
     {
         public const string DataTableNameRequest = "PaypalTransactionRequest";
         public const string DataTableNameResponse = "PaypalTransactionResponse";
+        public const string CreateOrderIntent = "CAPTURE";
+
     }
 }

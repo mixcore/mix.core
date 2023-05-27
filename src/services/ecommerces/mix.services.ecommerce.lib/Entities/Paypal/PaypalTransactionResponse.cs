@@ -9,12 +9,10 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Paypal
     public class PaypalTransactionResponse : EntityBase<int>
     {
         public string PaypalId { get; set; }
-        public string Intent { get; set; }
-        public string State { get; set; }
-        public string Cart { get; set; }
+        public string PaypalStatus { get; set; }
         public JObject Payer { get; set; }
-        public JArray Transactions { get; set; }
-        public DateTime CreatedTime { get; set; }
+        public JObject PaymentSource { get; set; }
+        public JArray PurchaseUnits { get; set; }
         public JArray Links { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public int MixTentantId { get; set; }
@@ -22,15 +20,13 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Paypal
         {
             
         }
-        public PaypalTransactionResponse(PayPalPaymentExecutedResponse response)
+        public PaypalTransactionResponse(PaypalOrderCapturedResponse response)
         {
             PaypalId = response.id;
-            Intent = response.intent;
-            State = response.state;
-            Cart = response.cart;
-            CreatedTime = response.create_time;
+            PaypalStatus = response.status;
+            PaymentSource = response.payment_source != null ? JObject.FromObject(response.payment_source) : new();
             Payer = response.payer != null ? JObject.FromObject(response.payer) : new();
-            Transactions = response.transactions != null ? JArray.FromObject(response.transactions) : new();
+            PurchaseUnits = response.purchase_units != null ? JArray.FromObject(response.purchase_units) : new();
             Links = response.links != null ? JArray.FromObject(response.links) : new();
         }
     }

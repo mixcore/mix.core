@@ -14,7 +14,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         public string? Title { get; set; }
         public string? Description { get; set; }
-        public string? Currency { get; set; }
+        public string Currency { get; set; }
         public PaymentGateway? PaymentGateway { get; set; }
         public double? Total { get; set; }
         public Guid UserId { get; set; }
