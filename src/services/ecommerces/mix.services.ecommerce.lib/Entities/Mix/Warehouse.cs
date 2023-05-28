@@ -2,7 +2,7 @@
 
 namespace Mix.Services.Ecommerce.Lib.Entities
 {
-    public class ProductVariant : EntityBase<int>
+    public class Warehouse : EntityBase<int>
     {
         public int MixTenantId { get; set; }
         public int ProductDetailsId { get; set; }

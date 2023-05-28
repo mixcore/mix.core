@@ -6,7 +6,7 @@ using Mix.Services.Ecommerce.Lib.Entities.Mix;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels
 {
-    public class ProductVariantViewModel : ViewModelBase<EcommerceDbContext, ProductVariant, int, ProductVariantViewModel>
+    public class ProductVariantViewModel : ViewModelBase<EcommerceDbContext, Warehouse, int, ProductVariantViewModel>
     {
         #region Properties
 
@@ -35,7 +35,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         {
         }
 
-        public ProductVariantViewModel(ProductVariant entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public ProductVariantViewModel(Warehouse entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 

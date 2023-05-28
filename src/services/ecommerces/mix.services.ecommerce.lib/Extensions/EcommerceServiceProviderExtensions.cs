@@ -15,6 +15,8 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static void AddMixEcommerce(this IServiceCollection services)
         {
+            services.AddMixOnepay();
+            services.AddMixPaypal();
             services.TryAddScoped<EcommerceDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<EcommerceDbContext>>();
             services.TryAddScoped<IOrderService, OrderService>();

@@ -6,12 +6,12 @@ using Mix.Services.Ecommerce.Lib.Constants;
 
 namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
 {
-    public class ProductVariantConfiguration : EntityBaseConfiguration<ProductVariant, int>
+    public class ProductVariantConfiguration : EntityBaseConfiguration<Warehouse, int>
     {
         public ProductVariantConfiguration(DatabaseService databaseService) : base(databaseService)
         {
         }
-        public override void Configure(EntityTypeBuilder<ProductVariant> builder)
+        public override void Configure(EntityTypeBuilder<Warehouse> builder)
         {
             builder.ToTable(MixEcommerceConstants.DatabaseNameProductVariant);
             base.Configure(builder);

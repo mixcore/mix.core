@@ -23,12 +23,10 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public string? Email { get; set; }
 
         public string? ShippingAddress { get; set; }
-        public string? PaymentRequest { get; set; }
-        public string? PaymentResponse { get; set; }
+        public JObject PaymentRequest { get; set; }
+        public JObject PaymentResponse { get; set; }
 
         public OrderAddress Address { get; set; }
-        public JObject PaymentRequestData { get; set; }
-        public JObject PaymentResponseData { get; set; }
         public int MixTenantId { get; set; }
 
         public List<OrderItemViewModel> OrderItems { get; set; } = new();
@@ -66,8 +64,6 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             OrderItems = await OrderItemViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderDetailId == Id, cancellationToken);
             OrderTrackings = await OrderTrackingViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderDetailId == Id, cancellationToken);
             Address = !string.IsNullOrEmpty(ShippingAddress) ? JObject.Parse(ShippingAddress).ToObject<OrderAddress>() : new();
-            PaymentRequestData = !string.IsNullOrEmpty(PaymentRequest) ? JObject.Parse(PaymentRequest) : new();
-            PaymentResponseData = !string.IsNullOrEmpty(PaymentResponse) ? JObject.Parse(PaymentResponse) : new();
         }
 
         public override async Task<OrderDetail> ParseEntity(CancellationToken cancellationToken = default)
@@ -78,8 +74,6 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             {
                 result.ShippingAddress = ReflectionHelper.ParseObject(Address)?.ToString(Formatting.None);
             }
-            result.PaymentRequest = PaymentRequestData?.ToString(Formatting.None);
-            result.PaymentResponse = PaymentResponseData?.ToString(Formatting.None);
             return result;
         }
 

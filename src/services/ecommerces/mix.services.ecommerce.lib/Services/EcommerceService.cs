@@ -257,7 +257,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             var request = await paymentService.GetPaymentRequestAsync(checkoutCart, againUrl, returnUrl, cancellationToken);
             var url = await paymentService.GetPaymentUrl(checkoutCart, againUrl, returnUrl, cancellationToken);
 
-            checkoutCart.PaymentRequestData = request;
+            checkoutCart.PaymentRequest = request;
             await checkoutCart.SaveAsync(cancellationToken);
             await myCart.SaveAsync(cancellationToken);
             await LogAction(checkoutCart.Id, OrderTrackingAction.CHECKOUT);
@@ -271,7 +271,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             checkoutCart.OrderItems = checkoutCart.OrderItems.Where(m => m.IsActive).ToList();
             var skus = checkoutCart.OrderItems.Select(m => m.Sku).ToList();
 
-            var orderProducts = _uow.DbContext.ProductVariant.Where(m => skus.Contains(m.Sku));
+            var orderProducts = _uow.DbContext.Warehouse.Where(m => skus.Contains(m.Sku));
             if (orderProducts.Count(m => m.Inventory == 0) > 0)
             {
                 var soldOutProducts = orderProducts.Where(m => m.Inventory == 0).Select(m => $"{m.Sku} sold out").ToArray();
@@ -316,7 +316,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             {
                 throw new MixException(MixErrorStatus.ServerError, $"Not Implement {order.PaymentGateway} payment");
             }
-            order.PaymentResponseData = paymentResponse;
+            order.PaymentResponse = paymentResponse;
             order.PaymentStatus = await paymentService.ProcessPaymentResponse(order, paymentResponse, cancellationToken);
             order.LastModified = DateTime.UtcNow;
             if (order.PaymentStatus == PaymentStatus.SUCCESS)

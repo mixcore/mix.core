@@ -1,5 +1,6 @@
 ﻿using Mix.Heart.Entities;
 using Mix.Services.Ecommerce.Lib.Enums;
+using Newtonsoft.Json.Linq;
 
 namespace Mix.Services.Ecommerce.Lib.Entities.Mix
 {
@@ -15,8 +16,8 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix
         public PaymentStatus? PaymentStatus { get; set; }
         public string Email { get; set; }
         public string? ShippingAddress { get; set; }
-        public string? PaymentRequest { get; set; }
-        public string? PaymentResponse { get; set; }
+        public JObject? PaymentRequest { get; set; }
+        public JObject? PaymentResponse { get; set; }
         public int MixTenantId { get; set; }
     }
 }

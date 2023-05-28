@@ -5,6 +5,8 @@ using Mix.Database.EntityConfigurations.Base;
 using Mix.Database.Services;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Payments.Lib.Constants;
+using Newtonsoft.Json.Linq;
+using Quartz;
 
 namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
 {
@@ -21,6 +23,20 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
             builder.Property(e => e.Email).IsRequired(false);
             builder.Property(e => e.Currency).IsRequired(false);
             builder.Property(e => e.Total).IsRequired(false);
+
+            builder.Property(e => e.PaymentRequest)
+            .HasConversion(
+                v => v.ToString(Newtonsoft.Json.Formatting.None),
+                v => !string.IsNullOrEmpty(v) ? JObject.Parse(v) : new())
+            .IsRequired(false)
+            .HasColumnType(Config.Text);
+
+            builder.Property(e => e.PaymentResponse)
+            .HasConversion(
+                v => v.ToString(Newtonsoft.Json.Formatting.None),
+                v => !string.IsNullOrEmpty(v) ? JObject.Parse(v) : new())
+            .IsRequired(false)
+            .HasColumnType(Config.Text);
 
             builder.Property(e => e.PaymentGateway)
                 .IsRequired(false)
