@@ -13,7 +13,6 @@ namespace Mix.Services.Ecommerce
         {
             services.AddMixEcommerce();
             services.TryAddScoped<IMixMetadataService, MixMetadataService>();
-            services.TryAddScoped<IProductService, ProductService>();
             services.TryAddScoped<OnepayService>();
             services.TryAddScoped<PaypalService>();
         }

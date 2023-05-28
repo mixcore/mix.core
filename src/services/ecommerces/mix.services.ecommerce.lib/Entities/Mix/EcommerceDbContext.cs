@@ -21,6 +21,5 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix
         public DbSet<OrderTracking> OrderTracking { get; set; }
         public DbSet<OrderItem> OrderItem { get; set; }
         public DbSet<Warehouse> Warehouse { get; set; }
-        public DbSet<MixDatabaseAssociation> MixDatabaseAssociation { get; set; }
     }
 }

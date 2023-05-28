@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\EcommerceDb\" />
     <Folder Include="Migrations\PaypalDb\" />
   </ItemGroup>
 
