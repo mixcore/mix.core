@@ -6,7 +6,6 @@ using Mix.Shared.Models;
 
 namespace Mixcore.Domain.ViewModels
 {
-    [GenerateRestApiController(QueryOnly = true)]
     public sealed class PageContentViewModel
         : ExtraColumnMultilingualSEOContentViewModelBase
             <MixCmsContext, MixPageContent, int, PageContentViewModel>

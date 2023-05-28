@@ -15,10 +15,15 @@ namespace Microsoft.Extensions.DependencyInjection
                     opt.CacheProfiles.Add("Default",
                         new CacheProfile()
                         {
-                            Duration = GlobalConfigService.Instance.ResponseCache,
+                            Duration = GlobalConfigService.Instance.ResponseCache > 0
+                                        ? GlobalConfigService.Instance.ResponseCache
+                                        : 0,
                             VaryByHeader = "User-Agent",
-                            Location = ResponseCacheLocation.Any,
-                            NoStore = false,
+                            Location = GlobalConfigService.Instance.ResponseCache > 0
+                                        ? ResponseCacheLocation.Any
+                                        : ResponseCacheLocation.None,
+                            NoStore = GlobalConfigService.Instance.ResponseCache > 0
+                                        ? false : true
                         });
                 });
         }

@@ -1,6 +1,7 @@
 ﻿using Mix.Heart.Helpers;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
+using MySqlX.XDevAPI.Common;
 
 namespace Mixcore.Domain.ViewModels
 {
@@ -34,7 +35,7 @@ namespace Mixcore.Domain.ViewModels
         public string DetailUrl => $"/Module/{Id}/{SeoName}";
 
         public JObject AdditionalData { get; set; }
-        public PagingResponseModel<ModuleDataViewModel> Data { get; set; }
+        public PagingResponseModel<JObject> Data { get; set; }
         public PagingResponseModel<ModulePostAssociationViewModel> Posts { get; set; }
         #endregion
 
@@ -73,9 +74,17 @@ namespace Mixcore.Domain.ViewModels
             MixCacheService cacheService)
         {
             await LoadAdditionalDataAsync(mixRepoDbRepository);
-            Data = await ModuleDataViewModel.GetRepository(UowInfo, CacheService).GetPagingAsync(
+            var getData = await ModuleDataViewModel.GetRepository(UowInfo, CacheService).GetPagingAsync(
                 m => m.ParentId == Id,
                 pagingModel);
+
+            List<JObject> objects = getData.Items.Select(m => m.Data).ToList();
+            Data = new PagingResponseModel<JObject>()
+            {
+                Items = objects,
+                PagingData = getData.PagingData
+            };
+
             Posts = await ModulePostAssociationViewModel.GetRepository(UowInfo, CacheService).GetPagingAsync(
                 m => m.ParentId == Id,
                 pagingModel);
