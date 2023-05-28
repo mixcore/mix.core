@@ -34,6 +34,9 @@ namespace Mixcore.Controllers
             var searchRequest = base.BuildSearchRequest(request);
 
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
+                !string.IsNullOrEmpty(req.Keyword),
+                m => m.Value.Contains(req.Keyword));
+            searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
                 request.ModuleId.HasValue,
                 m => m.ParentId == request.ModuleId);
 

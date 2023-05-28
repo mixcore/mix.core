@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 using Mix.Lib.Middlewares;
 using Mix.Mixdb.Event.Services;
 using Mix.Service.Interfaces;
@@ -57,8 +59,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.Configure<GzipCompressionProviderOptions>(
                 options => options.Level = System.IO.Compression.CompressionLevel.Fastest);
             services.AddResponseCompression(options => options.EnableForHttps = true);
-            services.AddResponseCaching();
-
+            services.AddMixResponseCaching();
             services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
             services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
             services.TryAddSingleton<IMixDbCommandHubClientService, MixDbCommandHubClientService>();
@@ -124,7 +125,7 @@ namespace Microsoft.Extensions.DependencyInjection
             bool isDevelop)
         {
             app.UseHttpLogging();
-            
+
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

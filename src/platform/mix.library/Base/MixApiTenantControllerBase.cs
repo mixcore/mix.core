@@ -6,6 +6,7 @@ using Mix.Lib.Services;
 
 namespace Mix.Lib.Base
 {
+    [ResponseCache(CacheProfileName = "Default")]
     public abstract class MixTenantApiControllerBase : Controller
     {
         protected readonly MixCacheService CacheService;

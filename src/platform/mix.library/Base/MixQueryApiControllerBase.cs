@@ -6,6 +6,7 @@ using Mix.Lib.Services;
 
 namespace Mix.Lib.Base
 {
+    [ResponseCache(CacheProfileName = "Default")]
     public class MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         : MixRestHandlerApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable

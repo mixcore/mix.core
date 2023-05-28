@@ -5,6 +5,7 @@ using Mix.Shared.Services;
 
 namespace Mixcore.Domain.Bases
 {
+    [ResponseCache(CacheProfileName = "Default")]
     public class MvcBaseController : MixControllerBase
     {
         protected UnitOfWorkInfo<MixCmsContext> Uow;
