@@ -3,6 +3,7 @@ using Mix.Heart.Helpers;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Models;
+using System.Reflection;
 
 namespace Mixcore.Domain.ViewModels
 {
@@ -17,7 +18,6 @@ namespace Mixcore.Domain.ViewModels
         }
 
         public PageContentViewModel(MixPageContent entity,
-
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
@@ -30,11 +30,8 @@ namespace Mixcore.Domain.ViewModels
         #region Properties
         public int? PageSize { get; set; }
         public MixPageType Type { get; set; }
-
         public string ClassName { get; set; }
-
         public string DetailUrl => $"/page/{Id}/{SeoName}";
-
         public Guid? AdditionalDataId { get; set; }
 
         public List<ModuleContentViewModel> Modules { get; set; }
@@ -52,9 +49,10 @@ namespace Mixcore.Domain.ViewModels
 
         #region Public Method
 
-        public async Task LoadDataAsync(MixRepoDbRepository mixRepoDbRepository, 
-                            IMixMetadataService metadataService, 
-                            PagingRequestModel pagingModel, MixCacheService cacheService)
+        public async Task LoadDataAsync(
+            MixRepoDbRepository mixRepoDbRepository,
+            IMixMetadataService metadataService,
+            PagingRequestModel pagingModel, MixCacheService cacheService)
         {
             await LoadAdditionalDataAsync(mixRepoDbRepository);
             await LoadModulesAsync(mixRepoDbRepository, metadataService, cacheService);
@@ -93,12 +91,16 @@ namespace Mixcore.Domain.ViewModels
                     .OrderBy(m => m.Priority)
                     .Select(m => m.ChildId)
                     .ToListAsync();
-            var moduleRepo = ModuleContentViewModel.GetRepository(UowInfo, CacheService);
-            Modules = await moduleRepo.GetListAsync(m => moduleIds.Contains(m.Id));
+
             var paging = new PagingModel();
-            foreach (var item in Modules)
+            Modules = new List<ModuleContentViewModel>();
+            var moduleRepo = ModuleContentViewModel.GetRepository(UowInfo, CacheService);
+            foreach (var moduleId in moduleIds)
             {
+                var item = await moduleRepo.GetSingleAsync(m => m.Id == moduleId);
                 await item.LoadData(paging, mixRepoDbRepository, metadataService, cacheService);
+
+                Modules.Add(item);
             }
         }
         private async Task LoadPostsAsync(PagingRequestModel pagingModel, MixRepoDbRepository mixRepoDbRepository, IMixMetadataService metadataService, MixCacheService cacheService)
@@ -110,7 +112,6 @@ namespace Mixcore.Domain.ViewModels
                 await item.LoadPost(mixRepoDbRepository, metadataService, cacheService);
             }
         }
-
 
         #endregion
     }
