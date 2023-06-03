@@ -24,7 +24,7 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
                .HasCharSet(Config.CharSet);
 
             builder.Property(e => e.FileName)
-               .HasColumnType($"{Config.NString}{Config.SmallLength}")
+               .HasColumnType($"{Config.NString}{Config.MediumLength}")
                .HasCharSet(Config.CharSet)
                .UseCollation(Config.DatabaseCollation);
 

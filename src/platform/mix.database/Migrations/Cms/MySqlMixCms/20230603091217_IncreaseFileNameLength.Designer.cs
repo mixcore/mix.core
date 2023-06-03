@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Cms;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.MySqlMixCms
+namespace Mix.Database.Migrations.Cms.MySqlMixCms
 {
     [DbContext(typeof(MySqlMixCmsContext))]
-    partial class MySqlMixCmsContextModelSnapshot : ModelSnapshot
+    [Migration("20230603091217_IncreaseFileNameLength")]
+    partial class IncreaseFileNameLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
