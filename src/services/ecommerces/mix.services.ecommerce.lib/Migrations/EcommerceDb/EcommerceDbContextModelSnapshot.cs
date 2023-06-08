@@ -88,6 +88,9 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.EcommerceDb
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
+                    b.Property<Guid>("TempId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("Title")
                         .HasColumnType("longtext");
 
@@ -286,7 +289,7 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.EcommerceDb
                     b.HasKey("Id")
                         .HasName("PK_Warehouse");
 
-                    b.ToTable("ProductVariant", (string)null);
+                    b.ToTable("Warehouse", (string)null);
                 });
 #pragma warning restore 612, 618
         }

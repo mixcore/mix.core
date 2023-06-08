@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mix.Services.Ecommerce.Lib.Migrations.EcommerceDb
 {
     [DbContext(typeof(EcommerceDbContext))]
-    [Migration("20230528150942_InitEcommerce")]
-    partial class InitEcommerce
+    [Migration("20230607113542_AddOrderTempId")]
+    partial class AddOrderTempId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -90,6 +90,9 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.EcommerceDb
                         .HasColumnType("varchar(50)");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<Guid>("TempId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Title")
                         .HasColumnType("longtext");

@@ -21,6 +21,7 @@ namespace Mix.Services.Ecommerce.Lib.Interfaces
         public Task<OrderViewModel> RemoveFromCart(ClaimsPrincipal principal, int itemId, CancellationToken cancellationToken = default);
 
         public Task<string?> Checkout(ClaimsPrincipal principal, PaymentGateway gateway, OrderViewModel checkoutCart, CancellationToken cancellationToken = default);
+        public Task<string?> CheckoutGuest(PaymentGateway gateway, OrderViewModel checkoutCart, CancellationToken cancellationToken = default);
 
         public Task<OrderStatus> ProcessPaymentResponse(int orderId, JObject paymentResponse, CancellationToken cancellationToken = default);
 

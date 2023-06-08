@@ -1,4 +1,5 @@
-﻿using Mix.Heart.Helpers;
+﻿using Microsoft.Build.Framework;
+using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
@@ -11,7 +12,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
     public class OrderViewModel : ViewModelBase<EcommerceDbContext, OrderDetail, int, OrderViewModel>
     {
         #region Properties
-
+        public Guid TempId { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
         public string Currency { get; set; }
@@ -20,6 +21,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public Guid UserId { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
+        [Required]
         public string? Email { get; set; }
 
         public string? ShippingAddress { get; set; }

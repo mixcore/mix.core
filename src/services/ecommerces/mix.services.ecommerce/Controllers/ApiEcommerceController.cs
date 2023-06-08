@@ -140,6 +140,18 @@ namespace Mix.Services.ecommerce.Controllers
             var url = await _ecommerceService.Checkout(User, gateway.Value, cart, cancellationToken);
             return !string.IsNullOrEmpty(url) ? Ok(new JObject(new JProperty("url", url))) : BadRequest();
         }
+        
+        [HttpPost]
+        [Route("checkout-guest/{gateway}")]
+        public async Task<ActionResult<JObject>> CheckoutGuest(PaymentGateway? gateway, [FromBody] OrderViewModel cart, CancellationToken cancellationToken = default)
+        {
+            if (gateway == null)
+            {
+                return BadRequest();
+            }
+            var url = await _ecommerceService.CheckoutGuest(gateway.Value, cart, cancellationToken);
+            return !string.IsNullOrEmpty(url) ? Ok(new JObject(new JProperty("url", url))) : BadRequest();
+        }
 
         [HttpGet]
         [Route("payment-response/{orderId}")]
