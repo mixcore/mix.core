@@ -16,6 +16,7 @@ using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Heart.Services;
 using Mix.Database.Entities.MixDb;
+using Mix.Shared.Dtos;
 
 namespace Mix.Services.Databases.Lib.Services
 {
@@ -139,16 +140,30 @@ namespace Mix.Services.Databases.Lib.Services
 
         #region IQueryables
 
-        public IQueryable<int> GetQueryableContentIdByMetadataSeoContent(Dictionary<string, string[]> metadataSeoContents, MixContentType contentType, bool isMandatory)
+        public IQueryable<int> GetQueryableContentIdByMetadataSeoContent(List<SearchQueryField> metadataSeoContents, MixContentType contentType)
         {
             //Expression<Func<MixMetadata, bool>>? predicate = m => isMandatory;
-            IQueryable<int> query = null;
-            foreach (var key in metadataSeoContents.Keys)
+            IQueryable<int> andQueryIds = null;
+            IQueryable<int> orQueryIds = null;
+            var andQueries = metadataSeoContents.Where(m => m.IsRequired).ToList();
+            var orQueries = metadataSeoContents.Where(m => !m.IsRequired).ToList();
+            foreach (var item in andQueries)
             {
-                //predicate = predicate.AndAlsoIf(isMandatory && metadataSeoContents[key].Length > 0,
-                //        m => m.Type == key && metadataSeoContents[key].Contains(m.SeoContent));
+                if (item.Value == null) continue;
 
-                Expression<Func<MixMetadata, bool>> predicate = m => m.Type == key && metadataSeoContents[key].Contains(m.SeoContent);
+                Expression<Func<MixMetadata, bool>> predicate = m =>
+                    m.Type == item.FieldName;
+
+
+                if (item.CompareOperator == MixCompareOperator.InRange)
+                {
+                    var array = (string[])item.Value;
+                    predicate = predicate.AndAlso(m => array.Contains(m.SeoContent));
+                }
+                else
+                {
+                    predicate = predicate.AndAlso(m => item.Value.ToString().Contains(m.SeoContent));
+                }
 
                 var allowMetadata = _uow.DbContext.MixMetadata.Where(predicate);
 
@@ -157,23 +172,51 @@ namespace Mix.Services.Databases.Lib.Services
                                         on metadata.Id equals association.MetadataId
                                         where association.MixTenantId == CurrentTenant.Id && association.ContentType == contentType
                                         select association.ContentId;
-                if (query == null)
+                if (andQueryIds == null)
                 {
-                    query = allowedContentIds.Distinct();
+                    andQueryIds = allowedContentIds.Distinct();
                 }
                 else
                 {
-                    if (isMandatory)
-                    {
-                        query = query.Where(m => allowedContentIds.Contains(m));
-                    }
-                    else
-                    {
-                        query = query.Concat(allowedContentIds);
-                    }
+                    andQueryIds = andQueryIds.Where(m => allowedContentIds.Contains(m));
                 }
             }
-            return query.Distinct();
+            foreach (var item in orQueries)
+            {
+                if (item.Value == null) continue;
+
+                Expression<Func<MixMetadata, bool>> predicate = m =>
+                    m.Type == item.FieldName;
+
+                if (item.CompareOperator == MixCompareOperator.InRange)
+                {
+                    var array = (string[])item.Value;
+                    predicate = predicate.AndAlso(m => array.Contains(m.SeoContent));
+                }
+                else
+                {
+                    predicate = predicate.AndAlso(m => item.Value.ToString().Contains(m.SeoContent));
+                }
+
+                var allowMetadata = _uow.DbContext.MixMetadata.Where(predicate);
+
+                var allowedContentIds = from metadata in allowMetadata
+                                        join association in _uow.DbContext.MixMetadataContentAssociation
+                                        on metadata.Id equals association.MetadataId
+                                        where association.MixTenantId == CurrentTenant.Id && association.ContentType == contentType
+                                        select association.ContentId;
+                if (orQueryIds == null)
+                {
+                    orQueryIds = allowedContentIds.Distinct();
+                }
+                else
+                {
+                    orQueryIds = orQueryIds.Concat(allowedContentIds);
+                }
+            }
+            return andQueries.Count == 0 ? orQueryIds.Distinct()
+                    : orQueries.Count == 0 ? andQueryIds.Distinct()
+                        : andQueryIds.Where(m => orQueryIds.Contains(m)).Distinct();
         }
 
         public IQueryable<int>? GetQueryableMetadataByContentId(int contentId, MixContentType? contentType, string metadataType)

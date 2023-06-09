@@ -27,19 +27,17 @@ namespace Mix.Lib.Models.Common
                 {
                     string seoContent = arr[2];
                     var contents = httpRequest.Query[key].ToString().TrimEnd(',').Split(',', StringSplitOptions.TrimEntries);
-                    if (arr[1] == "and")
+                    
+                    MetadataQueries.Add(new()
                     {
-                        AndMetadataQueries.Add(seoContent, contents);
-                    }
-                    else
-                    {
-                        OrMetadataQueries.Add(seoContent, contents);
-                    }
+                        FieldName = seoContent,
+                        Value = contents,
+                        CompareOperator = MixCompareOperator.InRange,
+                        IsRequired = arr[1] == "and"
+                    });
                 }
             }
         }
-
-        public Dictionary<string, string[]> AndMetadataQueries { get; set; } = new();
-        public Dictionary<string, string[]> OrMetadataQueries { get; set; } = new();
+        public List<SearchQueryField> MetadataQueries { get; set; } = new();
     }
 }

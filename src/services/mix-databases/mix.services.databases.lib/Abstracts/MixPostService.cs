@@ -12,6 +12,8 @@ using Mix.Heart.ViewModel;
 using Mix.Lib.Models.Common;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Interfaces;
+using Mix.Shared.Dtos;
+using RepoDb;
 using System.Linq.Expressions;
 
 namespace Mix.Services.Databases.Lib.Abstracts
@@ -54,7 +56,8 @@ namespace Mix.Services.Databases.Lib.Abstracts
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 using var postRepo = new Repository<MixCmsContext, MixPostContent, int, TView>(Uow);
-                searchRequest.Predicate = searchRequest.Predicate.AndAlso(ApplyMetadataQueries(searchRequest));
+                postRepo.CacheService = CacheService;
+                searchRequest.Predicate = searchRequest.Predicate.AndAlso(ParseMetadataQueriesPredicate(searchRequest.MetadataQueries));
                 var result = await postRepo.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, cancellationToken);
                 return result;
             }
@@ -64,24 +67,16 @@ namespace Mix.Services.Databases.Lib.Abstracts
             }
         }
 
-        private Expression<Func<MixPostContent, bool>> ApplyMetadataQueries(SearchPostQueryModel searchRequest)
+        public Expression<Func<MixPostContent, bool>> ParseMetadataQueriesPredicate(List<SearchQueryField> MetadataQueries)
         {
             Expression<Func<MixPostContent, bool>> predicate = m => true;
-            if (searchRequest.AndMetadataQueries.Count == 0 && searchRequest.OrMetadataQueries.Count == 0)
+            if (MetadataQueries.Count == 0)
             {
                 return predicate;
             }
 
-            IQueryable<int>? allowedIdQuery = default;
-            if (searchRequest.OrMetadataQueries.Any())
-            {
-                allowedIdQuery = MetadataService.GetQueryableContentIdByMetadataSeoContent(searchRequest.OrMetadataQueries, MixContentType.Post, false);
-            }
-            if (searchRequest.AndMetadataQueries.Any())
-            {
-                var andQuery = MetadataService.GetQueryableContentIdByMetadataSeoContent(searchRequest.AndMetadataQueries, MixContentType.Post, true);
-                allowedIdQuery = allowedIdQuery != default ? allowedIdQuery.Where(m => andQuery.Contains(m)) : andQuery;
-            }
+            IQueryable<int>? allowedIdQuery = MetadataService.GetQueryableContentIdByMetadataSeoContent(
+                                                MetadataQueries, MixContentType.Post);
             predicate = predicate.AndAlsoIf(allowedIdQuery != null, m => allowedIdQuery!.ToList().Contains(m.Id));
             return predicate;
         }

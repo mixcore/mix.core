@@ -109,7 +109,23 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<PagingResponseModel<dynamic>> GetPagingAsync(IEnumerable<QueryField> queryFields, PagingRequestModel pagingRequest)
+        public async Task<PagingResponseModel<dynamic>> GetPagingAsync(IEnumerable<SearchQueryField> searchQueryFields, PagingRequestModel pagingRequest, string? selectFieldNames = null)
+        {
+            List<Field>? fields = null;
+            if (!string.IsNullOrEmpty(selectFieldNames))
+            {
+                fields = new();
+                string[] fieldNames = selectFieldNames.Split(',');
+                foreach (var item in fieldNames)
+                {
+                    fields.Add(new Field(item));
+                }
+            }
+            List<QueryField> queries = ParseSearchQuery(searchQueryFields);
+            return await GetPagingAsync(queries, pagingRequest, fields);
+
+        }
+        public async Task<PagingResponseModel<dynamic>> GetPagingAsync(IEnumerable<QueryField> queryFields, PagingRequestModel pagingRequest, IEnumerable<Field>? selectFields = null)
         {
             List<OrderField> orderFields = new List<OrderField>() {
                     new OrderField(pagingRequest.SortBy ?? "Id", pagingRequest.SortDirection == SortDirection.Asc ? Order.Ascending: Order.Descending)
@@ -117,7 +133,7 @@ namespace Mix.RepoDb.Repositories
             var count = (int)_connection.Count(_tableName, queryFields, transaction: _dbTransaction);
             int pageSize = pagingRequest.PageSize.HasValue ? pagingRequest.PageSize.Value : 100;
             var data = await _connection.BatchQueryAsync(_tableName, pagingRequest.PageIndex,
-                pageSize, orderFields, queryFields, null, null, commandTimeout: _settings.CommandTimeout, transaction: _dbTransaction);
+                pageSize, orderFields, queryFields, selectFields, null, commandTimeout: _settings.CommandTimeout, transaction: _dbTransaction);
             return new PagingResponseModel<dynamic>()
             {
                 Items = data.ToList(),
@@ -455,6 +471,38 @@ namespace Mix.RepoDb.Repositories
             {
                 CompleteTransaction();
             }
+        }
+
+        public Operation ParseSearchOperation(ExpressionMethod? searchMethod)
+        {
+            return searchMethod switch
+            {
+                ExpressionMethod.Like => Operation.Like,
+                ExpressionMethod.Equal => Operation.Equal,
+                ExpressionMethod.NotEqual => Operation.NotEqual,
+                ExpressionMethod.LessThanOrEqual => Operation.LessThanOrEqual,
+                ExpressionMethod.LessThan => Operation.LessThan,
+                ExpressionMethod.GreaterThan => Operation.GreaterThan,
+                ExpressionMethod.GreaterThanOrEqual => Operation.GreaterThanOrEqual,
+                ExpressionMethod.In => Operation.In,
+                _ => Operation.Equal
+            };
+        }
+        
+        public MixCompareOperator ParseMixCompareOperator(ExpressionMethod? searchMethod)
+        {
+            return searchMethod switch
+            {
+                ExpressionMethod.Like => MixCompareOperator.Like,
+                ExpressionMethod.Equal => MixCompareOperator.Equal,
+                ExpressionMethod.NotEqual => MixCompareOperator.NotEqual,
+                ExpressionMethod.LessThanOrEqual => MixCompareOperator.LessThanOrEqual,
+                ExpressionMethod.LessThan => MixCompareOperator.LessThan,
+                ExpressionMethod.GreaterThan => MixCompareOperator.GreaterThan,
+                ExpressionMethod.GreaterThanOrEqual => MixCompareOperator.GreaterThanOrEqual,
+                ExpressionMethod.In => MixCompareOperator.InRange,
+                _ => MixCompareOperator.Equal
+            };
         }
 
         #endregion

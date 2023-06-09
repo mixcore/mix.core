@@ -11,6 +11,7 @@ namespace Mix.Portal
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
             services.TryAddScoped<IMixApplicationService, MixApplicationService>();
+            services.TryAddScoped<PortalPostService>();
             services.AddScoped<IMixThemeExportService, MixThemeExportService>();
             services.AddScoped<IMixThemeImportService, MixThemeImportService>();
             services.TryAddScoped<ICloneCultureService, CloneCultureService>();

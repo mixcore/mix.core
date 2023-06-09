@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Heart.Helpers;
+using Mix.Portal.Domain.Services;
 using Mix.RepoDb.Repositories;
 
 namespace Mix.Portal.Controllers
@@ -10,6 +11,7 @@ namespace Mix.Portal.Controllers
     public class MixPostContentController
         : MixBaseContentController<MixPostContentViewModel, MixPostContent, int>
     {
+        private readonly PortalPostService _postService;
         private readonly MixRepoDbRepository _mixRepoDbRepository;
         public MixPostContentController(
             MixIdentityService identityService,
@@ -21,11 +23,13 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService,
-            MixRepoDbRepository mixRepoDbRepository)
+            MixRepoDbRepository mixRepoDbRepository,
+            PortalPostService postService)
             : base(MixContentType.Post, identityService, userManager, httpContextAccessor, configuration, cacheService, translator,
                   mixIdentityService, cmsUow, queueService)
         {
             _mixRepoDbRepository = mixRepoDbRepository;
+            _postService = postService;
         }
 
         #region Routes
@@ -36,6 +40,9 @@ namespace Mix.Portal.Controllers
             var searchRequest = BuildSearchRequest(req);
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
                 !string.IsNullOrEmpty(req.MixDatabaseName), m => m.MixDatabaseName == req.MixDatabaseName);
+            searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
+                req.MetadataQueries.Count > 0, _postService.ParseMetadataQueriesPredicate(req.MetadataQueries));
+
             if (!string.IsNullOrEmpty(req.MixDatabaseName) && req.Queries.Count > 0)
             {
                 _mixRepoDbRepository.InitTableName(req.MixDatabaseName);

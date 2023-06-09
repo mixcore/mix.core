@@ -1,4 +1,6 @@
-﻿namespace Mix.Shared.Dtos
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Mix.Shared.Dtos
 {
     public class FilterContentRequestDto : SearchRequestDto
     {
@@ -20,6 +22,9 @@
         }
 
         public string MixDatabaseName { get; set; }
+        public string MetadataAnd { get; set; }
+        public string MetadataOr { get; set; }
         public List<SearchQueryField> Queries { get; set; } = new();
+        public List<SearchQueryField> MetadataQueries { get; set; } = new();
     }
 }

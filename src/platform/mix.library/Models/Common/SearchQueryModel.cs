@@ -107,7 +107,7 @@ namespace Mix.Lib.Models.Common
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword) && req.SearchMethod.HasValue)
             {
                 Expression<Func<TEntity, bool>> searchPredicate = m => false;
-                foreach (var col in req.SearchColumns.Replace(" ", string.Empty).Split(','))
+                foreach (var col in req.SearchColumns.Split(',', StringSplitOptions.TrimEntries))
                 {
                     if (SearchMethod.Value == ExpressionMethod.In)
                     {

@@ -3,6 +3,7 @@ using Mix.Heart.Models;
 using Mix.Mixdb.ViewModels;
 using Mix.Services.Databases.Lib.Dtos;
 using Mix.Services.Databases.Lib.Models;
+using Mix.Shared.Dtos;
 using Mix.Shared.Models;
 
 namespace Mix.Services.Databases.Lib.Interfaces
@@ -21,7 +22,7 @@ namespace Mix.Services.Databases.Lib.Interfaces
 
         public Task DeleteMetadataContentAssociation(int id, CancellationToken cancellationToken = default);
 
-        public IQueryable<int> GetQueryableContentIdByMetadataSeoContent(Dictionary<string, string[]> metadataSeoContents, MixContentType contentType, bool isMandatory);
+        public IQueryable<int> GetQueryableContentIdByMetadataSeoContent(List<SearchQueryField> metadataSeoContents, MixContentType contentType);
 
         public IQueryable<int>? GetQueryableMetadataByContentId(int contentId, MixContentType? contentType, string metadataType);
     }

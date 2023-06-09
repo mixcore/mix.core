@@ -118,7 +118,7 @@ namespace Mix.Lib.Services
             cancellationToken.ThrowIfCancellationRequested();
             if (!string.IsNullOrEmpty(req.Columns))
             {
-                Repository.SetSelectedMembers(req.Columns.Replace(" ", string.Empty).Split(','));
+                Repository.SetSelectedMembers(req.Columns.Split(',', StringSplitOptions.TrimEntries));
             }
 
             if (!string.IsNullOrEmpty(req.Columns))

@@ -61,7 +61,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         protected override async Task SaveEntityRelationshipAsync(OrderItem parentEntity, CancellationToken cancellationToken = default)
         {
-            MixDatabaseAssociationViewModel association = await GetCurrentAssociation();
+            MixEcommerceDatabaseAssociationViewModel association = await GetCurrentAssociation();
             if (association == null)
             {
                 association = new(UowInfo)
@@ -81,7 +81,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
             await base.DeleteHandlerAsync(cancellationToken);
-            MixDatabaseAssociationViewModel association = await GetCurrentAssociation();
+            MixEcommerceDatabaseAssociationViewModel association = await GetCurrentAssociation();
             if (association != null)
             {
                 await association.DeleteAsync(cancellationToken);
@@ -89,9 +89,9 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         }
 
-        private async Task<MixDatabaseAssociationViewModel> GetCurrentAssociation()
+        private async Task<MixEcommerceDatabaseAssociationViewModel> GetCurrentAssociation()
         {
-            return await MixDatabaseAssociationViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(m =>
+            return await MixEcommerceDatabaseAssociationViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(m =>
                         m.ParentId == OrderDetailId
                         && m.ChildId == Id
                         && m.ChildDatabaseName == EcommerceConstants.DataTableNameOrderItem);

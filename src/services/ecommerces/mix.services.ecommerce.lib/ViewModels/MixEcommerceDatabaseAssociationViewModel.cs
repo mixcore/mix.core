@@ -5,8 +5,8 @@ using Mix.Services.Ecommerce.Lib.Entities.Mix;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels
 {
-    public sealed class MixDatabaseAssociationViewModel
-        : ViewModelBase<EcommerceDbContext, MixDatabaseAssociation, Guid, MixDatabaseAssociationViewModel>
+    public sealed class MixEcommerceDatabaseAssociationViewModel
+        : ViewModelBase<EcommerceDbContext, MixDatabaseAssociation, Guid, MixEcommerceDatabaseAssociationViewModel>
     {
         #region Properties
         public int MixTenantId { get; set; }
@@ -18,16 +18,16 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         #region Constructors
 
-        public MixDatabaseAssociationViewModel()
+        public MixEcommerceDatabaseAssociationViewModel()
         {
         }
 
-        public MixDatabaseAssociationViewModel(MixDatabaseAssociation entity, UnitOfWorkInfo? uowInfo = null)
+        public MixEcommerceDatabaseAssociationViewModel(MixDatabaseAssociation entity, UnitOfWorkInfo? uowInfo = null)
             : base(entity, uowInfo)
         {
         }
 
-        public MixDatabaseAssociationViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public MixEcommerceDatabaseAssociationViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 

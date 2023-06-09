@@ -269,27 +269,35 @@ namespace Mix.Services.Ecommerce.Lib.Services
             OrderViewModel checkoutCart,
             CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            checkoutCart.TempId = Guid.NewGuid();
-            checkoutCart.PaymentGateway = gateway;
-            await FilterGuestCheckoutCartAsync(checkoutCart);
 
-            var paymentService = PaymentServiceFactory.GetPaymentService(_serviceProvider, gateway);
-
-            if (paymentService == null)
+            try
             {
-                throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
+                cancellationToken.ThrowIfCancellationRequested();
+                checkoutCart.TempId = Guid.NewGuid();
+                checkoutCart.PaymentGateway = gateway;
+                await FilterGuestCheckoutCartAsync(checkoutCart);
+
+                var paymentService = PaymentServiceFactory.GetPaymentService(_serviceProvider, gateway);
+
+                if (paymentService == null)
+                {
+                    throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
+                }
+
+                string returnUrl = $"{_paymentConfiguration.Urls.PaymentResponseUrl}/{checkoutCart.Id}";
+                string againUrl = $"{_paymentConfiguration.Urls.PaymentCartUrl}/{checkoutCart.Id}";
+                var request = await paymentService.GetPaymentRequestAsync(checkoutCart, againUrl, returnUrl, cancellationToken);
+                var url = await paymentService.GetPaymentUrl(checkoutCart, againUrl, returnUrl, cancellationToken);
+
+                checkoutCart.PaymentRequest = request;
+                var id = await checkoutCart.SaveAsync(cancellationToken);
+                await LogAction(id, OrderTrackingAction.CHECKOUT);
+                return url;
             }
-
-            string returnUrl = $"{_paymentConfiguration.Urls.PaymentResponseUrl}/{checkoutCart.Id}";
-            string againUrl = $"{_paymentConfiguration.Urls.PaymentCartUrl}/{checkoutCart.Id}";
-            var request = await paymentService.GetPaymentRequestAsync(checkoutCart, againUrl, returnUrl, cancellationToken);
-            var url = await paymentService.GetPaymentUrl(checkoutCart, againUrl, returnUrl, cancellationToken);
-
-            checkoutCart.PaymentRequest = request;
-            await checkoutCart.SaveAsync(cancellationToken);
-            await LogAction(checkoutCart.Id, OrderTrackingAction.CHECKOUT);
-            return url;
+            catch(Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
         }
 
         private async Task FilterGuestCheckoutCartAsync(OrderViewModel checkoutCart)
@@ -314,7 +322,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             checkoutCart.Calculate();
 
             checkoutCart.SetUowInfo(_uow, CacheService);
-            checkoutCart.Id = _uow.DbContext.OrderDetail.Max(m => m.Id) + 1;
+            //checkoutCart.Id = (_uow.DbContext.OrderDetail.Max(m => m.Id) ?? 0) + 1;
             checkoutCart.LastModified = DateTime.UtcNow;
             checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
 
