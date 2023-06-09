@@ -296,7 +296,7 @@ namespace Mix.Portal.Controllers
 
                                 result.Add(new JProperty(pr.Name.ToTitleCase(), JObject.FromObject(pr.Value).ToString(Formatting.None)));
                             }
-                            else if (col.DataType == MixDataType.Array || col.DataType == MixDataType.ArrayMedia)
+                            else if (col.DataType == MixDataType.Array || col.DataType == MixDataType.ArrayMedia || col.DataType == MixDataType.ArrayRadio)
                             {
 
                                 result.Add(new JProperty(pr.Name.ToTitleCase(), JArray.FromObject(pr.Value).ToString(Formatting.None)));
@@ -410,7 +410,7 @@ namespace Mix.Portal.Controllers
                             JArray nestedData = new();
                             foreach (var nd in getNestedData)
                             {
-                                nestedData.Add(await  _mixDbService.ParseDataAsync(rel.DestinateDatabaseName, nd));
+                                nestedData.Add(await _mixDbService.ParseDataAsync(rel.DestinateDatabaseName, nd));
                             }
                             data.Add(new JProperty(rel.DisplayName, ReflectionHelper.ParseArray(nestedData)));
                         }

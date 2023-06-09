@@ -98,6 +98,7 @@
         Tag,
         Json,
         Array,
-        ArrayMedia
+        ArrayMedia,
+        ArrayRadio
     }
 }

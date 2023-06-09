@@ -692,6 +692,7 @@ namespace Mix.RepoDb.Services
                 case MixDataType.Json:
                 case MixDataType.Array:
                 case MixDataType.ArrayMedia:
+                case MixDataType.ArrayRadio:
                     return _databaseConstant.Text;
                 case MixDataType.Duration:
                 case MixDataType.Custom:
