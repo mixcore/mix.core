@@ -23,7 +23,7 @@ namespace Mix.Services.Ecommerce.Lib.Interfaces
         public Task<string?> Checkout(ClaimsPrincipal principal, PaymentGateway gateway, OrderViewModel checkoutCart, CancellationToken cancellationToken = default);
         public Task<string?> CheckoutGuest(PaymentGateway gateway, OrderViewModel checkoutCart, CancellationToken cancellationToken = default);
 
-        public Task<OrderStatus> ProcessPaymentResponse(int orderId, JObject paymentResponse, CancellationToken cancellationToken = default);
+        public Task<OrderViewModel> ProcessPaymentResponse(Guid orderTempId, JObject paymentResponse, CancellationToken cancellationToken = default);
 
         public Task LogAction(int orderId, OrderTrackingAction action, string? note = "");
     }

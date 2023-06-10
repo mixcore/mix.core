@@ -56,7 +56,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                          && m.UserId == userId,
                     cancellationToken);
         }
-        
+
         public async Task<OrderViewModel> GetOrCreateShoppingOrder(ClaimsPrincipal principal, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.GetUserAsync(principal);
@@ -157,7 +157,9 @@ namespace Mix.Services.Ecommerce.Lib.Services
                     OrderDetailId = cart.Id,
                     IsActive = true,
                     MixTenantId = CurrentTenant.Id,
-                    Price = product.Price.Value
+                    Price = product.Price.Value,
+                    Sku = item.Sku,
+                    ProductId = item.ProductId
                 };
                 ReflectionHelper.Map(item, orderItem);
                 orderItem.Calculate();
@@ -252,8 +254,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
             }
 
-            string returnUrl = $"{_paymentConfiguration.Urls.PaymentResponseUrl}/{checkoutCart.Id}";
-            string againUrl = $"{_paymentConfiguration.Urls.PaymentCartUrl}/{checkoutCart.Id}";
+            string returnUrl = $"{_paymentConfiguration.Urls.PaymentResponseUrl}/{checkoutCart.TempId}";
+            string againUrl = $"{_paymentConfiguration.Urls.PaymentCartUrl}/{checkoutCart.TempId}";
             var request = await paymentService.GetPaymentRequestAsync(checkoutCart, againUrl, returnUrl, cancellationToken);
             var url = await paymentService.GetPaymentUrl(checkoutCart, againUrl, returnUrl, cancellationToken);
 
@@ -284,8 +286,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
                     throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
                 }
 
-                string returnUrl = $"{_paymentConfiguration.Urls.PaymentResponseUrl}/{checkoutCart.Id}";
-                string againUrl = $"{_paymentConfiguration.Urls.PaymentCartUrl}/{checkoutCart.Id}";
+                string returnUrl = $"{_paymentConfiguration.Urls.PaymentResponseUrl}/{checkoutCart.TempId}";
+                string againUrl = $"{_paymentConfiguration.Urls.PaymentCartUrl}/{checkoutCart.TempId}";
                 var request = await paymentService.GetPaymentRequestAsync(checkoutCart, againUrl, returnUrl, cancellationToken);
                 var url = await paymentService.GetPaymentUrl(checkoutCart, againUrl, returnUrl, cancellationToken);
 
@@ -294,7 +296,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 await LogAction(id, OrderTrackingAction.CHECKOUT);
                 return url;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new MixException(MixErrorStatus.ServerError, ex);
             }
@@ -331,7 +333,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             await _uow.DbContext.SaveChangesAsync();
         }
-        
+
         private async Task FilterCheckoutCartAsync(OrderViewModel checkoutCart, OrderViewModel myCart)
         {
             myCart.SetUowInfo(_uow, CacheService);
@@ -365,14 +367,14 @@ namespace Mix.Services.Ecommerce.Lib.Services
             await _uow.DbContext.SaveChangesAsync();
         }
 
-        public async Task<OrderStatus> ProcessPaymentResponse(
-            int orderId,
+        public async Task<OrderViewModel> ProcessPaymentResponse(
+            Guid orderTempId,
             JObject paymentResponse,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var order = await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(orderId, cancellationToken);
+            var order = await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.TempId == orderTempId, cancellationToken);
             if (order == null)
             {
                 throw new MixException(MixErrorStatus.ServerError, $"Invalid Order");
@@ -401,7 +403,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 await LogAction(order.Id, OrderTrackingAction.PAYMENT_FAILED);
             }
             await order.SaveAsync(cancellationToken);
-            return order.OrderStatus;
+            return order;
         }
 
         public async Task LogAction(int orderId, OrderTrackingAction action, string? note = "")

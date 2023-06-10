@@ -10,6 +10,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
     public class OrderItemViewModel : ViewModelBase<EcommerceDbContext, OrderItem, int, OrderItemViewModel>
     {
         #region Properties
+        public string ProductId { get; set; }
         public string Sku { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }

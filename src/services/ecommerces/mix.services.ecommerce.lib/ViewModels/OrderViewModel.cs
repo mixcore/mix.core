@@ -120,5 +120,10 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public string? City { get; set; }
         public string? Province { get; set; }
         public string? Ward { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Street} {Ward} {District} {City} {Province} ";
+        }
     }
 }

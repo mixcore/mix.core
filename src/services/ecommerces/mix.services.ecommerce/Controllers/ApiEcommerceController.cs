@@ -91,6 +91,15 @@ namespace Mix.Services.ecommerce.Controllers
             var order = await _orderService.GetUserOrder(User, id, cancellationToken);
             return Ok(order);
         }
+        
+        [MixAuthorize]
+        [HttpGet]
+        [Route("guest-order/{id}")]
+        public async Task<ActionResult<OrderViewModel>> GetGuestOrder(int id, CancellationToken cancellationToken = default)
+        {
+            var order = await _orderService.GetUserOrder(User, id, cancellationToken);
+            return Ok(order);
+        }
 
         [MixAuthorize]
         [HttpGet]
@@ -154,8 +163,8 @@ namespace Mix.Services.ecommerce.Controllers
         }
 
         [HttpGet]
-        [Route("payment-response/{orderId}")]
-        public async Task<ActionResult> PaymentResponse(int orderId, CancellationToken cancellationToken = default)
+        [Route("payment-response/{orderTempId}")]
+        public async Task<ActionResult> PaymentResponse(Guid orderTempId, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(Request.QueryString.Value))
             {
@@ -165,11 +174,13 @@ namespace Mix.Services.ecommerce.Controllers
             var query = HttpUtility.ParseQueryString(Request.QueryString.Value);
             var paymentResponse = JObject.FromObject(query!.AllKeys.ToDictionary(k => k, k => query[k]));
 
-            var result = await _ecommerceService.ProcessPaymentResponse(orderId, paymentResponse, cancellationToken);
+            var result = await _ecommerceService.ProcessPaymentResponse(orderTempId, paymentResponse, cancellationToken);
             string url =
-            result == OrderStatus.PAID
-                ? $"{_paymentConfiguration.Urls.PaymentSuccessUrl}?id={orderId}"
-                : $"{_paymentConfiguration.Urls.PaymentFailUrl}?id={orderId}";
+            result.OrderStatus == OrderStatus.PAID
+                ? $"{_paymentConfiguration.Urls.PaymentSuccessUrl}?id={orderTempId}"
+                : $"{_paymentConfiguration.Urls.PaymentFailUrl}?id={orderTempId}";
+
+            QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.PaymentResponse, result);
             return Redirect(url);
         }
 

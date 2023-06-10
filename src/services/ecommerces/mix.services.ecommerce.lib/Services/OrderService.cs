@@ -69,6 +69,13 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             return await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.Id == orderId && m.UserId == user.Id, cancellationToken);
         }
+        
+        public async Task<OrderViewModel> GetGuestOrder(Guid orderTempId, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.TempId == orderTempId, cancellationToken);
+        }
 
         public async Task CancelOrder(
             ClaimsPrincipal principal,

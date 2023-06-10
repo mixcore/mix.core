@@ -230,12 +230,15 @@ namespace Mix.Portal.Controllers
                 return NotFound();
             }
             string username = _idService.GetClaim(User, MixClaims.Username);
-            JObject obj = ReflectionHelper.ParseObject(data);
+            
+            // Not use Reflection to keep title case 
+            JObject obj = JObject.FromObject(data);
             foreach (var prop in fields.Properties())
             {
-                if (obj.ContainsKey(prop.Name))
+                var propName = prop.Name.ToTitleCase();
+                if (obj.ContainsKey(propName))
                 {
-                    obj[prop.Name] = prop.Value;
+                    obj[propName] = prop.Value;
                 }
             }
             await _repository.UpdateAsync(obj);
