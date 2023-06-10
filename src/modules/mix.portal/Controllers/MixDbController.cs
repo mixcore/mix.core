@@ -291,12 +291,11 @@ namespace Mix.Portal.Controllers
                     {
                         if (col != null)
                         {
-                            if (col.DataType == MixDataType.Json)
+                            if (col.DataType == MixDataType.Json || col.DataType == MixDataType.ArrayRadio)
                             {
-
                                 result.Add(new JProperty(pr.Name.ToTitleCase(), JObject.FromObject(pr.Value).ToString(Formatting.None)));
                             }
-                            else if (col.DataType == MixDataType.Array || col.DataType == MixDataType.ArrayMedia || col.DataType == MixDataType.ArrayRadio)
+                            else if (col.DataType == MixDataType.Array || col.DataType == MixDataType.ArrayMedia)
                             {
 
                                 result.Add(new JProperty(pr.Name.ToTitleCase(), JArray.FromObject(pr.Value).ToString(Formatting.None)));

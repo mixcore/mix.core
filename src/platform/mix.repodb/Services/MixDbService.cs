@@ -157,16 +157,16 @@ namespace Mix.RepoDb.Services
                 }
                 return default;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new MixException(MixErrorStatus.ServerError, ex);
             }
         }
-        
+
         public async Task<JObject?> GetByParentIdAsync(string tableName, MixContentType parentType, int parentId, bool loadNestedData)
         {
             _repository.InitTableName(tableName);
-            
+
             var obj = await _repository.GetSingleByParentAsync(parentType, parentId);
             if (obj != null)
             {
@@ -186,9 +186,10 @@ namespace Mix.RepoDb.Services
             var data = ReflectionHelper.ParseObject(obj);
             var db = await GetMixDatabase(tableName);
             var jsonColumns = db.Columns.Where(
-                                    c => c.DataType == MixDataType.Json 
-                                            || c.DataType == MixDataType.ArrayMedia 
-                                            || c.DataType == MixDataType.Array)
+                                    c => c.DataType == MixDataType.Json
+                                            || c.DataType == MixDataType.ArrayMedia
+                                            || c.DataType == MixDataType.Array
+                                            || c.DataType == MixDataType.ArrayRadio)
                                 .ToList();
             foreach (var col in jsonColumns)
             {
@@ -196,7 +197,7 @@ namespace Mix.RepoDb.Services
                 if (!string.IsNullOrEmpty(strValue))
                 {
                     data.Remove(col.SystemName);
-                    if (col.DataType == MixDataType.Json)
+                    if (col.DataType == MixDataType.Json || col.DataType == MixDataType.ArrayRadio)
                     {
                         data.Add(new JProperty(col.SystemName, JObject.Parse(strValue)));
                     }
