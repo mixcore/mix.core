@@ -15,7 +15,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public Guid TempId { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
-        public string Currency { get; set; }
+        public string Currency { get; set; } = "USD";
         public PaymentGateway? PaymentGateway { get; set; }
         public double? Total { get; set; }
         public Guid UserId { get; set; }
@@ -24,7 +24,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         [Required]
         public string? Email { get; set; }
 
-        public string? ShippingAddress { get; set; }
+        public Shipping Shipping { get; set; } = new();
         public JObject PaymentRequest { get; set; }
         public JObject PaymentResponse { get; set; }
 
@@ -65,12 +65,11 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         {
             OrderItems = await OrderItemViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderDetailId == Id, cancellationToken);
             OrderTrackings = await OrderTrackingViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderDetailId == Id, cancellationToken);
-            Address = !string.IsNullOrEmpty(ShippingAddress) ? JObject.Parse(ShippingAddress).ToObject<OrderAddress>() : new();
+            Address = !string.IsNullOrEmpty(Shipping.ShippingAddress) ? JObject.Parse(Shipping.ShippingAddress).ToObject<OrderAddress>() : new();
         }
 
         public override async Task<OrderDetail> ParseEntity(CancellationToken cancellationToken = default)
         {
-            Calculate();
             var result = await base.ParseEntity(cancellationToken);
             if (Address != null)
             {
@@ -102,14 +101,44 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         #region Methods
 
-        public void Calculate()
+        public void Calculate(double exchangeRate)
         {
-            Total = OrderItems.Sum(o => o.Total);
+            Total = 0;
+            if (!OrderItems.Any(m => m.Title == "Shipping"))
+            {
+                OrderItems.Add(new(UowInfo)
+                {
+                    Title = "Shipping",
+                    Price = Shipping.ShippingFee,
+                    Currency = Currency,
+                    Quantity = 1,
+                    MixTenantId = MixTenantId,
+                    CreatedBy = CreatedBy
+                });
+            }
+            foreach (var item in OrderItems)
+            {
+                if (item.Currency != Currency)
+                {
+                    item.Currency = Currency;
+                    item.Price = Math.Round(item.Price / exchangeRate, 2);
+                    Total += item.Price;
+                }
+                else
+                {
+                    Total += item.Price;
+                }
+            }
         }
 
         #endregion
     }
-
+    public class Shipping
+    {
+        public double ShippingFee { get; set; }
+        public string Currency { get; set; }
+        public string ShippingAddress { get; set; }
+    }
     public class OrderAddress
     {
         public string? Name { get; set; }
@@ -120,10 +149,12 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public string? City { get; set; }
         public string? Province { get; set; }
         public string? Ward { get; set; }
+        public string CountryCode { get; set; } = "US";
+        public string PostalCode { get; set; } = "US";
 
         public override string ToString()
         {
-            return $"{Street} {Ward} {District} {City} {Province} ";
+            return $"{Street} {Ward} {District} {City} {Province} {PostalCode} {CountryCode}";
         }
     }
 }

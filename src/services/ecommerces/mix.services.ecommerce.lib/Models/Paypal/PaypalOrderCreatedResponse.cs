@@ -14,7 +14,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
         public string? status { get; set; }
         public DateTime create_time { get; set; }
         public List<PaypalLink> links { get; set; }
-        public List<PurchaseUnit> purchase_units { get; set; } = new();
+        public List<ResponsePurchaseUnit> purchase_units { get; set; } = new();
 
         public PaypalOrderCreatedResponse()
         {

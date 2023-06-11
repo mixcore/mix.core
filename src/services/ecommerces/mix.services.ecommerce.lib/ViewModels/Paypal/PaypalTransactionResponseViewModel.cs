@@ -11,14 +11,18 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels.Paypal
     {
         #region Properties
         public string PaypalId { get; set; }
+        public string PaypalStatus { get; set; }
+        public JObject Payer { get; set; }
+        public JObject PaymentSource { get; set; }
+        public JArray PurchaseUnits { get; set; }
+        public JArray Links { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
+        public int MixTentantId { get; set; }
         public string Intent { get; set; }
         public string State { get; set; }
         public string Cart { get; set; }
-        public JObject Payer { get; set; }
         public JArray Transactions { get; set; }
         public DateTime CreatedTime { get; set; }
-        public JArray Links { get; set; }
-        public PaymentStatus PaymentStatus { get; set; }
         public int MixTenantId { get; set; }
 
         #endregion

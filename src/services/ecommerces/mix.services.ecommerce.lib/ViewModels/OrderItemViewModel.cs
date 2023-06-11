@@ -6,7 +6,7 @@ using Mix.Services.Payments.Lib.Constants;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels
 {
-    [GenerateRestApiController]
+    [GenerateRestApiController(IsAuthorized = true)]
     public class OrderItemViewModel : ViewModelBase<EcommerceDbContext, OrderItem, int, OrderItemViewModel>
     {
         #region Properties

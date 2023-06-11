@@ -24,10 +24,14 @@ namespace Mix.Services.Ecommerce.Lib.Services
     public sealed class EcommerceService : TenantServiceBase, IEcommerceService
     {
         private readonly IServiceProvider _serviceProvider;
+
+        private readonly MixConfigurationService _configService;
         private readonly TenantUserManager _userManager;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _uow;
         private readonly PaymentConfigurationModel _paymentConfiguration = new();
         private readonly IMixEdmService _edmService;
+        private double _exchangeRate = 1;
+
         public EcommerceService(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -35,7 +39,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
             TenantUserManager userManager,
             IServiceProvider serviceProvider,
             IMixEdmService edmService,
-            MixCacheService cacheService) : base(httpContextAccessor, cacheService)
+            MixCacheService cacheService,
+            MixConfigurationService configService) : base(httpContextAccessor, cacheService)
         {
             _uow = uow;
             _userManager = userManager;
@@ -44,6 +49,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
             var session = configuration.GetSection(MixAppSettingsSection.Payments);
             session.Bind(_paymentConfiguration);
             _edmService = edmService;
+            _configService = configService;
+            _exchangeRate = _configService.Configs.FirstOrDefault(m => m.SystemName == "exchangeRate")?.GetValue<double>() ?? 1;
         }
 
         public async Task<OrderViewModel?> GetShoppingOrder(Guid userId, CancellationToken cancellationToken = default)
@@ -242,8 +249,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
             {
                 throw new MixException(MixErrorStatus.Badrequest, $"Invalid Cart");
             }
-
             checkoutCart.PaymentGateway = gateway;
+            checkoutCart.MixTenantId = CurrentTenant.Id;
             checkoutCart.Email ??= user!.Email;
             await FilterCheckoutCartAsync(checkoutCart, myCart);
 
@@ -276,6 +283,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 checkoutCart.TempId = Guid.NewGuid();
+                checkoutCart.MixTenantId = CurrentTenant.Id;
                 checkoutCart.PaymentGateway = gateway;
                 await FilterGuestCheckoutCartAsync(checkoutCart);
 
@@ -321,7 +329,6 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 item.Sold += 1;
             }
 
-            checkoutCart.Calculate();
 
             checkoutCart.SetUowInfo(_uow, CacheService);
             //checkoutCart.Id = (_uow.DbContext.OrderDetail.Max(m => m.Id) ?? 0) + 1;
@@ -329,7 +336,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
 
             checkoutCart.CreatedDateTime = DateTime.UtcNow;
-            checkoutCart.Calculate();
+            checkoutCart.Calculate(_exchangeRate);
 
             await _uow.DbContext.SaveChangesAsync();
         }
@@ -354,15 +361,13 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 item.Sold += 1;
             }
 
-            myCart.Calculate();
-
             checkoutCart.SetUowInfo(_uow, CacheService);
             checkoutCart.Id = _uow.DbContext.OrderDetail.Max(m => m.Id) + 1;
             checkoutCart.LastModified = DateTime.UtcNow;
             checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
 
             checkoutCart.CreatedDateTime = DateTime.UtcNow;
-            checkoutCart.Calculate();
+            checkoutCart.Calculate(_exchangeRate);
 
             await _uow.DbContext.SaveChangesAsync();
         }

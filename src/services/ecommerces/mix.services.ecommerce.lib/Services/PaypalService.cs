@@ -39,15 +39,14 @@ namespace Mix.Services.Ecommerce.Lib.Services
             MixCacheService cacheService)
             : base(httpContextAccessor, cacheService)
         {
-            _httpClient = GetPaypalHttpClient();
-            _cmsUow = cmsUow;
-
             var session = configuration.GetSection(MixAppSettingsSection.Payments).GetSection("Paypal");
             session.Bind(_settings);
+            _cmsUow = cmsUow;
+            _httpClient = GetPaypalHttpClient();
         }
 
         public async Task<JObject> GetPaymentRequestAsync(
-            OrderViewModel order, 
+            OrderViewModel order,
             string cancelUrl, string returnUrl, CancellationToken cancellationToken)
         {
             var request = new PaypalOrderRequest(PaypalConstants.CreateOrderIntent, order, returnUrl, cancelUrl);
@@ -78,10 +77,14 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 string? token = response.Value<string>("token");
                 string? payerId = response.Value<string>("PayerID");
                 var result = await CaptureOrderResult(token);
-                var reference = result.purchase_units[0].reference_id;
-                var status = !string.IsNullOrEmpty(reference) ? PaymentStatus.SUCCESS : PaymentStatus.FAILED;
-                await SaveResponse(result, status, cancellationToken);
-                return status;
+                if (!string.IsNullOrEmpty(result.id))
+                {
+                    var reference = result.purchase_units[0].reference_id;
+                    var status = !string.IsNullOrEmpty(reference) ? PaymentStatus.SUCCESS : PaymentStatus.FAILED;
+                    await SaveResponse(result, status, cancellationToken);
+                    return status;
+                }
+                throw new MixException(MixErrorStatus.Badrequest, result.links[0].href);
             }
             catch (Exception ex)
             {
@@ -99,7 +102,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             vm.PaymentStatus = paymentStatus;
             await vm.SaveAsync(cancellationToken);
         }
-        
+
         private async Task SaveOrderRequest(PaypalOrderRequest request, OrderStatus paymentStatus, CancellationToken cancellationToken)
         {
             PaypalTransactionRequest paypalRequest = new(request);
@@ -141,8 +144,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             request.Content = new FormUrlEncodedContent(form);
 
-            HttpResponseMessage response = _httpClient.SendAsync(request).GetAwaiter().GetResult();
-
+            HttpResponseMessage response = SendPaypalRequest(request).GetAwaiter().GetResult();
             string content = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             PayPalAccessToken accessToken = JsonConvert.DeserializeObject<PayPalAccessToken>(content);
             return accessToken;
@@ -155,29 +157,37 @@ namespace Mix.Services.Ecommerce.Lib.Services
             CancellationToken cancellationToken = default)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "v2/checkout/orders");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token.access_token);
-
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Token.access_token);
             var payment = await GetPaymentRequestAsync(order, againUrl, returnUrl, cancellationToken);
 
             request.Content = new StringContent(JsonConvert.SerializeObject(payment), Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            HttpResponseMessage response = await SendPaypalRequest(request);
 
             string content = await response.Content.ReadAsStringAsync();
-            PaypalOrderCreatedResponse paypalPaymentCreated = JsonConvert.DeserializeObject<PaypalOrderCreatedResponse>(content);
-            return paypalPaymentCreated;
+            if (response.IsSuccessStatusCode)
+            {
+                PaypalOrderCreatedResponse paypalPaymentCreated = JsonConvert.DeserializeObject<PaypalOrderCreatedResponse>(content);
+                return paypalPaymentCreated;
+            }
+            throw new MixException(MixErrorStatus.Badrequest, content);
         }
 
         private async Task<PaypalOrderCapturedResponse> CaptureOrderResult(string orderId)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"v2/checkout/orders/{orderId}/capture");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token.access_token);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Token.access_token);
             request.Content = new StringContent("", Encoding.Default, "application/json");
-            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            HttpResponseMessage response = await SendPaypalRequest(request);
             string content = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<PaypalOrderCapturedResponse>(content);
 
             return result;
+        }
+
+        private async Task<HttpResponseMessage> SendPaypalRequest(HttpRequestMessage request)
+        {
+            return await _httpClient.SendAsync(request);
         }
         #endregion
     }

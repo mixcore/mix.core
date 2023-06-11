@@ -52,7 +52,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 OnepayRequest request = new OnepayRequest(order);
                 request.vpc_Merchant = Settings.Merchant;
                 request.vpc_AccessCode = Settings.AccessCode;
-                request.vpc_Locale = Settings.Locale;
+                request.vpc_Locale = order.Currency == "VND" ? "vn" : "us";
+                request.vpc_Currency = order.Currency;
                 request.vpc_TicketNo = HttpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();//"14.241.244.43";// 
                 request.AgainLink = againUrl;
                 request.vpc_ReturnURL = returnUrl;

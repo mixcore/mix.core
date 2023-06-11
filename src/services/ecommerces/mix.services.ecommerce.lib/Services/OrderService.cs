@@ -21,14 +21,19 @@ namespace Mix.Services.Ecommerce.Lib.Services
     {
         private readonly TenantUserManager _userManager;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _uow;
+        private double _exchangeRate = 1;
+        private readonly MixConfigurationService _configService;
         public OrderService(
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<EcommerceDbContext> uow,
             TenantUserManager userManager,
-            MixCacheService cacheService) : base(httpContextAccessor, cacheService)
+            MixCacheService cacheService,
+            MixConfigurationService configService) : base(httpContextAccessor, cacheService)
         {
             _uow = uow;
             _userManager = userManager;
+            _configService = configService;
+            _exchangeRate = _configService.Configs.FirstOrDefault(m => m.SystemName == "exchangeRate")?.GetValue<double>() ?? 1;
         }
 
         public async Task<PagingResponseModel<OrderViewModel>> GetUserOrders(
@@ -49,11 +54,16 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(request.Statuses.Count == 0, m => m.UserId == user.Id && m.OrderStatus != OrderStatus.NEW);
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(request.Statuses.Count > 0, m => m.UserId == user.Id && request.Statuses.Contains(m.OrderStatus));
-            return await OrderViewModel.GetRepository(_uow, CacheService)
+            var result = await OrderViewModel.GetRepository(_uow, CacheService)
                             .GetPagingAsync(
                                 searchRequest.Predicate,
                                 searchRequest.PagingData,
                                 cancellationToken);
+            foreach (var item in result.Items)
+            {
+                item.Calculate(_exchangeRate);
+            }
+            return result;
         }
 
         public async Task<OrderViewModel> GetUserOrder(ClaimsPrincipal principal, int orderId, CancellationToken cancellationToken = default)
@@ -67,7 +77,9 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 throw new MixException(MixErrorStatus.UnAuthorized);
             }
 
-            return await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.Id == orderId && m.UserId == user.Id, cancellationToken);
+            var result = await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.Id == orderId && m.UserId == user.Id, cancellationToken);
+            result.Calculate(_exchangeRate);
+            return result;
         }
         
         public async Task<OrderViewModel> GetGuestOrder(Guid orderTempId, CancellationToken cancellationToken = default)

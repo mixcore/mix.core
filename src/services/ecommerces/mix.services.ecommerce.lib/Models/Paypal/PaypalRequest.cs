@@ -1,4 +1,5 @@
 ﻿using Mix.Services.Ecommerce.Lib.ViewModels;
+using Newtonsoft.Json.Linq;
 
 namespace Mix.Services.Ecommerce.Lib.Models.Paypal
 {
@@ -6,7 +7,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
     {
         public string? intent { get; set; }
         public RedirecUrls application_context { get; set; }
-        public List<PurchaseUnit> purchase_units { get; set; } = new();
+        public List<RequestPurchaseUnit> purchase_units { get; set; } = new();
 
         public PaypalOrderRequest()
         {
@@ -20,23 +21,68 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
         }
     }
 
-    public class PurchaseUnit
+    public class RequestPurchaseUnit
     {
-
-        public PurchaseUnit(OrderViewModel order)
+        public RequestPurchaseUnit(OrderViewModel order)
         {
             foreach (var item in order.OrderItems)
             {
                 items.Add(new(item));
             }
             amount = new(order);
+            if (order.Address != null && !string.IsNullOrEmpty(order.Address.CountryCode) && !string.IsNullOrEmpty(order.Address.PostalCode))
+            {
+                shipping = new()
+                {
+                    address = new PaypalAddress()
+                    {
+                        address_line_1 = order.Address?.ToString(),
+                        country_code = order.Address?.CountryCode ?? "US",
+                        postal_code = order.Address?.PostalCode
+                    }
+                };
+            }
         }
+
         public string reference_id { get; set; }
         public Payee payee { get; set; }
+        public PaypalShipping shipping { get; set; }
         public List<PurchaseItem> items { get; set; } = new();
-        public AmountV2 amount { get; set; }
+        public PaypalAmount amount { get; set; }
 
     }
+
+    public class ResponsePurchaseUnit
+    {
+        public string reference_id { get; set; }
+        public PaypalShipping shipping { get; set; }
+        public List<PurchaseItem> items { get; set; } = new();
+        public JObject seller_protection { get; set; }
+        public SellerReceivableBreakdown seller_receivable_breakdown { get; set; }
+        public List<PaypalLink> links { get; set; }
+        public DateTime? create_time { get; set; }
+        public DateTime? update_time { get; set; }
+
+    }
+
+    public class SellerReceivableBreakdown
+    {
+        public PaypalAmount gross_amount { get; set; }
+        public PaypalAmount paypal_fee { get; set; }
+        public PaypalAmount net_amount { get; set; }
+    }
+
+    public class PaypalShipping
+    {
+        public string type { get; set; } = "SHIPPING";
+        public PaypalName name { get; set; }
+        public PaypalAddress address { get; set; }
+        public PaypalShipping()
+        {
+
+        }
+    }
+
     public class PaypalLink
     {
         public string rel { get; set; }
@@ -60,16 +106,16 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
         public UnitAmount unit_amount { get; set; }
     }
 
-    public class AmountV2
+    public class PaypalAmount
     {
-        public AmountV2(OrderViewModel order)
+        public PaypalAmount(OrderViewModel order)
         {
-            currency = order.Currency;
-            value = $"{order.Total}.00";
+            currency_code = order.Currency;
+            value = $"{order.Total}";
             breakdown = new(order);
         }
 
-        public string currency { get; set; }
+        public string currency_code { get; set; }
         public string value { get; set; }
         public Breakdown breakdown { get; set; }
     }
@@ -99,17 +145,17 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
     {
         public UnitAmount(OrderItemViewModel item)
         {
-            currency = item.Currency;
-            value = $"{item.Price}.00";
+            currency_code = item.Currency;
+            value = $"{item.Price}";
         }
 
         public UnitAmount(string? currency, double? total)
         {
-            this.currency = currency;
-            value = $"{total}.00";
+            currency_code = currency;
+            value = $"{total}";
         }
 
-        public string currency { get; set; }
+        public string currency_code { get; set; }
         public string value { get; set; }
     }
 
