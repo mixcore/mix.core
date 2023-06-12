@@ -57,8 +57,8 @@ namespace Mix.Services.Databases.Lib.Abstracts
                 cancellationToken.ThrowIfCancellationRequested();
                 using var postRepo = new Repository<MixCmsContext, MixPostContent, int, TView>(Uow);
                 postRepo.CacheService = CacheService;
-                searchRequest.Predicate = searchRequest.Predicate.AndAlso(ParseMetadataQueriesPredicate(searchRequest.MetadataQueries));
-                var result = await postRepo.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, cancellationToken);
+                var result = await postRepo.GetPagingAsync(
+                        searchRequest.Predicate, searchRequest.PagingData, cancellationToken);
                 return result;
             }
             catch (Exception ex)
@@ -67,18 +67,11 @@ namespace Mix.Services.Databases.Lib.Abstracts
             }
         }
 
-        public Expression<Func<MixPostContent, bool>> ParseMetadataQueriesPredicate(List<SearchQueryField> MetadataQueries)
+        public IQueryable<int> ParseMetadataQueriesPredicate(List<SearchQueryField> MetadataQueries)
         {
-            Expression<Func<MixPostContent, bool>> predicate = m => true;
-            if (MetadataQueries.Count == 0)
-            {
-                return predicate;
-            }
-
             IQueryable<int>? allowedIdQuery = MetadataService.GetQueryableContentIdByMetadataSeoContent(
                                                 MetadataQueries, MixContentType.Post);
-            predicate = predicate.AndAlsoIf(allowedIdQuery != null, m => allowedIdQuery!.ToList().Contains(m.Id));
-            return predicate;
+            return allowedIdQuery;
         }
     }
 }

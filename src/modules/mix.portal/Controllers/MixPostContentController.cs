@@ -41,7 +41,7 @@ namespace Mix.Portal.Controllers
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
                 !string.IsNullOrEmpty(req.MixDatabaseName), m => m.MixDatabaseName == req.MixDatabaseName);
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
-                req.MetadataQueries.Count > 0, _postService.ParseMetadataQueriesPredicate(req.MetadataQueries));
+                req.MetadataQueries.Count > 0, m => _postService.ParseMetadataQueriesPredicate(req.MetadataQueries).Contains(m.Id));
 
             if (!string.IsNullOrEmpty(req.MixDatabaseName) && req.Queries.Count > 0)
             {

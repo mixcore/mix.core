@@ -84,7 +84,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                     await SaveResponse(result, status, cancellationToken);
                     return status;
                 }
-                throw new MixException(MixErrorStatus.Badrequest, result.links[0].href);
+                return orderDetail.PaymentStatus;
             }
             catch (Exception ex)
             {

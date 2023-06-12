@@ -26,17 +26,17 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<EcommerceDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<EcommerceDbContext>>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<EcommerceDbContext>>();
-            if (!GlobalConfigService.Instance.IsInit)
-            {
-                using (var context = services.GetService<EcommerceDbContext>())
-                {
-                    var pendingMigrations = context.Database.GetPendingMigrations();
-                    if (pendingMigrations.Any())
-                    {
-                        context.Database.Migrate();
-                    }
-                }
-            }
+            //if (!GlobalConfigService.Instance.IsInit)
+            //{
+            //    using (var context = services.GetService<EcommerceDbContext>())
+            //    {
+            //        var pendingMigrations = context.Database.GetPendingMigrations();
+            //        if (pendingMigrations.Any())
+            //        {
+            //            context.Database.Migrate();
+            //        }
+            //    }
+            //}
         }
         public static void AddMixOnepay(this IServiceCollection services)
         {

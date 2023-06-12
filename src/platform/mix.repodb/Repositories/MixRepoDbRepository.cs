@@ -143,7 +143,7 @@ namespace Mix.RepoDb.Repositories
                     PageIndex = pagingRequest.PageIndex,
                     PageSize = pagingRequest.PageSize,
                     Total = count,
-                    TotalPage = (int)Math.Ceiling((double)pagingRequest.Total / pageSize)
+                    TotalPage = (int)Math.Ceiling((double)count / pageSize)
                 }
             };
         }
@@ -170,6 +170,7 @@ namespace Mix.RepoDb.Repositories
             switch (field.CompareOperator)
             {
                 case MixCompareOperator.InRange:
+                    return Operation.In;
                 case MixCompareOperator.Like:
                 case MixCompareOperator.Contain:
                     field.Value = $"%{field.Value}%";

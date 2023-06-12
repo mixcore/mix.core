@@ -1,6 +1,50 @@
 {
   "databases": [
     {
+      "systemName": "OrderDetail",
+      "displayName": "Order",
+      "description": null,
+      "type": "Service",
+      "readPermissions": "[\"Owner\"]",
+      "createPermissions": null,
+      "updatePermissions": null,
+      "deletePermissions": null,
+      "selfManaged": false,
+      "mixDatabaseColumns": null,
+      "sourceRelationships": null,
+      "destinateRelationships": null,
+      "id": 13,
+      "createdDateTime": "2022-11-27T14:52:59",
+      "lastModified": null,
+      "createdBy": "tinku",
+      "modifiedBy": "tinku",
+      "priority": 0,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "OrderItem",
+      "displayName": "Order Item",
+      "description": null,
+      "type": "Service",
+      "readPermissions": "[\"Owner\"]",
+      "createPermissions": null,
+      "updatePermissions": null,
+      "deletePermissions": null,
+      "selfManaged": false,
+      "mixDatabaseColumns": null,
+      "sourceRelationships": null,
+      "destinateRelationships": null,
+      "id": 14,
+      "createdDateTime": "2022-11-27T14:56:45",
+      "lastModified": null,
+      "createdBy": "tinku",
+      "modifiedBy": "tinku",
+      "priority": 0,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
       "systemName": "PortalMenu",
       "displayName": "Portal Menu",
       "description": null,
@@ -288,6 +332,749 @@
     }
   ],
   "columns": [
+    {
+      "systemName": "title",
+      "displayName": "Title",
+      "mixDatabaseName": "OrderDetail",
+      "dataType": "Text",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 13,
+      "mixDatabase": null,
+      "id": 49,
+      "createdDateTime": "2022-11-27T14:52:59",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 0,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "total",
+      "displayName": "Total",
+      "mixDatabaseName": "OrderDetail",
+      "dataType": "Double",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 13,
+      "mixDatabase": null,
+      "id": 50,
+      "createdDateTime": "2022-11-27T14:52:59",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 1,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "orderStatus",
+      "displayName": "Order Status",
+      "mixDatabaseName": "OrderDetail",
+      "dataType": "Text",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": true,
+        "AllowedValues": [
+          "NEW",
+          "WAITING_FOR_PAYMENT",
+          "PAID",
+          "SHIPPING",
+          "SUCCESS",
+          "PAYMENT_FAILED",
+          "SHIPPING_FAILED",
+          "CANCELED"
+        ],
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 13,
+      "mixDatabase": null,
+      "id": 51,
+      "createdDateTime": "2022-11-27T14:52:59",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 2,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "title",
+      "displayName": "Title",
+      "mixDatabaseName": "OrderItem",
+      "dataType": "Text",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 14,
+      "mixDatabase": null,
+      "id": 52,
+      "createdDateTime": "2022-11-27T14:56:45",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 0,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "image",
+      "displayName": "Image",
+      "mixDatabaseName": "OrderItem",
+      "dataType": "Upload",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 14,
+      "mixDatabase": null,
+      "id": 53,
+      "createdDateTime": "2022-11-27T14:56:45",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 2,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "price",
+      "displayName": "Price",
+      "mixDatabaseName": "OrderItem",
+      "dataType": "Double",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 14,
+      "mixDatabase": null,
+      "id": 54,
+      "createdDateTime": "2022-11-27T14:56:45",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 4,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "quantity",
+      "displayName": "Quantity",
+      "mixDatabaseName": "OrderItem",
+      "dataType": "Integer",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 14,
+      "mixDatabase": null,
+      "id": 55,
+      "createdDateTime": "2022-11-27T14:56:45",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 5,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "postId",
+      "displayName": "Post Id",
+      "mixDatabaseName": "OrderItem",
+      "dataType": "Integer",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 14,
+      "mixDatabase": null,
+      "id": 56,
+      "createdDateTime": "2022-11-27T14:56:45",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 7,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "referenceUrl",
+      "displayName": "Reference Url",
+      "mixDatabaseName": "OrderItem",
+      "dataType": "Text",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 14,
+      "mixDatabase": null,
+      "id": 57,
+      "createdDateTime": "2022-11-27T14:56:45",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 8,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "userId",
+      "displayName": "User Id",
+      "mixDatabaseName": "OrderDetail",
+      "dataType": "Guid",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 13,
+      "mixDatabase": null,
+      "id": 63,
+      "createdDateTime": "2022-11-27T15:45:28",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 11,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "total",
+      "displayName": "Total",
+      "mixDatabaseName": "OrderItem",
+      "dataType": "Double",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 14,
+      "mixDatabase": null,
+      "id": 64,
+      "createdDateTime": "2022-11-30T04:26:03",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 6,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "OrderDetailId",
+      "displayName": "OrderDetailId",
+      "mixDatabaseName": "OrderItem",
+      "dataType": "Reference",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 14,
+      "mixDatabase": null,
+      "id": 65,
+      "createdDateTime": "2022-11-30T06:54:49",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 1,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "description",
+      "displayName": "Description",
+      "mixDatabaseName": "OrderDetail",
+      "dataType": "MultilineText",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 13,
+      "mixDatabase": null,
+      "id": 67,
+      "createdDateTime": "2022-11-30T06:55:28",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 5,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "paymentGateway",
+      "displayName": "Payment Gateway",
+      "mixDatabaseName": "OrderDetail",
+      "dataType": "Text",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": true,
+        "AllowedValues": [ "Onepay", "Momo" ],
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": "Onepay",
+      "mixDatabaseId": 13,
+      "mixDatabase": null,
+      "id": 68,
+      "createdDateTime": "2022-11-30T09:44:43",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 3,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "currency",
+      "displayName": "Currency",
+      "mixDatabaseName": "OrderItem",
+      "dataType": "Text",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 14,
+      "mixDatabase": null,
+      "id": 79,
+      "createdDateTime": "2022-12-07T05:43:10",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 10,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "description",
+      "displayName": "Description",
+      "mixDatabaseName": "OrderItem",
+      "dataType": "MultilineText",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 14,
+      "mixDatabase": null,
+      "id": 80,
+      "createdDateTime": "2022-12-07T05:44:47",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 11,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "percent",
+      "displayName": "Percent",
+      "mixDatabaseName": "OrderItem",
+      "dataType": "Double",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 14,
+      "mixDatabase": null,
+      "id": 81,
+      "createdDateTime": "2022-12-07T05:45:15",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 12,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "currency",
+      "displayName": "Currency",
+      "mixDatabaseName": "OrderDetail",
+      "dataType": "Text",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 13,
+      "mixDatabase": null,
+      "id": 98,
+      "createdDateTime": "2022-12-11T03:36:17",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 6,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "email",
+      "displayName": "Email",
+      "mixDatabaseName": "OrderDetail",
+      "dataType": "EmailAddress",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 13,
+      "mixDatabase": null,
+      "id": 106,
+      "createdDateTime": "2022-12-25T13:57:19",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 7,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "paymentStatus",
+      "displayName": "Payment Status",
+      "mixDatabaseName": "OrderDetail",
+      "dataType": "Text",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": true,
+        "AllowedValues": [
+          "SENT",
+          "PENDING",
+          "SUCCESS",
+          "FAILED",
+          "INVALIDRESPONSE"
+        ],
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 13,
+      "mixDatabase": null,
+      "id": 107,
+      "createdDateTime": "2022-12-25T13:57:19",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 4,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "sku",
+      "displayName": "Sku",
+      "mixDatabaseName": "OrderItem",
+      "dataType": "Text",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 14,
+      "mixDatabase": null,
+      "id": 122,
+      "createdDateTime": "2023-01-01T16:40:47",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 3,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "isActive",
+      "displayName": "IsActive",
+      "mixDatabaseName": "OrderItem",
+      "dataType": "Boolean",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 14,
+      "mixDatabase": null,
+      "id": 132,
+      "createdDateTime": "2023-01-03T09:32:43",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 14,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "shippingAddress",
+      "displayName": "Shipping Address",
+      "mixDatabaseName": "OrderDetail",
+      "dataType": "Json",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 13,
+      "mixDatabase": null,
+      "id": 142,
+      "createdDateTime": "2023-01-04T04:26:28",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 8,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "paymentResponse",
+      "displayName": "Payment Response",
+      "mixDatabaseName": "OrderDetail",
+      "dataType": "Json",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 13,
+      "mixDatabase": null,
+      "id": 144,
+      "createdDateTime": "2023-01-06T08:35:44",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 10,
+      "status": "Published",
+      "isDeleted": false
+    },
+    {
+      "systemName": "paymentRequest",
+      "displayName": "Payment Request",
+      "mixDatabaseName": "OrderDetail",
+      "dataType": "Json",
+      "configurations": {
+        "IsUnique": false,
+        "IsRequire": false,
+        "IsEncrypt": false,
+        "IsSelect": false,
+        "Upload": {
+          "ArrayAccepts": [],
+          "Accepts": "",
+          "IsCrop": false
+        }
+      },
+      "referenceId": null,
+      "defaultValue": null,
+      "mixDatabaseId": 13,
+      "mixDatabase": null,
+      "id": 145,
+      "createdDateTime": "2023-01-06T09:33:07",
+      "lastModified": null,
+      "createdBy": null,
+      "modifiedBy": null,
+      "priority": 9,
+      "status": "Published",
+      "isDeleted": false
+    },
     {
       "systemName": "title",
       "displayName": "Title",
@@ -2018,7 +2805,7 @@
         }
       },
       "referenceId": null,
-      "defaultValue": "{     \"method\":\"\",     \"requestUrl\":\"\",     \"body\":{} }",
+      "defaultValue": "{\"method\":\"\",\"requestUrl\":\"\",\"body\":{} }",
       "mixDatabaseId": 13,
       "mixDatabase": null,
       "id": 62,

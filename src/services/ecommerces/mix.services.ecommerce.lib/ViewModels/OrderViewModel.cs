@@ -13,6 +13,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
     {
         #region Properties
         public Guid TempId { get; set; }
+        public string? Code { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
         public string Currency { get; set; } = "USD";
@@ -84,6 +85,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             {
                 item.SetUowInfo(UowInfo, CacheService);
                 item.OrderDetailId = parentEntity.Id;
+                item.MixTenantId = MixTenantId;
                 await item.SaveAsync(cancellationToken);
             }
         }
