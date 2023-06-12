@@ -112,7 +112,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
                 {
                     Title = "Shipping",
                     Price = Shipping.ShippingFee,
-                    Currency = Currency,
+                    Currency = Shipping.Currency,
                     Quantity = 1,
                     MixTenantId = MixTenantId,
                     CreatedBy = CreatedBy
