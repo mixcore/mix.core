@@ -267,11 +267,11 @@ namespace Mix.Lib.Services
                 await MixLogService.LogExceptionAsync(ex);
                 return ReflectionHelper.ParseObject(new
                 {
-                    ParentId = user.Id,
+                    ParentId = user?.Id,
                     ParentType = MixDatabaseParentType.User,
-                    Username = user.UserName,
-                    Email = user.Email,
-                    PhoneNumber = user.PhoneNumber
+                    Username = user?.UserName,
+                    Email = user?.Email,
+                    PhoneNumber = user?.PhoneNumber
                 });
             }
         }

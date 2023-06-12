@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Mix.Portal.Domain.Services;
 using Mix.RepoDb.Repositories;
@@ -40,20 +41,17 @@ namespace Mix.Portal.Controllers
             var searchRequest = BuildSearchRequest(req);
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
                 !string.IsNullOrEmpty(req.MixDatabaseName), m => m.MixDatabaseName == req.MixDatabaseName);
-            searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
-                req.MetadataQueries.Count > 0, m => _postService.ParseMetadataQueriesPredicate(req.MetadataQueries).Contains(m.Id));
+            var metadataPostIds = _postService.ParseMetadataQueriesPredicate(req.MetadataQueries)?.ToList();
+            searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(metadataPostIds != null && metadataPostIds.Count() > 0,
+                                        m => metadataPostIds.Contains(m.Id));
 
             if (!string.IsNullOrEmpty(req.MixDatabaseName) && req.Queries.Count > 0)
             {
                 _mixRepoDbRepository.InitTableName(req.MixDatabaseName);
-                var listData = await _mixRepoDbRepository.GetListByAsync(req.Queries, "id, parentId");
+                var listData = await _mixRepoDbRepository.GetListByAsync(req.Queries, "ParentId");
                 if (listData != null)
                 {
-                    List<int> allowIds = new();
-                    foreach (var data in listData)
-                    {
-                        allowIds.Add(ReflectionHelper.ParseObject(data).Value<int>("parentId"));
-                    }
+                    List<int> allowIds = listData.Select(m => (int)m.ParentId).ToList();
                     searchRequest.Predicate = searchRequest.Predicate.AndAlso(m => allowIds.Contains(m.Id));
                 }
             }

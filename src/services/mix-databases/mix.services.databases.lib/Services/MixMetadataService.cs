@@ -140,9 +140,14 @@ namespace Mix.Services.Databases.Lib.Services
 
         #region IQueryables
 
-        public IQueryable<int> GetQueryableContentIdByMetadataSeoContent(List<SearchQueryField> metadataSeoContents, MixContentType contentType)
+        public IQueryable<int>? GetQueryableContentIdByMetadataSeoContent(List<SearchQueryField> metadataSeoContents, MixContentType contentType)
         {
             //Expression<Func<MixMetadata, bool>>? predicate = m => isMandatory;
+            if (metadataSeoContents.Count == 0)
+            {
+                return default;
+            }
+
             IQueryable<int> andQueryIds = null;
             IQueryable<int> orQueryIds = null;
             var andQueries = metadataSeoContents.Where(m => m.IsRequired).ToList();
