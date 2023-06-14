@@ -15,7 +15,6 @@ using Mix.Constant.Enums;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Heart.Services;
-using Mix.Database.Entities.MixDb;
 using Mix.Shared.Dtos;
 
 namespace Mix.Services.Databases.Lib.Services
@@ -162,7 +161,7 @@ namespace Mix.Services.Databases.Lib.Services
 
                 if (item.CompareOperator == MixCompareOperator.InRange)
                 {
-                    var array = (string[])item.Value;
+                    var array = item.Value.ToString().Split(',');
                     predicate = predicate.AndAlso(m => array.Contains(m.SeoContent));
                 }
                 else
@@ -195,7 +194,7 @@ namespace Mix.Services.Databases.Lib.Services
 
                 if (item.CompareOperator == MixCompareOperator.InRange)
                 {
-                    var array = (string[])item.Value;
+                    var array = item.Value.ToString().Split(',');
                     predicate = predicate.AndAlso(m => array.Contains(m.SeoContent));
                 }
                 else
