@@ -160,7 +160,14 @@ namespace Mix.RepoDb.Repositories
             foreach (var item in searchQueryFields)
             {
                 Operation op = ParseMixOperator(item);
-                queries.Add(new QueryField(item.FieldName, op, item.Value));
+                if (op == Operation.In || op == Operation.NotIn && item.Value != null)
+                {
+                    queries.Add(new QueryField(item.FieldName, op, item.Value.ToString().Split(',')));
+                }
+                else
+                {
+                    queries.Add(new QueryField(item.FieldName, op, item.Value));
+                }
             }
             return queries;
         }
@@ -489,7 +496,7 @@ namespace Mix.RepoDb.Repositories
                 _ => Operation.Equal
             };
         }
-        
+
         public MixCompareOperator ParseMixCompareOperator(ExpressionMethod? searchMethod)
         {
             return searchMethod switch

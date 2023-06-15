@@ -17,11 +17,12 @@ namespace Mix.Storage.Lib.Engines.Mix
         public override Task<string?> UploadStream(FileModel file, string? createdBy, CancellationToken cancellationToken = default)
         {
             string? result = null;
+            var fileName = $"{DateTime.Now.Ticks}-{file.Filename}";
             file.FileFolder = GetUploadFolder(file.Extension, file.FolderName, createdBy);
             var saveResult = MixFileHelper.SaveFile(file);
             if (saveResult)
             {
-                result = $"{CurrentTenant.Configurations.Domain}/{file.FileFolder}/{file.Filename}{file.Extension}";
+                result = $"{CurrentTenant.Configurations.Domain}/{file.FileFolder}/{fileName}{file.Extension}";
             }
 
             return Task.FromResult(result);
@@ -32,16 +33,17 @@ namespace Mix.Storage.Lib.Engines.Mix
             using (var fileStream = file.OpenReadStream())
             {
                 string? result = null;
+                var fileName = $"{DateTime.Now.Ticks}-{file.FileName}";
                 if (string.IsNullOrEmpty(folder))
                 {
-                    folder = GetUploadFolder(file.FileName, folder, createdBy);
+                    folder = GetUploadFolder(fileName, folder, createdBy);
                 }
 
-                var fileModel = new FileModel(file.FileName, fileStream, folder);
+                var fileModel = new FileModel(fileName, fileStream, folder);
                 var saveResult = MixFileHelper.SaveFile(fileModel);
                 if (saveResult)
                 {
-                    result = $"{CurrentTenant.Configurations.Domain}/{folder}/{fileModel.Filename}{fileModel.Extension}";
+                    result = $"{CurrentTenant.Configurations.Domain}/{folder}/{fileName}";
                 }
 
                 return Task.FromResult(result);
