@@ -29,6 +29,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public JObject PaymentRequest { get; set; }
         public JObject PaymentResponse { get; set; }
 
+        public JObject? ShippingAddress { get; set; }
         public OrderAddress Address { get; set; }
         public int MixTenantId { get; set; }
 
@@ -66,7 +67,9 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         {
             OrderItems = await OrderItemViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderDetailId == Id, cancellationToken);
             OrderTrackings = await OrderTrackingViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderDetailId == Id, cancellationToken);
-            Address = !string.IsNullOrEmpty(Shipping.ShippingAddress) ? JObject.Parse(Shipping.ShippingAddress).ToObject<OrderAddress>() : new();
+            Address = ShippingAddress != null
+                        ? ShippingAddress.ToObject<OrderAddress>() 
+                        : new();
         }
 
         public override async Task<OrderDetail> ParseEntity(CancellationToken cancellationToken = default)
@@ -74,7 +77,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             var result = await base.ParseEntity(cancellationToken);
             if (Address != null)
             {
-                result.ShippingAddress = ReflectionHelper.ParseObject(Address)?.ToString(Formatting.None);
+                result.ShippingAddress = ReflectionHelper.ParseObject(Address);
             }
             return result;
         }
@@ -139,7 +142,6 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
     {
         public double ShippingFee { get; set; }
         public string Currency { get; set; }
-        public string ShippingAddress { get; set; }
     }
     public class OrderAddress
     {

@@ -31,6 +31,13 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
             .IsRequired(false)
             .HasColumnType(Config.Text);
 
+            builder.Property(e => e.ShippingAddress)
+            .HasConversion(
+                v => v.ToString(Newtonsoft.Json.Formatting.None),
+                v => !string.IsNullOrEmpty(v) ? JObject.Parse(v) : new())
+            .IsRequired(false)
+            .HasColumnType(Config.Text);
+            
             builder.Property(e => e.PaymentResponse)
             .HasConversion(
                 v => v.ToString(Newtonsoft.Json.Formatting.None),
