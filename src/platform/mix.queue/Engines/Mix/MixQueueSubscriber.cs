@@ -49,12 +49,15 @@ namespace Mix.Queue.Engines.MixQueue
                 {
                     _topic = _queue.GetTopic(_topic.Id);
                     var inQueueItems = _topic.ConsumeQueue(_subscriptionId, 10);
-                    Processing = true;
-                    foreach (var msg in inQueueItems)
+                    if (inQueueItems.Count > 0)
                     {
-                        await _messageHandler.Invoke(msg);
+                        Processing = true;
+                        foreach (var msg in inQueueItems)
+                        {
+                            await _messageHandler.Invoke(msg);
+                        }
+                        Processing = false;
                     }
-                    Processing = false;
                     await Task.Delay(1000, cancellationToken);
                 }
             }, cancellationToken);

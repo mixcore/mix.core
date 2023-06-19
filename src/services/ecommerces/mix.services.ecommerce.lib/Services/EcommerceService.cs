@@ -21,16 +21,16 @@ using Mix.Heart.Services;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
-    public sealed class EcommerceService : TenantServiceBase, IEcommerceService
+    public class EcommerceService : TenantServiceBase, IEcommerceService
     {
-        private readonly IServiceProvider _serviceProvider;
+        protected readonly IServiceProvider _serviceProvider;
 
-        private readonly MixConfigurationService _configService;
-        private readonly TenantUserManager _userManager;
-        private readonly UnitOfWorkInfo<EcommerceDbContext> _uow;
-        private readonly PaymentConfigurationModel _paymentConfiguration = new();
-        private readonly IMixEdmService _edmService;
-        private double _exchangeRate = 1;
+        protected readonly MixConfigurationService _configService;
+        protected readonly TenantUserManager _userManager;
+        protected readonly UnitOfWorkInfo<EcommerceDbContext> _uow;
+        protected readonly PaymentConfigurationModel _paymentConfiguration = new();
+        protected readonly IMixEdmService _edmService;
+        protected double _exchangeRate = 1;
 
         public EcommerceService(
             IHttpContextAccessor httpContextAccessor,
@@ -53,7 +53,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             _exchangeRate = _configService.Configs.FirstOrDefault(m => m.SystemName == "exchangeRate")?.GetValue<double>() ?? 1;
         }
 
-        public async Task<OrderViewModel?> GetShoppingOrder(Guid userId, CancellationToken cancellationToken = default)
+        public virtual async Task<OrderViewModel?> GetShoppingOrder(Guid userId, CancellationToken cancellationToken = default)
         {
             return await OrderViewModel
                 .GetRepository(_uow, CacheService)
@@ -64,7 +64,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                     cancellationToken);
         }
 
-        public async Task<OrderViewModel> GetOrCreateShoppingOrder(ClaimsPrincipal principal, CancellationToken cancellationToken = default)
+        public virtual async Task<OrderViewModel> GetOrCreateShoppingOrder(ClaimsPrincipal principal, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.GetUserAsync(principal);
             if (user == null)
@@ -90,7 +90,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             return cart;
         }
 
-        public async Task UpdateOrderStatus(int orderId, OrderStatus orderStatus, CancellationToken cancellationToken = default)
+        public virtual async Task UpdateOrderStatus(int orderId, OrderStatus orderStatus, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -136,7 +136,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             await order.SaveAsync(cancellationToken);
         }
 
-        public async Task<OrderViewModel> AddToCart(
+        public virtual async Task<OrderViewModel> AddToCart(
             ClaimsPrincipal principal,
             CartItemDto item,
             CancellationToken cancellationToken = default)
@@ -176,7 +176,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             return cart;
         }
 
-        public async Task<OrderViewModel> UpdateSelectedCartItem(
+        public virtual async Task<OrderViewModel> UpdateSelectedCartItem(
             ClaimsPrincipal principal,
             CartItemDto item,
             CancellationToken cancellationToken = default)
@@ -206,7 +206,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             return cart;
         }
 
-        public async Task<OrderViewModel> RemoveFromCart(
+        public virtual async Task<OrderViewModel> RemoveFromCart(
             ClaimsPrincipal principal,
             int itemId,
             CancellationToken cancellationToken = default)
@@ -223,7 +223,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             return cart;
         }
 
-        public async Task<string?> Checkout(
+        public virtual async Task<string?> Checkout(
             ClaimsPrincipal principal,
             PaymentGateway gateway,
             OrderViewModel checkoutCart,
@@ -273,7 +273,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             return url;
         }
 
-        public async Task<string?> CheckoutGuest(
+        public virtual async Task<string?> CheckoutGuest(
             PaymentGateway gateway,
             OrderViewModel checkoutCart,
             CancellationToken cancellationToken = default)
@@ -294,6 +294,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                     throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
                 }
 
+                // Get Payment URL
                 string returnUrl = $"{_paymentConfiguration.Urls.PaymentResponseUrl}/{checkoutCart.TempId}";
                 string againUrl = $"{_paymentConfiguration.Urls.PaymentCartUrl}/{checkoutCart.TempId}";
                 var request = await paymentService.GetPaymentRequestAsync(checkoutCart, againUrl, returnUrl, cancellationToken);
@@ -310,69 +311,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
             }
         }
 
-        private async Task FilterGuestCheckoutCartAsync(OrderViewModel checkoutCart)
-        {
-            checkoutCart.SetUowInfo(_uow, CacheService);
-            checkoutCart.OrderItems = checkoutCart.OrderItems.Where(m => m.IsActive).ToList();
-            var skus = checkoutCart.OrderItems.Select(m => m.Sku).ToList();
 
-            var orderProducts = _uow.DbContext.Warehouse.Where(m => skus.Contains(m.Sku));
-            if (orderProducts.Count(m => m.Inventory == 0) > 0)
-            {
-                var soldOutProducts = orderProducts.Where(m => m.Inventory == 0).Select(m => $"{m.Sku} sold out").ToArray();
-                throw new MixException(MixErrorStatus.Badrequest, soldOutProducts);
-            }
-
-            foreach (var item in orderProducts)
-            {
-                item.Inventory -= 1;
-                item.Sold += 1;
-            }
-
-
-            checkoutCart.SetUowInfo(_uow, CacheService);
-            //checkoutCart.Id = (_uow.DbContext.OrderDetail.Max(m => m.Id) ?? 0) + 1;
-            checkoutCart.LastModified = DateTime.UtcNow;
-            checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
-
-            checkoutCart.CreatedDateTime = DateTime.UtcNow;
-            checkoutCart.Calculate(_exchangeRate);
-
-            await _uow.DbContext.SaveChangesAsync();
-        }
-
-        private async Task FilterCheckoutCartAsync(OrderViewModel checkoutCart, OrderViewModel myCart)
-        {
-            myCart.SetUowInfo(_uow, CacheService);
-            myCart.OrderItems = checkoutCart.OrderItems.Where(m => !m.IsActive).ToList();
-            checkoutCart.OrderItems = checkoutCart.OrderItems.Where(m => m.IsActive).ToList();
-            var skus = checkoutCart.OrderItems.Select(m => m.Sku).ToList();
-
-            var orderProducts = _uow.DbContext.Warehouse.Where(m => skus.Contains(m.Sku));
-            if (orderProducts.Count(m => m.Inventory == 0) > 0)
-            {
-                var soldOutProducts = orderProducts.Where(m => m.Inventory == 0).Select(m => $"{m.Sku} sold out").ToArray();
-                throw new MixException(MixErrorStatus.Badrequest, soldOutProducts);
-            }
-
-            foreach (var item in orderProducts)
-            {
-                item.Inventory -= 1;
-                item.Sold += 1;
-            }
-
-            checkoutCart.SetUowInfo(_uow, CacheService);
-            checkoutCart.Id = _uow.DbContext.OrderDetail.Max(m => m.Id) + 1;
-            checkoutCart.LastModified = DateTime.UtcNow;
-            checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
-
-            checkoutCart.CreatedDateTime = DateTime.UtcNow;
-            checkoutCart.Calculate(_exchangeRate);
-
-            await _uow.DbContext.SaveChangesAsync();
-        }
-
-        public async Task<OrderViewModel> ProcessPaymentResponse(
+        public virtual async Task<OrderViewModel> ProcessPaymentResponse(
             Guid orderTempId,
             JObject paymentResponse,
             CancellationToken cancellationToken = default)
@@ -411,7 +351,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             return order;
         }
 
-        public async Task LogAction(int orderId, OrderTrackingAction action, string? note = "")
+        public virtual async Task LogAction(int orderId, OrderTrackingAction action, string? note = "")
         {
             OrderTrackingViewModel log = new(_uow)
             {
@@ -421,6 +361,71 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 MixTenantId = CurrentTenant.Id
             };
             await log.SaveAsync();
+        }
+
+        protected virtual async Task FilterGuestCheckoutCartAsync(OrderViewModel checkoutCart)
+        {
+            checkoutCart.SetUowInfo(_uow, CacheService);
+            checkoutCart.OrderItems = checkoutCart.OrderItems.Where(m => m.IsActive).ToList();
+            var skus = checkoutCart.OrderItems.Select(m => m.Sku).ToList();
+
+            var orderProductWarehouses = _uow.DbContext.Warehouse.Where(m => skus.Contains(m.Sku));
+            if (orderProductWarehouses.Count(m => m.InStock == 0) > 0)
+            {
+                var soldOutProducts = orderProductWarehouses.Where(m => m.InStock == 0).Select(m => $"{m.Sku} sold out").ToArray();
+                throw new MixException(MixErrorStatus.Badrequest, soldOutProducts);
+            }
+
+            foreach (var item in orderProductWarehouses)
+            {
+                item.InStock -= 1;
+                item.Sold += 1;
+                var orderItem = checkoutCart.OrderItems.FirstOrDefault(m => m.Sku == item.Sku);
+                orderItem.Price = item.Price ?? 0;
+                orderItem.Currency = item.Currency;
+            }
+
+
+            checkoutCart.SetUowInfo(_uow, CacheService);
+            //checkoutCart.Id = (_uow.DbContext.OrderDetail.Max(m => m.Id) ?? 0) + 1;
+            checkoutCart.LastModified = DateTime.UtcNow;
+            checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
+
+            checkoutCart.CreatedDateTime = DateTime.UtcNow;
+            checkoutCart.Calculate(_exchangeRate);
+
+            await _uow.DbContext.SaveChangesAsync();
+        }
+
+        protected virtual async Task FilterCheckoutCartAsync(OrderViewModel checkoutCart, OrderViewModel myCart)
+        {
+            myCart.SetUowInfo(_uow, CacheService);
+            myCart.OrderItems = checkoutCart.OrderItems.Where(m => !m.IsActive).ToList();
+            checkoutCart.OrderItems = checkoutCart.OrderItems.Where(m => m.IsActive).ToList();
+            var skus = checkoutCart.OrderItems.Select(m => m.Sku).ToList();
+
+            var orderProducts = _uow.DbContext.Warehouse.Where(m => skus.Contains(m.Sku));
+            if (orderProducts.Count(m => m.InStock == 0) > 0)
+            {
+                var soldOutProducts = orderProducts.Where(m => m.InStock == 0).Select(m => $"{m.Sku} sold out").ToArray();
+                throw new MixException(MixErrorStatus.Badrequest, soldOutProducts);
+            }
+
+            foreach (var item in orderProducts)
+            {
+                item.InStock -= 1;
+                item.Sold += 1;
+            }
+
+            checkoutCart.SetUowInfo(_uow, CacheService);
+            checkoutCart.Id = _uow.DbContext.OrderDetail.Max(m => m.Id) + 1;
+            checkoutCart.LastModified = DateTime.UtcNow;
+            checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
+
+            checkoutCart.CreatedDateTime = DateTime.UtcNow;
+            checkoutCart.Calculate(_exchangeRate);
+
+            await _uow.DbContext.SaveChangesAsync();
         }
 
 

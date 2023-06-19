@@ -15,8 +15,9 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public int ParentId { get; set; }
         public int ProductDetailsId { get; set; }
         public string? Sku { get; set; }
+        public string? Currency { get; set; }
         public double? Price { get; set; }
-        public int? Inventory { get; set; }
+        public int? InStock { get; set; }
         public int? Sold { get; set; }
 
         #endregion

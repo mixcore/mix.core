@@ -8,7 +8,7 @@ namespace Mix.Lib.Helpers
 {
     public class MixCmsHelper
     {
-        public static ExpressionMethod ParseOperator(MixCompareOperator? compareOperator)
+        public static ExpressionMethod ParseExpressionMethod(MixCompareOperator? compareOperator)
         {
             switch (compareOperator)
             {

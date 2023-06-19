@@ -16,6 +16,7 @@ using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Heart.Services;
 using Mix.Shared.Dtos;
+using Mix.Lib.Helpers;
 
 namespace Mix.Services.Databases.Lib.Services
 {
@@ -169,7 +170,8 @@ namespace Mix.Services.Databases.Lib.Services
                 }
                 else
                 {
-                    predicate = predicate.AndAlso(m => item.Value.ToString().Equals(m.SeoContent));
+                    predicate = predicate.AndAlso(ReflectionHelper.GetExpression<MixMetadata>(
+                                    "SeoContent", item.Value.ToString(), MixCmsHelper.ParseExpressionMethod(item.CompareOperator)));
                 }
 
                 var allowMetadata = _uow.DbContext.MixMetadata.Where(predicate);
@@ -205,7 +207,7 @@ namespace Mix.Services.Databases.Lib.Services
                 }
                 else
                 {
-                    predicate = predicate.AndAlso(m => item.Value.ToString().Equals(m.SeoContent));
+                    predicate = predicate.AndAlso(ReflectionHelper.GetExpression<MixMetadata>("SeoContent", item.Value.ToString(), MixCmsHelper.ParseExpressionMethod(item.CompareOperator)));
                 }
 
                 var allowMetadata = _uow.DbContext.MixMetadata.Where(predicate);

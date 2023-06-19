@@ -110,7 +110,7 @@ namespace Mix.Lib.Models.Common
                 foreach (var col in req.SearchColumns.Split(',', StringSplitOptions.TrimEntries))
                 {
                     searchPredicate = searchPredicate.Or(ReflectionHelper.GetExpression<TEntity>(
-                        col.ToTitleCase(), req.Keyword, MixCmsHelper.ParseOperator(req.SearchMethod)));
+                        col.ToTitleCase(), req.Keyword, MixCmsHelper.ParseExpressionMethod(req.SearchMethod)));
                 }
                 AndPredicate = AndPredicate.AndAlso(searchPredicate);
             }

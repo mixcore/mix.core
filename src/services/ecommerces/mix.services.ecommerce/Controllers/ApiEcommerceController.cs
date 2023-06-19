@@ -16,12 +16,13 @@ using Mix.Services.Ecommerce.Lib.Models;
 using Mix.Services.Ecommerce.Lib.ViewModels;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
+using MySqlX.XDevAPI.Common;
 using Newtonsoft.Json.Linq;
 using System.Web;
 
 namespace Mix.Services.ecommerce.Controllers
 {
-    [Route("api/v2/ecommerce")]
+    [Route("api/v2/mix/ecommerce")]
     [ApiController]
     public class ApiEcommerceController : MixTenantApiControllerBase
     {
@@ -53,17 +54,6 @@ namespace Mix.Services.ecommerce.Controllers
         }
 
         #region Routes
-
-        [HttpPost("update-warehouse")]
-        public async Task<ActionResult> UpdateWarehouse([FromBody] UpdateWarehouseDto dto, CancellationToken cancellationToken = default)
-        {
-            var msg = new SignalRMessageModel(dto)
-            {
-                Title = "From update-warehouse"
-            };
-            await _portalHub.SendMessageAsync(msg);
-            return Ok();
-        }
 
         [MixAuthorize]
         [HttpGet]
@@ -159,6 +149,7 @@ namespace Mix.Services.ecommerce.Controllers
                 return BadRequest();
             }
             var url = await _ecommerceService.CheckoutGuest(gateway.Value, cart, cancellationToken);
+            QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.PlacedOrder, cart);
             return !string.IsNullOrEmpty(url) ? Ok(new JObject(new JProperty("url", url))) : BadRequest();
         }
 
