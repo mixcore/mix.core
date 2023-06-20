@@ -46,15 +46,16 @@ namespace Mix.Storage.Controllers
         [Route("delete-file")]
         public ActionResult<bool> Delete()
         {
-            string fullPath = Request.Query["fullPath"].ToString();
-
-            if (fullPath.Contains(MixFolders.StaticFiles))
+            var fullPath = Request.Query["fullPath"].ToString();
+            if (string.IsNullOrEmpty(fullPath) || !fullPath.Contains(MixFolders.StaticFiles))
             {
-                var result = MixFileHelper.DeleteFile(fullPath);
-                return Ok(result);
+                return BadRequest();
             }
 
-            return BadRequest();
+            var domainUrl = $"{Request.Scheme}://{Request.Host.Value}/";
+            var path = fullPath.Replace(domainUrl, "");
+            var result = MixFileHelper.DeleteFile(path);
+            return Ok(result);
         }
 
         #endregion
