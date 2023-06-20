@@ -7,7 +7,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
     {
         public string? intent { get; set; }
         public RedirecUrls application_context { get; set; }
-        public List<RequestPurchaseUnit> purchase_units { get; set; } = new();
+        public List<PaypalRequestPurchaseUnit> purchase_units { get; set; } = new();
 
         public PaypalOrderRequest()
         {
@@ -21,27 +21,28 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
         }
     }
 
-    public class RequestPurchaseUnit
+    public class PaypalRequestPurchaseUnit
     {
-        public RequestPurchaseUnit(OrderViewModel order)
+        public PaypalRequestPurchaseUnit(OrderViewModel order)
         {
             foreach (var item in order.OrderItems)
             {
                 items.Add(new(item));
             }
             amount = new(order);
-            if (order.Address != null && !string.IsNullOrEmpty(order.Address.CountryCode) && !string.IsNullOrEmpty(order.Address.PostalCode))
-            {
-                shipping = new()
-                {
-                    address = new PaypalAddress()
-                    {
-                        address_line_1 = order.Address?.ToString(),
-                        country_code = order.Address?.CountryCode ?? "US",
-                        postal_code = order.Address?.PostalCode
-                    }
-                };
-            }
+            //if (order.Address != null && !string.IsNullOrEmpty(order.Address.CountryCode) && !string.IsNullOrEmpty(order.Address.PostalCode))
+            //{
+            //    shipping = new()
+            //    {
+            //        address = new PaypalAddress()
+            //        {
+            //            address_line_1 = order.Address?.ToString(),
+            //            address_line_2 = order.Address?.ToString(),
+            //            country_code = order.Address?.CountryCode ?? "US",
+            //            postal_code = order.Address?.PostalCode
+            //        }
+            //    };
+            //}
         }
 
         public string reference_id { get; set; }
