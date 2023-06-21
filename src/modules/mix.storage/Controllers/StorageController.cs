@@ -22,7 +22,7 @@ namespace Mix.Storage.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _storageService.UploadFile(file, folder, User?.Identity?.Name);
+                var result = await _storageService.UploadFile(file, folder, User.Identity?.Name);
                 return Ok(result);
             }
             return BadRequest();
@@ -35,7 +35,7 @@ namespace Mix.Storage.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _storageService.UploadStream(file, User?.Identity?.Name);
+                var result = await _storageService.UploadStream(file, User.Identity?.Name);
                 return Ok(result);
             }
             return BadRequest();
@@ -47,14 +47,13 @@ namespace Mix.Storage.Controllers
         public ActionResult<bool> Delete()
         {
             var fullPath = Request.Query["fullPath"].ToString();
-            if (string.IsNullOrEmpty(fullPath) || !fullPath.Contains(MixFolders.StaticFiles))
+            if (string.IsNullOrEmpty(fullPath) || !fullPath.Contains(MixFolders.StaticFiles, StringComparison.InvariantCultureIgnoreCase))
             {
                 return BadRequest();
             }
 
-            var domainUrl = $"{Request.Scheme}://{Request.Host.Value}/";
-            var path = fullPath.Replace(domainUrl, "");
-            var result = MixFileHelper.DeleteFile(path);
+            var uri = new Uri(fullPath);
+            var result = MixFileHelper.DeleteFile(uri.AbsolutePath[1..]);
             return Ok(result);
         }
 
