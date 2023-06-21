@@ -11,11 +11,9 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         #region Properties
 
         public int MixTenantId { get; set; }
-        public MixDatabaseParentType ParentType { get; set; }
-        public int ParentId { get; set; }
-        public int ProductDetailsId { get; set; }
+        public int PostId { get; set; }
         public string? Sku { get; set; }
-        public string? Currency { get; set; }
+        public string Currency { get; set; }
         public double? Price { get; set; }
         public int? InStock { get; set; }
         public int? Sold { get; set; }
