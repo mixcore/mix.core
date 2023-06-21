@@ -23,6 +23,10 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
 
     public class PaypalRequestPurchaseUnit
     {
+        public PaypalRequestPurchaseUnit()
+        {
+            
+        }
         public PaypalRequestPurchaseUnit(OrderViewModel order)
         {
             foreach (var item in order.OrderItems)
@@ -55,6 +59,10 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
 
     public class ResponsePurchaseUnit
     {
+        public ResponsePurchaseUnit()
+        {
+            
+        }
         public string reference_id { get; set; }
         public PaypalShipping shipping { get; set; }
         public List<PurchaseItem> items { get; set; } = new();
@@ -68,6 +76,10 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
 
     public class SellerReceivableBreakdown
     {
+        public SellerReceivableBreakdown()
+        {
+            
+        }
         public PaypalAmount gross_amount { get; set; }
         public PaypalAmount paypal_fee { get; set; }
         public PaypalAmount net_amount { get; set; }
@@ -86,6 +98,10 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
 
     public class PaypalLink
     {
+        public PaypalLink()
+        {
+            
+        }
         public string rel { get; set; }
         public string method { get; set; }
         public string href { get; set; }
@@ -93,6 +109,10 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
 
     public class PurchaseItem
     {
+        public PurchaseItem()
+        {
+            
+        }
         public PurchaseItem(OrderItemViewModel item)
         {
             name = item.Title;
@@ -109,6 +129,10 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
 
     public class PaypalAmount
     {
+        public PaypalAmount()
+        {
+            
+        }
         public PaypalAmount(OrderViewModel order)
         {
             currency_code = order.Currency;
@@ -122,12 +146,20 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
     }
     public class Payee
     {
+        public Payee()
+        {
+            
+        }
         public string merchant_id { get; set; }
         public string email_address { get; set; }
     }
 
     public class Breakdown
     {
+        public Breakdown()
+        {
+            
+        }
         public Breakdown(OrderViewModel order)
         {
             item_total = new(order.Currency, order.Total);
@@ -149,7 +181,10 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
             currency_code = item.Currency;
             value = $"{item.Price}";
         }
-
+        public UnitAmount()
+        {
+            
+        }
         public UnitAmount(string? currency, double? total)
         {
             currency_code = currency;
@@ -162,6 +197,10 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
 
     public class RedirecUrls
     {
+        public RedirecUrls()
+        {
+            
+        }
         public RedirecUrls(string returnUrl, string cancelUrl)
         {
             return_url = returnUrl;

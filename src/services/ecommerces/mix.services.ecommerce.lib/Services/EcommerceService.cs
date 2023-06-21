@@ -325,21 +325,28 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 throw new MixException(MixErrorStatus.ServerError, $"Invalid Order");
             }
 
+            order.Calculate(_exchangeRate);
             var paymentService = PaymentServiceFactory.GetPaymentService(_serviceProvider, order.PaymentGateway!.Value);
 
             if (paymentService == null)
             {
                 throw new MixException(MixErrorStatus.ServerError, $"Not Implement {order.PaymentGateway} payment");
             }
-            order.PaymentResponse = paymentResponse;
-            order.PaymentStatus = await paymentService.ProcessPaymentResponse(order, paymentResponse, cancellationToken);
-            order.LastModified = DateTime.UtcNow;
+
+            if (order.PaymentStatus != PaymentStatus.SUCCESS && order.PaymentStatus!= PaymentStatus.FAILED)
+            {
+                order.PaymentResponse = paymentResponse;
+                order.PaymentStatus = await paymentService.ProcessPaymentResponse(order, paymentResponse, cancellationToken);
+                order.LastModified = DateTime.UtcNow;
+            }
+
+
             if (order.PaymentStatus == PaymentStatus.SUCCESS)
             {
                 order.OrderStatus = OrderStatus.PAID;
                 if (!string.IsNullOrEmpty(order.Email))
                 {
-                    await _edmService.SendMailWithEdmTemplate("Payment Success", "PaymentSuccess", JObject.FromObject(order), order.Email);
+                    await SendPaymentSuccessEdm(order);
                 }
                 await LogAction(order.Id, OrderTrackingAction.PAID);
             }
@@ -362,6 +369,13 @@ namespace Mix.Services.Ecommerce.Lib.Services
             };
             await log.SaveAsync();
         }
+
+        protected virtual async Task SendPaymentSuccessEdm(OrderViewModel order)
+        {
+            var data = ReflectionHelper.ParseObject(order);
+            await _edmService.SendMailWithEdmTemplate("Payment Success", "PaymentSuccess", data, order.Email);
+        }
+
 
         protected virtual async Task FilterGuestCheckoutCartAsync(OrderViewModel checkoutCart)
         {

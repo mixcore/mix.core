@@ -102,7 +102,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.Configure<GzipCompressionProviderOptions>(
                 options => options.Level = System.IO.Compression.CompressionLevel.Fastest);
-            //services.AddResponseCompression(options => options.EnableForHttps = true);
             services.AddResponseCaching();
 
             services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();

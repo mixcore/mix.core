@@ -74,17 +74,24 @@ namespace Mix.Services.Ecommerce.Lib.Services
         {
             try
             {
+                if (orderDetail.PaymentStatus == PaymentStatus.SUCCESS || orderDetail.PaymentStatus == PaymentStatus.FAILED)
+                {
+                    return orderDetail.PaymentStatus;
+                }
+
                 string? token = response.Value<string>("token");
                 string? payerId = response.Value<string>("PayerID");
                 var result = await CaptureOrderResult(token);
-                if (!string.IsNullOrEmpty(result.id))
+                if (string.IsNullOrEmpty(result.id) && orderDetail.PaymentStatus == PaymentStatus.SENT)
                 {
-                    var reference = result.purchase_units[0].reference_id;
-                    var status = !string.IsNullOrEmpty(reference) ? PaymentStatus.SUCCESS : PaymentStatus.FAILED;
-                    await SaveResponse(result, status, cancellationToken);
-                    return status;
+                    result = await GetOrderResult(token);
                 }
-                return orderDetail.PaymentStatus;
+
+                var reference = result.purchase_units[0].reference_id;
+                var status = !string.IsNullOrEmpty(reference) ? PaymentStatus.SUCCESS : PaymentStatus.FAILED;
+                await SaveResponse(result, status, cancellationToken);
+                return status;
+
             }
             catch (Exception ex)
             {
@@ -176,6 +183,18 @@ namespace Mix.Services.Ecommerce.Lib.Services
         private async Task<PaypalOrderCapturedResponse> CaptureOrderResult(string orderId)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"v2/checkout/orders/{orderId}/capture");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Token.access_token);
+            request.Content = new StringContent("", Encoding.Default, "application/json");
+            HttpResponseMessage response = await SendPaypalRequest(request);
+            string content = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<PaypalOrderCapturedResponse>(content);
+
+            return result;
+        }
+
+        private async Task<PaypalOrderCapturedResponse> GetOrderResult(string orderId)
+        {
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"v2/checkout/orders/{orderId}");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Token.access_token);
             request.Content = new StringContent("", Encoding.Default, "application/json");
             HttpResponseMessage response = await SendPaypalRequest(request);

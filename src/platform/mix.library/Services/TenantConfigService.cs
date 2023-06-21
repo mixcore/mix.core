@@ -16,13 +16,13 @@
 
         public bool IsEncryptApi => AppSettings.IsEncryptApi;
         public string DefaultCulture => AppSettings.DefaultCulture;
-        public string Domain => $"//{AppSettings.Domain}";
+        public string Domain => $"https://{AppSettings.Domain}";
 
         public override bool SaveSettings()
         {
             if (!string.IsNullOrEmpty(AppSettings.Domain) && !AppSettings.Domain.StartsWith("http"))
             {
-                AppSettings.Domain = $"//{AppSettings.Domain}";
+                AppSettings.Domain = $"https://{AppSettings.Domain}";
             }
             return base.SaveSettings();
         }

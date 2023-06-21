@@ -70,6 +70,15 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             Address = ShippingAddress != null
                         ? ShippingAddress.ToObject<OrderAddress>() 
                         : new();
+            var shippingItem = OrderItems.FirstOrDefault(m => m.Title == "Shipping");
+            if (shippingItem != null)
+            {
+                Shipping = new()
+                {
+                    Currency = shippingItem.Currency,
+                    ShippingFee = shippingItem.Price
+                };
+            }
         }
 
         public override async Task<OrderDetail> ParseEntity(CancellationToken cancellationToken = default)
@@ -108,7 +117,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         public void Calculate(double exchangeRate)
         {
-            Total = 0;
+            double total = 0;
             if (!OrderItems.Any(m => m.Title == "Shipping"))
             {
                 OrderItems.Add(new(UowInfo)
@@ -126,14 +135,24 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
                 if (item.Currency != Currency)
                 {
                     item.Currency = Currency;
-                    item.Price = Math.Round(item.Price / exchangeRate, 2);
-                    Total += item.Price;
+                    item.Price = Math.Round(item.Price/exchangeRate, 2);
+                    total += item.Price;
                 }
                 else
                 {
-                    Total += item.Price;
+                    total += item.Price;
                 }
             }
+            var shippingItem = OrderItems.FirstOrDefault(m => m.Title == "Shipping");
+            if (shippingItem != null)
+            {
+                Shipping = new()
+                {
+                    Currency = shippingItem.Currency,
+                    ShippingFee = shippingItem.Price
+                };
+            }
+            Total = Math.Round(total, 2);
         }
 
         #endregion

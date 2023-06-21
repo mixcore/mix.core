@@ -4,10 +4,10 @@ using Mix.Lib.Interfaces;
 
 namespace Mix.Lib.Services
 {
-    public sealed class MixEdmService : TenantServiceBase, IMixEdmService
+    public class MixEdmService : TenantServiceBase, IMixEdmService
     {
-        private readonly IQueueService<MessageQueueModel> _queueService;
-        private readonly UnitOfWorkInfo<MixCmsContext> _uow;
+        protected readonly IQueueService<MessageQueueModel> _queueService;
+        protected readonly UnitOfWorkInfo<MixCmsContext> _uow;
 
         public MixEdmService(
             IHttpContextAccessor httpContextAccessor,
@@ -28,7 +28,7 @@ namespace Mix.Lib.Services
             return edmTemplate?.Content;
         }
 
-        public async Task SendMailWithEdmTemplate(string subject, string templateName, JObject data, string to, string? from = null)
+        public virtual async Task SendMailWithEdmTemplate(string subject, string templateName, JObject data, string to, string? from = null)
         {
             var template = await GetEdmTemplate(templateName);
             if (template == null)

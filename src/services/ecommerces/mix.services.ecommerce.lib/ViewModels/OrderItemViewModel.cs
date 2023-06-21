@@ -1,4 +1,5 @@
-﻿using Mix.Heart.UnitOfWork;
+﻿using DocumentFormat.OpenXml.Office.CustomUI;
+using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Mix.Lib.Attributes;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
@@ -56,7 +57,11 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         public override Task<OrderItem> ParseEntity(CancellationToken cancellationToken = default)
         {
-            Calculate();
+            //Calculate();
+            if (Image != null && Image.IndexOf("http") < 0)
+            {
+                Image = $"https:{Image}";
+            }
             return base.ParseEntity(cancellationToken);
         }
 
@@ -95,6 +100,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             return await MixEcommerceDatabaseAssociationViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(m =>
                         m.ParentId == OrderDetailId
                         && m.ChildId == Id
+                        && m.ParentDatabaseName == EcommerceConstants.DataTableNameOrder
                         && m.ChildDatabaseName == EcommerceConstants.DataTableNameOrderItem);
         }
         #endregion

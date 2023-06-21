@@ -501,10 +501,11 @@ namespace Mix.RepoDb.Services
                         if (currentDb is { Columns.Count: > 0 })
                         {
                             await Migrate(currentDb, _databaseService.DatabaseProvider, _repository);
-                            return true;
+                            
                         }
                     }
                 }
+                return true;
 
             }
             return false;
@@ -602,7 +603,7 @@ namespace Mix.RepoDb.Services
         {
             try
             {
-                await repo.ExecuteCommand($"SELECT Id FROM {_databaseConstant.BacktickOpen}{tableName}{_databaseConstant.BacktickClose};");
+                var count = await repo.ExecuteCommand($"SELECT Count(*) FROM {_databaseConstant.BacktickOpen}{tableName}{_databaseConstant.BacktickClose};");
                 return true;
             }
             catch
