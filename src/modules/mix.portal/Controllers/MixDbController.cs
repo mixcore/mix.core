@@ -363,16 +363,23 @@ namespace Mix.Portal.Controllers
 
         private async Task<PagingResponseModel<JObject>> SearchHandler(SearchMixDbRequestDto request)
         {
-            IEnumerable<QueryField> queries = await BuildSearchQueryAsync(request);
-            var paging = new PagingRequestModel()
+            try
             {
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
-                SortBy = request.OrderBy,
-                SortDirection = request.Direction
-            };
+                IEnumerable<QueryField> queries = await BuildSearchQueryAsync(request);
+                var paging = new PagingRequestModel()
+                {
+                    PageIndex = request.PageIndex,
+                    PageSize = request.PageSize,
+                    SortBy = request.OrderBy,
+                    SortDirection = request.Direction
+                };
 
-            return await GetResult(queries, paging, request.LoadNestedData);
+                return await GetResult(queries, paging, request.LoadNestedData);
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
         }
 
 
@@ -385,7 +392,7 @@ namespace Mix.Portal.Controllers
 
             foreach (var item in result.Items)
             {
-                var data = ReflectionHelper.ParseObject(item);
+                var data = await _mixDbService.ParseDataAsync(_tableName, item);
                 if (loadNestedData)
                 {
                     foreach (var rel in database.Relationships)
@@ -399,7 +406,12 @@ namespace Mix.Portal.Controllers
                             var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
                             _repository.InitTableName(rel.DestinateDatabaseName);
                             List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
-                            var nestedData = await _repository.GetListByAsync(query);
+                            var getNestedData = await _repository.GetListByAsync(query);
+                            JArray nestedData = new();
+                            foreach (var nd in getNestedData)
+                            {
+                                nestedData.Add(await  _mixDbService.ParseDataAsync(rel.DestinateDatabaseName, nd));
+                            }
                             data.Add(new JProperty(rel.DisplayName, ReflectionHelper.ParseArray(nestedData)));
                         }
                         else

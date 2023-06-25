@@ -43,10 +43,10 @@ namespace Mix.Services.Graphql.Lib
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGraphQL("graphql");
-                endpoints.MapGraphQLVoyager("ui/voyager");
-                endpoints.MapGraphQLGraphiQL("ui/graphiql");
-                endpoints.MapGraphQLPlayground("ui/playground");
-                endpoints.MapGraphQLAltair("ui/altair");
+                endpoints.MapGraphQLVoyager("graph/ui/voyager");
+                endpoints.MapGraphQLGraphiQL("graph/ui/graphiql");
+                endpoints.MapGraphQLPlayground("graph/ui/playground");
+                endpoints.MapGraphQLAltair("graph/ui/altair");
             });
         }
     }

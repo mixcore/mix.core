@@ -109,6 +109,10 @@ namespace Mix.Lib.Models.Common
                 Expression<Func<TEntity, bool>> searchPredicate = m => false;
                 foreach (var col in req.SearchColumns.Replace(" ", string.Empty).Split(','))
                 {
+                    if (SearchMethod.Value == ExpressionMethod.In)
+                    {
+
+                    }
                     searchPredicate = searchPredicate.Or(ReflectionHelper.GetExpression<TEntity>(
                         col.ToTitleCase(), req.Keyword, req.SearchMethod.Value));
                 }

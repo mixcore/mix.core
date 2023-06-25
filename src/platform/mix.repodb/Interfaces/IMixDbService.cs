@@ -19,5 +19,6 @@ namespace Mix.RepoDb.Interfaces
 
         public Task<bool> BackupDatabase(string databaseName, CancellationToken cancellationToken = default);
         Task<JObject?> GetByParentIdAsync(string tableName, MixContentType parentType, int parentId, bool loadNestedData);
+        Task<JObject> ParseDataAsync(string tableName, dynamic obj);
     }
 }

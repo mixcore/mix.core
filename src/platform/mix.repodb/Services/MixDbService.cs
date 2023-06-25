@@ -10,6 +10,7 @@ using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
 using Mix.Heart.Constants;
 using Mix.Heart.Enums;
+using Mix.Heart.Exceptions;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Models;
@@ -138,21 +139,28 @@ namespace Mix.RepoDb.Services
 
         public async Task<JObject?> GetById(string tableName, int id, bool loadNestedData)
         {
-            _repository.InitTableName(tableName);
-            
-            var obj = await _repository.GetSingleAsync(id);
-            if (obj != null)
+            try
             {
-                var data = await ParseDataAsync(tableName, obj);
-                ParseDataAsync(tableName, data);
+                _repository.InitTableName(tableName);
 
-                if (loadNestedData)
+                var obj = await _repository.GetSingleAsync(id);
+                if (obj != null)
                 {
-                    await LoadNestedData(id, data, tableName);
+                    var data = await ParseDataAsync(tableName, obj);
+                    ParseDataAsync(tableName, data);
+
+                    if (loadNestedData)
+                    {
+                        await LoadNestedData(id, data, tableName);
+                    }
+                    return data;
                 }
-                return data;
+                return default;
             }
-            return default;
+            catch(Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
         }
         
         public async Task<JObject?> GetByParentIdAsync(string tableName, MixContentType parentType, int parentId, bool loadNestedData)

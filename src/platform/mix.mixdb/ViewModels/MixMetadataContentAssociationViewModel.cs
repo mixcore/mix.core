@@ -39,6 +39,12 @@ namespace Mix.Mixdb.ViewModels
 
         public override Task Validate(CancellationToken cancellationToken)
         {
+            if (MetadataId == 0 || ContentId == 0)
+            {
+                IsValid = false;
+                Errors.Add(new($"Invalid Association Metadata '{MetadataId} - {ContentType} - {ContentId}'"));
+            }
+
             if (Context.MixMetadataContentAssociation.Any(
                 m => m.MixTenantId == MixTenantId
                     && m.Id != Id
