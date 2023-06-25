@@ -186,8 +186,7 @@ namespace Mix.RepoDb.Repositories
                     return Operation.NotEqual;
                 case MixCompareOperator.NotContain:
                 case MixCompareOperator.NotInRange:
-                    field.Value = $"%{field.Value}%";
-                    return Operation.NotLike;
+                    return Operation.NotIn;
                 case MixCompareOperator.GreaterThanOrEqual:
                     return Operation.GreaterThanOrEqual;
                 case MixCompareOperator.GreaterThan:

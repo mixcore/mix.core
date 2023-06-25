@@ -8,6 +8,50 @@ namespace Mix.Lib.Helpers
 {
     public class MixCmsHelper
     {
+        public static ExpressionMethod ParseOperator(MixCompareOperator? compareOperator)
+        {
+            switch (compareOperator)
+            {
+                case MixCompareOperator.Equal:
+                    return ExpressionMethod.Equal;
+                case MixCompareOperator.Like:
+                    return ExpressionMethod.Like;
+                case MixCompareOperator.NotEqual:
+                    return ExpressionMethod.NotEqual;
+                case MixCompareOperator.Contain:
+                    return ExpressionMethod.In;
+                case MixCompareOperator.NotInRange:
+                    return ExpressionMethod.NotIn;
+                case MixCompareOperator.NotContain:
+                    return ExpressionMethod.NotEqual;
+                case MixCompareOperator.InRange:
+                    return ExpressionMethod.In;
+                case MixCompareOperator.GreaterThanOrEqual:
+                    return ExpressionMethod.GreaterThanOrEqual;
+                case MixCompareOperator.GreaterThan:
+                    return ExpressionMethod.GreaterThan;
+                case MixCompareOperator.LessThanOrEqual:
+                    return ExpressionMethod.LessThanOrEqual;
+                case MixCompareOperator.LessThan:
+                    return ExpressionMethod.LessThan;
+                default:
+                    return ExpressionMethod.Equal;
+            }
+        }
+        public static object ParseSearchKeyword(MixCompareOperator? searchMethod, object keyword)
+        {
+            if (keyword == null)
+            {
+                return keyword;
+            }
+            return searchMethod switch
+            {
+                MixCompareOperator.Like => $"%{keyword}%",
+                MixCompareOperator.InRange => keyword.ToString().Split(',', StringSplitOptions.TrimEntries),
+                MixCompareOperator.NotInRange => keyword.ToString().Split(',', StringSplitOptions.TrimEntries),
+                _ => keyword
+            };
+        }
         public static IHostBuilder CreateHostBuilder<TStartup>(string[] args) where TStartup : class
         {
             var mixContentFolder = new DirectoryInfo(MixFolders.MixContentFolder);

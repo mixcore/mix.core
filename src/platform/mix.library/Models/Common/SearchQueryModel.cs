@@ -15,7 +15,7 @@ namespace Mix.Lib.Models.Common
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public MixContentStatus? Status { get; set; }
-        public ExpressionMethod? SearchMethod { get; set; }
+        public MixCompareOperator? SearchMethod { get; set; }
         public string Columns { get; set; }
         public string SearchColumns { get; set; }
 
@@ -109,12 +109,8 @@ namespace Mix.Lib.Models.Common
                 Expression<Func<TEntity, bool>> searchPredicate = m => false;
                 foreach (var col in req.SearchColumns.Split(',', StringSplitOptions.TrimEntries))
                 {
-                    if (SearchMethod.Value == ExpressionMethod.In)
-                    {
-
-                    }
                     searchPredicate = searchPredicate.Or(ReflectionHelper.GetExpression<TEntity>(
-                        col.ToTitleCase(), req.Keyword, req.SearchMethod.Value));
+                        col.ToTitleCase(), req.Keyword, MixCmsHelper.ParseOperator(req.SearchMethod)));
                 }
                 AndPredicate = AndPredicate.AndAlso(searchPredicate);
             }

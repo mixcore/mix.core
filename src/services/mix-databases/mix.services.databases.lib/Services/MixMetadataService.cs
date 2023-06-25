@@ -159,14 +159,17 @@ namespace Mix.Services.Databases.Lib.Services
                     m.Type == item.FieldName;
 
 
-                if (item.CompareOperator == MixCompareOperator.InRange)
+                if (item.CompareOperator == MixCompareOperator.InRange || item.CompareOperator == MixCompareOperator.NotInRange)
                 {
                     var array = item.Value.ToString().Split(',');
-                    predicate = predicate.AndAlso(m => array.Contains(m.SeoContent));
+                    predicate = predicate.AndAlsoIf(item.CompareOperator == MixCompareOperator.InRange,
+                                                    m => array.Contains(m.SeoContent));
+                    predicate = predicate.AndAlsoIf(item.CompareOperator == MixCompareOperator.NotInRange,
+                                                    m => !array.Contains(m.SeoContent));
                 }
                 else
                 {
-                    predicate = predicate.AndAlso(m => item.Value.ToString().Contains(m.SeoContent));
+                    predicate = predicate.AndAlso(m => item.Value.ToString().Equals(m.SeoContent));
                 }
 
                 var allowMetadata = _uow.DbContext.MixMetadata.Where(predicate);
@@ -192,14 +195,17 @@ namespace Mix.Services.Databases.Lib.Services
                 Expression<Func<MixMetadata, bool>> predicate = m =>
                     m.Type == item.FieldName;
 
-                if (item.CompareOperator == MixCompareOperator.InRange)
+                if (item.CompareOperator == MixCompareOperator.InRange || item.CompareOperator == MixCompareOperator.NotInRange)
                 {
                     var array = item.Value.ToString().Split(',');
-                    predicate = predicate.AndAlso(m => array.Contains(m.SeoContent));
+                    predicate = predicate.AndAlsoIf(item.CompareOperator == MixCompareOperator.InRange, 
+                                                    m => array.Contains(m.SeoContent));
+                    predicate = predicate.AndAlsoIf(item.CompareOperator == MixCompareOperator.NotInRange, 
+                                                    m => !array.Contains(m.SeoContent));
                 }
                 else
                 {
-                    predicate = predicate.AndAlso(m => item.Value.ToString().Contains(m.SeoContent));
+                    predicate = predicate.AndAlso(m => item.Value.ToString().Equals(m.SeoContent));
                 }
 
                 var allowMetadata = _uow.DbContext.MixMetadata.Where(predicate);

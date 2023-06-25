@@ -452,7 +452,7 @@ namespace Mix.Portal.Controllers
                 foreach (var query in request.Queries)
                 {
                     Operation op = ParseOperator(query.CompareOperator);
-                    queries.Add(new(query.FieldName, op, query.Value));
+                    queries.Add(new(query.FieldName, op, ParseSearchKeyword(query.CompareOperator, query.Value)));
                 }
             }
             return queries;
@@ -510,28 +510,34 @@ namespace Mix.Portal.Controllers
             return queries;
         }
 
-        private object ParseSearchKeyword(ExpressionMethod? searchMethod, string keyword)
+        private object ParseSearchKeyword(MixCompareOperator? searchMethod, object keyword)
         {
+            if (keyword == null)
+            {
+                return keyword;
+            }
             return searchMethod switch
             {
-                ExpressionMethod.Like => $"%{keyword}%",
-                ExpressionMethod.In => keyword.Split(',', StringSplitOptions.TrimEntries),
+                MixCompareOperator.Like => $"%{keyword}%",
+                MixCompareOperator.InRange => keyword.ToString().Split(',', StringSplitOptions.TrimEntries),
+                MixCompareOperator.NotInRange => keyword.ToString().Split(',', StringSplitOptions.TrimEntries),
                 _ => keyword
             };
         }
 
-        private Operation ParseSearchOperation(ExpressionMethod? searchMethod)
+        private Operation ParseSearchOperation(MixCompareOperator? searchMethod)
         {
             return searchMethod switch
             {
-                ExpressionMethod.Like => Operation.Like,
-                ExpressionMethod.Equal => Operation.Equal,
-                ExpressionMethod.NotEqual => Operation.NotEqual,
-                ExpressionMethod.LessThanOrEqual => Operation.LessThanOrEqual,
-                ExpressionMethod.LessThan => Operation.LessThan,
-                ExpressionMethod.GreaterThan => Operation.GreaterThan,
-                ExpressionMethod.GreaterThanOrEqual => Operation.GreaterThanOrEqual,
-                ExpressionMethod.In => Operation.In,
+                MixCompareOperator.Like => Operation.Like,
+                MixCompareOperator.Equal => Operation.Equal,
+                MixCompareOperator.NotEqual => Operation.NotEqual,
+                MixCompareOperator.LessThanOrEqual => Operation.LessThanOrEqual,
+                MixCompareOperator.LessThan => Operation.LessThan,
+                MixCompareOperator.GreaterThan => Operation.GreaterThan,
+                MixCompareOperator.GreaterThanOrEqual => Operation.GreaterThanOrEqual,
+                MixCompareOperator.InRange => Operation.In,
+                MixCompareOperator.NotInRange => Operation.NotIn,
                 _ => Operation.Equal
             };
         }

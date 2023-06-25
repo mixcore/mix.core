@@ -327,12 +327,13 @@ namespace Mix.RepoDb.Services
             return queries;
         }
 
-        private object ParseSearchKeyword(ExpressionMethod? searchMethod, string keyword)
+        private object ParseSearchKeyword(MixCompareOperator? searchMethod, string keyword)
         {
             return searchMethod switch
             {
-                ExpressionMethod.Like => $"%{keyword}%",
-                ExpressionMethod.In => keyword.Split(',', StringSplitOptions.TrimEntries),
+                MixCompareOperator.Like => $"%{keyword}%",
+                MixCompareOperator.InRange => keyword.Split(',', StringSplitOptions.TrimEntries),
+                MixCompareOperator.NotInRange => keyword.Split(',', StringSplitOptions.TrimEntries),
                 _ => keyword
             };
         }
@@ -368,18 +369,19 @@ namespace Mix.RepoDb.Services
             }
         }
 
-        private Operation ParseSearchOperation(ExpressionMethod? searchMethod)
+        private Operation ParseSearchOperation(MixCompareOperator? searchMethod)
         {
             return searchMethod switch
             {
-                ExpressionMethod.Like => Operation.Like,
-                ExpressionMethod.Equal => Operation.Equal,
-                ExpressionMethod.NotEqual => Operation.NotEqual,
-                ExpressionMethod.LessThanOrEqual => Operation.LessThanOrEqual,
-                ExpressionMethod.LessThan => Operation.LessThan,
-                ExpressionMethod.GreaterThan => Operation.GreaterThan,
-                ExpressionMethod.GreaterThanOrEqual => Operation.GreaterThanOrEqual,
-                ExpressionMethod.In => Operation.In,
+                MixCompareOperator.Like => Operation.Like,
+                MixCompareOperator.Equal => Operation.Equal,
+                MixCompareOperator.NotEqual => Operation.NotEqual,
+                MixCompareOperator.LessThanOrEqual => Operation.LessThanOrEqual,
+                MixCompareOperator.LessThan => Operation.LessThan,
+                MixCompareOperator.GreaterThan => Operation.GreaterThan,
+                MixCompareOperator.GreaterThanOrEqual => Operation.GreaterThanOrEqual,
+                MixCompareOperator.InRange => Operation.In,
+                MixCompareOperator.NotInRange => Operation.NotIn,
                 _ => Operation.Equal
             };
         }
