@@ -12,7 +12,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
     public class OrderViewModel : ViewModelBase<EcommerceDbContext, OrderDetail, int, OrderViewModel>
     {
         #region Properties
-        public Guid TempId { get; set; }
+        public Guid? TempId { get; set; }
         public string? Code { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
