@@ -46,7 +46,6 @@ namespace Mix.Services.Ecommerce.Lib.Models.Onepay
         public OnepayRequest(OrderViewModel order)
         {
             vpc_Amount = $"{order.Total}00";
-            vpc_Locale = "vn";
             vpc_MerchTxnRef = Guid.NewGuid().ToString();
             vpc_OrderInfo = order.Id.ToString();
             Title = order.Title;

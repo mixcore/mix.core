@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System.Text.RegularExpressions;
@@ -187,5 +188,49 @@ namespace Mix.Lib.Helpers
             }
         }
 
+        public static List<JObject> LoadExcelFileData(IFormFile file)
+        {
+            //create a list to hold all the values
+            List<JObject> excelData = new List<JObject>();
+
+            //create a new Excel package in a memorystream
+            using (var stream = file.OpenReadStream())
+            using (XLWorkbook excelPackage = new XLWorkbook(stream))
+            {
+                //loop all worksheets
+                foreach (var worksheet in excelPackage.Worksheets)
+                {
+                    bool FirstRow = true;
+                    //Range for reading the cells based on the last cell used.  
+                    string readRange = "1:1";
+                    List<string> columnNames = new();
+                    foreach (IXLRow row in worksheet.RowsUsed())
+                    {
+                        //If Reading the First Row (used) then add them as column name  
+                        if (FirstRow)
+                        {
+                            readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
+                            foreach (IXLCell cell in row.Cells(readRange))
+                            {
+                                columnNames.Add(cell.Value.ToString());
+                            }
+                            FirstRow = false;
+                        }
+                        else
+                        {
+                            JObject obj = new JObject();
+                            int colIndex = 0;
+                            foreach (IXLCell cell in row.Cells(readRange))
+                            {
+                                obj.Add(new JProperty(columnNames[colIndex], cell.Value.ToString()));
+                                colIndex++;
+                            }
+                            excelData.Add(obj);
+                        }
+                    }
+                }
+                return excelData;
+            }
+        }
     }
 }

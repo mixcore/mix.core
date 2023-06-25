@@ -379,7 +379,47 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<int?> InsertManyAsync(List<dynamic> entities)
+        public async Task<int?> InsertManyAsync(List<JObject> entities)
+        {
+            try
+            {
+                if (entities.Count == 0)
+                {
+                    return default;
+                }
+
+                List<Dictionary<string, object>> dicObjs = new();
+
+                foreach (var entity in entities)
+                {
+                    var dicObj = entity.ToObject<Dictionary<string, object>>();
+                    if (dicObj != null)
+                    {
+                        dicObjs.Add(dicObj);
+                    }
+                }
+                var fields = dicObjs[0].Keys.Select(m => new Field(m)).ToList();
+
+                BeginTransaction();
+                var result = await _connection.InsertAllAsync(
+                        _tableName,
+                        entities: dicObjs,
+                        fields: fields,
+                        commandTimeout: _settings.CommandTimeout,
+                        transaction: _dbTransaction,
+                        trace: _trace);
+                CompleteTransaction();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                await MixLogService.LogExceptionAsync(ex);
+                RollbackTransaction();
+                return default;
+            }
+        }
+
+        public async Task<int?> InsertManyAsync(List<dynamic> entities, List<Field>? fields = null)
         {
             try
             {
@@ -387,6 +427,7 @@ namespace Mix.RepoDb.Repositories
                 var result = await _connection.InsertAllAsync(
                         _tableName,
                         entities: entities,
+                        fields: fields,
                         commandTimeout: _settings.CommandTimeout,
                         transaction: _dbTransaction,
                         trace: _trace);

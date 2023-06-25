@@ -125,6 +125,20 @@ namespace Mix.Portal.Controllers
             var file = MixCmsHelper.ExportJObjectToExcel(result.Items.ToList(), _tableName, exportPath, filename, null);
             return Ok(file);
         }
+        
+        [HttpPost("import")]
+        public async Task<ActionResult> Import([FromForm] IFormFile file)
+        {
+            var data = MixCmsHelper.LoadExcelFileData(file);
+            List<JObject> lstDto = new();
+            foreach (var item in data)
+            {
+                lstDto.Add(await ParseDtoToEntityAsync(item));
+            }
+
+            var result = await _repository.InsertManyAsync(lstDto);
+            return Ok(result);
+        }
 
 
         [HttpGet("{id}")]
@@ -434,7 +448,7 @@ namespace Mix.Portal.Controllers
 
                 if (_database.Type == MixDatabaseType.AdditionalData || _database.Type == MixDatabaseType.GuidAdditionalData)
                 {
-                    queries.Add(new(ParentIdFieldName, request.ParentId));
+                    queries.Add(new(ParentIdFieldName, _database.Type == MixDatabaseType.AdditionalData ? request.ParentId: request.GuidParentId ));
                 }
                 else
                 {
