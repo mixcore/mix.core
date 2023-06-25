@@ -24,10 +24,16 @@ namespace Mix.Shared.Dtos
             {
                 ParentId = parentId;
             }
+            
+            if (Guid.TryParse(request.Query[MixRequestQueryKeywords.ParentId], out Guid guidParentId))
+            {
+                GuidParentId = guidParentId;
+            }
         }
         public bool LoadNestedData { get; set; }
         public List<SearchQueryField>? Queries { get; set; } = new();
         public int? ParentId { get; set; }
+        public Guid? GuidParentId { get; set; }
         public string ParentName { get; set; } = default;
     }
 }

@@ -25,11 +25,20 @@ namespace Mix.Portal.Controllers
 
         [HttpDelete("{parentDbName}/{childDbName}/{parentId}/{childId}")]
         public async Task<ActionResult> DeleteAssociation(
-          string parentDbName, string childDbName, int parentId, int childId)
+          string parentDbName, string childDbName, string parentId, int childId)
         {
+            if (int.TryParse(parentId, out int intParentId))
+            {
+                await Repository.DeleteAsync(
+                m => m.ParentDatabaseName == parentDbName && m.ChildDatabaseName == childDbName && m.ParentId == intParentId && m.ChildId == childId);
+            }
 
-            await Repository.DeleteAsync(
-                m => m.ParentDatabaseName == parentDbName && m.ChildDatabaseName == childDbName && m.ParentId == parentId && m.ChildId == childId);
+            if (Guid.TryParse(parentId, out Guid guidParentId))
+            {
+                await Repository.DeleteAsync(
+                m => m.ParentDatabaseName == parentDbName && m.ChildDatabaseName == childDbName && m.GuidParentId == guidParentId && m.ChildId == childId);
+            }
+
             return Ok();
         }
 

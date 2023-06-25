@@ -16,6 +16,7 @@ using Mix.SignalR.Interfaces;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
+using System.Linq.Expressions;
 
 namespace Mix.Portal.Controllers
 {
@@ -230,7 +231,7 @@ namespace Mix.Portal.Controllers
                 return NotFound();
             }
             string username = _idService.GetClaim(User, MixClaims.Username);
-            
+
             // Not use Reflection to keep title case 
             JObject obj = JObject.FromObject(data);
             foreach (var prop in fields.Properties())
@@ -251,9 +252,6 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult<object>> Delete(int id)
         {
             var data = await _repository.DeleteAsync(id);
-            //Expression<Func<MixDatabaseAssociation, bool>> associationPredicate = m => m.ParentDatabaseName == _tableName && m.ParentId == id;
-            //associationPredicate = associationPredicate.Or(m => m.ChildDatabaseName == _tableName && m.ChildId == id);
-            //await _associationRepository.DeleteManyAsync(associationPredicate);
             var childAssociationsQueries = GetAssociationQueries(parentDatabaseName: _tableName, parentId: id);
             var parentAssociationsQueries = GetAssociationQueries(childDatabaseName: _tableName, childId: id);
             _repository.InitTableName(AssociationTableName);
@@ -430,7 +428,7 @@ namespace Mix.Portal.Controllers
         private async Task<List<QueryField>> BuildSearchQueryAsync(SearchMixDbRequestDto request)
         {
             var queries = BuildSearchPredicate(request).ToList();
-            if (request.ParentId.HasValue)
+            if (request.ParentId.HasValue || request.GuidParentId.HasValue)
             {
                 _database = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == _tableName);
 
@@ -440,8 +438,13 @@ namespace Mix.Portal.Controllers
                 }
                 else
                 {
+                    Expression<Func<MixDatabaseAssociation, bool>> predicate = m =>
+                        m.ParentDatabaseName == request.ParentName
+                                        && m.ChildDatabaseName == _tableName;
+                    predicate = predicate.AndAlsoIf(request.ParentId.HasValue, m => m.ParentId == request.ParentId.Value);
+                    predicate = predicate.AndAlsoIf(request.GuidParentId.HasValue, m => m.GuidParentId == request.GuidParentId.Value);
                     var allowsIds = _cmsUow.DbContext.MixDatabaseAssociation
-                            .Where(m => m.ParentDatabaseName == request.ParentName && m.ParentId == request.ParentId.Value && m.ChildDatabaseName == _tableName)
+                            .Where(predicate)
                             .Select(m => m.ChildId).ToList();
                     queries.Add(new(IdFieldName, Operation.In, allowsIds));
                 }
