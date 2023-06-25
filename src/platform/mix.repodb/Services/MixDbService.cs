@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Mix.Constant.Constants;
 using Mix.Constant.Enums;
@@ -98,7 +99,6 @@ namespace Mix.RepoDb.Services
         #region Methods
 
         #region CRUD
-
         public async Task<PagingResponseModel<JObject>> GetMyData(string tableName, SearchMixDbRequestDto req, string username)
         {
             var paging = new PagingRequestModel()
@@ -139,10 +139,13 @@ namespace Mix.RepoDb.Services
         public async Task<JObject?> GetById(string tableName, int id, bool loadNestedData)
         {
             _repository.InitTableName(tableName);
+            
             var obj = await _repository.GetSingleAsync(id);
             if (obj != null)
             {
-                var data = ReflectionHelper.ParseObject(obj);
+                var data = await ParseDataAsync(tableName, obj);
+                ParseDataAsync(tableName, data);
+
                 if (loadNestedData)
                 {
                     await LoadNestedData(id, data, tableName);
@@ -150,6 +153,52 @@ namespace Mix.RepoDb.Services
                 return data;
             }
             return default;
+        }
+        
+        public async Task<JObject?> GetByParentIdAsync(string tableName, MixContentType parentType, int parentId, bool loadNestedData)
+        {
+            _repository.InitTableName(tableName);
+            
+            var obj = await _repository.GetSingleByParentAsync(parentType, parentId);
+            if (obj != null)
+            {
+                var data = await ParseDataAsync(tableName, obj);
+
+                if (loadNestedData)
+                {
+                    await LoadNestedData(data.Value<int>("id"), data, tableName);
+                }
+                return data;
+            }
+            return default;
+        }
+
+        public async Task<JObject> ParseDataAsync(string tableName, dynamic obj)
+        {
+            var data = ReflectionHelper.ParseObject(obj);
+            var db = await GetMixDatabase(tableName);
+            var jsonColumns = db.Columns.Where(
+                                    c => c.DataType == MixDataType.Json 
+                                            || c.DataType == MixDataType.ArrayMedia 
+                                            || c.DataType == MixDataType.Array)
+                                .ToList();
+            foreach (var col in jsonColumns)
+            {
+                var strValue = data.Value<string>(col.SystemName);
+                if (!string.IsNullOrEmpty(strValue))
+                {
+                    data.Remove(col.SystemName);
+                    if (col.DataType == MixDataType.Json)
+                    {
+                        data.Add(new JProperty(col.SystemName, JObject.Parse(strValue)));
+                    }
+                    else
+                    {
+                        data.Add(new JProperty(col.SystemName, JArray.Parse(strValue)));
+                    }
+                }
+            }
+            return data;
         }
 
 
@@ -197,8 +246,6 @@ namespace Mix.RepoDb.Services
             _repository.InitTableName(tableName);
             foreach (var item in database.Relationships)
             {
-
-
                 List<QueryField> associationQueries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
                 var associations = await _associationRepository.GetListByAsync(associationQueries);
                 if (associations != null && associations.Count > 0)
@@ -207,7 +254,12 @@ namespace Mix.RepoDb.Services
                     _repository.InitTableName(item.DestinateDatabaseName);
                     List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
                     var nestedData = await _repository.GetListByAsync(query);
-                    data.Add(new JProperty(item.DisplayName, ReflectionHelper.ParseArray(nestedData)));
+                    JArray result = new();
+                    foreach (var nd in nestedData)
+                    {
+                        result.Add(await ParseDataAsync(item.DestinateDatabaseName, nd));
+                    }
+                    data.Add(new JProperty(item.DisplayName, result));
                 }
                 else
                 {
@@ -632,7 +684,7 @@ namespace Mix.RepoDb.Services
                 case MixDataType.Json:
                 case MixDataType.Array:
                 case MixDataType.ArrayMedia:
-                    return $"{_databaseConstant.NString}{_databaseConstant.MaxLength}";
+                    return _databaseConstant.Text;
                 case MixDataType.Duration:
                 case MixDataType.Custom:
                 case MixDataType.PhoneNumber:

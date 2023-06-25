@@ -130,10 +130,11 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult<JObject>> GetSingle(int id, [FromQuery] bool loadNestedData)
         {
             var result = await _mixDbService.GetById(_tableName, id, loadNestedData);
+            string username = _idService.GetClaim(User, MixClaims.Username);
             QueueService.PushQueue(
                                     MixQueueTopics.MixBackgroundTasks,
                                     MixQueueActions.MixDbEvent
-                                    , new MixDbEventCommand("GET", _tableName, result));
+                                    , new MixDbEventCommand(username, "GET", _tableName, result));
             return result != default ? Ok(result) : NotFound(id);
         }
 
@@ -193,12 +194,12 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult<object>> Create(JObject dto)
         {
             JObject obj = await ParseDtoToEntityAsync(dto);
-
+            string username = _idService.GetClaim(User, MixClaims.Username);
             var id = await _repository.InsertAsync(obj);
             var resp = await _repository.GetSingleAsync(id);
             var result = resp != null ? ReflectionHelper.ParseObject(resp) : obj;
             QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
-                new MixDbEventCommand("POST", _tableName, result));
+                new MixDbEventCommand(username, "POST", _tableName, result));
             return Ok(result);
         }
 
@@ -207,14 +208,14 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult<object>> Update(int id, [FromBody] JObject dto)
         {
             JObject obj = await ParseDtoToEntityAsync(dto);
-
+            string username = _idService.GetClaim(User, MixClaims.Username);
             var data = await _repository.UpdateAsync(obj);
             if (data != null)
             {
-                var result = await _repository.GetSingleAsync(id);
+                var result = await _mixDbService.GetById(_tableName, id, true);
 
                 QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
-                                            new MixDbEventCommand("PUT", _tableName, obj));
+                                            new MixDbEventCommand(username, "PUT", _tableName, obj));
                 return Ok(ReflectionHelper.ParseObject(result));
             }
             return BadRequest();
@@ -228,7 +229,7 @@ namespace Mix.Portal.Controllers
             {
                 return NotFound();
             }
-
+            string username = _idService.GetClaim(User, MixClaims.Username);
             JObject obj = ReflectionHelper.ParseObject(data);
             foreach (var prop in fields.Properties())
             {
@@ -239,7 +240,7 @@ namespace Mix.Portal.Controllers
             }
             await _repository.UpdateAsync(obj);
             QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
-                new MixDbEventCommand("PATCH", _tableName, obj));
+                new MixDbEventCommand(username, "PATCH", _tableName, obj));
             return Ok();
         }
 
@@ -255,8 +256,9 @@ namespace Mix.Portal.Controllers
             _repository.InitTableName(AssociationTableName);
             await _repository.DeleteAsync(childAssociationsQueries);
             await _repository.DeleteAsync(parentAssociationsQueries);
+            string username = _idService.GetClaim(User, MixClaims.Username);
             QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
-                new MixDbEventCommand("DELETE", _tableName, new(new JProperty("data", id))));
+                new MixDbEventCommand(username, "DELETE", _tableName, new(new JProperty("data", id))));
             return data > 0 ? Ok() : NotFound();
         }
 

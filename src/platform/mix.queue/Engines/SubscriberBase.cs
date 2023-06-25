@@ -112,7 +112,7 @@ namespace Mix.Queue.Engines
                     return;
                 }
 
-                CacheService = GetRequiredService<MixCacheService>();
+                CacheService ??= GetRequiredService<MixCacheService>();
                 await Handler(data);
             }
             catch (Exception ex)

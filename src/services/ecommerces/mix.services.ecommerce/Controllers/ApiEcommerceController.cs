@@ -8,11 +8,14 @@ using Mix.Lib.Base;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
+using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Dtos;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Ecommerce.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.Models;
 using Mix.Services.Ecommerce.Lib.ViewModels;
+using Mix.SignalR.Interfaces;
+using Mix.SignalR.Models;
 using Newtonsoft.Json.Linq;
 using System.Web;
 
@@ -23,6 +26,7 @@ namespace Mix.Services.ecommerce.Controllers
     public class ApiEcommerceController : MixTenantApiControllerBase
     {
         private readonly PaymentConfigurationModel _paymentConfiguration = new();
+        private readonly IPortalHubClientService _portalHub;
         private readonly IEcommerceService _ecommerceService;
         private readonly IOrderService _orderService;
         protected UnitOfWorkInfo<MixCmsContext> CmsUow;
@@ -36,7 +40,8 @@ namespace Mix.Services.ecommerce.Controllers
             IQueueService<MessageQueueModel> queueService,
             IEcommerceService ecommerceService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IOrderService orderService)
+            IOrderService orderService,
+            IPortalHubClientService portalHub)
             : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
             _ecommerceService = ecommerceService;
@@ -44,9 +49,21 @@ namespace Mix.Services.ecommerce.Controllers
             _orderService = orderService;
             var session = configuration.GetSection(MixAppSettingsSection.Payments);
             session.Bind(_paymentConfiguration);
+            _portalHub = portalHub;
         }
 
         #region Routes
+
+        [HttpPost("update-warehouse")]
+        public async Task<ActionResult> UpdateWarehouse([FromBody] UpdateWarehouseDto dto, CancellationToken cancellationToken = default)
+        {
+            var msg = new SignalRMessageModel(dto)
+            {
+                Title = "From update-warehouse"
+            };
+            await _portalHub.SendMessageAsync(msg);
+            return Ok();
+        }
 
         [MixAuthorize]
         [HttpGet]

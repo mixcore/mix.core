@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddMixRepoDb(this IServiceCollection services)
         {
-            services.AddScoped<ICache, MemoryCache>();
+            services.TryAddScoped<ICache, MemoryCache>();
             services.TryAddScoped<IMixDbDataService, MixDbDataService>();
             services.TryAddScoped<IMixDbService, MixDbService>();
             services.TryAddScoped<MixRepoDbRepository>();

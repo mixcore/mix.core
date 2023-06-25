@@ -1,4 +1,5 @@
-﻿using Mix.Heart.Models;
+﻿using Mix.Constant.Enums;
+using Mix.Heart.Models;
 using Mix.Shared.Dtos;
 using Newtonsoft.Json.Linq;
 
@@ -17,5 +18,6 @@ namespace Mix.RepoDb.Interfaces
         public Task<bool> RestoreFromLocal(string name);
 
         public Task<bool> BackupDatabase(string databaseName, CancellationToken cancellationToken = default);
+        Task<JObject?> GetByParentIdAsync(string tableName, MixContentType parentType, int parentId, bool loadNestedData);
     }
 }
