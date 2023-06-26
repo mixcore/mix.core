@@ -2,6 +2,6 @@
 {
     public class MixQuartzTopics
     {
-        public const string BackgroundTasks = "BackgroundTasks";
+        public const string BackgroundTasks = "MixBackgroundTasks";
     }
 }

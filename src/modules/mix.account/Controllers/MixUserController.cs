@@ -136,6 +136,10 @@ namespace Mix.Account.Controllers
                     var data = new JObject(new JProperty("Url", confirmationLink));
                     await _edmService.SendMailWithEdmTemplate("Email Confirmation", "ActiveEmail", data, user.Email);
                 }
+                else
+                {
+                    await _edmService.SendMailWithEdmTemplate("Welcome", "Welcome", ReflectionHelper.ParseObject(user), user.Email);
+                }
                 return Ok(result);
             }
             else
@@ -172,6 +176,7 @@ namespace Mix.Account.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, token);
             string redirectUrl = result.Succeeded ? _authConfigService.AppSettings.ConfirmedEmailUrlSuccess
                 : $"{_authConfigService.AppSettings.ConfirmedEmailUrlFail}?error={result.Errors.First().Description}";
+            await _edmService.SendMailWithEdmTemplate("Welcome", "Welcome", ReflectionHelper.ParseObject(user), user.Email);
             return Redirect(redirectUrl);
         }
 
