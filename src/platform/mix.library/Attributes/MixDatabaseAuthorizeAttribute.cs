@@ -18,17 +18,21 @@ namespace Mix.Lib.Attributes
     public class DatabaseAuthorizeActionFilter : IAuthorizationFilter
     {
         private string _tableName;
+        public string[] UserRoles { get; set; }
         private readonly MixCmsContext _cmsContext;
         protected readonly MixIdentityService _idService;
+        protected readonly MixPermissionService _permissionService;
         private ClaimsPrincipal userPrinciple;
         public DatabaseAuthorizeActionFilter(
             string tableName,
             MixIdentityService idService,
-            MixCmsContext cmsContext)
+            MixCmsContext cmsContext,
+            MixPermissionService permissionService)
         {
             _tableName = tableName;
             _cmsContext = cmsContext;
             _idService = idService;
+            _permissionService = permissionService;
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
@@ -80,8 +84,8 @@ namespace Mix.Lib.Attributes
 
         private bool ValidEnpointPermission(AuthorizationFilterContext context)
         {
-            return _idService.CheckEndpointPermission(
-                    context.HttpContext.User, context.HttpContext.Request.Path, context.HttpContext.Request.Method);
+            return _permissionService.CheckEndpointPermission(
+                    UserRoles, context.HttpContext.Request.Path, context.HttpContext.Request.Method);
         }
 
         private bool ValidToken()
@@ -94,21 +98,21 @@ namespace Mix.Lib.Attributes
         private bool IsInRoles(string method, MixDatabase database)
         {
 
-            var userRoles = _idService.GetClaim(userPrinciple, MixClaims.Role).Split(',', StringSplitOptions.RemoveEmptyEntries)
+            UserRoles = _idService.GetClaim(userPrinciple, MixClaims.Role).Split(',', StringSplitOptions.RemoveEmptyEntries)
                 .Select(r => r.Trim()).ToArray();
 
-            if (userRoles.Any(m => m == MixRoles.SuperAdmin))
+            if (UserRoles.Any(r => r == MixRoles.SuperAdmin || r == $"{MixRoles.Owner}-{_idService.CurrentTenant.Id}"))
             {
                 return true;
             }
 
             switch (method)
             {
-                case "GET": return CheckUserInRoles(database.ReadPermissions, userRoles);
-                case "POST": return CheckUserInRoles(database.CreatePermissions, userRoles);
+                case "GET": return CheckUserInRoles(database.ReadPermissions, UserRoles);
+                case "POST": return CheckUserInRoles(database.CreatePermissions, UserRoles);
                 case "PATCH":
-                case "PUT": return CheckUserInRoles(database.ModifiedBy, userRoles);
-                case "DELETE": return CheckUserInRoles(database.DeletePermissions, userRoles);
+                case "PUT": return CheckUserInRoles(database.UpdatePermissions, UserRoles);
+                case "DELETE": return CheckUserInRoles(database.DeletePermissions, UserRoles);
                 default:
                     return false;
             }
