@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Models.Common;
@@ -57,10 +58,64 @@ namespace Mix.Lib.Base
         }
 
 
-        protected virtual Task PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties, CancellationToken cancellationToken = default)
+        protected virtual async Task PatchHandler(JObject obj, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return RestApiService.PatchHandler(id, data, properties, cancellationToken);
+            try
+            {
+                var id = obj.Value<TPrimaryKey>("id");
+                List<EntityPropertyModel> properties = ParseObjectToProperties(obj);
+                var data = await Repository.GetSingleAsync(id);
+                if (data == null)
+                {
+                    throw new MixException(MixErrorStatus.NotFound);
+                }
+                await RestApiService.PatchHandler(id, data, properties, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                if (ex is not MixException)
+                {
+                    throw new MixException(MixErrorStatus.ServerError, ex);
+                }
+            }
+        }
+
+        protected virtual async Task PatchManyHandler(IEnumerable<JObject> lstObj,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            try
+            {
+                foreach (var obj in lstObj)
+                {
+                    await PatchHandler(obj);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is not MixException)
+                {
+                    throw new MixException(MixErrorStatus.ServerError, ex);
+                }
+            }
+        }
+
+        private List<EntityPropertyModel> ParseObjectToProperties(JObject obj)
+        {
+            List<EntityPropertyModel> properties = new();
+            foreach (var prop in obj.Properties())
+            {
+                if (prop.Name != "id")
+                {
+                    properties.Add(new()
+                    {
+                        PropertyName = prop.Name,
+                        PropertyValue = prop.Value.ToString()
+                    });
+                }
+            }
+            return properties;
         }
 
         protected virtual Task SaveManyHandler(List<TView> data, CancellationToken cancellationToken = default)

@@ -72,17 +72,20 @@ namespace Mix.Lib.Base
             throw new MixException(MixErrorStatus.NotFound, "Not Found");
         }
 
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(TPrimaryKey id, [FromBody] IEnumerable<EntityPropertyModel> properties)
+        [HttpPatch]
+        public async Task<IActionResult> Patch([FromBody] JObject obj)
         {
-            var data = await Repository.GetSingleAsync(id);
-            if (data == null)
-            {
-                return NotFound();
-            }
-            await PatchHandler(id, data, properties);
-            var result = await GetById(id);
-            return Ok(result);
+            await PatchHandler(obj);
+            return Ok();
+        }
+
+
+        [HttpPatch("patch-many")]
+        public async Task<IActionResult> PatchMany([FromBody] IEnumerable<JObject> lstObj,
+                CancellationToken cancellationToken = default)
+        {
+            await PatchManyHandler(lstObj, cancellationToken);
+            return Ok();
         }
 
 
