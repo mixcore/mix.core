@@ -9,6 +9,11 @@ namespace Mix.Lib.Helpers
 {
     public class MixCmsHelper
     {
+        public static bool CheckStaticFileRequest(string path)
+        {
+            return !string.IsNullOrEmpty(path) && !string.IsNullOrEmpty(Path.GetExtension(path));
+        }
+
         public static ExpressionMethod ParseExpressionMethod(MixCompareOperator? compareOperator)
         {
             switch (compareOperator)
@@ -53,6 +58,7 @@ namespace Mix.Lib.Helpers
                 _ => keyword
             };
         }
+
         public static IHostBuilder CreateHostBuilder<TStartup>(string[] args) where TStartup : class
         {
             var mixContentFolder = new DirectoryInfo(MixFolders.MixContentFolder);

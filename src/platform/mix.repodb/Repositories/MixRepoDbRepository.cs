@@ -373,9 +373,7 @@ namespace Mix.RepoDb.Repositories
             }
             catch (Exception ex)
             {
-                await MixLogService.LogExceptionAsync(ex);
-                RollbackTransaction();
-                return default;
+                throw new MixException(MixErrorStatus.Badrequest, ex);
             }
         }
 

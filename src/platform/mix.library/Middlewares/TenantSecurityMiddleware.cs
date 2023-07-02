@@ -25,26 +25,38 @@ namespace Mix.Lib.Middlewares
             }
             else
             {
-
-                if (mixTenantService.AllTenants == null)
+                if (MixCmsHelper.CheckStaticFileRequest(context.Request.Path))
                 {
-                    await mixTenantService.Reload();
+                    await _next.Invoke(context);
                 }
-
-                var currentTenant = context.Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
-                if (currentTenant == null || currentTenant.Domains.All(m => m.Host != context.Request.Headers.Host))
+                else
                 {
-                    currentTenant = mixTenantService.GetTenant(context.Request.Headers.Host);
-                    context.Session.SetInt32(MixRequestQueryKeywords.TenantId, currentTenant.Id);
-                    context.Session.Put(MixRequestQueryKeywords.Tenant, currentTenant);
-                    mixEndpointService.SetDefaultDomain($"https://{currentTenant.PrimaryDomain}");
-                }
-                if (configService.Configs == null)
-                {
-                    await configService.Reload();
-                }
+                    if (mixTenantService.AllTenants == null)
+                    {
+                        await mixTenantService.Reload();
+                    }
 
-                await _next.Invoke(context);
+                    var currentTenant = context.Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
+                    if (currentTenant == null || currentTenant.Domains.All(m => m.Host != context.Request.Headers.Host))
+                    {
+                        currentTenant = mixTenantService.GetTenant(context.Request.Headers.Host);
+                        context.Session.SetInt32(MixRequestQueryKeywords.TenantId, currentTenant.Id);
+                        context.Session.Put(MixRequestQueryKeywords.Tenant, currentTenant);
+                        mixEndpointService.SetDefaultDomain($"https://{currentTenant.PrimaryDomain}");
+                    }
+
+                    if (configService.Configs == null)
+                    {
+                        await configService.Reload();
+                    }
+
+                    if (permissionService.RoleEndpoints == null)
+                    {
+                        await permissionService.Reload();
+                    }
+
+                    await _next.Invoke(context);
+                }
             }
         }
     }

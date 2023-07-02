@@ -58,10 +58,10 @@ namespace Mix.Service.Services
                         Status = MixContentStatus.Published
                     };
                     ReflectionHelper.Map(request, log);
-
+                    log.Success = request.StatusCode < 300;
                     _dbContext.AuditLog.Add(log);
                     await _dbContext.SaveChangesAsync();
-                    var msgType = request.Exception == null ? MessageType.Success : MessageType.Error;
+                    var msgType = request.StatusCode < 300 ? MessageType.Success : MessageType.Error;
                     await SendMessage(request.Endpoint, request.Exception ?? request.Body, msgType: msgType);
                 }
             }

@@ -19,35 +19,56 @@ namespace Mix.Lib.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            //await _next(context);
-
-            //Copy a pointer to the original response body stream
-            _auditlogService = context.RequestServices.GetService(typeof(IAuditLogService)) as AuditLogService;
-
-            await LogRequest(context);
-
-
-            //Copy a pointer to the original response body stream
-            var originalBodyStream = context.Response.Body;
-
-            //Create a new memory stream...
-            using (var responseBody = new MemoryStream())
+            if (CheckAuditLogPath(context.Request.Path))
             {
-                //...and use that for the temporary response body
-                context.Response.Body = responseBody;
+                //Copy a pointer to the original response body stream
+                _auditlogService = context.RequestServices.GetService(typeof(IAuditLogService)) as AuditLogService;
 
-                //Continue down the Middleware pipeline, eventually returning to this class
+                await LogRequest(context);
+
+
+                //Copy a pointer to the original response body stream
+                var originalBodyStream = context.Response.Body;
+
+                //Create a new memory stream...
+                using (var responseBody = new MemoryStream())
+                {
+                    //...and use that for the temporary response body
+                    context.Response.Body = responseBody;
+
+                    //Continue down the Middleware pipeline, eventually returning to this class
+                    await _next(context);
+
+                    //Format the response from the server
+                    await LogResponse(context);
+
+                    //Copy the contents of the new memory stream (which contains the response) to the original stream, which is then returned to the client.
+                    await responseBody.CopyToAsync(originalBodyStream);
+
+                    _auditlogService.QueueRequest(_auditlogData);
+                }
+            }
+            else
+            {
                 await _next(context);
-
-                //Format the response from the server
-                await LogResponse(context);
-
-                //Copy the contents of the new memory stream (which contains the response) to the original stream, which is then returned to the client.
-                await responseBody.CopyToAsync(originalBodyStream);
-
-                _auditlogService.QueueRequest(_auditlogData);
             }
         }
+
+        private bool CheckAuditLogPath(string path)
+        {
+            if(MixCmsHelper.CheckStaticFileRequest(path))
+            {
+                return false;
+            }
+
+            // Not log Signalr Hub 
+            if (path.IndexOf("/hub") == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
         private async Task LogRequest(HttpContext context)
         {
             var idService = context.RequestServices.GetService(typeof(MixIdentityService)) as MixIdentityService;
@@ -64,6 +85,7 @@ namespace Mix.Lib.Middlewares
             if (context.Response.Body.CanSeek)
             {
                 var response = await FormatResponse(context.Response);
+                _auditlogData.StatusCode = context.Response.StatusCode;
                 _auditlogData.Response = response.IsJsonString() ? JObject.Parse(response) : new JObject(new JProperty("data", response));
             }
         }

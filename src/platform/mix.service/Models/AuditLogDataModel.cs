@@ -13,6 +13,7 @@ namespace Mix.Service.Models
 {
     public class AuditLogDataModel
     {
+        public int StatusCode { get; set; }
         public string RequestIp { get; set; }
         public string Endpoint { get; set; }
         public string Method { get; set; }
