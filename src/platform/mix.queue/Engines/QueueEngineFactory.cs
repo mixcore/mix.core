@@ -14,7 +14,7 @@ namespace Mix.Queue.Engines
     {
         public static IQueuePublisher<T> CreatePublisher<T>(
             MixQueueProvider provider, QueueSetting queueSetting, string topicId,
-            MixMemoryMessageQueue<T> queue = null)
+            MixQueueMessages<T> mixQueueMessages = null)
             where T : MessageQueueModel
         {
             IQueuePublisher<T> publisher = default;
@@ -29,7 +29,7 @@ namespace Mix.Queue.Engines
                     break;
 
                 case MixQueueProvider.MIX:
-                    publisher = new MixQueuePublisher<T>(queueSetting, topicId, queue);
+                    publisher = new MixQueuePublisher<T>(queueSetting, topicId, mixQueueMessages);
                     break;
             }
             return publisher;
@@ -41,7 +41,7 @@ namespace Mix.Queue.Engines
             string topicId,
             string subscriptionId,
             Func<MessageQueueModel, Task> handler,
-            MixMemoryMessageQueue<MessageQueueModel> queueService)
+            MixQueueMessages<MessageQueueModel> queueService)
         {
             IQueueSubscriber subscriber = default;
             switch (provider)

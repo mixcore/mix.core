@@ -12,14 +12,16 @@ namespace Mix.Queue.Models
         public string Data { get; set; }
         public string DataTypeFullName { get; set; }
 
+        public int TenantId { get; set; }
         public List<MixSubscriptionModel> Subscriptions { get; set; } = new();
 
-        public MessageQueueModel()
+        public MessageQueueModel(int tenantId)
         {
-
+            TenantId = tenantId;
         }
-        public MessageQueueModel(string topicId, string action, object data = null)
+        public MessageQueueModel(int tenantId, string topicId, string action, object data = null)
         {
+            TenantId = tenantId;
             TopicId = topicId;
             Action = action;
 

@@ -64,7 +64,7 @@ namespace Mix.Portal.Controllers
         [HttpGet("backup/{name}")]
         public ActionResult Backup(string name)
         {
-            var msg = new MessageQueueModel(MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Backup, name);
+            var msg = new MessageQueueModel(CurrentTenant.Id, MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Backup, name);
             QueueService.PushQueue(msg);
             return Ok();
         }
@@ -73,7 +73,7 @@ namespace Mix.Portal.Controllers
         [HttpGet("restore/{name}")]
         public ActionResult RestoreAsync(string name)
         {
-            var msg = new MessageQueueModel(MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Restore, name);
+            var msg = new MessageQueueModel(CurrentTenant.Id, MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Restore, name);
             QueueService.PushQueue(msg);
             return Ok();
         }
@@ -82,7 +82,7 @@ namespace Mix.Portal.Controllers
         [HttpGet("update/{name}")]
         public ActionResult UpdateAsync(string name)
         {
-            var msg = new MessageQueueModel(MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Update, name);
+            var msg = new MessageQueueModel(CurrentTenant.Id, MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Update, name);
             QueueService.PushQueue(msg);
             return Ok();
         }

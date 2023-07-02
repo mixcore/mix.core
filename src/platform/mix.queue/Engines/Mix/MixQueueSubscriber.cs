@@ -14,14 +14,14 @@ namespace Mix.Queue.Engines.MixQueue
         private MixTopicModel _topic;
         private readonly MixQueueSetting _queueSetting;
         private readonly Func<MessageQueueModel, Task> _messageHandler;
-        private readonly MixMemoryMessageQueue<MessageQueueModel> _queue;
+        private readonly MixQueueMessages<MessageQueueModel> _queue;
         protected bool Processing { get; private set; }
         public MixQueueSubscriber(
             QueueSetting queueSetting,
             string topicId,
             string subscriptionId,
             Func<MessageQueueModel, Task> messageHandler,
-            MixMemoryMessageQueue<MessageQueueModel> queue)
+            MixQueueMessages<MessageQueueModel> queue)
         {
             _queueSetting = queueSetting as MixQueueSetting;
             _queue = queue;
@@ -45,20 +45,23 @@ namespace Mix.Queue.Engines.MixQueue
         {
             Task.Run(async () =>
             {
-                while (!cancellationToken.IsCancellationRequested && !Processing)
+                while (!cancellationToken.IsCancellationRequested)
                 {
-                    _topic = _queue.GetTopic(_topic.Id);
-                    var inQueueItems = _topic.ConsumeQueue(_subscriptionId, 10);
-                    if (inQueueItems.Count > 0)
+                    if (!Processing)
                     {
                         Processing = true;
-                        foreach (var msg in inQueueItems)
+                        _topic = _queue.GetTopic(_topic.Id);
+                        var inQueueItems = _topic.ConsumeQueue(_subscriptionId, 10);
+                        if (inQueueItems.Count > 0)
                         {
-                            await _messageHandler.Invoke(msg);
+                            foreach (var msg in inQueueItems)
+                            {
+                                await _messageHandler.Invoke(msg);
+                            }
                         }
                         Processing = false;
+                        await Task.Delay(1000, cancellationToken);
                     }
-                    await Task.Delay(1000, cancellationToken);
                 }
             }, cancellationToken);
 

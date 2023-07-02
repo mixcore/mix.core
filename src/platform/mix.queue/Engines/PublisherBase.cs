@@ -18,15 +18,15 @@ namespace Mix.Queue.Engines
         private readonly IQueueService<MessageQueueModel> _queueService;
         private List<IQueuePublisher<MessageQueueModel>> _publishers;
         private readonly IConfiguration _configuration;
-        private readonly MixMemoryMessageQueue<MessageQueueModel> _queue;
+        private readonly MixQueueMessages<MessageQueueModel> _queue;
         private const int MaxConsumeLength = 100;
         private readonly string _topicId;
-
+        private MixQueueProvider _provider;
         protected PublisherBase(
             string topicId,
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
-            MixMemoryMessageQueue<MessageQueueModel> queue)
+            MixQueueMessages<MessageQueueModel> queue)
         {
             _queueService = queueService;
             _configuration = configuration;
@@ -36,16 +36,16 @@ namespace Mix.Queue.Engines
 
         private List<IQueuePublisher<MessageQueueModel>> CreatePublisher(
             string topicName,
-            MixMemoryMessageQueue<MessageQueueModel> queue)
+            MixQueueMessages<MessageQueueModel> queue)
         {
             try
             {
                 var queuePublishers = new List<IQueuePublisher<MessageQueueModel>>();
                 var providerSetting = _configuration["MessageQueueSetting:Provider"];
 
-                var provider = Enum.Parse<MixQueueProvider>(providerSetting);
+                _provider = Enum.Parse<MixQueueProvider>(providerSetting);
 
-                switch (provider)
+                switch (_provider)
                 {
                     case MixQueueProvider.AZURE:
                         var azureSettingPath = _configuration.GetSection("MessageQueueSetting:AzureServiceBus");
@@ -54,7 +54,7 @@ namespace Mix.Queue.Engines
 
                         queuePublishers.Add(
                             QueueEngineFactory.CreatePublisher<MessageQueueModel>(
-                                provider, azureSetting, topicName));
+                                _provider, azureSetting, topicName));
                         break;
                     case MixQueueProvider.GOOGLE:
                         var googleSettingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
@@ -64,7 +64,7 @@ namespace Mix.Queue.Engines
 
                         queuePublishers.Add(
                             QueueEngineFactory.CreatePublisher<MessageQueueModel>(
-                                provider, googleSetting, topicName));
+                                _provider, googleSetting, topicName));
                         break;
                     case MixQueueProvider.MIX:
                         var mixSettingPath = _configuration.GetSection("MessageQueueSetting:Mix");
@@ -72,7 +72,7 @@ namespace Mix.Queue.Engines
                         mixSettingPath.Bind(mixSetting);
                         queuePublishers.Add(
                            QueueEngineFactory.CreatePublisher(
-                               provider, mixSetting, topicName, queue));
+                               _provider, mixSetting, topicName, queue));
 
                         break;
                 }
@@ -89,13 +89,22 @@ namespace Mix.Queue.Engines
         {
             return Task.Run(async () =>
             {
+                bool isProcessing = false;
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    var inQueueItems = _queueService.ConsumeQueue(MaxConsumeLength, _topicId);
-
-                    if (inQueueItems.Any() && _publishers != null)
+                    if (!isProcessing)
                     {
-                        Parallel.ForEach(_publishers, async publisher => { await publisher.SendMessages(inQueueItems); });
+                        isProcessing = true;
+                        var inQueueItems = _queueService.ConsumeQueue(MaxConsumeLength, _topicId);
+
+                        if (inQueueItems.Any() && _publishers != null)
+                        {
+                            foreach (var publisher in _publishers)
+                            {
+                                await publisher.SendMessages(inQueueItems);
+                            }
+                        }
+                        isProcessing = false;
                     }
                     await Task.Delay(1000, cancellationToken);
                 }

@@ -25,7 +25,7 @@ namespace Mix.SignalR.Hubs
             var obj = ReflectionHelper.ParseStringToObject<MixDbCommandModel>(message);
             obj.RequestedBy = Context.User?.Identity?.Name;
             obj.ConnectionId = Context.ConnectionId;
-            _queueService.PushQueue(MixQueueTopics.MixDbCommand, MixDbCommandQueueActions.Create, obj);
+            _queueService.PushQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueActions.Create, obj);
         }
     }
 }

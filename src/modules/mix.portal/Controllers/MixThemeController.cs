@@ -179,13 +179,16 @@ namespace Mix.Portal.Controllers
         protected override PagingResponseModel<MixThemeViewModel> ParseSearchResult(SearchRequestDto req, PagingResponseModel<MixThemeViewModel> result)
         {
             var data = base.ParseSearchResult(req, result);
-            int.TryParse(_configService.GetConfig(MixConfigurationNames.ActiveThemeId, Culture.Specificulture, "0"), out var activeId);
-            foreach (var item in data.Items)
+            var activeId = _configService.GetConfig<int?>(MixConfigurationNames.ActiveThemeId, Culture.Specificulture).GetAwaiter().GetResult();
+            if (activeId.HasValue)
             {
-                if (activeId == item.Id)
+                foreach (var item in data.Items)
                 {
-                    item.IsActive = true;
-                    break;
+                    if (activeId == item.Id)
+                    {
+                        item.IsActive = true;
+                        break;
+                    }
                 }
             }
             return data;

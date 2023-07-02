@@ -23,7 +23,7 @@ namespace Mix.Lib.Subscribers
         public MixDbCommandSubscriber(
             IServiceProvider serviceProvider,
             IConfiguration configuration,
-            MixMemoryMessageQueue<MessageQueueModel> queueService)
+            MixQueueMessages<MessageQueueModel> queueService)
             : base(TopicId, string.Empty, serviceProvider, configuration, queueService)
         {
         }

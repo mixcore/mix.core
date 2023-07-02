@@ -51,7 +51,7 @@ namespace Mix.Lib.Services
                 From = from,
                 To = to
             };
-            _queueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.SendMail, msg);
+            _queueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.SendMail, msg);
         }
     }
 }

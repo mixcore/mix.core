@@ -18,7 +18,8 @@ namespace Mix.Scheduler.Jobs
         public override Task ExecuteHandler(IJobExecutionContext context)
         {
             string objData = context.Trigger.JobDataMap.GetString("data") ?? "{}";
-            var msg = new MessageQueueModel()
+            int tenantId = context.Trigger.JobDataMap.GetInt("tenantId");
+            var msg = new MessageQueueModel(tenantId)
             {
                 Success = true,
                 TopicId = context.Trigger.JobDataMap.GetString("topic"),

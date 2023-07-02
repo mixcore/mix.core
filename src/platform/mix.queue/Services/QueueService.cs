@@ -52,7 +52,7 @@ namespace Mix.Queue.Services
             {
                 _queues.TryAdd(topicId, new ConcurrentQueue<MessageQueueModel>());
             }
-            return _queues.ContainsKey(topicId) ? _queues[topicId] : default;
+            return _queues[topicId];
         }
 
         public void PushQueue(MessageQueueModel model)
@@ -64,15 +64,15 @@ namespace Mix.Queue.Services
             }
         }
 
-        public void PushQueue(string topicId, string action, object data)
+        public void PushQueue(int tenantId, string topicId, string action, object data)
         {
-            var msg = new MessageQueueModel(topicId, action, data);
+            var msg = new MessageQueueModel(tenantId, topicId, action, data);
             PushQueue(msg);
         }
 
-        public void PushMessage<T>(T data, string action, bool success)
+        public void PushMessage<T>(int tenantId, T data, string action, bool success)
         {
-            var msg = new MessageQueueModel()
+            var msg = new MessageQueueModel(tenantId)
             {
                 Action = action,
                 Success = success,

@@ -9,12 +9,13 @@ namespace Mix.Lib.Middlewares
     public class AuditlogMiddleware
     {
         private readonly RequestDelegate _next;
-        private AuditLogService _auditlogService;
+        private IAuditLogService _auditlogService;
         private AuditLogDataModel _auditlogData;
-        public AuditlogMiddleware(RequestDelegate next)
+        public AuditlogMiddleware(RequestDelegate next, IAuditLogService auditlogService)
         {
             _next = next;
             _auditlogData = new();
+            _auditlogService = auditlogService;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -22,8 +23,6 @@ namespace Mix.Lib.Middlewares
             if (CheckAuditLogPath(context.Request.Path))
             {
                 //Copy a pointer to the original response body stream
-                _auditlogService = context.RequestServices.GetService(typeof(IAuditLogService)) as AuditLogService;
-
                 await LogRequest(context);
 
 
@@ -56,17 +55,11 @@ namespace Mix.Lib.Middlewares
 
         private bool CheckAuditLogPath(string path)
         {
-            if(MixCmsHelper.CheckStaticFileRequest(path))
+            if (path.IndexOf("/api") == 0 && path.IndexOf("audit-log") < 0)
             {
-                return false;
+                return true;
             }
-
-            // Not log Signalr Hub 
-            if (path.IndexOf("/hub") == 0)
-            {
-                return false;
-            }
-            return true;
+            return false;
         }
 
         private async Task LogRequest(HttpContext context)

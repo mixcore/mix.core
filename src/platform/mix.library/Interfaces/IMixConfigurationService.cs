@@ -8,6 +8,6 @@
 
         public Task Set(string name, string content, string culture, int cultureId, UnitOfWorkInfo<MixCmsContext> uow);
 
-        public string GetConfig(string name, string culture, string defaultValue = default);
+        public Task<T> GetConfig<T>(string name, string culture, T defaultValue = default);
     }
 }

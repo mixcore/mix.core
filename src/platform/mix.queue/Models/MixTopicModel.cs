@@ -58,13 +58,18 @@ namespace Mix.Queue.Models
             while (i <= length && _messages.Any(m => m.TopicId == subscription.TopicId))
             {
                 MessageQueueModel data = _messages.First(m => m.TopicId == subscription.TopicId);
-                data.Subscriptions.Add(subscription);
+                if (!data.Subscriptions.Any(m => m.Id == subscription.Id))
+                {
+                    data.Subscriptions.Add(subscription);
+                    result.Add(data);
+                }
+
                 if (data.Subscriptions.Count == Subscriptions.Count)
                 {
                     _messages.TryDequeue(out _);
                 }
 
-                result.Add(data);
+                
                 i++;
             }
             return result;

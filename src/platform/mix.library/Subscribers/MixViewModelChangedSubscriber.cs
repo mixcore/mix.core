@@ -16,7 +16,7 @@ namespace Mix.Lib.Subscribers
         public MixViewModelChangedSubscriber(
             IServiceProvider serviceProvider,
             IConfiguration configuration,
-            MixMemoryMessageQueue<MessageQueueModel> queueService,
+            MixQueueMessages<MessageQueueModel> queueService,
             IMixTenantService mixTenantService) : base(TopicId, MixModuleNames.Mixcore, serviceProvider, configuration, queueService)
         {
             _mixTenantService = mixTenantService;

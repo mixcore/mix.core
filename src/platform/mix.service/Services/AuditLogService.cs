@@ -26,7 +26,7 @@ namespace Mix.Service.Services
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IQueueService<MessageQueueModel> _queueService;
         private AuditLogDbContext _dbContext;
-
+        public int TenantId { get; set; }
         public AuditLogService(IServiceScopeFactory serviceScopeFactory, IQueueService<MessageQueueModel> queueService, ILogStreamHubClientService logStreamHub)
         {
             _serviceScopeFactory = serviceScopeFactory;
@@ -74,7 +74,7 @@ namespace Mix.Service.Services
         public void QueueRequest(AuditLogDataModel request)
         {
             var cmd = new LogAuditLogCommand(request);
-            _queueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.AuditLog, cmd);
+            _queueService.PushQueue(TenantId, MixQueueTopics.MixBackgroundTasks, MixQueueActions.AuditLog, cmd);
         }
 
         #region Helpers

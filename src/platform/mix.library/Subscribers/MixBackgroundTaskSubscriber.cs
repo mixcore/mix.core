@@ -23,7 +23,7 @@ namespace Mix.Lib.Subscribers
         public MixBackgroundTaskSubscriber(
             IServiceProvider serviceProvider,
             IConfiguration configuration,
-            MixMemoryMessageQueue<MessageQueueModel> queueService,
+            MixQueueMessages<MessageQueueModel> queueService,
             IAuditLogService auditLogService,
             IPortalHubClientService portalHub,
             MixDbEventService mixDbEventService)

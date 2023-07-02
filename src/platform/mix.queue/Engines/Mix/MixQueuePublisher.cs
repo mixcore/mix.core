@@ -10,13 +10,11 @@ namespace Mix.Queue.Engines.MixQueue
     internal class MixQueuePublisher<T> : IQueuePublisher<T>
         where T : MessageQueueModel
     {
-        private readonly MixMemoryMessageQueue<T> _queue;
+        private readonly MixQueueMessages<T> _queue;
         private MixTopicModel _topic;
-        private readonly MixQueueSetting _queueSetting;
 
-        public MixQueuePublisher(QueueSetting queueSetting, string topicName, MixMemoryMessageQueue<T> queue)
+        public MixQueuePublisher(QueueSetting queueSetting, string topicName, MixQueueMessages<T> queue)
         {
-            _queueSetting = queueSetting as MixQueueSetting;
             _queue = queue;
             InitializeQueue(topicName);
         }

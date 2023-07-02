@@ -9,7 +9,7 @@ namespace Mix.Lib.Services
     {
         private readonly DatabaseService _databaseService;
 
-        public List<MixConfigurationContentViewModel> Configs { get; private set; }
+        public List<MixConfigurationContentViewModel> Configs { get; set; }
 
         public MixConfigurationService(IHttpContextAccessor httpContextAccessor, DatabaseService databaseService, MixCacheService cacheService) 
             : base(httpContextAccessor, cacheService)
@@ -57,10 +57,14 @@ namespace Mix.Lib.Services
             }
         }
 
-        public string GetConfig(string name, string culture, string defaultValue = default)
+        public async Task<T> GetConfig<T>(string name, string culture, T defaultValue = default)
         {
+            if (Configs == null)
+            {
+                await Reload();
+            }
             var config = Configs?.FirstOrDefault(m => m.Specificulture == culture && m.SystemName == name);
-            return config != null ? config.Content : defaultValue;
+            return config != null ? config.GetValue<T>(): defaultValue;
         }
     }
 }

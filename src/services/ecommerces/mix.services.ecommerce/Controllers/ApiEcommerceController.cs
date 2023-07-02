@@ -149,7 +149,7 @@ namespace Mix.Services.ecommerce.Controllers
                 return BadRequest();
             }
             var url = await _ecommerceService.CheckoutGuest(gateway.Value, cart, cancellationToken);
-            QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.PlacedOrder, cart);
+            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.PlacedOrder, cart);
             return !string.IsNullOrEmpty(url) ? Ok(new JObject(new JProperty("url", url))) : BadRequest();
         }
 
@@ -171,7 +171,7 @@ namespace Mix.Services.ecommerce.Controllers
                 ? $"{_paymentConfiguration.Urls.PaymentSuccessUrl}?id={orderTempId}"
                 : $"{_paymentConfiguration.Urls.PaymentFailUrl}?id={orderTempId}";
 
-            QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.PaymentResponse, result);
+            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.PaymentResponse, result);
             return Redirect(url);
         }
 

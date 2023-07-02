@@ -19,7 +19,7 @@ namespace Mix.Lib.Services
         {
             return $"{domain}/" +
                 $"{MixFolders.SiteContentAssetsFolder}/" +
-                $"{_configService.GetConfig(MixConfigurationNames.ThemeFolder, culture)}";
+                $"{_configService.GetConfig<string>(MixConfigurationNames.ThemeFolder, culture)}";
         }
 
         public MixTenantSystemModel GetCurrentTenant()

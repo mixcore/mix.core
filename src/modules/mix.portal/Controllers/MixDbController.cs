@@ -125,7 +125,7 @@ namespace Mix.Portal.Controllers
             var file = MixCmsHelper.ExportJObjectToExcel(result.Items.ToList(), _tableName, exportPath, filename, null);
             return Ok(file);
         }
-        
+
         [HttpPost("import")]
         public async Task<ActionResult> Import([FromForm] IFormFile file)
         {
@@ -146,7 +146,7 @@ namespace Mix.Portal.Controllers
         {
             var result = await _mixDbService.GetById(_tableName, id, loadNestedData);
             string username = _idService.GetClaim(User, MixClaims.Username);
-            QueueService.PushQueue(
+            QueueService.PushQueue( CurrentTenant.Id,
                                     MixQueueTopics.MixBackgroundTasks,
                                     MixQueueActions.MixDbEvent
                                     , new MixDbEventCommand(username, "GET", _tableName, result));
@@ -200,7 +200,7 @@ namespace Mix.Portal.Controllers
                 Body = JObject.FromObject(dto),
                 MixDbName = _tableName
             };
-            QueueService.PushQueue(MixQueueTopics.MixDbCommand, MixDbCommandQueueActions.Create, obj);
+            QueueService.PushQueue( CurrentTenant.Id, MixQueueTopics.MixDbCommand, MixDbCommandQueueActions.Create, obj);
 
             return Ok();
         }
@@ -213,7 +213,7 @@ namespace Mix.Portal.Controllers
             var id = await _repository.InsertAsync(obj);
             var resp = await _repository.GetSingleAsync(id);
             var result = resp != null ? ReflectionHelper.ParseObject(resp) : obj;
-            QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
+            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
                 new MixDbEventCommand(username, "POST", _tableName, result));
             return Ok(result);
         }
@@ -229,7 +229,7 @@ namespace Mix.Portal.Controllers
             {
                 var result = await _mixDbService.GetById(_tableName, id, true);
 
-                QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
+                QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
                                             new MixDbEventCommand(username, "PUT", _tableName, obj));
                 return Ok(ReflectionHelper.ParseObject(result));
             }
@@ -257,7 +257,7 @@ namespace Mix.Portal.Controllers
                 }
             }
             await _repository.UpdateAsync(obj);
-            QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
+            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
                 new MixDbEventCommand(username, "PATCH", _tableName, obj));
             return Ok();
         }
@@ -272,7 +272,7 @@ namespace Mix.Portal.Controllers
             await _repository.DeleteAsync(childAssociationsQueries);
             await _repository.DeleteAsync(parentAssociationsQueries);
             string username = _idService.GetClaim(User, MixClaims.Username);
-            QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
+            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
                 new MixDbEventCommand(username, "DELETE", _tableName, new(new JProperty("data", id))));
             return data > 0 ? Ok() : NotFound();
         }
@@ -448,7 +448,7 @@ namespace Mix.Portal.Controllers
 
                 if (_database.Type == MixDatabaseType.AdditionalData || _database.Type == MixDatabaseType.GuidAdditionalData)
                 {
-                    queries.Add(new(ParentIdFieldName, _database.Type == MixDatabaseType.AdditionalData ? request.ParentId: request.GuidParentId ));
+                    queries.Add(new(ParentIdFieldName, _database.Type == MixDatabaseType.AdditionalData ? request.ParentId : request.GuidParentId));
                 }
                 else
                 {
@@ -515,7 +515,7 @@ namespace Mix.Portal.Controllers
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword))
             {
                 var searchColumns = req.SearchColumns.Replace(" ", string.Empty).Split(',');
-                var operation = ParseSearchOperation(req.SearchMethod);
+
                 var keyword = ParseSearchKeyword(req.SearchMethod, req.Keyword);
 
                 foreach (var item in searchColumns)

@@ -15,9 +15,9 @@ namespace Mix.Service.Services
             CacheService = cacheService;
         }
 
-        private MixTenantSystemModel _currentTenant;
+        protected MixTenantSystemModel? _currentTenant;
 
-        protected MixTenantSystemModel CurrentTenant
+        protected MixTenantSystemModel? CurrentTenant
         {
             get
             {
@@ -29,11 +29,20 @@ namespace Mix.Service.Services
                 var httpContext = HttpContextAccessor.HttpContext;
                 if (httpContext is not null)
                 {
-                    _currentTenant = httpContext.Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
+                    _currentTenant = httpContext.Session.Get<MixTenantSystemModel?>(MixRequestQueryKeywords.Tenant);
                 }
 
                 return _currentTenant;
             }
         }
+        
+        public void SetTenantId(int tenantId)
+        {
+            _currentTenant = new()
+            {
+                Id = tenantId
+            };
+        }
+
     }
 }

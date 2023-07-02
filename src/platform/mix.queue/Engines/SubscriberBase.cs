@@ -20,7 +20,7 @@ namespace Mix.Queue.Engines
     {
         private readonly IQueueSubscriber _subscriber;
         private readonly IConfiguration _configuration;
-        private readonly MixMemoryMessageQueue<MessageQueueModel> _queueService;
+        private readonly MixQueueMessages<MessageQueueModel> _queueService;
         private readonly string _topicId;
 
         protected MixCacheService CacheService;
@@ -31,7 +31,7 @@ namespace Mix.Queue.Engines
             string moduleName,
             IServiceProvider servicesProvider,
             IConfiguration configuration,
-            MixMemoryMessageQueue<MessageQueueModel> queueService)
+            MixQueueMessages<MessageQueueModel> queueService)
         {
             _configuration = configuration;
             _queueService = queueService;

@@ -20,7 +20,7 @@ namespace Mix.RepoDb.Subscribers
         private IMixDbService _mixDbService;
         public MixRepoDbSubscriber(
             IConfiguration configuration,
-            MixMemoryMessageQueue<MessageQueueModel> queueService,
+            MixQueueMessages<MessageQueueModel> queueService,
             IServiceProvider serviceProvider,
             IPortalHubClientService portalHub)
             : base(MixQueueTopics.MixRepoDb, string.Empty, serviceProvider, configuration, queueService)

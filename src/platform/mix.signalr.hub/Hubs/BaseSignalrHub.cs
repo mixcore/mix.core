@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Constant.Constants;
+using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Identity.Constants;
 using Mix.Service.Interfaces;
@@ -51,7 +52,7 @@ namespace Mix.SignalR.Hubs
             }
             catch (Exception ex)
             {
-                throw new MixException(Heart.Enums.MixErrorStatus.ServerError, ex);
+                throw new MixException(MixErrorStatus.ServerError, ex);
             }
 
         }

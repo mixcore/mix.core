@@ -102,7 +102,7 @@ namespace Mix.Lib.Base
         protected virtual async Task<TPrimaryKey> CreateHandlerAsync(TEntity data)
         {
             await Repository.CreateAsync(data);
-            QueueService.PushMessage(data, MixRestAction.Post.ToString(), true);
+            QueueService.PushMessage(CurrentTenant.Id, data, MixRestAction.Post.ToString(), true);
             return data.Id;
         }
 
@@ -110,14 +110,14 @@ namespace Mix.Lib.Base
         {
             await Repository.UpdateAsync(data);
             await CacheService.RemoveCacheAsync(id, typeof(TEntity).FullName);
-            QueueService.PushMessage(data, MixRestAction.Put.ToString(), true);
+            QueueService.PushMessage(CurrentTenant.Id, data, MixRestAction.Put.ToString(), true);
         }
 
         protected virtual async Task DeleteHandler(TEntity data)
         {
             await Repository.DeleteAsync(data);
             await CacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TEntity).FullName);
-            QueueService.PushMessage(data, MixRestAction.Delete.ToString(), true);
+            QueueService.PushMessage(CurrentTenant.Id, data, MixRestAction.Delete.ToString(), true);
         }
 
 
@@ -125,7 +125,7 @@ namespace Mix.Lib.Base
         {
             await Repository.SaveFieldsAsync(data, properties);
             await CacheService.RemoveCacheAsync(id.ToString(), typeof(TEntity).FullName);
-            QueueService.PushMessage(data, MixRestAction.Patch.ToString(), true);
+            QueueService.PushMessage(CurrentTenant.Id, data, MixRestAction.Patch.ToString(), true);
         }
 
         protected virtual async Task SaveManyHandler(List<TEntity> data)

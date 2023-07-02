@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Services;
 using System.Reflection;
@@ -11,9 +12,10 @@ namespace Microsoft.Extensions.DependencyInjection
         {
 
             // Message Queue
-            services.AddSingleton<IQueueService<MessageQueueModel>, QueueService>();
+            services.TryAddSingleton<IQueueService<MessageQueueModel>, QueueService>();
             // Need singleton instance to store all message from mix publishers
-            services.AddSingleton<MixMemoryMessageQueue<MessageQueueModel>>();
+            services.TryAddSingleton<MixMemoryMessageQueue<MessageQueueModel>>();
+            services.TryAddSingleton<MixQueueMessages<MessageQueueModel>>();
             return services;
         }
     }

@@ -12,7 +12,7 @@ namespace Mix.Lib.Publishers
         public MixPublisher(
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration, IWebHostEnvironment environment,
-            MixMemoryMessageQueue<MessageQueueModel> queueMessage)
+            MixQueueMessages<MessageQueueModel> queueMessage)
             : base(topicId, queueService, configuration, queueMessage)
         {
         }
