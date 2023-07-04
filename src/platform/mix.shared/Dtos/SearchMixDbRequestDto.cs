@@ -24,7 +24,7 @@ namespace Mix.Shared.Dtos
             {
                 ParentId = parentId;
             }
-            
+
             if (Guid.TryParse(request.Query[MixRequestQueryKeywords.ParentId], out Guid guidParentId))
             {
                 GuidParentId = guidParentId;

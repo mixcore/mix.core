@@ -14,11 +14,14 @@ namespace Mix.Shared.Dtos
             Value = value;
             CompareOperator = compareOperation;
         }
+
         [Required]
         public string FieldName { get; set; }
-        [Required]
+
         public object Value { get; set; }
+
         public MixCompareOperator CompareOperator { get; set; }
+
         public bool IsRequired { get; set; }
     }
 }

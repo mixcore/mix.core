@@ -146,11 +146,56 @@ namespace Mix.Portal.Controllers
         {
             var result = await _mixDbService.GetById(_tableName, id, loadNestedData);
             string username = _idService.GetClaim(User, MixClaims.Username);
-            QueueService.PushQueue( CurrentTenant.Id,
+            QueueService.PushQueue(CurrentTenant.Id,
                                     MixQueueTopics.MixBackgroundTasks,
                                     MixQueueActions.MixDbEvent
                                     , new MixDbEventCommand(username, "GET", _tableName, result));
             return result != default ? Ok(result) : NotFound(id);
+        }
+
+
+        [HttpPut("update-priority/{dbName}/{id}")]
+        public async Task<ActionResult<JObject>> UpdatePriority(string dbName, int id, [FromBody] UpdatePriorityDto<int> dto)
+        {
+            var data = await _mixDbService.GetById(dbName, id, false);
+            if (data == null)
+            {
+                return NotFound();
+            }
+
+            var min = Math.Min((int)data[PriorityFieldName], dto.Priority);
+            var max = Math.Max((int)data[PriorityFieldName], dto.Priority);
+
+            var queryFields = new List<SearchQueryField>
+            {
+                new SearchQueryField(IdFieldName, id, MixCompareOperator.NotEqual),
+                new SearchQueryField(PriorityFieldName, max, MixCompareOperator.LessThanOrEqual),
+                new SearchQueryField(PriorityFieldName, max, MixCompareOperator.LessThanOrEqual)
+            };
+
+            var query = await _repository.GetListByAsync(queryFields);
+            int start = min;
+            if (dto.Priority == min)
+            {
+                data[PriorityFieldName] = dto.Priority;
+                start++;
+            }
+
+            foreach (var item in query.OrderBy(m => m[PriorityFieldName]))
+            {
+                item.Priority = start;
+                await _repository.UpdateAsync(item);
+                start++;
+            }
+
+            if (dto.Priority == max)
+            {
+                data[PriorityFieldName] = start;
+            }
+
+            await _repository.UpdateAsync(data);
+
+            return Ok();
         }
 
         [HttpGet("get-by-parent/{parentType}/{parentId}")]
@@ -200,7 +245,7 @@ namespace Mix.Portal.Controllers
                 Body = JObject.FromObject(dto),
                 MixDbName = _tableName
             };
-            QueueService.PushQueue( CurrentTenant.Id, MixQueueTopics.MixDbCommand, MixDbCommandQueueActions.Create, obj);
+            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixDbCommand, MixDbCommandQueueActions.Create, obj);
 
             return Ok();
         }
