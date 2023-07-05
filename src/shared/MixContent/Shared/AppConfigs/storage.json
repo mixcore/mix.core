@@ -25,6 +25,37 @@
       "SecretAccessKey": "",
       "Region": ""
     },
-    "MixSetting": {}
+    "MixSetting": {},
+    "IsAutoScaleImage": true,
+    "ImageSizes": [
+      {
+        "name": "XXS",
+        "width": 30
+      },
+      {
+        "name": "XS",
+        "width": 100
+      },
+      {
+        "name": "S",
+        "width": 300
+      },
+      {
+        "name": "M",
+        "width": 600
+      },
+      {
+        "name": "L",
+        "width": 1000
+      },
+      {
+        "name": "XL",
+        "width": 2000
+      },
+      {
+        "name": "XXL",
+        "width": 4000
+      }
+    ]
   }
 }

@@ -57,24 +57,46 @@ namespace Mix.Storage.Lib.Engines.Base
 
         public async Task<string?> UploadFile(IFormFile file, string? folder, string? createdBy, CancellationToken cancellationToken)
         {
-            var result = await Upload(file, folder, createdBy, cancellationToken);
-            if (!string.IsNullOrEmpty(result))
+            try
             {
-                await CreateMedia(result, CurrentTenant.Id, createdBy, cancellationToken);
-            }
+                var result = await Upload(file, folder, createdBy, cancellationToken);
+                if (!string.IsNullOrEmpty(result))
+                {
+                    await CreateMedia(result, CurrentTenant.Id, createdBy, cancellationToken);
+                }
 
-            return result;
+                return result;
+            }
+            catch (MixException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
         }
 
         public async Task<string?> UploadFileStream(FileModel file, string? createdBy, CancellationToken cancellationToken)
         {
-            var result = await UploadStream(file, createdBy, cancellationToken);
-            if (!string.IsNullOrEmpty(result))
+            try
             {
-                await CreateMedia(result, CurrentTenant.Id, createdBy, cancellationToken);
-            }
+                var result = await UploadStream(file, createdBy, cancellationToken);
+                if (!string.IsNullOrEmpty(result))
+                {
+                    await CreateMedia(result, CurrentTenant.Id, createdBy, cancellationToken);
+                }
 
-            return result;
+                return result;
+            }
+            catch (MixException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
         }
 
         public abstract Task<string?> Upload(IFormFile file, string? themeName, string? createdBy, CancellationToken cancellationToken = default);
