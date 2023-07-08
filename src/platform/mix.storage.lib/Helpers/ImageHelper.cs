@@ -19,6 +19,69 @@ namespace Mix.Storage.Lib.Helpers
             return exts.Contains(extension.ToLower());
         }
 
+        #region Async Methods
+
+        public static async Task<bool> SaveImageAsync(Stream fileStream, FileModel file, ImageSize size = null)
+        {
+            if (!string.IsNullOrEmpty(file.FileBase64))
+            {
+                return await SaveBase64Async(file, size);
+
+            }
+            else
+            {
+                return await SaveFileStreamAsync(fileStream, file, size);
+            }
+        }
+
+        private static async Task<bool> SaveFileStreamAsync(Stream fileStream, FileModel file, ImageSize size)
+        {
+            using (Image image = await Image.LoadAsync(fileStream))
+            {
+                if (size != null)
+                {
+                    int width = size.Width;
+                    int height = (image.Height * width) / image.Width;
+                    image.Mutate(x => x.Resize(width, height));
+                    string fullPath = file.FullPath.Replace(file.Extension, $"-{size.Name}{file.Extension}");
+                    image.Save(fullPath);
+                }
+                else
+                {
+                    await image.SaveAsync(file.FullPath);
+                }
+                return true;
+            }
+        }
+
+        private static async Task<bool> SaveBase64Async(FileModel file, ImageSize size)
+        {
+            string base64 = file.FileBase64.IndexOf(',') >= 0
+                       ? file.FileBase64.Split(',')[1]
+                       : file.FileBase64;
+            byte[] bytes = Convert.FromBase64String(base64);
+            using (MemoryStream stream = new MemoryStream(bytes))
+            {
+                using (Image image = await Image.LoadAsync(stream))
+                {
+                    if (size != null)
+                    {
+                        int width = size.Width;
+                        int height = (image.Height * width) / image.Width;
+                        image.Mutate(x => x.Resize(width, height));
+                        image.Save(file.FullPath);
+                    }
+                    else
+                    {
+                        image.Save(file.FullPath);
+                    }
+                    return true;
+                }
+            }
+        }
+        #endregion
+
+        #region Sync Methods
 
         public static bool SaveImage(Stream fileStream, FileModel file, ImageSize size = null)
         {
@@ -38,7 +101,7 @@ namespace Mix.Storage.Lib.Helpers
             var format = Image.DetectFormat(fileStream);
             using (Image image = Image.Load(fileStream))
             {
-                if (size != null && size.Width < image.Width)
+                if (size != null)
                 {
                     int width = size.Width;
                     int height = (image.Height * width) / image.Width;
@@ -76,5 +139,6 @@ namespace Mix.Storage.Lib.Helpers
                 return true;
             }
         }
+        #endregion
     }
 }

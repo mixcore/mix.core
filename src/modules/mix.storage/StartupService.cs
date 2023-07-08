@@ -1,4 +1,5 @@
 ﻿using Mix.Shared.Interfaces;
+using Mix.Storage.Lib.Extensions;
 
 namespace Mix.Storage
 {
@@ -6,7 +7,7 @@ namespace Mix.Storage
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.TryAddScoped<MixStorageService>();
+            services.AddMixStorage();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

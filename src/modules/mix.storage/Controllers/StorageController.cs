@@ -16,6 +16,14 @@ namespace Mix.Storage.Controllers
 
         #region Routes
 
+        [Route("scale-image")]
+        [HttpGet]
+        public async Task<ActionResult> Upload([FromQuery] string imageUrl)
+        {
+            await _storageService.ScaleImage(imageUrl);
+            return Ok();
+        }
+
         [Route("upload-file")]
         [HttpPost]
         public async Task<ActionResult> Upload([FromForm] string? folder, [FromForm] IFormFile file)
