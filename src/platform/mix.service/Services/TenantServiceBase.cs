@@ -36,6 +36,11 @@ namespace Mix.Service.Services
             }
         }
         
+        public void SetTenant(MixTenantSystemModel tenant)
+        {
+            _currentTenant = tenant;
+        }
+        
         public void SetTenantId(int tenantId)
         {
             _currentTenant = new()

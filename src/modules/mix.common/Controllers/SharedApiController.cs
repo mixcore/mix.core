@@ -8,6 +8,8 @@ using Mix.Common.Domain.ViewModels;
 using Mix.Heart.Exceptions;
 using Mix.Identity.Constants;
 using Mix.Lib.Services;
+using Mix.Mixdb.ViewModels;
+using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Shared.Models.Configurations;
@@ -20,6 +22,8 @@ namespace Mix.Common.Controllers
     [ApiController]
     public class SharedApiController : MixApiControllerBase
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly MixQueueMessages<MessageQueueModel> _mixMemoryMessageQueue;
         private readonly MixCacheService _cacheService;
         private readonly ApplicationLifetime _applicationLifetime;
         protected UnitOfWorkInfo Uow;
@@ -33,8 +37,14 @@ namespace Mix.Common.Controllers
             TranslatorService translator,
             IActionDescriptorCollectionProvider routeProvider,
             MixIdentityService mixIdentityService,
-            MixCmsContext context, IQueueService<MessageQueueModel> queueService, ApplicationLifetime applicationLifetime, MixCacheService cacheService)
-            : base(configuration, translator, mixIdentityService, queueService)
+            UnitOfWorkInfo<MixCmsContext> uow,
+            IQueueService<MessageQueueModel> queueService,
+            ApplicationLifetime applicationLifetime,
+            MixCacheService cacheService,
+            IMixCmsService mixCmsService,
+            IHttpContextAccessor httpContextAccessor,
+            MixQueueMessages<MessageQueueModel> mixMemoryMessageQueue)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
             Context = context;
             _cacheService = cacheService;
@@ -43,6 +53,9 @@ namespace Mix.Common.Controllers
             _langRepo = MixLanguageContentViewModel.GetRepository(Uow, _cacheService);
             _routeProvider = routeProvider;
             _applicationLifetime = applicationLifetime;
+            _mixCmsService = mixCmsService;
+            _httpContextAccessor = httpContextAccessor;
+            _mixMemoryMessageQueue = mixMemoryMessageQueue;
         }
 
         #region Routes
@@ -97,6 +110,13 @@ namespace Mix.Common.Controllers
             };
 
             return Ok(res);
+        }
+        
+        [HttpGet]
+        [Route("queues")]
+        public ActionResult GetQueues()
+        {
+            return Ok(ReflectionHelper.ParseArray(_mixMemoryMessageQueue.GetAllTopic()));
         }
 
         [MixAuthorize(roles: MixRoles.SuperAdmin)]

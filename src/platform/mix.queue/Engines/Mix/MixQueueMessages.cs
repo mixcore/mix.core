@@ -11,7 +11,10 @@ namespace Mix.Queue.Engines.MixQueue
         public MixQueueMessages()
         {
         }
-
+        public List<MixTopicModel> GetAllTopic()
+        {
+            return _topics;
+        }
         public MixTopicModel GetTopic(string topicId)
         {
             if (_topics.All(m => m.Id != topicId))

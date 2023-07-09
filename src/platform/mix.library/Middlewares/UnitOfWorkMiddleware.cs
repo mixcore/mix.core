@@ -26,7 +26,7 @@ namespace Mix.Lib.Middlewares
             //Dictionary<string, DbConnection> dicConnections = new();
             //await ShareTransaction(context, dicConnections, dicTransactions);
 
-            if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)
+            if (GlobalConfigService.Instance.InitStatus == InitStep.Blank || MixCmsHelper.CheckStaticFileRequest(context.Request.Path))
             {
                 await _next.Invoke(context);
             }

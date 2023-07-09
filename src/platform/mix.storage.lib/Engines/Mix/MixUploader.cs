@@ -52,20 +52,17 @@ namespace Mix.Storage.Lib.Engines.Mix
 
                 if (saveResult)
                 {
-                    result = $"{CurrentTenant.Configurations.Domain}/{fileModel.FileFolder}/{fileModel.Filename}{fileModel.Extension}";
+                    result = $"https://{CurrentTenant.PrimaryDomain}/{fileModel.FileFolder}/{fileModel.Filename}{fileModel.Extension}";
                 }
                 return Task.FromResult(result);
             }
         }
 
-        private FileModel GetFileModel(string fileName, Stream fileStream, string? folder, string? createdBy)
+        public FileModel GetFileModel(string fileName, Stream fileStream, string? folder, string? createdBy)
         {
             var name = fileName.Substring(0, fileName.LastIndexOf('.')).ToLower();
             var ext = fileName.Substring(fileName.LastIndexOf('.')).ToLower();
-            if (string.IsNullOrEmpty(folder))
-            {
-                folder = GetUploadFolder(ext, folder, createdBy);
-            }
+            folder = GetUploadFolder(ext, folder, createdBy);
 
             if (ImageHelper.IsImageResizeable(ext))
             {
@@ -80,7 +77,7 @@ namespace Mix.Storage.Lib.Engines.Mix
         private string GetUploadFolder(string ext, string? fileFolder, string? createdBy)
         {
             string folder = $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{MixFolders.UploadsFolder}/{ext.TrimStart('.')}";
-            if (!string.IsNullOrEmpty(fileFolder))
+            if (!string.IsNullOrEmpty(fileFolder) && !folder.Contains(fileFolder))
             {
                 folder = $"{folder}/{fileFolder}";
             }

@@ -33,7 +33,11 @@ namespace Mix.Queue.Engines.MixQueue
 
         private void Initialize(string topicId, string subscriptionId)
         {
-            _topic = _queue.GetTopic(topicId);
+            while (_topic == null)
+            {
+                _topic = _queue.GetTopic(topicId);
+                Thread.Sleep(1000);
+            }
             _topic.CreateSubscription(subscriptionId);
         }
 

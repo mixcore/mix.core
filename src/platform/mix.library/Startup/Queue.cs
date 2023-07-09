@@ -12,10 +12,10 @@ namespace Microsoft.Extensions.DependencyInjection
         {
 
             // Message Queue
-            services.TryAddSingleton<IQueueService<MessageQueueModel>, QueueService>();
             // Need singleton instance to store all message from mix publishers
             services.TryAddSingleton<MixMemoryMessageQueue<MessageQueueModel>>();
             services.TryAddSingleton<MixQueueMessages<MessageQueueModel>>();
+            services.TryAddSingleton<IQueueService<MessageQueueModel>, QueueService>();
             return services;
         }
     }
