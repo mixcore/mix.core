@@ -1,9 +1,11 @@
 ﻿using Mix.Heart.Entities;
+using Mix.Services.Ecommerce.Lib.Enums;
 
 namespace Mix.Services.Ecommerce.Lib.Entities.Mix
 {
     public class OrderItem : EntityBase<int>
     {
+        public OrderItemType? ItemType { get; set; }
         public string? Sku { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
@@ -11,6 +13,8 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix
         public string? ReferenceUrl { get; set; }
         public string? Currency { get; set; }
         public int PostId { get; set; }
+        public double OriginalPrice { get; set; }
+        public double Discount { get; set; }
         public double? Price { get; set; }
         public bool? IsActive { get; set; }
         public double? Percent { get; set; }

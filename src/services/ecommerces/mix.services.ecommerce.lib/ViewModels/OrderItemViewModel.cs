@@ -3,6 +3,7 @@ using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Mix.Lib.Attributes;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
+using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Payments.Lib.Constants;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels
@@ -11,6 +12,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
     public class OrderItemViewModel : ViewModelBase<EcommerceDbContext, OrderItem, int, OrderItemViewModel>
     {
         #region Properties
+        public OrderItemType? ItemType { get; set; }
         public string ProductId { get; set; }
         public string Sku { get; set; }
         public string Title { get; set; }
@@ -19,6 +21,8 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public string ReferenceUrl { get; set; }
         public string Currency { get; set; }
         public int PostId { get; set; }
+        public double OriginalPrice { get; set; }
+        public double Discount { get; set; } = 0;
         public double Price { get; set; }
         public int Quantity { get; set; }
         public double Total { get; set; }

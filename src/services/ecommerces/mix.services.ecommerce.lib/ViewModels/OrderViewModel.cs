@@ -35,8 +35,11 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public int MixTenantId { get; set; }
 
         public List<OrderItemViewModel> OrderItems { get; set; } = new();
+        public List<OrderItemViewModel> Vouchers { get; set; } = new();
         public List<OrderTrackingViewModel> OrderTrackings { get; set; } = new();
 
+        public string? Instagram { get; set; }
+        public string? Note { get; set; }
         #endregion
 
         #region Contructors
@@ -136,6 +139,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
                 if (item.Currency != Currency)
                 {
                     item.Currency = Currency;
+                    item.OriginalPrice = Math.Round(item.OriginalPrice / exchangeRate, 2);
                     item.Price = Math.Round(item.Price/exchangeRate, 2);
                     total += item.Price;
                 }
