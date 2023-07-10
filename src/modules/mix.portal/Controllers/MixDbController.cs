@@ -479,16 +479,23 @@ namespace Mix.Portal.Controllers
                         var associations = await _associationRepository.GetListByAsync(nestedQueries, orderFields: orderFields);
                         if (associations is { Count: > 0 })
                         {
+                            JArray nestedDataList = new();
                             var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
+
                             _repository.InitTableName(rel.DestinateDatabaseName);
+
                             List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
-                            var getNestedData = await _repository.GetListByAsync(query);
-                            JArray nestedData = new();
-                            foreach (var nd in getNestedData)
+                            var nestedData = await _repository.GetListByAsync(query);
+                            foreach (var nestedId in nestedIds)
                             {
-                                nestedData.Add(await _mixDbService.ParseDataAsync(rel.DestinateDatabaseName, nd));
+                                var nd = nestedData.FirstOrDefault(m => m.Id == nestedId);
+                                if (nd is not null)
+                                {
+                                    nestedDataList.Add(await _mixDbService.ParseDataAsync(rel.DestinateDatabaseName, nd));
+                                }
                             }
-                            data.Add(new JProperty(rel.DisplayName, ReflectionHelper.ParseArray(nestedData)));
+
+                            data.Add(new JProperty(rel.DisplayName, ReflectionHelper.ParseArray(nestedDataList)));
                         }
                         else
                         {
