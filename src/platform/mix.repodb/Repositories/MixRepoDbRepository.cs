@@ -201,7 +201,7 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<List<dynamic>?> GetListByAsync(List<QueryField> queryFields, string? fields = null)
+        public async Task<List<dynamic>?> GetListByAsync(List<QueryField> queryFields, string? fields = null, List<OrderField>? orderFields = null)
         {
             try
             {
@@ -215,7 +215,7 @@ namespace Mix.RepoDb.Repositories
                         selectedFields.Add(new Field(item));
                     }
                 }
-                var data = await _connection.QueryAsync(_tableName, queryFields, selectedFields, transaction: _dbTransaction);
+                var data = await _connection.QueryAsync(_tableName, queryFields, selectedFields, orderFields, transaction: _dbTransaction);
                 return data.ToList();
             }
             catch (Exception ex)

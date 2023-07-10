@@ -471,7 +471,12 @@ namespace Mix.Portal.Controllers
                         var id = data.Value<int>("id");
 
                         List<QueryField> nestedQueries = GetAssociationQueries(rel.SourceDatabaseName, rel.DestinateDatabaseName, id);
-                        var associations = await _associationRepository.GetListByAsync(nestedQueries);
+                        var orderFields = new List<OrderField>
+                        {
+                            new("Priority", Order.Ascending)
+                        };
+
+                        var associations = await _associationRepository.GetListByAsync(nestedQueries, orderFields: orderFields);
                         if (associations is { Count: > 0 })
                         {
                             var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
