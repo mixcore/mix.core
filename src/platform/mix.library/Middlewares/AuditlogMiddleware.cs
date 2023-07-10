@@ -20,7 +20,7 @@ namespace Mix.Lib.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (CheckAuditLogPath(context.Request.Path))
+            if (GlobalConfigService.Instance.EnableAuditLog && CheckAuditLogPath(context.Request.Path))
             {
                 //Copy a pointer to the original response body stream
                 await LogRequest(context);

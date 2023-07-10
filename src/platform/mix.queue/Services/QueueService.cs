@@ -31,6 +31,7 @@ namespace Mix.Queue.Services
 
             int i = 1;
 
+            // Consume memory messages and push to MessageQueue Provider
             while (i <= length && queue.Any())
             {
                 queue.TryDequeue(out MessageQueueModel data);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
+using Mix.Queue.Engines.Mix;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
@@ -8,20 +9,21 @@ using System.Threading.Tasks;
 
 namespace Mix.Queue.Engines.MixQueue
 {
-    internal class MixQueueSubscriber : BackgroundService, IQueueSubscriber
+    public class MixQueueSubscriber<T> : BackgroundService, IQueueSubscriber
+        where T : MessageQueueModel
     {
         private readonly string _subscriptionId;
-        private MixTopicModel _topic;
+        private MixTopicModel<T> _topic;
         private readonly MixQueueSetting _queueSetting;
-        private readonly Func<MessageQueueModel, Task> _messageHandler;
-        private readonly MixQueueMessages<MessageQueueModel> _queue;
+        private readonly Func<T, Task> _messageHandler;
+        private readonly MixQueueMessages<T> _queue;
         protected bool Processing { get; private set; }
         public MixQueueSubscriber(
             QueueSetting queueSetting,
             string topicId,
             string subscriptionId,
-            Func<MessageQueueModel, Task> messageHandler,
-            MixQueueMessages<MessageQueueModel> queue)
+            Func<T, Task> messageHandler,
+            MixQueueMessages<T> queue)
         {
             _queueSetting = queueSetting as MixQueueSetting;
             _queue = queue;

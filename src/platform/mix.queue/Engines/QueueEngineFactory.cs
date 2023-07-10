@@ -35,25 +35,26 @@ namespace Mix.Queue.Engines
             return publisher;
         }
 
-        public static IQueueSubscriber CreateSubscriber(
+        public static IQueueSubscriber CreateSubscriber<T>(
             MixQueueProvider provider,
             QueueSetting queueSetting,
             string topicId,
             string subscriptionId,
-            Func<MessageQueueModel, Task> handler,
-            MixQueueMessages<MessageQueueModel> queueService)
+            Func<T, Task> handler,
+            MixQueueMessages<T> queueService)
+            where T : MessageQueueModel
         {
             IQueueSubscriber subscriber = default;
             switch (provider)
             {
                 case MixQueueProvider.AZURE:
-                    subscriber = new AzureQueueSubscriber(queueSetting, topicId, subscriptionId, handler);
+                    subscriber = new AzureQueueSubscriber<T>(queueSetting, topicId, subscriptionId, handler);
                     break;
                 case MixQueueProvider.GOOGLE:
-                    subscriber = new GoogleQueueSubscriber(queueSetting, topicId, subscriptionId, handler);
+                    subscriber = new GoogleQueueSubscriber<T>(queueSetting, topicId, subscriptionId, handler);
                     break;
                 case MixQueueProvider.MIX:
-                    subscriber = new MixQueueSubscriber(queueSetting, topicId, subscriptionId, handler, queueService);
+                    subscriber = new MixQueueSubscriber<T>(queueSetting, topicId, subscriptionId, handler, queueService);
                     break;
             }
             return subscriber;

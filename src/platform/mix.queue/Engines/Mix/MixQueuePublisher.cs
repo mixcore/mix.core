@@ -1,22 +1,27 @@
-﻿using Mix.Queue.Interfaces;
+﻿using Google.Cloud.PubSub.V1;
+using Mix.Queue.Engines.Mix;
+using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mix.Queue.Engines.MixQueue
 {
-    internal class MixQueuePublisher<T> : IQueuePublisher<T>
+    public class MixQueuePublisher<T> : IQueuePublisher<T>
         where T : MessageQueueModel
     {
         private readonly MixQueueMessages<T> _queue;
-        private MixTopicModel _topic;
+        private MixTopicModel<T> _topic;
+        private string _topicId;
 
         public MixQueuePublisher(QueueSetting queueSetting, string topicName, MixQueueMessages<T> queue)
         {
             _queue = queue;
-            InitializeQueue(topicName);
+            _topicId = topicName;
+            //InitializeQueue(topicName);
         }
 
         private void InitializeQueue(string topicId)
@@ -30,7 +35,8 @@ namespace Mix.Queue.Engines.MixQueue
 
         public Task SendMessage(T message)
         {
-            _topic.PushQueue(message);
+            message.Id = Guid.NewGuid();
+            _queue.GetTopic(_topicId).PushQueue(message);
             return Task.CompletedTask;
         }
 

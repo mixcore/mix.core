@@ -267,16 +267,27 @@ namespace Mix.Account.Controllers
         [Route("my-profile")]
         public async Task<ActionResult<MixUserViewModel>> MyProfile([FromServices] DatabaseService databaseService)
         {
-            var id = _idService.GetClaim(User, MixClaims.Id);
-            var user = await _userManager.FindByIdAsync(id); ;
-
-            if (user != null)
+            try
             {
-                var result = new MixUserViewModel(user, CmsUow);
-                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext, CacheService);
-                return Ok(result);
+                var id = _idService.GetClaim(User, MixClaims.Id);
+                var user = await _userManager.FindByIdAsync(id); ;
+
+                if (user != null)
+                {
+                    var result = new MixUserViewModel(user, CmsUow);
+                    await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext, CacheService);
+                    return Ok(result);
+                }
+                return BadRequest();
             }
-            return BadRequest();
+            catch (MixException)
+            {
+                throw;
+            }
+            catch(Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
         }
 
         [HttpGet]

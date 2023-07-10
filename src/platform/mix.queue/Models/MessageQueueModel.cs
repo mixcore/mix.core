@@ -1,11 +1,13 @@
 ﻿using Mix.Heart.Helpers;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 
 namespace Mix.Queue.Models
 {
     public class MessageQueueModel
     {
+        public Guid Id { get; set; }
         public string Action { get; set; }
         public bool Success { get; set; }
         public string TopicId { get; set; }

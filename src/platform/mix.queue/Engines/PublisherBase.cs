@@ -35,8 +35,7 @@ namespace Mix.Queue.Engines
         }
 
         private List<IQueuePublisher<MessageQueueModel>> CreatePublisher(
-            string topicName,
-            MixQueueMessages<MessageQueueModel> queue)
+            string topicName)
         {
             try
             {
@@ -72,7 +71,7 @@ namespace Mix.Queue.Engines
                         mixSettingPath.Bind(mixSetting);
                         queuePublishers.Add(
                            QueueEngineFactory.CreatePublisher(
-                               _provider, mixSetting, topicName, queue));
+                               _provider, mixSetting, topicName, _queue));
 
                         break;
                 }
@@ -95,12 +94,15 @@ namespace Mix.Queue.Engines
                     if (!isProcessing)
                     {
                         isProcessing = true;
+                        // Get messages from IQueueService 
                         var inQueueItems = _queueService.ConsumeQueue(MaxConsumeLength, _topicId);
 
                         if (inQueueItems.Any() && _publishers != null)
                         {
                             foreach (var publisher in _publishers)
                             {
+                                // Publish messages to current Message Queue Provider
+                                // If use Mix Queue => push to MixQueueMessages<MessageQueueModel> queue
                                 await publisher.SendMessages(inQueueItems);
                             }
                         }
@@ -113,7 +115,7 @@ namespace Mix.Queue.Engines
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _publishers = CreatePublisher(_topicId, _queue);
+            _publishers = CreatePublisher(_topicId);
             return StartMixQueueEngine(stoppingToken);
         }
     }

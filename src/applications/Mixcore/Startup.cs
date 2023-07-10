@@ -52,10 +52,7 @@ namespace Mixcore
 
             app.UseMixTenant();
 
-            if (GlobalConfigService.Instance.EnableAuditLog)
-            {
-                app.UseMiddleware<AuditlogMiddleware>();
-            }
+            app.UseMiddleware<AuditlogMiddleware>();
 
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.ContentRootPath, env.IsDevelopment());
 

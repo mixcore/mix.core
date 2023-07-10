@@ -35,15 +35,23 @@ namespace Mix.Storage.Lib.Subscribers
 
         public override async Task Handler(MessageQueueModel model)
         {
-            using (ServiceScope = ServicesProvider.CreateScope())
+            try
             {
-                switch (model.Action)
+                using (ServiceScope = ServicesProvider.CreateScope())
                 {
-                    case MixQueueActions.ScaleImage:
-                        MixStorageService srv = GetRequiredService<MixStorageService>();
-                        await srv.ScaleImage(model.Data);
-                        break;
+                    switch (model.Action)
+                    {
+                        case MixQueueActions.ScaleImage:
+                            MixStorageService srv = GetRequiredService<MixStorageService>();
+                            await srv.ScaleImage(model.Data);
+                            break;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                await MixLogService.LogExceptionAsync(ex);
+                await SendMessage(model.Action, false, ex);
             }
         }
 

@@ -1,14 +1,16 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Mix.Queue.Models;
 
-namespace Mix.Queue.Models
+namespace Mix.Queue.Engines.Mix
 {
-    public class MixTopicModel
+    public class MixTopicModel<T>
+        where T : MessageQueueModel
     {
         public string Id { get; set; }
         public List<MixSubscriptionModel> Subscriptions { get; set; } = new();
-        private readonly ConcurrentQueue<MessageQueueModel> _messages = new();
+        private readonly ConcurrentQueue<T> _messages = new();
 
         public MixSubscriptionModel CreateSubscription(string subscriptionId)
         {
@@ -36,9 +38,9 @@ namespace Mix.Queue.Models
             return _messages.Any();
         }
 
-        public IList<MessageQueueModel> ConsumeQueue(string subscriptionId, int length)
+        public IList<T> ConsumeQueue(string subscriptionId, int length)
         {
-            var result = new List<MessageQueueModel>();
+            var result = new List<T>();
             var subscription = Subscriptions.Find(m => m.Id == subscriptionId);
 
             if (subscription == null)
@@ -57,7 +59,7 @@ namespace Mix.Queue.Models
 
             while (i <= length && _messages.Any(m => m.TopicId == subscription.TopicId))
             {
-                MessageQueueModel data = _messages.First(m => m.TopicId == subscription.TopicId);
+                T data = _messages.First(m => m.TopicId == subscription.TopicId);
                 if (!data.Subscriptions.Any(m => m.Id == subscription.Id))
                 {
                     data.Subscriptions.Add(subscription);
@@ -69,15 +71,18 @@ namespace Mix.Queue.Models
                     _messages.TryDequeue(out _);
                 }
 
-                
+
                 i++;
             }
             return result;
         }
 
-        public void PushQueue(MessageQueueModel model)
+        public void PushQueue(T model)
         {
-            _messages.Enqueue(model);
+            if (!_messages.Any(m => m.Id == model.Id))
+            {
+                _messages.Enqueue(model);
+            }
         }
     }
 }

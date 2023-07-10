@@ -10,18 +10,18 @@ using System.Threading.Tasks;
 
 namespace Mix.Queue.Engines.Azure
 {
-    internal class AzureQueueSubscriber : IQueueSubscriber
+    internal class AzureQueueSubscriber<T> : IQueueSubscriber
     {
         private ServiceBusProcessor _subscriber;
         private static ServiceBusAdministrationClient _adminClient;
         private static ServiceBusClient _client;
         private readonly AzureQueueSetting _queueSetting;
-        private readonly Func<MessageQueueModel, Task> _messageHandler;
+        private readonly Func<T, Task> _messageHandler;
         public AzureQueueSubscriber(
             QueueSetting queueSetting,
             string topicId,
             string subscriptionId,
-            Func<MessageQueueModel, Task> messageHandler)
+            Func<T, Task> messageHandler)
         {
             _queueSetting = queueSetting as AzureQueueSetting;
             _messageHandler = messageHandler;
@@ -64,7 +64,7 @@ namespace Mix.Queue.Engines.Azure
         async Task MessageHandler(ProcessMessageEventArgs args)
         {
             string body = args.Message.Body.ToString();
-            var msg = JsonConvert.DeserializeObject<MessageQueueModel>(body);
+            var msg = JsonConvert.DeserializeObject<T>(body);
             await _messageHandler(msg);
             // complete the message. messages is deleted from the subscription. 
             await args.CompleteMessageAsync(args.Message);
