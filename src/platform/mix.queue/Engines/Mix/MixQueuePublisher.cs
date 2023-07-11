@@ -36,6 +36,7 @@ namespace Mix.Queue.Engines.MixQueue
         public Task SendMessage(T message)
         {
             message.Id = Guid.NewGuid();
+            message.CreatedDate = DateTime.UtcNow;
             _queue.GetTopic(_topicId).PushQueue(message);
             return Task.CompletedTask;
         }

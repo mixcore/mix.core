@@ -12,12 +12,12 @@ namespace Mix.Queue.Engines.MixQueue
     public class MixQueueSubscriber<T> : BackgroundService, IQueueSubscriber
         where T : MessageQueueModel
     {
+        public string SubscriptionId { get; set; }
         private readonly string _subscriptionId;
         private MixTopicModel<T> _topic;
         private readonly MixQueueSetting _queueSetting;
         private readonly Func<T, Task> _messageHandler;
         private readonly MixQueueMessages<T> _queue;
-        protected bool Processing { get; private set; }
         public MixQueueSubscriber(
             QueueSetting queueSetting,
             string topicId,
@@ -53,10 +53,10 @@ namespace Mix.Queue.Engines.MixQueue
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    if (!Processing)
+                    _topic = _queue.GetTopic(_topic.Id);
+                    if (!_topic.IsProcessing)
                     {
-                        Processing = true;
-                        _topic = _queue.GetTopic(_topic.Id);
+                        _topic.IsProcessing = true;
                         var inQueueItems = _topic.ConsumeQueue(_subscriptionId, 10);
                         if (inQueueItems.Count > 0)
                         {
@@ -65,7 +65,7 @@ namespace Mix.Queue.Engines.MixQueue
                                 await _messageHandler.Invoke(msg);
                             }
                         }
-                        Processing = false;
+                        _topic.IsProcessing = false;
                         await Task.Delay(1000, cancellationToken);
                     }
                 }

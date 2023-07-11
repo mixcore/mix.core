@@ -52,7 +52,7 @@ namespace Mix.Storage.Lib.Engines.Mix
 
                 if (saveResult)
                 {
-                    result = $"https://{CurrentTenant.PrimaryDomain}/{fileModel.FileFolder}/{fileModel.Filename}{fileModel.Extension}";
+                    result = $"{CurrentTenant.Configurations.Domain}/{fileModel.FileFolder}/{fileModel.Filename}{fileModel.Extension}";
                 }
                 return Task.FromResult(result);
             }
@@ -77,10 +77,6 @@ namespace Mix.Storage.Lib.Engines.Mix
         private string GetUploadFolder(string ext, string? fileFolder, string? createdBy)
         {
             string folder = $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{MixFolders.UploadsFolder}/{ext.TrimStart('.')}";
-            if (!string.IsNullOrEmpty(fileFolder) && !folder.Contains(fileFolder))
-            {
-                folder = $"{folder}/{fileFolder}";
-            }
             if (!string.IsNullOrEmpty(createdBy))
             {
                 folder = $"{folder}/{createdBy}";

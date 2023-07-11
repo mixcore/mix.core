@@ -19,7 +19,12 @@ namespace Mix.Lib.Subscribers
         protected IAuditLogService AuditLogService;
         protected MixDbEventService MixDbEventService;
         private const string TopicId = MixQueueTopics.MixBackgroundTasks;
-
+        private static string[] allowActions =
+        {
+            MixQueueActions.AuditLog,
+            MixQueueActions.SendMail,
+            MixQueueActions.MixDbEvent
+        };
         public MixBackgroundTaskSubscriber(
             IServiceProvider serviceProvider,
             IConfiguration configuration,
@@ -36,6 +41,10 @@ namespace Mix.Lib.Subscribers
 
         public override async Task Handler(MessageQueueModel model)
         {
+            if (!allowActions.Contains(model.Action))
+            {
+                return;
+            }
 
             switch (model.Action)
             {

@@ -12,6 +12,7 @@ namespace Mix.Queue.Engines.Azure
 {
     internal class AzureQueueSubscriber<T> : IQueueSubscriber
     {
+        public string SubscriptionId { get; set; }
         private ServiceBusProcessor _subscriber;
         private static ServiceBusAdministrationClient _adminClient;
         private static ServiceBusClient _client;

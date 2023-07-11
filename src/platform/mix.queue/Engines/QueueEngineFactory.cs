@@ -57,6 +57,7 @@ namespace Mix.Queue.Engines
                     subscriber = new MixQueueSubscriber<T>(queueSetting, topicId, subscriptionId, handler, queueService);
                     break;
             }
+            subscriber.SubscriptionId = subscriptionId;
             return subscriber;
         }
 

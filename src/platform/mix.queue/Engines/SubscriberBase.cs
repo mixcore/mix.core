@@ -10,6 +10,7 @@ using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
+using Mix.Shared.Helpers;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,19 +43,26 @@ namespace Mix.Queue.Engines
 
         public Task StartAsync(CancellationToken cancellationToken = default)
         {
-            Task.Run(async () =>
+            try
             {
-                if (_subscriber != null)
+                Task.Run(async () =>
                 {
-                    await _subscriber.ProcessQueue(cancellationToken);
-                }
-            }, cancellationToken);
-
-            return Task.CompletedTask;
+                    if (_subscriber != null)
+                    {
+                        await _subscriber.ProcessQueue(cancellationToken);
+                    }
+                }, cancellationToken);
+                return Task.CompletedTask;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(Heart.Enums.MixErrorStatus.ServerError, ex);
+            }
         }
 
         public Task StopAsync(CancellationToken cancellationToken = default)
         {
+            Console.Error.WriteLine($"{_subscriber.SubscriptionId} stopped at {DateTime.UtcNow}");
             return Task.CompletedTask;
         }
 
@@ -98,7 +106,7 @@ namespace Mix.Queue.Engines
 
         protected T GetRequiredService<T>()
         {
-            ServiceScope ??=  ServicesProvider.CreateScope();
+            ServiceScope ??= ServicesProvider.CreateScope();
             return ServiceScope.ServiceProvider.GetRequiredService<T>();
         }
 

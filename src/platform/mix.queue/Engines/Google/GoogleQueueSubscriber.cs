@@ -16,6 +16,7 @@ namespace Mix.Queue.Engines.GooglePubSub
     internal class GoogleQueueSubscriber<T> : IQueueSubscriber
         where T : MessageQueueModel
     {
+        public string SubscriptionId { get; set; }
         private SubscriberClient _subscriber;
         private readonly GoogleQueueSetting _queueSetting;
         private SubscriptionName _subscriptionName;

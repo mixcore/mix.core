@@ -20,7 +20,10 @@ namespace Mix.Storage.Lib.Subscribers
         protected IPortalHubClientService PortalHub;
         protected IAuditLogService AuditLogService;
         private const string TopicId = MixQueueTopics.MixBackgroundTasks;
-
+        private static string[] allowActions =
+        {
+            MixQueueActions.ScaleImage
+        };
         public StorageBackgroundTaskSubscriber(
             IServiceProvider serviceProvider,
             IConfiguration configuration,
@@ -35,23 +38,30 @@ namespace Mix.Storage.Lib.Subscribers
 
         public override async Task Handler(MessageQueueModel model)
         {
+            if (!allowActions.Contains(model.Action))
+            {
+                return;
+            }
+
             try
             {
-                using (ServiceScope = ServicesProvider.CreateScope())
+
+                switch (model.Action)
                 {
-                    switch (model.Action)
-                    {
-                        case MixQueueActions.ScaleImage:
+                    case MixQueueActions.ScaleImage:
+                        using (ServiceScope = ServicesProvider.CreateScope())
+                        {
                             MixStorageService srv = GetRequiredService<MixStorageService>();
                             await srv.ScaleImage(model.Data);
-                            break;
-                    }
+                        }
+                        break;
                 }
             }
             catch (Exception ex)
             {
                 await MixLogService.LogExceptionAsync(ex);
                 await SendMessage(model.Action, false, ex);
+                return;
             }
         }
 

@@ -47,7 +47,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Onepay
         {
             vpc_Amount = $"{order.Total}00";
             vpc_MerchTxnRef = Guid.NewGuid().ToString();
-            vpc_OrderInfo = order.Id.ToString();
+            vpc_OrderInfo = order.TempId.ToString();
             Title = order.Title;
         }
     }
