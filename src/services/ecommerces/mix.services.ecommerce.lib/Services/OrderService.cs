@@ -59,10 +59,6 @@ namespace Mix.Services.Ecommerce.Lib.Services
                                 searchRequest.Predicate,
                                 searchRequest.PagingData,
                                 cancellationToken);
-            foreach (var item in result.Items)
-            {
-                item.Calculate(_exchangeRate);
-            }
             return result;
         }
 
@@ -78,7 +74,6 @@ namespace Mix.Services.Ecommerce.Lib.Services
             }
 
             var result = await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.Id == orderId && m.UserId == user.Id, cancellationToken);
-            result.Calculate(_exchangeRate);
             return result;
         }
         

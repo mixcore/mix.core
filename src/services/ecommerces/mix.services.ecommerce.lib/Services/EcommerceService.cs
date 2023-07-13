@@ -324,7 +324,6 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 throw new MixException(MixErrorStatus.ServerError, $"Invalid Order");
             }
 
-            order.Calculate(_exchangeRate);
             var paymentService = PaymentServiceFactory.GetPaymentService(_serviceProvider, order.PaymentGateway!.Value);
 
             if (paymentService == null)

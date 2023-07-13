@@ -92,6 +92,19 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             {
                 result.ShippingAddress = ReflectionHelper.ParseObject(Address);
             }
+            if (Shipping != null && !OrderItems.Any(m => m.ItemType == OrderItemType.SHIPPING))
+            {
+                OrderItems.Add(new(UowInfo)
+                {
+                    Title = "Shipping",
+                    ItemType = OrderItemType.SHIPPING,
+                    Price = Shipping.ShippingFee,
+                    Currency = Shipping.Currency,
+                    Quantity = 1,
+                    MixTenantId = MixTenantId,
+                    CreatedBy = CreatedBy
+                });
+            }
             return result;
         }
 
@@ -118,48 +131,6 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         #endregion
 
         #region Methods
-
-        public void Calculate(double exchangeRate)
-        {
-            double total = 0;
-            if (!OrderItems.Any(m => m.Title == "Shipping"))
-            {
-                OrderItems.Add(new(UowInfo)
-                {
-                    Title = "Shipping",
-                    ItemType = OrderItemType.SHIPPING,
-                    Price = Shipping.ShippingFee,
-                    Currency = Shipping.Currency,
-                    Quantity = 1,
-                    MixTenantId = MixTenantId,
-                    CreatedBy = CreatedBy
-                });
-            }
-            foreach (var item in OrderItems)
-            {
-                if (item.Currency != Currency)
-                {
-                    item.Currency = Currency;
-                    item.OriginalPrice = Math.Round(item.OriginalPrice / exchangeRate, 2);
-                    item.Price = Math.Round(item.Price/exchangeRate, 2);
-                    total += item.Price;
-                }
-                else
-                {
-                    total += item.Price;
-                }
-            }
-            var shippingItem = OrderItems.FirstOrDefault(m => m.Title == "Shipping");
-            if (shippingItem != null)
-            {
-                Shipping = new()
-                {
-                    Currency = shippingItem.Currency,
-                    ShippingFee = shippingItem.Price
-                };
-            }
-            Total = Math.Round(total, 2);
-        }
 
         #endregion
     }
