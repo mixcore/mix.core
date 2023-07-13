@@ -40,12 +40,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             session.Bind(Settings);
         }
 
-        public async Task<string?> GetPaymentUrl(OrderViewModel request, string againUrl, string returnUrl, CancellationToken cancellationToken)
-        {
-            return await ParseRequestUrlAsync(request, againUrl, returnUrl, cancellationToken);
-        }
-
-        private async Task<string?> ParseRequestUrlAsync(OrderViewModel order, string againUrl, string returnUrl, CancellationToken cancellationToken)
+        public async Task<string?> GetPaymentUrl(OrderViewModel order, string againUrl, string returnUrl, CancellationToken cancellationToken)
         {
             try
             {
@@ -55,9 +50,9 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 request.vpc_Locale = order.Currency == "VND" ? "vn" : "us";
                 request.vpc_Currency = order.Currency;
                 request.vpc_TicketNo = HttpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();//"14.241.244.43";// 
-                request.AgainLink = againUrl;
+                request.AgainLink = $"{againUrl.TrimEnd('/')}?orderId={order.Id}";
                 request.vpc_ReturnURL = returnUrl;
-                request.vpc_CallbackURL = returnUrl;
+                //request.vpc_CallbackURL = returnUrl;
 
                 await SaveRequest(request, OrderStatus.WAITING_FOR_PAYMENT, cancellationToken);
 
@@ -196,9 +191,9 @@ namespace Mix.Services.Ecommerce.Lib.Services
             request.vpc_Locale = order.Currency == "VND"? "vn": "us";
             request.vpc_Currency = order.Currency;
             request.vpc_TicketNo = HttpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();//"14.241.244.43";// 
-            request.AgainLink = againUrl;
+            request.AgainLink = $"{againUrl.TrimEnd('/')}?orderId={order.TempId}";
             request.vpc_ReturnURL = returnUrl;
-            request.vpc_CallbackURL = returnUrl;
+            //request.vpc_CallbackURL = returnUrl;
             return Task.FromResult(ReflectionHelper.ParseObject(request));
         }
     }

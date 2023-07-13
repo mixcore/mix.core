@@ -82,11 +82,11 @@ namespace Mix.Services.Ecommerce.Lib.Services
             return result;
         }
         
-        public async Task<OrderViewModel> GetGuestOrder(Guid orderTempId, CancellationToken cancellationToken = default)
+        public async Task<OrderViewModel> GetGuestOrder(int orderId, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            return await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.TempId == orderTempId, cancellationToken);
+            return await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.Id == orderId, cancellationToken);
         }
 
         public async Task CancelOrder(

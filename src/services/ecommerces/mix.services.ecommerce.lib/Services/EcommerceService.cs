@@ -263,14 +263,12 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
             }
 
-            string returnUrl = $"{_paymentConfiguration.Urls.PaymentResponseUrl}";
-            string againUrl = $"{_paymentConfiguration.Urls.PaymentCartUrl}";
-            var request = await paymentService.GetPaymentRequestAsync(checkoutCart, againUrl, returnUrl, cancellationToken);
+            await checkoutCart.SaveAsync(cancellationToken);
+            var request = await paymentService.GetPaymentRequestAsync(checkoutCart, _paymentConfiguration.Urls.PaymentCartUrl, _paymentConfiguration.Urls.PaymentResponseUrl, cancellationToken);
+            var url = await paymentService.GetPaymentUrl(checkoutCart, _paymentConfiguration.Urls.PaymentCartUrl, _paymentConfiguration.Urls.PaymentResponseUrl, cancellationToken);
 
             checkoutCart.PaymentRequest = request;
-            await checkoutCart.SaveAsync(cancellationToken);
             await myCart.SaveAsync(cancellationToken);
-            var url = await paymentService.GetPaymentUrl(checkoutCart, $"{againUrl}/{checkoutCart.Id}", $"{returnUrl}/{checkoutCart.Id}", cancellationToken);
             await LogAction(checkoutCart.Id, OrderTrackingAction.CHECKOUT);
             return url;
         }
@@ -297,13 +295,12 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 }
 
                 // Get Payment URL
-                string returnUrl = $"{_paymentConfiguration.Urls.PaymentResponseUrl}";
-                string againUrl = $"{_paymentConfiguration.Urls.PaymentCartUrl}";
-                var request = await paymentService.GetPaymentRequestAsync(checkoutCart, againUrl, returnUrl, cancellationToken);
+                
+                var id = await checkoutCart.SaveAsync(cancellationToken);
+                var request = await paymentService.GetPaymentRequestAsync(checkoutCart, _paymentConfiguration.Urls.PaymentCartUrl, _paymentConfiguration.Urls.PaymentResponseUrl, cancellationToken);
+                var url = await paymentService.GetPaymentUrl(checkoutCart, _paymentConfiguration.Urls.PaymentCartUrl, _paymentConfiguration.Urls.PaymentResponseUrl, cancellationToken);
 
                 checkoutCart.PaymentRequest = request;
-                var id = await checkoutCart.SaveAsync(cancellationToken);
-                var url = await paymentService.GetPaymentUrl(checkoutCart, $"{againUrl}/{checkoutCart.Id}", $"{returnUrl}/{checkoutCart.Id}", cancellationToken);
                 await LogAction(id, OrderTrackingAction.CHECKOUT);
                 return url;
             }
@@ -335,7 +332,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 throw new MixException(MixErrorStatus.ServerError, $"Not Implement {order.PaymentGateway} payment");
             }
 
-            if (order.PaymentStatus != PaymentStatus.SUCCESS && order.PaymentStatus!= PaymentStatus.FAILED)
+            if (order.PaymentStatus != PaymentStatus.SUCCESS && order.PaymentStatus != PaymentStatus.FAILED)
             {
                 order.PaymentResponse = paymentResponse;
                 order.PaymentStatus = await paymentService.ProcessPaymentResponse(order, paymentResponse, cancellationToken);

@@ -154,8 +154,8 @@ namespace Mix.Services.ecommerce.Controllers
         }
 
         [HttpGet]
-        [Route("payment-response/{orderTempId}")]
-        public async Task<ActionResult> PaymentResponse(int orderTempId, CancellationToken cancellationToken = default)
+        [Route("payment-response")]
+        public async Task<ActionResult> PaymentResponse([FromQuery] int? orderId, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(Request.QueryString.Value))
             {
@@ -164,12 +164,17 @@ namespace Mix.Services.ecommerce.Controllers
             }
             var query = HttpUtility.ParseQueryString(Request.QueryString.Value);
             var paymentResponse = JObject.FromObject(query!.AllKeys.ToDictionary(k => k, k => query[k]));
+            orderId ??= paymentResponse.Value<int?>("vpc_OrderInfo");
+            if (!orderId.HasValue)
+            {
+                return BadRequest();
+            }
 
-            var result = await _ecommerceService.ProcessPaymentResponse(orderTempId, paymentResponse, cancellationToken);
+            var result = await _ecommerceService.ProcessPaymentResponse(orderId.Value, paymentResponse, cancellationToken);
             string url =
             result.OrderStatus == OrderStatus.PAID
-                ? $"{_paymentConfiguration.Urls.PaymentSuccessUrl}?id={orderTempId}"
-                : $"{_paymentConfiguration.Urls.PaymentFailUrl}?id={orderTempId}";
+                ? $"{_paymentConfiguration.Urls.PaymentSuccessUrl}?id={orderId}"
+                : $"{_paymentConfiguration.Urls.PaymentFailUrl}?id={orderId}";
 
             QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.PaymentResponse, result);
             return Redirect(url);

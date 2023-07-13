@@ -21,7 +21,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Onepay
 
         public string? vpc_OrderInfo { get; set; }
         public string? vpc_ReturnURL { get; set; }
-        public string? vpc_CallbackURL { get; set; }
+        //public string? vpc_CallbackURL { get; set; }
         public string? vpc_TicketNo { get; set; }
         public int? vpc_Version { get; set; } = 2;
 
@@ -48,7 +48,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Onepay
         {
             vpc_Amount = $"{order.Total}00";
             vpc_MerchTxnRef = Guid.NewGuid().ToString();
-            vpc_OrderInfo = order.TempId.ToString();
+            vpc_OrderInfo = order.Id.ToString();
             Title = order.Title;
         }
     }

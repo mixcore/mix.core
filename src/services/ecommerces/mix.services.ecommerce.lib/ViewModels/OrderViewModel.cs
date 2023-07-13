@@ -127,6 +127,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
                 OrderItems.Add(new(UowInfo)
                 {
                     Title = "Shipping",
+                    ItemType = OrderItemType.SHIPPING,
                     Price = Shipping.ShippingFee,
                     Currency = Shipping.Currency,
                     Quantity = 1,

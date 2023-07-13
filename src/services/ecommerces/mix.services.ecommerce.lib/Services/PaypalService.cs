@@ -21,6 +21,7 @@ using System.Net.Http;
 using Mix.Services.Payments.Lib.Constants;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using System.Text.RegularExpressions;
+using Quartz.Util;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
@@ -49,7 +50,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             OrderViewModel order,
             string cancelUrl, string returnUrl, CancellationToken cancellationToken)
         {
-            var request = new PaypalOrderRequest(PaypalConstants.CreateOrderIntent, order, returnUrl, cancelUrl);
+            var request = new PaypalOrderRequest(PaypalConstants.CreateOrderIntent, order, $"{returnUrl.TrimEnd('/')}?orderId={order.Id}", $"{cancelUrl.TrimEnd('/')}?orderId={order.Id}");
             await SaveOrderRequest(request, OrderStatus.WAITING_FOR_PAYMENT, cancellationToken);
             var payment = JObject.FromObject(request);
 
@@ -60,7 +61,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
         {
             try
             {
-                var createdPayment = await CreatePaypalOrderAsync(order, againUrl, returnUrl);
+                var createdPayment = await CreatePaypalOrderAsync(order, $"{againUrl.TrimEnd('/')}?orderId={order.Id}", $"{returnUrl.TrimEnd('/')}?orderId={order.Id}");
                 var approval_url = createdPayment.links.First(x => x.rel == "approve").href;
                 return approval_url;
             }
