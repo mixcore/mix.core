@@ -92,19 +92,6 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             {
                 result.ShippingAddress = ReflectionHelper.ParseObject(Address);
             }
-            if (Shipping != null && !OrderItems.Any(m => m.ItemType == OrderItemType.SHIPPING))
-            {
-                OrderItems.Add(new(UowInfo)
-                {
-                    Title = "Shipping",
-                    ItemType = OrderItemType.SHIPPING,
-                    Price = Shipping.ShippingFee,
-                    Currency = Shipping.Currency,
-                    Quantity = 1,
-                    MixTenantId = MixTenantId,
-                    CreatedBy = CreatedBy
-                });
-            }
             return result;
         }
 
