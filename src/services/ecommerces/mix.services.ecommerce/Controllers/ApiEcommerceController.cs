@@ -155,7 +155,7 @@ namespace Mix.Services.ecommerce.Controllers
 
         [HttpGet]
         [Route("payment-response/{orderTempId}")]
-        public async Task<ActionResult> PaymentResponse(Guid orderTempId, CancellationToken cancellationToken = default)
+        public async Task<ActionResult> PaymentResponse(int orderTempId, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(Request.QueryString.Value))
             {

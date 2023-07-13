@@ -57,6 +57,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 request.vpc_TicketNo = HttpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();//"14.241.244.43";// 
                 request.AgainLink = againUrl;
                 request.vpc_ReturnURL = returnUrl;
+                request.vpc_CallbackURL = returnUrl;
 
                 await SaveRequest(request, OrderStatus.WAITING_FOR_PAYMENT, cancellationToken);
 
@@ -197,6 +198,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             request.vpc_TicketNo = HttpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();//"14.241.244.43";// 
             request.AgainLink = againUrl;
             request.vpc_ReturnURL = returnUrl;
+            request.vpc_CallbackURL = returnUrl;
             return Task.FromResult(ReflectionHelper.ParseObject(request));
         }
     }

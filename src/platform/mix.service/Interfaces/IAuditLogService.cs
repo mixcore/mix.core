@@ -8,5 +8,6 @@ namespace Mix.Service.Interfaces
     {
         public Task SaveRequestAsync(AuditLogDataModel request);
         public void QueueRequest(AuditLogDataModel request);
+        Task LogStream(string? message, object? data = null, Exception? ex = null, bool isSuccess = false);
     }
 }

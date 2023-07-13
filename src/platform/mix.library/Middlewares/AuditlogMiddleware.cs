@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Mix.Identity.Constants;
 using Mix.Lib.Services;
 using Mix.Service.Interfaces;
+using Mix.Shared.Models.Configurations;
+using System.Configuration;
 using System.Text;
 
 namespace Mix.Lib.Middlewares
@@ -11,8 +14,11 @@ namespace Mix.Lib.Middlewares
         private readonly RequestDelegate _next;
         private IAuditLogService _auditlogService;
         private AuditLogDataModel _auditlogData;
-        public AuditlogMiddleware(RequestDelegate next, IAuditLogService auditlogService)
+        private IConfiguration _configuration;
+        private bool _isLog { get; set; }
+        public AuditlogMiddleware(RequestDelegate next, IConfiguration configuration, IAuditLogService auditlogService)
         {
+            _configuration = configuration;
             _next = next;
             _auditlogData = new();
             _auditlogService = auditlogService;
@@ -20,7 +26,14 @@ namespace Mix.Lib.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (GlobalConfigService.Instance.EnableAuditLog && CheckAuditLogPath(context.Request.Path))
+            var logConfigurations = _configuration.GetSection(MixAppSettingsSection.Log).Get<LogConfigurations>();
+            _isLog = CheckAuditLogPath(context.Request.Path);
+            if (!_isLog)
+            {
+                await _next(context);
+            }
+
+            else
             {
                 //Copy a pointer to the original response body stream
                 await LogRequest(context);
@@ -29,37 +42,45 @@ namespace Mix.Lib.Middlewares
                 //Copy a pointer to the original response body stream
                 var originalBodyStream = context.Response.Body;
 
-                //Create a new memory stream...
-                using (var responseBody = new MemoryStream())
+                if (!logConfigurations.EnableAuditLogResponse)
                 {
-                    //...and use that for the temporary response body
-                    context.Response.Body = responseBody;
-
-                    //Continue down the Middleware pipeline, eventually returning to this class
+                    if (logConfigurations.EnableAuditLog)
+                    {
+                        _auditlogService.QueueRequest(_auditlogData);
+                    }
                     await _next(context);
+                }
+                else
+                {
+                    //Create a new memory stream...
+                    using (var responseBody = new MemoryStream())
+                    {
+                        //...and use that for the temporary response body
+                        context.Response.Body = responseBody;
 
-                    //Format the response from the server
-                    await LogResponse(context);
+                        //Continue down the Middleware pipeline, eventually returning to this class
+                        await _next(context);
 
-                    //Copy the contents of the new memory stream (which contains the response) to the original stream, which is then returned to the client.
-                    await responseBody.CopyToAsync(originalBodyStream);
+                        //Format the response from the server
+                        await LogResponse(context);
 
-                    _auditlogService.QueueRequest(_auditlogData);
+                        //Copy the contents of the new memory stream (which contains the response) to the original stream, which is then returned to the client.
+                        await responseBody.CopyToAsync(originalBodyStream);
+
+                        _auditlogService.QueueRequest(_auditlogData);
+                    }
                 }
             }
-            else
+
+            _auditlogData.StatusCode = context.Response.StatusCode;
+            if (logConfigurations.IsLogStream && _isLog)
             {
-                await _next(context);
+                await _auditlogService.LogStream(_auditlogData.Endpoint, _auditlogData.Exception ?? _auditlogData.Body, isSuccess: _auditlogData.StatusCode < 300);
             }
         }
-
         private bool CheckAuditLogPath(string path)
         {
-            if (path.IndexOf("/api") == 0 && path.IndexOf("audit-log") < 0)
-            {
-                return true;
-            }
-            return false;
+            return (path.IndexOf("/api") == 0 && path.IndexOf("audit-log") < 0);
         }
 
         private async Task LogRequest(HttpContext context)

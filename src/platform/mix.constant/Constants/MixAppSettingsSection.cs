@@ -13,5 +13,6 @@
         public const string GoogleFirebase = "GoogleFirebase";
         public const string Payments = "Payments";
         public const string Azure = "Azure";
+        public const string Log = "Log";
     }
 }

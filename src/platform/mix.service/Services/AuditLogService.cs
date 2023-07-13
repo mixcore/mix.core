@@ -61,8 +61,6 @@ namespace Mix.Service.Services
                     log.Success = request.StatusCode < 300;
                     _dbContext.AuditLog.Add(log);
                     await _dbContext.SaveChangesAsync();
-                    var msgType = request.StatusCode < 300 ? MessageType.Success : MessageType.Error;
-                    await SendMessage(request.Endpoint, request.Exception ?? request.Body, msgType: msgType);
                 }
             }
             catch (Exception ex)
@@ -78,22 +76,20 @@ namespace Mix.Service.Services
         }
 
         #region Helpers
-        private async Task SendMessage(string? message, object? data = default, Exception? ex = null, MessageType msgType = MessageType.Info)
+        public async Task LogStream(string? message, object? data = default, Exception? ex = null, bool isSuccess = false)
         {
-            if (GlobalConfigService.Instance.IsLogStream)
+            MessageType msgType = isSuccess ? MessageType.Success : MessageType.Error;
+            var obj = ReflectionHelper.ParseObject(data ?? ex);
+            SignalRMessageModel msg = new()
             {
-                var obj = ReflectionHelper.ParseObject(data ?? ex);
-                SignalRMessageModel msg = new()
-                {
-                    Action = MessageAction.NewMessage,
-                    Type = msgType,
-                    Title = message,
-                    From = new("Log Stream Service"),
-                    Data = obj?.ToString(Newtonsoft.Json.Formatting.None),
-                    Message = ex == null ? message : ex!.Message
-                };
-                await _logStreamHub.SendMessageAsync(msg);
-            }
+                Action = MessageAction.NewMessage,
+                Type = msgType,
+                Title = message,
+                From = new("Log Stream Service"),
+                Data = obj?.ToString(Newtonsoft.Json.Formatting.None),
+                Message = ex == null ? message : ex!.Message
+            };
+            await _logStreamHub.SendMessageAsync(msg);
         }
 
         #endregion

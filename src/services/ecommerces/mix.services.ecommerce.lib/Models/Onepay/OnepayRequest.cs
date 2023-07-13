@@ -21,6 +21,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Onepay
 
         public string? vpc_OrderInfo { get; set; }
         public string? vpc_ReturnURL { get; set; }
+        public string? vpc_CallbackURL { get; set; }
         public string? vpc_TicketNo { get; set; }
         public int? vpc_Version { get; set; } = 2;
 
