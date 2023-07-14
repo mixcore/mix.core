@@ -24,7 +24,10 @@ namespace Mix.Communicator.Services
                 IsBodyHtml = true,
                 From = new MailAddress(msg.From ?? Settings.From)
             };
-            mailMessage.To.Add(msg.To);
+            foreach (var receipient in msg.To.Split(','))
+            {
+                mailMessage.To.Add(receipient);
+            }
             mailMessage.Body = msg.Message;
             mailMessage.Subject = msg.Subject;
             try
