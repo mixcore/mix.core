@@ -263,8 +263,10 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
             }
 
-            await checkoutCart.SaveAsync(cancellationToken);
             var request = await paymentService.GetPaymentRequestAsync(checkoutCart, _paymentConfiguration.Urls.PaymentCartUrl, _paymentConfiguration.Urls.PaymentResponseUrl, cancellationToken);
+            checkoutCart.PaymentRequest = request;
+            await checkoutCart.SaveAsync(cancellationToken);
+
             var url = await paymentService.GetPaymentUrl(checkoutCart, _paymentConfiguration.Urls.PaymentCartUrl, _paymentConfiguration.Urls.PaymentResponseUrl, cancellationToken);
 
             checkoutCart.PaymentRequest = request;
@@ -296,12 +298,13 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
                 // Get Payment URL
                 
-                var id = await checkoutCart.SaveAsync(cancellationToken);
                 var request = await paymentService.GetPaymentRequestAsync(checkoutCart, _paymentConfiguration.Urls.PaymentCartUrl, _paymentConfiguration.Urls.PaymentResponseUrl, cancellationToken);
+                checkoutCart.PaymentRequest = request;
+                await checkoutCart.SaveAsync(cancellationToken);
                 var url = await paymentService.GetPaymentUrl(checkoutCart, _paymentConfiguration.Urls.PaymentCartUrl, _paymentConfiguration.Urls.PaymentResponseUrl, cancellationToken);
 
                 checkoutCart.PaymentRequest = request;
-                await LogAction(id, OrderTrackingAction.CHECKOUT);
+                await LogAction(checkoutCart.Id, OrderTrackingAction.CHECKOUT);
                 return url;
             }
             catch (Exception ex)
@@ -381,7 +384,6 @@ namespace Mix.Services.Ecommerce.Lib.Services
             checkoutCart.LastModified = DateTime.UtcNow;
             checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
             checkoutCart.CreatedDateTime = DateTime.UtcNow;
-            await EcommerceUow.DbContext.SaveChangesAsync();
         }
 
         protected virtual async Task FilterCheckoutCartAsync(OrderViewModel checkoutCart, OrderViewModel myCart)
@@ -390,7 +392,6 @@ namespace Mix.Services.Ecommerce.Lib.Services
             checkoutCart.LastModified = DateTime.UtcNow;
             checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
             checkoutCart.CreatedDateTime = DateTime.UtcNow;
-            await EcommerceUow.DbContext.SaveChangesAsync();
         }
 
 
