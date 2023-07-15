@@ -20,6 +20,7 @@ namespace Mix.Scheduler.Jobs
         {
             var objData = JObject.Parse(context.Trigger.JobDataMap.GetString("data") ?? "{}");
             int tenantId = objData.Value<int>("tenantId");
+            
             var msg = new MessageQueueModel(tenantId)
             {
                 Success = true,

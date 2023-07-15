@@ -35,5 +35,6 @@ namespace Mix.Quartz.Interfaces
         Task ScheduleJob(JobSchedule schedule, CancellationToken cancellationToken = default);
 
         Task RescheduleJob(JobSchedule schedule, CancellationToken cancellationToken = default);
+        Task TriggerJob(string id, CancellationToken cancellationToken = default);
     }
 }

@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -64,6 +65,15 @@ namespace Mix.Quartz.Services
         {
             var key = new TriggerKey(id);
             return Scheduler.PauseTrigger(key, cancellationToken);
+        }
+
+        public async Task TriggerJob(string id, CancellationToken cancellationToken = default)
+        {
+            var trigger = await GetTrigger(id, cancellationToken);
+            if (trigger != null)
+            {
+                await Scheduler.TriggerJob(trigger.JobKey, trigger.Trigger.JobDataMap, cancellationToken);
+            }
         }
 
         public Task ResumeTrigger(string id, CancellationToken cancellationToken = default)

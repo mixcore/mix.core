@@ -56,6 +56,13 @@ namespace Mix.Scheduler.Controllers
             return Ok();
         }
 
+        [HttpGet("execute/{jobName}")]
+        public async Task<ActionResult> ExecuteJob(string jobName)
+        {
+            await _service.TriggerJob(jobName);
+            return Ok();
+        }
+
         [HttpPost("schedule")]
         public async Task<ActionResult> Schedule([FromBody] JobSchedule schedule)
         {

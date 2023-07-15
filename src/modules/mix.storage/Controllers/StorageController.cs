@@ -52,9 +52,8 @@ namespace Mix.Storage.Controllers
         [Authorize]
         [HttpDelete]
         [Route("delete-file")]
-        public ActionResult<bool> Delete()
+        public ActionResult<bool> Delete([FromQuery] string fullPath)
         {
-            var fullPath = Request.Query["fullPath"].ToString();
             if (string.IsNullOrEmpty(fullPath) || !fullPath.Contains(MixFolders.StaticFiles, StringComparison.InvariantCultureIgnoreCase))
             {
                 return BadRequest();
