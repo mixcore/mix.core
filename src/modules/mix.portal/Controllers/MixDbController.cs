@@ -649,7 +649,7 @@ namespace Mix.Portal.Controllers
             }
             if (childId.HasValue)
             {
-                queries.Add(new QueryField(ChildIdFieldName, parentId));
+                queries.Add(new QueryField(ChildIdFieldName, childId));
             }
             return queries;
         }
