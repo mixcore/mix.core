@@ -27,7 +27,11 @@ namespace Mix.Lib.Services
             return edmTemplate?.Content;
         }
 
-        public virtual async Task SendMailWithEdmTemplate(string subject, string templateName, JObject data, string to, string? from = null)
+        public virtual async Task SendMailWithEdmTemplate(
+            string subject, string templateName, JObject data, 
+            string to, 
+            string? cc = null,
+            string? from = null)
         {
             var template = await GetEdmTemplate(templateName);
             if (template == null)
@@ -48,6 +52,7 @@ namespace Mix.Lib.Services
                 Subject = subject,
                 Message = template,
                 From = from,
+                CC = cc,
                 To = to
             };
             _queueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.SendMail, msg);

@@ -32,6 +32,13 @@ namespace Mix.Communicator.Services
             {
                 mailMessage.To.Add(receipient);
             }
+            if (!string.IsNullOrEmpty(msg.CC))
+            {
+                foreach (var cc in msg.CC.Split(','))
+                {
+                    mailMessage.CC.Add(cc);
+                }
+            }
             mailMessage.Body = msg.Message;
             mailMessage.Subject = msg.Subject;
             try
