@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.Extensions.Configuration;
 using Mix.Heart.Models;
+using Mix.Shared.Helpers;
 using Mix.Storage.Lib.Engines.Base;
 using Mix.Storage.Lib.Helpers;
 using Mix.Storage.Lib.Models;
@@ -60,7 +61,7 @@ namespace Mix.Storage.Lib.Engines.Mix
 
         public FileModel GetFileModel(string fileName, Stream fileStream, string? folder, string? createdBy)
         {
-            var name = fileName.Substring(0, fileName.LastIndexOf('.')).ToLower();
+            var name = fileName.Substring(0, fileName.LastIndexOf('.')).Replace(" ", string.Empty).ToLower();
             var ext = fileName.Substring(fileName.LastIndexOf('.')).ToLower();
             folder = GetUploadFolder(ext, folder, createdBy);
 
@@ -86,7 +87,7 @@ namespace Mix.Storage.Lib.Engines.Mix
                 folder = $"{folder}/guest";
             }
 
-            return $"{folder}/{DateTime.Now:yyyy-MM}";
+            return $"{folder}/{DateTime.Now:yyyy-MM}".Replace(" ", string.Empty);
         }
     }
 }

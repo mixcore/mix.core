@@ -4,6 +4,7 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Mix.Shared.Helpers;
 using Mix.Storage.Lib.Engines.Base;
 
 namespace Mix.Storage.Lib.Engines.Aws
@@ -36,7 +37,7 @@ namespace Mix.Storage.Lib.Engines.Aws
                 var request = new PutObjectRequest
                 {
                     BucketName = _setting.BucketName,
-                    Key = string.IsNullOrEmpty(themeName) ? file.FileName : Path.Combine(themeName, file.FileName),
+                    Key = string.IsNullOrEmpty(themeName) ? file.FileName.Replace(" ", string.Empty) : Path.Combine(themeName, file.FileName.Replace(" ", string.Empty)),
                     InputStream = inputStream,
                     CannedACL = S3CannedACL.PublicRead
                 };
@@ -54,7 +55,7 @@ namespace Mix.Storage.Lib.Engines.Aws
                 var request = new PutObjectRequest
                 {
                     BucketName = _setting.BucketName,
-                    Key = string.IsNullOrEmpty(file.FileFolder) ? $"{file.Filename}{file.Extension}" : file.FullPath,
+                    Key = string.IsNullOrEmpty(file.FileFolder) ? $"{file.Filename.Replace(" ", string.Empty)}{file.Extension}" : file.FullPath,
                     InputStream = inputStream,
                     CannedACL = S3CannedACL.PublicRead
                 };
@@ -72,7 +73,7 @@ namespace Mix.Storage.Lib.Engines.Aws
             }
 
             var storageUrl = string.IsNullOrEmpty(_setting.CloudFrontUrl) ? _setting.BucketUrl : _setting.CloudFrontUrl;
-            return $"{storageUrl}/{request.Key}";
+            return $"{storageUrl}/{request.Key}".Replace(" ", string.Empty);
         }
     }
 }

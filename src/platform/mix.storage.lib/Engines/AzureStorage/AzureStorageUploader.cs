@@ -3,6 +3,7 @@ using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Configuration;
+using Mix.Shared.Helpers;
 using Mix.Storage.Lib.Engines.Base;
 using Mix.Storage.Lib.Engines.CloudFlare;
 using Org.BouncyCastle.Ocsp;
@@ -36,7 +37,7 @@ namespace Mix.Storage.Lib.Engines.AzureStorage
             using (Stream myBlob = file.OpenReadStream())
             {
                 var fileFolder = GetUploadFolder(file.FileName, folder, createdBy);
-                var fileName = $"{fileFolder}/{DateTime.Now.Ticks}-{file.FileName}";
+                var fileName = $"{fileFolder}/{DateTime.Now.Ticks}-{file.FileName.Replace(" ", string.Empty)}";
                 var blob = _blobClient.GetBlobClient(fileName);
                 BlobHttpHeaders h = new BlobHttpHeaders();
                 h.ContentType = GetContentType(Path.GetExtension(file.FileName));
@@ -66,7 +67,7 @@ namespace Mix.Storage.Lib.Engines.AzureStorage
                 var bytes = Convert.FromBase64String(file.FileBase64.ToBase64Stream());
                 using (var stream = new MemoryStream(bytes))
                 {
-                    var fileName = $"{fileFolder}/{DateTime.Now.Ticks}-{file.Filename}{file.Extension}";
+                    var fileName = $"{fileFolder}/{DateTime.Now.Ticks}{file.Extension}";
                     var blob = _blobClient.GetBlobClient(fileName);
                     await _blobClient.UploadBlobAsync(file.Filename, stream, cancellationToken);
                     return $"{_settings.CdnUrl}/{_settings.ContainerName}/{fileName}";
@@ -90,7 +91,7 @@ namespace Mix.Storage.Lib.Engines.AzureStorage
                 folder = $"{folder}/{fileFolder}";
             }
 
-            return $"{folder}/{DateTime.Now.ToString("yyyy-MM")}";
+            return $"{folder}/{DateTime.Now.ToString("yyyy-MM")}".Replace(" ", string.Empty);
         }
     }
 }
