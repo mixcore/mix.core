@@ -14,11 +14,13 @@ namespace Mix.Service.Services
 {
     public sealed class MixPermissionService
     {
+        private int? _tenantId;
         private readonly DatabaseService _databaseService;
+        private MixCmsAccountContext accountDbContext;
+
         private readonly IHttpContextAccessor _httpContextAccessor;
         public Dictionary<string, string[]> RoleEndpoints { get; private set; }
-        private MixCmsAccountContext accountDbContext;
-        private int? _tenantId;
+        
         public MixPermissionService(
                 IHttpContextAccessor httpContextAccessor)
         {
@@ -27,65 +29,65 @@ namespace Mix.Service.Services
             _tenantId = _httpContextAccessor.HttpContext?.Session.GetInt32(MixRequestQueryKeywords.TenantId) ?? 1;
         }
 
-        public async Task Reload()
-        {
-            if (!GlobalConfigService.Instance.IsInit)
-            {
-                UnitOfWorkInfo<MixDbDbContext> uow = null;
-                try
-                {
-                    RoleEndpoints = new Dictionary<string, string[]>();
-                    accountDbContext = new MixCmsAccountContext(_databaseService);
-                    uow = new(new MixDbDbContext(_databaseService));
+        //public async Task Reload()
+        //{
+        //    if (!GlobalConfigService.Instance.IsInit)
+        //    {
+        //        UnitOfWorkInfo<MixDbDbContext> uow = null;
+        //        try
+        //        {
+        //            RoleEndpoints = new Dictionary<string, string[]>();
+        //            accountDbContext = new MixCmsAccountContext(_databaseService);
+        //            uow = new(new MixDbDbContext(_databaseService));
 
-                    var roles = await accountDbContext.MixRoles.ToListAsync();
+        //            var roles = await accountDbContext.MixRoles.ToListAsync();
 
-                    foreach (var role in roles)
-                    {
-                        var permissionIds = uow.DbContext.MixDatabaseAssociation
-                                            .Where(m => m.GuidParentId == role.Id)
-                                            .Select(m => m.ChildId);
-                        var endpointIds = uow.DbContext.MixDatabaseAssociation
-                                            .Where(m => m.ParentDatabaseName == MixDatabaseNames.SYSTEM_PERMISSION
-                                                        && m.ChildDatabaseName == MixDatabaseNames.SYSTEM_PERMISSION_ENDPOINT
-                                                        && permissionIds.Contains(m.ParentId))
-                                            .Select(m => m.ChildId);
-                        var endpoints = await uow.DbContext.PermissionEndpoint.Where(
-                                                m => endpointIds.Contains(m.Id)
-                                                    && !string.IsNullOrEmpty(m.Path)
-                                                )
-                                        .GroupBy(m => m.MixTenantId)
-                                        .Select(m => new TenantRoleEndpoints
-                                        {
-                                            MixTenantId = m.Key,
-                                            Endpoints = m.ToList()
-                                        })
-                                        .ToListAsync();
+        //            foreach (var role in roles)
+        //            {
+        //                var permissionIds = uow.DbContext.MixDatabaseAssociation
+        //                                    .Where(m => m.GuidParentId == role.Id)
+        //                                    .Select(m => m.ChildId);
+        //                var endpointIds = uow.DbContext.MixDatabaseAssociation
+        //                                    .Where(m => m.ParentDatabaseName == MixDatabaseNames.SYSTEM_PERMISSION
+        //                                                && m.ChildDatabaseName == MixDatabaseNames.SYSTEM_PERMISSION_ENDPOINT
+        //                                                && permissionIds.Contains(m.ParentId))
+        //                                    .Select(m => m.ChildId);
+        //                var endpoints = await uow.DbContext.PermissionEndpoint.Where(
+        //                                        m => endpointIds.Contains(m.Id)
+        //                                            && !string.IsNullOrEmpty(m.Path)
+        //                                        )
+        //                                .GroupBy(m => m.MixTenantId)
+        //                                .Select(m => new TenantRoleEndpoints
+        //                                {
+        //                                    MixTenantId = m.Key,
+        //                                    Endpoints = m.ToList()
+        //                                })
+        //                                .ToListAsync();
 
-                        if (endpoints.Any())
-                        {
-                            foreach (var endpoint in endpoints)
-                            {
-                                RoleEndpoints.Add(
-                                    $"{role.Name}-{endpoint.MixTenantId}", 
-                                    endpoint.Endpoints.Select(p => $"{p.Method.ToLower()}-{p.Path.ToLower()}")
-                                        .Distinct().ToArray());
-                            }
-                        }
-                    }
+        //                if (endpoints.Any())
+        //                {
+        //                    foreach (var endpoint in endpoints)
+        //                    {
+        //                        RoleEndpoints.Add(
+        //                            $"{role.Name}-{endpoint.MixTenantId}", 
+        //                            endpoint.Endpoints.Select(p => $"{p.Method.ToLower()}-{p.Path.ToLower()}")
+        //                                .Distinct().ToArray());
+        //                    }
+        //                }
+        //            }
 
-                }
-                catch (Exception ex)
-                {
+        //        }
+        //        catch (Exception ex)
+        //        {
 
-                }
-                finally
-                {
-                    uow.Dispose();
-                    accountDbContext.Dispose();
-                }
-            }
-        }
+        //        }
+        //        finally
+        //        {
+        //            uow.Dispose();
+        //            accountDbContext.Dispose();
+        //        }
+        //    }
+        //}
 
         public bool CheckEndpointPermission(string[] userRoles, PathString path, string method)
         {
