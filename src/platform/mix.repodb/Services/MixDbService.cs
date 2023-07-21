@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Azure;
 using Mix.Constant.Constants;
 using Mix.Constant.Enums;
 using Mix.Database.Base;
@@ -30,6 +31,7 @@ using RepoDb.Enumerations;
 using RepoDb.Interfaces;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 
 namespace Mix.RepoDb.Services
 {
@@ -501,7 +503,7 @@ namespace Mix.RepoDb.Services
                         if (currentDb is { Columns.Count: > 0 })
                         {
                             await Migrate(currentDb, _databaseService.DatabaseProvider, _repository);
-                            
+
                         }
                     }
                 }
@@ -514,12 +516,23 @@ namespace Mix.RepoDb.Services
         // TODO: check why need to restart application to load new database schema for Repo Db Context !important
         public async Task<bool> RestoreFromLocal(string name)
         {
-            MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == name);
-            if (database is { Columns.Count: > 0 })
+            try
             {
-                return await RestoreFromLocal(database);
+                MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == name);
+                if (database is { Columns.Count: > 0 })
+                {
+                    return await RestoreFromLocal(database);
+                }
+                return false;
             }
-            return false;
+            catch (MixException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
         }
 
         public async Task<bool> BackupDatabase(string databaseName, CancellationToken cancellationToken = default)
@@ -569,12 +582,16 @@ namespace Mix.RepoDb.Services
             var data = await _backupRepository.GetAllAsync();
             if (data is { Count: > 0 })
             {
+                var dbColumns = database.Columns.Select(c => c.SystemName.ToTitleCase()).Union(DefaultProperties).ToList();
+                string insertQuery = $"INSERT INTO {database.SystemName} ({string.Join(',', dbColumns.Select(m => $"{_databaseConstant.BacktickOpen}{m}{_databaseConstant.BacktickClose}"))}) VALUES ";
+                List<string> queries = new();
                 foreach (var item in data)
                 {
-                    GetMembers(item, database.Columns.Select(c => c.SystemName.ToTitleCase()).ToList());
+                    queries.Add(GetInsertQuery(item, dbColumns));
                 }
+                insertQuery += string.Join(',', queries);
                 _repository.InitTableName(database.SystemName);
-                var result = await _repository.InsertManyAsync(data);
+                var result = await _repository.ExecuteCommand(insertQuery);
                 return result >= 0;
             }
             return true;
@@ -590,6 +607,25 @@ namespace Mix.RepoDb.Services
                     obj!.Remove(kvp.Key, out _);
                 }
             }
+        }
+        private string GetInsertQuery(ExpandoObject obj, List<string> selectMembers)
+        {
+            var result = obj.ToList();
+            List<string> values = new();
+            foreach (var col in selectMembers)
+            {
+                if (obj.Any(m => m.Key == col))
+                {
+                    var val = obj.First(m => m.Key == col).Value;
+                    if (val != null)
+                    {
+                        values.Add($"'{val}'");
+                        continue;
+                    }
+                }
+                values.Add("NULL");
+            }
+            return $"({string.Join(',', values)})";
         }
 
         private async Task<List<dynamic>?> GetCurrentData(string databaseName, CancellationToken cancellationToken = default)
