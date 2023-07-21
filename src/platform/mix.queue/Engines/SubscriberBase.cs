@@ -5,11 +5,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mix.Heart.Exceptions;
+using Mix.Heart.Helpers;
 using Mix.Heart.Services;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
+using Mix.Queue.Services;
 using Mix.Shared.Helpers;
 using System;
 using System.Threading;
@@ -19,26 +21,33 @@ namespace Mix.Queue.Engines
 {
     public abstract class SubscriberBase : IHostedService
     {
+        private IQueueService<MessageQueueModel> _queueService;
         private readonly IQueueSubscriber _subscriber;
         private readonly IConfiguration _configuration;
-        private readonly MixQueueMessages<MessageQueueModel> _queueService;
+        private readonly MixQueueMessages<MessageQueueModel> _mixQueueService;
         private readonly string _topicId;
-
+        private readonly int _timeout;
         protected MixCacheService CacheService;
         protected readonly IServiceProvider ServicesProvider;
         protected IServiceScope ServiceScope { get; set; }
+
+
         protected SubscriberBase(
             string topicId,
             string moduleName,
+            int timeout,
             IServiceProvider servicesProvider,
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> queueService)
+            MixQueueMessages<MessageQueueModel> mixQueueService,
+            IQueueService<MessageQueueModel> queueService)
         {
+            _timeout = timeout;
             _configuration = configuration;
-            _queueService = queueService;
+            _mixQueueService = mixQueueService;
             _topicId = topicId;
             _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{moduleName}");
             ServicesProvider = servicesProvider;
+            _queueService = queueService;
         }
 
         public Task StartAsync(CancellationToken cancellationToken = default)
@@ -80,20 +89,20 @@ namespace Mix.Queue.Engines
                         var azureSetting = new AzureQueueSetting();
                         azureSettingPath.Bind(azureSetting);
                         return QueueEngineFactory.CreateSubscriber(
-                            provider, azureSetting, topicId, subscriptionId, MessageHandler, _queueService);
+                            provider, azureSetting, topicId, subscriptionId, MessageHandler, _mixQueueService);
                     case MixQueueProvider.GOOGLE:
                         var googleSettingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
                         var googleSetting = new GoogleQueueSetting();
                         googleSettingPath.Bind(googleSetting);
                         googleSetting.CredentialFile = googleSetting.CredentialFile;
                         return QueueEngineFactory.CreateSubscriber(
-                            provider, googleSetting, topicId, subscriptionId, MessageHandler, _queueService);
+                            provider, googleSetting, topicId, subscriptionId, MessageHandler, _mixQueueService);
                     case MixQueueProvider.MIX:
                         var mixSettingPath = _configuration.GetSection("MessageQueueSetting:Mix");
                         var mixSetting = new MixQueueSetting();
                         mixSettingPath.Bind(mixSetting);
                         return QueueEngineFactory.CreateSubscriber(
-                           provider, mixSetting, topicId, subscriptionId, MessageHandler, _queueService);
+                           provider, mixSetting, topicId, subscriptionId, MessageHandler, _mixQueueService);
                 }
             }
             catch (Exception ex)
@@ -112,7 +121,6 @@ namespace Mix.Queue.Engines
 
         public async Task MessageHandler(MessageQueueModel data)
         {
-
             try
             {
                 if (_topicId != data.TopicId)
@@ -121,7 +129,12 @@ namespace Mix.Queue.Engines
                 }
 
                 CacheService ??= GetRequiredService<MixCacheService>();
-                await Handler(data);
+                if (Handler(data).Wait(TimeSpan.FromSeconds(_timeout)))
+                {
+                    return;
+                }
+                else
+                    await HandleDeadLetter(data);
             }
             catch (Exception ex)
             {
@@ -129,9 +142,27 @@ namespace Mix.Queue.Engines
             }
         }
 
+        public virtual Task HandleDeadLetter(MessageQueueModel message)
+        {
+            _queueService.PushQueue(new MessageQueueModel(1)
+            {
+                Action = MixQueueActions.DeadLetter,
+                TopicId = MixQueueTopics.MixBackgroundTasks,
+                Data = ReflectionHelper.ParseObject(message).ToString(),
+                Success = false
+            });
+            return Task.CompletedTask;
+        }
+        
         public virtual Task HandleException(Exception ex)
         {
-            Console.Error.WriteLine(ex);
+            _queueService.PushQueue(new MessageQueueModel(1)
+            {
+                Action = MixQueueActions.ExceptionLog,
+                TopicId = MixQueueTopics.MixBackgroundTasks,
+                Data = ReflectionHelper.ParseObject(ex).ToString(),
+                Success = false
+            });
             return Task.CompletedTask;
         }
 

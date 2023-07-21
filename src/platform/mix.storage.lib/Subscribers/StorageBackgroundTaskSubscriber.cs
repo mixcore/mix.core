@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Communicator.Models;
 using Mix.Communicator.Services;
+using Mix.Lib.Subscribers;
 using Mix.Mixdb.Event.Services;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
@@ -27,10 +28,11 @@ namespace Mix.Storage.Lib.Subscribers
         public StorageBackgroundTaskSubscriber(
             IServiceProvider serviceProvider,
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> queueService,
+            MixQueueMessages<MessageQueueModel> mixQueueService,
             IAuditLogService auditLogService,
-            IPortalHubClientService portalHub)
-            : base(TopicId, "Storage", serviceProvider, configuration, queueService)
+            IPortalHubClientService portalHub,
+            IQueueService<MessageQueueModel> queueService)
+            : base(TopicId, nameof(StorageBackgroundTaskSubscriber), 20, serviceProvider, configuration, mixQueueService, queueService)
         {
             AuditLogService = auditLogService;
             PortalHub = portalHub;

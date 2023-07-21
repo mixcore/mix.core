@@ -5,6 +5,7 @@ using Mix.Database.Entities.Cms;
 using Mix.Heart.UnitOfWork;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
+using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.RepoDb.Interfaces;
 using Mix.SignalR.Enums;
@@ -20,10 +21,11 @@ namespace Mix.RepoDb.Subscribers
         private IMixDbService _mixDbService;
         public MixRepoDbSubscriber(
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> queueService,
+            MixQueueMessages<MessageQueueModel> mixQueueService,
             IServiceProvider serviceProvider,
-            IPortalHubClientService portalHub)
-            : base(MixQueueTopics.MixRepoDb, string.Empty, serviceProvider, configuration, queueService)
+            IPortalHubClientService portalHub,
+            IQueueService<MessageQueueModel> queueService)
+            : base(MixQueueTopics.MixRepoDb, nameof(MixRepoDbSubscriber), 20, serviceProvider, configuration, mixQueueService, queueService)
         {
             PortalHub = portalHub;
         }
