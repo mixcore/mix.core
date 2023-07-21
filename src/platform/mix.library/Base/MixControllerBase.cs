@@ -116,6 +116,7 @@ namespace Mix.Lib.Base
 
             // If mode Maintenance enabled in appsettings
             if (!GlobalConfigService.Instance.IsInit
+                && CurrentTenant != null
                 && CurrentTenant.Configurations != null
                 && CurrentTenant.Configurations.IsMaintenance
                 && Request.RouteValues["seoName"]?.ToString() != "maintenance")

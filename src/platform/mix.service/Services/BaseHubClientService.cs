@@ -72,12 +72,12 @@ namespace Mix.Service.Services
                     Console.WriteLine("Cannot Start SignalR Hub: MixEndpointService.Messenger is null or empty");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await MixLogService.LogExceptionAsync(ex);
             }
         }
-        
+
         public async Task SendMessageAsync(SignalRMessageModel message)
         {
             try
@@ -97,8 +97,11 @@ namespace Mix.Service.Services
                     {
                         try
                         {
-                            await Task.Delay(new Random().Next(0, 5) * 1000);
-                            await Connection.StartAsync();
+                            if (Connection.State == HubConnectionState.Disconnected)
+                            {
+                                await Task.Delay(new Random().Next(0, 5) * 1000);
+                                await Connection.StartAsync();
+                            }
                         }
 
                         catch (Exception ex)
@@ -113,7 +116,7 @@ namespace Mix.Service.Services
                     Console.WriteLine("Cannot Start SignalR Hub: MixEndpointService.Messenger is null or empty");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await MixLogService.LogExceptionAsync(ex);
             }
