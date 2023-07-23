@@ -19,14 +19,15 @@ namespace Mix.Communicator.Services
 
         public async Task SendMail(EmailMessageModel msg)
         {
-            if (string.IsNullOrEmpty(msg.Subject)|| string.IsNullOrEmpty(msg.To))
+            if (string.IsNullOrEmpty(msg.Subject) || string.IsNullOrEmpty(msg.To))
             {
                 throw new MixException(Heart.Enums.MixErrorStatus.Badrequest, "Invalid Mail message");
             }
             MailMessage mailMessage = new MailMessage
             {
+
                 IsBodyHtml = true,
-                From = new MailAddress(msg.From ?? Settings.From)
+                From = new MailAddress(msg.From ?? Settings.From, Settings.FromName)
             };
             foreach (var receipient in msg.To.Split(','))
             {

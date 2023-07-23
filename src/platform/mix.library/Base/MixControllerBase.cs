@@ -56,15 +56,18 @@ namespace Mix.Lib.Base
             //{
             //    Culture = GlobalConfigService.Instance.AppSettings.DefaultCulture;
             //}
-            if (!CurrentTenant.Cultures.Any(m => m.Specificulture == Culture))
+            if (CurrentTenant != null)
             {
-                Culture = CurrentTenant.Cultures.First().Specificulture;
-            }
+                if (!CurrentTenant.Cultures.Any(m => m.Specificulture == Culture))
+                {
+                    Culture = CurrentTenant.Cultures.First().Specificulture;
+                }
 
-            // Set CultureInfo
-            var cultureInfo = new CultureInfo(Culture);
-            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+                // Set CultureInfo
+                var cultureInfo = new CultureInfo(Culture);
+                CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+                CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+            }
         }
 
         public ViewContext ViewContext { get; set; }

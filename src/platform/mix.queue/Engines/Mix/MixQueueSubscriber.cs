@@ -13,6 +13,7 @@ namespace Mix.Queue.Engines.MixQueue
         where T : MessageQueueModel
     {
         public string SubscriptionId { get; set; }
+        public bool IsProcessing { get; private set; }
         private readonly string _subscriptionId;
         private MixTopicModel<T> _topic;
         private readonly MixQueueSetting _queueSetting;
@@ -53,10 +54,10 @@ namespace Mix.Queue.Engines.MixQueue
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    _topic = _queue.GetTopic(_topic.Id);
-                    if (!_topic.IsProcessing)
+                    if (!IsProcessing)
                     {
-                        _topic.IsProcessing = true;
+                        IsProcessing = true;
+                        _topic = _queue.GetTopic(_topic.Id);
                         var inQueueItems = _topic.ConsumeQueue(_subscriptionId, 10);
                         if (inQueueItems.Count > 0)
                         {
@@ -65,7 +66,7 @@ namespace Mix.Queue.Engines.MixQueue
                                 await _messageHandler.Invoke(msg);
                             }
                         }
-                        _topic.IsProcessing = false;
+                        IsProcessing = false;
                         await Task.Delay(1000, cancellationToken);
                     }
                 }

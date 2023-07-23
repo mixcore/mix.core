@@ -65,7 +65,7 @@ namespace Mix.Queue.Engines
             }
             catch (Exception ex)
             {
-                throw new MixException(Heart.Enums.MixErrorStatus.ServerError, ex);
+                throw new MixException(_subscriber.SubscriptionId, ex);
             }
         }
 
@@ -153,7 +153,7 @@ namespace Mix.Queue.Engines
             });
             return Task.CompletedTask;
         }
-        
+
         public virtual Task HandleException(Exception ex)
         {
             _queueService.PushQueue(new MessageQueueModel(1)

@@ -59,16 +59,16 @@ namespace Mix.Queue.Engines.Mix
 
             int i = 1;
 
-
-            while (i <= length && Messages.Any())
+            var messages = Messages.Where(m => !m.Subscriptions.Any(s => s.Id == subscriptionId));
+            while (i <= length && messages.Any())
             {
-                T data = Messages.First();
+                T data = messages.First();
                 if (!data.Subscriptions.Any(m => m.Id == subscription.Id))
                 {
                     data.Subscriptions.Add(subscription);
                     result.Add(data);
                 }
-                if (data.Subscriptions.Count == Subscriptions.Count || data.CreatedDate.AddMinutes(1) < DateTime.UtcNow)
+                if (data.Subscriptions.Count == Subscriptions.Count)
                 {
                     Messages.TryDequeue(out _);
                 }

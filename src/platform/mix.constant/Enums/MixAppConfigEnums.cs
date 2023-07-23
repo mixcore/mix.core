@@ -3,6 +3,9 @@
     public enum MixAppConfigEnums
     {
         Global,
+        Kiotviet,
+        Log,
+        RateLimit,
         Authentication,
         Portal,
         EPPlus,

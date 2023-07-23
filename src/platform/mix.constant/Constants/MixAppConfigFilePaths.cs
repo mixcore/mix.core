@@ -25,5 +25,8 @@
         public const string Storage = "MixContent/Shared/AppConfigs/storage";
         public const string Queue = "MixContent/Shared/AppConfigs/queue";
         public const string Payments = "MixContent/Shared/AppConfigs/payments";
+        public const string Kiotviet = "MixContent/Shared/AppConfigs/kiotviet";
+        public const string Log = "MixContent/Shared/AppConfigs/log";
+        public const string RateLimit = "MixContent/Shared/AppConfigs/rate_limit";
     }
 }
