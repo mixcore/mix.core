@@ -232,7 +232,7 @@ namespace Mix.Account.Controllers
         [Route("login-unsecure")]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> LoginUnSecure(LoginViewModel model)
+        public async Task<ActionResult> LoginUnSecure([FromBody] LoginViewModel model)
         {
             var loginResult = await _idService.LoginAsync(model);
             return Ok(loginResult);
@@ -240,7 +240,7 @@ namespace Mix.Account.Controllers
 
         [AllowAnonymous]
         [HttpPost("external-login-unsecure")]
-        public async Task<ActionResult> ExternalLoginUnSecure(RegisterExternalBindingModel model)
+        public async Task<ActionResult> ExternalLoginUnSecure([FromBody] RegisterExternalBindingModel model)
         {
             var loginResult = await _idService.ExternalLogin(model);
             return Ok(loginResult);
@@ -284,7 +284,7 @@ namespace Mix.Account.Controllers
             {
                 throw;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new MixException(MixErrorStatus.ServerError, ex);
             }

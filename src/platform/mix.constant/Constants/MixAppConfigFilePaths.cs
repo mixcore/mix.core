@@ -28,5 +28,7 @@
         public const string Kiotviet = "MixContent/Shared/AppConfigs/kiotviet";
         public const string Log = "MixContent/Shared/AppConfigs/log";
         public const string RateLimit = "MixContent/Shared/AppConfigs/rate_limit";
+        public const string GoogleFirebase = "MixContent/Shared/AppConfigs/google_firebase";
+        public const string GoogleCredential = "MixContent/Shared/AppConfigs/google_credential";
     }
 }

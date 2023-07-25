@@ -25,6 +25,7 @@ using Mix.Service.Interfaces;
 using Mix.Service.Services;
 using Mix.Shared.Dtos;
 using Mix.Shared.Models;
+using Mix.Shared.Services;
 using Newtonsoft.Json.Linq;
 using RepoDb;
 using RepoDb.Enumerations;
@@ -473,42 +474,46 @@ namespace Mix.RepoDb.Services
 
         public async Task<bool> MigrateSystemDatabases()
         {
-            var strMixDbs = MixFileHelper.GetFile(
-                    "system-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
-            var obj = JObject.Parse(strMixDbs.Content);
-            var databases = obj.Value<JArray>("databases")?.ToObject<List<MixDatabase>>();
-            var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
-            if (databases != null)
+            if (GlobalConfigService.Instance.AppSettings.MigrateSystemDatabases)
             {
-                foreach (var database in databases)
-                {
-                    if (!await CheckTableExist(database.SystemName, _repository))
-                    {
-                        MixDatabaseViewModel currentDb = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService)
-                            .GetSingleAsync(m => m.SystemName == database.SystemName);
-                        if (currentDb == null)
-                        {
-                            currentDb = new(database, _cmsUow);
-                            currentDb.Id = 0;
-                            currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
-                            currentDb.CreatedDateTime = DateTime.UtcNow;
-                            currentDb.Columns = new();
-                            var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
-                            foreach (var col in cols)
-                            {
-                                currentDb.Columns.Add(new(col, _cmsUow));
-                            }
-                            await currentDb.SaveAsync();
-                        }
-                        if (currentDb is { Columns.Count: > 0 })
-                        {
-                            await Migrate(currentDb, _databaseService.DatabaseProvider, _repository);
 
+                var strMixDbs = MixFileHelper.GetFile(
+                        "system-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
+                var obj = JObject.Parse(strMixDbs.Content);
+                var databases = obj.Value<JArray>("databases")?.ToObject<List<MixDatabase>>();
+                var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
+                if (databases != null)
+                {
+                    foreach (var database in databases)
+                    {
+                        if (!await CheckTableExist(database.SystemName, _repository))
+                        {
+                            MixDatabaseViewModel currentDb = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService)
+                                .GetSingleAsync(m => m.SystemName == database.SystemName);
+                            if (currentDb == null)
+                            {
+                                currentDb = new(database, _cmsUow);
+                                currentDb.Id = 0;
+                                currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
+                                currentDb.CreatedDateTime = DateTime.UtcNow;
+                                currentDb.Columns = new();
+                                var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
+                                foreach (var col in cols)
+                                {
+                                    currentDb.Columns.Add(new(col, _cmsUow));
+                                }
+                                await currentDb.SaveAsync();
+                            }
+                            if (currentDb is { Columns.Count: > 0 })
+                            {
+                                await Migrate(currentDb, _databaseService.DatabaseProvider, _repository);
+
+                            }
                         }
                     }
-                }
-                return true;
+                    return true;
 
+                }
             }
             return false;
         }

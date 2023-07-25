@@ -134,6 +134,11 @@ namespace Mix.Common.Controllers
                 MixAppConfigEnums.Queue => MixAppConfigFilePaths.Queue,
                 MixAppConfigEnums.Storage => MixAppConfigFilePaths.Storage,
                 MixAppConfigEnums.Payments => MixAppConfigFilePaths.Payments,
+                MixAppConfigEnums.Kiotviet => MixAppConfigFilePaths.Kiotviet,
+                MixAppConfigEnums.Log => MixAppConfigFilePaths.Log,
+                MixAppConfigEnums.RateLimit => MixAppConfigFilePaths.RateLimit,
+                MixAppConfigEnums.GoogleFirebase => MixAppConfigFilePaths.GoogleFirebase,
+                MixAppConfigEnums.GoogleCredential => MixAppConfigFilePaths.GoogleCredential,
                 _ => string.Empty
             };
         }

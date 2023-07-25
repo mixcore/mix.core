@@ -18,6 +18,8 @@
         Storage,
         Smtp,
         Endpoint,
-        Payments
+        Payments,
+        GoogleFirebase,
+        GoogleCredential
     }
 }

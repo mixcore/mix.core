@@ -69,9 +69,9 @@ namespace Mix.Lib.Services
             UnitOfWorkInfo<MixCmsAccountContext> accountUow,
             MixCacheService cacheService,
             FirebaseService firebaseService, MixRepoDbRepository repoDbRepository,
-            DatabaseService databaseService, 
-            MixCmsAccountContext accContext, 
-            UnitOfWorkInfo<MixDbDbContext> mixDbUow, 
+            DatabaseService databaseService,
+            MixCmsAccountContext accContext,
+            UnitOfWorkInfo<MixDbDbContext> mixDbUow,
             IMixDbDataService mixDbDataService)
         {
             Session = httpContextAccessor.HttpContext?.Session;
@@ -334,48 +334,60 @@ namespace Mix.Lib.Services
 
         public virtual async Task<JObject> ExternalLogin(RegisterExternalBindingModel model, CancellationToken cancellationToken = default)
         {
-            var verifiedAccessToken = await VerifyExternalAccessTokenAsync(model.Provider, model.ExternalAccessToken, AuthConfigService.AppSettings);
-            if (verifiedAccessToken != null)
+            try
             {
-
-                var user = await UserManager.FindByLoginAsync(model.Provider.ToString(), verifiedAccessToken.user_id);
-
-                // return local token if already register
-                if (user != null)
+                var verifiedAccessToken = await VerifyExternalAccessTokenAsync(model.Provider, model.ExternalAccessToken, AuthConfigService.AppSettings);
+                if (verifiedAccessToken != null)
                 {
-                    return await GetAuthData(user, true, CurrentTenant.Id, cancellationToken);
-                }
 
-                // register new account
-                else
-                {
-                    string userName = model.UserName ?? model.Email ?? model.PhoneNumber;
+                    var user = await UserManager.FindByLoginAsync(model.Provider.ToString(), verifiedAccessToken.user_id);
 
-                    if (!string.IsNullOrEmpty(userName))
+                    // return local token if already register
+                    if (user != null)
                     {
-                        user = await RegisterAsync(
-                            new RegisterViewModel
-                            {
-                                Email = model.Email,
-                                PhoneNumber = model.PhoneNumber,
-                                UserName = userName,
-                                Provider = model.Provider,
-                                ProviderKey = verifiedAccessToken.user_id,
-                                //Data = model.Data
-                            },
-                            CurrentTenant.Id,
-                            CmsUow,
-                            cancellationToken);
-
                         return await GetAuthData(user, true, CurrentTenant.Id, cancellationToken);
                     }
+
+                    // register new account
                     else
                     {
-                        throw new MixException(MixErrorStatus.Badrequest, "Login Failed");
+                        string userName = model.UserName ?? model.Email ?? model.PhoneNumber;
+                        
+                        if (!string.IsNullOrEmpty(userName))
+                        {
+                            user = await UserManager.FindByNameAsync(userName);
+                            user ??= await RegisterAsync(
+                                new RegisterViewModel
+                                {
+                                    Email = model.Email,
+                                    PhoneNumber = model.PhoneNumber,
+                                    UserName = userName,
+                                    Provider = model.Provider,
+                                    ProviderKey = verifiedAccessToken.user_id,
+                                    //Data = model.Data
+                                },
+                                CurrentTenant.Id,
+                                CmsUow,
+                                cancellationToken);
+
+                            return await GetAuthData(user, true, CurrentTenant.Id, cancellationToken);
+                        }
+                        else
+                        {
+                            throw new MixException(MixErrorStatus.Badrequest, "Login Failed");
+                        }
                     }
                 }
+                throw new MixException(MixErrorStatus.Badrequest);
             }
-            return default;
+            catch (MixException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
         }
 
         public async Task<JObject> RenewTokenAsync(RenewTokenDto refreshTokenDto, CancellationToken cancellationToken = default)
@@ -511,7 +523,7 @@ namespace Mix.Lib.Services
         {
             var userRoles = await UserManager.GetUserRolesAsync(user);
             List<Claim> claims = await GetClaimsAsync(user, userRoles);
-            if (info!= null && info.ContainsKey("endpoints"))
+            if (info != null && info.ContainsKey("endpoints"))
             {
                 var endpoints = info.Values<JArray>("endpoints");
                 foreach (var endpoint in endpoints)
