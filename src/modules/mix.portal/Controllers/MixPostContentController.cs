@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Heart.Extensions;
-using Mix.Heart.Helpers;
 using Mix.Portal.Domain.Services;
 using Mix.RepoDb.Repositories;
 
@@ -10,7 +8,7 @@ namespace Mix.Portal.Controllers
     [ApiController]
     [MixAuthorize(MixRoles.Owner)]
     public class MixPostContentController
-        : MixBaseContentController<MixPostContentViewModel, MixPostContent, int>
+        : MixBaseContentController<MixPortalPostContentViewModel, MixPostContent, int>
     {
         private readonly PortalPostService _postService;
         private readonly MixRepoDbRepository _mixRepoDbRepository;
@@ -36,7 +34,7 @@ namespace Mix.Portal.Controllers
         #region Routes
 
         [HttpPost("filter")]
-        public async Task<ActionResult<PagingResponseModel<MixPostContentViewModel>>> Filter([FromBody] FilterContentRequestDto req)
+        public async Task<ActionResult<PagingResponseModel<MixPortalPostContentViewModel>>> Filter([FromBody] FilterContentRequestDto req)
         {
             var searchRequest = BuildSearchRequest(req);
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
@@ -56,13 +54,19 @@ namespace Mix.Portal.Controllers
                 }
             }
             var result = await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+            if (req.LoadNestedData)
+            {
+                foreach (var item in result.Items)
+                {
+                    await item.LoadAdditionalDataAsync(_mixRepoDbRepository, CacheService);
+                }
+            }
             return Ok(ParseSearchResult(req, result));
         }
 
         #endregion
 
         #region Overrides
-
         #endregion
     }
 }

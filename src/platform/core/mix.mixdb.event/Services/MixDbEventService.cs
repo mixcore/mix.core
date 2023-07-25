@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Amqp.Framing;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
+using Microsoft.Extensions.DependencyInjection;
+using Mix.Constant.Constants;
 using Mix.Database.Constants;
 using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
@@ -30,16 +32,22 @@ namespace Mix.Mixdb.Event.Services
 {
     public class MixDbEventService
     {
+        protected readonly IServiceProvider ServicesProvider;
         private readonly IPortalHubClientService PortalHub;
         private DatabaseService _databaseService;
         public List<MixDbEventSubscriberViewModel> Subscribers;
         private readonly HttpService _httpService;
-        public MixDbEventService(DatabaseService databaseService, HttpService httpService, IPortalHubClientService portalHub)
+        public MixDbEventService(DatabaseService databaseService, HttpService httpService, 
+            IPortalHubClientService portalHub, 
+            MixPermissionService mixPermissionService, 
+            IServiceProvider servicesProvider)
         {
             _databaseService = databaseService;
             LoadEvents();
             _httpService = httpService;
             PortalHub = portalHub;
+            _mixPermissionService = mixPermissionService;
+            ServicesProvider = servicesProvider;
         }
 
         public void LoadEvents()
@@ -54,24 +62,34 @@ namespace Mix.Mixdb.Event.Services
 
         public async Task HandleMessage(MixDbEventCommand model)
         {
-            if (model.MixDbName == MixDbDatabaseNames.DatabaseNameMixDbEvent || model.MixDbName == MixDbDatabaseNames.DatabaseNameMixDbEventSubscriber)
+            using (var serviceScope = ServicesProvider.CreateScope())
             {
-                LoadEvents();
-            }
-            else
-            {
-                var subs = Subscribers.Where(e => e.MixDbName == model.MixDbName
-                            && e.Action!.Equals(model.Action, StringComparison.OrdinalIgnoreCase));
-                if (subs.Count() > 0)
+                var _cacheService = serviceScope.ServiceProvider.GetRequiredService<MixCacheService>();
+                await _cacheService.RemoveCacheAsync(model.Data.Value<string>("Id"), $"{MixFolders.MixDbCacheFolder}/{model.MixDbName}");
+                if (model.MixDbName == MixDatabaseNames.SYSTEM_PERMISSION || model.MixDbName == MixDatabaseNames.SYSTEM_PERMISSION_ENDPOINT)
                 {
-                    foreach (var sub in subs)
+                    await _mixPermissionService.Reload();
+                }
+                else
+                if (model.MixDbName == MixDbDatabaseNames.MixDbEvent || model.MixDbName == MixDbDatabaseNames.MixDbEventSubscriber)
+                {
+                    LoadEvents();
+                }
+                else
+                {
+                    var subs = Subscribers.Where(e => e.MixDbName == model.MixDbName
+                                && e.Action!.Equals(model.Action, StringComparison.OrdinalIgnoreCase));
+                    if (subs.Count() > 0)
                     {
-                        if (sub.Callback != null)
+                        foreach (var sub in subs)
                         {
-                            var requestModel = sub.Callback.ToObject<HttpRequestModel>();
-                            requestModel!.Body = ParseBody(requestModel.Body, model.Data);
-                            var result = await _httpService.SendHttpRequestModel(requestModel);
-                            await SendMessage(model, requestModel!.Body, result);
+                            if (sub.Callback != null)
+                            {
+                                var requestModel = sub.Callback.ToObject<HttpRequestModel>();
+                                requestModel!.Body = ParseBody(requestModel.Body, model.Data);
+                                var result = await _httpService.SendHttpRequestModel(requestModel);
+                                await SendMessage(model, requestModel!.Body, result);
+                            }
                         }
                     }
                 }
