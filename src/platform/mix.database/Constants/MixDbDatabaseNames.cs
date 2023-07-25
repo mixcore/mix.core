@@ -2,13 +2,15 @@
 {
     public sealed class MixDbDatabaseNames
     {
-        public const string DatabaseNameMixDbEvent = "MixDbEvent";
-        public const string DatabaseNameMixDbEventSubscriber = "MixDbEventSubscriber";
-        public const string DatabaseNameMetadata = "Metadata";
-        public const string DatabaseNameMedia = "SysMedia";
-        public const string DatabaseNamePortalMenu = "PortalMenu";
-        public const string DatabaseNameMetadataContentAssociation = "MetadataContentAssociation";
-        public const string DatabaseNameUserData = "SysUserData";
-        public const string DatabaseNameContactAddress = "ContactAddress";
+        public const string MixDbEvent = "MixDbEvent";
+        public const string MixDbEventSubscriber = "MixDbEventSubscriber";
+        public const string Metadata = "Metadata";
+        public const string Media = "SysMedia";
+        public const string PortalMenu = "PortalMenu";
+        public const string MetadataContentAssociation = "MetadataContentAssociation";
+        public const string UserData = "SysUserData";
+        public const string ContactAddress = "ContactAddress";
+        public const string Navigation = "sysNavigation";
+        public const string MenuItem = "sysMenuItem";
     }
 }

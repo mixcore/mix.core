@@ -16,7 +16,7 @@ namespace Mix.Communicator.Services
         public FirebaseService(IConfiguration configuration)
         {
             configuration.GetSection(MixAppSettingsSection.GoogleFirebase).Bind(_settings);
-            if (!string.IsNullOrEmpty(_settings.Filename))
+            if (!string.IsNullOrEmpty(_settings.ProjectId) && !string.IsNullOrEmpty(_settings.Filename))
             {
 
                 var googleCredential = _settings.Filename;

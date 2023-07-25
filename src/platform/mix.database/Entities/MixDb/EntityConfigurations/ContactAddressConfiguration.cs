@@ -13,7 +13,7 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixContactAddress> builder)
         {
-            builder.ToTable(MixDbDatabaseNames.DatabaseNameContactAddress);
+            builder.ToTable(MixDbDatabaseNames.ContactAddress);
             base.Configure(builder);
 
             builder.Property(e => e.Street)

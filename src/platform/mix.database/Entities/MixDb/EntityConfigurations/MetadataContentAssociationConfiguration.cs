@@ -11,7 +11,7 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixMetadataContentAssociation> builder)
         {
-            builder.ToTable(MixDbDatabaseNames.DatabaseNameMetadataContentAssociation);
+            builder.ToTable(MixDbDatabaseNames.MetadataContentAssociation);
             base.Configure(builder);
             builder.Property(e => e.ContentType)
                .IsRequired(false)

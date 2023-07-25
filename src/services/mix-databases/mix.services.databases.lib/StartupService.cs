@@ -19,7 +19,7 @@ namespace Mix.Services.Databases.Lib
             services.TryAddScoped<MySqlMixDbDbContext>();
             services.TryAddScoped<SqliteMixDbDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<MixDbDbContext>>();
-            services.TryAddScoped<IMixPermissionService, MixPermissionService>();
+            services.TryAddScoped<IMixPermissionService, MixUserPermissionService>();
             services.TryAddScoped<IMixMetadataService, MixMetadataService>();
             services.TryAddScoped<IMixUserDataService, MixUserDataService>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixDbDbContext>>();

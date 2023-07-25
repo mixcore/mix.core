@@ -14,7 +14,7 @@ namespace Mix.Services.Graphql.Lib.Entities.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixMetadata> builder)
         {
-            builder.ToTable(MixDbDatabaseNames.DatabaseNameMetadata);
+            builder.ToTable(MixDbDatabaseNames.Metadata);
             base.Configure(builder);
         }
     }

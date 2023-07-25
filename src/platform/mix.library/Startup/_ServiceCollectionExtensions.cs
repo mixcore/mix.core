@@ -63,6 +63,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
             services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
             services.TryAddSingleton<IMixDbCommandHubClientService, MixDbCommandHubClientService>();
+            services.TryAddSingleton<MixPermissionService>();
             services.TryAddSingleton<MixDbEventService>();
             services.AddMixRepoDb();
 
@@ -147,6 +148,7 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseDefaultFiles();
             var provider = new FileExtensionContentTypeProvider();
             provider.Mappings[".vue"] = "application/text";
+            provider.Mappings[".xml"] = "application/xml";
 
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -167,6 +169,9 @@ namespace Microsoft.Extensions.DependencyInjection
                     Path.Combine(contentRootPath, MixFolders.StaticFiles)),
                 RequestPath = $"/{MixFolders.StaticFiles}"
             });
+
+            // Use staticfile for wwwroot
+            app.UseStaticFiles();
 
             return app;
         }

@@ -10,7 +10,7 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixPortalMenu> builder)
         {
-            builder.ToTable(MixDbDatabaseNames.DatabaseNamePortalMenu);
+            builder.ToTable(MixDbDatabaseNames.PortalMenu);
             base.Configure(builder);
 
             builder.Property(e => e.Title)

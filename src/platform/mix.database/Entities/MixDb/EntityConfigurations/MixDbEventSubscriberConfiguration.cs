@@ -11,7 +11,7 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixDbEventSubscriber> builder)
         {
-            builder.ToTable(MixDbDatabaseNames.DatabaseNameMixDbEventSubscriber);
+            builder.ToTable(MixDbDatabaseNames.MixDbEventSubscriber);
             builder.Property(e => e.Callback)
              .HasConversion(
                  v => v.ToString(Newtonsoft.Json.Formatting.None),

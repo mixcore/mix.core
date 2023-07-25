@@ -10,7 +10,7 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixMetadata> builder)
         {
-            builder.ToTable(MixDbDatabaseNames.DatabaseNameMetadata);
+            builder.ToTable(MixDbDatabaseNames.Metadata);
             base.Configure(builder);
         }
     }

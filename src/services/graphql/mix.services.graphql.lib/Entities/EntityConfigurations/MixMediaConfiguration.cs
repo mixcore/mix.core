@@ -14,7 +14,7 @@ namespace Mix.Services.Graphql.Lib.Entities.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixMedia> builder)
         {
-            builder.ToTable(MixDbDatabaseNames.DatabaseNameMedia);
+            builder.ToTable(MixDbDatabaseNames.Media);
             base.Configure(builder);
         }
     }

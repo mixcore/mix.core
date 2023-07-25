@@ -10,7 +10,7 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixDbMedia> builder)
         {
-            builder.ToTable(MixDbDatabaseNames.DatabaseNameMedia);
+            builder.ToTable(MixDbDatabaseNames.Media);
             base.Configure(builder);
         }
     }

@@ -577,6 +577,7 @@ namespace Mix.Portal.Controllers
 
         private IEnumerable<QueryField> BuildSearchPredicate(SearchMixDbRequestDto req)
         {
+            var operation = ParseSearchOperation(req.SearchMethod);
             var queries = new List<QueryField>()
             {
                 new QueryField(TenantIdFieldName, CurrentTenant.Id)

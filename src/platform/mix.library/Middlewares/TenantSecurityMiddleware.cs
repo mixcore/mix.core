@@ -17,6 +17,7 @@ namespace Mix.Lib.Middlewares
             HttpContext context,
             IMixTenantService mixTenantService,
             MixConfigurationService configService,
+            MixPermissionService permissionService,
             MixEndpointService mixEndpointService)
         {
             if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)

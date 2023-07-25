@@ -1,4 +1,4 @@
-﻿ using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -7,6 +7,7 @@ using Mix.Common.Domain.Models;
 using Mix.Common.Domain.ViewModels;
 using Mix.Heart.Exceptions;
 using Mix.Identity.Constants;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Mixdb.ViewModels;
 using Mix.Queue.Engines.MixQueue;
@@ -22,7 +23,6 @@ namespace Mix.Common.Controllers
     [ApiController]
     public class SharedApiController : MixApiControllerBase
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly MixQueueMessages<MessageQueueModel> _mixMemoryMessageQueue;
         private readonly MixCacheService _cacheService;
         private readonly ApplicationLifetime _applicationLifetime;
@@ -41,20 +41,17 @@ namespace Mix.Common.Controllers
             IQueueService<MessageQueueModel> queueService,
             ApplicationLifetime applicationLifetime,
             MixCacheService cacheService,
-            IMixCmsService mixCmsService,
             IHttpContextAccessor httpContextAccessor,
             MixQueueMessages<MessageQueueModel> mixMemoryMessageQueue)
             : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
-            Context = context;
+            Context = uow.DbContext;
             _cacheService = cacheService;
             Uow = new(Context);
             _configRepo = MixConfigurationContentViewModel.GetRepository(Uow, _cacheService);
             _langRepo = MixLanguageContentViewModel.GetRepository(Uow, _cacheService);
             _routeProvider = routeProvider;
             _applicationLifetime = applicationLifetime;
-            _mixCmsService = mixCmsService;
-            _httpContextAccessor = httpContextAccessor;
             _mixMemoryMessageQueue = mixMemoryMessageQueue;
         }
 
@@ -111,7 +108,7 @@ namespace Mix.Common.Controllers
 
             return Ok(res);
         }
-        
+
         [HttpGet]
         [Route("queues")]
         public ActionResult GetQueues()

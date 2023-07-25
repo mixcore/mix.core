@@ -11,7 +11,7 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixUserData> builder)
         {
-            builder.ToTable(MixDbDatabaseNames.DatabaseNameUserData);
+            builder.ToTable(MixDbDatabaseNames.UserData);
             base.Configure(builder);
 
             builder.Property(e => e.Avatar)

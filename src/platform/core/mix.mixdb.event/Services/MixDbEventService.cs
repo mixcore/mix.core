@@ -35,11 +35,12 @@ namespace Mix.Mixdb.Event.Services
         protected readonly IServiceProvider ServicesProvider;
         private readonly IPortalHubClientService PortalHub;
         private DatabaseService _databaseService;
+        private MixPermissionService _mixPermissionService;
         public List<MixDbEventSubscriberViewModel> Subscribers;
         private readonly HttpService _httpService;
-        public MixDbEventService(DatabaseService databaseService, HttpService httpService, 
-            IPortalHubClientService portalHub, 
-            MixPermissionService mixPermissionService, 
+        public MixDbEventService(DatabaseService databaseService, HttpService httpService,
+            IPortalHubClientService portalHub,
+            MixPermissionService mixPermissionService,
             IServiceProvider servicesProvider)
         {
             _databaseService = databaseService;
