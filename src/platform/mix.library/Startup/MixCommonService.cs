@@ -30,6 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IPSecurityConfigService>();
 
             services.TryAddScoped<MixConfigurationService>();
+            services.TryAddSingleton<MixPermissionService>();
             services.TryAddScoped<IMixCmsService, MixCmsService>();
             services.TryAddScoped<MixCacheService>();
             services.TryAddScoped<TranslatorService>();
