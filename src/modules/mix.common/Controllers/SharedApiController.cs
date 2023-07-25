@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Mix.Common.Domain.Dtos;
 using Mix.Common.Domain.Models;
 using Mix.Common.Domain.ViewModels;
+using Mix.Database.Entities.MixDb;
 using Mix.Heart.Exceptions;
 using Mix.Identity.Constants;
 using Mix.Lib.Interfaces;
@@ -21,13 +22,13 @@ namespace Mix.Common.Controllers
 {
     [Route("api/v2/rest/shared")]
     [ApiController]
-    public class SharedApiController : MixApiControllerBase
+    public sealed class SharedApiController : MixTenantApiControllerBase
     {
         private readonly MixQueueMessages<MessageQueueModel> _mixMemoryMessageQueue;
         private readonly MixCacheService _cacheService;
         private readonly ApplicationLifetime _applicationLifetime;
-        protected UnitOfWorkInfo Uow;
-        protected readonly MixCmsContext Context;
+        private readonly UnitOfWorkInfo<MixCmsContext> _uow;
+        private readonly IMixCmsService _mixCmsService;
         private readonly ViewQueryRepository<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel> _configRepo;
         private readonly ViewQueryRepository<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel> _langRepo;
         private readonly IActionDescriptorCollectionProvider _routeProvider;
@@ -45,11 +46,10 @@ namespace Mix.Common.Controllers
             MixQueueMessages<MessageQueueModel> mixMemoryMessageQueue)
             : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
-            Context = uow.DbContext;
+            _uow = uow;
             _cacheService = cacheService;
-            Uow = new(Context);
-            _configRepo = MixConfigurationContentViewModel.GetRepository(Uow, _cacheService);
-            _langRepo = MixLanguageContentViewModel.GetRepository(Uow, _cacheService);
+            _configRepo = MixConfigurationContentViewModel.GetRepository(_uow, _cacheService);
+            _langRepo = MixLanguageContentViewModel.GetRepository(_uow, _cacheService);
             _routeProvider = routeProvider;
             _applicationLifetime = applicationLifetime;
             _mixMemoryMessageQueue = mixMemoryMessageQueue;
@@ -123,6 +123,13 @@ namespace Mix.Common.Controllers
         {
             await _cacheService.ClearAllCacheAsync(cancellationToken);
             return Ok();
+        }
+
+        [HttpGet("sitemap")]
+        public async Task<ActionResult> Sitemap(CancellationToken cancellationToken = default)
+        {
+            var file = await _mixCmsService.ParseSitemapAsync();
+            return Ok(file);
         }
 
         [HttpGet]

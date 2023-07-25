@@ -25,5 +25,6 @@ namespace Mix.Database.Entities.MixDb
         public DbSet<MixUserData> MixUserData { get; set; }
         public DbSet<MixContactAddress> MixContactAddress { get; set; }
         public DbSet<MixNavigation> MixNavigation { get; set; }
+        public DbSet<MixMenuItem> MixMenuItem { get; set; }
     }
 }
