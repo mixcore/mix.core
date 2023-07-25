@@ -143,6 +143,17 @@ namespace Mix.Shared.Services
             return SendRequestAsync<T>(
                 client => client.PostAsync(requestUrl, content), bearerToken, requestHeaders);
         }
+        
+        public Task<T> PutAsync<T, T1>(string requestUrl, T1 body,
+                string bearerToken = null,
+                List<KeyValuePair<string, string>> requestHeaders = null,
+                string contentType = "application/json"
+            )
+        {
+            var content = CreateHttpContent(body, contentType);
+            return SendRequestAsync<T>(
+                client => client.PutAsync(requestUrl, content), bearerToken, requestHeaders);
+        }
         #region Privates
                 
         private HttpContent CreateHttpContent<T>(T content, string contentType)
