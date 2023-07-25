@@ -1,8 +1,5 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Azure.Amqp.Framing;
-using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
 using Mix.RepoDb.Interfaces;
@@ -104,6 +101,21 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult<PagingResponseModel<JObject>>> Get([FromQuery] SearchMixDbRequestDto req)
         {
             var result = await SearchHandler(req);
+
+            return Ok(result);
+        }
+
+        [HttpPost("by-ids")]
+        public async Task<ActionResult<PagingResponseModel<JObject>>> GetByIds([FromBody] GetIdsDto req)
+        {
+            var searchDto = new SearchMixDbRequestDto
+            {
+                SearchColumns = "id",
+                SearchMethod = MixCompareOperator.InRange,
+                Keyword = string.Join(',', req.Ids)
+            };
+
+            var result = await SearchHandler(searchDto);
 
             return Ok(result);
         }
