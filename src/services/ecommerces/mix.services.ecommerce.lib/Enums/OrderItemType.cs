@@ -3,7 +3,7 @@
     public enum OrderItemType
     {
         PRODUCT,
-        VOUCHER,
-        SHIPPING
+        SHIPPING,
+        PROMOTION
     }
 }

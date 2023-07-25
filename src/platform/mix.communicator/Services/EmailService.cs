@@ -19,6 +19,10 @@ namespace Mix.Communicator.Services
 
         public async Task SendMail(EmailMessageModel msg)
         {
+            if (string.IsNullOrEmpty(msg.Subject)|| string.IsNullOrEmpty(msg.To))
+            {
+                throw new MixException(Heart.Enums.MixErrorStatus.Badrequest, "Invalid Mail message");
+            }
             MailMessage mailMessage = new MailMessage
             {
                 IsBodyHtml = true,

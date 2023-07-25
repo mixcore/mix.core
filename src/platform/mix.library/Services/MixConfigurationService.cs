@@ -23,12 +23,14 @@ namespace Mix.Lib.Services
             {
                 if (uow != null)
                 {
-                    Configs = await MixConfigurationContentViewModel.GetRepository(uow, CacheService).GetAllAsync(m => m.MixTenantId == CurrentTenant.Id);
+                    Configs = await MixConfigurationContentViewModel.GetRepository(uow, CacheService).GetAllAsync(
+                        m => m.MixTenantId == CurrentTenant.Id);
                 }
                 else
                 {
                     uow = new(new MixCmsContext(_databaseService));
-                    Configs = await MixConfigurationContentViewModel.GetRepository(uow, CacheService).GetAllAsync(m => m.MixTenantId == CurrentTenant.Id);
+                    Configs = await MixConfigurationContentViewModel.GetRepository(uow, CacheService).GetAllAsync(
+                        m => m.MixTenantId == CurrentTenant.Id);
                     uow.Dispose();
                 }
             }
@@ -57,13 +59,24 @@ namespace Mix.Lib.Services
             }
         }
 
+
+        public async Task<string> GetConfig(string name, string culture, string defaultValue = default)
+        {
+            if (Configs == null)
+            {
+                await Reload();
+            }
+            var config = Configs.FirstOrDefault(m => m.Specificulture == culture && m.SystemName == name);
+            return config != null ? config.Content : defaultValue;
+        }
+
         public async Task<T> GetConfig<T>(string name, string culture, T defaultValue = default)
         {
             if (Configs == null)
             {
                 await Reload();
             }
-            var config = Configs?.FirstOrDefault(m => m.Specificulture == culture && m.SystemName == name);
+            var config = Configs.FirstOrDefault(m => m.Specificulture == culture && m.SystemName == name);
             return config != null ? config.GetValue<T>(): defaultValue;
         }
     }

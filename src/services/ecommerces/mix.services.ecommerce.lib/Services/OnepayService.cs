@@ -191,7 +191,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             request.vpc_Locale = order.Currency == "VND"? "vn": "us";
             request.vpc_Currency = order.Currency;
             request.vpc_TicketNo = HttpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();//"14.241.244.43";// 
-            request.AgainLink = $"{againUrl.TrimEnd('/')}?orderId={order.TempId}";
+            request.AgainLink = $"{againUrl.TrimEnd('/')}?orderId={order.ExternalId}";
             request.vpc_ReturnURL = returnUrl;
             //request.vpc_CallbackURL = returnUrl;
             return Task.FromResult(ReflectionHelper.ParseObject(request));

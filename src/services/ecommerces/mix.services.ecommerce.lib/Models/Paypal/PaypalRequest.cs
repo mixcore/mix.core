@@ -1,9 +1,10 @@
-﻿using Mix.Services.Ecommerce.Lib.ViewModels;
+﻿using Mix.Services.Ecommerce.Lib.Interfaces;
+using Mix.Services.Ecommerce.Lib.ViewModels;
 using Newtonsoft.Json.Linq;
 
 namespace Mix.Services.Ecommerce.Lib.Models.Paypal
 {
-    public sealed class PaypalOrderRequest
+    public class PaypalOrderRequest
     {
         public string? intent { get; set; }
         public RedirecUrls application_context { get; set; }

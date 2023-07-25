@@ -22,8 +22,7 @@ namespace Mix.Lib.Services
         public async Task<string?> GetEdmTemplate(string filename)
         {
             var edmTemplate = await MixTemplateViewModel.GetRepository(_uow, CacheService).GetSingleAsync(
-               m => m.MixTenantId == CurrentTenant.Id
-                        && m.FolderType == MixTemplateFolderType.Edms
+               m => m.FolderType == MixTemplateFolderType.Edms
                         && m.FileName == filename);
             return edmTemplate?.Content;
         }

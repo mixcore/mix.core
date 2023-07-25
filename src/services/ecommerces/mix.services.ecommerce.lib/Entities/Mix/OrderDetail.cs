@@ -6,12 +6,13 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix
 {
     public class OrderDetail : EntityBase<int>
     {
-        public Guid TempId { get; set; }
+        public Guid ExternalId { get; set; }
         public string? Title { get; set; }
         public string? Code { get; set; }
         public long KiotvietId { get; set; }
         public string? DeliveryCode { get; set; }
         public string? Description { get; set; }
+        public string? AdminNote { get; set; }
         public string? Currency { get; set; }
         public PaymentGateway? PaymentGateway { get; set; }
         public double? Total { get; set; }

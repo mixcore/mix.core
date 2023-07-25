@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Mix.Heart.Enums;
+using Mix.Heart.Exceptions;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Ecommerce.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.Services;
@@ -19,6 +21,8 @@ namespace Mix.Services.Ecommerce.Lib.Providers
                     return serviceProvider.GetRequiredService<PaypalService>();
                 case PaymentGateway.Momo:
                     break;
+                default:
+                    throw new MixException(MixErrorStatus.ServerError, $"Not Implement {provider} payment");
             }
             return default;
         }

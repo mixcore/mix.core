@@ -251,6 +251,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             {
                 throw new MixException(MixErrorStatus.Badrequest, $"Invalid Cart");
             }
+            checkoutCart.ExternalId ??= Guid.NewGuid();
             checkoutCart.PaymentGateway = gateway;
             checkoutCart.MixTenantId = CurrentTenant.Id;
             checkoutCart.Email ??= user!.Email;
@@ -284,7 +285,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             try
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                checkoutCart.TempId = Guid.NewGuid();
+                checkoutCart.ExternalId ??= Guid.NewGuid();
                 checkoutCart.MixTenantId = CurrentTenant.Id;
                 checkoutCart.PaymentGateway = gateway;
                 await FilterGuestCheckoutCartAsync(checkoutCart);

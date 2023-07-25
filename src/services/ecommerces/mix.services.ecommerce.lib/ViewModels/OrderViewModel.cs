@@ -12,7 +12,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
     public class OrderViewModel : ViewModelBase<EcommerceDbContext, OrderDetail, int, OrderViewModel>
     {
         #region Properties
-        public Guid? TempId { get; set; }
+        public Guid? ExternalId { get; set; }
         public string? Code { get; set; }
         public long KiotvietId { get; set; }
         public string? DeliveryCode { get; set; }
@@ -73,7 +73,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             OrderItems = await OrderItemViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderDetailId == Id, cancellationToken);
             OrderTrackings = await OrderTrackingViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderDetailId == Id, cancellationToken);
             Address = ShippingAddress != null
-                        ? ShippingAddress.ToObject<OrderAddress>() 
+                        ? ShippingAddress.ToObject<OrderAddress>()!
                         : new();
             var shippingItem = OrderItems.FirstOrDefault(m => m.Title == "Shipping");
             if (shippingItem != null)
