@@ -7,10 +7,10 @@
 
   <ItemGroup>
     <!--<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />-->
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="7.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="7.0.3" />
-    <PackageReference Include="Microsoft.Azure.SignalR" Version="1.21.2" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="7.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="7.0.9" />
+    <PackageReference Include="Microsoft.Azure.SignalR" Version="1.21.5" />
   </ItemGroup>
 
   <ItemGroup>

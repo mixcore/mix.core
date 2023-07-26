@@ -13,8 +13,8 @@
 		<Using Include="Mix.Shared.Dtos" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="FirebaseAdmin" Version="2.3.0" />
-		<PackageReference Include="Google.Api.Gax.Rest" Version="4.3.1" />
+		<PackageReference Include="FirebaseAdmin" Version="2.4.0" />
+		<PackageReference Include="Google.Api.Gax.Rest" Version="4.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>
