@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty).ToHypenCase(' ');
             string version = "v2";
-            string swaggerBasePath = $"api/{version}/{title.Replace(".", "-").ToHypenCase()}";
+            string swaggerBasePath = string.Empty;
 
             services.AddSwaggerGen(c =>
             {
@@ -50,10 +50,10 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty);
             string version = "v2";
-            string swaggerBasePath = $"api/{version}/{title.Replace(".", "-").ToHypenCase()}";
-            string routePrefix = $"{swaggerBasePath}/swagger";
-            string routeTemplate = swaggerBasePath + "/swagger/{documentName}/swagger.json";
-            string endPoint = $"/{swaggerBasePath}/swagger/{version}/swagger.json";
+            string swaggerBasePath = string.Empty;
+            string routePrefix = $"swagger";
+            string routeTemplate = "swagger/{documentName}/swagger.json";
+            string endPoint = $"/swagger/{version}/swagger.json";
             if (isDevelop)
             {
                 // using System.Reflection;
