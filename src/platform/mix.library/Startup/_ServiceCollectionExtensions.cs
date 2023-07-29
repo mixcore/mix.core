@@ -30,8 +30,16 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddMvc().AddSessionStateTempDataProvider();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSession();
-            services.AddMixCommonServices(executingAssembly, configuration);
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(4);
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.HttpOnly = true;
+                // Make the session cookie essential if you wish
+                //options.Cookie.IsEssential = true;
+            });
+                services.AddMixCommonServices(executingAssembly, configuration);
             services.AddMixDbContexts();
             services.AddUoWs();
             services.AddMixCache(configuration);

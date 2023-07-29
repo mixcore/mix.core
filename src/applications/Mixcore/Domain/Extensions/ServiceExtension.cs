@@ -1,16 +1,21 @@
 ﻿using Newtonsoft.Json.Converters;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using Ocelot.Cache.CacheManager;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceExtension
     {
         #region Ocelot
-        
+
         public static void AddMixOcelot(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddOcelot(configuration);
+            services.AddOcelot(configuration)
+                .AddCacheManager(x =>
+                {
+                    x.WithDictionaryHandle();
+                });
         }
 
         public static void UseMixOcelot(this IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
@@ -24,8 +29,9 @@ namespace Microsoft.Extensions.DependencyInjection
         public static void AddMixRoutes(this IServiceCollection services)
         {
             services.AddControllersWithViews()
-              .AddRazorRuntimeCompilation()
-              .AddNewtonsoftJson(options =>
+                .AddSessionStateTempDataProvider()
+                .AddRazorRuntimeCompilation()
+                .AddNewtonsoftJson(options =>
               {
                   options.SerializerSettings.Converters.Add(new StringEnumConverter());
               });
