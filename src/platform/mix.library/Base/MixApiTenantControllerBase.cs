@@ -44,12 +44,14 @@ namespace Mix.Lib.Base
             {
                 return;
             }
+            if (CurrentTenant != null)
+            {
+                Lang = RouteData.Values[MixRequestQueryKeywords.Specificulture] != null
+                    ? RouteData.Values[MixRequestQueryKeywords.Specificulture].ToString()
+                    : CurrentTenant.Configurations.DefaultCulture;
 
-            Lang = RouteData.Values[MixRequestQueryKeywords.Specificulture] != null
-                ? RouteData.Values[MixRequestQueryKeywords.Specificulture].ToString()
-                : CurrentTenant.Configurations.DefaultCulture;
-
-            Culture = CurrentTenant.Cultures.FirstOrDefault(c => c.Specificulture == Lang) ?? CurrentTenant.Cultures.FirstOrDefault();
+                Culture = CurrentTenant.Cultures.FirstOrDefault(c => c.Specificulture == Lang) ?? CurrentTenant.Cultures.FirstOrDefault();
+            }
         }
     }
 }

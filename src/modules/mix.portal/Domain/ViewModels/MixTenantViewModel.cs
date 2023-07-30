@@ -69,6 +69,7 @@
             Culture.MixTenantId = parent.Id;
             Culture.SetUowInfo(UowInfo, CacheService);
             await Culture.SaveAsync(cancellationToken);
+            ModifiedEntities.AddRange(Culture.ModifiedEntities);
         }
 
         private async Task SaveDomainAsync(MixTenant parent, CancellationToken cancellationToken = default)
@@ -79,6 +80,7 @@
                 domain.SetCacheService(CacheService);
                 domain.SetUowInfo(UowInfo, CacheService);
                 await domain.SaveAsync(cancellationToken);
+                ModifiedEntities.AddRange(domain.ModifiedEntities);
             }
         }
         #endregion

@@ -104,6 +104,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
                 item.OrderDetailId = parentEntity.Id;
                 item.MixTenantId = MixTenantId;
                 await item.SaveAsync(cancellationToken);
+                ModifiedEntities.AddRange(item.ModifiedEntities);
             }
         }
 

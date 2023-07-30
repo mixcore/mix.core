@@ -10,6 +10,7 @@
         public bool IsHttps { get; set; }
         public int ResponseCache { get; set; }
         public string ApiEncryptKey { get; set; }
+        public string DefaultDomain { get; set; }
         public bool EnableOcelot { get; set; }
         public InitStep InitStatus { get; set; }
     }

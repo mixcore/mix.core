@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Services;
+using Mix.SignalR.Interfaces;
 
 namespace Mix.Lib.Controllers
 {
@@ -14,7 +15,8 @@ namespace Mix.Lib.Controllers
         where TEntity : EntityBase<TPrimaryKey>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
-        public MixAutoGenerateRestApiController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService) : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
+        public MixAutoGenerateRestApiController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService,
+            IPortalHubClientService portalHub) : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
         {
         }
     }

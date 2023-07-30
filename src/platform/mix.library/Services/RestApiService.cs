@@ -3,6 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Identity.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Models.Common;
+using Mix.SignalR.Enums;
+using Mix.SignalR.Interfaces;
+using Mix.SignalR.Models;
+using NuGet.Protocol;
 
 namespace Mix.Lib.Services
 {
@@ -14,6 +18,7 @@ namespace Mix.Lib.Services
     {
         protected readonly MixIdentityService MixIdentityService;
         protected readonly IQueueService<MessageQueueModel> QueueService;
+        protected readonly IPortalHubClientService PortalHub;
         protected UnitOfWorkInfo Uow;
         protected UnitOfWorkInfo CacheUow;
         public Repository<TDbContext, TEntity, TPrimaryKey, TView> Repository { get; set; }
@@ -24,7 +29,8 @@ namespace Mix.Lib.Services
             MixIdentityService identityService,
             UnitOfWorkInfo<TDbContext> uow,
             IQueueService<MessageQueueModel> queueService,
-            MixCacheService cacheService)
+            MixCacheService cacheService,
+            IPortalHubClientService portalHub)
             : base(httpContextAccessor, cacheService)
         {
             MixIdentityService = identityService;
@@ -33,6 +39,7 @@ namespace Mix.Lib.Services
             Context = (TDbContext)uow.ActiveDbContext;
             Repository ??= ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(Uow, cacheService);
             Repository.CacheService = cacheService;
+            PortalHub = portalHub;
         }
 
         #region Command Handlers
@@ -57,6 +64,14 @@ namespace Mix.Lib.Services
             data.CreatedBy = MixIdentityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username);
             data.ModifiedBy = data.CreatedBy;
             var id = await data.SaveAsync(cancellationToken);
+            await PortalHub.SendMessageAsync(new SignalRMessageModel()
+            {
+                Action = MessageAction.NewQueueMessage,
+                Title= ViewModelAction.Create.ToString(),
+                Message = MixQueueTopics.MixViewModelChanged,
+                Data = ReflectionHelper.ParseObject(data).ToString(),
+                Type = MessageType.Success,
+            });
             QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), data);
             return id;
         }
@@ -72,6 +87,14 @@ namespace Mix.Lib.Services
             data.SetUowInfo(Uow, CacheService);
             await data.SaveAsync(cancellationToken);
             await CacheService.RemoveCacheAsync(id, Repository.CacheFolder, cancellationToken);
+            await PortalHub.SendMessageAsync(new SignalRMessageModel()
+            {
+                Action = MessageAction.NewQueueMessage,
+                Title = ViewModelAction.Update.ToString(),
+                Message = MixQueueTopics.MixViewModelChanged,
+                Data = ReflectionHelper.ParseObject(data).ToString(),
+                Type = MessageType.Success,
+            });
             QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Put.ToString(), data);
         }
 
@@ -81,6 +104,14 @@ namespace Mix.Lib.Services
             data.SetUowInfo(Uow, CacheService);
             await data.DeleteAsync(cancellationToken);
             await CacheService.RemoveCacheAsync(data.Id.ToString(), Repository.CacheFolder, cancellationToken);
+            await PortalHub.SendMessageAsync(new SignalRMessageModel()
+            {
+                Action = MessageAction.NewQueueMessage,
+                Title = ViewModelAction.Delete.ToString(),
+                Message = MixQueueTopics.MixViewModelChanged,
+                Data = ReflectionHelper.ParseObject(data).ToString(),
+                Type = MessageType.Success,
+            });
             QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Delete.ToString(), data);
         }
 

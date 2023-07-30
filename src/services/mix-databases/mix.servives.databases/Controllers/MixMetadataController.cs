@@ -14,6 +14,7 @@ using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Heart.Services;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Entities.MixDb;
+using Mix.SignalR.Interfaces;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -23,15 +24,16 @@ namespace Mix.Services.Databases.Controllers
     {
         private readonly IMixMetadataService _metadataService;
         public MixMetadataController(
-            IMixMetadataService metadataService, 
+            IMixMetadataService metadataService,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixDbDbContext> uow,
-            IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
+            IQueueService<MessageQueueModel> queueService,
+            IPortalHubClientService portalHub)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
         {
             _metadataService = metadataService;
             Repository.IsCache = false;

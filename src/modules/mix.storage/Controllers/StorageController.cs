@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.SignalR.Interfaces;
 using Mix.Storage.Lib.ViewModels;
 
 namespace Mix.Storage.Controllers
@@ -9,7 +10,8 @@ namespace Mix.Storage.Controllers
     {
         private readonly MixStorageService _storageService;
 
-        public StorageController(MixStorageService storageService, IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> uow, IQueueService<MessageQueueModel> queueService) : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
+        public StorageController(MixStorageService storageService, IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> uow, IQueueService<MessageQueueModel> queueService,
+            IPortalHubClientService portalHub) : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
         {
             _storageService = storageService;
         }

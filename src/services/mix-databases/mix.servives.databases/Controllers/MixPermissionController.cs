@@ -13,6 +13,7 @@ using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Heart.Services;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Entities.MixDb;
+using Mix.SignalR.Interfaces;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -29,8 +30,9 @@ namespace Mix.Services.Databases.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixDbDbContext> uow,
-            IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
+            IQueueService<MessageQueueModel> queueService,
+            IPortalHubClientService portalHub)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
         {
             _permissionService = permissionService;
             Repository.IsCache = false;

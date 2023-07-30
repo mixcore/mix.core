@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.SignalR.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
@@ -9,7 +10,8 @@ namespace Mix.Portal.Controllers
     {
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
 
-        public MixPostPostController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> cmsUow, IQueueService<MessageQueueModel> queueService) : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cmsUow, queueService)
+        public MixPostPostController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> cmsUow, IQueueService<MessageQueueModel> queueService,
+            IPortalHubClientService portalHub) : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub)
         {
             _cmsUow = cmsUow;
         }

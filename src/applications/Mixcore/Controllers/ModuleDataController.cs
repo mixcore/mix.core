@@ -3,6 +3,7 @@ using Mix.Heart.Extensions;
 using Mix.Lib.Dtos;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
+using Mix.SignalR.Interfaces;
 
 namespace Mixcore.Controllers
 {
@@ -15,8 +16,9 @@ namespace Mixcore.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> uow,
-            IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
+            IQueueService<MessageQueueModel> queueService,
+            IPortalHubClientService portalHub)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
         {
         }
 

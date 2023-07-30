@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Dtos;
 using Mix.Lib.Services;
+using Mix.SignalR.Interfaces;
 
 namespace Mix.Lib.Base
 {
@@ -20,8 +21,9 @@ namespace Mix.Lib.Base
             IConfiguration configuration, MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
+            UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService,
+            IPortalHubClientService portalHub)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
         {
         }
 

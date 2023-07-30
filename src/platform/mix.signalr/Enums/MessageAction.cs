@@ -6,6 +6,7 @@
         MemberList,
         NewMember,
         NewMessage,
+        NewQueueMessage,
         MemberOffline
     }
 }

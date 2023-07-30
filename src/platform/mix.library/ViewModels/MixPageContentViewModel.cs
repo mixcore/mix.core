@@ -89,6 +89,7 @@ namespace Mix.Lib.ViewModels
                     item.SourceContentId = Id;
                     item.Type = MixUrlAliasType.Page;
                     await item.SaveAsync(cancellationToken);
+                    ModifiedEntities.AddRange(item.ModifiedEntities);
                 }
             }
         }

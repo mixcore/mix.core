@@ -51,6 +51,7 @@ namespace Mix.Mixdb.ViewModels
                     endpoint.ModifiedBy = ModifiedBy;
                     endpoint.MixTenantId = parentEntity.MixTenantId;
                     await endpoint.SaveAsync(cancellationToken);
+                    ModifiedEntities.AddRange(endpoint.ModifiedEntities);
                 }
             }
         }

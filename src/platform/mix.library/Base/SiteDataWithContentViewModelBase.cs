@@ -62,6 +62,7 @@ namespace Mix.Lib.Base
                     item.SetUowInfo(UowInfo, CacheService);
                     item.ParentId = parentEntity.Id;
                     await item.SaveAsync(cancellationToken);
+                    ModifiedEntities.AddRange(item.ModifiedEntities);
                 }
             }
         }

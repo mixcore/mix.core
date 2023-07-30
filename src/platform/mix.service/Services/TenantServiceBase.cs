@@ -31,7 +31,13 @@ namespace Mix.Service.Services
                 {
                     _currentTenant = httpContext.Session.Get<MixTenantSystemModel?>(MixRequestQueryKeywords.Tenant);
                 }
-
+                if (_currentTenant == null)
+                {
+                    _currentTenant = new()
+                    {
+                        Id = 1
+                    };
+                }
                 return _currentTenant;
             }
         }

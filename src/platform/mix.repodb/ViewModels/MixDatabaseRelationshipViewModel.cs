@@ -84,6 +84,7 @@ namespace Mix.RepoDb.ViewModels
                 };
 
                 await refCol.SaveAsync(cancellationToken);
+                ModifiedEntities.AddRange(refCol.ModifiedEntities);
             }
         }
 

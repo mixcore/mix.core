@@ -84,6 +84,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
                     MixTenantId = MixTenantId
                 };
                 await association.SaveAsync(cancellationToken);
+                ModifiedEntities.AddRange(association.ModifiedEntities);
             }
         }
 

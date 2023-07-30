@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Mix.Lib.Policies;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -8,7 +9,11 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static void AddMixResponseCaching(this IServiceCollection services)
         {
-            services.AddOutputCache();
+            services.AddOutputCache(options =>
+            {
+                options.AddBasePolicy(builder => builder.Cache());
+                options.AddPolicy("OutputCacheWithAuthPolicy", OutputCacheWithAuthPolicy.Instance);
+            });
             services.AddResponseCaching();
             services.AddControllers(
                 opt =>

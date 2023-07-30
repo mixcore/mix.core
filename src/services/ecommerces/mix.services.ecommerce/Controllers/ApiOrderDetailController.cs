@@ -10,6 +10,7 @@ using Mix.Services.Ecommerce.Lib.Dtos;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.ViewModels;
+using Mix.SignalR.Interfaces;
 
 namespace Mix.Services.Ecommerce.Controllers
 {
@@ -28,8 +29,9 @@ namespace Mix.Services.Ecommerce.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<EcommerceDbContext> uow,
-            IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
+            IQueueService<MessageQueueModel> queueService,
+            IPortalHubClientService portalHub)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
         {
             Repository.IsCache = false;
             _ecommerceService = ecommerceService;

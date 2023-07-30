@@ -80,6 +80,7 @@ namespace Mix.Lib.ViewModels
                 };
 
                 await refCol.SaveAsync(cancellationToken);
+                ModifiedEntities.AddRange(refCol.ModifiedEntities);
             }
         }
 

@@ -96,6 +96,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.graphql", "ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.mixdb.event", "platform\core\mix.mixdb.event\mix.mixdb.event.csproj", "{9508136B-0879-4BF2-B694-3B6242715BE7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mixcore.gateway", "applications\mixcore.gateway\mixcore.gateway.csproj", "{B57EEC99-85CF-4C4E-BB10-929CCD1D3723}"
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

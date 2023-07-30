@@ -7,6 +7,7 @@ using Mix.Lib.ViewModels;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.RepoDb.Repositories;
+using Mix.SignalR.Interfaces;
 
 namespace Mix.Common.Controllers
 {
@@ -23,8 +24,9 @@ namespace Mix.Common.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService,
-            MixRepoDbRepository mixRepoDbRepository)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cmsUow, queueService)
+            MixRepoDbRepository mixRepoDbRepository,
+            IPortalHubClientService portalHub)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub)
         {
             _mixRepoDbRepository = mixRepoDbRepository;
         }

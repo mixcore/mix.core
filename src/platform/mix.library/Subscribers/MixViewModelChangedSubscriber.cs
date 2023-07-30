@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Mix.Heart.Model;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers;
 using Mix.Queue.Engines;
@@ -26,6 +27,7 @@ namespace Mix.Lib.Subscribers
 
         public override async Task Handler(MessageQueueModel data)
         {
+            await UpdateCacheHandler(data);
             switch (data.DataTypeFullName)
             {
                 case var m when m == typeof(MixTemplateViewModel).FullName:
@@ -45,5 +47,32 @@ namespace Mix.Lib.Subscribers
             }
         }
 
+        private async Task UpdateCacheHandler(MessageQueueModel data)
+        {
+            if (data.Data.IsJsonString())
+            {
+                JObject vm = JObject.Parse(data.Data);
+
+                if (vm.ContainsKey("modifiedEntities"))
+                {
+                    using (var serviceScope = ServicesProvider.CreateScope())
+                    {
+                        var cacheService = serviceScope.ServiceProvider.GetRequiredService<MixCacheService>();
+                        switch (data.Action)
+                        {
+                            case "Patch":
+                            case "Post":
+                            case "Put":
+                            case "Delete":
+                                await cacheService.RemoveCachesAsync(vm.Value<List<ModifiedEntityModel>>("modifiedEntities"));
+                                break;
+                            case "Get":
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
