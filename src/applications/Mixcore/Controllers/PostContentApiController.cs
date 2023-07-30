@@ -5,6 +5,7 @@ using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
+using Mix.SignalR.Interfaces;
 
 namespace Mixcore.Controllers
 {
@@ -26,8 +27,9 @@ namespace Mixcore.Controllers
             MixcorePostService postService,
             MixRepoDbRepository mixRepoDbRepository,
             IMixMetadataService metadataService,
-            MixRepoDbRepository repoDbRepository) 
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
+            MixRepoDbRepository repoDbRepository,
+            IPortalHubClientService portalHub) 
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
         {
             _postService = postService;
             _mixRepoDbRepository = mixRepoDbRepository;

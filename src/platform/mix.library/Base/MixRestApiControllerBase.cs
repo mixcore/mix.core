@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
+using Mix.SignalR.Interfaces;
 
 namespace Mix.Lib.Base
 {
@@ -18,7 +19,6 @@ namespace Mix.Lib.Base
         protected readonly TDbContext Context;
         protected UnitOfWorkInfo Uow;
         protected readonly RestApiService<TView, TDbContext, TEntity, TPrimaryKey> RestApiService;
-
         public MixRestHandlerApiControllerBase(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -26,13 +26,14 @@ namespace Mix.Lib.Base
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<TDbContext> uow,
-            IQueueService<MessageQueueModel> queueService)
+            IQueueService<MessageQueueModel> queueService,
+            IPortalHubClientService portalHub)
             : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
             Context = (TDbContext)uow.ActiveDbContext;
             Uow = uow;
             Repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(Uow, CacheService);
-            RestApiService = new(httpContextAccessor, mixIdentityService, uow, queueService, CacheService);
+            RestApiService = new(httpContextAccessor, mixIdentityService, uow, queueService, CacheService, portalHub);
             RestApiService.Repository = Repository;
             Repository.CacheService = CacheService;
         }

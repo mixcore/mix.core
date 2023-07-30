@@ -86,6 +86,7 @@ namespace Mix.RepoDb.ViewModels
                     item.MixDatabaseId = parentEntity.Id;
                     item.MixDatabaseName = parentEntity.SystemName;
                     await item.SaveAsync(cancellationToken);
+                    ModifiedEntities.AddRange(item.ModifiedEntities);
                 }
             }
 
@@ -97,6 +98,7 @@ namespace Mix.RepoDb.ViewModels
                     item.ParentId = parentEntity.Id;
                     item.SourceDatabaseName = parentEntity.SystemName;
                     await item.SaveAsync(cancellationToken);
+                    ModifiedEntities.AddRange(item.ModifiedEntities);
                 }
             }
         }

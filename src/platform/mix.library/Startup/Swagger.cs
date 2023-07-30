@@ -54,8 +54,8 @@ namespace Microsoft.Extensions.DependencyInjection
             string routePrefix = $"swagger";
             string routeTemplate = "swagger/{documentName}/swagger.json";
             string endPoint = $"/swagger/{version}/swagger.json";
-            if (isDevelop)
-            {
+            //if (isDevelop)
+            //{
                 // using System.Reflection;
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 
@@ -76,7 +76,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     //c.HeadContent = "Mixcore - API Specification";
                     //c.IncludeXmlComments(xmlFilename);
                 });
-            }
+            //}
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

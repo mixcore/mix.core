@@ -7,6 +7,7 @@ using Mix.Shared.Helpers;
 using Mix.Shared.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
+using Mix.SignalR.Interfaces;
 using System.Text.RegularExpressions;
 
 namespace Mix.Portal.Controllers
@@ -35,8 +36,9 @@ namespace Mix.Portal.Controllers
             IQueueService<MessageQueueModel> queueService,
             HttpService httpService,
             IHubContext<MixThemeHub> hubContext,
-            MixConfigurationService configService)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cmsUow, queueService)
+            MixConfigurationService configService,
+            IPortalHubClientService portalHub)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub)
         {
 
             _exportService = exportService;

@@ -69,6 +69,7 @@ namespace Mix.Mixdb.ViewModels
                     item.SetUowInfo(UowInfo, CacheService);
                     item.SysUserDataId = parentEntity.Id;
                     await item.SaveAsync(cancellationToken);
+                    ModifiedEntities.AddRange(item.ModifiedEntities);
                 }
             }
         }

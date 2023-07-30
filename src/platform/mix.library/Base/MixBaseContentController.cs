@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Services;
+using Mix.SignalR.Interfaces;
 using System.Linq.Expressions;
 
 namespace Mix.Portal.Controllers
@@ -28,8 +29,9 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cmsUow, queueService)
+            IQueueService<MessageQueueModel> queueService,
+            IPortalHubClientService portalHub)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub)
         {
             ContentType = contentType;
             CmsUow = cmsUow;

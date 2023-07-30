@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.RepoDb.Interfaces;
+using Mix.SignalR.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
@@ -18,8 +19,9 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService,
-            IMixDbService mixDbService)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cmsUow, queueService)
+            IMixDbService mixDbService,
+            IPortalHubClientService portalHub)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub)
         {
             _mixDbService = mixDbService;
         }

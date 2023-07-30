@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Mix.Lib.Dtos;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
+using Mix.SignalR.Interfaces;
 
 namespace Mix.Lib.Base
 {
@@ -14,7 +15,8 @@ namespace Mix.Lib.Base
         where TEntity : AssociationBase<int>
         where TView : AssociationViewModelBase<TDbContext, TEntity, int, TView>
     {
-        public MixAssociationApiControllerBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService) : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
+        public MixAssociationApiControllerBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService,
+            IPortalHubClientService portalHub) : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
         {
         }
 

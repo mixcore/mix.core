@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Entities.AuditLog;
 using Mix.Portal.Domain.Interfaces;
+using Mix.SignalR.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
@@ -18,8 +19,9 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> uow,
-            IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService)
+            IQueueService<MessageQueueModel> queueService,
+            IPortalHubClientService portalHub)
+            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
         {
             _cmsContext = uow.DbContext;
         }

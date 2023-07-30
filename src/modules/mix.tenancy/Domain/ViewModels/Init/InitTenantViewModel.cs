@@ -102,6 +102,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
             Culture.MixTenantId = parent.Id;
             Culture.SetUowInfo(UowInfo, CacheService);
             await Culture.SaveAsync(cancellationToken);
+            ModifiedEntities.AddRange(Culture.ModifiedEntities);
         }
 
         private async Task SaveDomainAsync(MixTenant parent)
@@ -109,6 +110,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
             Domain.MixTenantId = parent.Id;
             Domain.SetUowInfo(UowInfo, CacheService);
             await Domain.SaveAsync();
+            ModifiedEntities.AddRange(Domain.ModifiedEntities);
         }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)
