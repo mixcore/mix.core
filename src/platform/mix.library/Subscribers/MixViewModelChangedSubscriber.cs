@@ -64,7 +64,8 @@ namespace Mix.Lib.Subscribers
                             case "Post":
                             case "Put":
                             case "Delete":
-                                await cacheService.RemoveCachesAsync(vm.Value<List<ModifiedEntityModel>>("modifiedEntities"));
+                                var modifiedEntities = vm.Value<JArray>("modifiedEntities")?.ToObject<List<ModifiedEntityModel>>();
+                                await cacheService.RemoveCachesAsync(modifiedEntities);
                                 break;
                             case "Get":
                             default:

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using Mix.Constant.Constants;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
+using Mix.Heart.Helpers;
 using Mix.Identity.Constants;
 using Mix.Service.Interfaces;
 using Mix.Service.Services;
@@ -30,7 +31,8 @@ namespace Mix.SignalR.Hubs
 
         public virtual async Task SendMessage(SignalRMessageModel message)
         {
-            await Clients.All.SendAsync(HubMethods.ReceiveMethod, message);
+            message.From ??= GetCurrentUser();
+            await Clients.All.SendAsync(HubMethods.ReceiveMethod, ReflectionHelper.ParseObject(message).ToString());
         }
 
         private string? GetIPAddress()
@@ -44,6 +46,7 @@ namespace Mix.SignalR.Hubs
         {
             try
             {
+                message.From ??= GetCurrentUser();
                 await Clients.Client(connectionId).SendAsync(HubMethods.ReceiveMethod, message);
                 if (selfReceive)
                 {
@@ -61,6 +64,7 @@ namespace Mix.SignalR.Hubs
         {
             try
             {
+                message.From ??= GetCurrentUser();
                 return Clients.Caller.SendAsync(HubMethods.ReceiveMethod, message);
             }
             catch (Exception ex)

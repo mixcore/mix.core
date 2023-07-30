@@ -43,6 +43,18 @@ namespace Mix.Lib.Subscribers
             MixDbEventService = mixDbEventService;
         }
 
+        public override Task StartAsync(CancellationToken cancellationToken = default)
+        {
+            Task.Run(async () =>
+            {
+                while (PortalHub.Connection == null || PortalHub.Connection.State != Microsoft.AspNetCore.SignalR.Client.HubConnectionState.Connected)
+                {
+                    await Task.Delay(5000);
+                    await PortalHub.StartConnection();
+                }
+            });
+            return base.StartAsync(cancellationToken);
+        }
         public override async Task Handler(MessageQueueModel model)
         {
             if (!allowActions.Contains(model.Action))

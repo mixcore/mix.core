@@ -50,7 +50,7 @@ namespace Mix.Queue.Engines
             _queueService = queueService;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken = default)
+        public virtual Task StartAsync(CancellationToken cancellationToken = default)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace Mix.Queue.Engines
             }
         }
 
-        public Task StopAsync(CancellationToken cancellationToken = default)
+        public virtual Task StopAsync(CancellationToken cancellationToken = default)
         {
             Console.Error.WriteLine($"{_subscriber.SubscriptionId} stopped at {DateTime.UtcNow}");
             return Task.CompletedTask;

@@ -67,8 +67,8 @@ namespace Mix.Lib.Services
             await PortalHub.SendMessageAsync(new SignalRMessageModel()
             {
                 Action = MessageAction.NewQueueMessage,
-                Title= ViewModelAction.Create.ToString(),
-                Message = MixQueueTopics.MixViewModelChanged,
+                Title = MixQueueTopics.MixViewModelChanged,
+                Message = ViewModelAction.Create.ToString(),
                 Data = ReflectionHelper.ParseObject(data).ToString(),
                 Type = MessageType.Success,
             });
@@ -90,8 +90,8 @@ namespace Mix.Lib.Services
             await PortalHub.SendMessageAsync(new SignalRMessageModel()
             {
                 Action = MessageAction.NewQueueMessage,
-                Title = ViewModelAction.Update.ToString(),
-                Message = MixQueueTopics.MixViewModelChanged,
+                Title = MixQueueTopics.MixViewModelChanged,
+                Message = ViewModelAction.Update.ToString(),
                 Data = ReflectionHelper.ParseObject(data).ToString(),
                 Type = MessageType.Success,
             });
@@ -107,8 +107,8 @@ namespace Mix.Lib.Services
             await PortalHub.SendMessageAsync(new SignalRMessageModel()
             {
                 Action = MessageAction.NewQueueMessage,
-                Title = ViewModelAction.Delete.ToString(),
-                Message = MixQueueTopics.MixViewModelChanged,
+                Title = MixQueueTopics.MixViewModelChanged,
+                Message = ViewModelAction.Delete.ToString(),
                 Data = ReflectionHelper.ParseObject(data).ToString(),
                 Type = MessageType.Success,
             });

@@ -10,12 +10,16 @@ using System;
 using System.Threading.Tasks;
 using Mix.Shared.Extensions;
 using System.Drawing.Printing;
+using Microsoft.Extensions.Hosting;
+using Mix.SignalR.Interfaces;
+using Mix.Heart.Helpers;
+using Mix.Heart.Extensions;
 
 namespace Mix.Service.Services
 {
-    public abstract class BaseHubClientService
+    public abstract class BaseHubClientService : IHubClientService
     {
-        protected HubConnection Connection;
+        public HubConnection Connection { get; set; }
         protected string HubName;
         protected string AccessToken;
         public bool IsStarted => Connection != null;
@@ -43,28 +47,7 @@ namespace Mix.Service.Services
             {
                 if (!string.IsNullOrEmpty(MixEndpointService.Messenger))
                 {
-                    while (Connection == null)
-                    {
-                        Init();
-                        if (Connection == null)
-                        {
-                            await Task.Delay(5000);
-                        }
-                    }
-
-                    while (Connection != null && Connection.State != HubConnectionState.Connected)
-                    {
-                        try
-                        {
-                            await Task.Delay(new Random().Next(0, 5) * 1000);
-                            await Connection.StartAsync();
-                        }
-
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex);
-                        }
-                    }
+                    await StartConnection();
                     await Connection.InvokeAsync(HubMethods.SendPrivateMessage, message, connectionId, selfReceive);
                 }
                 else
@@ -84,31 +67,7 @@ namespace Mix.Service.Services
             {
                 if (!string.IsNullOrEmpty(MixEndpointService.Messenger))
                 {
-                    while (Connection == null)
-                    {
-                        Init();
-                        if (Connection == null)
-                        {
-                            await Task.Delay(5000);
-                        }
-                    }
-
-                    while (Connection != null && Connection.State != HubConnectionState.Connected)
-                    {
-                        try
-                        {
-                            if (Connection.State == HubConnectionState.Disconnected)
-                            {
-                                await Task.Delay(new Random().Next(0, 5) * 1000);
-                                await Connection.StartAsync();
-                            }
-                        }
-
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex);
-                        }
-                    }
+                    await StartConnection();
                     await Connection.InvokeAsync(HubMethods.SendMessage, message);
                 }
                 else
@@ -121,6 +80,35 @@ namespace Mix.Service.Services
                 await MixLogService.LogExceptionAsync(ex);
             }
         }
+
+        public async Task StartConnection()
+        {
+            while (Connection == null)
+            {
+                Init();
+                if (Connection == null)
+                {
+                    await Task.Delay(5000);
+                }
+            }
+
+            while (Connection != null && Connection.State != HubConnectionState.Connected)
+            {
+                try
+                {
+                    if (Connection.State == HubConnectionState.Disconnected)
+                    {
+                        await Connection.StartAsync();
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            }
+        }
+
         private void Init()
         {
             if (!string.IsNullOrEmpty(MixEndpointService.Messenger))
@@ -140,9 +128,13 @@ namespace Mix.Service.Services
                     await Connection.StartAsync();
                 };
 
-                Connection.On(HubMethods.ReceiveMethod, (SignalRMessageModel message) =>
+                Connection.On(HubMethods.ReceiveMethod, async (string message) =>
                 {
-                    HandleMessage(message);
+                    if (message.IsJsonString())
+                    {
+                        var obj = ReflectionHelper.ParseStringToObject<SignalRMessageModel>(message);
+                        await HandleMessage(obj);
+                    }
                 });
 
                 Connection.Reconnecting += error =>
@@ -158,6 +150,7 @@ namespace Mix.Service.Services
             }
         }
 
-        protected abstract void HandleMessage(SignalRMessageModel message);
+        protected abstract Task HandleMessage(SignalRMessageModel message);
+
     }
 }

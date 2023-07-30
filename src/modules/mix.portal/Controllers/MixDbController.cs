@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Mix.Database.Constants;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
+using Mix.Heart.Model;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Service.Commands;
@@ -9,7 +11,10 @@ using Mix.Service.Interfaces;
 using Mix.Service.Models;
 using Mix.Shared.Models;
 using Mix.Shared.Services;
+using Mix.SignalR.Enums;
+using Mix.SignalR.Hubs;
 using Mix.SignalR.Interfaces;
+using Mix.SignalR.Models;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
@@ -36,6 +41,7 @@ namespace Mix.Portal.Controllers
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private readonly MixRepoDbRepository _repository;
         private readonly IMixMemoryCacheService _memoryCache;
+        private readonly IPortalHubClientService PortalHub;
         private readonly MixRepoDbRepository _associationRepository;
         private string _tableName;
         private MixDatabaseViewModel _database;
@@ -57,7 +63,8 @@ namespace Mix.Portal.Controllers
             DatabaseService databaseService,
             MixIdentityService idService,
             IMixDbService mixDbService,
-            IMixDbCommandHubClientService mixDbCommandHubClientService)
+            IMixDbCommandHubClientService mixDbCommandHubClientService,
+            IPortalHubClientService portalHub)
             : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
         {
             _repository = repository;
@@ -68,6 +75,7 @@ namespace Mix.Portal.Controllers
             _idService = idService;
             _mixDbService = mixDbService;
             _mixDbCommandHubClientService = mixDbCommandHubClientService;
+            PortalHub = portalHub;
         }
 
         #region Overrides
@@ -288,6 +296,26 @@ namespace Mix.Portal.Controllers
 
                 QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
                                             new MixDbEventCommand(username, "PUT", _tableName, obj));
+                var modifiedEnties = new List<ModifiedEntityModel>()
+                {
+                    new ModifiedEntityModel()
+                    {
+                        Id = id,
+                        CacheFolder = $"{MixFolders.MixDbCacheFolder}/{_tableName}",
+                        Action = ViewModelAction.Update
+                    }
+                };
+                var modifiedData = new JObject() { 
+                    new JProperty("modifiedEntiies", modifiedEnties)
+                };
+                await PortalHub.SendMessageAsync(new SignalRMessageModel()
+                {
+                    Action = MessageAction.NewQueueMessage,
+                    Title = MixQueueTopics.MixViewModelChanged,
+                    Message = ViewModelAction.Delete.ToString(),
+                    Data = modifiedData.ToString(),
+                    Type = MessageType.Success,
+                });
                 return Ok(ReflectionHelper.ParseObject(result));
             }
             return BadRequest();
