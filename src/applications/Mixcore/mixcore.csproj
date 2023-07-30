@@ -61,6 +61,7 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Ocelot" Version="19.0.2" />
+		<PackageReference Include="Ocelot.Cache.CacheManager" Version="19.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>

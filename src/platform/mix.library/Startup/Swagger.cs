@@ -8,7 +8,8 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static partial class ServiceCollectionExtensions
     {
-        private static IServiceCollection AddMixSwaggerServices(this IServiceCollection services, Assembly assembly)
+        // Swagger must be after AddMvc()
+        public static IServiceCollection AddMixSwaggerServices(this IServiceCollection services, Assembly assembly)
         {
             string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty).ToHypenCase(' ');
             string version = "v2";
@@ -46,7 +47,8 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        private static IApplicationBuilder UseMixSwaggerApps(this IApplicationBuilder app, bool isDevelop, Assembly assembly)
+        // Swagger must be after UseRouting()
+        public static IApplicationBuilder UseMixSwaggerApps(this IApplicationBuilder app, bool isDevelop, Assembly assembly)
         {
             string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty);
             string version = "v2";
@@ -54,28 +56,29 @@ namespace Microsoft.Extensions.DependencyInjection
             string routePrefix = $"swagger";
             string routeTemplate = "swagger/{documentName}/swagger.json";
             string endPoint = $"/swagger/{version}/swagger.json";
+
             //if (isDevelop)
             //{
-                // using System.Reflection;
-                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            // using System.Reflection;
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 
-                app.UseSwagger(opt =>
-                   {
-                       opt.RouteTemplate = routeTemplate;
-                   });
-                app.UseSwaggerUI(c =>
-                {
-                    c.InjectStylesheet("/mix-app/css/swagger.css");
-                    c.InjectJavascript("/mix-app/js/swagger.js");
-                    c.SwaggerEndpoint(endPoint, $"{title} {version}");
-                    c.RoutePrefix = routePrefix;
-                    c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
-                    c.DocumentTitle = "Mixcore - API Specification";
-                    c.EnableFilter();
-                    c.EnableDeepLinking();
-                    //c.HeadContent = "Mixcore - API Specification";
-                    //c.IncludeXmlComments(xmlFilename);
-                });
+            app.UseSwagger(opt =>
+            {
+                opt.RouteTemplate = routeTemplate;
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.InjectStylesheet("/mix-app/css/swagger.css");
+                c.InjectJavascript("/mix-app/js/swagger.js");
+                c.SwaggerEndpoint(endPoint, $"{title} {version}");
+                c.RoutePrefix = routePrefix;
+                c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
+                c.DocumentTitle = "Mixcore - API Specification";
+                c.EnableFilter();
+                c.EnableDeepLinking();
+                //c.HeadContent = "Mixcore - API Specification";
+                //c.IncludeXmlComments(xmlFilename);
+            });
             //}
             app.UseEndpoints(endpoints =>
             {

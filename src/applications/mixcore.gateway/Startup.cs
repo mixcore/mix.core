@@ -24,6 +24,7 @@ namespace Mixcore.Gateway
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
             });
 
+            services.AddMvc();
             services.AddMixSwaggerServices(Assembly.GetExecutingAssembly());
 
             services.AddOcelot(Configuration)
@@ -42,6 +43,7 @@ namespace Mixcore.Gateway
                 app.UseHsts();
             }
             //app.UseResponseCompression();
+            app.UseRouting();
             app.UseMixAuthorize();
             app.UseMixSwaggerApps(env.IsDevelopment(), Assembly.GetExecutingAssembly());
             app.UseOcelot().Wait();
