@@ -14,12 +14,17 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Pull & update submodules recursively
+      run: |
+          git submodule update --init --recursive
+          git submodule update --recursive --remote
+    - name: Setup
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
-    - name: Restore dependencies
+    - name: Restore
       run: dotnet restore
       working-directory: src
     - name: Build
