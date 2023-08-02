@@ -16,10 +16,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    - name: Pull & update submodules recursively
-      run: |
-          git submodule update --init --recursive
-          git submodule update --recursive --remote
+      with:
+        submodules: https://github.com/mixcore/mix.heart.git
     - name: Setup
       uses: actions/setup-dotnet@v3
       with:
