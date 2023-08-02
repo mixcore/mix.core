@@ -11,13 +11,14 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     
     steps:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        submodules: https://github.com/mixcore/mix.heart.git
+        path: 'develop'
+        submodules: 'https://github.com/mixcore/mix.heart.git'
     - name: Setup
       uses: actions/setup-dotnet@v3
       with:
