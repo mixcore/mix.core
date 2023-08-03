@@ -24,6 +24,6 @@ jobs:
       with:
         dotnet-version: 7.0.x
     - name: Restore
-      run: dotnet restore src/applications/Mixcore/mixcore.csproj
+      run: dotnet restore ${{env.DOTNET_ROOT}}/src/applications/Mixcore/mixcore.csproj
     - name: Build
-      run: dotnet build src/applications/Mixcore/mixcore.csproj --no-restore
+      run: dotnet build ${{env.DOTNET_ROOT}}/src/applications/Mixcore/mixcore.csproj --no-restore
