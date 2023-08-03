@@ -107,6 +107,10 @@
 		<None Remove="wwwroot\mix-content\**" />
 	</ItemGroup>
 	<ItemGroup>
+		<Content Update="Views\Home\Index.cshtml">
+		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
 		<Content Update="wwwroot\mix-app\css\swagger.css">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Content>
