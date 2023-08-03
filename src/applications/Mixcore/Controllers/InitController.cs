@@ -11,8 +11,9 @@ namespace Mixcore.Controllers
             IHttpContextAccessor httpContextAccessor,
             IMixCmsService mixCmsService,
             IPSecurityConfigService ipSecurityConfigService,
-            MixEndpointService mixEndpointService)
-            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService)
+            MixEndpointService mixEndpointService,
+            IMixTenantService tenantService)
+            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService)
         {
             _mixEndpointService = mixEndpointService;
         }

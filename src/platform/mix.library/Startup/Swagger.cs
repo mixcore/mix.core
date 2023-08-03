@@ -80,10 +80,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 //c.IncludeXmlComments(xmlFilename);
             });
             //}
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
 
             return app;
         }

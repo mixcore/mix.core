@@ -18,6 +18,7 @@ namespace Mix.Lib.Base
         protected string RedirectUrl;
         protected readonly IPSecurityConfigService IpSecurityConfigService;
         protected readonly IMixCmsService MixCmsService;
+        protected IMixTenantService TenantService;
         protected MixTenantSystemModel CurrentTenant => Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
         protected bool ForbiddenPortal
         {
@@ -38,12 +39,14 @@ namespace Mix.Lib.Base
         protected MixControllerBase(
              IHttpContextAccessor httpContextAccessor,
              IMixCmsService mixCmsService,
-             IPSecurityConfigService ipSecurityConfigService)
+             IPSecurityConfigService ipSecurityConfigService,
+             IMixTenantService tenantService)
         {
             Session = httpContextAccessor.HttpContext?.Session;
             IpSecurityConfigService = ipSecurityConfigService;
             ViewData[MixRequestQueryKeywords.Tenant] = CurrentTenant;
             MixCmsService = mixCmsService;
+            TenantService = tenantService;
         }
 
         private void LoadCulture()
@@ -51,6 +54,17 @@ namespace Mix.Lib.Base
             if (RouteData.Values["culture"]?.ToString()?.ToLower() is not null)
             {
                 Culture = RouteData.Values["culture"]?.ToString()?.ToLower();
+            }
+            if (RouteData.Values["seoName"] is not null)
+            {
+                string seoName = RouteData.Values["seoName"]?.ToString()?.ToLower();
+                string culture = seoName.Split('/')[0];
+                if (TenantService.AllCultures.Any(m => m.Specificulture == culture))
+                {
+                    RouteData.Values["culture"] = culture;
+                    RouteData.Values["seoName"] = seoName.Replace(culture, string.Empty);
+                    Culture = culture;
+                }
             }
             //if (!_globalConfigService.Instance.CheckValidCulture(Culture))
             //{
@@ -74,13 +88,18 @@ namespace Mix.Lib.Base
 
         public string Culture { get; set; }
 
-        public override void OnActionExecuting(ActionExecutingContext context)
+        public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            ValidateRequest();
             if (!GlobalConfigService.Instance.AppSettings.IsInit)
             {
                 LoadCulture();
             }
+            return base.OnActionExecutionAsync(context, next);
+        }
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            ValidateRequest();
+           
             if (!string.IsNullOrEmpty(Culture))
             {
                 ViewData["Culture"] = Culture;

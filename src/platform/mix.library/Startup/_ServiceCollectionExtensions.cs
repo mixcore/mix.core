@@ -133,7 +133,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             app.UseHttpLogging();
 
-            app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseUoWs();
