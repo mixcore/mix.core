@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MessagePack;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Constant.Constants;
+using Mix.Database.Entities.Cms;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Model;
 using Mix.Heart.Services;
+using Mix.Lib.Interfaces;
 using Mix.Shared.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Enums;
@@ -18,11 +21,18 @@ namespace Mix.Service.Services
 {
     public class PortalHubClientService : BaseHubClientService, IPortalHubClientService
     {
+        private static Type[] DomainTypes =
+        {
+            typeof(MixDomain),typeof(MixTenant), typeof(MixCulture)
+        };
+
         private readonly IServiceProvider _serviceProvider;
-        public PortalHubClientService(IServiceProvider serviceProvider, MixEndpointService mixEndpointService)
+        private readonly IMixTenantService _mixTenantService;
+        public PortalHubClientService(IServiceProvider serviceProvider, MixEndpointService mixEndpointService, IMixTenantService mixTenantService)
             : base(HubEndpoints.PortalHub, mixEndpointService)
         {
             _serviceProvider = serviceProvider;
+            _mixTenantService = mixTenantService;
         }
 
         protected override async Task HandleMessage(SignalRMessageModel message)
@@ -47,10 +57,20 @@ namespace Mix.Service.Services
                             if (obj.ContainsKey("modifiedEntities"))
                             {
                                 var modifiedEntities = obj.Value<JArray>("modifiedEntities")?.ToObject<List<ModifiedEntityModel>>();
-                                var cacheService = serviceScope.ServiceProvider.GetRequiredService<MixCacheService>();
-                                await cacheService.RemoveCachesAsync(modifiedEntities);
+                                if (modifiedEntities != null)
+                                {
+                                    var cacheService = serviceScope.ServiceProvider.GetRequiredService<MixCacheService>();
+                                    await cacheService.RemoveCachesAsync(modifiedEntities);
+                                    if (modifiedEntities.Any(m => DomainTypes.Contains(m.EntityType)))
+                                    {
+                                        Thread.Sleep(1000);
+                                        await _mixTenantService.Reload();
+                                    }
+                                }
                             }
+
                         }
+
                         break;
                 }
             }

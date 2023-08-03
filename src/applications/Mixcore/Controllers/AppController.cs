@@ -20,8 +20,9 @@ namespace Mixcore.Controllers
             IMixCmsService mixCmsService,
             DatabaseService databaseService,
             MixCmsContext cmsContext,
-            MixCacheService cacheService)
-            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService)
+            MixCacheService cacheService,
+            IMixTenantService tenantService)
+            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService)
         {
             CmsContext = cmsContext;
             Uow = new(CmsContext);

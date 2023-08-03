@@ -2,7 +2,7 @@
   "IsInit": true,
   "IsLogStream": false,
   "IsEncryptApi": false,
-  "EnableOcelot": true,
+  "EnableOcelot": false,
   "PortalThemeSettings": null,
   "IsMaintenance": false,
   "IsHttps": false,
