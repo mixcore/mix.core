@@ -24,8 +24,8 @@ jobs:
       with:
         dotnet-version: 7.0.x
     - name: Restore
-      run: dotnet restore
+      run: dotnet restore src/applications/Mixcore/mixcore.csproj
       working-directory: src
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build src/applications/Mixcore/mixcore.csproj --no-restore
       working-directory: src
