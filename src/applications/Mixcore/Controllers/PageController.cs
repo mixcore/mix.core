@@ -16,16 +16,8 @@ namespace Mixcore.Controllers
         private readonly MixRepoDbRepository _repoDbRepository;
         private readonly IMixMetadataService _metadataService;
 
-        public PageController(
-            IHttpContextAccessor httpContextAccessor,
-            IPSecurityConfigService ipSecurityConfigService,
-            IMixCmsService mixCmsService,
-            DatabaseService databaseService,
-            MixCmsContext cmsContext,
-            MixRepoDbRepository repoDbRepository,
-            IMixMetadataService metadataService,
-            MixCacheService cacheService)
-            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService)
+        public PageController(IHttpContextAccessor httpContextAccessor, IPSecurityConfigService ipSecurityConfigService, IMixCmsService mixCmsService, DatabaseService databaseService, MixCmsContext cmsContext, MixRepoDbRepository repoDbRepository, IMixMetadataService metadataService, MixCacheService cacheService, IMixTenantService tenantService) : 
+            base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService)
         {
             CmsContext = cmsContext;
             Uow = new(CmsContext);

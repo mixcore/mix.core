@@ -25,8 +25,9 @@ namespace Mixcore.Controllers
             UnitOfWorkInfo<MixCmsContext> uow,
             MixRepoDbRepository repoDbRepository,
             IMixMetadataService metadataService,
-            MixCacheService cacheService)
-            : base(httpContextAccessor, ipSecurityConfigService, mixCmsService, translator, databaseService, uow, cacheService)
+            MixCacheService cacheService,
+            IMixTenantService tenantService)
+            : base(httpContextAccessor, ipSecurityConfigService, mixCmsService, translator, databaseService, uow, cacheService, tenantService)
         {
             _repoDbRepository = repoDbRepository;
             _metadataService = metadataService;
@@ -52,10 +53,12 @@ namespace Mixcore.Controllers
             }
         }
 
-        [Route("{seoName?}")]
-        public async Task<IActionResult> Index([FromRoute] string seoName)
+        [HttpGet("")]
+        [HttpGet("{seoName}")]
+        [HttpGet("{culture}/{seoName}")]
+        public async Task<IActionResult> Index()
         {
-
+            string seoName = Request.RouteValues["seoName"]?.ToString();
             if (!IsValid)
             {
                 return Redirect(RedirectUrl);

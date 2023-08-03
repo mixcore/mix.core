@@ -26,8 +26,9 @@ namespace Mixcore.Controllers
             ILogger<ExternalLoginModel> logger,
             MixIdentityService idService,
             TenantUserManager userManager,
-            MixEndpointService mixEndpointService)
-            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService)
+            MixEndpointService mixEndpointService,
+            IMixTenantService tenantService)
+            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService)
         {
             _signInManager = signInManager;
             _logger = logger;
