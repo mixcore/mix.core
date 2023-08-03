@@ -25,6 +25,6 @@ jobs:
         dotnet-version: 7.0.x
         submodules: recursive
     - name: Restore
-      run: dotnet restore /src/applications/Mixcore/mixcore.csproj
+      run: dotnet restore .\src\applications\Mixcore\mixcore.csproj 
     - name: Build
-      run: dotnet build /src/applications/Mixcore/mixcore.csproj --no-restore
+      run: dotnet build .\src\applications\Mixcore\mixcore.csproj --no-restore
