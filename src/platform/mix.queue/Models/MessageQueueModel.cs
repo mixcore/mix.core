@@ -52,7 +52,7 @@ namespace Mix.Queue.Models
         {
             try
             {
-                return ReflectionHelper.ParseObject(Data).ToObject<T>();
+                return ReflectionHelper.ParseStringToObject<T>(Data);
             }
             catch
             {
