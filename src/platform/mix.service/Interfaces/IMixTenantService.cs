@@ -1,4 +1,7 @@
-﻿namespace Mix.Lib.Interfaces
+﻿using Mix.Database.Entities.Cms;
+using Mix.Service.Models;
+
+namespace Mix.Lib.Interfaces
 {
     public interface IMixTenantService
     {

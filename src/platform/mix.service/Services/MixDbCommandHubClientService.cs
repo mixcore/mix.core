@@ -16,7 +16,6 @@ namespace Mix.Service.Services
 
         protected override Task HandleMessage(SignalRMessageModel message)
         {
-            Console.WriteLine(message.ToString());
             return Task.CompletedTask;
         }
     }

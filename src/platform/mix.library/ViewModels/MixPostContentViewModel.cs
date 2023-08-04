@@ -37,6 +37,27 @@ namespace Mix.Lib.ViewModels
             await base.ExpandView(cancellationToken);
         }
 
+        protected override async Task SaveEntityRelationshipAsync(MixPostContent parentEntity, CancellationToken cancellationToken = default)
+        {
+            await SaveAliasAsync(parentEntity, cancellationToken);
+        }
+
+        private async Task SaveAliasAsync(MixPostContent parentEntity, CancellationToken cancellationToken)
+        {
+            if (UrlAliases != null)
+            {
+                foreach (var item in UrlAliases)
+                {
+                    item.SetUowInfo(UowInfo, CacheService);
+                    item.MixTenantId = MixTenantId;
+                    item.SourceContentId = parentEntity.Id;
+                    item.Type = MixUrlAliasType.Post;
+                    await item.SaveAsync(cancellationToken);
+                    ModifiedEntities.AddRange(item.ModifiedEntities);
+                }
+            }
+        }
+
         public override async Task<int> CreateParentAsync(CancellationToken cancellationToken = default)
         {
             MixPostViewModel parent = new()

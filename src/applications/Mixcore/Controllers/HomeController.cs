@@ -53,9 +53,7 @@ namespace Mixcore.Controllers
             }
         }
 
-        [HttpGet("")]
-        [HttpGet("{seoName}")]
-        [HttpGet("{culture}/{seoName}")]
+        [Route("{seoName?}")]
         public async Task<IActionResult> Index()
         {
             string seoName = Request.RouteValues["seoName"]?.ToString();

@@ -63,12 +63,12 @@ namespace Mixcore.Controllers
 
         #region Routes
         [Route("{id}")]
-        [Route("{id}/{keyword}")]
-        public async Task<IActionResult> Index(int id, string keyword)
+        [Route("{id}/{seoName}")]
+        public async Task<IActionResult> Index(int id, string seoName)
         {
             if (IsValid)
             {
-                return await Post(id, keyword);
+                return await Post(id, seoName);
             }
             else
             {
@@ -79,7 +79,7 @@ namespace Mixcore.Controllers
         #endregion Routes
 
         #region Helper
-        protected async Task<IActionResult> Post(int postId, string keyword = null)
+        protected async Task<IActionResult> Post(int postId, string seoName = null)
         {
             // Home Post
             var postRepo = PostContentViewModel.GetRepository(Uow, _cacheService);
@@ -97,7 +97,7 @@ namespace Mixcore.Controllers
             ViewData["Layout"] = post.Layout?.FilePath;
             ViewData["BodyClass"] = post.ClassName;
             ViewData["ViewMode"] = MixMvcViewMode.Post;
-            ViewData["Keyword"] = keyword;
+            ViewData["Keyword"] = seoName;
 
             ViewData["ViewMode"] = MixMvcViewMode.Post;
             return View(post);
