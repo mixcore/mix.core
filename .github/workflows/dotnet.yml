@@ -25,6 +25,6 @@ jobs:
         dotnet-version: 7.0.x
         submodules: recursive
     - name: Restore
-      run: dotnet restore 
+      run: dotnet restore Mixcore.sln
     - name: Build
-      run: dotnet build
+      run: dotnet build Mixcore.sln --no-restore
