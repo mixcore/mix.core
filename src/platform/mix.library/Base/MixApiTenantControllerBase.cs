@@ -44,9 +44,7 @@ namespace Mix.Lib.Base
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            base.OnActionExecuting(context);
-
-            if (GlobalConfigService.Instance.AppSettings.IsInit)
+            if (GlobalConfigService.Instance.AppSettings.InitStatus == InitStep.Blank)
             {
                 return;
             }
@@ -57,6 +55,7 @@ namespace Mix.Lib.Base
                 : CurrentTenant.Configurations.DefaultCulture;
 
             Culture = CurrentTenant.Cultures.FirstOrDefault(c => c.Specificulture == Lang) ?? CurrentTenant.Cultures.FirstOrDefault();
+            base.OnActionExecuting(context);
         }
 
         protected bool IsValidCulture(string culture)
