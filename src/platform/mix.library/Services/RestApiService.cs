@@ -30,8 +30,9 @@ namespace Mix.Lib.Services
             UnitOfWorkInfo<TDbContext> uow,
             IQueueService<MessageQueueModel> queueService,
             MixCacheService cacheService,
-            IPortalHubClientService portalHub)
-            : base(httpContextAccessor, cacheService)
+            IPortalHubClientService portalHub,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, cacheService, mixTenantService)
         {
             MixIdentityService = identityService;
             Uow = uow;

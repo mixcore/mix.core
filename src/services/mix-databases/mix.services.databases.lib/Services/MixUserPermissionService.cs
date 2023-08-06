@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Heart.Services;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Services.Databases.Lib.Services
 {
@@ -23,8 +24,9 @@ namespace Mix.Services.Databases.Lib.Services
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<MixDbDbContext> uow,
             MixIdentityService identityService,
-            MixCacheService cacheService)
-            : base(httpContextAccessor, cacheService)
+            MixCacheService cacheService,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, cacheService, mixTenantService)
         {
             _uow = uow;
             _permissionDbContext = _uow.DbContext;

@@ -43,8 +43,10 @@ namespace Mix.Common.Controllers
             ApplicationLifetime applicationLifetime,
             MixCacheService cacheService,
             IHttpContextAccessor httpContextAccessor,
-            MixQueueMessages<MessageQueueModel> mixMemoryMessageQueue)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
+            MixQueueMessages<MessageQueueModel> mixMemoryMessageQueue,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration, 
+                  cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
             _uow = uow;
             _cacheService = cacheService;

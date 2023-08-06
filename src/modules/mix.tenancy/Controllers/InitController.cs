@@ -49,7 +49,8 @@ namespace Mix.Tenancy.Controllers
             MixEndpointService mixEndpointService = null,
             MixConfigurationService configService = null,
             UnitOfWorkInfo<MixCmsContext> uow = null)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
+            : base(httpContextAccessor, configuration,
+                  cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
 
             _initCmsService = initCmsService;

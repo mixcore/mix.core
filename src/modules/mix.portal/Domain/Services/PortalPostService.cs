@@ -1,4 +1,5 @@
-﻿using Mix.Services.Databases.Lib.Abstracts;
+﻿using Mix.Lib.Interfaces;
+using Mix.Services.Databases.Lib.Abstracts;
 using Mix.Services.Databases.Lib.Interfaces;
 
 namespace Mix.Portal.Domain.Services
@@ -9,8 +10,9 @@ namespace Mix.Portal.Domain.Services
             UnitOfWorkInfo<MixCmsContext> uow,
             IMixMetadataService metadataService,
             IHttpContextAccessor httpContextAccessor,
-            MixCacheService cacheService)
-            : base(uow, metadataService, httpContextAccessor, cacheService)
+            MixCacheService cacheService,
+            IMixTenantService mixTenantService)
+            : base(uow, metadataService, httpContextAccessor, cacheService, mixTenantService)
         {
         }
     }

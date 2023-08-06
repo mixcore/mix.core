@@ -53,5 +53,14 @@ namespace Mix.Lib.Services
         {
             return AllTenants.FirstOrDefault(m => m.Domains.Any(d => d.Host == host)) ?? AllTenants.First();
         }
+
+        public async Task<MixTenantSystemModel> GetDefaultTenant()
+        {
+            if (AllTenants == null)
+            {
+                await Reload();
+            }
+            return AllTenants.FirstOrDefault();
+        }
     }
 }

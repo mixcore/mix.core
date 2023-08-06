@@ -12,5 +12,6 @@ namespace Mix.Lib.Interfaces
         public Task Reload(CancellationToken cancellationToken = default);
 
         public MixTenantSystemModel GetTenant(string host);
+        public Task<MixTenantSystemModel> GetDefaultTenant();
     }
 }

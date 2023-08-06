@@ -30,7 +30,8 @@ namespace Mix.Portal.Controllers
             UnitOfWorkInfo<MixCmsContext> uow,
             IQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
+            : base(httpContextAccessor, configuration,
+                  cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _userManager = userManager;
             _accContext = accContext;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Mix.Heart.Constants;
+using Mix.Lib.Interfaces;
 using Mix.Portal.Domain.Interfaces;
 using Mix.Shared.Helpers;
 using Mix.Shared.Services;
@@ -25,8 +26,9 @@ namespace Mix.Portal.Domain.Services
             MixIdentityService mixIdentityService,
             IThemeService themeService, 
             IQueueService<MessageQueueModel> queueService,
-            MixCacheService cacheService)
-            : base(httpContextAccessor, cacheService)
+            MixCacheService cacheService,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, cacheService, mixTenantService)
         {
             _cmsUow = cmsUow;
             _hubContext = hubContext;

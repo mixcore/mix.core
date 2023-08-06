@@ -19,8 +19,9 @@ namespace Mix.Lib.Services
             MixConfigurationService configService,
             MixCacheService cacheService,
             UnitOfWorkInfo<MixDbDbContext> mixdbUow,
-            UnitOfWorkInfo<MixCmsContext> cmsUow)
-            : base(httpContextAccessor, cacheService)
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, cacheService, mixTenantService)
         {
             _configService = configService;
             _mixdbUow = mixdbUow;

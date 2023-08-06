@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Lib.Interfaces;
 using Mix.Portal.Domain.Services;
 using Mix.RepoDb.Repositories;
 using Mix.SignalR.Interfaces;
@@ -25,9 +26,10 @@ namespace Mix.Portal.Controllers
             IQueueService<MessageQueueModel> queueService,
             MixRepoDbRepository mixRepoDbRepository,
             PortalPostService postService,
-            IPortalHubClientService portalHub)
+            IPortalHubClientService portalHub,
+            IMixTenantService mixTenantService)
             : base(MixContentType.Post, identityService, userManager, httpContextAccessor, configuration, cacheService, translator,
-                  mixIdentityService, cmsUow, queueService, portalHub)
+                  mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
             _mixRepoDbRepository = mixRepoDbRepository;
             _postService = postService;

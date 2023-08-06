@@ -13,6 +13,7 @@ using Mix.Heart.Services;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Entities.MixDb;
 using Mix.SignalR.Interfaces;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -32,8 +33,10 @@ namespace Mix.Services.Databases.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixDbDbContext> uow,
             IQueueService<MessageQueueModel> queueService,
-            IPortalHubClientService portalHub)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
+            IPortalHubClientService portalHub,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration, 
+                  cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _userDataService = metadataService;
             _userManager = userManager;

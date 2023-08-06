@@ -14,6 +14,7 @@ using Mix.Heart.Extensions;
 using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Interfaces;
 using Mix.Heart.Services;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
@@ -28,7 +29,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
             UnitOfWorkInfo<EcommerceDbContext> uow,
             TenantUserManager userManager,
             MixCacheService cacheService,
-            MixConfigurationService configService) : base(httpContextAccessor, cacheService)
+            MixConfigurationService configService,
+            IMixTenantService mixTenantService) : base(httpContextAccessor, cacheService, mixTenantService)
         {
             _uow = uow;
             _userManager = userManager;

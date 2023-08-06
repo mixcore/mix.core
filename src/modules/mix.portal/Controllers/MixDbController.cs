@@ -4,6 +4,7 @@ using Mix.Database.Constants;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
 using Mix.Heart.Model;
+using Mix.Lib.Interfaces;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Service.Commands;
@@ -64,8 +65,10 @@ namespace Mix.Portal.Controllers
             MixIdentityService idService,
             IMixDbService mixDbService,
             IMixDbCommandHubClientService mixDbCommandHubClientService,
-            IPortalHubClientService portalHub)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
+            IPortalHubClientService portalHub,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration, 
+                  cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
             _repository = repository;
             _associationRepository = new(cache, databaseService, cmsUow);

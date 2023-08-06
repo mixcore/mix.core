@@ -11,6 +11,7 @@ using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Dtos;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Heart.Services;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Services.Databases.Lib.Services
 {
@@ -23,8 +24,9 @@ namespace Mix.Services.Databases.Lib.Services
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<MixDbDbContext> uow,
             TenantUserManager userManager,
-            MixCacheService cacheService)
-            : base(httpContextAccessor, cacheService)
+            MixCacheService cacheService,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, cacheService, mixTenantService)
         {
             _uow = uow;
             _userManager = userManager;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Constant.Constants;
 using Mix.Heart.Services;
+using Mix.Lib.Interfaces;
 using Mix.Service.Models;
 using Mix.Shared.Extensions;
 namespace Mix.Service.Services
@@ -8,16 +9,26 @@ namespace Mix.Service.Services
     public abstract class TenantServiceBase
     {
         protected IHttpContextAccessor HttpContextAccessor;
+        protected IMixTenantService MixTenantService;
         protected readonly MixCacheService CacheService;
-        protected TenantServiceBase(IHttpContextAccessor httpContextAccessor, MixCacheService cacheService)
+        private readonly MixDitributedCache _cache;
+
+        protected TenantServiceBase(MixDitributedCache cache)
+        {
+            _cache = cache;
+            CacheService = new MixCacheService(cache);
+        }
+
+        protected TenantServiceBase(IHttpContextAccessor httpContextAccessor, MixCacheService cacheService, IMixTenantService mixTenantService)
         {
             HttpContextAccessor = httpContextAccessor;
             CacheService = cacheService;
+            MixTenantService = mixTenantService;
         }
 
         protected MixTenantSystemModel? _currentTenant;
 
-        protected MixTenantSystemModel? CurrentTenant
+        protected MixTenantSystemModel CurrentTenant
         {
             get
             {
@@ -31,13 +42,8 @@ namespace Mix.Service.Services
                 {
                     _currentTenant = httpContext.Session.Get<MixTenantSystemModel?>(MixRequestQueryKeywords.Tenant);
                 }
-                if (_currentTenant == null)
-                {
-                    _currentTenant = new()
-                    {
-                        Id = 1
-                    };
-                }
+                _currentTenant ??= MixTenantService.GetDefaultTenant().GetAwaiter().GetResult();
+
                 return _currentTenant;
             }
         }
@@ -54,6 +60,10 @@ namespace Mix.Service.Services
                 Id = tenantId
             };
         }
-
+        protected bool IsValidCulture(string culture)
+        {
+            return CurrentTenant != null && !string.IsNullOrEmpty(culture)
+                && CurrentTenant.Cultures.Any(m => m.Specificulture == culture);
+        }
     }
 }

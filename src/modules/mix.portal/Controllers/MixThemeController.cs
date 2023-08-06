@@ -37,8 +37,10 @@ namespace Mix.Portal.Controllers
             HttpService httpService,
             IHubContext<MixThemeHub> hubContext,
             MixConfigurationService configService,
-            IPortalHubClientService portalHub)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub)
+            IPortalHubClientService portalHub,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration, 
+                  cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
 
             _exportService = exportService;

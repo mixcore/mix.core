@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Entities.Account;
 using Mix.Heart.Entities.Cache;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
@@ -22,8 +23,10 @@ namespace Mix.Account.Controllers
             MixIdentityService mixIdentityService,
             MixCacheDbContext cacheDbContext,
             MixCmsAccountContext context,
-            IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, cacheDbContext, context, queueService)
+            IQueueService<MessageQueueModel> queueService,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration, 
+                  cacheService, translator, mixIdentityService, cacheDbContext, context, queueService, mixTenantService)
         {
 
         }

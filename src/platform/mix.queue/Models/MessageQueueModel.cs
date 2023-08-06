@@ -18,6 +18,10 @@ namespace Mix.Queue.Models
         public int TenantId { get; set; }
         public List<MixSubscriptionModel> Subscriptions { get; set; } = new();
 
+        public MessageQueueModel()
+        {
+            TenantId = 1;
+        }
         public MessageQueueModel(int tenantId)
         {
             TenantId = tenantId;

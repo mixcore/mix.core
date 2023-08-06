@@ -66,8 +66,10 @@ namespace Mix.Account.Controllers
              IQueueService<MessageQueueModel> queueService,
              UnitOfWorkInfo<MixDbDbContext> mixDbUow,
              AuthConfigService authConfigService,
-             IMixEdmService edmService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
+             IMixEdmService edmService,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration, mixService, 
+                  translator, mixIdentityService, queueService, mixTenantService)
         {
             _userManager = userManager;
             _signInManager = signInManager;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.SignalR.Interfaces;
 
@@ -22,8 +23,10 @@ namespace Mix.Lib.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<TDbContext> uow,
             IQueueService<MessageQueueModel> queueService,
-            IPortalHubClientService portalHub)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
+            IPortalHubClientService portalHub,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration, 
+                  cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
         }
     }

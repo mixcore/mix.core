@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Heart.Constants;
+using Mix.Lib.Interfaces;
 using Mix.Storage.Lib.Models;
 
 namespace Mix.Storage.Controllers
@@ -16,8 +17,10 @@ namespace Mix.Storage.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
-            MixStorageService storageService)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
+            MixStorageService storageService,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration, 
+                  cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
         }
 

@@ -13,7 +13,8 @@ namespace Mix.Lib.Services
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<MixCmsContext> uow,
             IQueueService<MessageQueueModel> queueService,
-            MixCacheService cacheService) : base(httpContextAccessor, cacheService)
+            MixCacheService cacheService,
+            IMixTenantService mixTenantService) : base(httpContextAccessor, cacheService, mixTenantService)
         {
             _uow = uow;
             _queueService = queueService;

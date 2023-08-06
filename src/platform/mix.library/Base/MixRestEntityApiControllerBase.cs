@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 
 namespace Mix.Lib.Base
@@ -21,8 +22,10 @@ namespace Mix.Lib.Base
             MixIdentityService mixIdentityService,
             MixCacheDbContext cacheDbContext,
             TDbContext context,
-            IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, context, queueService, cacheDbContext)
+            IQueueService<MessageQueueModel> queueService,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration,
+                  cacheService, translator, mixIdentityService, context, queueService, cacheDbContext, mixTenantService)
         {
         }
 

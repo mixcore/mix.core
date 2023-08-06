@@ -24,6 +24,7 @@ using Mix.Identity.Constants;
 using Mix.Shared.Services;
 using Mix.Database.Entities.MixDb;
 using Newtonsoft.Json;
+using Mix.Lib.Interfaces;
 
 namespace Mix.RepoDb.Services
 {
@@ -56,8 +57,9 @@ namespace Mix.RepoDb.Services
             MixRepoDbRepository repository,
             ICache cache,
             IMixMemoryCacheService memoryCache,
-            MixCacheService cacheService)
-            : base(httpContextAccessor, cacheService)
+            MixCacheService cacheService,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, cacheService, mixTenantService)
         {
             _cmsUow = uow;
             _repository = repository;
@@ -413,9 +415,9 @@ namespace Mix.RepoDb.Services
                 }
                 else
                 {
-                    if (col != null && 
-                        (col.DataType == MixDataType.Json 
-                        || col.DataType == MixDataType.Array 
+                    if (col != null &&
+                        (col.DataType == MixDataType.Json
+                        || col.DataType == MixDataType.Array
                         || col.DataType == MixDataType.ArrayMedia
                         || col.DataType == MixDataType.ArrayRadio))
                     {

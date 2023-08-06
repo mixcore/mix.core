@@ -63,7 +63,7 @@ namespace Mix.Service.Services
                                     await cacheService.RemoveCachesAsync(modifiedEntities);
                                     if (modifiedEntities.Any(m => DomainTypes.Contains(m.EntityType)))
                                     {
-                                        Thread.Sleep(1000);
+                                        Thread.Sleep(10000);
                                         await _mixTenantService.Reload();
                                     }
                                 }
