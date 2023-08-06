@@ -34,9 +34,6 @@ namespace Mixcore
             services.AddMixAuthorize<MixCmsAccountContext>(Configuration);
             services.AddMixRoutes();
 
-            // Must app Auth config after Add mixservice to init App config 
-            services.AddMixOcelot(Configuration);
-
             services.TryAddScoped<MixcorePostService>();
         }
 
@@ -66,10 +63,6 @@ namespace Mixcore
                     Path.Combine(env.ContentRootPath, MixFolders.TemplatesFolder))
             });
             
-            if (GlobalConfigService.Instance.AppSettings.EnableOcelot)
-            {
-                app.UseMixOcelot(Configuration, env.IsDevelopment());
-            }
             if (GlobalConfigService.Instance.AppSettings.IsHttps)
             {
                 app.UseHttpsRedirection();
