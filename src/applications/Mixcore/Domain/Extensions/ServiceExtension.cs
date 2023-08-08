@@ -43,7 +43,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             //string notStartWithPattern = "regex(^(?!(graph|app|init|page|post|security|portal|api|vue|error|swagger|graphql|ReDoc|OpenAPI|.+Hub))(.+)$)";
             //string urlPathPattern = @"regex((([A-z0-9\-\%]+\/)*[A-z0-9\-\%]+$)?)";
-            app.UseRouting();
+            
             app.UseEndpoints(routes =>
             {
                 routes.MapDefaultControllerRoute();

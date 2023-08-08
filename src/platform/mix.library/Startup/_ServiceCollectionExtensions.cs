@@ -132,9 +132,6 @@ namespace Microsoft.Extensions.DependencyInjection
             bool isDevelop)
         {
             app.UseHttpLogging();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
             app.UseUoWs();
             app.UseMixModuleApps(configuration, isDevelop);
             app.UseMixSwaggerApps(isDevelop, executingAssembly);
