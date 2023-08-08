@@ -6,6 +6,7 @@ using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
+using Mix.Lib.Interfaces;
 using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Entities.Onepay;
 using Mix.Services.Ecommerce.Lib.Enums;
@@ -30,8 +31,9 @@ namespace Mix.Services.Ecommerce.Lib.Services
             HttpService httpService,
             IConfiguration configuration,
             UnitOfWorkInfo<OnepayDbContext> cmsUow,
-            MixCacheService cacheService)
-            : base(httpContextAccessor, cacheService)
+            MixCacheService cacheService,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, cacheService, mixTenantService)
         {
             _httpService = httpService;
             _cmsUow = cmsUow;

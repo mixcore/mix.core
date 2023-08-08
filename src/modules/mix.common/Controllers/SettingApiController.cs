@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Heart.Exceptions;
 using Mix.Identity.Constants;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
@@ -22,8 +23,10 @@ namespace Mix.Common.Controllers
             MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
+            IQueueService<MessageQueueModel> queueService,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration, 
+                  cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
         }
 

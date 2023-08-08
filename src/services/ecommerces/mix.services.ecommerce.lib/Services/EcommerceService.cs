@@ -41,7 +41,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
             IServiceProvider serviceProvider,
             IMixEdmService edmService,
             MixCacheService cacheService,
-            MixConfigurationService configService) : base(httpContextAccessor, cacheService)
+            MixConfigurationService configService,
+            IMixTenantService mixTenantService) : base(httpContextAccessor, cacheService, mixTenantService)
         {
             EcommerceUow = ecommerceUow;
             _userManager = userManager;

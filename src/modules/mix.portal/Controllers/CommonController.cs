@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Heart.Helpers;
+using Mix.Lib.Interfaces;
 using Mix.RepoDb.Repositories;
 using RepoDb;
 using RepoDb.Enumerations;
@@ -22,8 +23,10 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
             TenantUserManager userManager,
-            MixRepoDbRepository repoDbRepository)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
+            MixRepoDbRepository repoDbRepository,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration, 
+                  cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
             _context = context;
             UserManager = userManager;

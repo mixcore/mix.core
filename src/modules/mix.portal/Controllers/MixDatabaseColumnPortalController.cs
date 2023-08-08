@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Lib.Interfaces;
 using Mix.SignalR.Interfaces;
 using System.Linq.Expressions;
 
@@ -18,8 +19,10 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> uow,
             IQueueService<MessageQueueModel> queueService,
-            IPortalHubClientService portalHub)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
+            IPortalHubClientService portalHub,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration, 
+                  cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
         }
 

@@ -11,8 +11,11 @@ namespace Mix.Lib.Services
 
         public List<MixConfigurationContentViewModel> Configs { get; set; }
 
-        public MixConfigurationService(IHttpContextAccessor httpContextAccessor, DatabaseService databaseService, MixCacheService cacheService) 
-            : base(httpContextAccessor, cacheService)
+        public MixConfigurationService(
+            IHttpContextAccessor httpContextAccessor, 
+            DatabaseService databaseService, MixCacheService cacheService,
+            IMixTenantService mixTenantService) 
+            : base(httpContextAccessor, cacheService, mixTenantService)
         {
             _databaseService = databaseService;
         }

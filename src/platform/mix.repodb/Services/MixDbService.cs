@@ -17,6 +17,7 @@ using Mix.Heart.Helpers;
 using Mix.Heart.Models;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
+using Mix.Lib.Interfaces;
 using Mix.RepoDb.Entities;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
@@ -80,8 +81,9 @@ namespace Mix.RepoDb.Services
             MixRepoDbRepository repository,
             ICache cache,
             IMixMemoryCacheService memoryCache,
-            MixCacheService cacheService)
-            : base(httpContextAccessor, cacheService)
+            MixCacheService cacheService,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, cacheService, mixTenantService)
         {
             _cmsUow = uow;
             _databaseService = databaseService;
@@ -624,7 +626,14 @@ namespace Mix.RepoDb.Services
                     var val = obj.First(m => m.Key == col).Value;
                     if (val != null)
                     {
-                        values.Add($"'{val}'");
+                        if (val is string)
+                        {
+                            values.Add($"'{val.ToString()!.Replace("'", "\\'")}'");
+                        }
+                        else
+                        {
+                            values.Add($"'{val}'");
+                        }
                         continue;
                     }
                 }

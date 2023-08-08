@@ -22,6 +22,7 @@ using Mix.Services.Payments.Lib.Constants;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using System.Text.RegularExpressions;
 using Quartz.Util;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
@@ -37,8 +38,9 @@ namespace Mix.Services.Ecommerce.Lib.Services
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             UnitOfWorkInfo<PaypalDbContext> cmsUow,
-            MixCacheService cacheService)
-            : base(httpContextAccessor, cacheService)
+            MixCacheService cacheService,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, cacheService, mixTenantService)
         {
             var session = configuration.GetSection(MixAppSettingsSection.Payments).GetSection("Paypal");
             session.Bind(_settings);

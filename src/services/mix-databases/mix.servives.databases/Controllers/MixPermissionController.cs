@@ -14,6 +14,7 @@ using Mix.Heart.Services;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Entities.MixDb;
 using Mix.SignalR.Interfaces;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -23,7 +24,7 @@ namespace Mix.Services.Databases.Controllers
     {
         private readonly IMixPermissionService _permissionService;
         public MixPermissionController(
-            IMixPermissionService permissionService, 
+            IMixPermissionService permissionService,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
@@ -31,8 +32,10 @@ namespace Mix.Services.Databases.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixDbDbContext> uow,
             IQueueService<MessageQueueModel> queueService,
-            IPortalHubClientService portalHub)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
+            IPortalHubClientService portalHub,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration,
+                  cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _permissionService = permissionService;
             Repository.IsCache = false;

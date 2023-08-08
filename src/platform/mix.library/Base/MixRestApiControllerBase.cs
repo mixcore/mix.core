@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using Mix.SignalR.Interfaces;
@@ -27,13 +28,15 @@ namespace Mix.Lib.Base
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<TDbContext> uow,
             IQueueService<MessageQueueModel> queueService,
-            IPortalHubClientService portalHub)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
+            IPortalHubClientService portalHub,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration, 
+                  cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
             Context = (TDbContext)uow.ActiveDbContext;
             Uow = uow;
             Repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(Uow, CacheService);
-            RestApiService = new(httpContextAccessor, mixIdentityService, uow, queueService, CacheService, portalHub);
+            RestApiService = new(httpContextAccessor, mixIdentityService, uow, queueService, CacheService, portalHub, mixTenantService);
             RestApiService.Repository = Repository;
             Repository.CacheService = CacheService;
         }

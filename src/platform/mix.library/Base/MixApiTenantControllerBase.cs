@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 
 namespace Mix.Lib.Base
@@ -18,14 +19,16 @@ namespace Mix.Lib.Base
         protected readonly IConfiguration Configuration;
         protected readonly MixIdentityService MixIdentityService;
         protected readonly TranslatorService Translator;
-        protected MixTenantSystemModel CurrentTenant => Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
+        protected IMixTenantService MixTenantService;
+        protected MixTenantSystemModel CurrentTenant { get; set; }
         protected MixTenantApiControllerBase(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService)
+            IQueueService<MessageQueueModel> queueService,
+            IMixTenantService mixTenantService)
         {
             HttpContextAccessor = httpContextAccessor;
             Session = httpContextAccessor.HttpContext?.Session;
@@ -34,24 +37,31 @@ namespace Mix.Lib.Base
             Translator = translator;
             MixIdentityService = mixIdentityService;
             QueueService = queueService;
+            MixTenantService = mixTenantService;
+
+
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            base.OnActionExecuting(context);
-
-            if (GlobalConfigService.Instance.AppSettings.IsInit)
+            if (GlobalConfigService.Instance.AppSettings.InitStatus == InitStep.Blank)
             {
                 return;
             }
-            if (CurrentTenant != null)
-            {
-                Lang = RouteData.Values[MixRequestQueryKeywords.Specificulture] != null
-                    ? RouteData.Values[MixRequestQueryKeywords.Specificulture].ToString()
-                    : CurrentTenant.Configurations.DefaultCulture;
+            CurrentTenant = Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
+            CurrentTenant ??= MixTenantService.GetDefaultTenant().GetAwaiter().GetResult();
+            Lang = RouteData.Values[MixRequestQueryKeywords.Specificulture] != null
+                ? RouteData.Values[MixRequestQueryKeywords.Specificulture].ToString()
+                : CurrentTenant.Configurations.DefaultCulture;
 
-                Culture = CurrentTenant.Cultures.FirstOrDefault(c => c.Specificulture == Lang) ?? CurrentTenant.Cultures.FirstOrDefault();
-            }
+            Culture = CurrentTenant.Cultures.FirstOrDefault(c => c.Specificulture == Lang) ?? CurrentTenant.Cultures.FirstOrDefault();
+            base.OnActionExecuting(context);
+        }
+
+        protected bool IsValidCulture(string culture)
+        {
+            return CurrentTenant != null && !string.IsNullOrEmpty(culture)
+                && CurrentTenant.Cultures.Any(m => m.Specificulture == culture);
         }
     }
 }

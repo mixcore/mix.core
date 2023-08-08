@@ -3,6 +3,7 @@ using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
@@ -30,8 +31,10 @@ namespace Mix.Services.Ecommerce.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<EcommerceDbContext> uow,
             IQueueService<MessageQueueModel> queueService,
-            IPortalHubClientService portalHub)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
+            IPortalHubClientService portalHub,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration, 
+                  cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             Repository.IsCache = false;
             _ecommerceService = ecommerceService;

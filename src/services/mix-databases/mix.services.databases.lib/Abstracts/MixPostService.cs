@@ -9,6 +9,7 @@ using Mix.Heart.Repository;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Models.Common;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Interfaces;
@@ -28,8 +29,9 @@ namespace Mix.Services.Databases.Lib.Abstracts
             UnitOfWorkInfo<MixCmsContext> uow,
             IMixMetadataService metadataService,
             IHttpContextAccessor httpContextAccessor,
-            MixCacheService cacheService)
-            : base(httpContextAccessor, cacheService)
+            MixCacheService cacheService,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, cacheService, mixTenantService)
         {
             Uow = uow;
             MetadataService = metadataService;

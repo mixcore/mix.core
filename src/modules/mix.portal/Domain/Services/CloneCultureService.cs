@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Base;
+using Mix.Lib.Interfaces;
 using Mix.Portal.Domain.Interfaces;
 using System.Linq.Expressions;
 
@@ -20,8 +21,9 @@ namespace Mix.Portal.Domain.Services
         public CloneCultureService(
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
-            MixCacheService cacheService)
-            : base(httpContextAccessor, cacheService)
+            MixCacheService cacheService,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, cacheService, mixTenantService)
         {
             _cmsUow = cmsUow;
         }

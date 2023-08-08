@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using System.Linq.Expressions;
@@ -28,8 +29,10 @@ namespace Mix.Lib.Base
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             TDbContext context,
-            IQueueService<MessageQueueModel> queueService, MixCacheDbContext cacheDbContext)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
+            IQueueService<MessageQueueModel> queueService, MixCacheDbContext cacheDbContext,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, 
+                  configuration, cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
             Context = context;
             Uow = new(Context);

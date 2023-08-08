@@ -25,8 +25,10 @@ namespace Mixcore.Controllers
             IQueueService<MessageQueueModel> queueService,
             MixRepoDbRepository mixRepoDbRepository,
             IMixMetadataService metadataService,
-            IPortalHubClientService portalHub)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub)
+            IPortalHubClientService portalHub,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration, 
+                  cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _mixRepoDbRepository = mixRepoDbRepository;
             _metadataService = metadataService;

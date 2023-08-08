@@ -2,6 +2,7 @@
 using Mix.Common.Domain.Helpers;
 using Mix.Common.Domain.ViewModels;
 using Mix.Common.Models;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
@@ -27,8 +28,10 @@ namespace Mix.Common.Controllers
             MixIdentityService mixIdentityService,
             AuthConfigService authConfigService,
             MixCmsContext context,
-            IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, queueService)
+            IQueueService<MessageQueueModel> queueService,
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration,
+                  cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
             _authConfigurations = authConfigService.AppSettings;
             Context = context;
