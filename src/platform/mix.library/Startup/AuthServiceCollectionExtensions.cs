@@ -122,8 +122,11 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IApplicationBuilder UseMixAuthorize(this IApplicationBuilder app)
+        public static IApplicationBuilder UseMixAuth(this IApplicationBuilder app)
         {
+            //  If there are calls to app.UseRouting() and app.UseEndpoints(...), the call to app.UseAuthorization() must go between them.
+            app.UseAuthentication();
+            app.UseAuthorization();
             return app;
         }
 

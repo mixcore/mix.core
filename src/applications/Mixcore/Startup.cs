@@ -50,8 +50,14 @@ namespace Mixcore
             app.UseMixTenant();
 
             app.UseMiddleware<AuditlogMiddleware>();
+            
+            app.UseRouting();
 
+            // must go between app.UseRouting() and app.UseEndpoints.
+            app.UseMixAuth();
+            
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.ContentRootPath, env.IsDevelopment());
+            app.UseMixEndpoints();
 
             app.UseResponseCompression();
             app.UseMixResponseCaching();
@@ -68,7 +74,7 @@ namespace Mixcore
                 app.UseHttpsRedirection();
             }
 
-            app.UseMixRoutes();
+            
         }
     }
 }
