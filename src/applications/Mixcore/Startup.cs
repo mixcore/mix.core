@@ -53,12 +53,11 @@ namespace Mixcore
             
             app.UseRouting();
 
-            //  If there are calls to app.UseRouting() and app.UseEndpoints(...), the call to app.UseAuthorization() must go between them.
-            app.UseAuthentication();
-            app.UseAuthorization();
+            // must go between app.UseRouting() and app.UseEndpoints.
+            app.UseMixAuth();
             
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.ContentRootPath, env.IsDevelopment());
-            app.UseMixRoutes();
+            app.UseMixEndpoints();
 
             app.UseResponseCompression();
             app.UseMixResponseCaching();

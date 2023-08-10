@@ -44,7 +44,7 @@ namespace Mixcore.Gateway
             }
             //app.UseResponseCompression();
             app.UseRouting();
-            app.UseMixAuthorize();
+            app.UseMixAuth();
             app.UseMixSwaggerApps(env.IsDevelopment(), Assembly.GetExecutingAssembly());
             app.UseOcelot().Wait();
         }

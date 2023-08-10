@@ -39,7 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
             //services.AddSingleton<MixSEORouteTransformer>();
         }
 
-        public static IApplicationBuilder UseMixRoutes(this IApplicationBuilder app)
+        public static IApplicationBuilder UseMixEndpoints(this IApplicationBuilder app)
         {
             //string notStartWithPattern = "regex(^(?!(graph|app|init|page|post|security|portal|api|vue|error|swagger|graphql|ReDoc|OpenAPI|.+Hub))(.+)$)";
             //string urlPathPattern = @"regex((([A-z0-9\-\%]+\/)*[A-z0-9\-\%]+$)?)";
