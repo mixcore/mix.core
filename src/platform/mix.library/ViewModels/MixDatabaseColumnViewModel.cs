@@ -50,6 +50,7 @@ namespace Mix.Lib.ViewModels
             ColumnConfigurations = Configurations != null
                         ? Configurations.ToObject<ColumnConfigurations>()
                         : new();
+            ColumnConfigurations.Editor ??= DataType.ToString();
         }
 
         #endregion
