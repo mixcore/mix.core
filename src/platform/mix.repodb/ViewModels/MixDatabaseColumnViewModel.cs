@@ -21,6 +21,7 @@ namespace Mix.RepoDb.ViewModels
 
         public string DefaultValue { get; set; }
         public int MixDatabaseId { get; set; }
+        [JsonIgnore]
         public JObject Configurations { get; set; }
         public ColumnConfigurations ColumnConfigurations { get; set; } = new();
         #endregion
@@ -56,9 +57,10 @@ namespace Mix.RepoDb.ViewModels
         {
             cancellationToken.ThrowIfCancellationRequested();
             base.ParseView(sourceObject, cancellationToken);
-            ColumnConfigurations = Configurations != null
+            ColumnConfigurations ??= Configurations != null
                        ? Configurations.ToObject<ColumnConfigurations>()
                        : new();
+            ColumnConfigurations.Editor ??= DataType.ToString();
         }
 
         #endregion

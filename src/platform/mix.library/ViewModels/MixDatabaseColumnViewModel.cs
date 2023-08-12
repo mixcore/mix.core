@@ -15,6 +15,7 @@ namespace Mix.Lib.ViewModels
 
         public string DefaultValue { get; set; }
         public int MixDatabaseId { get; set; }
+        [JsonIgnore]
         public JObject Configurations { get; set; }
         public ColumnConfigurations ColumnConfigurations { get; set; }
         #endregion
@@ -47,7 +48,7 @@ namespace Mix.Lib.ViewModels
         public override void ParseView<TSource>(TSource sourceObject, CancellationToken cancellationToken)
         {
             base.ParseView(sourceObject, cancellationToken);
-            ColumnConfigurations = Configurations != null
+            ColumnConfigurations ??= Configurations != null
                         ? Configurations.ToObject<ColumnConfigurations>()
                         : new();
             ColumnConfigurations.Editor ??= DataType.ToString();
