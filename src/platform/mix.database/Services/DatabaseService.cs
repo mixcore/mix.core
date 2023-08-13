@@ -79,7 +79,7 @@ namespace Mix.Database.Services
                 _ => null,
             };
         }
-        
+
         public MixDbDbContext GetMixDbDbContext()
         {
             return DatabaseProvider switch
@@ -91,12 +91,12 @@ namespace Mix.Database.Services
                 _ => null,
             };
         }
-        
+
         public MixCmsContext GetMixcmsContext()
         {
             return DatabaseProvider switch
             {
-                MixDatabaseProvider.SQLSERVER => new (this),
+                MixDatabaseProvider.SQLSERVER => new(this),
                 MixDatabaseProvider.MySQL => new MySqlMixCmsContext(this),
                 MixDatabaseProvider.SQLITE => new SqliteMixCmsContext(this),
                 MixDatabaseProvider.PostgreSQL => new PostgresqlMixCmsContext(this),
@@ -147,9 +147,9 @@ namespace Mix.Database.Services
             // TODO: Seperate Account db. Current Store account to same database
             if (databaseProvider == MixDatabaseProvider.SQLITE)
             {
-                SetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION, connectionString.Replace(".db", "") + "-quartz.db");
-                SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, connectionString.Replace(".db", "") + "-account.db");
-                SetConnectionString(MixConstants.CONST_MIXDB_CONNECTION, connectionString.Replace(".db", "") + "-mixdb.db");
+                SetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION, connectionString.Replace(".sqlite", "") + "-quartz.sqlite");
+                SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, connectionString.Replace(".sqlite", "") + "-account.sqlite");
+                SetConnectionString(MixConstants.CONST_MIXDB_CONNECTION, connectionString.Replace(".sqlite", "") + "-mixdb.sqlite");
             }
             else
             {
@@ -161,8 +161,16 @@ namespace Mix.Database.Services
             AppSettings.DatabaseProvider = databaseProvider;
             MixHeartConfigService.Instance.AppSettings.DatabaseProvider = databaseProvider;
             MixHeartConfigService.Instance.SetConnectionString(MixHeartConstants.CACHE_CONNECTION, connectionString);
-            //MixAppSettingService.Instance.SetConfig<string>(MixAppSettingsSection.MixConfigurations, WebConfiguration.MixCacheConnectionString, model.ConnectionString);
-            //MixAppSettingService.Instance.SetConfig<string>(MixAppSettingsSection.GlobalSettings, WebConfiguration.MixCacheDbProvider, model.DatabaseProvider.ToString());
+            SaveSettings();
+        }
+
+        public void ResetConnectionStrings()
+        {
+            SetConnectionString(MixConstants.CONST_CMS_CONNECTION, null);
+            SetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION, null);
+            SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, null);
+            SetConnectionString(MixConstants.CONST_MIXDB_CONNECTION, null);
+            MixHeartConfigService.Instance.SetConnectionString(MixHeartConstants.CACHE_CONNECTION, null);
             SaveSettings();
         }
         public void UpdateMixCmsContext()

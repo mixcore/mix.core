@@ -15,6 +15,7 @@ using Newtonsoft.Json.Linq;
 using Mix.Lib.Interfaces;
 using Mix.Tenancy.Domain.Interfaces;
 using Mix.Quartz.Interfaces;
+using Mix.Database.Services;
 
 namespace Mix.Tenancy.Controllers
 {
@@ -22,6 +23,7 @@ namespace Mix.Tenancy.Controllers
     [ApiController]
     public class InitController : MixTenantApiControllerBase
     {
+        private readonly DatabaseService _databaseService;
         private readonly MixEndpointService _mixEndpointService;
         private readonly IMixTenantService _mixTenantService;
         private readonly IInitCmsService _initCmsService;
@@ -48,7 +50,8 @@ namespace Mix.Tenancy.Controllers
             IMixTenantService mixTenantService = null,
             MixEndpointService mixEndpointService = null,
             MixConfigurationService configService = null,
-            UnitOfWorkInfo<MixCmsContext> uow = null)
+            UnitOfWorkInfo<MixCmsContext> uow = null,
+            DatabaseService databaseService = null)
             : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
@@ -62,6 +65,7 @@ namespace Mix.Tenancy.Controllers
             _mixEndpointService = mixEndpointService;
             _configService = configService;
             _uow = uow;
+            _databaseService = databaseService;
         }
 
         #region Routes
@@ -98,6 +102,7 @@ namespace Mix.Tenancy.Controllers
             }
             catch (Exception ex)
             {
+                _databaseService.ResetConnectionStrings();
                 return BadRequest(ex.Message);
             }
         }

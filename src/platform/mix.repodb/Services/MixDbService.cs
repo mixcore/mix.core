@@ -716,8 +716,20 @@ namespace Mix.RepoDb.Services
             string colType = GetColumnType(col.DataType, col.ColumnConfigurations.MaxLength);
             string nullable = col.ColumnConfigurations.IsRequire ? "NOT NUll" : "NULL";
             string unique = col.ColumnConfigurations.IsUnique ? "Unique" : "";
-            string defaultValue = !string.IsNullOrEmpty(col.DefaultValue) ? $"DEFAULT '{@col.DefaultValue}'" : string.Empty;
+            string defaultValue = !IsLongTextColumn(col) && !string.IsNullOrEmpty(col.DefaultValue)
+                                    ? $"DEFAULT '{@col.DefaultValue}'" : string.Empty;
             return $"{_databaseConstant.BacktickOpen}{col.SystemName.ToTitleCase()}{_databaseConstant.BacktickClose} {colType} {nullable} {unique} {defaultValue}";
+        }
+
+        private bool IsLongTextColumn(MixDatabaseColumnViewModel col)
+        {
+            return col.DataType == MixDataType.Text
+                | col.DataType == MixDataType.Array
+                | col.DataType == MixDataType.ArrayMedia
+                | col.DataType == MixDataType.ArrayRadio 
+                | col.DataType == MixDataType.Html
+                | col.DataType == MixDataType.Json
+                | col.DataType == MixDataType.TuiEditor;
         }
 
         private string GetColumnType(MixDataType dataType, int? maxLength = null)

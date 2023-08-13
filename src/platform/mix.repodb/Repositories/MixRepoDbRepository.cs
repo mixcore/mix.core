@@ -653,26 +653,29 @@ namespace Mix.RepoDb.Repositories
             _isRoot = false;
         }
 
-        public IDbConnection CreateConnection(bool isRoot = false, bool isRenew = false)
+        public IDbConnection? CreateConnection(bool isRoot = false, bool isRenew = false)
         {
-            _trace = new();
-
-            if (!isRenew && _connection != null)
+            if (!string.IsNullOrEmpty(ConnectionString))
             {
-                return _connection;
-            }
+                _trace = new();
 
-            _isRoot = isRoot;
-            var connectionType = GetDbConnectionType(DatabaseProvider);
+                if (!isRenew && _connection != null)
+                {
+                    return _connection;
+                }
 
-            if (_isRoot || DatabaseProvider == MixDatabaseProvider.SQLITE)
-            {
-                _connection = Activator.CreateInstance(connectionType) as IDbConnection;
-                _connection!.ConnectionString = ConnectionString;
-            }
-            else
-            {
-                SetDbConnection();
+                _isRoot = isRoot;
+                var connectionType = GetDbConnectionType(DatabaseProvider);
+
+                if (_isRoot || DatabaseProvider == MixDatabaseProvider.SQLITE)
+                {
+                    _connection = Activator.CreateInstance(connectionType) as IDbConnection;
+                    _connection!.ConnectionString = ConnectionString;
+                }
+                else
+                {
+                    SetDbConnection();
+                }
             }
             return _connection;
         }

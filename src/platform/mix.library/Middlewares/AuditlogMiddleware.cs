@@ -80,7 +80,7 @@ namespace Mix.Lib.Middlewares
         }
         private bool CheckAuditLogPath(string path)
         {
-            return (path.IndexOf("/api") == 0 && path.IndexOf("audit-log") < 0);
+            return !GlobalConfigService.Instance.IsInit && (path.IndexOf("/api") == 0 && path.IndexOf("audit-log") < 0);
         }
 
         private async Task LogRequest(HttpContext context)
