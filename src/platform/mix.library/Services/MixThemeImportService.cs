@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Vml;
+using Google.Protobuf.WellKnownTypes;
 using Humanizer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -537,8 +538,15 @@ namespace Mix.Lib.Services
                         item.ChildId = _dicMixDatabaseIds[item.ChildId];
                         item.CreatedBy = _siteData.CreatedBy;
                         item.CreatedDateTime = DateTime.UtcNow;
-                        dbContext.Entry(item).State = EntityState.Added;
-                        await dbContext.SaveChangesAsync(_cts.Token);
+                        
+                        if (!dbContext.MixDatabaseRelationship.Any(
+                                m => m.ParentId == item.ParentId 
+                                    && m.ChildId == item.ChildId
+                                    && m.DisplayName == item.DisplayName))
+                        {
+                            dbContext.Entry(item).State = EntityState.Added;
+                            await dbContext.SaveChangesAsync(_cts.Token);
+                        }
                     }
                 }
                 catch (MixException)
@@ -558,9 +566,10 @@ namespace Mix.Lib.Services
             {
                 try
                 {
-                    if (database.Data != null && database.Data.Count > 0)
+                    var mixDb = _siteData.MixDatabases.FirstOrDefault(m => m.SystemName == database.DatabaseName);
+                    if (mixDb != null && database.Data != null && database.Data.Count > 0)
                     {
-                        var sql = GetInsertQuery(database);
+                        var sql = GetInsertQuery(database, mixDb);
                         await _repository.ExecuteCommand(sql);
                     }
                 }
@@ -575,7 +584,7 @@ namespace Mix.Lib.Services
             }
         }
 
-        private string GetInsertQuery(MixDbModel database)
+        private string GetInsertQuery(MixDbModel database, MixDatabase mixDb)
         {
             List<string> columns = new List<string> { "Id", "CreatedDateTime", "LastModified", "MixTenantId", "CreatedBy", "ModifiedBy", "Priority", "Status", "IsDeleted" };
             columns.AddRange(_siteData.MixDatabaseColumns.Where(c => c.MixDatabaseName == database.DatabaseName).Select(c => c.SystemName.ToTitleCase()).ToList());
@@ -586,13 +595,35 @@ namespace Mix.Lib.Services
                 var item = (JObject)jToken;
                 List<string> values = new();
                 item["MixTenantId"] = CurrentTenant.Id;
+
+                if (mixDb.Type == MixDatabaseType.AdditionalData)
+                {
+                    string parentType = item.Value<string>("ParentType");
+                    if (parentType == "Post" && _dicPostContentIds.TryGetValue(item.Value<int>("ParentId"), out int postId))
+                    {
+                        item["ParentId"] = postId;
+                    }
+                    else if (parentType == "Page" && _dicPageIds.TryGetValue(item.Value<int>("ParentId"), out int pageId))
+                    {
+                        item["ParentId"] = pageId;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
+
                 foreach (var col in columns)
                 {
                     var colType = dbColumns.FirstOrDefault(c => c.SystemName.Equals(col, StringComparison.OrdinalIgnoreCase))?.DataType;
                     var defaultValue = dbColumns.FirstOrDefault(c => c.SystemName.Equals(col, StringComparison.OrdinalIgnoreCase))?.DefaultValue;
-                    string objValue = GetColumnValue(col, colType, item, defaultValue);
+                    string objValue = GetColumnValue(col, colType, item, defaultValue, mixDb.Type);
                     values.Add(objValue);
                 }
+
+
+
                 sqlList.Add($"Insert into {_databaseConstant.BacktickOpen}{database.DatabaseName}{_databaseConstant.BacktickClose} " +
                     $"({string.Join(',', columns.Select(c => $"{_databaseConstant.BacktickOpen}{c}{_databaseConstant.BacktickClose}"))}) " +
                     $"Values ({string.Join(',', values)})");
@@ -600,25 +631,26 @@ namespace Mix.Lib.Services
             return string.Join(';', sqlList);
         }
 
-        private string GetColumnValue(string col, MixDataType? colType, JObject item, string defaultValue)
+        private string GetColumnValue(string col, MixDataType? colDataType, JObject item, string defaultValue, MixDatabaseType mixDbType)
         {
             switch (col)
             {
                 case "CreatedDateTime":
                 case "LastModified":
-                    colType = MixDataType.Date;
+                    colDataType = MixDataType.Date;
                     break;
                 case "IsDeleted":
-                    colType = MixDataType.Boolean;
+                    colDataType = MixDataType.Boolean;
                     break;
                 case "Id":
                 case "MixTenantId":
                 case "Priority":
-                    colType = MixDataType.Integer;
+                    colDataType = MixDataType.Integer;
                     break;
             }
 
             var strValue = item.Value<string>(col);
+
             if (strValue != null && strValue.Contains("'"))
             {
                 strValue = strValue.Replace("'", "\\'");
@@ -627,7 +659,7 @@ namespace Mix.Lib.Services
             {
                 defaultValue = "NULL";
             }
-            return colType switch
+            return colDataType switch
             {
                 MixDataType.Boolean => string.IsNullOrEmpty(strValue) ? defaultValue : strValue,
                 MixDataType.Integer => string.IsNullOrEmpty(strValue) ? defaultValue : strValue,

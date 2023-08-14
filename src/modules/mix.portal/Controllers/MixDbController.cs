@@ -227,33 +227,46 @@ namespace Mix.Portal.Controllers
             dynamic obj = await _repository.GetSingleByParentAsync(parentType, parentId);
             if (obj != null)
             {
-                var data = ReflectionHelper.ParseObject(obj);
-                var database = await GetMixDatabase();
-                foreach (var item in database.Relationships)
+                try
                 {
-                    if (loadNestedData)
+                    var data = ReflectionHelper.ParseObject(obj);
+                    var database = await GetMixDatabase();
+                    foreach (var item in database.Relationships)
                     {
-
-                        List<QueryField> queries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, data.id);
-                        var associations = await _associationRepository.GetListByAsync(queries);
-                        if (associations is { Count: > 0 })
+                        if (loadNestedData)
                         {
-                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
-                            _repository.InitTableName(item.DestinateDatabaseName);
-                            List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
-                            var nestedData = await _repository.GetListByAsync(query);
-                            if (nestedData != null)
+
+                            List<QueryField> queries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, data.id);
+                            var associations = await _associationRepository.GetListByAsync(queries);
+                            if (associations is { Count: > 0 })
                             {
-                                data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
+                                var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
+                                _repository.InitTableName(item.DestinateDatabaseName);
+                                List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
+                                var nestedData = await _repository.GetListByAsync(query);
+                                if (nestedData != null)
+                                {
+                                    data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
+                                }
                             }
                         }
+                        else
+                        {
+                            data.Add(new JProperty(
+                                    $"{item.DisplayName}Url",
+                                    $"{CurrentTenant.Configurations.Domain}/api/v2/rest/mix-portal/mix-db/{item.DestinateDatabaseName}?ParentId={data.id}&ParentName={item.SourceDatabaseName}"));
+                        }
                     }
-                    else
-                    {
-                        data.Add(new JProperty($"{item.DisplayName}Url", $"{CurrentTenant.Configurations.Domain}/api/v2/rest/mix-portal/mix-db/{item.DestinateDatabaseName}?ParentId={data.id}&ParentName={item.SourceDatabaseName}"));
-                    }
+                    return Ok(data);
                 }
-                return Ok(data);
+                catch (MixException)
+                {
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    throw new MixException(MixErrorStatus.Badrequest, ex);
+                }
             }
             return NotFound();
             //throw new MixException(MixErrorStatus.NotFound, id);
