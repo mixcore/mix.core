@@ -9,7 +9,7 @@ namespace Mix.Database.Entities.AuditLog
         {
             MixFileHelper.CreateFolderIfNotExist(MixFolders.MixAuditLogFolder);
 
-            string cnn = $"Data Source={MixFolders.MixAuditLogFolder}/auditlog_{DateTime.Now.ToString("dd_MM_yyyy")}.db";
+            string cnn = $"Data Source={MixFolders.MixAuditLogFolder}/{DateTime.Now.ToString("dd_MM")}/auditlog_{DateTime.Now.ToString("dd_MM_yyyy")}.sqlite";
             optionsBuilder.UseSqlite(cnn);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
