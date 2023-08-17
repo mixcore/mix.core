@@ -12,6 +12,7 @@ using Mix.Mixdb.Event.Services;
 using Mix.Service.Interfaces;
 using Mix.Shared;
 using Mix.Shared.Interfaces;
+using Mix.Shared.Models.Configurations;
 using Mix.SignalR.Interfaces;
 using System.Reflection;
 
@@ -28,6 +29,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddMixServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
+            var options = configuration.Get<GlobalConfigurations>();
             services.AddMvc().AddSessionStateTempDataProvider();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSession(options =>
@@ -47,7 +49,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddHttpClient();
             services.AddLogging();
 
-            services.ApplyMigrations();
+            services.ApplyMigrations(options);
 
             services.AddQueues(executingAssembly, configuration);
 
@@ -82,6 +84,9 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMixTestServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
             // Clone Settings from shared folder
+            var options = new GlobalConfigurations();
+            configuration.GetSection("GlobalConfigurations").Bind(options);
+
             services.AddMvc().AddSessionStateTempDataProvider();
             services.AddSession();
             services.AddMixCommonServices(executingAssembly, configuration);
@@ -92,7 +97,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddHttpClient();
             services.AddLogging();
 
-            services.ApplyMigrations();
+            services.ApplyMigrations(options);
 
             services.AddQueues(executingAssembly, configuration);
 
