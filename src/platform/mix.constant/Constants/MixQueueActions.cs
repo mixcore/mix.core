@@ -3,6 +3,7 @@
     public class MixQueueActions
     {
         public const string AuditLog = "AuditLog";
+        public const string QueueLog = "QueueLog";
         public const string ExceptionLog = "ExceptionLog";
         public const string DeadLetter = "DeadLetter";
         public const string ScaleImage = "ScaleImage";
