@@ -12,6 +12,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    name: Build & Publish
     
     steps:
     - name: Checkout
