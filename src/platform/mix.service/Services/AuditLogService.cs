@@ -23,13 +23,11 @@ namespace Mix.Service.Services
     public class AuditLogService : IAuditLogService
     {
         private readonly ILogStreamHubClientService _logStreamHub;
-        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IQueueService<MessageQueueModel> _queueService;
         private AuditLogDbContext _dbContext;
         public int TenantId { get; set; }
-        public AuditLogService(IServiceScopeFactory serviceScopeFactory, IQueueService<MessageQueueModel> queueService, ILogStreamHubClientService logStreamHub)
+        public AuditLogService(IQueueService<MessageQueueModel> queueService, ILogStreamHubClientService logStreamHub)
         {
-            _serviceScopeFactory = serviceScopeFactory;
             _queueService = queueService;
             _logStreamHub = logStreamHub;
         }
