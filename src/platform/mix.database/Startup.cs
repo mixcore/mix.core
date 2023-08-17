@@ -10,8 +10,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddDbContext<MixCmsAccountContext>();
             services.AddDbContext<MixCmsContext>();
             services.AddDbContext<MixCmsAccountContext>();
-            services.AddDbContext<AuditLogDbContext>();
-
             return services;
         }
     }

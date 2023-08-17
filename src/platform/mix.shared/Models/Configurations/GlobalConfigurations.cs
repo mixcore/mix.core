@@ -1,6 +1,8 @@
-﻿namespace Mix.Shared.Models.Configurations
+﻿using Mix.Shared.Interfaces;
+
+namespace Mix.Shared.Models.Configurations
 {
-    public class GlobalConfigurations
+    public class GlobalConfigurations : IGlobalConfigurations
     {
         public bool IsInit { get; set; }
         public bool MigrateSystemDatabases { get; set; }

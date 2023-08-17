@@ -10,6 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddUoWs(this IServiceCollection services)
         {
+            services.AddDbContext<AuditLogDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<MixCmsContext>>();
             services.TryAddScoped<UnitOfWorkInfo<MixCacheDbContext>>();
             services.TryAddScoped<UnitOfWorkInfo<MixCmsAccountContext>>();

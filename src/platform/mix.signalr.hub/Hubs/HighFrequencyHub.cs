@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Mix.Service.Interfaces;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Models;
 using Newtonsoft.Json.Linq;

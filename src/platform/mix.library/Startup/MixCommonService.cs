@@ -6,7 +6,6 @@ using Mix.Lib.Interfaces;
 using Mix.Lib.Publishers;
 using Mix.Lib.Services;
 using Mix.Lib.Subscribers;
-using Mix.Service.Interfaces;
 using Mix.SignalR.Interfaces;
 using System.Reflection;
 
@@ -19,8 +18,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<HttpService>();
             services.TryAddSingleton<DatabaseService>();
             services.TryAddSingleton<ILogStreamHubClientService, LogStreamHubClientService>();
-            services.TryAddScoped<AuditLogDataModel>();
-            services.TryAddSingleton<IAuditLogService, AuditLogService>();
             services.TryAddSingleton<MixEndpointService>();
 
 

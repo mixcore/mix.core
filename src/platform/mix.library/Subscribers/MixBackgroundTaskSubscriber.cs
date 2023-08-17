@@ -9,6 +9,7 @@ using Mix.Queue.Engines.MixQueue;
 using Mix.Service.Commands;
 using Mix.Service.Interfaces;
 using Mix.SignalR.Enums;
+using Mix.SignalR.Hubs;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
 
@@ -33,6 +34,7 @@ namespace Mix.Lib.Subscribers
             IQueueService<MessageQueueModel> queueService)
             : base(TopicId, nameof(MixBackgroundTaskSubscriber), 20, serviceProvider, configuration, mixQueueService, queueService)
         {
+            PortalHub = portalHub;
             MixDbEventService = mixDbEventService;
         }
 
