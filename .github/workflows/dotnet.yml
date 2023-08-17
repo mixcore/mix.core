@@ -29,4 +29,4 @@ jobs:
     - name: Build
       run: dotnet build develop/Mixcore.sln --no-restore
     - name: Publish
-      run: dotnet publish develop/Mixcore.sln -c Release --output ./Release --no-restore
+      run: dotnet publish develop/src/applications/Mixcore/Mixcore.csproj -c Release --output ./Release --no-restore
