@@ -5,9 +5,9 @@ name: .NET
 
 on:
   push:
-    branches: [ "feature/refactor" ]
+    branches: [ "feature/github_actions" ]
   pull_request:
-    branches: [ "feature/refactor" ]
+    branches: [ "feature/github_actions" ]
 
 jobs:
   build:
@@ -28,3 +28,5 @@ jobs:
       run: dotnet restore develop/Mixcore.sln
     - name: Build
       run: dotnet build develop/Mixcore.sln --no-restore
+    - name: Publish
+      run: dotnet publish develop/Mixcore.sln -c Release --output ./Release --no-restore
