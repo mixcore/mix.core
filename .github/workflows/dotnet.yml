@@ -5,13 +5,14 @@ name: .NET
 
 on:
   push:
-    branches: [ "feature/refactor" ]
+    branches: [ "feature/github_actions" ]
   pull_request:
-    branches: [ "feature/refactor" ]
+    branches: [ "feature/github_actions" ]
 
 jobs:
   build:
     runs-on: windows-latest
+    name: Build & Publish
     
     steps:
     - name: Checkout
@@ -28,3 +29,5 @@ jobs:
       run: dotnet restore develop/Mixcore.sln
     - name: Build
       run: dotnet build develop/Mixcore.sln --no-restore
+    - name: Publish
+      run: dotnet publish develop/src/applications/Mixcore/Mixcore.csproj -c Release --output ./Release --no-restore
