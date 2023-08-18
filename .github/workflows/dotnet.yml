@@ -31,5 +31,9 @@ jobs:
       run: dotnet build develop/Mixcore.sln --no-restore
     - name: Publish
       run: dotnet publish develop/src/applications/Mixcore/Mixcore.csproj -c Release --output ./Release --no-restore
-    - name: Run deployment script
-      run: bash develop/deployment/deployment.sh ${{ secrets.FTP_SERVER }} ${{ secrets.FTP_USERNAME }} "\${{ secrets.FTP_PASSWORD }}" "./Release" "/test_folder" "./*"
+    - shell: bash
+      env:
+        HOST: ${{ secrets.FTP_SERVER }}
+        USERNAME: ${{ secrets.FTP_USERNAME }}
+        PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      run: bash develop/deployment/deployment.sh "$HOST" "$USERNAME" "\$PASSWORD" "./Release" "/test_folder" "./*"
