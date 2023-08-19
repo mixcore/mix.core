@@ -12,15 +12,15 @@ REMOTEFOLDER=$2
 FILES="./*"
 
 # Go to local current directory
-cd "$LOCALFOLDER"
-echo $1 $3
+#cd "$LOCALFOLDER"
+echo $HOST $USERNAME $PASSWORD
 # FTP login and upload is explained in paragraph below
-ftp -inv $HOST <<EOF
-user $USERNAME $PASSWORD
+#ftp -inv $HOST <<EOF
+#user $USERNAME $PASSWORD
 
 # Go to local current directory
-cd "$REMOTEFOLDER"
-mput $FILES
-mdel app_offline.htm
+#cd "$REMOTEFOLDER"
+#mput $FILES
+#mdel app_offline.htm
 bye
 EOF
