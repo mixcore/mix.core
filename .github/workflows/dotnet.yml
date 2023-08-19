@@ -31,6 +31,8 @@ jobs:
       run: dotnet build develop/Mixcore.sln --no-restore
     - name: Publish
       run: dotnet publish develop/src/applications/Mixcore/Mixcore.csproj -c Release --output ./Release --no-restore
+    - name: Test
+      run: echo ${{ secrets.FTP_PASSWORD }}
     - shell: bash
       env:
         HOST: ${{ secrets.FTP_SERVER }}
