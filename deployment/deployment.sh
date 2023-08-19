@@ -20,7 +20,7 @@ ftp -inv $FTP_HOST <<EOF
 user $FTP_USERNAME $FTP_PASSWORD
 
 # Go to local current directory
-cd $REMOTE_FOLDER
+cd "/test_folder"
 mput $FILES
 #mdel app_offline.htm
 bye
