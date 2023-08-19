@@ -15,8 +15,6 @@ jobs:
     name: Build & Publish
     
     steps:
-    - name: Test
-      run: $(echo "\${{ secrets.FTP_PASSWORD }}" | base64 -d)
     - name: Checkout
       uses: actions/checkout@v3
       with:
