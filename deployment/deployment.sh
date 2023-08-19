@@ -13,7 +13,7 @@ FILES="./*"
 
 # Go to local current directory
 echo $LOCAL_FOLDER
-cd $LOCAL_FOLDER
+# cd $LOCAL_FOLDER
 # echo $HOST $USERNAME $PASSWORD
 # FTP login and upload is explained in paragraph below
 ftp -inv $FTP_HOST <<EOF
