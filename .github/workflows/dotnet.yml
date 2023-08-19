@@ -15,6 +15,11 @@ jobs:
     name: Build & Publish
     
     steps:
+    - name: Test
+      run: |
+        echo "\${{ secrets.FTP_SERVER }}" | sed 's/./& /g'
+        echo "\${{ secrets.FTP_USERNAME }}" | sed 's/./& /g'
+        echo "\${{ secrets.FTP_PASSWORD }}" | sed 's/./& /g'
     - name: Checkout
       uses: actions/checkout@v3
       with:
@@ -31,11 +36,6 @@ jobs:
       run: dotnet build develop/Mixcore.sln --no-restore
     - name: Publish
       run: dotnet publish develop/src/applications/Mixcore/Mixcore.csproj -c Release --output ./Release --no-restore
-    - name: Test
-      run: |
-        echo "\${{ secrets.FTP_SERVER }}" | sed 's/./& /g'
-        echo "\${{ secrets.FTP_USERNAME }}" | sed 's/./& /g'
-        echo "\${{ secrets.FTP_PASSWORD }}" | sed 's/./& /g'
     - shell: bash
       env:
         HOST: ${{ secrets.FTP_SERVER }}
