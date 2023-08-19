@@ -379,6 +379,11 @@
           "path": "/admin/audit-log/list",
           "title": "Audit Logs",
           "icon": "mi mi-Error"
+        },
+        {
+          "path": "/admin/queue-log/list",
+          "title": "Queue Logs",
+          "icon": "mi mi-FileExplorer"
         }
       ]
     }
@@ -556,6 +561,16 @@
           "path": "/admin/audit-log/stream",
           "templatePath": "/mix-app/views/app-portal/pages/audit-log/stream.html",
           "controller": "AuditLogController"
+        }
+      ]
+    },
+    {
+      "cate": "queue-log",
+      "items": [
+        {
+          "path": "/admin/queue-log/list",
+          "templatePath": "/mix-app/views/app-portal/pages/queue-log/list.html",
+          "controller": "QueueLogController"
         }
       ]
     },

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.AuditLog;
+using Mix.Database.Entities.Queue;
 using Mix.Lib.Middlewares;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -11,15 +12,18 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddUoWs(this IServiceCollection services)
         {
             services.AddDbContext<AuditLogDbContext>();
+            services.AddDbContext<MixQueueDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<MixCmsContext>>();
             services.TryAddScoped<UnitOfWorkInfo<MixCacheDbContext>>();
             services.TryAddScoped<UnitOfWorkInfo<MixCmsAccountContext>>();
             services.TryAddScoped<UnitOfWorkInfo<AuditLogDbContext>>();
+            services.TryAddScoped<UnitOfWorkInfo<MixQueueDbContext>>();
 
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCmsContext>>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCacheDbContext>>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCmsAccountContext>>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<AuditLogDbContext>>();
+            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixQueueDbContext>>();
 
             return services;
         }

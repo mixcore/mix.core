@@ -1,23 +1,25 @@
-﻿using Microsoft.Extensions.Options;
-using Mix.Database.Entities.AuditLog.EntityConfigurations;
-using Mix.Database.Entities.Queue.EntityConfigurations;
-using Mix.Database.Services;
+﻿using Mix.Database.Entities.Queue.EntityConfigurations;
 using Mix.Heart.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Database.Entities.Queue
 {
     public sealed class MixQueueDbContext : DbContext
     {
+        private string _folder = DateTime.Now.ToString("dd_MM");
+        private string _cnn;
+        public MixQueueDbContext()
+        {
+            _cnn = $"Data Source={MixFolders.MixQueueLogFolder}/{_folder}/queuelog_{DateTime.Now.ToString("dd_MM_yyyy")}.sqlite";
+        }
+        public MixQueueDbContext(DateTime date)
+        {
+            _folder = date.ToString("dd_MM");
+            _cnn = $"Data Source={MixFolders.MixQueueLogFolder}/{_folder}/queuelog_{date.ToString("dd_MM_yyyy")}.sqlite";
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            MixFileHelper.CreateFolderIfNotExist($"{MixFolders.MixQueueLogFolder}/{DateTime.Now.ToString("dd_MM")}");
-            string cnn = $"Data Source={MixFolders.MixQueueLogFolder}/{DateTime.Now.ToString("dd_MM")}/queuelog_{DateTime.Now.ToString("dd_MM_yyyy")}.sqlite";
-            optionsBuilder.UseSqlite(cnn);
+            MixFileHelper.CreateFolderIfNotExist($"{MixFolders.MixQueueLogFolder}/{_folder}");
+            optionsBuilder.UseSqlite(_cnn);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

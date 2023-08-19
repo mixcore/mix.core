@@ -5,11 +5,21 @@ namespace Mix.Database.Entities.AuditLog
 {
     public class AuditLogDbContext : DbContext
     {
+        private string _folder = DateTime.Now.ToString("dd_MM");
+        private string _cnn;
+        public AuditLogDbContext()
+        {
+            _cnn = $"Data Source={MixFolders.MixAuditLogFolder}/{_folder}/auditlog_{DateTime.Now.ToString("dd_MM_yyyy")}.sqlite";
+        }
+        public AuditLogDbContext(DateTime date)
+        {
+            _folder = date.ToString("dd_MM");
+            _cnn = $"Data Source={MixFolders.MixAuditLogFolder}/{_folder}/auditlog_{date.ToString("dd_MM_yyyy")}.sqlite";
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            MixFileHelper.CreateFolderIfNotExist($"{MixFolders.MixAuditLogFolder}/{DateTime.Now.ToString("dd_MM")}");
-            string cnn = $"Data Source={MixFolders.MixAuditLogFolder}/{DateTime.Now.ToString("dd_MM")}/auditlog_{DateTime.Now.ToString("dd_MM_yyyy")}.sqlite";
-            optionsBuilder.UseSqlite(cnn);
+            MixFileHelper.CreateFolderIfNotExist($"{MixFolders.MixAuditLogFolder}/{_folder}");
+            optionsBuilder.UseSqlite(_cnn);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
