@@ -24,6 +24,6 @@ namespace Mix.Database.Entities.Queue
             modelBuilder.ApplyConfiguration(new MixQueueMessageConfiguration());
         }
 
-        public DbSet<MixQueueMessage> MixQueueMessage { get; set; }
+        public DbSet<MixQueueMessageLog> MixQueueMessage { get; set; }
     }
 }

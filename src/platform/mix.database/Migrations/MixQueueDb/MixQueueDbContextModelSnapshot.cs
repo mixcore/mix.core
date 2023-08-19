@@ -17,7 +17,7 @@ namespace Mix.Database.Migrations.MixQueueDb
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.9");
 
-            modelBuilder.Entity("Mix.Database.Entities.Queue.MixQueueMessage", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Queue.MixQueueMessageLog", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,9 +33,6 @@ namespace Mix.Database.Migrations.MixQueueDb
                         .HasColumnType("datetime");
 
                     b.Property<string>("DataTypeFullName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("From")
                         .HasColumnType("varchar(250)");
 
                     b.Property<bool>("IsDeleted")
@@ -47,14 +44,22 @@ namespace Mix.Database.Migrations.MixQueueDb
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
+                    b.Property<string>("Note")
+                        .HasColumnType("varchar(250)");
+
                     b.Property<string>("ObjectData")
                         .HasColumnType("ntext");
 
                     b.Property<int>("Priority")
                         .HasColumnType("integer");
 
+                    b.Property<Guid>("QueueMessageId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("State")
-                        .HasColumnType("varchar(250)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -64,11 +69,14 @@ namespace Mix.Database.Migrations.MixQueueDb
                     b.Property<string>("StringData")
                         .HasColumnType("ntext");
 
+                    b.Property<string>("SubscriptionId")
+                        .HasColumnType("varchar(250)");
+
                     b.Property<int>("TenantId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("TopicId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("varchar(250)");
 
                     b.HasKey("Id");
 

@@ -27,7 +27,7 @@ namespace Mixcore
             {
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
             });
-            
+
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
             services.AddMixCors();
             services.AddScoped<MixNavigationService>();
@@ -51,16 +51,13 @@ namespace Mixcore
 
             app.UseMixTenant();
 
-            if (!globalConfigs.IsInit)
-            {
-                app.UseMiddleware<AuditlogMiddleware>();
-            }
+            app.UseMiddleware<AuditlogMiddleware>();
 
             app.UseRouting();
 
             // must go between app.UseRouting() and app.UseEndpoints.
             app.UseMixAuth();
-            
+
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.ContentRootPath, env.IsDevelopment());
             app.UseMixEndpoints();
 
@@ -73,13 +70,13 @@ namespace Mixcore
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(env.ContentRootPath, MixFolders.TemplatesFolder))
             });
-            
+
             if (GlobalConfigService.Instance.AppSettings.IsHttps)
             {
                 app.UseHttpsRedirection();
             }
 
-            
+
         }
     }
 }

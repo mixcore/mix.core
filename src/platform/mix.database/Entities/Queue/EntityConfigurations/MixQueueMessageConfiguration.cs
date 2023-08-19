@@ -8,23 +8,35 @@ using System.Threading.Tasks;
 
 namespace Mix.Database.Entities.Queue.EntityConfigurations
 {
-    internal class MixQueueMessageConfiguration : IEntityTypeConfiguration<MixQueueMessage>
+    internal class MixQueueMessageConfiguration : IEntityTypeConfiguration<MixQueueMessageLog>
     {
         public IDatabaseConstants Config;
         public MixQueueMessageConfiguration()
         {
             Config = new SqliteDatabaseConstants();
         }
-        public void Configure(EntityTypeBuilder<MixQueueMessage> builder)
+        public void Configure(EntityTypeBuilder<MixQueueMessageLog> builder)
         {
+            builder.Property(e => e.TopicId)
+                .HasColumnType($"{Config.String}{Config.MediumLength}");
+            
+            builder.Property(e => e.SubscriptionId)
+                .HasColumnType($"{Config.String}{Config.MediumLength}");
+            
+            builder.Property(e => e.DataTypeFullName)
+                .HasColumnType($"{Config.String}{Config.MediumLength}");
+            
             builder.Property(e => e.Action)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
             
-            builder.Property(e => e.From)
+            builder.Property(e => e.Note)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
-            
+
             builder.Property(e => e.State)
-                .HasColumnType($"{Config.String}{Config.MediumLength}");
+               .IsRequired()
+               .HasConversion(new EnumToStringConverter<MixQueueMessageLogState>())
+               .HasColumnType($"{Config.String}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet);
 
             builder.Property(e => e.StringData)
                 .HasColumnType(Config.Text);

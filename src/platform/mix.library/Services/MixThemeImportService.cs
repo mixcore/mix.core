@@ -619,7 +619,6 @@ namespace Mix.Lib.Services
                     }
                 }
 
-
                 foreach (var col in columns)
                 {
                     var colType = dbColumns.FirstOrDefault(c => c.SystemName.Equals(col, StringComparison.OrdinalIgnoreCase))?.DataType;

@@ -9,6 +9,7 @@ namespace Mix.Queue.Models
     {
         public Guid Id { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string Sender { get; set; }
         public string Action { get; set; }
         public bool Success { get; set; }
         public string TopicId { get; set; }

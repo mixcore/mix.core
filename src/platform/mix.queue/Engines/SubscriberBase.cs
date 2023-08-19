@@ -21,7 +21,7 @@ namespace Mix.Queue.Engines
 {
     public abstract class SubscriberBase : IHostedService
     {
-        private IQueueService<MessageQueueModel> _queueService;
+        private IQueueService<MessageQueueModel> _memQueueService;
         private readonly IQueueSubscriber _subscriber;
         private readonly IConfiguration _configuration;
         private readonly MixQueueMessages<MessageQueueModel> _mixQueueService;
@@ -45,9 +45,9 @@ namespace Mix.Queue.Engines
             _configuration = configuration;
             _mixQueueService = mixQueueService;
             _topicId = topicId;
+            _memQueueService = queueService;
             _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{moduleName}");
             ServicesProvider = servicesProvider;
-            _queueService = queueService;
         }
 
         public virtual Task StartAsync(CancellationToken cancellationToken = default)
@@ -89,20 +89,20 @@ namespace Mix.Queue.Engines
                         var azureSetting = new AzureQueueSetting();
                         azureSettingPath.Bind(azureSetting);
                         return QueueEngineFactory.CreateSubscriber(
-                            provider, azureSetting, topicId, subscriptionId, MessageHandler, _mixQueueService);
+                            provider, azureSetting, topicId, subscriptionId, MessageHandler, _mixQueueService, _memQueueService);
                     case MixQueueProvider.GOOGLE:
                         var googleSettingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
                         var googleSetting = new GoogleQueueSetting();
                         googleSettingPath.Bind(googleSetting);
                         googleSetting.CredentialFile = googleSetting.CredentialFile;
                         return QueueEngineFactory.CreateSubscriber(
-                            provider, googleSetting, topicId, subscriptionId, MessageHandler, _mixQueueService);
+                            provider, googleSetting, topicId, subscriptionId, MessageHandler, _mixQueueService, _memQueueService);
                     case MixQueueProvider.MIX:
                         var mixSettingPath = _configuration.GetSection("MessageQueueSetting:Mix");
                         var mixSetting = new MixQueueSetting();
                         mixSettingPath.Bind(mixSetting);
                         return QueueEngineFactory.CreateSubscriber(
-                           provider, mixSetting, topicId, subscriptionId, MessageHandler, _mixQueueService);
+                           provider, mixSetting, topicId, subscriptionId, MessageHandler, _mixQueueService, _memQueueService);
                 }
             }
             catch (Exception ex)
@@ -144,10 +144,10 @@ namespace Mix.Queue.Engines
 
         public virtual Task HandleDeadLetter(MessageQueueModel message)
         {
-            _queueService.PushQueue(new MessageQueueModel(1)
+            _memQueueService.PushQueue(new MessageQueueModel(1)
             {
                 Action = MixQueueActions.DeadLetter,
-                TopicId = MixQueueTopics.MixBackgroundTasks,
+                TopicId = MixQueueTopics.MixLog,
                 Data = ReflectionHelper.ParseObject(message).ToString(),
                 Success = false
             });
@@ -156,7 +156,7 @@ namespace Mix.Queue.Engines
 
         public virtual Task HandleException(Exception ex)
         {
-            _queueService.PushQueue(new MessageQueueModel(1)
+            _memQueueService.PushQueue(new MessageQueueModel(1)
             {
                 Action = MixQueueActions.ExceptionLog,
                 TopicId = MixQueueTopics.MixBackgroundTasks,

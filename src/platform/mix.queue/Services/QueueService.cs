@@ -1,5 +1,8 @@
-﻿using Mix.Queue.Interfaces;
+﻿using Mix.Heart.Helpers;
+using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +45,7 @@ namespace Mix.Queue.Services
             return result;
         }
 
-        private ConcurrentQueue<MessageQueueModel> GetQueue(string topicId)
+        public ConcurrentQueue<MessageQueueModel> GetQueue(string topicId)
         {
             if (string.IsNullOrEmpty(topicId))
             {
@@ -61,7 +64,26 @@ namespace Mix.Queue.Services
             var queue = GetQueue(model.TopicId);
             if (queue != null)
             {
+                model.Id = Guid.NewGuid();
                 queue.Enqueue(model);
+                EnqueueLog(model);
+            }
+
+        }
+
+        private void EnqueueLog(MessageQueueModel model)
+        {
+            var logQueue = GetQueue(MixQueueTopics.MixLog);
+            if (logQueue != null)
+            {
+                logQueue.Enqueue(new MessageQueueModel()
+                {
+                    TopicId = MixQueueTopics.MixLog,
+                    Action = MixQueueActions.EnqueueLog,
+                    Data = ReflectionHelper.ParseObject(model).ToString(),
+                    TenantId = 1,
+                    CreatedDate = DateTime.UtcNow
+                });
             }
         }
 

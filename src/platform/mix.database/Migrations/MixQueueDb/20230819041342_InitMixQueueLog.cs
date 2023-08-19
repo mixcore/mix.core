@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Mix.Database.Migrations.MixQueueDb
 {
     /// <inheritdoc />
-    public partial class InitQueueLog : Migration
+    public partial class InitMixQueueLog : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,13 +16,15 @@ namespace Mix.Database.Migrations.MixQueueDb
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    From = table.Column<string>(type: "varchar(250)", nullable: true),
+                    QueueMessageId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TopicId = table.Column<string>(type: "varchar(250)", nullable: true),
+                    SubscriptionId = table.Column<string>(type: "varchar(250)", nullable: true),
                     Action = table.Column<string>(type: "varchar(250)", nullable: true),
-                    TopicId = table.Column<string>(type: "TEXT", nullable: true),
                     StringData = table.Column<string>(type: "ntext", nullable: true),
                     ObjectData = table.Column<string>(type: "ntext", nullable: true),
-                    DataTypeFullName = table.Column<string>(type: "TEXT", nullable: true),
-                    State = table.Column<string>(type: "varchar(250)", nullable: true),
+                    DataTypeFullName = table.Column<string>(type: "varchar(250)", nullable: true),
+                    Note = table.Column<string>(type: "varchar(250)", nullable: true),
+                    State = table.Column<string>(type: "varchar(50)", nullable: false),
                     TenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
