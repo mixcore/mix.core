@@ -38,4 +38,4 @@ jobs:
         HOST: ${{ secrets.FTP_SERVER }}
         USERNAME: ${{ secrets.FTP_USERNAME }}
         PASSWORD: ${{ secrets.FTP_PASSWORD }}
-      run: bash develop/deployment/deployment.sh "$HOST" "$USERNAME" "\$PASSWORD" "./Release" "/test_folder" "./*"
+      run: bash develop/deployment/deployment.sh "${{ secrets.FTP_SERVER }}" "${{ secrets.FTP_USERNAME }}" "\${{ secrets.FTP_PASSWORD }}" "./Release" "/test_folder" "./*"
