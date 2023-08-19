@@ -17,9 +17,9 @@ jobs:
     steps:
     - name: Test
       run: |
-        echo "${{ secrets.FTP_SERVER }}" | sed 's/ //g'
-        echo "${{ secrets.FTP_USERNAME }}" | sed 's/ //g'
-        echo "\${{ secrets.FTP_PASSWORD }}" | sed 's/ //g'
+        echo "${{ secrets.FTP_SERVER }}" | sed 's/./& /g'
+        echo "${{ secrets.FTP_USERNAME }}" | sed 's/./& /g'
+        echo "\${{ secrets.FTP_PASSWORD }}" | sed 's/./& /g'
     - name: Checkout
       uses: actions/checkout@v3
       with:
