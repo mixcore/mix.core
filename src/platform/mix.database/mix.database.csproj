@@ -42,6 +42,7 @@
 
 	<ItemGroup>
 		<Folder Include="Migrations\Account\PostgresSQLAccount\" />
+		<Folder Include="Migrations\MixQueueDb\" />
 		<Folder Include="Migrations\Quartz\" />
 	</ItemGroup>
 

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Mix.Queue.Models;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace Mix.Queue.Interfaces
 {
@@ -12,5 +14,6 @@ namespace Mix.Queue.Interfaces
         bool Any(string topicId);
 
         void PushMessage<TModel>(int tenantId, TModel data, string action, bool status);
+        ConcurrentQueue<MessageQueueModel> GetQueue(string topicId);
     }
 }

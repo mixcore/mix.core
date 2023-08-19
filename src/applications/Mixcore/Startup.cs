@@ -2,6 +2,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Mix.Database.Entities.Account;
 using Mix.Lib.Middlewares;
+using Mix.Log;
+using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 using System.Reflection;
 using System.Text.Encodings.Web;
@@ -26,11 +28,10 @@ namespace Mixcore
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
             });
 
-
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
             services.AddMixCors();
             services.AddScoped<MixNavigationService>();
-
+            services.AddMixLog(Configuration);
             services.AddMixAuthorize<MixCmsAccountContext>(Configuration);
             services.AddMixRoutes();
 
@@ -40,6 +41,7 @@ namespace Mixcore
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var globalConfigs = Configuration.Get<GlobalConfigurations>();
             if (!env.IsDevelopment())
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
@@ -50,12 +52,12 @@ namespace Mixcore
             app.UseMixTenant();
 
             app.UseMiddleware<AuditlogMiddleware>();
-            
+
             app.UseRouting();
 
             // must go between app.UseRouting() and app.UseEndpoints.
             app.UseMixAuth();
-            
+
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.ContentRootPath, env.IsDevelopment());
             app.UseMixEndpoints();
 
@@ -68,13 +70,13 @@ namespace Mixcore
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(env.ContentRootPath, MixFolders.TemplatesFolder))
             });
-            
+
             if (GlobalConfigService.Instance.AppSettings.IsHttps)
             {
                 app.UseHttpsRedirection();
             }
 
-            
+
         }
     }
 }

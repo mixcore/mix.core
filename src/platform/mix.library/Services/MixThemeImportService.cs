@@ -564,6 +564,12 @@ namespace Mix.Lib.Services
         {
             foreach (var database in _siteData.MixDbModels)
             {
+                // Not import user data from other site
+                if (database.DatabaseName == MixDatabaseNames.SYSTEM_USER_DATA)
+                {
+                    continue;
+                }
+
                 try
                 {
                     var mixDb = _siteData.MixDatabases.FirstOrDefault(m => m.SystemName == database.DatabaseName);
@@ -612,7 +618,6 @@ namespace Mix.Lib.Services
                         continue;
                     }
                 }
-
 
                 foreach (var col in columns)
                 {

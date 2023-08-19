@@ -9,6 +9,7 @@ using Mix.Queue.Engines.MixQueue;
 using Mix.Service.Commands;
 using Mix.Service.Interfaces;
 using Mix.SignalR.Enums;
+using Mix.SignalR.Hubs;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
 
@@ -17,14 +18,10 @@ namespace Mix.Lib.Subscribers
     public class MixBackgroundTaskSubscriber : SubscriberBase
     {
         protected IPortalHubClientService PortalHub;
-        protected IAuditLogService AuditLogService;
         protected MixDbEventService MixDbEventService;
         private const string TopicId = MixQueueTopics.MixBackgroundTasks;
         private static string[] allowActions =
         {
-            MixQueueActions.ExceptionLog,
-            MixQueueActions.DeadLetter,
-            MixQueueActions.AuditLog,
             MixQueueActions.SendMail,
             MixQueueActions.MixDbEvent
         };
@@ -32,13 +29,11 @@ namespace Mix.Lib.Subscribers
             IServiceProvider serviceProvider,
             IConfiguration configuration,
             MixQueueMessages<MessageQueueModel> mixQueueService,
-            IAuditLogService auditLogService,
             IPortalHubClientService portalHub,
             MixDbEventService mixDbEventService,
             IQueueService<MessageQueueModel> queueService)
             : base(TopicId, nameof(MixBackgroundTaskSubscriber), 20, serviceProvider, configuration, mixQueueService, queueService)
         {
-            AuditLogService = auditLogService;
             PortalHub = portalHub;
             MixDbEventService = mixDbEventService;
         }
@@ -64,29 +59,6 @@ namespace Mix.Lib.Subscribers
 
             switch (model.Action)
             {
-                case MixQueueActions.AuditLog:
-                    var cmd = model.ParseData<LogAuditLogCommand>();
-                    if (cmd != null)
-                    {
-                        await AuditLogService.SaveRequestAsync(cmd.Request);
-                    }
-                    break;
-
-                case MixQueueActions.ExceptionLog:
-                    var ex = model.ParseData<Exception>();
-                    await MixLogService.LogExceptionAsync(ex);
-                    break;
-
-                case MixQueueActions.DeadLetter:
-                    var message = model.ParseData<MessageQueueModel>();
-                    await AuditLogService.SaveRequestAsync(new AuditLogDataModel()
-                    {
-                        Endpoint = "Dead Letter",
-                        Body = ReflectionHelper.ParseObject(message),
-                        Method = "Queue"
-                    });
-                    break;
-
                 case MixQueueActions.SendMail:
                     await SendMail(model);
                     break;

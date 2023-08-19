@@ -41,7 +41,8 @@ namespace Mix.Queue.Engines
             string topicId,
             string subscriptionId,
             Func<T, Task> handler,
-            MixQueueMessages<T> queueService)
+            MixQueueMessages<T> queueService,
+            IQueueService<MessageQueueModel> memQueues)
             where T : MessageQueueModel
         {
             IQueueSubscriber subscriber = default;
@@ -54,7 +55,7 @@ namespace Mix.Queue.Engines
                     subscriber = new GoogleQueueSubscriber<T>(queueSetting, topicId, subscriptionId, handler);
                     break;
                 case MixQueueProvider.MIX:
-                    subscriber = new MixQueueSubscriber<T>(queueSetting, topicId, subscriptionId, handler, queueService);
+                    subscriber = new MixQueueSubscriber<T>(queueSetting, topicId, subscriptionId, handler, queueService, memQueues);
                     break;
             }
             subscriber.SubscriptionId = subscriptionId;

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Google.Cloud.PubSub.V1;
+using Microsoft.Extensions.Hosting;
+using Mix.Heart.Helpers;
 using Mix.Queue.Engines.Mix;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
@@ -19,19 +21,21 @@ namespace Mix.Queue.Engines.MixQueue
         private readonly MixQueueSetting _queueSetting;
         private readonly Func<T, Task> _messageHandler;
         private readonly MixQueueMessages<T> _queue;
+        private readonly IQueueService<MessageQueueModel> _memQueues;
         public MixQueueSubscriber(
             QueueSetting queueSetting,
             string topicId,
             string subscriptionId,
             Func<T, Task> messageHandler,
-            MixQueueMessages<T> queue)
+            MixQueueMessages<T> queue,
+            IQueueService<MessageQueueModel> memQueues)
         {
             _queueSetting = queueSetting as MixQueueSetting;
             _queue = queue;
             _subscriptionId = subscriptionId;
             _messageHandler = messageHandler;
+            _memQueues = memQueues;
             Initialize(topicId, subscriptionId);
-
         }
 
         private void Initialize(string topicId, string subscriptionId)
@@ -63,6 +67,7 @@ namespace Mix.Queue.Engines.MixQueue
                         {
                             foreach (var msg in inQueueItems)
                             {
+                                AckQueueMessage(msg);
                                 await _messageHandler.Invoke(msg);
                             }
                         }
@@ -79,6 +84,26 @@ namespace Mix.Queue.Engines.MixQueue
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             return ProcessQueue(stoppingToken);
+        }
+
+        private void AckQueueMessage(MessageQueueModel model)
+        {
+            if (model.Action != MixQueueActions.AckLog && model.Action != MixQueueActions.EnqueueLog)
+            {
+                var logQueue = _memQueues.GetQueue(MixQueueTopics.MixLog);
+                if (logQueue != null)
+                {
+                    logQueue.Enqueue(new MessageQueueModel()
+                    {
+                        TopicId = MixQueueTopics.MixLog,
+                        Action = MixQueueActions.AckLog,
+                        Sender = _subscriptionId,
+                        Data = ReflectionHelper.ParseObject(model).ToString(),
+                        TenantId = 1,
+                        CreatedDate = DateTime.UtcNow
+                    });
+                }
+            }
         }
     }
 }
