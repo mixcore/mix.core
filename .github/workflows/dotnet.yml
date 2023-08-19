@@ -30,12 +30,12 @@ jobs:
     - name: Build
       run: dotnet build develop/Mixcore.sln --no-restore
     - name: Publish
-      run: dotnet publish develop/src/applications/Mixcore/Mixcore.csproj -c Release --output ./Release --no-restore
+      run: dotnet publish develop/src/applications/Mixcore/Mixcore.csproj -c Release --output develop/release --no-restore
     - shell: bash
       run: bash develop/deployment/deployment.sh
       env:
         FTP_HOST: ${{ secrets.FTP_SERVER }}
         FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
         FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        LOCAL_FOLDER: "${{ github.workspace }}/Release"
+        LOCAL_FOLDER: develop/release
         REMOTE_FOLDER: "/test_folder"
