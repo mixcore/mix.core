@@ -5,21 +5,21 @@
 # USER=$2
 # PASSWORD=$3
 
-LOCALFOLDER=$1
+# LOCALFOLDER=$1
 
-REMOTEFOLDER=$2
+# REMOTEFOLDER=$2
 
 FILES="./*"
 
 # Go to local current directory
-cd "$LOCALFOLDER"
+cd $LOCAL_FOLDER
 # echo $HOST $USERNAME $PASSWORD
 # FTP login and upload is explained in paragraph below
-ftp -inv $HOST <<EOF
-user $USERNAME $PASSWORD
+ftp -inv $FTP_HOST <<EOF
+user $FTP_USERNAME $FTP_PASSWORD
 
 # Go to local current directory
-cd "$REMOTEFOLDER"
+cd $REMOTE_FOLDER
 mput $FILES
 #mdel app_offline.htm
 bye
