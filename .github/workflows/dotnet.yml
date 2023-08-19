@@ -37,5 +37,5 @@ jobs:
         FTP_HOST: ${{ secrets.FTP_SERVER }}
         FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
         FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        LOCAL_FOLDER: ".Release"
+        LOCAL_FOLDER: "./Release"
         REMOTE_FOLDER: "/test_folder"
