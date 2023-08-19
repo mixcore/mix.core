@@ -5,15 +5,15 @@
 # USER=$2
 # PASSWORD=$3
 
-LOCALFOLDER=$4
+LOCALFOLDER=$1
 
-REMOTEFOLDER=$5
+REMOTEFOLDER=$2
 
 FILES="./*"
 
 # Go to local current directory
 cd "$LOCALFOLDER"
-echo $1 $3 $3
+echo $1 $3
 # FTP login and upload is explained in paragraph below
 ftp -inv $HOST <<EOF
 user $USERNAME $PASSWORD
