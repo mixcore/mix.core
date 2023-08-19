@@ -73,17 +73,20 @@ namespace Mix.Queue.Services
 
         private void EnqueueLog(MessageQueueModel model)
         {
-            var logQueue = GetQueue(MixQueueTopics.MixLog);
-            if (logQueue != null)
+            if (model.TopicId != MixQueueTopics.MixLog)
             {
-                logQueue.Enqueue(new MessageQueueModel()
+                var logQueue = GetQueue(MixQueueTopics.MixLog);
+                if (logQueue != null)
                 {
-                    TopicId = MixQueueTopics.MixLog,
-                    Action = MixQueueActions.EnqueueLog,
-                    Data = ReflectionHelper.ParseObject(model).ToString(),
-                    TenantId = 1,
-                    CreatedDate = DateTime.UtcNow
-                });
+                    logQueue.Enqueue(new MessageQueueModel()
+                    {
+                        TopicId = MixQueueTopics.MixLog,
+                        Action = MixQueueActions.EnqueueLog,
+                        Data = ReflectionHelper.ParseObject(model).ToString(),
+                        TenantId = 1,
+                        CreatedDate = DateTime.UtcNow
+                    });
+                }
             }
         }
 

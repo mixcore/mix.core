@@ -88,7 +88,7 @@ namespace Mix.Queue.Engines.MixQueue
 
         private void AckQueueMessage(MessageQueueModel model)
         {
-            if (model.Action != MixQueueActions.AckLog && model.Action != MixQueueActions.EnqueueLog)
+            if (model.TopicId != MixQueueTopics.MixLog)
             {
                 var logQueue = _memQueues.GetQueue(MixQueueTopics.MixLog);
                 if (logQueue != null)
