@@ -13,7 +13,7 @@ FILES="./*"
 
 # Go to local current directory
 cd "$LOCALFOLDER"
-
+echo $1 $3 $3
 # FTP login and upload is explained in paragraph below
 ftp -inv $HOST <<EOF
 user $USER $PASSWORD
