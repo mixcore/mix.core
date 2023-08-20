@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Azure.Amqp.Framing;
 using Mix.Database.Constants;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
@@ -67,7 +69,7 @@ namespace Mix.Portal.Controllers
             IMixDbCommandHubClientService mixDbCommandHubClientService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
             _repository = repository;
@@ -321,7 +323,7 @@ namespace Mix.Portal.Controllers
                         Action = ViewModelAction.Update
                     }
                 };
-                var modifiedData = new JObject() { 
+                var modifiedData = new JObject() {
                     new JProperty("modifiedEntiies", modifiedEnties)
                 };
                 await PortalHub.SendMessageAsync(new SignalRMessageModel()
@@ -337,29 +339,19 @@ namespace Mix.Portal.Controllers
             return BadRequest();
         }
 
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(int id, [FromBody] JObject fields)
+        [HttpPatch]
+        public async Task<IActionResult> Patch([FromBody] JObject obj, CancellationToken cancellationToken = default)
         {
-            var data = await _repository.GetSingleAsync(id);
-            if (data == null)
-            {
-                return NotFound();
-            }
-            string username = _idService.GetClaim(User, MixClaims.Username);
+            await PatchHandler(obj, cancellationToken);
+            return Ok();
+        }
 
-            // Not use Reflection to keep title case 
-            JObject obj = JObject.FromObject(data);
-            foreach (var prop in fields.Properties())
-            {
-                var propName = prop.Name.ToTitleCase();
-                if (obj.ContainsKey(propName))
-                {
-                    obj[propName] = prop.Value;
-                }
-            }
-            await _repository.UpdateAsync(obj);
-            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
-                new MixDbEventCommand(username, "PATCH", _tableName, obj));
+
+        [HttpPatch("patch-many")]
+        public async Task<IActionResult> PatchMany([FromBody] IEnumerable<JObject> lstObj,
+                CancellationToken cancellationToken = default)
+        {
+            await PatchManyHandler(lstObj, cancellationToken);
             return Ok();
         }
 
@@ -381,6 +373,60 @@ namespace Mix.Portal.Controllers
 
         #region Handler
 
+        private async Task PatchManyHandler(IEnumerable<JObject> lstObj, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            try
+            {
+                foreach (var obj in lstObj)
+                {
+                    await PatchHandler(obj, cancellationToken);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is not MixException)
+                {
+                    throw new MixException(MixErrorStatus.ServerError, ex);
+                }
+            }
+        }
+        private async Task PatchHandler(JObject objDto, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            try
+            {
+                var id = objDto.Value<int>("id");
+                var data = await _repository.GetSingleAsync(id);
+                if (data == null)
+                {
+                    throw new MixException(MixErrorStatus.NotFound);
+                }
+
+
+                string username = _idService.GetClaim(User, MixClaims.Username);
+
+                // Not use Reflection to keep title case 
+                JObject obj = JObject.FromObject(data);
+
+                foreach (var prop in objDto.Properties())
+                {
+                    var propName = prop.Name.ToTitleCase();
+                    if (obj.ContainsKey(propName))
+                    {
+                        obj[propName] = prop.Value;
+                    }
+                }
+
+                await _repository.UpdateAsync(objDto);
+                QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
+                    new MixDbEventCommand(username, "PATCH", _tableName, objDto));
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
+        }
         private async Task<JObject> ParseDtoToEntityAsync(JObject dto)
         {
             try

@@ -18,7 +18,7 @@ namespace Mix.Lib.Base
     {
         protected Repository<TDbContext, TEntity, TPrimaryKey, TView> Repository;
         protected readonly TDbContext Context;
-        protected UnitOfWorkInfo Uow;
+        protected UnitOfWorkInfo<TDbContext> Uow;
         protected readonly RestApiService<TView, TDbContext, TEntity, TPrimaryKey> RestApiService;
         public MixRestHandlerApiControllerBase(
             IHttpContextAccessor httpContextAccessor,
