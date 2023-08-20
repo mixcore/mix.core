@@ -7,11 +7,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Middlewares;
 using Mix.Mixdb.Event.Services;
 using Mix.Service.Interfaces;
 using Mix.Shared;
-using Mix.Shared.Interfaces;
 using Mix.Shared.Models.Configurations;
 using Mix.SignalR.Interfaces;
 using System.Reflection;
@@ -41,7 +41,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 // Make the session cookie essential if you wish
                 //options.Cookie.IsEssential = true;
             });
-                services.AddMixCommonServices(executingAssembly, configuration);
+            services.AddMixCommonServices(executingAssembly, configuration);
             services.AddMixDbContexts();
             services.AddUoWs();
             services.AddMixCache(configuration);
@@ -141,7 +141,19 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseMixModuleApps(configuration, isDevelop);
             app.UseMixSwaggerApps(isDevelop, executingAssembly);
             app.ConfigureExceptionHandler();
-
+            app.UseEndpoints(endpoints =>
+            {
+                foreach (var assembly in MixAssemblies)
+                {
+                    var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
+                    foreach (var startup in startupServices)
+                    {
+                        ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
+                        var instance = classConstructor.Invoke(Array.Empty<Type>());
+                        startup.GetMethod("UseEndpoints").Invoke(instance, new object[] { endpoints, configuration, isDevelop });
+                    }
+                }
+            });
             return app;
         }
 

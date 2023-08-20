@@ -33,7 +33,6 @@ namespace Mixcore
             services.AddScoped<MixNavigationService>();
             services.AddMixLog(Configuration);
             services.AddMixAuthorize<MixCmsAccountContext>(Configuration);
-            services.AddMixRoutes();
 
             services.TryAddScoped<MixcorePostService>();
         }
@@ -59,7 +58,6 @@ namespace Mixcore
             app.UseMixAuth();
 
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.ContentRootPath, env.IsDevelopment());
-            app.UseMixEndpoints();
 
             app.UseResponseCompression();
             app.UseMixResponseCaching();

@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Mix.Shared.Interfaces;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Messenger
 {
@@ -15,8 +16,12 @@ namespace Mix.Messenger
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
         {
-            app.UseMixSignalRApp();
+            //app.UseMixSignalRApp();
         }
 
+        public void UseEndpoints(IEndpointRouteBuilder endpoints, IConfiguration configuration, bool isDevelop)
+        {
+            endpoints.UseMixSignalRApp();
+        }
     }
 }

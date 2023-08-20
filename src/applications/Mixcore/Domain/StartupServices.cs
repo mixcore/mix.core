@@ -1,23 +1,19 @@
-﻿using Mix.Lib.Interfaces;
-using Mix.Services.Graphql.Lib;
-
-namespace Mix.Services.Graphql.Domain
+﻿namespace Mixcore.Domain
 {
-    public class StartupService : IStartupService
+    public class StartupServices : IStartupService
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMixGraphQL();
+            services.AddMixRoutes();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
         {
-            //app.UseEndpoints(enpoints => enpoints.UseMixGraphQL());
         }
 
         public void UseEndpoints(IEndpointRouteBuilder endpoints, IConfiguration configuration, bool isDevelop)
         {
-            endpoints.UseMixGraphQL();
+            endpoints.UseMixMVCEndpoints();
         }
     }
 }

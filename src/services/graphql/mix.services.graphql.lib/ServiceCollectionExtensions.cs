@@ -1,6 +1,7 @@
 ﻿using GraphQL;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Database.Services;
@@ -37,17 +38,13 @@ namespace Mix.Services.Graphql.Lib
             return services;
         }
 
-        public static void UseMixGraphQL(this IApplicationBuilder app)
+        public static void UseMixGraphQL(this IEndpointRouteBuilder endpoints)
         {
-            app.UseWebSockets();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGraphQL("graphql");
-                endpoints.MapGraphQLVoyager("graph/ui/voyager");
-                endpoints.MapGraphQLGraphiQL("graph/ui/graphiql");
-                endpoints.MapGraphQLPlayground("graph/ui/playground");
-                endpoints.MapGraphQLAltair("graph/ui/altair");
-            });
+            endpoints.MapGraphQL("graphql");
+            endpoints.MapGraphQLVoyager("graph/ui/voyager");
+            endpoints.MapGraphQLGraphiQL("graph/ui/graphiql");
+            endpoints.MapGraphQLPlayground("graph/ui/playground");
+            endpoints.MapGraphQLAltair("graph/ui/altair");
         }
     }
 }

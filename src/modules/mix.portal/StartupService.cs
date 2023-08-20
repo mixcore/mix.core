@@ -2,7 +2,6 @@
 using Mix.Lib.Interfaces;
 using Mix.Portal.Domain.Interfaces;
 using Mix.Portal.Domain.Services;
-using Mix.Shared.Interfaces;
 
 namespace Mix.Portal
 {
@@ -19,6 +18,10 @@ namespace Mix.Portal
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
+        {
+        }
+
+        public void UseEndpoints(IEndpointRouteBuilder endpoints, IConfiguration configuration, bool isDevelop)
         {
         }
     }

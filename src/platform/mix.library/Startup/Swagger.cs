@@ -57,30 +57,26 @@ namespace Microsoft.Extensions.DependencyInjection
             string routeTemplate = "swagger/{documentName}/swagger.json";
             string endPoint = $"/swagger/{version}/swagger.json";
 
-            //if (isDevelop)
-            //{
-            // using System.Reflection;
-            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-
-            app.UseSwagger(opt =>
+            if (isDevelop)
             {
-                opt.RouteTemplate = routeTemplate;
-            });
-            app.UseSwaggerUI(c =>
-            {
-                c.InjectStylesheet("/mix-app/css/swagger.css");
-                c.InjectJavascript("/mix-app/js/swagger.js");
-                c.SwaggerEndpoint(endPoint, $"{title} {version}");
-                c.RoutePrefix = routePrefix;
-                c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
-                c.DocumentTitle = "Mixcore - API Specification";
-                c.EnableFilter();
-                c.EnableDeepLinking();
-                //c.HeadContent = "Mixcore - API Specification";
-                //c.IncludeXmlComments(xmlFilename);
-            });
-            //}
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 
+                app.UseSwagger(opt =>
+                {
+                    opt.RouteTemplate = routeTemplate;
+                });
+                app.UseSwaggerUI(c =>
+                {
+                    c.InjectStylesheet("/mix-app/css/swagger.css");
+                    c.InjectJavascript("/mix-app/js/swagger.js");
+                    c.SwaggerEndpoint(endPoint, $"{title} {version}");
+                    c.RoutePrefix = routePrefix;
+                    c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
+                    c.DocumentTitle = "Mixcore - API Specification";
+                    c.EnableFilter();
+                    c.EnableDeepLinking();
+                });
+            }
             return app;
         }
 

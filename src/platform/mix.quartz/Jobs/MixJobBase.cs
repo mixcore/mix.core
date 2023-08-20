@@ -19,16 +19,15 @@ namespace Mix.Quartz.Jobs
             QueueService = queueService;
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             try
             {
-                return ExecuteHandler(context);
+                await ExecuteHandler(context);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                return Task.CompletedTask;
             }
         }
 

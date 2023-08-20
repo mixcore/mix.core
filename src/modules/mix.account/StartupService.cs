@@ -1,5 +1,5 @@
 ﻿using Mix.Database.Entities.Account;
-using Mix.Shared.Interfaces;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Account
 {
@@ -13,6 +13,10 @@ namespace Mix.Account
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
+        {
+        }
+
+        public void UseEndpoints(IEndpointRouteBuilder endpoints, IConfiguration configuration, bool isDevelop)
         {
         }
     }

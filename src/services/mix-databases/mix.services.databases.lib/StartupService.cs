@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Database.Entities.MixDb;
 using Mix.Heart.UnitOfWork;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Middlewares;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Services.Databases.Lib.Services;
-using Mix.Shared.Interfaces;
 
 namespace Mix.Services.Databases.Lib
 {
@@ -26,6 +27,10 @@ namespace Mix.Services.Databases.Lib
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
+        {
+        }
+
+        public void UseEndpoints(IEndpointRouteBuilder endpoints, IConfiguration configuration, bool isDevelop)
         {
         }
     }

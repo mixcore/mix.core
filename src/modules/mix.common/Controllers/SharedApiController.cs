@@ -16,6 +16,7 @@ using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
+using System.Diagnostics;
 using ApplicationLifetime = Microsoft.Extensions.Hosting.IHostApplicationLifetime;
 
 namespace Mix.Common.Controllers
@@ -84,9 +85,14 @@ namespace Mix.Common.Controllers
         [HttpGet]
         [MixAuthorize(roles: $"{MixRoles.SuperAdmin},{MixRoles.Owner}")]
         [Route("stop-application")]
-        public ActionResult StopApplication()
+        public async Task<ActionResult> StopApplication()
         {
             _applicationLifetime.StopApplication();
+            string _currentProcess = Path.GetFullPath(Process.GetCurrentProcess().MainModule.FileName);
+
+            Process.Start(_currentProcess);
+
+            await Task.FromResult(0);
             return Ok(DateTime.UtcNow);
         }
 

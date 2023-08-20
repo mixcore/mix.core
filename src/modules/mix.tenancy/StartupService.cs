@@ -1,6 +1,5 @@
 ﻿using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
-using Mix.Shared.Interfaces;
 using Mix.Tenancy.Domain.Interfaces;
 using Mix.Tenancy.Domain.Services;
 
@@ -34,6 +33,10 @@ namespace Mix.Tenancy
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
+        {
+        }
+
+        public void UseEndpoints(IEndpointRouteBuilder endpoints, IConfiguration configuration, bool isDevelop)
         {
         }
     }

@@ -32,7 +32,7 @@ namespace Mix.Messenger
         {
             app.UseMixCors();
             app.UseRouting();
-            app.UseMixSignalRApp();
+            app.UseEndpoints(enpoints => enpoints.UseMixSignalRApp());
         }
     }
 }

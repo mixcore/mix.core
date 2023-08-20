@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Lib.Interfaces;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Services.Databases.Lib.Services;
 using Mix.Services.Ecommerce.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.Services;
-using Mix.Shared.Interfaces;
 
 namespace Mix.Services.Ecommerce
 {
@@ -18,6 +18,10 @@ namespace Mix.Services.Ecommerce
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
+        {
+        }
+
+        public void UseEndpoints(IEndpointRouteBuilder endpoints, IConfiguration configuration, bool isDevelop)
         {
         }
     }
