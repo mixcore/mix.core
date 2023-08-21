@@ -5,24 +5,40 @@ name: .NET
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "feature/github_actions" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "feature/github_actions" ]
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    runs-on: windows-latest
+    name: Build & Publish
+    
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        path: 'develop'
+        submodules: recursive
+    - name: Setup
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
+        dotnet-version: 7.0.x
+        submodules: recursive
+    - name: Restore
+      run: dotnet restore develop/Mixcore.sln
     - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet build develop/Mixcore.sln --no-restore
+    - name: Publish
+      run: |
+        dotnet publish develop/src/applications/Mixcore/Mixcore.csproj -c Release --output develop/release --no-restore
+        cd develop/release
+    - name: Deploy
+      shell: bash
+      run: bash develop/deployment/deployment.sh
+      env:
+        FTP_HOST: ${{ secrets.FTP_SERVER }}
+        FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+        FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        LOCAL_FOLDER: .
+        REMOTE_FOLDER: "/test_folder"
