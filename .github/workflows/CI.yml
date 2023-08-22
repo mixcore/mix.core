@@ -5,9 +5,9 @@ name: .NET
 
 on:
   push:
-    branches: [ "feature/refactor" ]
+    branches: [ "develop" ]
   pull_request:
-    branches: [ "feature/refactor" ]
+    branches: [ "develop" ]
 
 jobs:
   build:
@@ -25,6 +25,6 @@ jobs:
         dotnet-version: 7.0.x
         submodules: recursive
     - name: Restore
-      run: dotnet restore develop/Mixcore.sln
+      run: dotnet restore develop/src/Mixcore.sln
     - name: Build
-      run: dotnet build develop/Mixcore.sln --no-restore
+      run: dotnet build develop/src/Mixcore.sln --no-restore
