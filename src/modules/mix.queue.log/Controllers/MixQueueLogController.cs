@@ -14,9 +14,9 @@ using Mix.SignalR.Interfaces;
 
 namespace mix.queue.log.Controllers
 {
-	[Route("api/v2/rest/mix-portal/queue-log")]
+	[Route("api/v2/rest/mix-queue-log")]
 	[ApiController]
-	[MixAuthorize(MixRoles.Owner)]
+	//[MixAuthorize(MixRoles.Owner)]
 	public class MixQueueLogController : MixRestfulApiControllerBase<MixQueueMessageLogViewModel, MixQueueDbContext, MixQueueMessageLog, Guid>
 	{
 		public MixQueueLogController(
