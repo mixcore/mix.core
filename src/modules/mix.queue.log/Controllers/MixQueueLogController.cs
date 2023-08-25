@@ -14,32 +14,32 @@ using Mix.SignalR.Interfaces;
 
 namespace mix.queue.log.Controllers
 {
-	[Route("api/v2/rest/mix-queue-log")]
-	[ApiController]
-	//[MixAuthorize(MixRoles.Owner)]
-	public class MixQueueLogController : MixRestfulApiControllerBase<MixQueueMessageLogViewModel, MixQueueDbContext, MixQueueMessageLog, Guid>
-	{
-		public MixQueueLogController(
-			IHttpContextAccessor httpContextAccessor,
-			IConfiguration configuration,
-			MixCacheService cacheService,
-			TranslatorService translator,
-			MixIdentityService mixIdentityService,
-			UnitOfWorkInfo<MixQueueDbContext> uow,
-			IQueueService<MessageQueueModel> queueService,
-			IPortalHubClientService portalHub,
-			IMixTenantService mixTenantService)
-			: base(
-				httpContextAccessor,
-				configuration,
-				cacheService,
-				translator,
-				mixIdentityService,
-				uow,
-				queueService,
-				portalHub,
-				mixTenantService)
-		{
-		}
-	}
+    [Route("api/v2/rest/mix-portal/queue-log")]
+    [ApiController]
+    [MixAuthorize(MixRoles.Owner)]
+    public class MixQueueLogController : MixRestfulApiControllerBase<MixQueueMessageLogViewModel, MixQueueDbContext, MixQueueMessageLog, Guid>
+    {
+        public MixQueueLogController(
+            IHttpContextAccessor httpContextAccessor,
+            IConfiguration configuration,
+            MixCacheService cacheService,
+            TranslatorService translator,
+            MixIdentityService mixIdentityService,
+            UnitOfWorkInfo<MixQueueDbContext> uow,
+            IQueueService<MessageQueueModel> queueService,
+            IPortalHubClientService portalHub,
+            IMixTenantService mixTenantService)
+            : base(
+                httpContextAccessor,
+                configuration,
+                cacheService,
+                translator,
+                mixIdentityService,
+                uow,
+                queueService,
+                portalHub,
+                mixTenantService)
+        {
+        }
+    }
 }
