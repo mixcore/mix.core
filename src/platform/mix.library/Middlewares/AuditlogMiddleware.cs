@@ -2,8 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Mix.Identity.Constants;
 using Mix.Lib.Services;
-using Mix.Log.Interfaces;
-using Mix.Log.Models;
+using Mix.Log.Lib.Interfaces;
+using Mix.Log.Lib.Models;
 using Mix.Service.Interfaces;
 using Mix.Shared.Models.Configurations;
 using System.Configuration;

@@ -1,0 +1,11 @@
+{
+  "GoogleFirebase": {
+    "FileName": "MixContent/Shared/AppConfigs/google_credential.json",
+    "WebApiKey": "",
+    "ProjectId": "",
+    "AuthDomain": "",
+    "StorageBucket": "",
+    "MessagingSenderId": "",
+    "AppId": ""
+  }
+}

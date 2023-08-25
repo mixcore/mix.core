@@ -1,0 +1,16 @@
+{
+  "MessageQueueSetting": {
+    "Provider": "MIX",
+    "GoogleQueueSetting": {
+      "CredentialFile": "",
+      "ProjectId": ""
+    },
+    "AzureServiceBus": {
+      "ConnectionString": "",
+      "QueueName": ""
+    },
+    "Mix": {
+      "ProjectId": ""
+    }
+  }
+}

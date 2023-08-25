@@ -109,9 +109,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "level_0", "level_0", "{6F92
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "level_1", "level_1", "{B4C40E02-E06A-4359-BDC5-349E103366AD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.log", "platform\mix.log\mix.log.csproj", "{BC6B8583-4F0F-45AD-BF71-1D998AA65869}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.log.lib", "platform\mix.log\mix.log.lib.csproj", "{BC6B8583-4F0F-45AD-BF71-1D998AA65869}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.queue.log", "modules\mix.queue.log\mix.queue.log.csproj", "{F37BBDB4-EB48-42E4-8CB1-D459F5EF3C3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.log", "modules\mix.queue.log\mix.log.csproj", "{F37BBDB4-EB48-42E4-8CB1-D459F5EF3C3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,61 @@
+{
+  "StorageSetting": {
+    "Provider": "MIX",
+    "CloudFlareSetting": {
+      "EndpointTemplate": "https://api.cloudflare.com/client/v4/accounts/{0}/images/v1",
+      "ApiToken": "",
+      "ApiKey": {
+        "GlobalKey": "",
+        "OriginKey": ""
+      },
+      "ZoneId": "",
+      "AccountId": ""
+    },
+    "AzureStorageSetting": {
+      "CdnUrl": "",
+      "StorageAccountName": "",
+      "AzureWebJobStorage": "",
+      "ContainerName": ""
+    },
+    "AwsSetting": {
+      "BucketName": "",
+      "CloudFrontUrl": "",
+      "BucketUrl": "",
+      "AccessKeyId": "",
+      "SecretAccessKey": "",
+      "Region": ""
+    },
+    "MixSetting": {},
+    "IsAutoScaleImage": true,
+    "ImageSizes": [
+      {
+        "name": "XXS",
+        "width": 30
+      },
+      {
+        "name": "XS",
+        "width": 100
+      },
+      {
+        "name": "S",
+        "width": 300
+      },
+      {
+        "name": "M",
+        "width": 600
+      },
+      {
+        "name": "L",
+        "width": 1000
+      },
+      {
+        "name": "XL",
+        "width": 2000
+      },
+      {
+        "name": "XXL",
+        "width": 4000
+      }
+    ]
+  }
+}

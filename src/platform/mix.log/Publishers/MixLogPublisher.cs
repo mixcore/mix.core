@@ -5,7 +5,7 @@ using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 
-namespace Mix.Log.Publishers
+namespace Mix.Log.Lib.Publishers
 {
     public class MixLogPublisher : PublisherBase
     {

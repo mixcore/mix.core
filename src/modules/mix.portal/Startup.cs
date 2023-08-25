@@ -27,6 +27,7 @@ namespace Mix.Portal
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMixCors();
+            app.UseRouting();
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.ContentRootPath, env.IsDevelopment());
         }
     }

@@ -1,6 +1,6 @@
-﻿using Mix.Log.Models;
+﻿using Mix.Log.Lib.Models;
 
-namespace Mix.Log.Commands
+namespace Mix.Log.Lib.Commands
 {
     public class LogAuditLogCommand
     {

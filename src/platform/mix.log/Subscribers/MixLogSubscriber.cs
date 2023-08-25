@@ -5,9 +5,9 @@ using Mix.Database.Entities.Queue;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
-using Mix.Log.Commands;
-using Mix.Log.Interfaces;
-using Mix.Log.Models;
+using Mix.Log.Lib.Commands;
+using Mix.Log.Lib.Interfaces;
+using Mix.Log.Lib.Models;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
@@ -18,7 +18,7 @@ using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
 using Newtonsoft.Json.Linq;
 
-namespace Mix.Log.Subscribers
+namespace Mix.Log.Lib.Subscribers
 {
     public class MixLogSubscriber : SubscriberBase
     {
