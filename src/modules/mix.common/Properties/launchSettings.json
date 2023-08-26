@@ -3,7 +3,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/v2/mix-common/swagger",
+      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -11,7 +11,7 @@
     "mix.common": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/v2/mix-common/swagger",
+      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

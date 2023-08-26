@@ -143,6 +143,7 @@ namespace Microsoft.Extensions.DependencyInjection
             app.ConfigureExceptionHandler();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapDefaultControllerRoute();
                 foreach (var assembly in MixAssemblies)
                 {
                     var startupServices = assembly.GetExportedTypes().Where(IsStartupService);

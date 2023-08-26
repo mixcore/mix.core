@@ -1,4 +1,6 @@
 using Mix.Database.Entities.Account;
+using Mix.Lib.Middlewares;
+using Mix.Log;
 using System.Reflection;
 
 namespace Mix.Portal
@@ -18,7 +20,7 @@ namespace Mix.Portal
 
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
             services.AddMixCors();
-
+            services.AddMixLog(Configuration);
             // Must app Auth config after Add mixservice to init App config 
             services.AddMixAuthorize<MixCmsAccountContext>(Configuration);
         }
@@ -26,6 +28,11 @@ namespace Mix.Portal
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMixCors();
+            app.UseMixTenant();
+            app.UseMiddleware<AuditlogMiddleware>();
+            app.UseRouting();
+            app.UseMixAuth();
             app.UseMixCors();
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.ContentRootPath, env.IsDevelopment());
         }
