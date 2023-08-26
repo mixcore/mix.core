@@ -1,6 +1,6 @@
 using Mix.Database.Entities.Account;
 using Mix.Lib.Middlewares;
-using Mix.Log;
+using Mix.Log.Lib;
 using System.Reflection;
 
 namespace Mix.Portal

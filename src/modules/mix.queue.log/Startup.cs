@@ -1,4 +1,6 @@
 ﻿using Mix.Database.Entities.Account;
+using Mix.Lib.Middlewares;
+using Mix.Log.Lib;
 using System.Reflection;
 
 namespace Mix.Log
@@ -15,12 +17,9 @@ namespace Mix.Log
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
             services.AddMixCors();
-
-            // Must app Auth config after Add mixservice to init App config 
+            services.AddMixLog(Configuration);
             services.AddMixAuthorize<MixCmsAccountContext>(Configuration);
         }
 
@@ -28,8 +27,12 @@ namespace Mix.Log
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMixCors();
+            app.UseMixTenant();
+            app.UseMiddleware<AuditlogMiddleware>();
             app.UseRouting();
-
+            app.UseMixAuth();
+            app.UseMixCors();
+            app.UseRouting();
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.ContentRootPath, env.IsDevelopment());
         }
     }
