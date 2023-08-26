@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Mix.Log.Models;
+using Mix.Log.Lib.Models;
 
 namespace Mix.Lib.Filters
 {

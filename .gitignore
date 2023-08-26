@@ -26,6 +26,7 @@ bld/
 
 # Visual Studio 2015 cache/options directory
 .vs/
+.idea/
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
@@ -239,7 +240,6 @@ ModelManifest.xml
 .fake/
 
 # Source
-.gitignore
 .DS_Store
 .vscode/
 *.db
@@ -259,3 +259,5 @@ src/applications/Mixcore/MixContent/
 
 src/applications/Mixcore/wwwroot/portal-apps/
 src/test/__pycache__/
+
+src/modules/**/MixContent

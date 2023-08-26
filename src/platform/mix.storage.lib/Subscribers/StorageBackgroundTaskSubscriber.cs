@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mix.Communicator.Models;
 using Mix.Communicator.Services;
 using Mix.Lib.Subscribers;
-using Mix.Log.Interfaces;
+using Mix.Log.Lib.Interfaces;
 using Mix.Mixdb.Event.Services;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;

@@ -4,7 +4,7 @@ using Mix.Database.Entities.AuditLog;
 using Mix.Database.Entities.Queue;
 using Mix.Heart.Enums;
 using Mix.Heart.Helpers;
-using Mix.Log.Interfaces;
+using Mix.Log.Lib.Interfaces;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Service.Commands;
@@ -14,7 +14,7 @@ using Mix.SignalR.Enums;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
 
-namespace Mix.Log.Services
+namespace Mix.Log.Lib.Services
 {
     public class MixQueueLogService : IMixQueueLog
     {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Mix.Log.Models;
+using Mix.Log.Lib.Models;
 using Newtonsoft.Json.Linq;
 
-namespace Mix.Log.Interfaces
+namespace Mix.Log.Lib.Interfaces
 {
     public interface IAuditLogService
     {

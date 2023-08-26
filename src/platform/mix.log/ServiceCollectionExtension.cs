@@ -4,11 +4,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Database.Entities.AuditLog;
 using Mix.Database.Entities.Queue;
-using Mix.Log.Interfaces;
-using Mix.Log.Models;
-using Mix.Log.Publishers;
-using Mix.Log.Services;
-using Mix.Log.Subscribers;
+using Mix.Log.Lib.Interfaces;
+using Mix.Log.Lib.Models;
+using Mix.Log.Lib.Publishers;
+using Mix.Log.Lib.Services;
+using Mix.Log.Lib.Subscribers;
 using Mix.Service.Services;
 using Mix.Shared.Interfaces;
 using Mix.Shared.Models.Configurations;
@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mix.Log
+namespace Mix.Log.Lib
 {
     public static class ServiceCollectionExtensions
     {

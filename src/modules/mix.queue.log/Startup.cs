@@ -1,9 +1,9 @@
-using Mix.Database.Entities.Account;
+﻿using Mix.Database.Entities.Account;
 using Mix.Lib.Middlewares;
 using Mix.Log.Lib;
 using System.Reflection;
 
-namespace Mix.Portal
+namespace Mix.Log
 {
     public class Startup
     {
@@ -11,17 +11,15 @@ namespace Mix.Portal
         {
             Configuration = configuration;
         }
+
         public IConfiguration Configuration { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //MixFileHelper.CopyFolder(MixFolders.MixCoreConfigurationFolder, MixFolders.MixContentFolder);
-
-
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
             services.AddMixCors();
             services.AddMixLog(Configuration);
-            // Must app Auth config after Add mixservice to init App config 
             services.AddMixAuthorize<MixCmsAccountContext>(Configuration);
         }
 

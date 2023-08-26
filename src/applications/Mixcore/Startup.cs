@@ -2,7 +2,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Mix.Database.Entities.Account;
 using Mix.Lib.Middlewares;
-using Mix.Log;
+using Mix.Log.Lib;
 using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 using System.Reflection;

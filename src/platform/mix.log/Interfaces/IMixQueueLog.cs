@@ -3,7 +3,7 @@ using Mix.Database.Entities.Queue;
 using Mix.Service.Models;
 using Newtonsoft.Json.Linq;
 
-namespace Mix.Log.Interfaces
+namespace Mix.Log.Lib.Interfaces
 {
     public interface IMixQueueLog
     {
