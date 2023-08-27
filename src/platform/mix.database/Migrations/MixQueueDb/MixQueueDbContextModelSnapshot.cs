@@ -35,6 +35,9 @@ namespace Mix.Database.Migrations.MixQueueDb
                     b.Property<string>("DataTypeFullName")
                         .HasColumnType("varchar(250)");
 
+                    b.Property<string>("Exception")
+                        .HasColumnType("ntext");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -53,7 +56,7 @@ namespace Mix.Database.Migrations.MixQueueDb
                     b.Property<int>("Priority")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("QueueMessageId")
+                    b.Property<Guid?>("QueueMessageId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("State")
@@ -71,6 +74,9 @@ namespace Mix.Database.Migrations.MixQueueDb
 
                     b.Property<string>("SubscriptionId")
                         .HasColumnType("varchar(250)");
+
+                    b.Property<string>("Subscriptions")
+                        .HasColumnType("ntext");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("INTEGER");

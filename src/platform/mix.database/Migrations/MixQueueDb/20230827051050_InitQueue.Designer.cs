@@ -11,8 +11,8 @@ using Mix.Database.Entities.Queue;
 namespace Mix.Database.Migrations.MixQueueDb
 {
     [DbContext(typeof(MixQueueDbContext))]
-    [Migration("20230819041342_InitMixQueueLog")]
-    partial class InitMixQueueLog
+    [Migration("20230827051050_InitQueue")]
+    partial class InitQueue
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,9 @@ namespace Mix.Database.Migrations.MixQueueDb
                     b.Property<string>("DataTypeFullName")
                         .HasColumnType("varchar(250)");
 
+                    b.Property<string>("Exception")
+                        .HasColumnType("ntext");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -56,7 +59,7 @@ namespace Mix.Database.Migrations.MixQueueDb
                     b.Property<int>("Priority")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("QueueMessageId")
+                    b.Property<Guid?>("QueueMessageId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("State")
@@ -74,6 +77,9 @@ namespace Mix.Database.Migrations.MixQueueDb
 
                     b.Property<string>("SubscriptionId")
                         .HasColumnType("varchar(250)");
+
+                    b.Property<string>("Subscriptions")
+                        .HasColumnType("ntext");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("INTEGER");

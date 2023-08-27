@@ -73,7 +73,7 @@ namespace Mix.Lib.Subscribers
             }
         }
 
-        public override Task HandleException(Exception ex)
+        public override Task HandleException(MessageQueueModel model, Exception ex)
         {
             return MixLogService.LogExceptionAsync(ex);
         }

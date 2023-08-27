@@ -6,12 +6,15 @@ namespace Mix.Lib.ViewModels
         : ViewModelBase<MixQueueDbContext, MixQueueMessageLog, Guid, MixQueueMessageLogViewModel>
     {
         #region Properties
-        public Guid QueueMessageId { get; set; }
+        public Guid? QueueMessageId { get; set; }
         public string TopicId { get; set; }
         public string SubscriptionId { get; set; }
         public string Action { get; set; }
         public string StringData { get; set; }
         public JObject ObjectData { get; set; }
+        public JObject Exception { get; set; }
+        public JArray Subscriptions { get; set; }
+
         public string DataTypeFullName { get; set; }
         public string Note { get; set; }
         public MixQueueMessageLogState State { get; set; }

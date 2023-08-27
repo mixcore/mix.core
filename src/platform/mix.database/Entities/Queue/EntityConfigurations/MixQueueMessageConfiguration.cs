@@ -71,6 +71,20 @@ namespace Mix.Database.Entities.Queue.EntityConfigurations
                  v => !string.IsNullOrEmpty(v) ? JObject.Parse(v) : new())
              .IsRequired(false)
              .HasColumnType(Config.Text);
+            
+            builder.Property(e => e.Exception)
+             .HasConversion(
+                 v => v.ToString(Newtonsoft.Json.Formatting.None),
+                 v => !string.IsNullOrEmpty(v) ? JObject.Parse(v) : new())
+             .IsRequired(false)
+             .HasColumnType(Config.Text);
+            
+            builder.Property(e => e.Subscriptions)
+             .HasConversion(
+                 v => v.ToString(Newtonsoft.Json.Formatting.None),
+                 v => !string.IsNullOrEmpty(v) ? JArray.Parse(v) : new())
+             .IsRequired(false)
+             .HasColumnType(Config.Text);
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Mix.Constant.Enums
     {
         ACK,
         NACK,
-        DeadLetter
+        DEADLETTER,
+        FAILED
     }
 }

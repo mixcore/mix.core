@@ -6,6 +6,7 @@
         public const string EnqueueLog = "QueueLog";
         public const string AckLog = "AckLog";
         public const string ExceptionLog = "ExceptionLog";
+        public const string QueueFailed = "QueueFailed";
         public const string DeadLetter = "DeadLetter";
         public const string ScaleImage = "ScaleImage";
         public const string MixDbEvent = "MixDbEvent";

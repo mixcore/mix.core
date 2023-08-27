@@ -83,26 +83,7 @@ namespace Mix.Log.Lib.Subscribers
 
                     if (queueMessage != null)
                     {
-                        var queueLog = new MixQueueMessageLog()
-                        {
-                            Id = Guid.NewGuid(),
-                            QueueMessageId = queueMessage.Id,
-                            CreatedDateTime = DateTime.UtcNow,
-                            Action = queueMessage.Action,
-                            TopicId = queueMessage.TopicId,
-                            DataTypeFullName = queueMessage.DataTypeFullName,
-                            State = MixQueueMessageLogState.NACK,
-                            Status = MixContentStatus.Published
-                        };
-                        if (model.Data.IsJsonString())
-                        {
-                            queueLog.ObjectData = JObject.Parse(model.Data);
-                        }
-                        else
-                        {
-                            queueLog.StringData = model.Data;
-                        }
-                        await _queueMessageLogService.SaveRequestAsync(queueLog);
+                        await _queueMessageLogService.EnqueueMessageAsync(queueMessage);
                     }
                     break;
                 case MixQueueActions.AckLog:
@@ -110,27 +91,8 @@ namespace Mix.Log.Lib.Subscribers
 
                     if (ackQueueMessage != null)
                     {
-                        var queueLog = new MixQueueMessageLog()
-                        {
-                            Id = Guid.NewGuid(),
-                            QueueMessageId = ackQueueMessage.Id,
-                            CreatedDateTime = DateTime.UtcNow,
-                            Action = ackQueueMessage.Action,
-                            TopicId = ackQueueMessage.TopicId,
-                            DataTypeFullName = ackQueueMessage.DataTypeFullName,
-                            SubscriptionId = model.Sender,
-                            State = MixQueueMessageLogState.ACK,
-                            Status = MixContentStatus.Published
-                        };
-                        if (model.Data.IsJsonString())
-                        {
-                            queueLog.ObjectData = JObject.Parse(model.Data);
-                        }
-                        else
-                        {
-                            queueLog.StringData = model.Data;
-                        }
-                        await _queueMessageLogService.SaveRequestAsync(queueLog);
+                        ackQueueMessage.Sender = model.Sender;
+                        await _queueMessageLogService.AckQueueMessage(ackQueueMessage);
                     }
                     break;
 
@@ -139,37 +101,29 @@ namespace Mix.Log.Lib.Subscribers
                     await MixLogService.LogExceptionAsync(ex);
                     break;
 
+                case MixQueueActions.QueueFailed:
+                    var queueEx = model.ParseData<MessageQueueModel>();
+                    if (queueEx != null)
+                    {
+                        queueEx.Sender = model.Sender;
+                        await _queueMessageLogService.FailedQueueMessage(queueEx);
+                    }
+                    break;
+
                 case MixQueueActions.DeadLetter:
                     var deadLetterMsg = model.ParseData<MessageQueueModel>();
 
                     if (deadLetterMsg != null)
                     {
-                        var queueLog = new MixQueueMessageLog()
-                        {
-                            Id = Guid.NewGuid(),
-                            QueueMessageId = deadLetterMsg.Id,
-                            CreatedDateTime = DateTime.UtcNow,
-                            Action = deadLetterMsg.Action,
-                            TopicId = deadLetterMsg.TopicId,
-                            DataTypeFullName = deadLetterMsg.DataTypeFullName,
-                            State = MixQueueMessageLogState.DeadLetter,
-                            Status = MixContentStatus.Published
-                        };
-                        if (model.Data.IsJsonString())
-                        {
-                            queueLog.ObjectData = JObject.Parse(model.Data);
-                        }
-                        else
-                        {
-                            queueLog.StringData = model.Data;
-                        }
-                        await _queueMessageLogService.SaveRequestAsync(queueLog);
+                        deadLetterMsg.Sender = model.Sender;
+                        
+                        await _queueMessageLogService.DeadLetterMessageAsync(deadLetterMsg);
                     }
                     break;
             }
         }
 
-        public override Task HandleException(Exception ex)
+        public override Task HandleException(MessageQueueModel model, Exception ex)
         {
             return MixLogService.LogExceptionAsync(ex);
         }

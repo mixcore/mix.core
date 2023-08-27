@@ -23,7 +23,7 @@ namespace Mix.Queue.Engines.Mix
                 subscription = new MixSubscriptionModel()
                 {
                     Id = subscriptionId,
-                    Status = MixQueueMessageStatus.Nack,
+                    Status = MixQueueMessageLogState.NACK,
                     TopicId = Id
                 };
                 Subscriptions.Add(subscription);
@@ -50,7 +50,6 @@ namespace Mix.Queue.Engines.Mix
             {
                 return result;
             }
-            subscription.Status = MixQueueMessageStatus.Ack;
 
             if (!Messages.Any())
             {

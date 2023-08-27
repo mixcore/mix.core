@@ -18,7 +18,7 @@ namespace Mix.Queue.Models
 
         public int TenantId { get; set; }
         public List<MixSubscriptionModel> Subscriptions { get; set; } = new();
-
+        public Exception Exception { get; set; }
         public MessageQueueModel()
         {
             TenantId = 1;

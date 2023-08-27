@@ -21,12 +21,12 @@ namespace Mix.Queue.Engines
 {
     public abstract class SubscriberBase : IHostedService
     {
-        private IQueueService<MessageQueueModel> _memQueueService;
-        private readonly IQueueSubscriber _subscriber;
-        private readonly IConfiguration _configuration;
-        private readonly MixQueueMessages<MessageQueueModel> _mixQueueService;
-        private readonly string _topicId;
-        private readonly int _timeout;
+        protected IQueueService<MessageQueueModel> _memQueueService;
+        protected readonly IQueueSubscriber _subscriber;
+        protected readonly IConfiguration _configuration;
+        protected readonly MixQueueMessages<MessageQueueModel> _mixQueueService;
+        protected readonly string _topicId;
+        protected readonly int _timeout;
         protected MixCacheService CacheService;
         protected readonly IServiceProvider ServicesProvider;
         protected IServiceScope ServiceScope { get; set; }
@@ -138,7 +138,7 @@ namespace Mix.Queue.Engines
             }
             catch (Exception ex)
             {
-                await HandleException(ex);
+                await HandleException(data, ex);
             }
         }
 
@@ -154,13 +154,16 @@ namespace Mix.Queue.Engines
             return Task.CompletedTask;
         }
 
-        public virtual Task HandleException(Exception ex)
+        public virtual Task HandleException(MessageQueueModel data, Exception ex)
         {
             _memQueueService.PushQueue(new MessageQueueModel(1)
             {
-                Action = MixQueueActions.ExceptionLog,
-                TopicId = MixQueueTopics.MixBackgroundTasks,
-                Data = ReflectionHelper.ParseObject(ex).ToString(),
+                Action = MixQueueActions.QueueFailed,
+                TopicId = MixQueueTopics.MixLog,
+                Id = data.Id,
+                Sender = _subscriber.SubscriptionId,
+                Data = ReflectionHelper.ParseObject(data).ToString(),
+                Exception = ex,
                 Success = false
             });
             return Task.CompletedTask;

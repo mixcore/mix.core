@@ -71,6 +71,24 @@ namespace Mix.Queue.Services
 
         }
 
+        public void PushQueue(int tenantId, string topicId, string action, object data)
+        {
+            var msg = new MessageQueueModel(tenantId, topicId, action, data);
+            PushQueue(msg);
+        }
+
+        public void PushMessage<T>(int tenantId, T data, string action, bool success)
+        {
+            var msg = new MessageQueueModel(tenantId)
+            {
+                Action = action,
+                Success = success,
+            };
+            msg.Package(data);
+            PushQueue(msg);
+        }
+
+
         private void EnqueueLog(MessageQueueModel model)
         {
             if (model.TopicId != MixQueueTopics.MixLog)
@@ -90,21 +108,5 @@ namespace Mix.Queue.Services
             }
         }
 
-        public void PushQueue(int tenantId, string topicId, string action, object data)
-        {
-            var msg = new MessageQueueModel(tenantId, topicId, action, data);
-            PushQueue(msg);
-        }
-
-        public void PushMessage<T>(int tenantId, T data, string action, bool success)
-        {
-            var msg = new MessageQueueModel(tenantId)
-            {
-                Action = action,
-                Success = success,
-            };
-            msg.Package(data);
-            PushQueue(msg);
-        }
     }
 }

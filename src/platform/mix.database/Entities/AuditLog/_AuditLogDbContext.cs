@@ -5,7 +5,7 @@ namespace Mix.Database.Entities.AuditLog
 {
     public class AuditLogDbContext : DbContext
     {
-        private string _folder = DateTime.Now.ToString("dd_MM");
+        private string _folder = DateTime.Now.ToString("MM_yyyy");
         private string _cnn;
         public AuditLogDbContext()
         {

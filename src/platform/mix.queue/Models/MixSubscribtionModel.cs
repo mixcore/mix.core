@@ -6,6 +6,6 @@ namespace Mix.Queue.Models
     {
         public string TopicId { get; set; }
         public string Id { get; set; }
-        public MixQueueMessageStatus Status { get; set; }
+        public MixQueueMessageLogState Status { get; set; }
     }
 }

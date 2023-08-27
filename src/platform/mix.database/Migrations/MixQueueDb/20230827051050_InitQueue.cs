@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Mix.Database.Migrations.MixQueueDb
 {
     /// <inheritdoc />
-    public partial class InitMixQueueLog : Migration
+    public partial class InitQueue : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,12 +16,14 @@ namespace Mix.Database.Migrations.MixQueueDb
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    QueueMessageId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    QueueMessageId = table.Column<Guid>(type: "TEXT", nullable: true),
                     TopicId = table.Column<string>(type: "varchar(250)", nullable: true),
                     SubscriptionId = table.Column<string>(type: "varchar(250)", nullable: true),
                     Action = table.Column<string>(type: "varchar(250)", nullable: true),
                     StringData = table.Column<string>(type: "ntext", nullable: true),
                     ObjectData = table.Column<string>(type: "ntext", nullable: true),
+                    Exception = table.Column<string>(type: "ntext", nullable: true),
+                    Subscriptions = table.Column<string>(type: "ntext", nullable: true),
                     DataTypeFullName = table.Column<string>(type: "varchar(250)", nullable: true),
                     Note = table.Column<string>(type: "varchar(250)", nullable: true),
                     State = table.Column<string>(type: "varchar(50)", nullable: false),
