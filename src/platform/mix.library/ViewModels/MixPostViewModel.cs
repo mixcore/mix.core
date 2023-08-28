@@ -1,6 +1,5 @@
 ﻿namespace Mix.Lib.ViewModels
 {
-    [GenerateRestApiController]
     public sealed class MixPostViewModel
         : SiteDataWithContentViewModelBase<MixCmsContext, MixPost, int, MixPostViewModel, MixPostContent, MixPostContentViewModel>
     {
