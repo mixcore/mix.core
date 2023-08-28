@@ -18,7 +18,7 @@ namespace Mix.Log.Controllers
     [Route("api/v2/rest/mix-log/queue-log")]
     [ApiController]
     [MixAuthorize(MixRoles.Owner)]
-    public class MixQueueLogController : MixRestfulApiControllerBase<MixQueueMessageLogViewModel, MixQueueDbContext, MixQueueMessageLog, Guid>
+    public class MixQueueLogController : MixQueryApiControllerBase<MixQueueMessageLogViewModel, MixQueueDbContext, MixQueueMessageLog, Guid>
     {
         public MixQueueLogController(
             IHttpContextAccessor httpContextAccessor,
