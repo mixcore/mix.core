@@ -1,7 +1,9 @@
 ﻿using Mix.Database.Entities.AuditLog;
-using Mix.Lib.Services;
+using Mix.Heart.UnitOfWork;
+using Mix.Heart.ViewModel;
+using Newtonsoft.Json.Linq;
 
-namespace Mix.Lib.ViewModels
+namespace Mix.Log.Lib.ViewModels
 {
     public sealed class AuditLogViewModel
         : ViewModelBase<AuditLogDbContext, AuditLog, Guid, AuditLogViewModel>
@@ -23,12 +25,12 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public AuditLogViewModel(AuditLog entity, UnitOfWorkInfo? uowInfo) 
+        public AuditLogViewModel(AuditLog entity, UnitOfWorkInfo<AuditLogDbContext>? uowInfo)
             : base(entity, uowInfo)
         {
         }
 
-        public AuditLogViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public AuditLogViewModel(UnitOfWorkInfo<AuditLogDbContext> unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 

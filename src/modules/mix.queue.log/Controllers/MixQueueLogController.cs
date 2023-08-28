@@ -7,9 +7,10 @@ using Mix.Lib.Attributes;
 using Mix.Lib.Base;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
-using Mix.Lib.ViewModels;
+using Mix.Log.Lib.ViewModels;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
+using Mix.Service.Services;
 using Mix.SignalR.Interfaces;
 
 namespace Mix.Log.Controllers

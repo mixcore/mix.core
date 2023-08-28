@@ -1,6 +1,10 @@
-﻿using Mix.Database.Entities.Queue;
+﻿using Mix.Constant.Enums;
+using Mix.Database.Entities.Queue;
+using Mix.Heart.UnitOfWork;
+using Mix.Heart.ViewModel;
+using Newtonsoft.Json.Linq;
 
-namespace Mix.Lib.ViewModels
+namespace Mix.Log.Lib.ViewModels
 {
     public sealed class MixQueueMessageLogViewModel
         : ViewModelBase<MixQueueDbContext, MixQueueMessageLog, Guid, MixQueueMessageLogViewModel>
@@ -27,7 +31,7 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixQueueMessageLogViewModel(MixQueueMessageLog entity, UnitOfWorkInfo? uowInfo) 
+        public MixQueueMessageLogViewModel(MixQueueMessageLog entity, UnitOfWorkInfo? uowInfo)
             : base(entity, uowInfo)
         {
         }

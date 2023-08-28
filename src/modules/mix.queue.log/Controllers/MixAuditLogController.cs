@@ -1,11 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Entities.AuditLog;
+using Mix.Heart.Services;
+using Mix.Heart.UnitOfWork;
+using Mix.Identity.Constants;
+using Mix.Lib.Attributes;
+using Mix.Lib.Base;
 using Mix.Lib.Interfaces;
+using Mix.Lib.Services;
+using Mix.Log.Lib.ViewModels;
+using Mix.Queue.Interfaces;
+using Mix.Queue.Models;
 using Mix.SignalR.Interfaces;
 
-namespace Mix.Portal.Controllers
+namespace Mix.Log.Controllers
 {
-    [Route("api/v2/rest/mix-portal/audit-log")]
+    [Route("api/v2/rest/mix-log/audit-log")]
     [ApiController]
     [MixAuthorize(MixRoles.Owner)]
     public class AuditLogController
@@ -21,7 +30,7 @@ namespace Mix.Portal.Controllers
             IQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
 
