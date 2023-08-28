@@ -18,7 +18,7 @@ namespace Mix.Log.Controllers
     [ApiController]
     [MixAuthorize(MixRoles.Owner)]
     public class AuditLogController
-        : MixRestfulApiControllerBase<AuditLogViewModel, AuditLogDbContext, AuditLog, Guid>
+        : MixQueryApiControllerBase<AuditLogViewModel, AuditLogDbContext, AuditLog, Guid>
     {
         public AuditLogController(
             IHttpContextAccessor httpContextAccessor,
