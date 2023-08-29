@@ -1,6 +1,5 @@
 ﻿namespace Mix.Lib.ViewModels
 {
-    [GenerateRestApiController]
     public sealed class MixUrlAliasViewModel
         : TenantDataViewModelBase<MixCmsContext, MixUrlAlias, int, MixUrlAliasViewModel>
     {

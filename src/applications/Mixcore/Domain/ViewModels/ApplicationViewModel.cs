@@ -4,7 +4,6 @@ using Mix.RepoDb.Repositories;
 
 namespace Mixcore.Domain.ViewModels
 {
-    [GenerateRestApiController(QueryOnly = true)]
     public sealed class ApplicationViewModel
         : TenantDataViewModelBase
             <MixCmsContext, MixApplication, int, ApplicationViewModel>

@@ -1,6 +1,5 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
-    [GenerateRestApiController]
     public sealed class MixViewTemplateViewModel
         : ViewModelBase<MixCmsContext, MixTemplate, int, MixViewTemplateViewModel>
     {

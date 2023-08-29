@@ -1,6 +1,5 @@
 ﻿namespace Mix.Lib.ViewModels
 {
-    [GenerateRestApiController]
     public sealed class MixLanguageViewModel
         : SiteDataWithContentViewModelBase
         <MixCmsContext, MixLanguage, int, MixLanguageViewModel, MixLanguageContent, MixLanguageContentViewModel>

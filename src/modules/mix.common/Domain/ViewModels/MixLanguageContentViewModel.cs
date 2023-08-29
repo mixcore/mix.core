@@ -1,6 +1,5 @@
 ﻿namespace Mix.Common.Domain.ViewModels
 {
-    [GenerateRestApiController(QueryOnly = true)]
     public class MixLanguageContentViewModel
         : MultilingualUniqueNameContentViewModelBase<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel>
     {
