@@ -113,6 +113,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.log.lib", "platform\mix
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.log", "modules\mix.log\mix.log.csproj", "{F37BBDB4-EB48-42E4-8CB1-D459F5EF3C3F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.mqtt.lib", "platform\mix.mqtt.lib\mix.mqtt.lib.csproj", "{81B2DDD8-7138-4327-A503-2D5F46972A3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -259,6 +261,10 @@ Global
 		{F37BBDB4-EB48-42E4-8CB1-D459F5EF3C3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F37BBDB4-EB48-42E4-8CB1-D459F5EF3C3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F37BBDB4-EB48-42E4-8CB1-D459F5EF3C3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81B2DDD8-7138-4327-A503-2D5F46972A3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81B2DDD8-7138-4327-A503-2D5F46972A3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81B2DDD8-7138-4327-A503-2D5F46972A3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81B2DDD8-7138-4327-A503-2D5F46972A3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -318,6 +324,7 @@ Global
 		{B4C40E02-E06A-4359-BDC5-349E103366AD} = {5B29B975-B0AC-46B3-8398-4C8A22EAE355}
 		{BC6B8583-4F0F-45AD-BF71-1D998AA65869} = {84C68A6F-ECE0-467E-91C0-AE63AC4FC4C7}
 		{F37BBDB4-EB48-42E4-8CB1-D459F5EF3C3F} = {B4C40E02-E06A-4359-BDC5-349E103366AD}
+		{81B2DDD8-7138-4327-A503-2D5F46972A3C} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0143C230-7F40-44B2-8BA3-EF5B92D55848}
