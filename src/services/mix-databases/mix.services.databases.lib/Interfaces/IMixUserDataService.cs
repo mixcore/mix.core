@@ -14,7 +14,7 @@ namespace Mix.Services.Databases.Lib.Interfaces
 
         public Task<MixUserDataViewModel> CreateUserAddress(CreateUserAddressDto dto, MixUser user, CancellationToken cancellationToken = default);
 
-        public Task UpdateUserAddress(MixContactAddressViewModel address, MixUser? user, CancellationToken cancellationToken);
+        public Task UpdateUserAddress(MixContactAddressViewModel address, MixUser user, CancellationToken cancellationToken);
 
         public Task UpdateProfile(MixUserDataViewModel profile, CancellationToken cancellationToken = default);
     }

@@ -9,7 +9,7 @@ namespace Mix.RepoDb.Interfaces
     {
         public Task<PagingResponseModel<JObject>> GetMyData(string tableName, SearchMixDbRequestDto req, string username);
 
-        public Task<JObject> GetMyDataById(string tableName, string username, int id, bool loadNestedData);
+        public Task<JObject?> GetMyDataById(string tableName, string username, int id, bool loadNestedData);
 
         public Task<JObject?> GetById(string tableName, int id, bool loadNestedData);
 

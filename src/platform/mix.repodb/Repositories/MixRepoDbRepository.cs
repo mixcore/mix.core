@@ -159,10 +159,15 @@ namespace Mix.RepoDb.Repositories
             List<QueryField> queries = new();
             foreach (var item in searchQueryFields)
             {
-                Operation op = ParseMixOperator(item);
-                if (op == Operation.In || op == Operation.NotIn && item.Value != null)
+                if (item.Value is null)
                 {
-                    queries.Add(new QueryField(item.FieldName, op, item.Value.ToString().Split(',')));
+                    continue;
+                }
+
+                Operation op = ParseMixOperator(item);
+                if (op == Operation.In || op == Operation.NotIn)
+                {
+                    queries.Add(new QueryField(item.FieldName, op, item.Value.ToString()!.Split(',')));
                 }
                 else
                 {

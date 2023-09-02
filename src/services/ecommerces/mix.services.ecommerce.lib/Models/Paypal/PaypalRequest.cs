@@ -186,7 +186,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
         {
             
         }
-        public UnitAmount(string? currency, double? total)
+        public UnitAmount(string currency, double? total)
         {
             currency_code = currency;
             value = $"{total}";

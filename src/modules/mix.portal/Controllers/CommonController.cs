@@ -43,7 +43,7 @@ namespace Mix.Portal.Controllers
 
         [MixAuthorize]
         [HttpGet("portal-menus")]
-        public async Task<ActionResult<JArray?>> PortalMenus()
+        public async Task<ActionResult<JArray>> PortalMenus()
         {
             var user = await UserManager.GetUserAsync(User);
             var roles = await UserManager.GetRolesAsync(user);
@@ -53,7 +53,7 @@ namespace Mix.Portal.Controllers
 
 
 
-        private async Task<JArray?> LoadUserPortalMenus(string[] roles)
+        private async Task<JArray> LoadUserPortalMenus(string[] roles)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Mix.Portal.Controllers
                 }
                 return arrMenus;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new();
             }

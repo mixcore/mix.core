@@ -27,7 +27,7 @@ namespace Mix.Service.Services
             Cache.Remove(key);
         }
 
-        public async Task<T> TryGetValueAsync<T>(object key, Func<ICacheEntry, Task<T>> factory)
+        public async Task<T?> TryGetValueAsync<T>(object key, Func<ICacheEntry, Task<T>> factory)
         {
             return await Cache.GetOrCreateAsync(key, factory);
         }

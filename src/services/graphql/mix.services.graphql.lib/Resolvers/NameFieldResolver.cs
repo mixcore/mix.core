@@ -30,7 +30,7 @@ namespace Mix.Services.Graphql.Lib.Resolvers
             //{
             //    throw new InvalidOperationException($"Expected to find property {context.FieldAst.Name} on {context.Source.GetType().Name} but it does not exist.");
             //}
-            return value;
+            return await Task.FromResult(value);
         }
     }
 }

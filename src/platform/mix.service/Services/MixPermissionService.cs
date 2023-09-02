@@ -31,12 +31,11 @@ namespace Mix.Service.Services
         {
             if (!GlobalConfigService.Instance.IsInit)
             {
-                UnitOfWorkInfo<MixDbDbContext> uow = null;
+                UnitOfWorkInfo<MixDbDbContext> uow = new(new MixDbDbContext(_databaseService)); ;
                 try
                 {
                     RoleEndpoints = new Dictionary<string, string[]>();
                     accountDbContext = new MixCmsAccountContext(_databaseService);
-                    uow = new(new MixDbDbContext(_databaseService));
 
                     var roles = await accountDbContext.MixRoles.ToListAsync();
 
@@ -73,10 +72,6 @@ namespace Mix.Service.Services
                             }
                         }
                     }
-
-                }
-                catch (Exception ex)
-                {
 
                 }
                 finally

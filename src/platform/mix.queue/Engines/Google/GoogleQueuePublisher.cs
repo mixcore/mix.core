@@ -33,10 +33,13 @@ namespace Mix.Queue.Engines.GooglePubSub
                 CreateTopic(topicName);
 
                 var googleCredential = GoogleCredential.FromFile(_queueSetting.CredentialFile);
-                var createSettings = new PublisherClient.ClientCreationSettings(credentials: googleCredential.ToChannelCredentials());
-                var toppicName = new TopicName(_queueSetting.ProjectId, topicName);
-                var publisher = PublisherClient.CreateAsync(toppicName, createSettings);
-                _publisher = publisher.Result;
+                var publisherClientBuilder = new PublisherClientBuilder
+                {
+                    Credential = googleCredential,
+                    TopicName = new TopicName(_queueSetting.ProjectId, topicName)
+                };
+
+                _publisher = publisherClientBuilder.Build();
             }
         }
 
@@ -44,10 +47,13 @@ namespace Mix.Queue.Engines.GooglePubSub
         {
             try
             {
-                PublisherServiceApiClientBuilder builder = new PublisherServiceApiClientBuilder();
-                builder.CredentialsPath = _queueSetting.CredentialFile;
-                PublisherServiceApiClient publisher = builder.Build();
-                TopicName topicName = new TopicName(_queueSetting.ProjectId, topicId);
+                var builder = new PublisherServiceApiClientBuilder
+                {
+                    CredentialsPath = _queueSetting.CredentialFile
+                };
+
+                var publisher = builder.Build();
+                var topicName = new TopicName(_queueSetting.ProjectId, topicId);
                 return publisher.CreateTopic(topicName);
             }
             catch (RpcException e) when (e.Status.StatusCode == StatusCode.AlreadyExists)

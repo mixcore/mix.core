@@ -70,7 +70,7 @@ namespace Mix.RepoDb.Services
 
         #region Methods
 
-        public async void SetUOW(UnitOfWorkInfo<MixDbDbContext> uow)
+        public void SetUOW(UnitOfWorkInfo<MixDbDbContext> uow)
         {
             _repository.SetDbConnection(uow);
         }
@@ -107,7 +107,7 @@ namespace Mix.RepoDb.Services
             return await GetResult(tableName, queries, paging, req.LoadNestedData);
         }
 
-        public async Task<JObject> GetMyDataById(string tableName, string username, int id, bool loadNestedData)
+        public async Task<JObject?> GetMyDataById(string tableName, string username, int id, bool loadNestedData)
         {
             _repository.InitTableName(tableName);
             var queries = new List<QueryField>()
@@ -122,13 +122,23 @@ namespace Mix.RepoDb.Services
             {
                 var data = ReflectionHelper.ParseObject(obj);
                 var database = await GetMixDatabase(tableName);
+
+                if (database is null)
+                {
+                    return default;
+                }
+
                 foreach (var item in database.Relationships)
                 {
                     if (loadNestedData)
                     {
-
                         List<QueryField> associationQueries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
                         var associations = await _associationRepository.GetListByAsync(associationQueries);
+                        if (associations is null)
+                        {
+                            continue;
+                        }
+
                         if (associations.Count > 0)
                         {
                             var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
@@ -145,8 +155,10 @@ namespace Mix.RepoDb.Services
                 }
                 return data;
             }
+
             return default;
         }
+
         public async Task<JObject?> GetById(string tableName, int id, bool loadNestedData)
         {
             _repository.InitTableName(tableName);
@@ -162,7 +174,6 @@ namespace Mix.RepoDb.Services
             }
             return default;
         }
-
 
         public async Task<JObject?> GetSingleBy(string tableName, List<QueryField> queries)
         {
@@ -181,8 +192,6 @@ namespace Mix.RepoDb.Services
             var obj = await ParseDto(tableName, data);
             return await _repository.InsertAsync(obj);
         }
-
-
         #endregion
 
         #region Helper
@@ -195,6 +204,12 @@ namespace Mix.RepoDb.Services
         private async Task LoadNestedData(string tableName, JObject data)
         {
             var database = await GetMixDatabase(tableName);
+
+            if (database is null)
+            {
+                return;
+            }
+
             foreach (var item in database.Relationships)
             {
                 List<QueryField> queries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, data.Value<int>("id"));
@@ -217,6 +232,10 @@ namespace Mix.RepoDb.Services
 
             var items = new List<JObject>();
             var database = await GetMixDatabase(tableName);
+            if (database is null)
+            {
+                return new PagingResponseModel<JObject>();
+            }
 
             foreach (var item in result.Items)
             {
@@ -241,10 +260,11 @@ namespace Mix.RepoDb.Services
                 }
                 items.Add(data);
             }
+
             return new PagingResponseModel<JObject> { Items = items, PagingData = result.PagingData };
         }
 
-        private List<QueryField> GetAssociationQueries(string parentDatabaseName = null, string childDatabaseName = null, int? parentId = null, int? childId = null)
+        private List<QueryField> GetAssociationQueries(string? parentDatabaseName = null, string? childDatabaseName = null, int? parentId = null, int? childId = null)
         {
             var queries = new List<QueryField>();
             if (!string.IsNullOrEmpty(parentDatabaseName))
@@ -266,7 +286,7 @@ namespace Mix.RepoDb.Services
             return queries;
         }
 
-        private async Task<MixDatabaseViewModel> GetMixDatabase(string tableName)
+        private async Task<MixDatabaseViewModel?> GetMixDatabase(string tableName)
         {
             return await _memoryCache.TryGetValueAsync(
                 tableName,
@@ -284,6 +304,11 @@ namespace Mix.RepoDb.Services
             if (request.ParentId.HasValue)
             {
                 var database = await GetMixDatabase(tableName);
+                if (database is null)
+                {
+                    return queries;
+                }
+
                 if (database.Type == MixDatabaseType.AdditionalData || database.Type == MixDatabaseType.GuidAdditionalData)
                 {
                     queries.Add(new(ParentIdFieldName, request.ParentId));
@@ -398,6 +423,11 @@ namespace Mix.RepoDb.Services
         {
             JObject result = new();
             var database = await GetMixDatabase(tableName);
+            if (database is null)
+            {
+                return result;
+            }
+
             var encryptedColumnNames = database.Columns
                 .Where(m => m.ColumnConfigurations.IsEncrypt)
                 .Select(c => c.SystemName)
@@ -433,7 +463,7 @@ namespace Mix.RepoDb.Services
 
             if (!result.ContainsKey(IdFieldName))
             {
-                result.Add(new JProperty(IdFieldName, null));
+                result.Add(new JProperty(IdFieldName));
                 if (!result.ContainsKey(CreatedDateFieldName))
                 {
                     result.Add(new JProperty(CreatedDateFieldName, DateTime.UtcNow));

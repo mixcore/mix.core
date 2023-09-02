@@ -45,7 +45,7 @@ namespace Mix.Services.ecommerce.Controllers
             IOrderService orderService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
             _ecommerceService = ecommerceService;
@@ -84,7 +84,7 @@ namespace Mix.Services.ecommerce.Controllers
             var order = await _orderService.GetUserOrder(User, id, cancellationToken);
             return Ok(order);
         }
-        
+
         [MixAuthorize]
         [HttpGet]
         [Route("guest-order/{id}")]
@@ -142,7 +142,7 @@ namespace Mix.Services.ecommerce.Controllers
             var url = await _ecommerceService.Checkout(User, gateway.Value, cart, cancellationToken);
             return !string.IsNullOrEmpty(url) ? Ok(new JObject(new JProperty("url", url))) : BadRequest();
         }
-        
+
         [HttpPost]
         [Route("checkout-guest/{gateway}")]
         public async Task<ActionResult<JObject>> CheckoutGuest(PaymentGateway? gateway, [FromBody] OrderViewModel cart, CancellationToken cancellationToken = default)
@@ -166,7 +166,12 @@ namespace Mix.Services.ecommerce.Controllers
 
             }
             var query = HttpUtility.ParseQueryString(Request.QueryString.Value);
-            var paymentResponse = JObject.FromObject(query!.AllKeys.ToDictionary(k => k, k => query[k]));
+            if (query is null || query.AllKeys is null)
+            {
+                return BadRequest();
+            }
+
+            var paymentResponse = JObject.FromObject(query.AllKeys.ToDictionary(k => k, k => query[k]));
             orderId ??= paymentResponse.Value<int?>("vpc_OrderInfo");
             if (!orderId.HasValue)
             {

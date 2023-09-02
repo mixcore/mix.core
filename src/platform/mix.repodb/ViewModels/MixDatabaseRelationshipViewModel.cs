@@ -31,7 +31,7 @@ namespace Mix.RepoDb.ViewModels
         {
         }
 
-        public MixDatabaseRelationshipViewModel(MixDatabaseRelationship entity, UnitOfWorkInfo uowInfo = null)
+        public MixDatabaseRelationshipViewModel(MixDatabaseRelationship entity, UnitOfWorkInfo? uowInfo = null)
             : base(entity, uowInfo)
         {
         }
@@ -71,8 +71,13 @@ namespace Mix.RepoDb.ViewModels
             string parentColIdName = $"{SourceDatabaseName.ToTitleCase()}Id";
             if (!Context.MixDatabaseColumn.Any(m => m.MixDatabaseName == DestinateDatabaseName && m.SystemName == parentColIdName))
             {
-                var srcDb = Context.MixDatabase.FirstOrDefault(m => m.SystemName == SourceDatabaseName);
                 var destDb = Context.MixDatabase.FirstOrDefault(m => m.SystemName == DestinateDatabaseName);
+
+                if (destDb is null)
+                {
+                    return;
+                }
+
                 var refCol = new MixDatabaseColumnViewModel(UowInfo)
                 {
                     MixDatabaseName = DestinateDatabaseName,

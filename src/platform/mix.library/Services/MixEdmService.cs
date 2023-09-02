@@ -20,7 +20,7 @@ namespace Mix.Lib.Services
             _queueService = queueService;
         }
 
-        public async Task<string?> GetEdmTemplate(string filename)
+        public async Task<string> GetEdmTemplate(string filename)
         {
             var edmTemplate = await MixTemplateViewModel.GetRepository(_uow, CacheService).GetSingleAsync(
                m => m.FolderType == MixTemplateFolderType.Edms
@@ -31,8 +31,8 @@ namespace Mix.Lib.Services
         public virtual async Task SendMailWithEdmTemplate(
             string subject, string templateName, JObject data, 
             string to, 
-            string? cc = null,
-            string? from = null)
+            string cc = null,
+            string from = null)
         {
             var template = await GetEdmTemplate(templateName);
             if (template == null)

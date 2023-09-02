@@ -14,6 +14,7 @@ using Mix.Database.Entities.Cms;
 using Mix.Database.Entities.MixDb;
 using Mix.SignalR.Interfaces;
 using Mix.Lib.Interfaces;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -24,8 +25,8 @@ namespace Mix.Services.Databases.Controllers
         private readonly TenantUserManager _userManager;
         private readonly IMixUserDataService _userDataService;
         public MixUserDataController(
-            IMixUserDataService metadataService, 
-            TenantUserManager userManager, 
+            IMixUserDataService metadataService,
+            TenantUserManager userManager,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
@@ -35,7 +36,7 @@ namespace Mix.Services.Databases.Controllers
             IQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _userDataService = metadataService;
@@ -50,16 +51,21 @@ namespace Mix.Services.Databases.Controllers
         public async Task<ActionResult<MixUserDataViewModel>> GetUserData(CancellationToken cancellationToken = default)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
             var result = await _userDataService.GetUserDataAsync(user.Id, cancellationToken);
             return Ok(result);
         }
-        
+
         [MixAuthorize]
         [HttpPut("update-profile")]
         public async Task<ActionResult<MixUserDataViewModel>> UpdateProfile([FromBody] MixUserDataViewModel profile, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user.Id != profile.ParentId)
+            if (user?.Id != profile.ParentId)
             {
                 return BadRequest();
             }
@@ -77,6 +83,11 @@ namespace Mix.Services.Databases.Controllers
         public async Task<ActionResult<MixUserDataViewModel>> AddUserAddress([FromBody] CreateUserAddressDto dto, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user is null)
+            {
+                return BadRequest();
+            }
+
             var result = await _userDataService.CreateUserAddress(dto, user, cancellationToken);
             return Ok(result);
         }
@@ -86,6 +97,11 @@ namespace Mix.Services.Databases.Controllers
         public async Task<ActionResult<MixUserDataViewModel>> UpdateUserAddress([FromBody] MixContactAddressViewModel address, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user is null)
+            {
+                return BadRequest();
+            }
+
             await _userDataService.UpdateUserAddress(address, user, cancellationToken);
             return Ok();
         }
@@ -95,6 +111,11 @@ namespace Mix.Services.Databases.Controllers
         public async Task<ActionResult> DeleteUserAddress(int addressId, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user is null)
+            {
+                return BadRequest();
+            }
+
             await _userDataService.DeleteUserAddress(addressId, user, cancellationToken);
             return Ok();
         }

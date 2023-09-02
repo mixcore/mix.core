@@ -12,9 +12,7 @@ namespace Mix.Account.Domain.ViewModels
         {
         }
 
-        public MixRoleViewModel(MixRole entity,
-
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixRoleViewModel(MixRole entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 

@@ -98,7 +98,7 @@ namespace Mix.Lib.Subscribers
 
         }
 
-        private async Task SendMessage(string message, bool result, Exception? ex = null)
+        private async Task SendMessage(string message, bool result, Exception ex = null)
         {
             SignalRMessageModel msg = new()
             {

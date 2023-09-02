@@ -42,11 +42,12 @@ namespace Mix.Tenancy.Domain.Services
         }
 
 
-        public async Task InitDbContext(InitCmsDto model)
+        public Task InitDbContext(InitCmsDto model)
         {
             _databaseService.InitConnectionStrings(model.ConnectionString, model.DatabaseProvider);
-
             _databaseService.UpdateMixCmsContext();
+
+            return Task.CompletedTask;
         }
 
         public async Task InitTenantAsync(InitCmsDto model)

@@ -28,7 +28,7 @@ namespace Mix.Storage.Lib.Engines.Mix
         public override Task<string?> UploadStream(FileModel file, string? createdBy, CancellationToken cancellationToken = default)
         {
             string? result = null;
-            file = GetFileModel($"{file.Filename}{file.Extension}", null, null, createdBy);
+            file = GetFileModel($"{file.Filename}{file.Extension}", file.FileStream, null, createdBy);
             var saveResult = MixFileHelper.SaveFile(file);
             if (saveResult)
             {

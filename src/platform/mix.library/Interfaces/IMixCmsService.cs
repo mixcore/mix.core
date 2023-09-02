@@ -4,6 +4,6 @@
     {
         public string GetAssetFolder(string culture, string domain);
         public MixTenantSystemModel GetCurrentTenant();
-        Task<FileModel> ParseSitemapAsync();
+        Task<FileModel> ParseSitemapAsync(CancellationToken cancellationToken = default);
     }
 }
