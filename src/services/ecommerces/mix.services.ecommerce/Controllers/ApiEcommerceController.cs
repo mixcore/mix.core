@@ -28,7 +28,6 @@ namespace Mix.Services.ecommerce.Controllers
     public class ApiEcommerceController : MixTenantApiControllerBase
     {
         private readonly PaymentConfigurationModel _paymentConfiguration = new();
-        private readonly IPortalHubClientService _portalHub;
         private readonly IEcommerceService _ecommerceService;
         private readonly IOrderService _orderService;
         protected UnitOfWorkInfo<MixCmsContext> CmsUow;
@@ -43,7 +42,6 @@ namespace Mix.Services.ecommerce.Controllers
             IEcommerceService ecommerceService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IOrderService orderService,
-            IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
@@ -53,7 +51,6 @@ namespace Mix.Services.ecommerce.Controllers
             _orderService = orderService;
             var session = configuration.GetSection(MixAppSettingsSection.Payments);
             session.Bind(_paymentConfiguration);
-            _portalHub = portalHub;
         }
 
         #region Routes

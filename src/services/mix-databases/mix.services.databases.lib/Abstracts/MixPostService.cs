@@ -69,7 +69,7 @@ namespace Mix.Services.Databases.Lib.Abstracts
             }
         }
 
-        public IQueryable<int> ParseMetadataQueriesPredicate(List<SearchQueryField> MetadataQueries)
+        public IQueryable<int>? ParseMetadataQueriesPredicate(List<SearchQueryField> MetadataQueries)
         {
             IQueryable<int>? allowedIdQuery = MetadataService.GetQueryableContentIdByMetadataSeoContent(
                                                 MetadataQueries, MixContentType.Post);

@@ -30,7 +30,6 @@ namespace Mix.Services.Databases.Lib.Services
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<MixDbDbContext> uow,
             MixIdentityService identityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUow,
             MixCacheService cacheService,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, cacheService, mixTenantService)

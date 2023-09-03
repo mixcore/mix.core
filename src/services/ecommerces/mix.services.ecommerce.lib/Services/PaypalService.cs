@@ -31,8 +31,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
     {
         private readonly UnitOfWorkInfo<PaypalDbContext> _cmsUow;
         private readonly HttpClient _httpClient;
-        private PaypalConfigurations _settings { get; set; } = new PaypalConfigurations();
-        public PayPalAccessToken? Token { get => GetPayPalAccessTokenAsync(); }
+        private PaypalConfigurations Settings { get; set; } = new PaypalConfigurations();
+        public PayPalAccessToken Token { get => GetPayPalAccessTokenAsync() ?? throw new MixException(MixErrorStatus.Badrequest, "Cannot get token"); }
         public PaypalService(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -42,7 +42,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             : base(httpContextAccessor, cacheService, mixTenantService)
         {
             var session = configuration.GetSection(MixAppSettingsSection.Payments).GetSection("Paypal");
-            session.Bind(_settings);
+            session.Bind(Settings);
             _cmsUow = cmsUow;
             _httpClient = GetPaypalHttpClient();
         }
@@ -112,8 +112,10 @@ namespace Mix.Services.Ecommerce.Lib.Services
         private async Task SaveResponse(PaypalOrderCapturedResponse? response, PaymentStatus paymentStatus, CancellationToken cancellationToken)
         {
             var resp = new PaypalTransactionResponse(response!);
-            var vm = new PaypalTransactionResponseViewModel(resp, _cmsUow);
-            vm.PaymentStatus = paymentStatus;
+            var vm = new PaypalTransactionResponseViewModel(resp, _cmsUow)
+            {
+                PaymentStatus = paymentStatus
+            };
             await vm.SaveAsync(cancellationToken);
         }
 
@@ -128,7 +130,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
         {
             var http = new HttpClient
             {
-                BaseAddress = new Uri(_settings.BaseUrl),
+                BaseAddress = new Uri(Settings.BaseUrl),
                 Timeout = TimeSpan.FromSeconds(30),
             };
 
@@ -137,12 +139,12 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
         private PayPalAccessToken? GetPayPalAccessTokenAsync()
         {
-            var clientId = _settings.ClientId;
-            var secret = _settings.SecretKey;
+            var clientId = Settings.ClientId;
+            var secret = Settings.SecretKey;
 
             byte[] bytes = Encoding.GetEncoding("iso-8859-1").GetBytes($"{clientId}:{secret}");
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "/v1/oauth2/token");
+            HttpRequestMessage request = new(HttpMethod.Post, "/v1/oauth2/token");
             request.Headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(bytes));
 
             var form = new Dictionary<string, string>
@@ -162,7 +164,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             OrderViewModel order, string againUrl, string returnUrl,
             CancellationToken cancellationToken = default)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "v2/checkout/orders");
+            HttpRequestMessage request = new(HttpMethod.Post, "v2/checkout/orders");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Token.access_token);
             var payment = await GetPaymentRequestAsync(order, againUrl, returnUrl, cancellationToken);
 
@@ -170,7 +172,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             HttpResponseMessage response = await SendPaypalRequest(request);
 
-            string content = await response.Content.ReadAsStringAsync();
+            string content = await response.Content.ReadAsStringAsync(cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 PaypalOrderCreatedResponse? paypalPaymentCreated = JsonConvert.DeserializeObject<PaypalOrderCreatedResponse>(content);
@@ -182,7 +184,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
         private async Task<PaypalOrderCapturedResponse?> CaptureOrderResult(string? orderId)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"v2/checkout/orders/{orderId}/capture");
+            HttpRequestMessage request = new(HttpMethod.Post, $"v2/checkout/orders/{orderId}/capture");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Token.access_token);
             request.Content = new StringContent("", Encoding.Default, "application/json");
             HttpResponseMessage response = await SendPaypalRequest(request);
@@ -194,7 +196,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
         private async Task<PaypalOrderCapturedResponse?> GetOrderResult(string? orderId)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"v2/checkout/orders/{orderId}");
+            HttpRequestMessage request = new(HttpMethod.Get, $"v2/checkout/orders/{orderId}");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Token.access_token);
             request.Content = new StringContent("", Encoding.Default, "application/json");
             HttpResponseMessage response = await SendPaypalRequest(request);

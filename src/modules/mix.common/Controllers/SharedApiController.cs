@@ -45,7 +45,8 @@ namespace Mix.Common.Controllers
             MixCacheService cacheService,
             IHttpContextAccessor httpContextAccessor,
             MixQueueMessages<MessageQueueModel> mixMemoryMessageQueue,
-            IMixTenantService mixTenantService)
+            IMixTenantService mixTenantService,
+            IMixCmsService mixCmsService)
             : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
@@ -56,6 +57,7 @@ namespace Mix.Common.Controllers
             _routeProvider = routeProvider;
             _applicationLifetime = applicationLifetime;
             _mixMemoryMessageQueue = mixMemoryMessageQueue;
+            _mixCmsService = mixCmsService;
         }
 
         #region Routes

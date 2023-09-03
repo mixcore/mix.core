@@ -46,14 +46,16 @@ namespace Mix.Services.Ecommerce.Lib.Services
         {
             try
             {
-                OnepayRequest request = new OnepayRequest(order);
-                request.vpc_Merchant = Settings.Merchant;
-                request.vpc_AccessCode = Settings.AccessCode;
-                request.vpc_Locale = order.Currency == "VND" ? "vn" : "us";
-                request.vpc_Currency = order.Currency;
-                request.vpc_TicketNo = HttpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();//"14.241.244.43";// 
-                request.AgainLink = $"{againUrl.TrimEnd('/')}?orderId={order.Id}";
-                request.vpc_ReturnURL = returnUrl;
+                OnepayRequest request = new(order)
+                {
+                    vpc_Merchant = Settings.Merchant,
+                    vpc_AccessCode = Settings.AccessCode,
+                    vpc_Locale = order.Currency == "VND" ? "vn" : "us",
+                    vpc_Currency = order.Currency,
+                    vpc_TicketNo = HttpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString(),//"14.241.244.43";// 
+                    AgainLink = $"{againUrl.TrimEnd('/')}?orderId={order.Id}",
+                    vpc_ReturnURL = returnUrl
+                };
                 //request.vpc_CallbackURL = returnUrl;
 
                 await SaveRequest(request, OrderStatus.WAITING_FOR_PAYMENT, cancellationToken);
@@ -84,7 +86,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             }
 
             // Build string from collection in preperation to be hashed
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             foreach (var kvp in parameters)
             {
                 if (!string.IsNullOrEmpty(kvp.Value) && kvp.Key != "vpc_SecureHash" && (kvp.Key.StartsWith("vpc_") || kvp.Key.StartsWith("user_")))
@@ -95,7 +97,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 sb.Remove(sb.Length - 1, 1);
             // Create secureHash on string
             string hexHash = "";
-            using (HMACSHA256 hasher = new HMACSHA256(convertedHash))
+            using (HMACSHA256 hasher = new(convertedHash))
             {
                 byte[] hashValue = hasher.ComputeHash(Encoding.UTF8.GetBytes(sb.ToString()));//(tmp)); //
                 foreach (byte b in hashValue)
@@ -108,14 +110,17 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
         private async Task SaveResponse(OnepayTransactionResponse response, PaymentStatus paymentStatus, CancellationToken cancellationToken)
         {
-            var vm = new OnepayTransactionResponseViewModel(response, _cmsUow);
-            vm.PaymentStatus = paymentStatus;
+            var vm = new OnepayTransactionResponseViewModel(response, _cmsUow)
+            {
+                PaymentStatus = paymentStatus
+            };
+
             await vm.SaveAsync(cancellationToken);
         }
 
         private async Task SaveRequest(OnepayRequest request, OrderStatus paymentStatus, CancellationToken cancellationToken)
         {
-            var vm = await OnepayTransactionRequestViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.vpc_OrderInfo == request.vpc_OrderInfo);
+            var vm = await OnepayTransactionRequestViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.vpc_OrderInfo == request.vpc_OrderInfo, cancellationToken);
             if (vm == null)
             {
                 OnepayTransactionRequest onepayRequest = new();
@@ -127,7 +132,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             await vm.SaveAsync(cancellationToken);
         }
 
-        public async Task<OnepayQueryResponse> Query(OnepayQueryRequest request, CancellationToken cancellationToken)
+        public async Task<OnepayQueryResponse> Query(OnepayQueryRequest request)
         {
             try
             {
@@ -148,10 +153,9 @@ namespace Mix.Services.Ecommerce.Lib.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
+                var response = responseObj.ToObject<OnepayTransactionResponse>() ?? throw new MixException(MixErrorStatus.Badrequest, "Cannot convert response.");
 
-                var response = responseObj.ToObject<OnepayTransactionResponse>();
                 var paymentStatus = PaymentStatus.SUCCESS;
-
                 if (!response.vpc_TxnResponseCode.Equals("0") && !string.IsNullOrEmpty(response.vpc_Message))
                 {
                     if (!string.IsNullOrEmpty(response.vpc_SecureHash))
@@ -187,14 +191,17 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
         public Task<JObject> GetPaymentRequestAsync(OrderViewModel order, string againUrl, string returnUrl, CancellationToken cancellationToken)
         {
-            OnepayRequest request = new OnepayRequest(order);
-            request.vpc_Merchant = Settings.Merchant;
-            request.vpc_AccessCode = Settings.AccessCode;
-            request.vpc_Locale = order.Currency == "VND"? "vn": "us";
-            request.vpc_Currency = order.Currency;
-            request.vpc_TicketNo = HttpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();//"14.241.244.43";// 
-            request.AgainLink = $"{againUrl.TrimEnd('/')}?orderId={order.ExternalId}";
-            request.vpc_ReturnURL = returnUrl;
+            OnepayRequest request = new(order)
+            {
+                vpc_Merchant = Settings.Merchant,
+                vpc_AccessCode = Settings.AccessCode,
+                vpc_Locale = order.Currency == "VND" ? "vn" : "us",
+                vpc_Currency = order.Currency,
+                vpc_TicketNo = HttpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString(),//"14.241.244.43";// 
+                AgainLink = $"{againUrl.TrimEnd('/')}?orderId={order.ExternalId}",
+                vpc_ReturnURL = returnUrl
+            };
+
             //request.vpc_CallbackURL = returnUrl;
             return Task.FromResult(ReflectionHelper.ParseObject(request));
         }

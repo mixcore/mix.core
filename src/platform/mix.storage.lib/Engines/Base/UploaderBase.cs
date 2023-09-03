@@ -16,10 +16,7 @@ namespace Mix.Storage.Lib.Engines.Base
         {
             get
             {
-                if (_currentTenant == null)
-                {
-                    _currentTenant = Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
-                }
+                _currentTenant ??= Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
                 return _currentTenant;
             }
         }
@@ -28,24 +25,24 @@ namespace Mix.Storage.Lib.Engines.Base
         {
             CmsUow = cmsUow;
             Configuration = configuration;
-            Session = httpContextAccessor?.HttpContext?.Session;
+            Session = httpContextAccessor?.HttpContext?.Session ?? throw new MixException(MixErrorStatus.Badrequest, "Session not found."); ;
         }
 
         public async Task CreateMedia(string fullname, int tenantId, string? createdBy, CancellationToken cancellationToken = default)
         {
-            string filePath = fullname.Substring(0, fullname.LastIndexOf('/'));
+            string filePath = fullname[..fullname.LastIndexOf('/')];
             string fileFolder = CurrentTenant.Configurations.Domain != null
                         ? filePath.Replace(CurrentTenant.Configurations.Domain, string.Empty)
                         : filePath;
-            string fileName = fullname.Substring(fullname.LastIndexOf('/') + 1);
+            string fileName = fullname[(fullname.LastIndexOf('/') + 1)..];
             var media = new MixMediaViewModel(CmsUow)
             {
                 Id = Guid.NewGuid(),
                 DisplayName = fileName,
                 Status = MixContentStatus.Published,
                 FileFolder = fileFolder,
-                FileName = fileName.Substring(0, fileName.LastIndexOf('.')),
-                Extension = fileName.Substring(fileName.LastIndexOf('.')),
+                FileName = fileName[..fileName.LastIndexOf('.')],
+                Extension = fileName[fileName.LastIndexOf('.')..],
                 TargetUrl = fullname,
                 CreatedBy = createdBy,
                 MixTenantId = tenantId,

@@ -16,9 +16,9 @@ namespace Mix.Signalr.Hub.Hubs
         // incomingCall(User callingUser)
         // receiveSignal(User signalingUser, string signal)
 
-        private static readonly List<User> Users = new List<User>();
-        private static readonly List<UserCall> UserCalls = new List<UserCall>();
-        private static readonly List<CallOffer> CallOffers = new List<CallOffer>();
+        private static readonly List<User> Users = new();
+        private static readonly List<UserCall> UserCalls = new();
+        private static readonly List<CallOffer> CallOffers = new();
 
         public VideoCallHub(IAuditLogService auditLogService) : base(auditLogService)
         {
@@ -58,7 +58,7 @@ namespace Mix.Signalr.Hub.Hubs
             var targetUser = Users.SingleOrDefault(u => u.ConnectionId == targetConnectionId);
 
             // Make sure the person we are trying to call is still here
-            if (targetUser == null)
+            if (targetUser == null || callingUser == null)
             {
                 // If not, let the caller know
                 await Clients.Caller.SendAsync("callDeclined", targetConnectionId, "The user you called has left.");

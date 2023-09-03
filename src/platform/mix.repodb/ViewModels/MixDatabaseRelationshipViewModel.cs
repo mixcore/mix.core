@@ -95,9 +95,14 @@ namespace Mix.RepoDb.ViewModels
 
         protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
-            var leftDb = Context.MixDatabase.Find(ParentId);
+            var leftDb = await Context.MixDatabase.FindAsync(new object?[] { ParentId }, cancellationToken: cancellationToken);
+            var rightDb = await Context.MixDatabase.FindAsync(new object?[] { ChildId }, cancellationToken: cancellationToken);
+            if (leftDb is null || rightDb is null)
+            {
+                return;
+            }
+
             string leftColName = $"{leftDb.SystemName}Id";
-            var rightDb = Context.MixDatabase.Find(ChildId);
             string rightColName = $"{rightDb.SystemName}Id";
             await MixDatabaseColumnViewModel.GetRepository(UowInfo, CacheService)
                 .DeleteManyAsync(m =>
