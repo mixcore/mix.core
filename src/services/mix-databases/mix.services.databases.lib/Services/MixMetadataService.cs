@@ -30,7 +30,6 @@ namespace Mix.Services.Databases.Lib.Services
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<MixDbDbContext> uow,
             MixIdentityService identityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUow,
             MixCacheService cacheService,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, cacheService, mixTenantService)
@@ -150,13 +149,16 @@ namespace Mix.Services.Databases.Lib.Services
                 return default;
             }
 
-            IQueryable<int> andQueryIds = null;
-            IQueryable<int> orQueryIds = null;
-            var andQueries = metadataSeoContents.Where(m => m.IsRequired).ToList();
-            var orQueries = metadataSeoContents.Where(m => !m.IsRequired).ToList();
+            IQueryable<int>? andQueryIds = null;
+            IQueryable<int>? orQueryIds = null;
+            List<SearchQueryField> andQueries = metadataSeoContents.Where(m => m.IsRequired).ToList();
+            List<SearchQueryField> orQueries = metadataSeoContents.Where(m => !m.IsRequired).ToList();
             foreach (var item in andQueries)
             {
-                if (item.Value == null) continue;
+                if (item.Value is null)
+                {
+                    continue;
+                }
 
                 Expression<Func<MixMetadata, bool>> predicate = m =>
                     m.Type == item.FieldName;
@@ -164,25 +166,26 @@ namespace Mix.Services.Databases.Lib.Services
 
                 if (item.CompareOperator == MixCompareOperator.InRange || item.CompareOperator == MixCompareOperator.NotInRange)
                 {
-                    var array = item.Value.ToString().Split(',');
-                    predicate = predicate.AndAlsoIf(item.CompareOperator == MixCompareOperator.InRange,
-                                                    m => array.Contains(m.SeoContent));
-                    predicate = predicate.AndAlsoIf(item.CompareOperator == MixCompareOperator.NotInRange,
-                                                    m => !array.Contains(m.SeoContent));
+                    var array = item.Value.ToString()!.Split(',');
+                    predicate = predicate
+                        .AndAlsoIf(item.CompareOperator == MixCompareOperator.InRange, m => array.Contains(m.SeoContent));
+
+                    predicate = predicate
+                        .AndAlsoIf(item.CompareOperator == MixCompareOperator.NotInRange, m => !array.Contains(m.SeoContent));
                 }
                 else
                 {
-                    predicate = predicate.AndAlso(ReflectionHelper.GetExpression<MixMetadata>(
-                                    "SeoContent", item.Value.ToString(), MixCmsHelper.ParseExpressionMethod(item.CompareOperator)));
+                    predicate = predicate
+                        .AndAlso(ReflectionHelper.GetExpression<MixMetadata>("SeoContent", item.Value.ToString(), MixCmsHelper.ParseExpressionMethod(item.CompareOperator)));
                 }
 
                 var allowMetadata = _uow.DbContext.MixMetadata.Where(predicate);
-
                 var allowedContentIds = from metadata in allowMetadata
                                         join association in _uow.DbContext.MixMetadataContentAssociation
                                         on metadata.Id equals association.MetadataId
                                         where association.MixTenantId == CurrentTenant.Id && association.ContentType == contentType
                                         select association.ContentId;
+
                 if (andQueryIds == null)
                 {
                     andQueryIds = allowedContentIds.Distinct();
@@ -192,19 +195,23 @@ namespace Mix.Services.Databases.Lib.Services
                     andQueryIds = andQueryIds.Where(m => allowedContentIds.Contains(m));
                 }
             }
+
             foreach (var item in orQueries)
             {
-                if (item.Value == null) continue;
+                if (item.Value == null)
+                {
+                    continue;
+                }
 
                 Expression<Func<MixMetadata, bool>> predicate = m =>
                     m.Type == item.FieldName;
 
                 if (item.CompareOperator == MixCompareOperator.InRange || item.CompareOperator == MixCompareOperator.NotInRange)
                 {
-                    var array = item.Value.ToString().Split(',');
-                    predicate = predicate.AndAlsoIf(item.CompareOperator == MixCompareOperator.InRange, 
+                    var array = item.Value.ToString()!.Split(',');
+                    predicate = predicate.AndAlsoIf(item.CompareOperator == MixCompareOperator.InRange,
                                                     m => array.Contains(m.SeoContent));
-                    predicate = predicate.AndAlsoIf(item.CompareOperator == MixCompareOperator.NotInRange, 
+                    predicate = predicate.AndAlsoIf(item.CompareOperator == MixCompareOperator.NotInRange,
                                                     m => !array.Contains(m.SeoContent));
                 }
                 else
@@ -228,6 +235,7 @@ namespace Mix.Services.Databases.Lib.Services
                     orQueryIds = orQueryIds.Concat(allowedContentIds);
                 }
             }
+
             return andQueries.Count == 0 ? orQueryIds.Distinct()
                     : orQueries.Count == 0 ? andQueryIds.Distinct()
                         : andQueryIds.Where(m => orQueryIds.Contains(m)).Distinct();

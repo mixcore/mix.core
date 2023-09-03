@@ -21,7 +21,7 @@ namespace Mix.Storage.Lib.Helpers
 
         #region Async Methods
 
-        public static async Task<bool> SaveImageAsync(Stream fileStream, FileModel file, ImageSize size = null)
+        public static async Task<bool> SaveImageAsync(Stream fileStream, FileModel file, ImageSize? size = null)
         {
             if (!string.IsNullOrEmpty(file.FileBase64))
             {
@@ -34,7 +34,7 @@ namespace Mix.Storage.Lib.Helpers
             }
         }
 
-        private static async Task<bool> SaveFileStreamAsync(Stream fileStream, FileModel file, ImageSize size)
+        private static async Task<bool> SaveFileStreamAsync(Stream fileStream, FileModel file, ImageSize? size)
         {
             using (Image image = await Image.LoadAsync(fileStream))
             {
@@ -54,7 +54,7 @@ namespace Mix.Storage.Lib.Helpers
             }
         }
 
-        private static async Task<bool> SaveBase64Async(FileModel file, ImageSize size)
+        private static async Task<bool> SaveBase64Async(FileModel file, ImageSize? size)
         {
             string base64 = file.FileBase64.IndexOf(',') >= 0
                        ? file.FileBase64.Split(',')[1]
@@ -83,7 +83,7 @@ namespace Mix.Storage.Lib.Helpers
 
         #region Sync Methods
 
-        public static bool SaveImage(Stream fileStream, FileModel file, ImageSize size = null)
+        public static bool SaveImage(Stream fileStream, FileModel file, ImageSize? size = null)
         {
             if (!string.IsNullOrEmpty(file.FileBase64))
             {
@@ -96,7 +96,7 @@ namespace Mix.Storage.Lib.Helpers
             }
         }
 
-        private static bool SaveFileStream(Stream fileStream, FileModel file, ImageSize size)
+        private static bool SaveFileStream(Stream fileStream, FileModel file, ImageSize? size)
         {
             var format = Image.DetectFormat(fileStream);
             using (Image image = Image.Load(fileStream))
@@ -117,7 +117,7 @@ namespace Mix.Storage.Lib.Helpers
             }
         }
 
-        private static bool SaveBase64(FileModel file, ImageSize size)
+        private static bool SaveBase64(FileModel file, ImageSize? size)
         {
             string base64 = file.FileBase64.IndexOf(',') >= 0
                        ? file.FileBase64.Split(',')[1]

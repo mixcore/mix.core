@@ -53,7 +53,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
                 Errors.Add(new("This association is existed"));
             }
         }
-        public override void InitDefaultValues(string language = null, int? cultureId = null)
+        public override void InitDefaultValues(string? language = null, int? cultureId = null)
         {
             base.InitDefaultValues(language, cultureId);
             if (Id == default)

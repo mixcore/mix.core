@@ -190,6 +190,11 @@ namespace Mix.RepoDb.Services
         {
             var data = ReflectionHelper.ParseObject(obj);
             var db = await GetMixDatabase(tableName);
+            if (db is null)
+            {
+                return data;
+            }
+
             var jsonColumns = db.Columns.Where(
                                     c => c.DataType == MixDataType.Json
                                             || c.DataType == MixDataType.ArrayMedia
@@ -257,6 +262,11 @@ namespace Mix.RepoDb.Services
         private async Task LoadNestedData(int id, JObject data, string tableName)
         {
             var database = await GetMixDatabase(tableName);
+            if (database is null)
+            {
+                return;
+            }
+
             _repository.InitTableName(tableName);
             foreach (var item in database.Relationships)
             {
@@ -268,6 +278,11 @@ namespace Mix.RepoDb.Services
                     _repository.InitTableName(item.DestinateDatabaseName);
                     List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
                     var nestedData = await _repository.GetListByAsync(query);
+                    if (nestedData is null)
+                    {
+                        continue;
+                    }
+
                     JArray result = new();
                     foreach (var nd in nestedData)
                     {
@@ -289,6 +304,10 @@ namespace Mix.RepoDb.Services
 
             var items = new List<JObject>();
             var database = await GetMixDatabase(tableName);
+            if (database is null)
+            {
+                return new PagingResponseModel<JObject>();
+            }
 
             foreach (var item in result.Items)
             {
@@ -338,7 +357,7 @@ namespace Mix.RepoDb.Services
             return queries;
         }
 
-        private async Task<MixDatabaseViewModel> GetMixDatabase(string tableName)
+        private async Task<MixDatabaseViewModel?> GetMixDatabase(string tableName)
         {
             return await _memoryCache.TryGetValueAsync(
                 tableName,
@@ -356,6 +375,11 @@ namespace Mix.RepoDb.Services
             if (request.ParentId.HasValue)
             {
                 var database = await GetMixDatabase(tableName);
+                if (database is null)
+                {
+                    return queries;
+                }
+
                 if (database.Type == MixDatabaseType.AdditionalData || database.Type == MixDatabaseType.GuidAdditionalData)
                 {
                     queries.Add(new(ParentIdFieldName, request.ParentId));
@@ -499,11 +523,16 @@ namespace Mix.RepoDb.Services
                                 currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
                                 currentDb.CreatedDateTime = DateTime.UtcNow;
                                 currentDb.Columns = new();
-                                var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
-                                foreach (var col in cols)
+
+                                if (columns is not null)
                                 {
-                                    currentDb.Columns.Add(new(col, _cmsUow));
+                                    var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
+                                    foreach (var col in cols)
+                                    {
+                                        currentDb.Columns.Add(new(col, _cmsUow));
+                                    }
                                 }
+
                                 await currentDb.SaveAsync();
                             }
                             if (currentDb is { Columns.Count: > 0 })
@@ -607,7 +636,7 @@ namespace Mix.RepoDb.Services
         private void GetMembers(ExpandoObject obj, List<string> selectMembers)
         {
             var result = obj.ToList();
-            foreach (KeyValuePair<string, object> kvp in result)
+            foreach (KeyValuePair<string, object?> kvp in result)
             {
                 if (DefaultProperties.All(m => m != kvp.Key) && selectMembers.All(m => m != kvp.Key))
                 {
@@ -726,7 +755,7 @@ namespace Mix.RepoDb.Services
             return col.DataType == MixDataType.Text
                 | col.DataType == MixDataType.Array
                 | col.DataType == MixDataType.ArrayMedia
-                | col.DataType == MixDataType.ArrayRadio 
+                | col.DataType == MixDataType.ArrayRadio
                 | col.DataType == MixDataType.Html
                 | col.DataType == MixDataType.Json
                 | col.DataType == MixDataType.TuiEditor;

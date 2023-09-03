@@ -127,11 +127,13 @@ namespace Mix.RepoDb.Repositories
         }
         public async Task<PagingResponseModel<dynamic>> GetPagingAsync(IEnumerable<QueryField> queryFields, PagingRequestModel pagingRequest, IEnumerable<Field>? selectFields = null)
         {
-            List<OrderField> orderFields = new List<OrderField>() {
-                    new OrderField(pagingRequest.SortBy ?? "Id", pagingRequest.SortDirection == SortDirection.Asc ? Order.Ascending: Order.Descending)
-                };
+            List<OrderField> orderFields = new()
+            {
+                new OrderField(pagingRequest.SortBy ?? "Id", pagingRequest.SortDirection == SortDirection.Asc ? Order.Ascending: Order.Descending)
+            };
+
             var count = (int)_connection.Count(_tableName, queryFields, transaction: _dbTransaction);
-            int pageSize = pagingRequest.PageSize.HasValue ? pagingRequest.PageSize.Value : 100;
+            int pageSize = pagingRequest.PageSize ?? 100;
             var data = await _connection.BatchQueryAsync(_tableName, pagingRequest.PageIndex,
                 pageSize, orderFields, queryFields, selectFields, null, commandTimeout: _settings.CommandTimeout, transaction: _dbTransaction);
             return new PagingResponseModel<dynamic>()
@@ -159,10 +161,15 @@ namespace Mix.RepoDb.Repositories
             List<QueryField> queries = new();
             foreach (var item in searchQueryFields)
             {
-                Operation op = ParseMixOperator(item);
-                if (op == Operation.In || op == Operation.NotIn && item.Value != null)
+                if (item.Value is null)
                 {
-                    queries.Add(new QueryField(item.FieldName, op, item.Value.ToString().Split(',')));
+                    continue;
+                }
+
+                Operation op = ParseMixOperator(item);
+                if (op == Operation.In || op == Operation.NotIn)
+                {
+                    queries.Add(new QueryField(item.FieldName, op, item.Value.ToString()!.Split(',')));
                 }
                 else
                 {
@@ -567,22 +574,20 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-
-        private IEnumerable<QueryField>? ParseQuery(JObject query)
-        {
-            List<QueryField>? result = null;
-            if (query != null)
-            {
-                result = new List<QueryField>();
-                foreach (var item in query.Properties())
-                {
-                    QueryField field = new QueryField(item.Name, query.Value<string>(item.Name));
-                    result.Add(field);
-                }
-            }
-            return result;
-        }
-
+        //private IEnumerable<QueryField>? ParseQuery(JObject query)
+        //{
+        //    List<QueryField>? result = null;
+        //    if (query != null)
+        //    {
+        //        result = new List<QueryField>();
+        //        foreach (var item in query.Properties())
+        //        {
+        //            QueryField field = new QueryField(item.Name, query.Value<string>(item.Name));
+        //            result.Add(field);
+        //        }
+        //    }
+        //    return result;
+        //}
 
         private void InitializeRepoDb()
         {
@@ -669,8 +674,8 @@ namespace Mix.RepoDb.Repositories
 
                 if (_isRoot || DatabaseProvider == MixDatabaseProvider.SQLITE)
                 {
-                    _connection = Activator.CreateInstance(connectionType) as IDbConnection;
-                    _connection!.ConnectionString = ConnectionString;
+                    _connection = (Activator.CreateInstance(connectionType) as IDbConnection)!;
+                    _connection.ConnectionString = ConnectionString;
                 }
                 else
                 {
@@ -682,22 +687,15 @@ namespace Mix.RepoDb.Repositories
 
         static Type GetDbConnectionType(MixDatabaseProvider dbProvider)
         {
-            switch (dbProvider)
+            return dbProvider switch
             {
-                case MixDatabaseProvider.SQLSERVER:
-                    return typeof(SqlConnection);
-                case MixDatabaseProvider.MySQL:
-                    return typeof(MySqlConnection);
-                case MixDatabaseProvider.PostgreSQL:
-                    return typeof(NpgsqlConnection);
-                case MixDatabaseProvider.SQLITE:
-                    return typeof(SqliteConnection);
-                default:
-                    return typeof(SqliteConnection);
-            }
+                MixDatabaseProvider.SQLSERVER => typeof(SqlConnection),
+                MixDatabaseProvider.MySQL => typeof(MySqlConnection),
+                MixDatabaseProvider.PostgreSQL => typeof(NpgsqlConnection),
+                MixDatabaseProvider.SQLITE => typeof(SqliteConnection),
+                _ => typeof(SqliteConnection),
+            };
         }
-
-
 
         #endregion
         public void CompleteTransaction()
@@ -715,6 +713,7 @@ namespace Mix.RepoDb.Repositories
                 _dbTransaction.Rollback();
             }
         }
+
         public void Dispose()
         {
             if (_connection != null)

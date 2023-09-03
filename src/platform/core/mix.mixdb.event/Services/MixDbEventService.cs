@@ -111,7 +111,7 @@ namespace Mix.Mixdb.Event.Services
                 {
                     if (strBody.Contains($"[[{prop.Name}]]", StringComparison.OrdinalIgnoreCase))
                     {
-                        strBody = strBody.Replace($"[[{prop.Name.ToTitleCase()}]]", data.GetValue(prop.Name).ToString());
+                        strBody = strBody.Replace($"[[{prop.Name.ToTitleCase()}]]", data.GetValue(prop.Name)!.ToString());
                     }
                 }
                 return JObject.Parse(strBody);

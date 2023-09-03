@@ -8,13 +8,13 @@ namespace Mix.Services.Graphql.Lib
 {
     public class GraphQLQuery : ObjectGraphType<object>
     {
-        private IDatabaseMetadata _dbMetadata;
-        private ITableNameLookup _tableNameLookup;
-        private DbContext _dbContext;
+        private readonly IDatabaseMetadata _dbMetadata;
+        private readonly ITableNameLookup _tableNameLookup;
+        private readonly DbContext _dbContext;
         public GraphQLQuery(
-         DbContext dbContext,
-         IDatabaseMetadata dbMetadata,
-         ITableNameLookup tableNameLookup)
+            DbContext dbContext,
+            IDatabaseMetadata dbMetadata,
+            ITableNameLookup tableNameLookup)
         {
             _dbMetadata = dbMetadata;
             _tableNameLookup = tableNameLookup;
@@ -25,6 +25,11 @@ namespace Mix.Services.Graphql.Lib
             foreach (var metaTable in _dbMetadata.GetTableMetadatas())
             {
                 var type = assem.GetType(metaTable.AssemblyFullName);
+                if (type is null)
+                {
+                    continue;
+                }
+
                 var tableType = new TableType(metaTable, type);
                 var friendlyTableName = metaTable.TableName;
                 _tableNameLookup.GetFriendlyName(metaTable.TableName);

@@ -80,7 +80,7 @@ namespace Mix.Mixdb.Services
             }
         }
 
-        public DbContext GetMixDatabaseDbContext()
+        public DbContext? GetMixDatabaseDbContext()
         {
             if (!string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION)))
             {
@@ -90,10 +90,7 @@ namespace Mix.Mixdb.Services
                 }
                 if (_assembly != null)
                 {
-
-                    _dbContextType = _assembly.GetType("TypedDataContext.Context.DataContext");
-                    _ = _dbContextType ?? throw new Exception("DataContext type not found");
-
+                    _dbContextType = _assembly.GetType("TypedDataContext.Context.DataContext") ?? throw new Exception("DataContext type not found");
                     var constr = _dbContextType.GetConstructor(Type.EmptyTypes);
                     _ = constr ?? throw new Exception("DataContext ctor not found");
                     var ctx = (DbContext)constr.Invoke(null);
@@ -101,6 +98,7 @@ namespace Mix.Mixdb.Services
                     return ctx;
                 }
             }
+
             return default;
         }
 
@@ -139,10 +137,10 @@ namespace Mix.Mixdb.Services
             string contextFileCode = scaffoldedModelSources.ContextFile.Code;
             foreach (var item in scaffoldedModelSources.AdditionalFiles)
             {
-                string name = item.Path.Substring(0, item.Path.LastIndexOf('.'));
+                string name = item.Path[..item.Path.LastIndexOf('.')];
                 if (databaseNames.Any(m => string.Equals(m, name, StringComparison.OrdinalIgnoreCase)))
                 {
-                    ReplaceEntityNaming(databaseNames, item, ref contextFileCode);
+                    ReplaceEntityNaming(item, ref contextFileCode);
                 }
                 sourceFiles.Add(item.Code);
             }
@@ -154,9 +152,9 @@ namespace Mix.Mixdb.Services
             return sourceFiles;
         }
 
-        private void ReplaceEntityNaming(List<string> databaseNames, ScaffoldedFile item, ref string contextFileCode)
+        private void ReplaceEntityNaming(ScaffoldedFile item, ref string contextFileCode)
         {
-            string name = item.Path.Substring(0, item.Path.LastIndexOf('.'));
+            string name = item.Path[..item.Path.LastIndexOf('.')];
             string newName = name.ToLower();
             contextFileCode = contextFileCode.Replace($"Entity<{name}>", $"Entity<{newName}>")
                 .Replace($"DbSet<{name}>", $"DbSet<{newName}>");

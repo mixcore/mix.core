@@ -40,14 +40,14 @@ namespace Mix.Lib.Services
             return CurrentTenant;
         }
 
-        public async Task<FileModel> ParseSitemapAsync()
+        public async Task<FileModel> ParseSitemapAsync(CancellationToken cancellationToken = default)
         {
             try
             {
                 XNamespace aw = "http://www.sitemaps.org/schemas/sitemap/0.9";
                 var root = new XElement(aw + "urlset");
 
-                await ParseNavigationsAsync(root);
+                await ParseNavigationsAsync(root, cancellationToken);
                 await ParsePostsDocAsync(root);
 
                 string folder = $"wwwroot";
@@ -70,7 +70,7 @@ namespace Mix.Lib.Services
 
         #region Navigation
 
-        protected virtual async Task ParseNavigationsAsync(XElement root)
+        protected virtual async Task ParseNavigationsAsync(XElement root, CancellationToken cancellation = default)
         {
             var navs = await MixNavigationViewModel.GetRepository(_mixdbUow, CacheService).GetListAsync(
                 m => m.MixTenantId == CurrentTenant.Id);
@@ -81,11 +81,9 @@ namespace Mix.Lib.Services
             }
         }
 
-        protected virtual async Task ParsePostsDocAsync(XElement root)
+        protected virtual async Task ParsePostsDocAsync(XElement root, CancellationToken cancellation = default)
         {
-            var posts = await MixPostViewModel.GetRepository(_cmsUow, CacheService).GetListAsync(
-                m => m.MixTenantId == CurrentTenant.Id);
-
+            var posts = await MixPostViewModel.GetRepository(_cmsUow, CacheService).GetListAsync(m => m.MixTenantId == CurrentTenant.Id, cancellation);
             foreach (var post in posts)
             {
                 ParsePostDoc(root, post);

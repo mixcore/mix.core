@@ -118,7 +118,7 @@ namespace Mix.Service.Services
                 Connection = new HubConnectionBuilder()
                    .WithUrl(endpoint, options =>
                    {
-                       options.AccessTokenProvider = () => Task.FromResult(AccessToken);
+                       options.AccessTokenProvider = async () => await Task.FromResult(AccessToken);
                    })
                    .WithAutomaticReconnect()
                    .Build();

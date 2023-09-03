@@ -22,7 +22,7 @@ namespace Mix.Services.Databases.Lib.Interfaces
 
         public Task DeleteMetadataContentAssociation(int id, CancellationToken cancellationToken = default);
 
-        public IQueryable<int> GetQueryableContentIdByMetadataSeoContent(List<SearchQueryField> metadataSeoContents, MixContentType contentType);
+        public IQueryable<int>? GetQueryableContentIdByMetadataSeoContent(List<SearchQueryField> metadataSeoContents, MixContentType contentType);
 
         public IQueryable<int>? GetQueryableMetadataByContentId(int contentId, MixContentType? contentType, string metadataType);
     }

@@ -8,6 +8,6 @@ namespace Mix.Service.Interfaces
 
         public void Remove(object key);
 
-        public Task<T> TryGetValueAsync<T>(object key, Func<ICacheEntry, Task<T>> factory);
+        public Task<T?> TryGetValueAsync<T>(object key, Func<ICacheEntry, Task<T>> factory);
     }
 }

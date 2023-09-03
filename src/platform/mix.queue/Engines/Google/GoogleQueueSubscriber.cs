@@ -40,10 +40,14 @@ namespace Mix.Queue.Engines.GooglePubSub
                 CreateSubscription(topicId, subscriptionId);
                 _subscriptionName = new SubscriptionName(_queueSetting.ProjectId, subscriptionId);
                 var googleCredential = GoogleCredential.FromFile(_queueSetting.CredentialFile);
-                var createSettings = new SubscriberClient.ClientCreationSettings(
-                    credentials: googleCredential.ToChannelCredentials());
-                var subscriber = SubscriberClient.CreateAsync(_subscriptionName, createSettings);
-                _subscriber = subscriber.Result;
+
+                var builder = new SubscriberClientBuilder
+                {
+                    Credential = googleCredential,
+                    SubscriptionName = _subscriptionName
+                };
+
+                _subscriber = builder.Build();
             }
         }
 
