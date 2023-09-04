@@ -45,8 +45,9 @@ namespace Mix.Common.Controllers
             MixCacheService cacheService,
             IHttpContextAccessor httpContextAccessor,
             MixQueueMessages<MessageQueueModel> mixMemoryMessageQueue,
-            IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            IMixTenantService mixTenantService,
+            IMixCmsService mixCmsService)
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
             _uow = uow;
@@ -56,6 +57,7 @@ namespace Mix.Common.Controllers
             _routeProvider = routeProvider;
             _applicationLifetime = applicationLifetime;
             _mixMemoryMessageQueue = mixMemoryMessageQueue;
+            _mixCmsService = mixCmsService;
         }
 
         #region Routes
@@ -136,7 +138,7 @@ namespace Mix.Common.Controllers
         [HttpGet("sitemap")]
         public async Task<ActionResult> Sitemap(CancellationToken cancellationToken = default)
         {
-            var file = await _mixCmsService.ParseSitemapAsync();
+            var file = await _mixCmsService.ParseSitemapAsync(cancellationToken);
             return Ok(file);
         }
 

@@ -11,11 +11,10 @@ namespace Mix.Services.Graphql.Lib.Resolvers
 {
     public class NameFieldResolver : IFieldResolver
     {
-        private static object GetPropValue(object src, string propName)
+        private static object? GetPropValue(object src, string propName)
         {
             return src.GetType().GetProperty(propName)?.GetValue(src, null);
         }
-
 
         public async ValueTask<object?> ResolveAsync(IResolveFieldContext context)
         {
@@ -30,7 +29,7 @@ namespace Mix.Services.Graphql.Lib.Resolvers
             //{
             //    throw new InvalidOperationException($"Expected to find property {context.FieldAst.Name} on {context.Source.GetType().Name} but it does not exist.");
             //}
-            return value;
+            return await Task.FromResult(value);
         }
     }
 }

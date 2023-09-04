@@ -299,7 +299,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 }
 
                 // Get Payment URL
-                
+
                 var request = await paymentService.GetPaymentRequestAsync(checkoutCart, _paymentConfiguration.Urls.PaymentCartUrl, _paymentConfiguration.Urls.PaymentResponseUrl, cancellationToken);
                 checkoutCart.PaymentRequest = request;
                 await checkoutCart.SaveAsync(cancellationToken);
@@ -380,22 +380,24 @@ namespace Mix.Services.Ecommerce.Lib.Services
         }
 
 
-        protected virtual async Task FilterGuestCheckoutCartAsync(OrderViewModel checkoutCart)
+        protected virtual Task FilterGuestCheckoutCartAsync(OrderViewModel checkoutCart)
         {
             checkoutCart.SetUowInfo(EcommerceUow, CacheService);
             checkoutCart.LastModified = DateTime.UtcNow;
             checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
             checkoutCart.CreatedDateTime = DateTime.UtcNow;
+
+            return Task.CompletedTask;
         }
 
-        protected virtual async Task FilterCheckoutCartAsync(OrderViewModel checkoutCart, OrderViewModel myCart)
+        protected virtual Task FilterCheckoutCartAsync(OrderViewModel checkoutCart, OrderViewModel myCart)
         {
             myCart.SetUowInfo(EcommerceUow, CacheService);
             checkoutCart.LastModified = DateTime.UtcNow;
             checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
             checkoutCart.CreatedDateTime = DateTime.UtcNow;
+
+            return Task.CompletedTask;
         }
-
-
     }
 }

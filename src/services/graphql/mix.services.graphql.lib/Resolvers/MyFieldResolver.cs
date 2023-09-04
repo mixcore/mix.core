@@ -23,6 +23,11 @@ namespace Mix.Services.Graphql.Lib.Resolvers
         {
             var queryable = _dbContext.Query(_tableMetadata.AssemblyFullName);
 
+            if (queryable is null)
+            {
+                return default;
+            }
+
             // Get filters
             var filters = context.Arguments!.Where(c => c.Key != "first" && c.Key != "offset");
             string predicates = string.Empty;
@@ -36,7 +41,8 @@ namespace Mix.Services.Graphql.Lib.Resolvers
                 {
                     predicates += " and ";
                 }
-                args[paramsCount] = item.Value!.Value;
+
+                args[paramsCount] = item.Value!.Value!;
                 // Note: check for like function https://github.com/StefH/System.Linq.Dynamic.Core/issues/105                
                 predicates += $"{item.Key.ToTitleCase()} == @{paramsCount}";
             }

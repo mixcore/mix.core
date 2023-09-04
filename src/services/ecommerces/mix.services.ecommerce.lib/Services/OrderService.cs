@@ -22,8 +22,6 @@ namespace Mix.Services.Ecommerce.Lib.Services
     {
         private readonly TenantUserManager _userManager;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _uow;
-        private double _exchangeRate = 1;
-        private readonly MixConfigurationService _configService;
         public OrderService(
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<EcommerceDbContext> uow,
@@ -34,8 +32,6 @@ namespace Mix.Services.Ecommerce.Lib.Services
         {
             _uow = uow;
             _userManager = userManager;
-            _configService = configService;
-            _exchangeRate = _configService.Configs.FirstOrDefault(m => m.SystemName == "exchangeRate")?.GetValue<double>() ?? 1;
         }
 
         public async Task<PagingResponseModel<OrderViewModel>> GetUserOrders(
@@ -43,12 +39,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             FilterOrderDto request,
             CancellationToken cancellationToken = default)
         {
-            var user = await _userManager.GetUserAsync(principal);
-
-            if (user == null)
-            {
-                throw new MixException(MixErrorStatus.UnAuthorized);
-            }
+            var user = await _userManager.GetUserAsync(principal) ?? throw new MixException(MixErrorStatus.UnAuthorized);
             var searchRequest = new SearchQueryModel<OrderDetail, int>(
                     HttpContextAccessor.HttpContext!.Request,
                     request,
@@ -68,17 +59,11 @@ namespace Mix.Services.Ecommerce.Lib.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var user = await _userManager.GetUserAsync(principal);
-
-            if (user == null)
-            {
-                throw new MixException(MixErrorStatus.UnAuthorized);
-            }
-
+            var user = await _userManager.GetUserAsync(principal) ?? throw new MixException(MixErrorStatus.UnAuthorized);
             var result = await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.Id == orderId && m.UserId == user.Id, cancellationToken);
             return result;
         }
-        
+
         public async Task<OrderViewModel> GetGuestOrder(int orderId, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -93,14 +78,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var user = await _userManager.GetUserAsync(principal);
-
-            var order = await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.Id == id && m.UserId == user!.Id, cancellationToken);
-            if (order == null)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, "Invalid Order");
-            }
-
+            var user = await _userManager.GetUserAsync(principal) ?? throw new MixException(MixErrorStatus.Badrequest, "User not found");
+            var order = await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.Id == id && m.UserId == user!.Id, cancellationToken) ?? throw new MixException(MixErrorStatus.Badrequest, "Invalid Order");
             if (order.PaymentStatus == PaymentStatus.SUCCESS)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Cannot cancel paid order");

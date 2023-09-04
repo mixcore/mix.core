@@ -31,12 +31,11 @@ namespace Mix.Service.Services
         {
             if (!GlobalConfigService.Instance.IsInit)
             {
-                UnitOfWorkInfo<MixDbDbContext> uow = null;
+                UnitOfWorkInfo<MixDbDbContext> uow = new(new MixDbDbContext(_databaseService));
                 try
                 {
                     RoleEndpoints = new Dictionary<string, string[]>();
                     accountDbContext = new MixCmsAccountContext(_databaseService);
-                    uow = new(new MixDbDbContext(_databaseService));
 
                     var roles = await accountDbContext.MixRoles.ToListAsync();
 
@@ -50,6 +49,8 @@ namespace Mix.Service.Services
                                                         && m.ChildDatabaseName == MixDatabaseNames.SYSTEM_PERMISSION_ENDPOINT
                                                         && permissionIds.Contains(m.ParentId))
                                             .Select(m => m.ChildId);
+
+                        // TODO: PermissionEndpoint cannot initial at first time
                         var endpoints = await uow.DbContext.PermissionEndpoint.Where(
                                                 m => endpointIds.Contains(m.Id)
                                                     && !string.IsNullOrEmpty(m.Path)
@@ -77,7 +78,6 @@ namespace Mix.Service.Services
                 }
                 catch (Exception ex)
                 {
-
                 }
                 finally
                 {

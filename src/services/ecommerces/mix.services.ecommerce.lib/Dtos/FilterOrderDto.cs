@@ -27,6 +27,6 @@ namespace Mix.Services.Ecommerce.Lib.Dtos
                 Direction = SortDirection.Desc;
             }
         }
-        public List<OrderStatus>? Statuses { get; set; } = new();
+        public List<OrderStatus> Statuses { get; set; } = new();
     }
 }

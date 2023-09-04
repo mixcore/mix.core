@@ -56,14 +56,14 @@ namespace Mix.Services.Graphql.Controllers
             return BadRequest();
         }
 
-        private GraphQLRequest BuildRequest(string query, string? operationName, string? variables = null, string? extensions = null)
-       => new GraphQLRequest
-       {
-           Query = query == "" ? null : query,
-           OperationName = operationName == "" ? null : operationName,
-           Variables = _serializer.Deserialize<Inputs>(variables == "" ? null : variables),
-           Extensions = _serializer.Deserialize<Inputs>(extensions == "" ? null : extensions),
-       };
+        private GraphQLRequest BuildRequest(string? query, string? operationName, string? variables = null, string? extensions = null)
+            => new GraphQLRequest
+            {
+                Query = string.IsNullOrEmpty(query) ? null : query,
+                OperationName = operationName == "" ? null : operationName,
+                Variables = _serializer.Deserialize<Inputs>(variables == "" ? null : variables),
+                Extensions = _serializer.Deserialize<Inputs>(extensions == "" ? null : extensions),
+            };
 
 
         private async Task<IActionResult> ExecuteGraphQLRequestAsync(GraphQLRequest? request)

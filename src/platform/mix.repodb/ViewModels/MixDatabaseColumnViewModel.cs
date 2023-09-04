@@ -36,7 +36,7 @@ namespace Mix.RepoDb.ViewModels
         {
         }
 
-        public MixDatabaseColumnViewModel(MixDatabaseColumn entity, UnitOfWorkInfo? uowInfo = null): base(entity, uowInfo)
+        public MixDatabaseColumnViewModel(MixDatabaseColumn entity, UnitOfWorkInfo? uowInfo = null) : base(entity, uowInfo)
         {
         }
         #endregion
@@ -57,9 +57,7 @@ namespace Mix.RepoDb.ViewModels
         {
             cancellationToken.ThrowIfCancellationRequested();
             base.ParseView(sourceObject, cancellationToken);
-            ColumnConfigurations ??= Configurations != null
-                       ? Configurations.ToObject<ColumnConfigurations>()
-                       : new();
+            ColumnConfigurations = Configurations != null ? Configurations.ToObject<ColumnConfigurations>()! : new();
             ColumnConfigurations.Editor ??= DataType.ToString();
         }
 

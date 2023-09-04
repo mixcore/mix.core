@@ -2,14 +2,13 @@
 
 namespace Mix.Database.Entities.Account.EntityConfigurations
 {
-    internal class ClientsConfiguration : AccountEntityBaseConfiguration<Clients>
-
+    public class ClientsConfiguration : AccountEntityBaseConfiguration<Clients>
     {
         public ClientsConfiguration(DatabaseService databaseService) : base(databaseService)
         {
         }
 
-        public virtual void Configure(EntityTypeBuilder<Clients> builder)
+        public override void Configure(EntityTypeBuilder<Clients> builder)
         {
             builder.Property(e => e.Id)
                 .HasCharSet(Config.CharSet)

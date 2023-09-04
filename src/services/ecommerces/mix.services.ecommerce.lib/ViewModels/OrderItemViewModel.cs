@@ -49,7 +49,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             IsCache = false;
         }
 
-        public OrderItemViewModel(OrderItem entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public OrderItemViewModel(OrderItem entity, UnitOfWorkInfo? uowInfo = null) : base(entity, uowInfo)
         {
             IsCache = false;
         }

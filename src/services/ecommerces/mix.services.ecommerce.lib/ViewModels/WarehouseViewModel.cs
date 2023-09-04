@@ -34,7 +34,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         {
         }
 
-        public WarehouseViewModel(Warehouse entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public WarehouseViewModel(Warehouse entity, UnitOfWorkInfo? uowInfo = null) : base(entity, uowInfo)
         {
         }
 

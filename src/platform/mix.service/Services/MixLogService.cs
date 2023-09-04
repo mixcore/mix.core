@@ -12,12 +12,7 @@ namespace Mix.Service.Services
 {
     public class MixLogService
     {
-        static MixLogService()
-        {
-            MixEndpointService enpointSrv = new();
-        }
-
-        public static async Task LogExceptionAsync(Exception? ex = null, MixErrorStatus? status = MixErrorStatus.ServerError, string? message = null)
+        public static Task LogExceptionAsync(Exception? ex = null, MixErrorStatus? status = MixErrorStatus.ServerError, string? message = null)
         {
             Console.Error.WriteLine(ex);
 
@@ -59,7 +54,11 @@ namespace Mix.Service.Services
             {
                 Console.Write($"Cannot write log file {filePath}");
                 // File invalid
+
+                return Task.CompletedTask;
             }
+
+            return Task.CompletedTask;
         }
 
     }

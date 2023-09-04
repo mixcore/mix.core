@@ -56,11 +56,11 @@ namespace Mix.Xunittest.Domain.Base
             }
             catch (MixException mex)
             {
-                Assert.True(false, mex.Message);
+                Assert.Fail(mex.Message);
             }
             catch (Exception ex)
             {
-                Assert.True(false, ex.Message);
+                Assert.Fail(ex.Message);
             }
         }
     }

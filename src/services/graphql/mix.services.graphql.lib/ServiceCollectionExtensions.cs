@@ -29,9 +29,9 @@ namespace Mix.Services.Graphql.Lib
             services.TryAddSingleton<ISchema>((resolver) =>
             {
                 var runtimeDbContextService = resolver.GetRequiredService<RuntimeDbContextService>();
-                var dbContext = runtimeDbContextService.GetMixDatabaseDbContext();
+                var dbContext = runtimeDbContextService.GetMixDatabaseDbContext()!;
                 var tableNameLookup = resolver.GetRequiredService<ITableNameLookup>();
-                DatabaseMetadata metaDatabase = new DatabaseMetadata(dbContext, tableNameLookup);
+                DatabaseMetadata metaDatabase = new(dbContext, tableNameLookup);
                 var schema = new Schema { Query = new GraphQLQuery(dbContext, metaDatabase, tableNameLookup) };
                 return schema;
             });

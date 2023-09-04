@@ -64,15 +64,17 @@ namespace Mix.Services.Databases.Lib.Services
             cancellationToken.ThrowIfCancellationRequested();
 
             var userData = await GetUserDataAsync(user.Id, cancellationToken);
-            if (userData == null)
+            if (userData is null || userData.Addresses is null)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "User Data not existed");
             }
+
             var address = userData.Addresses.SingleOrDefault(a => a.Id == addressId);
-            if (address == null)
+            if (address is null)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Address not existed");
             }
+
             await address.DeleteAsync(cancellationToken);
         }
 
@@ -82,7 +84,7 @@ namespace Mix.Services.Databases.Lib.Services
             cancellationToken.ThrowIfCancellationRequested();
 
             var userData = await GetUserDataAsync(user.Id, cancellationToken);
-            if (userData == null)
+            if (userData is null)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "User Data not existed");
             }
@@ -98,7 +100,7 @@ namespace Mix.Services.Databases.Lib.Services
             return userData;
         }
 
-        public async Task UpdateUserAddress(MixContactAddressViewModel address, MixUser? user, CancellationToken cancellationToken)
+        public async Task UpdateUserAddress(MixContactAddressViewModel address, MixUser user, CancellationToken cancellationToken)
         {
             var userData = await GetUserDataAsync(user.Id, cancellationToken);
             if (address.SysUserDataId != userData.Id)
