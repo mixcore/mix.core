@@ -45,7 +45,19 @@ namespace Mix.Lib.Subscribers
                         if (!string.IsNullOrEmpty(cmd.ConnectionId))
                         {
                             await mixDbCommandHub.SendPrivateMessageAsync(
-                                new SignalRMessageModel(cmd.Body), cmd.ConnectionId, false);
+                                new SignalRMessageModel(cmd.Body) { Title = "Success", Type = MessageType.Success }, cmd.ConnectionId, false);
+                        }
+                    }
+                    break;
+                case MixDbCommandQueueActions.Update:
+                    var updCmd = model.ParseData<MixDbCommandModel>();
+                    if (updCmd != null)
+                    {
+                        var id = await mixDbDataService.UpdateData(updCmd.MixDbName, updCmd.Body);
+                        if (!string.IsNullOrEmpty(updCmd.ConnectionId))
+                        {
+                            await mixDbCommandHub.SendPrivateMessageAsync(
+                                new SignalRMessageModel(updCmd.Body) { Title = "Success", Type = MessageType.Success }, updCmd.ConnectionId, false);
                         }
                     }
                     break;

@@ -21,6 +21,8 @@ namespace Mix.RepoDb.Interfaces
         public Task<JObject?> GetSingleBy(string tableName, List<QueryField> queries);
 
         public Task<long> CreateData(string tableName, JObject data);
+        public Task<object?> UpdateData(string tableName, JObject data);
+        public Task<long> DeleteData(string tableName, int id);
         void SetUOW(UnitOfWorkInfo<MixDbDbContext> uow);
     }
 }

@@ -126,6 +126,11 @@ namespace Mix.SignalR.Hubs
 
         public override async Task OnConnectedAsync()
         {
+            var user = GetCurrentUser();
+            if (user != null)
+            {
+                await SendMessageToCaller(new(user) { Action = MessageAction.MyConnection });
+            }
             await base.OnConnectedAsync().ConfigureAwait(false);
         }
 

@@ -25,6 +25,8 @@ using Mix.Shared.Services;
 using Mix.Database.Entities.MixDb;
 using Newtonsoft.Json;
 using Mix.Lib.Interfaces;
+using Mix.Heart.Entities;
+using Mix.Heart.Exceptions;
 
 namespace Mix.RepoDb.Services
 {
@@ -177,9 +179,59 @@ namespace Mix.RepoDb.Services
 
         public async Task<long> CreateData(string tableName, JObject data)
         {
-            _repository.InitTableName(tableName);
-            var obj = await ParseDto(tableName, data);
-            return await _repository.InsertAsync(obj);
+            try
+            {
+                _repository.InitTableName(tableName);
+                var obj = await ParseDto(tableName, data);
+                return await _repository.InsertAsync(obj);
+            }
+            catch (MixException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
+        }
+
+        public async Task<object?> UpdateData(string tableName, JObject data)
+        {
+            try
+            {
+                _repository.InitTableName(tableName);
+                var obj = await ParseDto(tableName, data);
+                var id = data.Value<int?>("id");
+                if (!id.HasValue)
+                {
+                    throw new MixException(MixErrorStatus.NotFound);
+                }
+                return await _repository.UpdateAsync(obj);
+            }
+            catch (MixException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
+        }
+        public async Task<long> DeleteData(string tableName, int id)
+        {
+            try
+            {
+                _repository.InitTableName(tableName);
+                return await _repository.DeleteAsync(id);
+            }
+            catch (MixException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
         }
 
 
@@ -470,6 +522,7 @@ namespace Mix.RepoDb.Services
             _repository.Dispose();
             _cmsUow.Dispose();
         }
+
         #endregion
     }
 }

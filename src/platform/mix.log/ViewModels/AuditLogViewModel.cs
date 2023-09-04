@@ -25,12 +25,12 @@ namespace Mix.Log.Lib.ViewModels
         {
         }
 
-        public AuditLogViewModel(AuditLog entity, UnitOfWorkInfo<AuditLogDbContext>? uowInfo)
+        public AuditLogViewModel(AuditLog entity, UnitOfWorkInfo? uowInfo)
             : base(entity, uowInfo)
         {
         }
 
-        public AuditLogViewModel(UnitOfWorkInfo<AuditLogDbContext> unitOfWorkInfo) : base(unitOfWorkInfo)
+        public AuditLogViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
