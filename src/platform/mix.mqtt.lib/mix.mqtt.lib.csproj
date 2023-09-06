@@ -5,15 +5,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>Mix.MQTT.Lib</AssemblyName>
+    <RootNamespace>Mix.MQTT.Lib</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MQTTnet" Version="4.2.1.781" />
+    <PackageReference Include="MQTTnet" Version="4.3.0.858" />
+    <PackageReference Include="MQTTnet.Extensions.WebSocket4Net" Version="4.3.0.858" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Clients\" />
-    <Folder Include="Servers\" />
+    <ProjectReference Include="..\mix.library\mix.library.csproj" />
   </ItemGroup>
 
 </Project>
