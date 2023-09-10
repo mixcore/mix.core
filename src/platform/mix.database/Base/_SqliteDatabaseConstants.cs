@@ -28,7 +28,7 @@
 
         string IDatabaseConstants.GenerateUUID => "(newid())";
 
-        string IDatabaseConstants.Boolean => "boolean";
+        string IDatabaseConstants.Boolean => "INTEGER";
 
         string IDatabaseConstants.BacktickOpen => "[";
 

@@ -5,6 +5,7 @@ namespace Mix.Database.Entities.Cms
 {
     public class MixDatabase : EntityBase<int>
     {
+        public int? MixDatabaseContextId { get; set; }
         public string SystemName { get; set; }
         public string DisplayName { get; set; }
         public virtual string Description { get; set; }

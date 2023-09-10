@@ -263,7 +263,6 @@ namespace Mix.Lib.Services
             await ImportDatabasesAsync(dbContext);
             await ImportDatabaseRelationshipsAsync(dbContext);
             await MigrateMixDatabaseAsync(mixDbService);
-            await ImportAssociationDataAsync(dbContext, _siteData.DatabaseContextDatabaseAssociations, _dicMixDatabaseContextIds, _dicMixDatabaseIds);
         }
 
         private async Task MigrateMixDatabaseAsync(IMixDbService mixDbService)

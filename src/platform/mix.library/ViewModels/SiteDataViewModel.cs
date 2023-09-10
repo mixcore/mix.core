@@ -54,7 +54,6 @@
 
         public List<MixModuleData> ModuleDatas { get; set; } = new();
 
-        public List<MixDatabaseContextDatabaseAssociation> DatabaseContextDatabaseAssociations { get; set; } = new();
         public List<MixPagePostAssociation> PagePosts { get; set; } = new();
         public List<MixPostPostAssociation> PostPosts { get; set; } = new();
         public List<MixPageModuleAssociation> PageModules { get; set; } = new();
