@@ -4,7 +4,6 @@ using Mix.SignalR.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
-    //TODO
     [Route("api/v2/rest/mix-portal/configuration")]
     [ApiController]
     [MixAuthorize(MixRoles.Owner)]
