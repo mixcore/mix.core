@@ -95,6 +95,19 @@ namespace Mix.Portal.Controllers
         #endregion
 
         #region Overrides
+        protected override SearchQueryModel<MixDatabase, int> BuildSearchRequest(SearchRequestDto req)
+        {
+            var predicate = base.BuildSearchRequest(req);
+            if (int.TryParse(HttpContext.Request.Query["MixDatabaseContextId"], out int mixDatabaseContextId))
+            {
+                predicate.Predicate = predicate.Predicate.AndAlso(m => m.MixDatabaseContextId == mixDatabaseContextId);
+            }
+            else
+            {
+                predicate.Predicate = predicate.Predicate.AndAlso(m => m.MixDatabaseContextId == null);
+            }
+            return predicate;
+        }
         protected override async Task UpdateHandler(int id, MixDatabaseViewModel data, CancellationToken cancellationToken = default)
         {
             try

@@ -6,6 +6,7 @@ namespace Mix.Lib.ViewModels
     public sealed class MixDatabaseViewModel : TenantDataViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
     {
         #region Properties
+        public int? MixDatabaseContextId { get; set; }
         [Required]
         public string SystemName { get; set; }
 

@@ -74,7 +74,7 @@ namespace Mix.RepoDb.Repositories
             DatabaseProvider = databaseProvider;
             ConnectionString = connectionString;
             InitializeRepoDb();
-            CreateConnection();
+            CreateConnection(true);
         }
 
 
