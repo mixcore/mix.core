@@ -1,15 +1,9 @@
-﻿using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Azure;
 using Mix.Constant.Constants;
 using Mix.Constant.Enums;
 using Mix.Database.Base;
-using Mix.Database.Constants;
 using Mix.Database.Entities.Cms;
-using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
 using Mix.Heart.Constants;
 using Mix.Heart.Enums;
@@ -33,9 +27,7 @@ using Newtonsoft.Json.Linq;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
-using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
 using System.Linq.Dynamic.Core;
 
 namespace Mix.RepoDb.Services
@@ -44,7 +36,6 @@ namespace Mix.RepoDb.Services
     {
         private IDatabaseConstants _databaseConstant;
         private MixDatabaseProvider _databaseProvider;
-        private string _databaseScheme;
         private readonly ICache _cache;
         private MixRepoDbRepository _repository;
         private MixRepoDbRepository _backupRepository;
@@ -521,7 +512,6 @@ namespace Mix.RepoDb.Services
             {
                 throw new MixException(MixErrorStatus.Badrequest, $"Invalid MixDatabaseContext Id {dbContextId}");
             }
-            _databaseScheme = dbContext.Schema;
             _databaseProvider = dbContext.DatabaseProvider;
             _databaseConstant = _databaseProvider switch
             {
@@ -732,8 +722,7 @@ namespace Mix.RepoDb.Services
             MixRepoDbRepository repo)
         {
             var colsSql = new List<string>();
-            var tableName = string.IsNullOrEmpty(_databaseScheme) ? database.SystemName.ToTitleCase()
-                : $"{_databaseScheme}_{database.SystemName.ToTitleCase()}";
+            var tableName = database.SystemName.ToTitleCase();
 
             foreach (var col in database.Columns)
             {

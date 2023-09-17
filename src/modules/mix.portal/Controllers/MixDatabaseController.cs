@@ -120,7 +120,7 @@ namespace Mix.Portal.Controllers
                 throw new MixException(MixErrorStatus.ServerError, ex);
             }
         }
-        protected override Task DeleteHandler(Lib.ViewModels.MixDatabaseViewModel data, CancellationToken cancellationToken = default)
+        protected override Task DeleteHandler(MixDatabaseViewModel data, CancellationToken cancellationToken = default)
         {
             //if (data.Type == MixDatabaseType.System)
             //{

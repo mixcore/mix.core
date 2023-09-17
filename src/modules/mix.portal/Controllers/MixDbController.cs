@@ -7,6 +7,7 @@ using Mix.Database.Services;
 using Mix.Heart.Helpers;
 using Mix.Heart.Model;
 using Mix.Lib.Interfaces;
+using Mix.Lib.ViewModels.ReadOnly;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Service.Commands;
@@ -52,6 +53,7 @@ namespace Mix.Portal.Controllers
         private readonly IMixDbService _mixDbService;
         private const string AssociationTableName = nameof(MixDatabaseAssociation);
         private IMixDbCommandHubClientService _mixDbCommandHubClientService;
+        private MixDatabaseViewModel _mixDb;
         public MixDbController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -84,12 +86,19 @@ namespace Mix.Portal.Controllers
         }
 
         #region Overrides
-
-        public override void OnActionExecuting(ActionExecutingContext context)
+        public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             _tableName = RouteData?.Values["name"].ToString();
-            _repository.InitTableName(_tableName);
-            base.OnActionExecuting(context);
+            _mixDb = await GetMixDatabase();
+            if (_mixDb.MixDatabaseContextId.HasValue)
+            {
+                _repository.Init(_tableName, _mixDb.MixDatabaseContext.DatabaseProvider, _mixDb.MixDatabaseContext.ConnectionString);
+            }
+            else
+            {
+                _repository.InitTableName(_tableName);
+            }
+            await base.OnActionExecutionAsync(context, next);
         }
 
         #endregion
@@ -232,8 +241,7 @@ namespace Mix.Portal.Controllers
                 try
                 {
                     var data = ReflectionHelper.ParseObject(obj);
-                    var database = await GetMixDatabase();
-                    foreach (var item in database.Relationships)
+                    foreach (var item in _mixDb.Relationships)
                     {
                         if (loadNestedData)
                         {
@@ -433,14 +441,13 @@ namespace Mix.Portal.Controllers
             {
                 string username = _idService.GetClaim(User, MixClaims.Username);
                 JObject result = new();
-                var database = await GetMixDatabase();
-                var encryptedColumnNames = database.Columns
+                var encryptedColumnNames = _mixDb.Columns
                     .Where(m => m.ColumnConfigurations.IsEncrypt)
                     .Select(c => c.SystemName)
                     .ToList();
                 foreach (var pr in dto.Properties())
                 {
-                    var col = database.Columns.FirstOrDefault(c => c.SystemName.Equals(pr.Name, StringComparison.InvariantCultureIgnoreCase));
+                    var col = _mixDb.Columns.FirstOrDefault(c => c.SystemName.Equals(pr.Name, StringComparison.InvariantCultureIgnoreCase));
 
                     if (encryptedColumnNames.Contains(pr.Name))
                     {
@@ -549,14 +556,13 @@ namespace Mix.Portal.Controllers
             var result = await _repository.GetPagingAsync(queries, paging);
 
             var items = new List<JObject>();
-            var database = await GetMixDatabase();
 
             foreach (var item in result.Items)
             {
                 var data = await _mixDbService.ParseDataAsync(_tableName, item);
                 if (loadNestedData)
                 {
-                    foreach (var rel in database.Relationships)
+                    foreach (var rel in _mixDb.Relationships)
                     {
                         var id = data.Value<int>("id");
 
