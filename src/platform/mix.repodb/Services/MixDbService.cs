@@ -722,7 +722,7 @@ namespace Mix.RepoDb.Services
             MixRepoDbRepository repo)
         {
             var colsSql = new List<string>();
-            var tableName = database.SystemName.ToTitleCase();
+            var tableName = database.SystemName;
 
             foreach (var col in database.Columns)
             {
