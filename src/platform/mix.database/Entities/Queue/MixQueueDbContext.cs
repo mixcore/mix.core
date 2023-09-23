@@ -13,7 +13,7 @@ namespace Mix.Database.Entities.Queue
         }
         public MixQueueDbContext(DateTime date)
         {
-            _folder = date.ToString("dd_MM");
+            _folder = date.ToString("MM_yyyy");
             _cnn = $"Data Source={MixFolders.MixQueueLogFolder}/{_folder}/queuelog_{date.ToString("dd_MM_yyyy")}.sqlite";
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
