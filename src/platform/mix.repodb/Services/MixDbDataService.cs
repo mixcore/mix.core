@@ -36,6 +36,7 @@ namespace Mix.RepoDb.Services
         private readonly MixRepoDbRepository _repository;
         private readonly MixRepoDbRepository _associationRepository;
         private readonly IMixMemoryCacheService _memoryCache;
+        private MixDatabaseViewModel? _mixDb;
         #region Properties
 
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
@@ -81,7 +82,7 @@ namespace Mix.RepoDb.Services
 
         public async Task<JObject?> GetSingleByParent(string tableName, MixContentType parentType, object parentId, bool loadNestedData = false)
         {
-            _repository.InitTableName(tableName);
+            await InitRepository(tableName);
             var data = await _repository.GetSingleByParentAsync(parentType, parentId);
             if (data != null)
             {
@@ -111,7 +112,7 @@ namespace Mix.RepoDb.Services
 
         public async Task<JObject?> GetMyDataById(string tableName, string username, int id, bool loadNestedData)
         {
-            _repository.InitTableName(tableName);
+            await InitRepository(tableName);
             var queries = new List<QueryField>()
             {
                 new QueryField(TenantIdFieldName, CurrentTenant.Id),
@@ -163,7 +164,7 @@ namespace Mix.RepoDb.Services
 
         public async Task<JObject?> GetById(string tableName, int id, bool loadNestedData)
         {
-            _repository.InitTableName(tableName);
+            await InitRepository(tableName);
             var obj = await _repository.GetSingleAsync(id);
             if (obj != null)
             {
@@ -179,7 +180,7 @@ namespace Mix.RepoDb.Services
 
         public async Task<JObject?> GetSingleBy(string tableName, List<QueryField> queries)
         {
-            _repository.InitTableName(tableName);
+            await InitRepository(tableName);
             var obj = await _repository.GetSingleByAsync(queries);
             if (obj != null)
             {
@@ -192,7 +193,7 @@ namespace Mix.RepoDb.Services
         {
             try
             {
-                _repository.InitTableName(tableName);
+                await InitRepository(tableName);
                 var obj = await ParseDto(tableName, data);
                 return await _repository.InsertAsync(obj);
             }
@@ -210,7 +211,7 @@ namespace Mix.RepoDb.Services
         {
             try
             {
-                _repository.InitTableName(tableName);
+                await InitRepository(tableName);
                 var obj = await ParseDto(tableName, data);
                 var id = data.Value<int?>("id");
                 if (!id.HasValue)
@@ -232,7 +233,7 @@ namespace Mix.RepoDb.Services
         {
             try
             {
-                _repository.InitTableName(tableName);
+                await InitRepository(tableName);
                 return await _repository.DeleteAsync(id);
             }
             catch (MixException)
@@ -471,6 +472,25 @@ namespace Mix.RepoDb.Services
         #endregion
 
         #region Private
+
+        private async Task InitRepository(string tableName)
+        {
+            _mixDb = await GetMixDatabase(tableName);
+            if (_mixDb == null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, $"Invalid Mix Db {tableName}");
+            }
+
+            if (_mixDb.MixDatabaseContextId.HasValue)
+            {
+                _repository.Init(tableName, _mixDb.MixDatabaseContext.DatabaseProvider, _mixDb.MixDatabaseContext.ConnectionString);
+            }
+            else
+            {
+                _repository.InitTableName(tableName);
+            }
+        }
+
         private async Task<JObject> ParseDto(string tableName, JObject dto)
         {
             JObject result = new();
@@ -515,7 +535,7 @@ namespace Mix.RepoDb.Services
 
             if (!result.ContainsKey(IdFieldName))
             {
-                result.Add(new JProperty(IdFieldName));
+                result.Add(new JProperty(IdFieldName, null));
                 if (!result.ContainsKey(CreatedDateFieldName))
                 {
                     result.Add(new JProperty(CreatedDateFieldName, DateTime.UtcNow));

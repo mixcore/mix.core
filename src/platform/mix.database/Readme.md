@@ -2,7 +2,9 @@
 ** Move to mix.database folder
 ** dotnet ef --startup-project ../../applications/Mixcore migrations add Init --context PostgresqlmixcmsContext --output-dir Migrations/Cms/PostgresqlMixCms
 
-# Update DatabaseService -> GetConnectionstring
+### Remove mixcontent folder
+### Update DatabaseService -> GetConnectionstring
+### Update DatabaseService.DatabaseProvider
 # Sample Connection String:
 - Sqlite: "Data Source=MixContent\\mix-cms.db"
 ```

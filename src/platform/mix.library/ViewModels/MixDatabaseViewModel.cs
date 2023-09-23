@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Mix.Lib.ViewModels.ReadOnly;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Lib.ViewModels
@@ -6,6 +7,7 @@ namespace Mix.Lib.ViewModels
     public sealed class MixDatabaseViewModel : TenantDataViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
     {
         #region Properties
+        public int? MixDatabaseContextId { get; set; }
         [Required]
         public string SystemName { get; set; }
 
@@ -18,6 +20,7 @@ namespace Mix.Lib.ViewModels
 
         public List<MixDatabaseColumnViewModel> Columns { get; set; } = new();
         public List<MixDatabaseRelationshipViewModel> Relationships { get; set; } = new();
+        public MixDatabaseContextReadViewModel MixDatabaseContext { get; set; }
         #endregion
 
         #region Constructors
@@ -55,6 +58,10 @@ namespace Mix.Lib.ViewModels
             var columnRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo, CacheService);
             Columns = await columnRepo.GetListAsync(c => c.MixDatabaseId == Id, cancellationToken);
             Relationships = await MixDatabaseRelationshipViewModel.GetRepository(UowInfo, CacheService).GetListAsync(c => c.ParentId == Id, cancellationToken);
+            if (MixDatabaseContextId.HasValue)
+            {
+                MixDatabaseContext = await MixDatabaseContextReadViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(m => m.Id == MixDatabaseContextId.Value);
+            }
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity, CancellationToken cancellationToken = default)

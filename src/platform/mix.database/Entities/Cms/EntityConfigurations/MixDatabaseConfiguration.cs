@@ -38,10 +38,13 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
                .HasColumnType($"{Config.NString}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
 
+            builder.Property(e => e.MixDatabaseContextId)
+               .IsRequired(false);
+
             builder.Property(e => e.ReadPermissions)
-               .IsRequired(false)
-               .HasColumnType($"{Config.NString}{Config.MediumLength}")
-               .HasCharSet(Config.CharSet);
+            .IsRequired(false)
+            .HasColumnType($"{Config.NString}{Config.MediumLength}")
+            .HasCharSet(Config.CharSet);
 
             builder.Property(e => e.CreatePermissions)
                .IsRequired(false)

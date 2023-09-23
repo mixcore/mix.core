@@ -6,6 +6,8 @@
         #region Properties
         public MixDatabaseProvider DatabaseProvider { get; set; }
         public string ConnectionString { get; set; }
+        public string Schema { get; set; }
+        public string SystemName { get; set; }
 
         public List<MixDatabaseViewModel> Databases { get; set; } = new();
         #endregion
@@ -32,16 +34,14 @@
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             var dbRepo = MixDatabaseViewModel.GetRepository(UowInfo, CacheService);
-            var associations = Context.MixDatabaseContextDatabaseAssociation.Where(m => m.ParentId == Id).Select(m => m.ChildId);
-            Databases = await dbRepo.GetListAsync(m => associations.Any(a => a == m.Id), cancellationToken);
+            Databases = await dbRepo.GetListAsync(m => m.MixDatabaseContextId == Id, cancellationToken);
         }
 
         protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
-            var associations = Context.MixDatabaseContextDatabaseAssociation
-                .Where(m => m.ParentId == Id);
+            var databases = Context.MixDatabase.Where(m => m.MixDatabaseContextId == Id);
 
-            Context.MixDatabaseContextDatabaseAssociation.RemoveRange(associations);
+            Context.MixDatabase.RemoveRange(databases);
 
             await Context.SaveChangesAsync(cancellationToken);
             await base.DeleteHandlerAsync(cancellationToken);

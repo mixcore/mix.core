@@ -16,7 +16,7 @@ namespace Mix.Database.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.9");
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixApplication", b =>
                 {
@@ -62,7 +62,7 @@ namespace Mix.Database.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -124,7 +124,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -208,7 +208,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("INTEGER");
@@ -286,7 +286,7 @@ namespace Mix.Database.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsOwner")
                         .HasColumnType("INTEGER");
@@ -351,7 +351,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -421,12 +421,12 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("MixDatabaseContextDatabaseAssociationId")
+                    b.Property<int?>("MixDatabaseContextId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("MixTenantId")
@@ -468,8 +468,6 @@ namespace Mix.Database.Migrations
                     b.HasKey("Id")
                         .HasName("PK_MixDatabase");
 
-                    b.HasIndex("MixDatabaseContextDatabaseAssociationId");
-
                     b.HasIndex("MixTenantId");
 
                     b.ToTable("MixDatabase");
@@ -495,8 +493,14 @@ namespace Mix.Database.Migrations
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
+                    b.Property<Guid?>("GuidChildId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("GuidParentId")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -537,9 +541,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Configurations")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnType("varchar(4000)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -564,7 +566,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -641,13 +643,10 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
-
-                    b.Property<int?>("MixDatabaseContextDatabaseAssociationId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixTenantId")
                         .HasColumnType("INTEGER");
@@ -657,6 +656,11 @@ namespace Mix.Database.Migrations
 
                     b.Property<int>("Priority")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Schema")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -672,52 +676,9 @@ namespace Mix.Database.Migrations
                     b.HasKey("Id")
                         .HasName("PK_MixDatabaseContext");
 
-                    b.HasIndex("MixDatabaseContextDatabaseAssociationId");
-
                     b.HasIndex("MixTenantId");
 
                     b.ToTable("MixDatabaseContext");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseContextDatabaseAssociation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ChildId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("MixTenantId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("ParentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MixDatabaseContextDatabaseAssociation");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseRelationship", b =>
@@ -747,7 +708,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -816,7 +777,7 @@ namespace Mix.Database.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -878,7 +839,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -930,7 +891,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1014,7 +975,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("INTEGER");
@@ -1101,7 +1062,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileName")
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
@@ -1119,7 +1080,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1191,7 +1152,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1267,7 +1228,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("INTEGER");
@@ -1406,7 +1367,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("INTEGER");
@@ -1571,7 +1532,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1641,7 +1602,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("INTEGER");
@@ -1851,7 +1812,7 @@ namespace Mix.Database.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1916,7 +1877,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("INTEGER");
@@ -2095,7 +2056,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -2168,7 +2129,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -2237,7 +2198,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -2311,7 +2272,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -2399,10 +2360,6 @@ namespace Mix.Database.Migrations
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDatabaseContextDatabaseAssociation", null)
-                        .WithMany("MixDatabases")
-                        .HasForeignKey("MixDatabaseContextDatabaseAssociationId");
-
                     b.HasOne("Mix.Database.Entities.Cms.MixTenant", null)
                         .WithMany("MixDatabases")
                         .HasForeignKey("MixTenantId");
@@ -2421,10 +2378,6 @@ namespace Mix.Database.Migrations
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseContext", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDatabaseContextDatabaseAssociation", null)
-                        .WithMany("MixDatabaseContext")
-                        .HasForeignKey("MixDatabaseContextDatabaseAssociationId");
-
                     b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
                         .WithMany()
                         .HasForeignKey("MixTenantId")
@@ -2678,13 +2631,6 @@ namespace Mix.Database.Migrations
                     b.Navigation("MixDatabaseColumns");
 
                     b.Navigation("SourceRelationships");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseContextDatabaseAssociation", b =>
-                {
-                    b.Navigation("MixDatabaseContext");
-
-                    b.Navigation("MixDatabases");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixLanguage", b =>

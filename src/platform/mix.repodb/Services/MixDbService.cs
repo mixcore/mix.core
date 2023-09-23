@@ -1,13 +1,9 @@
-﻿using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Azure;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Mix.Constant.Constants;
 using Mix.Constant.Enums;
 using Mix.Database.Base;
-using Mix.Database.Constants;
 using Mix.Database.Entities.Cms;
-using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
 using Mix.Heart.Constants;
 using Mix.Heart.Enums;
@@ -31,19 +27,20 @@ using Newtonsoft.Json.Linq;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
-using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
+using System.Linq.Dynamic.Core;
 
 namespace Mix.RepoDb.Services
 {
     public class MixDbService : TenantServiceBase, IMixDbService
     {
-        private readonly IDatabaseConstants _databaseConstant;
-        private readonly MixRepoDbRepository _repository;
-        private readonly MixRepoDbRepository _backupRepository;
-        private readonly MixRepoDbRepository _associationRepository;
-        private readonly IMixMemoryCacheService _memoryCache;
+        private IDatabaseConstants _databaseConstant;
+        private MixDatabaseProvider _databaseProvider;
+        private readonly ICache _cache;
+        private MixRepoDbRepository _repository;
+        private MixRepoDbRepository _backupRepository;
+        private MixRepoDbRepository _associationRepository;
+        private IMixMemoryCacheService _memoryCache;
 
         #region Properties
 
@@ -85,13 +82,15 @@ namespace Mix.RepoDb.Services
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, cacheService, mixTenantService)
         {
+            _cache = cache;
             _cmsUow = uow;
             _databaseService = databaseService;
             _repository = repository;
             _associationRepository = new MixRepoDbRepository(cache, databaseService, uow);
             _associationRepository.InitTableName(nameof(MixDatabaseAssociation));
             _backupRepository = new MixRepoDbRepository(cache, databaseService, uow);
-            _databaseConstant = _databaseService.DatabaseProvider switch
+            _databaseProvider = _databaseService.DatabaseProvider;
+            _databaseConstant = _databaseProvider switch
             {
                 MixDatabaseProvider.SQLSERVER => new SqlServerDatabaseConstants(),
                 MixDatabaseProvider.MySQL => new MySqlDatabaseConstants(),
@@ -488,14 +487,42 @@ namespace Mix.RepoDb.Services
         public async Task<bool> MigrateDatabase(string name)
         {
             MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == name);
+            
+            if (database.MixDatabaseContextId.HasValue)
+            {
+                await SwitchDbContext(database.MixDatabaseContextId.Value);
+            }
+
             if (database is { Columns.Count: > 0 })
             {
                 //await BackupDatabase(database.SystemName);
-                await Migrate(database, _databaseService.DatabaseProvider, _repository);
+                await Migrate(database, _databaseProvider, _repository);
+                _repository.CompleteTransaction();
                 //await RestoreFromLocal(database);
                 return true;
             }
             return false;
+        }
+
+        private async Task SwitchDbContext(int dbContextId)
+        {
+            var dbContext = await _cmsUow.DbContext.MixDatabaseContext.FirstOrDefaultAsync(m => m.Id == dbContextId);
+
+            if (dbContext == null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, $"Invalid MixDatabaseContext Id {dbContextId}");
+            }
+            _databaseProvider = dbContext.DatabaseProvider;
+            _databaseConstant = _databaseProvider switch
+            {
+                MixDatabaseProvider.SQLSERVER => new SqlServerDatabaseConstants(),
+                MixDatabaseProvider.MySQL => new MySqlDatabaseConstants(),
+                MixDatabaseProvider.PostgreSQL => new PostgresDatabaseConstants(),
+                MixDatabaseProvider.SQLITE => new SqliteDatabaseConstants(),
+                _ => throw new NotImplementedException()
+            };
+            _repository = new MixRepoDbRepository(_cache, dbContext.DatabaseProvider, dbContext.ConnectionString, _cmsUow);
+            
         }
 
         public async Task<bool> MigrateSystemDatabases()
@@ -695,7 +722,7 @@ namespace Mix.RepoDb.Services
             MixRepoDbRepository repo)
         {
             var colsSql = new List<string>();
-            var tableName = database.SystemName.ToTitleCase();
+            var tableName = database.SystemName;
 
             foreach (var col in database.Columns)
             {

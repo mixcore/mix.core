@@ -60,7 +60,6 @@ namespace Mix.Database.Entities.Cms
         public virtual DbSet<MixLanguageContent> MixLanguageContent { get; set; }
         public virtual DbSet<MixDatabaseColumn> MixDatabaseColumn { get; set; }
         public virtual DbSet<MixDatabaseAssociation> MixDatabaseAssociation { get; set; }
-        public virtual DbSet<MixDatabaseContextDatabaseAssociation> MixDatabaseContextDatabaseAssociation { get; set; }
         public virtual DbSet<MixPagePostAssociation> MixPagePostAssociation { get; set; }
         public virtual DbSet<MixPostPostAssociation> MixPostPostAssociation { get; set; }
         public virtual DbSet<MixPageModuleAssociation> MixPageModuleAssociation { get; set; }
