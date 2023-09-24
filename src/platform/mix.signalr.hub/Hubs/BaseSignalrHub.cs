@@ -1,26 +1,54 @@
-﻿using Microsoft.AspNetCore.Http.Features;
+﻿using Google.Api;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Constant.Constants;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Identity.Constants;
+using Mix.Lib.Interfaces;
+using Mix.Signalr.Hub.Models;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
+using System.Security.Claims;
 
 namespace Mix.SignalR.Hubs
 {
     public abstract class BaseSignalRHub : Hub
     {
         protected IAuditLogService AuditLogService;
+        protected IMixTenantService MixTenantService;
+        protected HubUserModel? CurrentUser;
+        protected int? TenantId;
 
-        protected BaseSignalRHub(IAuditLogService auditLogService)
+        protected BaseSignalRHub(IAuditLogService auditLogService, IMixTenantService mixTenantService)
         {
             AuditLogService = auditLogService;
+            MixTenantService = mixTenantService;
         }
 
         public static Dictionary<string, List<HubUserModel>> Rooms = new Dictionary<string, List<HubUserModel>>();
+        public virtual async Task Join(string host)
+        {
+            if (MixTenantService.AllTenants == null)
+            {
+                await MixTenantService.Reload();
+            }
+            var currentTenant = MixTenantService.GetTenant(host);
+            if (currentTenant != null)
+            {
+                TenantId = currentTenant.Id;
+            }
+
+            var user = GetCurrentUser();
+            if (user != null)
+            {
+                CurrentUser = user;
+                await SendMessageToCaller(new(user) { Action = MessageAction.MyConnection });
+            }
+        }
+
         public virtual async Task JoinRoom(string roomName)
         {
             await AddUserToRoom(roomName);
@@ -115,6 +143,7 @@ namespace Mix.SignalR.Hubs
         {
             return new()
             {
+                TenantId = TenantId,
                 ConnectionId = Context.ConnectionId,
                 Username = Context.User?.Identity?.Name ?? "Annonymous",
                 Avatar = Context.User?.Claims.FirstOrDefault(m => m.Type == MixClaims.Avatar)?.Value ?? MixConstants.CONST_DEFAULT_EXTENSIONS_FILE_PATH,
@@ -129,6 +158,7 @@ namespace Mix.SignalR.Hubs
             var user = GetCurrentUser();
             if (user != null)
             {
+                CurrentUser = user;
                 await SendMessageToCaller(new(user) { Action = MessageAction.MyConnection });
             }
             await base.OnConnectedAsync().ConfigureAwait(false);
