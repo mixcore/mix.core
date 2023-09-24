@@ -5,7 +5,7 @@ namespace Mix.Database.Entities.AuditLog
 {
     public class AuditLogDbContext : DbContext
     {
-        private string _folder = DateTime.Now.ToString("MM_yyyy");
+        private string _folder = DateTime.UtcNow.ToString("MM_yyyy");
         private string _cnn;
         public AuditLogDbContext()
         {
@@ -13,7 +13,7 @@ namespace Mix.Database.Entities.AuditLog
         }
         public AuditLogDbContext(DateTime date)
         {
-            _folder = date.ToString("dd_MM");
+            _folder = date.ToString("MM_yyyy");
             _cnn = $"Data Source={MixFolders.MixAuditLogFolder}/{_folder}/auditlog_{date.ToString("dd_MM_yyyy")}.sqlite";
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
