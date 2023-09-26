@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.SignalR;
 using Mix.Constant.Constants;
 using Mix.Heart.Helpers;
+using Mix.Lib.Interfaces;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Service.Interfaces;
@@ -15,7 +16,7 @@ namespace Mix.SignalR.Hubs
     public class MixDbCommandHub : BaseSignalRHub
     {
         private readonly IQueueService<MessageQueueModel> _queueService;
-        public MixDbCommandHub(IAuditLogService auditLogService, IQueueService<MessageQueueModel> queueService) : base(auditLogService)
+        public MixDbCommandHub(IAuditLogService auditLogService, IMixTenantService mixTenantService, IQueueService<MessageQueueModel> queueService) : base(auditLogService, mixTenantService)
         {
             _queueService = queueService;
         }
@@ -23,6 +24,7 @@ namespace Mix.SignalR.Hubs
         public virtual void CreateData(string message)
         {
             var obj = ReflectionHelper.ParseStringToObject<MixDbCommandModel>(message);
+            obj.MixTenantId = CurrentUser?.TenantId ?? 1;
             obj.RequestedBy = Context.User?.Identity?.Name;
             obj.ConnectionId = Context.ConnectionId;
             _queueService.PushQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueActions.Create, obj);

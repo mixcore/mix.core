@@ -74,6 +74,7 @@ namespace Mix.Log.Controllers
                     {
                         searchDate = searchDate.AddDays(1);
                         searchResult = await SearchByDate(searchRequest, searchDate, cancellationToken);
+                        result.Results.Add(searchResult);
                         if (result.PagingData.TotalPage < searchResult.Data?.PagingData.TotalPage)
                         {
                             result.PagingData = searchResult.Data.PagingData;
