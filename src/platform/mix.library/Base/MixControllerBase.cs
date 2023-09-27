@@ -96,7 +96,7 @@ namespace Mix.Lib.Base
 
         public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (!GlobalConfigService.Instance.AppSettings.IsInit)
+            if (!GlobalConfig.IsInit)
             {
                 LoadCulture();
             }

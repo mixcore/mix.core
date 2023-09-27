@@ -29,7 +29,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddMixServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
-            var options = configuration.Get<GlobalConfigurations>();
+            var globalConfig = configuration.Get<GlobalConfigurations>();
             services.AddMvc().AddSessionStateTempDataProvider();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSession(options =>
@@ -49,7 +49,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddHttpClient();
             services.AddLogging();
 
-            services.ApplyMigrations(options);
+            services.ApplyMigrations(globalConfig);
 
             services.AddQueues(executingAssembly, configuration);
 
