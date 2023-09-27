@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Amqp.Framing;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Constant.Constants;
 using Mix.Database.Constants;
@@ -16,6 +17,7 @@ using Mix.RepoDb.Services;
 using Mix.Service.Commands;
 using Mix.Service.Services;
 using Mix.Shared.Models;
+using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Interfaces;
@@ -37,13 +39,16 @@ namespace Mix.Mixdb.Event.Services
         private DatabaseService _databaseService;
         private MixPermissionService _mixPermissionService;
         public List<MixDbEventSubscriberViewModel> Subscribers;
+        private readonly GlobalConfigurations _globalConfig;
         private readonly HttpService _httpService;
         public MixDbEventService(DatabaseService databaseService, HttpService httpService,
             IPortalHubClientService portalHub,
             MixPermissionService mixPermissionService,
-            IServiceProvider servicesProvider)
+            IServiceProvider servicesProvider,
+            IConfiguration configuration)
         {
             _databaseService = databaseService;
+            _globalConfig = configuration.Get<GlobalConfigurations>()!;
             LoadEvents();
             _httpService = httpService;
             PortalHub = portalHub;
@@ -53,7 +58,7 @@ namespace Mix.Mixdb.Event.Services
 
         public void LoadEvents()
         {
-            if (!GlobalConfigService.Instance.IsInit)
+            if (!_globalConfig.IsInit)
             {
                 var repo = MixDbEventSubscriberViewModel.GetRootRepository(new MixDbDbContext(_databaseService), null);
                 Subscribers = repo.GetAllAsync(m => !m.IsDeleted).GetAwaiter().GetResult();

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Configuration;
+using Mix.Shared.Models.Configurations;
 using System.Data.Common;
 
 namespace Mix.Lib.Middlewares
@@ -9,9 +11,11 @@ namespace Mix.Lib.Middlewares
     {
         private readonly RequestDelegate _next;
         private static readonly List<Type> UowInfos = new();
-        public UnitOfWorkMiddleware(RequestDelegate next)
+        private GlobalConfigurations _globalConfig;
+        public UnitOfWorkMiddleware(RequestDelegate next, IConfiguration configuration)
         {
             _next = next;
+            _globalConfig = configuration.Get<GlobalConfigurations>();
         }
 
         public static void AddUnitOfWork<T>() where T : IUnitOfWorkInfo
@@ -46,7 +50,7 @@ namespace Mix.Lib.Middlewares
             Dictionary<string, DbConnection> dicConnections,
             Dictionary<string, IDbContextTransaction> dicTransactions)
         {
-            if (GlobalConfigService.Instance.IsInit)
+            if (_globalConfig.IsInit)
             {
                 return;
             }

@@ -16,7 +16,7 @@ using Mix.Database.Entities.MixDb;
 using Mix.Identity.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
-
+using Mix.Shared.Models.Configurations;
 using System.Text;
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -27,8 +27,8 @@ namespace Microsoft.Extensions.DependencyInjection
             where TDbContext : DbContext
         {
             AuthConfigService authConfigService = services.GetService<AuthConfigService>();
-
-            if (GlobalConfigService.Instance.IsInit)
+            var _globalConfig = configuration.Get<GlobalConfigurations>()!;
+            if (_globalConfig.IsInit)
             {
                 authConfigService.AppSettings.SecretKey = Guid.NewGuid().ToString("N");
                 authConfigService.SaveSettings();

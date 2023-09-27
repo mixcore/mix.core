@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
@@ -29,6 +30,7 @@ namespace Mix.Lib.Services
     {
         protected const string TenantIdFieldName = "MixTenantId";
         protected const string datetimeFormat = "yyyy-MM-ddTHH:mm:ss.FFFZ";
+        protected IConfiguration Configuration;
         protected readonly UnitOfWorkInfo<MixCmsAccountContext> AccountUow;
         protected readonly UnitOfWorkInfo<MixCmsContext> CmsUow;
         protected readonly UnitOfWorkInfo<MixDbDbContext> MixDbUow;
@@ -37,6 +39,7 @@ namespace Mix.Lib.Services
         protected readonly SignInManager<MixUser> SignInManager;
         protected readonly RoleManager<MixRole> RoleManager;
         protected readonly AuthConfigService AuthConfigService;
+        protected readonly GlobalConfigurations GlobalConfig;
         protected readonly FirebaseService FirebaseService;
         protected readonly IMixDbDataService MixDbDataService;
         protected readonly MixRepoDbRepository RepoDbRepository;
@@ -72,9 +75,10 @@ namespace Mix.Lib.Services
             DatabaseService databaseService,
             MixCmsAccountContext accContext,
             UnitOfWorkInfo<MixDbDbContext> mixDbUow,
-            IMixDbDataService mixDbDataService)
+            IMixDbDataService mixDbDataService, IConfiguration configuration)
         {
             Session = httpContextAccessor.HttpContext?.Session;
+            Configuration = configuration;
             CmsUow = cmsUow;
             CmsContext = cmsUow.DbContext;
             CacheService = cacheService;
@@ -91,6 +95,7 @@ namespace Mix.Lib.Services
             _accContext = accContext;
             MixDbUow = mixDbUow;
             MixDbDataService = mixDbDataService;
+            GlobalConfig = Configuration.Get<GlobalConfigurations>();
         }
 
         public virtual async Task<bool> Any(Guid userId)
@@ -160,7 +165,7 @@ namespace Mix.Lib.Services
         public virtual async Task<JObject> GetAuthData(MixUser user, bool rememberMe, int tenantId, CancellationToken cancellationToken = default)
         {
             var rsaKeys = RSAEncryptionHelper.GenerateKeys();
-            var aesKey = GlobalConfigService.Instance.AesKey;  //AesEncryptionHelper.GenerateCombinedKeys();
+            var aesKey = GlobalConfig.AesKey;  //AesEncryptionHelper.GenerateCombinedKeys();
 
             var token = await GenerateAccessTokenAsync(user, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY], cancellationToken);
             if (token != null)
@@ -246,7 +251,7 @@ namespace Mix.Lib.Services
             try
             {
                 var u = await MixDbDataService.GetSingleByParent(MixDatabaseNames.SYSTEM_USER_DATA, MixContentType.User, user.Id, true);
-                if (u == null && !GlobalConfigService.Instance.IsInit)
+                if (u == null && !GlobalConfig.IsInit)
                 {
                     u = new JObject()
                     {

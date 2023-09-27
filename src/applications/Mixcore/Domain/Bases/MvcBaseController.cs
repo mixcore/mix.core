@@ -20,7 +20,9 @@ namespace Mixcore.Domain.Bases
             DatabaseService databaseService,
             UnitOfWorkInfo<MixCmsContext> uow,
             MixCacheService cacheService,
-            IMixTenantService tenantService) : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService)
+            IMixTenantService tenantService,
+             IConfiguration configuration) : 
+            base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
         {
             Translator = translator;
             DatabaseService = databaseService;

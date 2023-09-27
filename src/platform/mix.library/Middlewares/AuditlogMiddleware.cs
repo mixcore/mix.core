@@ -17,10 +17,12 @@ namespace Mix.Lib.Middlewares
         private IAuditLogService _auditlogService;
         private AuditLogDataModel _auditlogData;
         private IConfiguration _configuration;
+        private GlobalConfigurations _globalConfig;
         private bool _isLog { get; set; }
         public AuditlogMiddleware(RequestDelegate next, IConfiguration configuration, IAuditLogService auditlogService)
         {
             _configuration = configuration;
+            _globalConfig = _configuration.Get<GlobalConfigurations>();
             _next = next;
             _auditlogData = new();
             _auditlogService = auditlogService;
@@ -82,7 +84,7 @@ namespace Mix.Lib.Middlewares
         }
         private bool CheckAuditLogPath(string path)
         {
-            return !GlobalConfigService.Instance.IsInit && (path.IndexOf("/api") == 0 && path.IndexOf("audit-log") < 0 && path.IndexOf("queue-log") < 0);
+            return !_globalConfig.IsInit && (path.IndexOf("/api") == 0 && path.IndexOf("audit-log") < 0 && path.IndexOf("queue-log") < 0);
         }
 
         private async Task LogRequest(HttpContext context)

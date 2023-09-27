@@ -1,3 +1,5 @@
+using Mix.Shared.Helpers;
+
 namespace Mixcore
 {
     public class Program
@@ -9,11 +11,16 @@ namespace Mixcore
 
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            var builder = MixCmsHelper.CreateHostBuilder<Startup>(args);
-            builder.ConfigureAppConfiguration((hostingContext, config) =>
+            var mixContentFolder = new DirectoryInfo(MixFolders.MixContentFolder);
+
+            // Clone Settings from shared folder
+            if (!mixContentFolder.Exists)
             {
-                config.AddJsonFile("MixContent/Shared/AppConfigs/kiotviet.json", true, true);
-            });
+                MixFileHelper.UnZipFile(MixConstants.CONST_DEFAULT_MIX_CONTENT, MixFolders.MixContentFolder);
+                MixFileHelper.DeleteFile(MixConstants.CONST_DEFAULT_MIX_CONTENT);
+            }
+
+            var builder = MixCmsHelper.CreateHostBuilder<Startup>(args);
             return builder;
         }
     }

@@ -61,14 +61,6 @@ namespace Mix.Lib.Helpers
 
         public static IHostBuilder CreateHostBuilder<TStartup>(string[] args) where TStartup : class
         {
-            var mixContentFolder = new DirectoryInfo(MixFolders.MixContentFolder);
-
-            // Clone Settings from shared folder
-            if (!mixContentFolder.Exists)
-            {
-                MixHelper.CopyFolder(MixFolders.SharedConfigurationFolder, MixFolders.MixContentFolder);
-                Console.WriteLine("Clone Settings from shared folder completed.");
-            }
             return Host.CreateDefaultBuilder(args)
             .UseContentRoot(Directory.GetCurrentDirectory())
                .ConfigureAppConfiguration((hostingContext, config) =>

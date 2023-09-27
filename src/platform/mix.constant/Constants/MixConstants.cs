@@ -26,6 +26,7 @@
         public const string CONST_DOMAIN_NOTIFICATION_KEY_COMMIT_VALUE = "We had a problem during saving your data.";
         public const string CONST_DOMAIN_NOTIFICATION = "DomainNotification";
         public const string CONST_DEFAULT_AVATAR = "/mix-app/assets/img/user.png";
+        public const string CONST_DEFAULT_MIX_CONTENT = "wwwroot/default-content.zip";
         public const string CONST_DEFAULT_EXTENSIONS_FILE_PATH = "\\Contents\\Extensions\\";
         public const string CONST_DEFAULT_EXTENSION_FILE_NAME = "extensions.json";
         public const string CONST_DEFAULT_STRING_ID = "default";
