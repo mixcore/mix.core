@@ -33,7 +33,7 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixDatabaseViewModel(MixDatabase entity, UnitOfWorkInfo uowInfo = null)
+        public MixDatabaseViewModel(MixDatabase entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

@@ -23,7 +23,7 @@
         {
         }
 
-        public MixDatabaseContextViewModel(MixDatabaseContext entity, UnitOfWorkInfo uowInfo = null)
+        public MixDatabaseContextViewModel(MixDatabaseContext entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

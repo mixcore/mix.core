@@ -20,7 +20,7 @@ namespace Mix.Lib.Base
         {
         }
 
-        protected AssociationViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null)
+        protected AssociationViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

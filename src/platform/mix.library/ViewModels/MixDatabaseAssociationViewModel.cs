@@ -21,7 +21,7 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixDatabaseAssociationViewModel(MixDatabaseAssociation entity, UnitOfWorkInfo uowInfo = null)
+        public MixDatabaseAssociationViewModel(MixDatabaseAssociation entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

@@ -29,7 +29,7 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixDatabaseRelationshipViewModel(MixDatabaseRelationship entity, UnitOfWorkInfo uowInfo = null)
+        public MixDatabaseRelationshipViewModel(MixDatabaseRelationship entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

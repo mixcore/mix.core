@@ -21,7 +21,7 @@ namespace Mix.Lib.Base
         {
         }
 
-        protected MultilingualSEOContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null)
+        protected MultilingualSEOContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

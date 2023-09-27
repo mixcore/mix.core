@@ -18,7 +18,7 @@
         {
         }
 
-        protected HaveParentContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null)
+        protected HaveParentContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

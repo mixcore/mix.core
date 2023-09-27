@@ -167,8 +167,7 @@ namespace Mix.Services.ecommerce.Controllers
             {
                 return BadRequest();
             }
-
-            var paymentResponse = JObject.FromObject(query.AllKeys.ToDictionary(k => k, k => query[k]));
+            var paymentResponse = JObject.FromObject(query.AllKeys.ToDictionary(k => k!, k => query[k]));
             orderId ??= paymentResponse.Value<int?>("vpc_OrderInfo");
             if (!orderId.HasValue)
             {

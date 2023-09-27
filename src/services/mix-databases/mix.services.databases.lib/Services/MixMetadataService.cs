@@ -236,9 +236,9 @@ namespace Mix.Services.Databases.Lib.Services
                 }
             }
 
-            return andQueries.Count == 0 ? orQueryIds.Distinct()
-                    : orQueries.Count == 0 ? andQueryIds.Distinct()
-                        : andQueryIds.Where(m => orQueryIds.Contains(m)).Distinct();
+            return andQueries.Count == 0 ? orQueryIds?.Distinct()
+                    : orQueryIds == null || orQueries.Count == 0 ? andQueryIds?.Distinct()
+                        : andQueryIds?.Where(m => orQueryIds.Contains(m)).Distinct();
         }
 
         public IQueryable<int>? GetQueryableMetadataByContentId(int contentId, MixContentType? contentType, string metadataType)

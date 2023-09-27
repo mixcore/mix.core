@@ -12,7 +12,7 @@ namespace Mix.Identity.ViewModels
         {
         }
 
-        public RoleViewModel(MixRole entity, UnitOfWorkInfo uowInfo = null)
+        public RoleViewModel(MixRole entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

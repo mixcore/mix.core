@@ -4,6 +4,7 @@ using Mix.Constant.Constants;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
+using Mix.Heart.Exceptions;
 using Mix.Heart.UnitOfWork;
 using Mix.Shared.Extensions;
 using Mix.Shared.Services;
@@ -78,6 +79,7 @@ namespace Mix.Service.Services
                 }
                 catch (Exception ex)
                 {
+                    throw new MixException(Heart.Enums.MixErrorStatus.Badrequest, ex);
                 }
                 finally
                 {

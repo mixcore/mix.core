@@ -24,7 +24,7 @@
         {
         }
 
-        public MixUrlAliasViewModel(MixUrlAlias entity, UnitOfWorkInfo uowInfo = null)
+        public MixUrlAliasViewModel(MixUrlAlias entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

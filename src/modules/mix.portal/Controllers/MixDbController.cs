@@ -435,7 +435,7 @@ namespace Mix.Portal.Controllers
                 throw new MixException(MixErrorStatus.Badrequest, ex);
             }
         }
-        private async Task<JObject> ParseDtoToEntityAsync(JObject dto)
+        private Task<JObject> ParseDtoToEntityAsync(JObject dto)
         {
             try
             {
@@ -521,7 +521,7 @@ namespace Mix.Portal.Controllers
                 {
                     result.Add(new JProperty(IsDeletedFieldName, false));
                 }
-                return result;
+                return Task.FromResult(result);
             }
             catch (Exception ex)
             {

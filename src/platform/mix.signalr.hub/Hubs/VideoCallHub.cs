@@ -26,7 +26,7 @@ namespace Mix.Signalr.Hub.Hubs
         {
         }
 
-        public async Task Join(string username)
+        public override async Task Join(string username)
         {
             // Add the new user
             Users.Add(new User

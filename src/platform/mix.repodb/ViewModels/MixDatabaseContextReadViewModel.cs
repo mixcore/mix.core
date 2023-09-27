@@ -28,7 +28,7 @@ namespace Mix.RepoDb.ViewModels
         {
         }
 
-        public MixDatabaseContextReadViewModel(MixDatabaseContext entity, UnitOfWorkInfo uowInfo = null)
+        public MixDatabaseContextReadViewModel(MixDatabaseContext entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }
