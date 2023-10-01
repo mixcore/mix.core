@@ -39,7 +39,7 @@ namespace Mix.Lib.Services
         protected readonly SignInManager<MixUser> SignInManager;
         protected readonly RoleManager<MixRole> RoleManager;
         protected readonly AuthConfigService AuthConfigService;
-        protected readonly GlobalConfigurations GlobalConfig;
+        protected readonly GlobalSettingsModel GlobalConfig;
         protected readonly FirebaseService FirebaseService;
         protected readonly IMixDbDataService MixDbDataService;
         protected readonly MixRepoDbRepository RepoDbRepository;
@@ -95,7 +95,7 @@ namespace Mix.Lib.Services
             _accContext = accContext;
             MixDbUow = mixDbUow;
             MixDbDataService = mixDbDataService;
-            GlobalConfig = Configuration.Get<GlobalConfigurations>();
+            GlobalConfig = Configuration.Get<GlobalSettingsModel>();
         }
 
         public virtual async Task<bool> Any(Guid userId)

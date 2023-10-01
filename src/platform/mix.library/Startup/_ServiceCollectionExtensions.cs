@@ -12,6 +12,7 @@ using Mix.Lib.Middlewares;
 using Mix.Mixdb.Event.Services;
 using Mix.Service.Interfaces;
 using Mix.Shared;
+using Mix.Shared.Interfaces;
 using Mix.Shared.Models.Configurations;
 using Mix.SignalR.Interfaces;
 using System.Reflection;
@@ -29,7 +30,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddMixServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
-            var globalConfig = configuration.Get<GlobalConfigurations>();
+            var globalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings)
+                                            .Get<GlobalSettingsModel>();
+            services.AddOptions<GlobalSettingsModel>()
+                 .Bind(configuration.GetSection(MixAppSettingsSection.GlobalSettings))
+                 .ValidateDataAnnotations();
+
             services.AddMvc().AddSessionStateTempDataProvider();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSession(options =>
@@ -74,7 +80,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
             services.TryAddSingleton<IMixDbCommandHubClientService, MixDbCommandHubClientService>();
             services.TryAddSingleton<MixDbEventService>();
-            services.AddMixRepoDb();
+            services.AddMixRepoDb(globalConfig);
 
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCacheDbContext>>();
             return services;
@@ -84,8 +90,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMixTestServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
             // Clone Settings from shared folder
-            var options = new GlobalConfigurations();
-            configuration.GetSection("GlobalConfigurations").Bind(options);
+            var globalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
 
             services.AddMvc().AddSessionStateTempDataProvider();
             services.AddSession();
@@ -97,7 +102,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddHttpClient();
             services.AddLogging();
 
-            services.ApplyMigrations(options);
+            services.ApplyMigrations(globalConfig);
 
             services.AddQueues(executingAssembly, configuration);
 
@@ -119,7 +124,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
             services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
-            services.AddMixRepoDb();
+            services.AddMixRepoDb(globalConfig);
 
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCacheDbContext>>();
             return services;

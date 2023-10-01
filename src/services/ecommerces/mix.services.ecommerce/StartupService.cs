@@ -1,9 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Constant.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Services.Databases.Lib.Services;
 using Mix.Services.Ecommerce.Lib.Interfaces;
+using Mix.Services.Ecommerce.Lib.Models;
 using Mix.Services.Ecommerce.Lib.Services;
+using Mix.Shared.Models.Configurations;
 
 namespace Mix.Services.Ecommerce
 {
@@ -11,10 +15,15 @@ namespace Mix.Services.Ecommerce
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMixEcommerce();
-            services.TryAddScoped<IMixMetadataService, MixMetadataService>();
-            services.TryAddScoped<OnepayService>();
-            services.TryAddScoped<PaypalService>();
+            var globalSettings = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>();
+
+            if (!globalSettings!.IsInit)
+            {
+                services.AddMixEcommerce(configuration);
+                services.TryAddScoped<IMixMetadataService, MixMetadataService>();
+                services.TryAddScoped<OnepayService>();
+                services.TryAddScoped<PaypalService>();
+            }
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

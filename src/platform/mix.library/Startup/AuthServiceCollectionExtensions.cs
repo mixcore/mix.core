@@ -27,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
             where TDbContext : DbContext
         {
             AuthConfigService authConfigService = services.GetService<AuthConfigService>();
-            var _globalConfig = configuration.Get<GlobalConfigurations>()!;
+            var _globalConfig = configuration.Get<GlobalSettingsModel>()!;
             if (_globalConfig.IsInit)
             {
                 authConfigService.AppSettings.SecretKey = Guid.NewGuid().ToString("N");

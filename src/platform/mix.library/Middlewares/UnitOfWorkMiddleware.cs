@@ -11,11 +11,11 @@ namespace Mix.Lib.Middlewares
     {
         private readonly RequestDelegate _next;
         private static readonly List<Type> UowInfos = new();
-        private GlobalConfigurations _globalConfig;
+        private GlobalSettingsModel _globalConfig;
         public UnitOfWorkMiddleware(RequestDelegate next, IConfiguration configuration)
         {
             _next = next;
-            _globalConfig = configuration.Get<GlobalConfigurations>();
+            _globalConfig = configuration.Get<GlobalSettingsModel>();
         }
 
         public static void AddUnitOfWork<T>() where T : IUnitOfWorkInfo

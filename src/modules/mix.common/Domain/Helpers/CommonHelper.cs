@@ -7,7 +7,7 @@ namespace Mix.Common.Domain.Helpers
 {
     public class CommonHelper
     {
-        internal static GlobalSettings GetAppSettings(MixAuthenticationConfigurations authConfigurations, MixTenantSystemModel currentTenant)
+        internal static Common.Models.GlobalSettings GetAppSettings(MixAuthenticationConfigurations authConfigurations, MixTenantSystemModel currentTenant)
         {
             //var cultures = _cultureService.Cultures;
             //var culture = _cultureService.LoadCulture(lang);

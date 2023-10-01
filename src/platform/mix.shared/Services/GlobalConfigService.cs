@@ -2,7 +2,7 @@
 
 namespace Mix.Shared.Services
 {
-    public class GlobalConfigService : ConfigurationServiceBase<GlobalConfigurations>
+    public class GlobalConfigService : ConfigurationServiceBase<GlobalSettingsModel>
     {
 
         #region Instance
@@ -37,7 +37,7 @@ namespace Mix.Shared.Services
         #endregion
 
         public GlobalConfigService()
-            : base(MixAppConfigFilePaths.Global)
+            : base(MixAppConfigFilePaths.Global, MixAppSettingsSection.GlobalSettings)
         {
         }
         public new string AesKey

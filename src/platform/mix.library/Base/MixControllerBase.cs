@@ -19,7 +19,7 @@ namespace Mix.Lib.Base
         protected bool IsValid = true;
         protected string RedirectUrl;
         protected readonly IPSecurityConfigService IpSecurityConfigService;
-        protected readonly GlobalConfigurations GlobalConfig;
+        protected readonly GlobalSettingsModel GlobalConfig;
         protected readonly IMixCmsService MixCmsService;
         protected IMixTenantService TenantService;
         protected MixTenantSystemModel CurrentTenant => Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
@@ -52,7 +52,7 @@ namespace Mix.Lib.Base
             ViewData[MixRequestQueryKeywords.Tenant] = CurrentTenant;
             MixCmsService = mixCmsService;
             TenantService = tenantService;
-            GlobalConfig = Configuration.Get<GlobalConfigurations>();
+            GlobalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
         }
 
         private void LoadCulture()

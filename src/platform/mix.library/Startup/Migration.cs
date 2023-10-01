@@ -3,13 +3,14 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Database.Services;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Services;
+using Mix.Shared.Models.Configurations;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static partial class ServiceCollectionExtensions
     {
 
-        private static void ApplyMigrations(this IServiceCollection services, Mix.Shared.Models.Configurations.GlobalConfigurations options)
+        private static void ApplyMigrations(this IServiceCollection services, GlobalSettingsModel options)
         {
             if (!options.IsInit)
             {

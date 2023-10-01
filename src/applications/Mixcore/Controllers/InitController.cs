@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 using Mixcore.Domain.Constants;
 
@@ -7,6 +8,7 @@ namespace Mixcore.Controllers
     public class InitController : MixControllerBase
     {
         private readonly MixEndpointService _mixEndpointService;
+        private readonly GlobalSettingsModel _globalConfig;
         public InitController(
             IHttpContextAccessor httpContextAccessor,
             IMixCmsService mixCmsService,
@@ -17,6 +19,7 @@ namespace Mixcore.Controllers
             : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
         {
             _mixEndpointService = mixEndpointService;
+            _globalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
         }
 
         [HttpGet]
@@ -24,14 +27,14 @@ namespace Mixcore.Controllers
         [Route("init/{page}")]
         public IActionResult Index(string page)
         {
-            if (!GlobalConfigService.Instance.AppSettings.IsInit)
+            if (!_globalConfig.IsInit)
             {
                 return Redirect("/");
             }
             else
             {
                 page ??= "";
-                var initStatus = GlobalConfigService.Instance.AppSettings.InitStatus;
+                var initStatus = _globalConfig.InitStatus;
 
                 switch (initStatus)
                 {

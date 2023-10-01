@@ -39,7 +39,7 @@ namespace Mix.Mixdb.Event.Services
         private DatabaseService _databaseService;
         private MixPermissionService _mixPermissionService;
         public List<MixDbEventSubscriberViewModel> Subscribers;
-        private readonly GlobalConfigurations _globalConfig;
+        private readonly GlobalSettingsModel _globalConfig;
         private readonly HttpService _httpService;
         public MixDbEventService(DatabaseService databaseService, HttpService httpService,
             IPortalHubClientService portalHub,
@@ -48,7 +48,7 @@ namespace Mix.Mixdb.Event.Services
             IConfiguration configuration)
         {
             _databaseService = databaseService;
-            _globalConfig = configuration.Get<GlobalConfigurations>()!;
+            _globalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
             LoadEvents();
             _httpService = httpService;
             PortalHub = portalHub;

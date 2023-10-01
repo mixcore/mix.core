@@ -197,7 +197,7 @@ namespace Mix.Common.Controllers
 
         [HttpPost]
         [Route("global-settings")]
-        public ActionResult GetSettings([FromBody] GlobalConfigurations settings)
+        public ActionResult GetSettings([FromBody] GlobalSettingsModel settings)
         {
             GlobalConfigService.Instance.AppSettings = settings;
             GlobalConfigService.Instance.SaveSettings();

@@ -11,7 +11,7 @@
         bool IsHttps { get; set; }
         bool IsInit { get; set; }
         bool IsLogStream { get; set; }
-        bool MigrateSystemDatabases { get; set; }
+        bool IsUpdateSystemDatabases { get; set; }
         int ResponseCache { get; set; }
     }
 }

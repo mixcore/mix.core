@@ -4,6 +4,7 @@ using Mix.RepoDb.Publishers;
 using Mix.RepoDb.Repositories;
 using Mix.RepoDb.Services;
 using Mix.RepoDb.Subscribers;
+using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 using RepoDb;
 using RepoDb.Interfaces;
@@ -12,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMixRepoDb(this IServiceCollection services)
+        public static IServiceCollection AddMixRepoDb(this IServiceCollection services, GlobalSettingsModel globalConfig)
         {
             services.TryAddScoped<ICache, MemoryCache>();
             services.TryAddScoped<IMixDbDataService, MixDbDataService>();
@@ -21,7 +22,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddHostedService<MixRepoDbPublisher>();
             services.AddHostedService<MixRepoDbSubscriber>();
 
-            if (!GlobalConfigService.Instance.AppSettings.IsInit)
+            if (!globalConfig.IsInit && globalConfig.IsUpdateSystemDatabases)
             {
                 var mixDbService = services.GetService<IMixDbService>();
                 mixDbService.MigrateSystemDatabases().GetAwaiter().GetResult();

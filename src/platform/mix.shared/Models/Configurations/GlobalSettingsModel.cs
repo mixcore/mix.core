@@ -2,10 +2,10 @@
 
 namespace Mix.Shared.Models.Configurations
 {
-    public class GlobalConfigurations : IGlobalConfigurations
+    public class GlobalSettingsModel : IGlobalConfigurations
     {
         public bool IsInit { get; set; }
-        public bool MigrateSystemDatabases { get; set; }
+        public bool IsUpdateSystemDatabases { get; set; }
         public bool EnableAuditLog { get; set; }
         public bool IsLogStream { get; set; }
         public bool AllowAnyOrigin { get; set; }

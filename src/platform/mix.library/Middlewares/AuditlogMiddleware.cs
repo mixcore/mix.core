@@ -17,12 +17,12 @@ namespace Mix.Lib.Middlewares
         private IAuditLogService _auditlogService;
         private AuditLogDataModel _auditlogData;
         private IConfiguration _configuration;
-        private GlobalConfigurations _globalConfig;
+        private GlobalSettingsModel _globalConfig;
         private bool _isLog { get; set; }
         public AuditlogMiddleware(RequestDelegate next, IConfiguration configuration, IAuditLogService auditlogService)
         {
             _configuration = configuration;
-            _globalConfig = _configuration.Get<GlobalConfigurations>();
+            _globalConfig = _configuration.Get<GlobalSettingsModel>();
             _next = next;
             _auditlogData = new();
             _auditlogService = auditlogService;

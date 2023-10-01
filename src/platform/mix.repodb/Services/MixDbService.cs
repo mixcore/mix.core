@@ -487,7 +487,7 @@ namespace Mix.RepoDb.Services
         public async Task<bool> MigrateDatabase(string name)
         {
             MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == name);
-            
+
             if (database.MixDatabaseContextId.HasValue)
             {
                 await SwitchDbContext(database.MixDatabaseContextId.Value);
@@ -522,56 +522,52 @@ namespace Mix.RepoDb.Services
                 _ => throw new NotImplementedException()
             };
             _repository = new MixRepoDbRepository(_cache, dbContext.DatabaseProvider, dbContext.ConnectionString, _cmsUow);
-            
+
         }
 
         public async Task<bool> MigrateSystemDatabases()
         {
-            if (GlobalConfigService.Instance.AppSettings.MigrateSystemDatabases)
+            var strMixDbs = MixFileHelper.GetFile(
+                    "system-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
+            var obj = JObject.Parse(strMixDbs.Content);
+            var databases = obj.Value<JArray>("databases")?.ToObject<List<MixDatabase>>();
+            var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
+            if (databases != null)
             {
-
-                var strMixDbs = MixFileHelper.GetFile(
-                        "system-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
-                var obj = JObject.Parse(strMixDbs.Content);
-                var databases = obj.Value<JArray>("databases")?.ToObject<List<MixDatabase>>();
-                var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
-                if (databases != null)
+                foreach (var database in databases)
                 {
-                    foreach (var database in databases)
+                    if (!await CheckTableExist(database.SystemName, _repository))
                     {
-                        if (!await CheckTableExist(database.SystemName, _repository))
+                        MixDatabaseViewModel currentDb = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService)
+                            .GetSingleAsync(m => m.SystemName == database.SystemName);
+                        if (currentDb == null)
                         {
-                            MixDatabaseViewModel currentDb = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService)
-                                .GetSingleAsync(m => m.SystemName == database.SystemName);
-                            if (currentDb == null)
-                            {
-                                currentDb = new(database, _cmsUow);
-                                currentDb.Id = 0;
-                                currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
-                                currentDb.CreatedDateTime = DateTime.UtcNow;
-                                currentDb.Columns = new();
+                            currentDb = new(database, _cmsUow);
+                            currentDb.Id = 0;
+                            currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
+                            currentDb.CreatedDateTime = DateTime.UtcNow;
+                            currentDb.Columns = new();
 
-                                if (columns is not null)
+                            if (columns is not null)
+                            {
+                                var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
+                                foreach (var col in cols)
                                 {
-                                    var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
-                                    foreach (var col in cols)
-                                    {
-                                        currentDb.Columns.Add(new(col, _cmsUow));
-                                    }
+                                    currentDb.Columns.Add(new(col, _cmsUow));
                                 }
-
-                                await currentDb.SaveAsync();
                             }
-                            if (currentDb is { Columns.Count: > 0 })
-                            {
-                                await Migrate(currentDb, _databaseService.DatabaseProvider, _repository);
 
-                            }
+                            await currentDb.SaveAsync();
+                        }
+                        if (currentDb is { Columns.Count: > 0 })
+                        {
+                            await Migrate(currentDb, _databaseService.DatabaseProvider, _repository);
+
                         }
                     }
-                    return true;
-
                 }
+                return true;
+
             }
             return false;
         }

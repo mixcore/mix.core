@@ -8,10 +8,17 @@
     "ValidateIssuerSigningKey": true,
     "TokenType": "Bearer",
     "Audience": "mix-core",
-    "SecretKey": "7fdc91305d594f29bb9d2860163f4d27",
+    "ClientId": "00000000-0000-0000-0000-000000000000",
+    "SecretKey": "61cf4651c35a4dfab0bb2cea9181db53",
     "Issuer": "mix-core",
     "Issuers": "mix-core",
     "Audiences": "mix-core",
+    "RequireUniqueEmail": false,
+    "RequireConfirmedEmail": false,
+    "ConfirmedEmailUrl": null,
+    "ConfirmedEmailUrlSuccess": null,
+    "ConfirmedEmailUrlFail": null,
+    "TokenLifespan": 3,
     "Facebook": {
       "AppId": "",
       "AppSecret": ""
@@ -20,13 +27,19 @@
       "AppId": "",
       "AppSecret": ""
     },
+    "Microsoft": {
+      "AppId": "",
+      "AppSecret": ""
+    },
     "Twitter": {
       "AppId": "",
       "AppSecret": ""
     },
-    "Microsoft": {
-      "AppId": "",
-      "AppSecret": ""
+    "AzureAd": {
+      "Instance": "https://login.microsoftonline.com/",
+      "ClientId": null,
+      "TenantId": null,
+      "Scopes": null
     }
   }
 }
