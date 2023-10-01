@@ -1,23 +1,27 @@
-﻿using Mix.Database.Entities.Account;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Mix.Lib.Interfaces;
 
-namespace Mix.Account
+namespace Mix.Messenger.Domain
 {
     public class StartupService : IStartupService
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<EntityRepository<MixCmsContext, MixCulture, int>>();
-            services.AddScoped<EntityRepository<MixCmsAccountContext, MixUser, Guid>>();
-            services.AddScoped<EntityRepository<MixCmsAccountContext, RefreshTokens, Guid>>();
+            services.AddMixSignalR(configuration);
+            services.AddMixCommunicators();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
         {
+            //app.UseMixSignalRApp();
         }
 
         public void UseEndpoints(IEndpointRouteBuilder endpoints, IConfiguration configuration, bool isDevelop)
         {
+            endpoints.UseMixSignalRApp();
         }
     }
 }

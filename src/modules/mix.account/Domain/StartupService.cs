@@ -1,16 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Mix.Database.Entities.Account;
 using Mix.Lib.Interfaces;
 
-namespace Mix.Scheduler
+namespace Mix.Account.Domain
 {
     public class StartupService : IStartupService
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMixQuartzServices(configuration);
+            services.AddScoped<EntityRepository<MixCmsContext, MixCulture, int>>();
+            services.AddScoped<EntityRepository<MixCmsAccountContext, MixUser, Guid>>();
+            services.AddScoped<EntityRepository<MixCmsAccountContext, RefreshTokens, Guid>>();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

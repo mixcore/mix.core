@@ -6,7 +6,7 @@ using Quartz;
 using System;
 using System.Threading.Tasks;
 
-namespace Mix.Scheduler.Jobs
+namespace Mix.Scheduler.Domain.Jobs
 {
     public class SendMessageQueueJob : MixJobBase
     {
@@ -20,7 +20,7 @@ namespace Mix.Scheduler.Jobs
         {
             var objData = JObject.Parse(context.Trigger.JobDataMap.GetString("data") ?? "{}");
             int tenantId = objData.Value<int>("tenantId");
-            
+
             var msg = new MessageQueueModel(tenantId)
             {
                 Success = true,

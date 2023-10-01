@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Mix.Grpc.Domain.Services;
 using Mix.Lib.Interfaces;
 
-namespace Mix.Grpc
+namespace Mix.Grpc.Domain
 {
     public class StartupService : IStartupService
     {

@@ -85,9 +85,6 @@
 		<EmbeddedResource Include="Views\_ViewStart.cshtml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
-		<EmbeddedResource Include="..\..\shared\mixcontent">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="logs\**" />

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;
 
-namespace Mix.Grpc.Models
+namespace Mix.Grpc.Domain.Models
 {
     public class GrpcChannelModel<T>
     {

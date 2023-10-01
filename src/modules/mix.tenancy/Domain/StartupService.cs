@@ -3,7 +3,7 @@ using Mix.Lib.Services;
 using Mix.Tenancy.Domain.Interfaces;
 using Mix.Tenancy.Domain.Services;
 
-namespace Mix.Tenancy
+namespace Mix.Tenancy.Domain
 {
     public class StartupService : IStartupService
     {

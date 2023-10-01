@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Mix.Quartz.Jobs;
 using Mix.SignalR.Interfaces;
 
-namespace Mix.Scheduler.Jobs
+namespace Mix.Scheduler.Domain.Jobs
 {
     public class SendPortalMessageJob : MixJobBase
     {

@@ -5,7 +5,7 @@ using Quartz;
 using System;
 using System.Threading.Tasks;
 
-namespace Mix.Scheduler.Jobs
+namespace Mix.Scheduler.Domain.Jobs
 {
     public class PublishScheduledPostsJob : MixJobBase
     {

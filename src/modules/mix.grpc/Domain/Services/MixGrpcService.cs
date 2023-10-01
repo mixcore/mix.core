@@ -5,7 +5,7 @@ using System;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Mix.Grpc
+namespace Mix.Grpc.Domain.Services
 {
     public class MixGrpcService : MixGrpc.MixGrpcBase
     {

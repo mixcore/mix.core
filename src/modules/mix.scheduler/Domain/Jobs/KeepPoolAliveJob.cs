@@ -9,7 +9,7 @@ using Mix.Quartz.Jobs;
 using Mix.Quartz.Models;
 using NuGet.Packaging.Signing;
 
-namespace Mix.Scheduler.Jobs
+namespace Mix.Scheduler.Domain.Jobs
 {
     public class KeepPoolAliveJob : MixJobBase
     {
@@ -39,7 +39,7 @@ namespace Mix.Scheduler.Jobs
                 {
                     var now = DateTime.UtcNow;
                     var ping = await _httpService.GetStringAsync($"{domain.TrimEnd('/')}");
-                    
+
                     Console.WriteLine($"Ping at {now}: {(DateTime.Now - now).TotalMilliseconds}");
                 }
                 catch (Exception ex)
