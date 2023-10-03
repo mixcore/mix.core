@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
-using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
 using Mix.Database.Services;
 using Mix.Heart.Models;
@@ -19,13 +18,10 @@ using RepoDb;
 using System.Linq.Expressions;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
-using Mix.Communicator.Models;
 using Newtonsoft.Json.Linq;
 using System.Web;
 using Mix.Identity.Models.ManageViewModels;
-
 using Mix.Lib.Interfaces;
-using Mix.Database.Entities.MixDb;
 
 namespace Mix.Account.Controllers
 {
@@ -36,56 +32,48 @@ namespace Mix.Account.Controllers
         private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<MixRole> _roleManager;
         private readonly MixIdentityService _idService;
-        private readonly EmailService _emailService;
         private readonly IMixEdmService _edmService;
         private readonly EntityRepository<MixCmsAccountContext, MixUser, Guid> _repository;
         private readonly MixRepoDbRepository _repoDbRepository;
-        protected readonly MixIdentityService _mixIdentityService;
-        protected UnitOfWorkInfo AccountUow;
-        protected UnitOfWorkInfo<MixDbDbContext> MixDbUow;
-        protected UnitOfWorkInfo<MixCmsContext> CmsUow;
+        private readonly UnitOfWorkInfo _accountUow;
+        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private readonly MixCmsAccountContext _accContext;
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
         private readonly AuthConfigService _authConfigService;
 
         public MixUserController(
-             TenantUserManager userManager,
-             SignInManager<MixUser> signInManager,
-             RoleManager<MixRole> roleManager,
-             MixIdentityService idService,
-             EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
-             MixCmsAccountContext accContext,
-             MixCmsContext cmsContext,
-             MixRepoDbRepository repoDbRepository,
-             EmailService emailService,
-             IHttpContextAccessor httpContextAccessor,
-             IConfiguration configuration,
-             MixCacheService mixService,
-             TranslatorService translator,
-             MixIdentityService mixIdentityService,
-             IQueueService<MessageQueueModel> queueService,
-             UnitOfWorkInfo<MixDbDbContext> mixDbUow,
-             AuthConfigService authConfigService,
-             IMixEdmService edmService,
+            TenantUserManager userManager,
+            SignInManager<MixUser> signInManager,
+            RoleManager<MixRole> roleManager,
+            MixIdentityService idService,
+            EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
+            MixCmsAccountContext accContext,
+            MixCmsContext cmsContext,
+            MixRepoDbRepository repoDbRepository,
+            IHttpContextAccessor httpContextAccessor,
+            IConfiguration configuration,
+            MixCacheService mixService,
+            TranslatorService translator,
+            MixIdentityService mixIdentityService,
+            IQueueService<MessageQueueModel> queueService,
+            AuthConfigService authConfigService,
+            IMixEdmService edmService,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, mixService, 
-                  translator, mixIdentityService, queueService, mixTenantService)
+            : base(httpContextAccessor, configuration, mixService,
+                translator, mixIdentityService, queueService, mixTenantService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _idService = idService;
             _refreshTokenRepo = refreshTokenRepo;
-            _mixIdentityService = mixIdentityService;
-            AccountUow = new(accContext);
-            CmsUow = new(cmsContext);
-            _repository = new(AccountUow);
+            _accountUow = new(accContext);
+            _cmsUow = new(cmsContext);
+            _repository = new(_accountUow);
             _accContext = accContext;
 
 
             _repoDbRepository = repoDbRepository;
-            _emailService = emailService;
-            MixDbUow = mixDbUow;
             _authConfigService = authConfigService;
             _edmService = edmService;
         }
@@ -94,14 +82,14 @@ namespace Mix.Account.Controllers
 
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            if (AccountUow.ActiveTransaction != null)
+            if (_accountUow.ActiveTransaction != null)
             {
-                AccountUow.Complete();
+                _accountUow.Complete();
             }
 
-            if (CmsUow.ActiveTransaction != null)
+            if (_cmsUow.ActiveTransaction != null)
             {
-                CmsUow.Complete();
+                _cmsUow.Complete();
             }
 
             base.OnActionExecuted(context);
@@ -115,8 +103,10 @@ namespace Mix.Account.Controllers
         public async Task<ActionResult> MyTenants()
         {
             var userId = Guid.Parse(_idService.GetClaim(User, MixClaims.Id));
-            var tenantIds = await _accContext.MixUserTenants.Where(m => m.MixUserId == userId).Select(m => m.TenantId).ToListAsync();
-            var tenants = await MixTenantSystemViewModel.GetRepository(CmsUow, CacheService).GetListAsync(m => tenantIds.Contains(m.Id));
+            var tenantIds = await _accContext.MixUserTenants.Where(m => m.MixUserId == userId).Select(m => m.TenantId)
+                .ToListAsync();
+            var tenants = await MixTenantSystemViewModel.GetRepository(_cmsUow, CacheService)
+                .GetListAsync(m => tenantIds.Contains(m.Id));
             return Ok(tenants);
         }
 
@@ -125,7 +115,7 @@ namespace Mix.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Register([FromBody] RegisterViewModel model)
         {
-            await _idService.RegisterAsync(model, CurrentTenant.Id, CmsUow);
+            await _idService.RegisterAsync(model, CurrentTenant.Id, _cmsUow);
             var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
             var result = _idService.GetAuthData(user, true, CurrentTenant.Id);
             if (result != null && user != null)
@@ -133,15 +123,18 @@ namespace Mix.Account.Controllers
                 if (_authConfigService.AppSettings.RequireConfirmedEmail)
                 {
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var confirmationLink = $"{_authConfigService.AppSettings.ConfirmedEmailUrl}?token={HttpUtility.UrlEncode(token)}&email={user.Email}";
+                    var confirmationLink =
+                        $"{_authConfigService.AppSettings.ConfirmedEmailUrl}?token={HttpUtility.UrlEncode(token)}&email={user.Email}";
 
                     var data = new JObject(new JProperty("Url", confirmationLink));
                     await _edmService.SendMailWithEdmTemplate("Email Confirmation", "ActiveEmail", data, user.Email);
                 }
                 else
                 {
-                    await _edmService.SendMailWithEdmTemplate("Welcome", "Welcome", ReflectionHelper.ParseObject(user), user.Email);
+                    await _edmService.SendMailWithEdmTemplate("Welcome", "Welcome", ReflectionHelper.ParseObject(user),
+                        user.Email);
                 }
+
                 return Ok(result);
             }
             else
@@ -155,10 +148,11 @@ namespace Mix.Account.Controllers
         public async Task<ActionResult> ResendConfirmEmail(string id)
         {
             var user = await _userManager.FindByIdAsync(id).ConfigureAwait(false);
-            if (user != null && !user.EmailConfirmed)
+            if (user is { EmailConfirmed: false })
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var confirmationLink = $"{_authConfigService.AppSettings.ConfirmedEmailUrl}?token={HttpUtility.UrlEncode(token)}&email={user.Email}";
+                var confirmationLink =
+                    $"{_authConfigService.AppSettings.ConfirmedEmailUrl}?token={HttpUtility.UrlEncode(token)}&email={user.Email}";
                 var data = new JObject(new JProperty("Url", confirmationLink));
                 await _edmService.SendMailWithEdmTemplate("Email Confirmation", "ActiveEmail", data, user.Email);
                 return Ok();
@@ -176,9 +170,11 @@ namespace Mix.Account.Controllers
             if (user == null)
                 return View("Error");
             var result = await _userManager.ConfirmEmailAsync(user, token);
-            string redirectUrl = result.Succeeded ? _authConfigService.AppSettings.ConfirmedEmailUrlSuccess
+            string redirectUrl = result.Succeeded
+                ? _authConfigService.AppSettings.ConfirmedEmailUrlSuccess
                 : $"{_authConfigService.AppSettings.ConfirmedEmailUrlFail}?error={result.Errors.First().Description}";
-            await _edmService.SendMailWithEdmTemplate("Welcome", "Welcome", ReflectionHelper.ParseObject(user), user.Email);
+            await _edmService.SendMailWithEdmTemplate("Welcome", "Welcome", ReflectionHelper.ParseObject(user),
+                user.Email);
             return Redirect(redirectUrl);
         }
 
@@ -204,6 +200,7 @@ namespace Mix.Account.Controllers
             {
                 return Ok(loginResult);
             }
+
             return Unauthorized();
         }
 
@@ -272,15 +269,16 @@ namespace Mix.Account.Controllers
             try
             {
                 var id = _idService.GetClaim(User, MixClaims.Id);
-                var user = await _userManager.FindByIdAsync(id); ;
+                var user = await _userManager.FindByIdAsync(id);
 
-                if (user != null)
+                if (user == null)
                 {
-                    var result = new MixUserViewModel(user, CmsUow);
-                    await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext, CacheService);
-                    return Ok(result);
+                    return BadRequest();
                 }
-                return BadRequest();
+
+                var result = new MixUserViewModel(user, _cmsUow);
+                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext, CacheService);
+                return Ok(result);
             }
             catch (MixException)
             {
@@ -295,16 +293,16 @@ namespace Mix.Account.Controllers
         [HttpGet]
         [MixAuthorize(roles: MixRoles.Owner)]
         [Route("details/{id}")]
-        public async Task<ActionResult> Details([FromServices] DatabaseService databaseService, string id = null)
+        public async Task<ActionResult> Details([FromServices] DatabaseService databaseService, string id)
         {
-            MixUser user = await _userManager.FindByIdAsync(id); ;
-
+            var user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
-                var result = new MixUserViewModel(user, CmsUow);
+                var result = new MixUserViewModel(user, _cmsUow);
                 await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext, CacheService);
                 return Ok(result);
             }
+
             return BadRequest();
         }
 
@@ -313,7 +311,7 @@ namespace Mix.Account.Controllers
         [Route("remove-user/{id}")]
         public async Task<ActionResult> Remove(string id)
         {
-            MixUser user = await _userManager.FindByIdAsync(id); ;
+            var user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
                 var logins = await _userManager.GetLoginsAsync(user);
@@ -325,6 +323,7 @@ namespace Mix.Account.Controllers
                         throw new MixException(MixErrorStatus.Badrequest, result.Errors.First());
                     }
                 }
+
                 var idResult = await _userManager.DeleteAsync(user);
                 if (idResult.Succeeded)
                 {
@@ -337,6 +336,7 @@ namespace Mix.Account.Controllers
                     return Ok();
                 }
             }
+
             throw new MixException(MixErrorStatus.NotFound);
         }
 
@@ -360,7 +360,7 @@ namespace Mix.Account.Controllers
                 {
                     errors.Add($"User: {model.UserId} does not exists");
                 }
-                else if (!await (_userManager.IsInRoleAsync(appUser, role.Name)))
+                else if (role.Name != null && !await (_userManager.IsInRoleAsync(appUser, role.Name)))
                 {
                     await _userManager.AddToRoleAsync(appUser, role.Name, CurrentTenant.Id);
                     return Ok();
@@ -375,24 +375,24 @@ namespace Mix.Account.Controllers
                     errors.Add($"User: {model.UserId} does not exists");
                 }
 
-                var removeResult = _userManager.RemoveFromRoleAsync(appUser, role.Name, CurrentTenant.Id);
+                await _userManager.RemoveFromRoleAsync(appUser, role.Name, CurrentTenant.Id);
                 return Ok();
             }
+
             return BadRequest(errors);
         }
 
         [MixAuthorize(roles: MixRoles.Owner)]
         [HttpGet("list")]
-        public virtual async Task<ActionResult<PagingResponseModel<MixUser>>> Get([FromQuery] SearchRequestDto request)
+        public virtual async Task<ActionResult<PagingResponseModel<MixUserViewModel>>> Get(
+            [FromQuery] SearchRequestDto request)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var roles = await _userManager.GetRolesAsync(user);
             Expression<Func<MixUser, bool>> predicate = model =>
                 (string.IsNullOrWhiteSpace(request.Keyword)
-                || (
-                    (EF.Functions.Like(model.UserName, $"%{request.Keyword}%"))
-                   || (EF.Functions.Like(model.Email, $"%{request.Keyword}%"))
-                   )
+                 || (
+                     (EF.Functions.Like(model.UserName, $"%{request.Keyword}%"))
+                     || (EF.Functions.Like(model.Email, $"%{request.Keyword}%"))
+                 )
                 )
                 && (!request.FromDate.HasValue
                     || (model.CreatedDateTime >= request.FromDate.Value.ToUniversalTime())
@@ -400,10 +400,21 @@ namespace Mix.Account.Controllers
                 && (!request.ToDate.HasValue
                     || (model.CreatedDateTime <= request.ToDate.Value.ToUniversalTime())
                 );
+
             var searchQuery = new SearchAccountQueryModel(request);
-            var data = await _repository.GetPagingEntitiesAsync(predicate, searchQuery.PagingData)
-               .ConfigureAwait(false);
-            return data;
+            var data = await _repository
+                .GetPagingEntitiesAsync(predicate, searchQuery.PagingData)
+                .ConfigureAwait(false);
+
+            var items = new List<MixUserViewModel>();
+            foreach (var user in data.Items)
+            {
+                var result = new MixUserViewModel(user, _cmsUow);
+                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext, CacheService);
+                items.Add(result);
+            }
+
+            return new PagingResponseModel<MixUserViewModel>(items, searchQuery.PagingData);
         }
 
         // POST api/template
@@ -413,34 +424,43 @@ namespace Mix.Account.Controllers
         public async Task<ActionResult<MixUserViewModel>> Save(
             [FromBody] MixUserViewModel model)
         {
-            if (model != null)
+            if (model == null)
             {
-                var user = await _userManager.FindByIdAsync(model.Id.ToString());
-                user.Email = model.Email;
-                user.PhoneNumber = model.PhoneNumber;
-                var updInfo = await _userManager.UpdateAsync(user);
-                if (model.IsChangePassword)
-                {
-                    var changePwd = await _userManager.ChangePasswordAsync(
-                        user,
-                        model.ChangePassword.CurrentPassword,
-                        model.ChangePassword.NewPassword);
-                    if (!changePwd.Succeeded)
-                    {
-                        throw new MixException(string.Join(",", changePwd.Errors));
-                    }
-                    else
-                    {
-                        // Remove other token if change password success
-                        if (Guid.TryParse(_idService.GetClaim(User, MixClaims.RefreshToken), out var refreshTokenId))
-                        {
-                            await _refreshTokenRepo.DeleteManyAsync(m => m.Username == user.UserName && m.Id != refreshTokenId);
-                        }
-                    }
-                }
+                return BadRequest();
+            }
+
+            var user = await _userManager.FindByIdAsync(model.Id.ToString());
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            user.Email = model.Email;
+            user.PhoneNumber = model.PhoneNumber;
+            if (!model.IsChangePassword)
+            {
                 return Ok(model);
             }
-            return BadRequest();
+
+            var changePwd = await _userManager.ChangePasswordAsync(
+                user,
+                model.ChangePassword.CurrentPassword,
+                model.ChangePassword.NewPassword);
+            if (!changePwd.Succeeded)
+            {
+                throw new MixException(string.Join(",", changePwd.Errors));
+            }
+            else
+            {
+                // Remove other token if change password success
+                if (Guid.TryParse(_idService.GetClaim(User, MixClaims.RefreshToken), out var refreshTokenId))
+                {
+                    await _refreshTokenRepo.DeleteManyAsync(m =>
+                        m.Username == user.UserName && m.Id != refreshTokenId);
+                }
+            }
+
+            return Ok(model);
         }
 
 
@@ -463,9 +483,10 @@ namespace Mix.Account.Controllers
             //    result.Data = "Invalid Email";
 
             var confirmationCode =
-                    await _userManager.GeneratePasswordResetTokenAsync(user);
+                await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            var callbackUrl = $"{Request.Scheme}://{Request.Host}/security/reset-password/?token={System.Web.HttpUtility.UrlEncode(confirmationCode)}";
+            var callbackUrl =
+                $"{Request.Scheme}://{Request.Host}/security/reset-password/?token={HttpUtility.UrlEncode(confirmationCode)}";
             var obj = ReflectionHelper.ParseObject(user);
             obj.Add(new JProperty("URL", callbackUrl));
 
@@ -483,9 +504,9 @@ namespace Mix.Account.Controllers
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Invalid User");
             }
-            string code = HttpUtility.UrlDecode(model.Code)?.Replace(' ', '+');
+
             var idResult = await _userManager.ResetPasswordAsync(
-                                        user, model.Code, model.Password);
+                user, model.Code, model.Password);
             if (!idResult.Succeeded)
             {
                 var errors = idResult.Errors.Select(m => m.Description);
@@ -501,11 +522,13 @@ namespace Mix.Account.Controllers
         public async Task<ActionResult> ResetPassword([FromBody] ChangePasswordViewModel model)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
             var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
             return result.Succeeded ? Ok() : BadRequest(result.Errors.Select(m => m.Description).ToList());
         }
-        #region Helpers
-
-        #endregion
     }
 }
