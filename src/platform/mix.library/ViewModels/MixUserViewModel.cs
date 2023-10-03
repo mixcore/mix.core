@@ -43,9 +43,7 @@ namespace Mix.Lib.ViewModels
         public bool IsChangePassword { get; set; }
 
         public ChangePasswordViewModel ChangePassword { get; set; }
-        [JsonIgnore]
-        private UnitOfWorkInfo<MixCmsContext> _cmsUow { get; }
-
+        [JsonIgnore] private UnitOfWorkInfo<MixCmsContext> _cmsUow { get; }
 
         #endregion Change Password
 
@@ -56,7 +54,8 @@ namespace Mix.Lib.ViewModels
             _cmsUow = uow;
         }
 
-        public async Task LoadUserDataAsync(int tenantId, MixRepoDbRepository repoDbRepository, MixCmsAccountContext accContext, MixCacheService cacheService)
+        public async Task LoadUserDataAsync(int tenantId, MixRepoDbRepository repoDbRepository,
+            MixCmsAccountContext accContext, MixCacheService cacheService)
         {
             if (!GlobalConfigService.Instance.IsInit)
             {
@@ -68,19 +67,20 @@ namespace Mix.Lib.ViewModels
                     dynamic data = await repoDbRepository.GetSingleByParentAsync(MixContentType.User, Id);
                     if (data != null)
                     {
-
-                        UserData = data != null ? ReflectionHelper.ParseObject(data) : null;
+                        UserData = ReflectionHelper.ParseObject(data);
                         foreach (var relation in database.Relationships)
                         {
-                            var associations = _cmsUow.DbContext.MixDatabaseAssociation.Where(m => m.ParentDatabaseName == MixDatabaseNames.SYSTEM_USER_DATA
-                                                        && m.ChildDatabaseName == relation.DestinateDatabaseName
-                                                        && m.ParentId == UserData.Value<int>("id"));
+                            var associations = _cmsUow.DbContext.MixDatabaseAssociation.Where(m =>
+                                m.ParentDatabaseName == MixDatabaseNames.SYSTEM_USER_DATA
+                                && m.ChildDatabaseName == relation.DestinateDatabaseName
+                                && m.ParentId == UserData.Value<int>("id"));
                             if (associations.Count() > 0)
                             {
                                 var ids = associations.Select(m => m.ChildId).ToList();
 
                                 repoDbRepository.InitTableName(relation.DestinateDatabaseName);
-                                var nestedData = await repoDbRepository.GetListByAsync(new List<QueryField> {
+                                var nestedData = await repoDbRepository.GetListByAsync(new List<QueryField>
+                                {
                                     new("id", ids.First())
                                 });
                                 if (nestedData != null)
@@ -90,11 +90,12 @@ namespace Mix.Lib.ViewModels
                             }
                         }
                     }
+
                     var roles = from ur in accContext.AspNetUserRoles
-                                join r in accContext.MixRoles
-                                on ur.RoleId equals r.Id
-                                where ur.UserId == Id && ur.MixTenantId == tenantId
-                                select ur;
+                        join r in accContext.MixRoles
+                            on ur.RoleId equals r.Id
+                        where ur.UserId == Id && ur.MixTenantId == tenantId
+                        select ur;
                     Roles = await roles.ToListAsync();
                 }
                 catch (Exception ex)
@@ -112,11 +113,11 @@ namespace Mix.Lib.ViewModels
                 {
                     repoDbRepository.InitTableName(MixDatabaseNames.PORTAL_MENU);
                     var menus = await repoDbRepository.GetListByAsync(
-                            new List<SearchQueryField>()
-                            {
-                                new SearchQueryField("Role", roles, MixCompareOperator.InRange)
-                            }
-                        );
+                        new List<SearchQueryField>()
+                        {
+                            new SearchQueryField("Role", roles, MixCompareOperator.InRange)
+                        }
+                    );
                     PortalMenus = ReflectionHelper.ParseArray(menus);
                 }
             }
@@ -157,6 +158,5 @@ namespace Mix.Lib.ViewModels
         //        return $"{method} - {path}";
         //    }).Distinct().ToList();
         //}
-
     }
 }
