@@ -24,7 +24,7 @@ namespace Mix.Lib.ViewModels.ReadOnly
         {
         }
 
-        public MixDatabaseContextReadViewModel(MixDatabaseContext entity, UnitOfWorkInfo uowInfo = null)
+        public MixDatabaseContextReadViewModel(MixDatabaseContext entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

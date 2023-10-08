@@ -25,6 +25,10 @@ namespace Mix.Database.Migrations
                         .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("AppSettings")
+                        .HasColumnType("ntext")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("BaseApiUrl")
                         .HasColumnType("varchar(250)")
                         .HasAnnotation("MySql:CharSet", "utf8");

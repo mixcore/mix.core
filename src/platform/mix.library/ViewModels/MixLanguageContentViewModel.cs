@@ -19,7 +19,7 @@
         {
         }
 
-        public MixLanguageContentViewModel(MixLanguageContent entity, UnitOfWorkInfo uowInfo = null)
+        public MixLanguageContentViewModel(MixLanguageContent entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

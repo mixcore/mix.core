@@ -2,6 +2,7 @@
 using Mix.Database.Services;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
+using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
@@ -13,16 +14,16 @@ namespace Mixcore.Controllers
         protected readonly MixCmsContext CmsContext;
         private readonly MixCacheService _cacheService;
         private readonly DatabaseService _databaseService;
-
-        public AppController(
+        public AppController(            
             IHttpContextAccessor httpContextAccessor,
             IPSecurityConfigService ipSecurityConfigService,
             IMixCmsService mixCmsService,
             DatabaseService databaseService,
             MixCmsContext cmsContext,
             MixCacheService cacheService,
-            IMixTenantService tenantService)
-            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService)
+            IMixTenantService tenantService,
+            IConfiguration configuration)
+            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
         {
             CmsContext = cmsContext;
             Uow = new(CmsContext);
@@ -36,7 +37,7 @@ namespace Mixcore.Controllers
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (GlobalConfigService.Instance.AppSettings.IsInit)
+            if (GlobalConfig.IsInit)
             {
                 IsValid = false;
                 if (string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -45,7 +46,7 @@ namespace Mixcore.Controllers
                 }
                 else
                 {
-                    var status = GlobalConfigService.Instance.AppSettings.InitStatus;
+                    var status = GlobalConfig.InitStatus;
                     RedirectUrl = $"/init/step{status}";
                 }
             }

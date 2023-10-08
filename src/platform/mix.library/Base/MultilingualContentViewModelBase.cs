@@ -23,7 +23,7 @@ namespace Mix.Lib.Base
         {
         }
 
-        protected MultilingualContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null)
+        protected MultilingualContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

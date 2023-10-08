@@ -2,33 +2,33 @@
 {
     public class MixAppConfigFilePaths
     {
-        public const string Authentication = "MixContent/Shared/AppConfigs/authentication";
-        public const string AppConfigs = "MixContent/AppConfigs";
-        public const string Shared = "MixContent/Shared";
-        public const string Database = "MixContent/Shared/AppConfigs/database";
-        public const string Culture = "MixContent/Shared/AppConfigs/culture";
-        public const string ConnectionString = "MixContent/Shared/AppConfigs/connection_string";
-        public const string MixConfigurations = "MixContent/Shared/AppConfigs/authentication";
-        public const string Translator = "MixContent/Shared/AppConfigs/translator";
-        public const string Configration = "MixContent/Shared/AppConfigs/configuration";
+        public const string Authentication = "mixcontent/shared/appconfigs/authentication";
+        public const string AppConfigs = "mixcontent/appconfigs";
+        public const string Shared = "mixcontent/shared";
+        public const string Database = "mixcontent/shared/appconfigs/database";
+        public const string Culture = "mixcontent/shared/appconfigs/culture";
+        public const string ConnectionString = "mixcontent/shared/appconfigs/connection_string";
+        public const string MixConfigurations = "mixcontent/shared/appconfigs/authentication";
+        public const string Translator = "mixcontent/shared/appconfigs/translator";
+        public const string Configration = "mixcontent/shared/appconfigs/configuration";
 
-        public const string Global = "MixContent/Shared/AppConfigs/global";
-        public const string Portal = "MixContent/Shared/AppConfigs/portal";
-        public const string EPPlus = "MixContent/Shared/AppConfigs/epplus";
-        public const string IPSecurity = "MixContent/Shared/AppConfigs/ip_security";
-        public const string MixHeart = "MixContent/Shared/AppConfigs/mix_heart";
-        public const string Quartz = "MixContent/Shared/AppConfigs/quartz";
-        public const string Smtp = "MixContent/Shared/AppConfigs/smtp";
-        public const string Endpoint = "MixContent/Shared/AppConfigs/endpoint";
-        public const string Azure = "MixContent/Shared/AppConfigs/azure";
-        public const string Ocelot = "MixContent/Shared/AppConfigs/ocelot";
-        public const string Storage = "MixContent/Shared/AppConfigs/storage";
-        public const string Queue = "MixContent/Shared/AppConfigs/queue";
-        public const string Payments = "MixContent/Shared/AppConfigs/payments";
-        public const string Kiotviet = "MixContent/Shared/AppConfigs/kiotviet";
-        public const string Log = "MixContent/Shared/AppConfigs/log";
-        public const string RateLimit = "MixContent/Shared/AppConfigs/rate_limit";
-        public const string GoogleFirebase = "MixContent/Shared/AppConfigs/google_firebase";
-        public const string GoogleCredential = "MixContent/Shared/AppConfigs/google_credential";
+        public const string Global = "mixcontent/shared/appconfigs/global";
+        public const string Portal = "mixcontent/shared/appconfigs/portal";
+        public const string EPPlus = "mixcontent/shared/appconfigs/epplus";
+        public const string IPSecurity = "mixcontent/shared/appconfigs/ip_security";
+        public const string MixHeart = "mixcontent/shared/appconfigs/mix_heart";
+        public const string Quartz = "mixcontent/shared/appconfigs/quartz";
+        public const string Smtp = "mixcontent/shared/appconfigs/smtp";
+        public const string Endpoint = "mixcontent/shared/appconfigs/endpoint";
+        public const string Azure = "mixcontent/shared/appconfigs/azure";
+        public const string Ocelot = "mixcontent/shared/appconfigs/ocelot";
+        public const string Storage = "mixcontent/shared/appconfigs/storage";
+        public const string Queue = "mixcontent/shared/appconfigs/queue";
+        public const string Payments = "mixcontent/shared/appconfigs/payments";
+        public const string Kiotviet = "mixcontent/shared/appconfigs/kiotviet";
+        public const string Log = "mixcontent/shared/appconfigs/log";
+        public const string RateLimit = "mixcontent/shared/appconfigs/rate_limit";
+        public const string GoogleFirebase = "mixcontent/shared/appconfigs/google_firebase";
+        public const string GoogleCredential = "mixcontent/shared/appconfigs/google_credential";
     }
 }

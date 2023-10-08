@@ -85,35 +85,8 @@
 		<EmbeddedResource Include="Views\_ViewStart.cshtml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
-		<EmbeddedResource Include="..\..\shared\**">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Remove="Domain\Helpers\**" />
 		<Compile Remove="logs\**" />
-		<Compile Remove="Models\Cms\**" />
-		<Content Remove="Domain\Helpers\**" />
-		<Content Remove="logs\**" />
-		<Content Remove="Models\Cms\**" />
-		<Content Remove="wwwroot\mix-content\**" />
-		<EmbeddedResource Remove="..\..\shared\MixContent\**" />
-		<EmbeddedResource Remove="Domain\Helpers\**" />
-		<EmbeddedResource Remove="logs\**" />
-		<EmbeddedResource Remove="Models\Cms\**" />
-		<EmbeddedResource Remove="wwwroot\mix-content\**" />
-		<None Remove="Domain\Helpers\**" />
-		<None Remove="logs\**" />
-		<None Remove="Models\Cms\**" />
-		<None Remove="wwwroot\mix-content\**" />
-	</ItemGroup>
-	<ItemGroup>
-		<Content Update="Views\Home\Index.cshtml">
-		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-		<Content Update="wwwroot\mix-app\css\swagger.css">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</Content>
 	</ItemGroup>
 </Project>

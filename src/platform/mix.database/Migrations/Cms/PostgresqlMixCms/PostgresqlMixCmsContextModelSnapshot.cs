@@ -30,6 +30,10 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AppSettings")
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("BaseApiUrl")
                         .HasColumnType("varchar(250)")
                         .HasAnnotation("MySql:CharSet", "utf8");

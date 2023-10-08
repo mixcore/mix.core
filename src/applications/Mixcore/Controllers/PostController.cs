@@ -28,8 +28,9 @@ namespace Mixcore.Controllers
             IMixMetadataService metadataService,
             UnitOfWorkInfo<MixDbDbContext> dbUow,
             MixCacheService cacheService,
-            IMixTenantService tenantService)
-            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService)
+            IMixTenantService tenantService,
+             IConfiguration configuration)
+            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
         {
             CmsContext = cmsContext;
             Uow = new(CmsContext);

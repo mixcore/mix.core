@@ -27,6 +27,11 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("AppSettings")
+                        .HasColumnType("longtext");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("AppSettings"), "utf8");
+
                     b.Property<string>("BaseApiUrl")
                         .HasColumnType("varchar(250)");
 

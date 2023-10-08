@@ -18,7 +18,7 @@
         {
         }
 
-        protected HaveParentSEOContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null)
+        protected HaveParentSEOContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

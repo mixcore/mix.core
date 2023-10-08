@@ -535,7 +535,7 @@ namespace Mix.RepoDb.Services
 
             if (!result.ContainsKey(IdFieldName))
             {
-                result.Add(new JProperty(IdFieldName, null));
+                result.Add(new JProperty(IdFieldName, string.Empty));
                 if (!result.ContainsKey(CreatedDateFieldName))
                 {
                     result.Add(new JProperty(CreatedDateFieldName, DateTime.UtcNow));

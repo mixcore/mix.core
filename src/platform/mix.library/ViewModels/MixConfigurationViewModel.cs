@@ -16,7 +16,7 @@
         {
         }
 
-        public MixConfigurationViewModel(MixConfiguration entity, UnitOfWorkInfo uowInfo = null)
+        public MixConfigurationViewModel(MixConfiguration entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

@@ -66,7 +66,7 @@ namespace Mix.Lib.Helpers
             // Clone Settings from shared folder
             if (!mixContentFolder.Exists)
             {
-                MixHelper.CopyFolder(MixFolders.SharedConfigurationFolder, MixFolders.MixContentFolder);
+                MixHelper.CopyFolder(MixFolders.DefaultMixContentFolder, MixFolders.MixContentFolder);
                 Console.WriteLine("Clone Settings from shared folder completed.");
             }
             return Host.CreateDefaultBuilder(args)

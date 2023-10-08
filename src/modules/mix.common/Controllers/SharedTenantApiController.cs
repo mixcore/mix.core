@@ -44,7 +44,7 @@ namespace Mix.Common.Controllers
 
         [HttpGet]
         [Route("get-global-settings")]
-        public ActionResult<GlobalSettings> GetSharedSettings()
+        public ActionResult<Models.GlobalSettings> GetSharedSettings()
         {
             var settings = CommonHelper.GetAppSettings(_authConfigurations, CurrentTenant);
             return Ok(settings);

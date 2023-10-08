@@ -244,20 +244,10 @@ ModelManifest.xml
 .vscode/
 *.db
 
-src/applications/Mixcore/Properties/PublishProfiles/
-
-src/shared/__pycache__/
-src/applications/Mixcore/MixContent/cache
-src/applications/Mixcore/MixContent/Temp
-src/applications/Mixcore/MixContent/*.db
-src/applications/Mixcore/MixContent/*.db-shm
-src/applications/Mixcore/MixContent/*.db-wal
-src/applications/Mixcore/logs/
-
-src/applications/Mixcore/MixContent/
-
+src/applications/**/PublishProfiles/
+src/applications/**/mixcontent/
+src/applications/**/ServiceDependencies/
 
 src/applications/Mixcore/wwwroot/portal-apps/
-src/test/__pycache__/
-
-src/modules/**/MixContent
+src/**/__pycache__/
+src/**/logs/

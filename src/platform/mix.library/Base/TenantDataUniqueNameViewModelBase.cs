@@ -18,7 +18,7 @@ namespace Mix.Lib.Base
         {
         }
 
-        protected TenantDataUniqueNameViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null)
+        protected TenantDataUniqueNameViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

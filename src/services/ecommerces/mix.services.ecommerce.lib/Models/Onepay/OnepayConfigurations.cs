@@ -2,6 +2,7 @@
 {
     public sealed class OnepayConfigurations
     {
+        public bool Enabled { get; set; }
         public int Version { get; set; }
         public string Currency { get; set; }
         public string PaymentEndpoint { get; set; }

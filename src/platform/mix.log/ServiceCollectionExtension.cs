@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Constant.Constants;
 using Mix.Database.Entities.AuditLog;
 using Mix.Database.Entities.Queue;
 using Mix.Log.Lib.Interfaces;
@@ -27,7 +28,7 @@ namespace Mix.Log.Lib
     {
         public static IServiceCollection AddMixLog(this IServiceCollection services, IConfiguration configuration)
         {
-            var globalConfigs = configuration.Get<GlobalConfigurations>();
+            var globalConfigs = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
 
             services.AddDbContext<AuditLogDbContext>();
             services.AddDbContext<MixQueueDbContext>();

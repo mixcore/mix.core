@@ -19,7 +19,7 @@
         {
         }
 
-        protected ExtraColumnMultilingualSEOContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null)
+        protected ExtraColumnMultilingualSEOContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

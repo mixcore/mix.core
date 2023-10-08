@@ -14,7 +14,7 @@ namespace Mix.Common.Domain.ViewModels
         {
         }
 
-        public PostContentViewModel(MixPostContent entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public PostContentViewModel(MixPostContent entity, UnitOfWorkInfo uowInfo) : base(entity, uowInfo)
         {
         }
 

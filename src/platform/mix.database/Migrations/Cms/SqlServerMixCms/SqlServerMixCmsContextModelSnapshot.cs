@@ -32,6 +32,10 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AppSettings")
+                        .HasColumnType("ntext")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("BaseApiUrl")
                         .HasColumnType("varchar(250)")
                         .HasAnnotation("MySql:CharSet", "utf8");

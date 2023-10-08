@@ -1,11 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Constant.Constants;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Middlewares;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Entities.Onepay;
 using Mix.Services.Ecommerce.Lib.Entities.Paypal;
 using Mix.Services.Ecommerce.Lib.Interfaces;
+using Mix.Services.Ecommerce.Lib.Models;
 using Mix.Services.Ecommerce.Lib.Services;
 using Mix.Shared.Services;
 
@@ -13,13 +16,17 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceProviderExtensions
     {
-        public static void AddMixEcommerce(this IServiceCollection services)
+        public static void AddMixEcommerce(this IServiceCollection services, Configuration.IConfiguration configuration)
         {
-            services.AddMixOnepay();
-            services.AddMixPaypal();
-            services.AddEcommerceDb();
-            services.TryAddScoped<IOrderService, OrderService>();
-            services.TryAddScoped<IEcommerceService, EcommerceService>();
+            var paymentSettings = configuration.GetSection(MixAppSettingsSection.Payments).Get<PaymentConfigurationModel>();
+            if (paymentSettings != null && paymentSettings.IsActive)
+            {
+                services.AddMixOnepay();
+                services.AddMixPaypal();
+                services.AddEcommerceDb();
+                services.TryAddScoped<IOrderService, OrderService>();
+                services.TryAddScoped<IEcommerceService, EcommerceService>();
+            }
         }
         public static void AddEcommerceDb(this IServiceCollection services)
         {
@@ -43,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<OnepayDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<OnepayDbContext>>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<OnepayDbContext>>();
-            
+
             if (!GlobalConfigService.Instance.IsInit)
             {
                 using (var context = services.GetService<OnepayDbContext>())

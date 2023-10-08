@@ -26,8 +26,9 @@ namespace Mixcore.Controllers
             MixRepoDbRepository repoDbRepository,
             IMixMetadataService metadataService,
             MixCacheService cacheService,
-            IMixTenantService tenantService)
-            : base(httpContextAccessor, ipSecurityConfigService, mixCmsService, translator, databaseService, uow, cacheService, tenantService)
+            IMixTenantService tenantService,
+             IConfiguration configuration)
+            : base(httpContextAccessor, ipSecurityConfigService, mixCmsService, translator, databaseService, uow, cacheService, tenantService, configuration)
         {
             _repoDbRepository = repoDbRepository;
             _metadataService = metadataService;
@@ -38,7 +39,7 @@ namespace Mixcore.Controllers
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (GlobalConfigService.Instance.AppSettings.IsInit)
+            if (GlobalConfig.IsInit)
             {
                 IsValid = false;
                 if (string.IsNullOrEmpty(DatabaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -47,7 +48,7 @@ namespace Mixcore.Controllers
                 }
                 else
                 {
-                    var status = GlobalConfigService.Instance.AppSettings.InitStatus;
+                    var status = GlobalConfig.InitStatus;
                     RedirectUrl = $"/init/step{status}";
                 }
             }

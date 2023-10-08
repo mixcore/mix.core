@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\mix_grpc.proto" GrpcServices="Server" />
+    <Protobuf Include="Domain\Protos\mix_grpc.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>

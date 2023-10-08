@@ -27,8 +27,9 @@ namespace Mixcore.Controllers
             MixIdentityService idService,
             TenantUserManager userManager,
             MixEndpointService mixEndpointService,
-            IMixTenantService tenantService)
-            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService)
+            IMixTenantService tenantService,
+             IConfiguration configuration)
+            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
         {
             _signInManager = signInManager;
             _logger = logger;

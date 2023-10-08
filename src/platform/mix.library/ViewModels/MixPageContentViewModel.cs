@@ -10,7 +10,7 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixPageContentViewModel(MixPageContent entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixPageContentViewModel(MixPageContent entity, UnitOfWorkInfo uowInfo) : base(entity, uowInfo)
         {
         }
 

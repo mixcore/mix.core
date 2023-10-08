@@ -7,6 +7,7 @@
 
         public string BaseHref { get; set; }
         public string BaseRoute { get; set; }
+        public JObject AppSettings { get; set; }
         public string Domain { get; set; }
         public string BaseApiUrl { get; set; }
         public int? TemplateId { get; set; }

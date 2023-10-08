@@ -19,8 +19,12 @@ namespace Mix.SignalR.Hubs
                 try
                 {
                     var msg = JObject.Parse(message).ToObject<SignalRMessageModel>();
-                    msg.From ??= GetCurrentUser();
-                    _ = Clients.GroupExcept(room, Context.ConnectionId).SendAsync(HubMethods.ReceiveMethod, msg.ToString());
+                    if (msg != null)
+                    {
+
+                        msg.From ??= GetCurrentUser();
+                        _ = Clients.GroupExcept(room, Context.ConnectionId).SendAsync(HubMethods.ReceiveMethod, msg.ToString());
+                    }
                 }
                 catch (Exception ex)
                 {

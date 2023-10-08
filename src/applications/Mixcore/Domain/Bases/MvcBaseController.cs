@@ -20,7 +20,9 @@ namespace Mixcore.Domain.Bases
             DatabaseService databaseService,
             UnitOfWorkInfo<MixCmsContext> uow,
             MixCacheService cacheService,
-            IMixTenantService tenantService) : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService)
+            IMixTenantService tenantService,
+             IConfiguration configuration) : 
+            base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
         {
             Translator = translator;
             DatabaseService = databaseService;
@@ -33,7 +35,7 @@ namespace Mixcore.Domain.Bases
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (GlobalConfigService.Instance.AppSettings.IsInit)
+            if (GlobalConfig.IsInit)
             {
                 IsValid = false;
                 if (string.IsNullOrEmpty(DatabaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -42,7 +44,7 @@ namespace Mixcore.Domain.Bases
                 }
                 else
                 {
-                    var status = GlobalConfigService.Instance.AppSettings.InitStatus;
+                    var status = GlobalConfig.InitStatus;
                     RedirectUrl = $"/init/step{status}";
                 }
             }

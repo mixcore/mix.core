@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Interfaces;
+using Mix.Shared.Models.Configurations;
+using RepoDb;
 using System.Globalization;
 
 namespace Mix.Lib.Base
@@ -17,6 +19,7 @@ namespace Mix.Lib.Base
         protected bool IsValid = true;
         protected string RedirectUrl;
         protected readonly IPSecurityConfigService IpSecurityConfigService;
+        protected readonly GlobalSettingsModel GlobalConfig;
         protected readonly IMixCmsService MixCmsService;
         protected IMixTenantService TenantService;
         protected MixTenantSystemModel CurrentTenant => Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
@@ -40,13 +43,16 @@ namespace Mix.Lib.Base
              IHttpContextAccessor httpContextAccessor,
              IMixCmsService mixCmsService,
              IPSecurityConfigService ipSecurityConfigService,
-             IMixTenantService tenantService)
+             IMixTenantService tenantService,
+             IConfiguration configuration)
         {
+            Configuration = configuration;
             Session = httpContextAccessor.HttpContext?.Session;
             IpSecurityConfigService = ipSecurityConfigService;
             ViewData[MixRequestQueryKeywords.Tenant] = CurrentTenant;
             MixCmsService = mixCmsService;
             TenantService = tenantService;
+            GlobalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
         }
 
         private void LoadCulture()
@@ -90,7 +96,7 @@ namespace Mix.Lib.Base
 
         public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (!GlobalConfigService.Instance.AppSettings.IsInit)
+            if (!GlobalConfig.IsInit)
             {
                 LoadCulture();
             }
@@ -137,7 +143,7 @@ namespace Mix.Lib.Base
             }
 
             // If mode Maintenance enabled in appsettings
-            if (!GlobalConfigService.Instance.IsInit
+            if (!GlobalConfig.IsInit
                 && CurrentTenant != null
                 && CurrentTenant.Configurations != null
                 && CurrentTenant.Configurations.IsMaintenance
