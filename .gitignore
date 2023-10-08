@@ -245,6 +245,7 @@ ModelManifest.xml
 *.db
 
 src/applications/**/PublishProfiles/
+src/applications/**/mixcontent/
 src/applications/**/ServiceDependencies/
 
 src/applications/Mixcore/wwwroot/portal-apps/

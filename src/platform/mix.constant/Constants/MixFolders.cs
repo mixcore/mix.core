@@ -21,7 +21,7 @@
         public const string ImportFolder = "mixcontent/staticfiles/imports/themes";
         public const string UploadsFolder = "uploads";
         public const string SiteContentAssetsFolder = "mixcontent/assets";
-        public const string SharedConfigurationFolder = "../../shared/MixContent";
+        public const string DefaultMixContentFolder = "wwwroot/default-mixcontent";
         public const string MixCoreConfigurationFolder = "../../applications/Mixcore/mixcontent";
     }
 }
