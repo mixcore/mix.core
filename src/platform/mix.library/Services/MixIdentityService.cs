@@ -95,7 +95,7 @@ namespace Mix.Lib.Services
             _accContext = accContext;
             MixDbUow = mixDbUow;
             MixDbDataService = mixDbDataService;
-            GlobalConfig = Configuration.Get<GlobalSettingsModel>();
+            GlobalConfig = Configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>();
         }
 
         public virtual async Task<bool> Any(Guid userId)
@@ -165,7 +165,7 @@ namespace Mix.Lib.Services
         public virtual async Task<JObject> GetAuthData(MixUser user, bool rememberMe, int tenantId, CancellationToken cancellationToken = default)
         {
             var rsaKeys = RSAEncryptionHelper.GenerateKeys();
-            var aesKey = GlobalConfig.AesKey;  //AesEncryptionHelper.GenerateCombinedKeys();
+            var aesKey = GlobalConfig.ApiEncryptKey;
 
             var token = await GenerateAccessTokenAsync(user, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY], cancellationToken);
             if (token != null)

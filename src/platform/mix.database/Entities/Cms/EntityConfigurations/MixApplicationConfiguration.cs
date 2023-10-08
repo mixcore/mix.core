@@ -17,6 +17,12 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
             builder.Property(e => e.DisplayName)
                 .HasColumnType($"{Config.String}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet);
+            builder.Property(e => e.AppSettings)
+               .HasColumnType(Config.Text)
+               .HasConversion(
+                   v => v.ToString(Newtonsoft.Json.Formatting.None),
+                   v => !string.IsNullOrEmpty(v) ? JObject.Parse(v) : new())
+               .HasCharSet(Config.CharSet);
             builder.Property(e => e.BaseHref)
                 .HasColumnType($"{Config.String}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet);
