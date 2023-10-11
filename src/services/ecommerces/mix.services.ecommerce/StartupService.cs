@@ -21,8 +21,7 @@ namespace Mix.Services.Ecommerce
             {
                 services.AddMixEcommerce(configuration);
                 services.TryAddScoped<IMixMetadataService, MixMetadataService>();
-                services.TryAddScoped<OnepayService>();
-                services.TryAddScoped<PaypalService>();
+                
             }
         }
 
