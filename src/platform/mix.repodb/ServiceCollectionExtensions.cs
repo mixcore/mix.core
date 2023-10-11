@@ -22,11 +22,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddHostedService<MixRepoDbPublisher>();
             services.AddHostedService<MixRepoDbSubscriber>();
 
-            if (!globalConfig.IsInit && globalConfig.IsUpdateSystemDatabases)
-            {
-                var mixDbService = services.GetService<IMixDbService>();
-                mixDbService.MigrateSystemDatabases().GetAwaiter().GetResult();
-            }
             return services;
         }
     }

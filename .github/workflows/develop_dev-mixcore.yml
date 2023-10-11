@@ -6,7 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - dev-mixcore
 on:
   push:
     branches:
-      - features/cleanup-startup
+      - features/fix-migrate-sytem-databases
   workflow_dispatch:
 
 jobs:

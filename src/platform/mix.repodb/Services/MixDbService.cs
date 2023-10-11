@@ -525,8 +525,12 @@ namespace Mix.RepoDb.Services
 
         }
 
-        public async Task<bool> MigrateSystemDatabases()
+        // Only run after init CMS success
+        // TODO: Add version to systemDatabases and update if have newer version
+        public async Task<bool> MigrateSystemDatabases(CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var strMixDbs = MixFileHelper.GetFile(
                     "system-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
             var obj = JObject.Parse(strMixDbs.Content);
@@ -536,29 +540,26 @@ namespace Mix.RepoDb.Services
             {
                 foreach (var database in databases)
                 {
-                    if (!await CheckTableExist(database.SystemName, _repository))
+                    if (!_cmsUow.DbContext.MixDatabase.Any(m => m.SystemName == database.SystemName))
                     {
-                        MixDatabaseViewModel currentDb = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService)
-                            .GetSingleAsync(m => m.SystemName == database.SystemName);
-                        if (currentDb == null)
+
+                        MixDatabaseViewModel currentDb = new(database, _cmsUow);
+                        currentDb.Id = 0;
+                        currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
+                        currentDb.CreatedDateTime = DateTime.UtcNow;
+                        currentDb.Columns = new();
+
+                        if (columns is not null)
                         {
-                            currentDb = new(database, _cmsUow);
-                            currentDb.Id = 0;
-                            currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
-                            currentDb.CreatedDateTime = DateTime.UtcNow;
-                            currentDb.Columns = new();
-
-                            if (columns is not null)
+                            var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
+                            foreach (var col in cols)
                             {
-                                var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
-                                foreach (var col in cols)
-                                {
-                                    currentDb.Columns.Add(new(col, _cmsUow));
-                                }
+                                col.Id = 0;
+                                currentDb.Columns.Add(new(col, _cmsUow));
                             }
-
-                            await currentDb.SaveAsync();
                         }
+
+                        await currentDb.SaveAsync(cancellationToken);
                         if (currentDb is { Columns.Count: > 0 })
                         {
                             await Migrate(currentDb, _databaseService.DatabaseProvider, _repository);
@@ -701,18 +702,6 @@ namespace Mix.RepoDb.Services
             return await _repository.GetAllAsync(cancellationToken);
         }
 
-        private async Task<bool> CheckTableExist(string tableName, MixRepoDbRepository repo)
-        {
-            try
-            {
-                var count = await repo.ExecuteCommand($"SELECT Count(*) FROM {_databaseConstant.BacktickOpen}{tableName}{_databaseConstant.BacktickClose};");
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
         private async Task<bool> Migrate(MixDatabaseViewModel database,
             MixDatabaseProvider databaseProvider,
             MixRepoDbRepository repo)

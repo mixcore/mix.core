@@ -4,7 +4,7 @@
     {
         public const string WebRootPath = "wwwroot";
         public const string StaticFiles = "mixcontent/staticfiles";
-        public const string TemplatesFolder = "mixcontent/templates";//"Views/Shared/Templates"
+        public const string TemplatesFolder = "mixcontent/templates";
         public const string TempFolder = "mixcontent/temp";
         public const string ThemePackage = "mixcontent/temp/themes";
         public const string PortalApps = "portal-apps";
