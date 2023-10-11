@@ -257,12 +257,15 @@ namespace Mix.Lib.Services
             await ImportContentDataAsync(_siteData.ConfigurationContents, _dicConfigurationContentIds, _dicConfigurationIds);
         }
 
-        private async Task ImportMixDatabases(MixCmsContext dbContext, IMixDbService mixDbService)
+        private async Task ImportMixDatabases(MixCmsContext dbContext, IMixDbService mixDbService, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             await ImportDatabaseContextsAsync(dbContext);
             await ImportDatabasesAsync(dbContext);
             await ImportDatabaseRelationshipsAsync(dbContext);
             await MigrateMixDatabaseAsync(mixDbService);
+            await MigrateSystemMixDatabaseAsync(mixDbService, cancellationToken);
         }
 
         private async Task MigrateMixDatabaseAsync(IMixDbService mixDbService)
@@ -274,6 +277,11 @@ namespace Mix.Lib.Services
                     await mixDbService.MigrateDatabase(_dicMixDatabaseNames[item.SystemName]);
                 }
             }
+        }
+        
+        private async Task MigrateSystemMixDatabaseAsync(IMixDbService mixDbService, CancellationToken cancellationToken = default)
+        {
+            await mixDbService.MigrateSystemDatabases(cancellationToken);
         }
 
         private async Task ImportPosts()

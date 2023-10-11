@@ -85,8 +85,18 @@
 		<EmbeddedResource Include="Views\_ViewStart.cshtml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
+		<Resource Include="wwwroot\default-mixcontent\templates\_ViewImports.cshtml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="wwwroot\default-mixcontent\templates\_ViewStart.cshtml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="logs\**" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Remove="wwwroot\default-mixcontent\templates\_ViewImports.cshtml" />
+	  <Content Remove="wwwroot\default-mixcontent\templates\_ViewStart.cshtml" />
 	</ItemGroup>
 </Project>
