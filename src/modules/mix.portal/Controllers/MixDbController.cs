@@ -233,7 +233,57 @@ namespace Mix.Portal.Controllers
         }
 
         [HttpGet("get-by-parent/{parentType}/{parentId}")]
-        public async Task<ActionResult<JObject>> GetSingleByParent(MixContentType parentType, string parentId, [FromQuery] bool loadNestedData)
+        public async Task<ActionResult<JObject>> GetSingleByParent(MixContentType parentType, int parentId, [FromQuery] bool loadNestedData)
+        {
+            dynamic obj = await _repository.GetSingleByParentAsync(parentType, parentId);
+            if (obj != null)
+            {
+                try
+                {
+                    var data = ReflectionHelper.ParseObject(obj);
+                    foreach (var item in _mixDb.Relationships)
+                    {
+                        if (loadNestedData)
+                        {
+
+                            List<QueryField> queries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, data.id);
+                            var associations = await _associationRepository.GetListByAsync(queries);
+                            if (associations is { Count: > 0 })
+                            {
+                                var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
+                                _repository.InitTableName(item.DestinateDatabaseName);
+                                List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
+                                var nestedData = await _repository.GetListByAsync(query);
+                                if (nestedData != null)
+                                {
+                                    data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            data.Add(new JProperty(
+                                    $"{item.DisplayName}Url",
+                                    $"{CurrentTenant.Configurations.Domain}/api/v2/rest/mix-portal/mix-db/{item.DestinateDatabaseName}?ParentId={data.id}&ParentName={item.SourceDatabaseName}"));
+                        }
+                    }
+                    return Ok(data);
+                }
+                catch (MixException)
+                {
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    throw new MixException(MixErrorStatus.Badrequest, ex);
+                }
+            }
+            return NotFound();
+            //throw new MixException(MixErrorStatus.NotFound, id);
+        }
+
+        [HttpGet("get-by-guid-parent/{parentType}/{parentId}")]
+        public async Task<ActionResult<JObject>> GetSingleByGuidParent(MixContentType parentType, Guid parentId, [FromQuery] bool loadNestedData)
         {
             dynamic obj = await _repository.GetSingleByParentAsync(parentType, parentId);
             if (obj != null)

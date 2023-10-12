@@ -169,11 +169,11 @@ namespace Mix.RepoDb.Repositories
                 Operation op = ParseMixOperator(item);
                 if (op == Operation.In || op == Operation.NotIn)
                 {
-                    queries.Add(new QueryField(item.FieldName, op, item.Value.ToString()!.Split(',')));
+                    queries.Add(new QueryField(item.FieldName.ToTitleCase(), op, item.Value.ToString()!.Split(',')));
                 }
                 else
                 {
-                    queries.Add(new QueryField(item.FieldName, op, item.Value));
+                    queries.Add(new QueryField(item.FieldName.ToTitleCase(), op, item.Value));
                 }
             }
             return queries;
@@ -227,8 +227,7 @@ namespace Mix.RepoDb.Repositories
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex.Message);
-                return default;
+                throw new MixException(MixErrorStatus.Badrequest, ex);
             }
         }
 
@@ -245,7 +244,7 @@ namespace Mix.RepoDb.Repositories
             {
                 Console.Error.WriteLine(ex.Message);
                 RollbackTransaction();
-                return default;
+                throw new MixException(MixErrorStatus.Badrequest, ex);
             }
             finally
             {
@@ -262,7 +261,7 @@ namespace Mix.RepoDb.Repositories
                     _tableName,
                     new List<QueryField>() {
                     new QueryField("ParentType", parentType.ToString()),
-                    new QueryField("ParentId", parentId.ToString())
+                    new QueryField("ParentId", parentId)
                     },
                     commandTimeout: _settings.CommandTimeout,
                     transaction: _dbTransaction,
@@ -272,7 +271,7 @@ namespace Mix.RepoDb.Repositories
             {
                 await MixLogService.LogExceptionAsync(ex);
                 RollbackTransaction();
-                return default;
+                throw new MixException(MixErrorStatus.Badrequest, ex);
             }
             finally
             {
@@ -296,7 +295,7 @@ namespace Mix.RepoDb.Repositories
             {
                 await MixLogService.LogExceptionAsync(ex);
                 RollbackTransaction();
-                return default;
+                throw new MixException(MixErrorStatus.Badrequest, ex);
             }
             finally
             {
@@ -324,7 +323,7 @@ namespace Mix.RepoDb.Repositories
             {
                 await MixLogService.LogExceptionAsync(ex);
                 RollbackTransaction();
-                return default;
+                throw new MixException(MixErrorStatus.Badrequest, ex);
             }
             finally
             {
@@ -353,7 +352,7 @@ namespace Mix.RepoDb.Repositories
             {
                 await MixLogService.LogExceptionAsync(ex);
                 RollbackTransaction();
-                return default;
+                throw new MixException(MixErrorStatus.Badrequest, ex);
             }
             finally
             {
