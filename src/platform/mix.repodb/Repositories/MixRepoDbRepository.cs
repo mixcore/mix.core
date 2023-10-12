@@ -81,7 +81,7 @@ namespace Mix.RepoDb.Repositories
         #region Methods
         public void InitTableName(string tableName)
         {
-            _tableName = tableName.ToLower();
+            _tableName = tableName;
             InitializeRepoDb();
             CreateConnection();
         }

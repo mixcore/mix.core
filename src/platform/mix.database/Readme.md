@@ -6,10 +6,10 @@
 ### Update DatabaseService -> GetConnectionstring
 ### Update DatabaseService.DatabaseProvider
 # Sample Connection String:
-- Sqlite: "Data Source=MixContent\\mix-cms.db"
+- Sqlite: "Data Source=MixContent\\mix-cms.sqlite"
 ```
 DatabaseProvider = MixDatabaseProvider.SQLITE;
-return "Data Source=MixContent\\mix-cms.db";
+return "Data Source=MixContent\\mix-cms.sqlite";
 ```
 
 - Postgres: "Host=localhost;Database=mixcore_structure;Username=postgres;Password=myPassword"
