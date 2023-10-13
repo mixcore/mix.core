@@ -63,11 +63,14 @@ namespace Mix.Portal.Domain.Services
             {
                 var indexFile = MixFileHelper.GetFileByFullName($"{appFolder}/index.html");
                 Regex regex = new("((?<=src=\")|(?<=href=\"))(?!(http[^\\s]+))(.+?)(\\.+?)");
+                Regex baseHrefRegex = new("(base href=\"(.+?)\")");
 
                 if (indexFile.Content != null && regex.IsMatch(indexFile.Content))
                 {
-                    indexFile.Content = regex.Replace(indexFile.Content, $"/{appFolder}/$3$4")
+                    indexFile.Content = regex.Replace(indexFile.Content, $"/{appFolder}/$3$4");
+                    indexFile.Content = baseHrefRegex.Replace(indexFile.Content, $"base href=\"/app/{baseRoute}\"")
                         .Replace("[baseRoute]", $"/app/{baseRoute}")
+                        .Replace("base href=\"/\"", $"/app/{baseRoute}")
                         //.Replace("[baseHref]", appFolder)
                         .Replace("options['baseRoute']", $"'/app/{baseRoute}'")
                         .Replace("options['baseHref']", $"'{appFolder}'");
