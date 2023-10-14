@@ -46,6 +46,14 @@ namespace Mix.Portal.Controllers
             await _applicationService.Install(app, cancellationToken);
             return base.Ok(app);
         }
+        
+        [HttpPost]
+        [Route("restore-package")]
+        public async Task<ActionResult<MixApplicationViewModel>> Restore([FromBody] RestoreMixApplicationPackageDto dto, CancellationToken cancellationToken = default)
+        {
+            MixApplicationViewModel app = await _applicationService.RestorePackage(dto, cancellationToken);
+            return base.Ok(app);
+        }
 
         #endregion
 
@@ -64,7 +72,7 @@ namespace Mix.Portal.Controllers
             var result = await base.SearchHandler(req, cancellationToken);
             foreach (var item in result.Items)
             {
-                item.DetailUrl = $"{CurrentTenant.PrimaryDomain}/app/{item.BaseRoute}";
+                item.DetailUrl = $"{CurrentTenant.PrimaryDomain}{item.BaseRoute}";
             }
             return result;
         }

@@ -8,5 +8,6 @@ namespace Mix.Portal.Domain.Interfaces
         public Task<MixApplicationViewModel> UpdatePackage(MixApplicationViewModel app, string pakageFilePath, CancellationToken cancellationToken = default);
 
         public Task AlertAsync<T>(IClientProxy clients, string action, int status, T message);
+        Task<MixApplicationViewModel> RestorePackage(RestoreMixApplicationPackageDto dto, CancellationToken cancellationToken);
     }
 }

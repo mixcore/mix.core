@@ -7,6 +7,7 @@ using Mix.Shared.Helpers;
 using Mix.Shared.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
+using System.IO.Packaging;
 using System.Text.RegularExpressions;
 
 namespace Mix.Portal.Domain.Services
@@ -45,7 +46,7 @@ namespace Mix.Portal.Domain.Services
             string filePath = await DownloadPackage(name, app.PackageFilePath, appFolder);
             MixFileHelper.UnZipFile(filePath, appFolder);
 
-            var template = await CreateTemplate(name, appFolder, app.BaseRoute);
+            var template = await SaveTemplate(app.TemplateId, name, appFolder, app.BaseRoute);
             if (template != null)
             {
                 app.SetUowInfo(_cmsUow, CacheService);
@@ -60,7 +61,7 @@ namespace Mix.Portal.Domain.Services
             return null;
         }
 
-        private async Task<MixTemplateViewModel> CreateTemplate(string name, string appFolder, string baseRoute)
+        private async Task<MixTemplateViewModel> SaveTemplate(int? templateId, string name, string appFolder, string baseRoute)
         {
             try
             {
@@ -79,19 +80,20 @@ namespace Mix.Portal.Domain.Services
                         .Replace("options['baseHref']", $"'{appFolder}'");
 
                     var activeTheme = await _themeService.GetActiveTheme();
-                    MixTemplateViewModel template = new(_cmsUow)
+                    MixTemplateViewModel template = await MixTemplateViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.Id == templateId);
+                    template ??= new(_cmsUow)
                     {
                         MixThemeId = activeTheme.Id,
                         FileName = name,
                         FileFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{activeTheme.SystemName}/{MixTemplateFolderType.Pages}",
                         FolderType = MixTemplateFolderType.Pages,
                         Extension = MixFileExtensions.CsHtml,
-                        Content = indexFile.Content.Replace("@", "@@"),
                         MixTenantId = CurrentTenant.Id,
                         Scripts = string.Empty,
                         Styles = string.Empty,
                         CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext.User, MixClaims.Username)
                     };
+                    template.Content = indexFile.Content.Replace("@", "@@");
                     await template.SaveAsync();
                     _queueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), template);
                     MixFileHelper.SaveFile(indexFile);
@@ -122,10 +124,11 @@ namespace Mix.Portal.Domain.Services
                     }
                 };
                 var cancellationToken = new CancellationToken();
-                
-                string filePath = $"{appFolder}/{name}-{DateTime.UtcNow.ToString("dd-MM-yyyy-hh:mm:ss")}{MixFileExtensions.Zip}";
-                await _httpService.DownloadAsync(packageUrl, appFolder, name, MixFileExtensions.Zip, progress, cancellationToken);
-                
+
+                string fileName = $"{name}-{DateTime.UtcNow.ToString("dd-MM-yyyy-hh-mm-ss")}";
+                string filePath = $"{appFolder}/{fileName}{MixFileExtensions.Zip}";
+                await _httpService.DownloadAsync(packageUrl, appFolder, fileName, MixFileExtensions.Zip, progress, cancellationToken);
+
                 return filePath;
             }
             catch (Exception ex)
@@ -144,11 +147,11 @@ namespace Mix.Portal.Domain.Services
                 }
 
                 var packages = app.AppSettings.Value<JArray>("packages") ?? new();
-                
+
                 string appFolder = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{app.DisplayName}";
                 string package = await DownloadPackage(app.DisplayName, app.PackageFilePath, appFolder);
                 MixFileHelper.UnZipFile(package, appFolder);
-
+                var template = await SaveTemplate(app.TemplateId, app.DisplayName, appFolder, app.BaseRoute);
                 packages.Add(package);
                 app.AppSettings["activePackage"] = package;
                 app.AppSettings["packages"] = packages;
@@ -158,7 +161,40 @@ namespace Mix.Portal.Domain.Services
             {
                 throw;
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
+        }
+
+        public async Task<MixApplicationViewModel> RestorePackage(RestoreMixApplicationPackageDto dto, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var app = await MixApplicationViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.Id == dto.AppId);
+                if (app == null)
+                {
+                    throw new MixException(MixErrorStatus.NotFound, "App Not Found");
+                }
+                if (!File.Exists(dto.PackageFilePath))
+                {
+                    throw new MixException(MixErrorStatus.NotFound, $"Package {dto.PackageFilePath} Not Found");
+                }
+
+                string appFolder = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{app.DisplayName}";
+                MixFileHelper.UnZipFile(dto.PackageFilePath, appFolder);
+                var template = await SaveTemplate(app.TemplateId, app.DisplayName, appFolder, app.BaseRoute);
+                app.AppSettings["activePackage"] = dto.PackageFilePath;
+
+                await app.SaveAsync(cancellationToken);
+
+                return app;
+            }
+            catch (MixException)
+            {
+                throw;
+            }
+            catch (Exception ex)
             {
                 throw new MixException(MixErrorStatus.Badrequest, ex);
             }
@@ -190,6 +226,8 @@ namespace Mix.Portal.Domain.Services
             await clients.SendAsync(
                 HubMethods.ReceiveMethod, logMsg.ToString(Formatting.None));
         }
+
+
         #endregion
     }
 }

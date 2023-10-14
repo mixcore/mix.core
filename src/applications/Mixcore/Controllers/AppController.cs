@@ -58,7 +58,7 @@ namespace Mixcore.Controllers
         {
             if (IsValid)
             {
-                return await App(baseRoute);
+                return await App($"/app/{baseRoute}");
             }
             else
             {
