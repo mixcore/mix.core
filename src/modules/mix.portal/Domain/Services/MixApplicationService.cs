@@ -75,7 +75,7 @@ namespace Mix.Portal.Domain.Services
                     indexFile.Content = baseHrefRegex.Replace(indexFile.Content, $"base href=\"{baseRoute}\"")
                         .Replace("[baseRoute]", $"/app/{baseRoute}")
                         .Replace("base href=\"/\"", $"/app/{baseRoute}")
-                        //.Replace("[baseHref]", appFolder)
+                        .Replace("[basePath]", appFolder)
                         .Replace("options['baseRoute']", $"'/app/{baseRoute}'")
                         .Replace("options['baseHref']", $"'{appFolder}'");
 
@@ -145,13 +145,13 @@ namespace Mix.Portal.Domain.Services
                 {
                     throw new MixException(MixErrorStatus.NotFound, "App not found");
                 }
-
+                string name = SeoHelper.GetSEOString(app.DisplayName);
                 var packages = app.AppSettings.Value<JArray>("packages") ?? new();
 
                 string appFolder = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{app.DisplayName}";
-                string package = await DownloadPackage(app.DisplayName, app.PackageFilePath, appFolder);
+                string package = await DownloadPackage(name, app.PackageFilePath, appFolder);
                 MixFileHelper.UnZipFile(package, appFolder);
-                var template = await SaveTemplate(app.TemplateId, app.DisplayName, appFolder, app.BaseRoute);
+                var template = await SaveTemplate(app.TemplateId, name, appFolder, app.BaseRoute);
                 packages.Add(package);
                 app.AppSettings["activePackage"] = package;
                 app.AppSettings["packages"] = packages;
@@ -180,10 +180,10 @@ namespace Mix.Portal.Domain.Services
                 {
                     throw new MixException(MixErrorStatus.NotFound, $"Package {dto.PackageFilePath} Not Found");
                 }
-
-                string appFolder = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{app.DisplayName}";
+                string name = SeoHelper.GetSEOString(app.DisplayName);
+                string appFolder = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{name}";
                 MixFileHelper.UnZipFile(dto.PackageFilePath, appFolder);
-                var template = await SaveTemplate(app.TemplateId, app.DisplayName, appFolder, app.BaseRoute);
+                var template = await SaveTemplate(app.TemplateId, name, appFolder, app.BaseRoute);
                 app.AppSettings["activePackage"] = dto.PackageFilePath;
 
                 await app.SaveAsync(cancellationToken);
