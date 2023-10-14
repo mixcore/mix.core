@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.AspNetCore.SignalR;
 using Mix.Heart.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Portal.Domain.Interfaces;
@@ -19,12 +20,12 @@ namespace Mix.Portal.Domain.Services
         private readonly HttpService _httpService;
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         public MixApplicationService(
-            IHttpContextAccessor httpContextAccessor, 
-            UnitOfWorkInfo<MixCmsContext> cmsUow, 
-            IHubContext<MixThemeHub> hubContext, 
-            HttpService httpService, 
+            IHttpContextAccessor httpContextAccessor,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
+            IHubContext<MixThemeHub> hubContext,
+            HttpService httpService,
             MixIdentityService mixIdentityService,
-            IThemeService themeService, 
+            IThemeService themeService,
             IQueueService<MessageQueueModel> queueService,
             MixCacheService cacheService,
             IMixTenantService mixTenantService)
@@ -37,10 +38,12 @@ namespace Mix.Portal.Domain.Services
             _themeService = themeService;
             _queueService = queueService;
         }
-        public async Task<MixApplicationViewModel> Install(MixApplicationViewModel app)
+        public async Task<MixApplicationViewModel> Install(MixApplicationViewModel app, CancellationToken cancellationToken = default)
         {
             string name = SeoHelper.GetSEOString(app.DisplayName);
-            string appFolder = await DownloadPackage(name, app.PackateFilePath);
+            string appFolder = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{name}";
+            string filePath = await DownloadPackage(name, app.PackageFilePath, appFolder);
+            MixFileHelper.UnZipFile(filePath, appFolder);
 
             var template = await CreateTemplate(name, appFolder, app.BaseRoute);
             if (template != null)
@@ -68,7 +71,7 @@ namespace Mix.Portal.Domain.Services
                 if (indexFile.Content != null && regex.IsMatch(indexFile.Content))
                 {
                     indexFile.Content = regex.Replace(indexFile.Content, $"/{appFolder}/$3$4");
-                    indexFile.Content = baseHrefRegex.Replace(indexFile.Content, $"base href=\"/app/{baseRoute}\"")
+                    indexFile.Content = baseHrefRegex.Replace(indexFile.Content, $"base href=\"{baseRoute}\"")
                         .Replace("[baseRoute]", $"/app/{baseRoute}")
                         .Replace("base href=\"/\"", $"/app/{baseRoute}")
                         //.Replace("[baseHref]", appFolder)
@@ -103,7 +106,7 @@ namespace Mix.Portal.Domain.Services
             }
         }
 
-        private async Task<string> DownloadPackage(string name, string packageUrl)
+        private async Task<string> DownloadPackage(string name, string packageUrl, string appFolder)
         {
             try
             {
@@ -119,15 +122,45 @@ namespace Mix.Portal.Domain.Services
                     }
                 };
                 var cancellationToken = new CancellationToken();
-                string appFolder = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{name}";
-                string filePath = $"{appFolder}/{name}{MixFileExtensions.Zip}";
+                
+                string filePath = $"{appFolder}/{name}-{DateTime.UtcNow.ToString("dd-MM-yyyy-hh:mm:ss")}{MixFileExtensions.Zip}";
                 await _httpService.DownloadAsync(packageUrl, appFolder, name, MixFileExtensions.Zip, progress, cancellationToken);
-                MixFileHelper.UnZipFile(filePath, appFolder);
-                return appFolder;
+                
+                return filePath;
             }
             catch (Exception ex)
             {
                 throw new MixException(MixErrorStatus.ServerError, ex);
+            }
+        }
+
+        public async Task<MixApplicationViewModel> UpdatePackage(MixApplicationViewModel app, string packageFileUrl, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (app == null)
+                {
+                    throw new MixException(MixErrorStatus.NotFound, "App not found");
+                }
+
+                var packages = app.AppSettings.Value<JArray>("packages") ?? new();
+                
+                string appFolder = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{app.DisplayName}";
+                string package = await DownloadPackage(app.DisplayName, app.PackageFilePath, appFolder);
+                MixFileHelper.UnZipFile(package, appFolder);
+
+                packages.Add(package);
+                app.AppSettings["activePackage"] = package;
+                app.AppSettings["packages"] = packages;
+                return app;
+            }
+            catch (MixException)
+            {
+                throw;
+            }
+            catch(Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
             }
         }
 
