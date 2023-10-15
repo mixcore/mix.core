@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Wordprocessing;
+using Humanizer;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Heart.Constants;
 using Mix.Lib.Interfaces;
@@ -44,67 +45,119 @@ namespace Mix.Portal.Domain.Services
             string name = SeoHelper.GetSEOString(app.DisplayName);
             string appFolder = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{name}";
             string filePath = await DownloadPackage(name, app.PackageFilePath, appFolder);
+            await AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Extract Package {filePath} Successfully");
             MixFileHelper.UnZipFile(filePath, appFolder);
-
-            var template = await SaveTemplate(app.TemplateId, name, appFolder, app.BaseRoute);
-            if (template != null)
+            await AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Extract Package {filePath} Successfully");
+            app.TemplateId = await SaveTemplate(app.TemplateId, name, appFolder, app.BaseRoute);
+            app.SetUowInfo(_cmsUow, CacheService);
+            app.BaseRoute ??= name;
+            app.BaseHref = appFolder;
+            app.MixTenantId = CurrentTenant.Id;
+            app.CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext?.User, MixClaims.Username);
+            app.AppSettings["activePackage"] = filePath;
+            app.AppSettings["packages"] = new JArray
             {
-                app.SetUowInfo(_cmsUow, CacheService);
-                app.BaseRoute ??= name;
-                app.BaseHref = appFolder;
-                app.MixTenantId = CurrentTenant.Id;
-                app.TemplateId = template.Id;
-                app.CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext?.User, MixClaims.Username);
-                await app.SaveAsync();
-                return app;
-            }
-            return null;
+                filePath
+            };
+            await app.SaveAsync();
+            return app;
         }
 
-        private async Task<MixTemplateViewModel> SaveTemplate(int? templateId, string name, string appFolder, string baseRoute)
+        private async Task<int?> SaveTemplate(int? templateId, string name, string appFolder, string baseRoute)
         {
             try
             {
-                var indexFile = MixFileHelper.GetFileByFullName($"{appFolder}/index.html");
-                Regex regex = new("((?<=src=\")|(?<=href=\"))(?!(http[^\\s]+))(.+?)(\\.+?)");
-                Regex baseHrefRegex = new("(base href=\"(.+?)\")");
-
-                if (indexFile.Content != null && regex.IsMatch(indexFile.Content))
+                templateId = await ReplaceIndex(templateId, name, appFolder, baseRoute);
+                var files = MixFileHelper.GetTopFiles(appFolder, true);
+                var folders = string.Join('|', MixFileHelper.GetTopDirectories(appFolder));
+                foreach (var file in files)
                 {
-                    indexFile.Content = regex.Replace(indexFile.Content, $"/{appFolder}/$3$4");
-                    indexFile.Content = baseHrefRegex.Replace(indexFile.Content, $"base href=\"{baseRoute}\"")
-                        .Replace("[baseRoute]", $"/app/{baseRoute}")
-                        .Replace("base href=\"/\"", $"/app/{baseRoute}")
-                        .Replace("[basePath]", appFolder)
-                        .Replace("options['baseRoute']", $"'/app/{baseRoute}'")
-                        .Replace("options['baseHref']", $"'{appFolder}'");
-
-                    var activeTheme = await _themeService.GetActiveTheme();
-                    MixTemplateViewModel template = await MixTemplateViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.Id == templateId);
-                    template ??= new(_cmsUow)
+                    if (file.Extension == MixFileExtensions.Js || file.Extension == MixFileExtensions.Css)
                     {
-                        MixThemeId = activeTheme.Id,
-                        FileName = name,
-                        FileFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{activeTheme.SystemName}/{MixTemplateFolderType.Pages}",
-                        FolderType = MixTemplateFolderType.Pages,
-                        Extension = MixFileExtensions.CsHtml,
-                        MixTenantId = CurrentTenant.Id,
-                        Scripts = string.Empty,
-                        Styles = string.Empty,
-                        CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext.User, MixClaims.Username)
-                    };
-                    template.Content = indexFile.Content.Replace("@", "@@");
-                    await template.SaveAsync();
-                    _queueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), template);
-                    MixFileHelper.SaveFile(indexFile);
-
-                    return template;
+                        await ReplaceContent(file, folders, appFolder);
+                    }
                 }
-                throw new MixException(MixErrorStatus.Badrequest, "Invalid Application Package");
+                return templateId;
             }
             catch (Exception ex)
             {
                 throw new MixException(MixErrorStatus.ServerError, ex);
+            }
+        }
+
+        private async Task<int?> ReplaceIndex(int? templateId, string name, string appFolder, string baseRoute)
+        {
+            try
+            {
+                var indexFile = MixFileHelper.GetFileByFullName($"{appFolder}/index.html");
+
+                if (string.IsNullOrEmpty(indexFile.Content))
+                {
+                    throw new MixException(MixErrorStatus.Badrequest, "Invalid Application Package");
+                }
+
+                await AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Modifying {name}.cshtml");
+                Regex regex = new("((?<=src=\")|(?<=href=\"))(?!(http[^\\s]+))(.+?)(\\.+?)");
+                Regex baseHrefRegex = new("(base href=\"(.+?)\")");
+                indexFile.Content = indexFile.Content.Replace("[basePath]/", string.Empty);
+                indexFile.Content = regex.Replace(indexFile.Content, $"/{appFolder}/$3$4");
+                indexFile.Content = baseHrefRegex.Replace(indexFile.Content, $"base href=\"{baseRoute}\"")
+                    .Replace("[baseRoute]", baseRoute)
+
+                    .Replace("options['baseRoute']", $"'{baseRoute}'")
+                    .Replace("options['baseHref']", $"'/{appFolder}'");
+
+                var activeTheme = await _themeService.GetActiveTheme();
+                MixTemplateViewModel template = await MixTemplateViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.Id == templateId);
+                template ??= new(_cmsUow)
+                {
+                    MixThemeId = activeTheme.Id,
+                    FileName = name,
+                    FileFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{activeTheme.SystemName}/{MixTemplateFolderType.Pages}",
+                    FolderType = MixTemplateFolderType.Pages,
+                    Extension = MixFileExtensions.CsHtml,
+                    MixTenantId = CurrentTenant.Id,
+                    Scripts = string.Empty,
+                    Styles = string.Empty,
+                    CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext.User, MixClaims.Username)
+                };
+                template.Content = indexFile.Content.Replace("@", "@@");
+                await template.SaveAsync();
+                _queueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), template);
+                MixFileHelper.SaveFile(indexFile);
+                await AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Modified {name}.cshtml successfully");
+                return template.Id;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private async Task ReplaceContent(FileModel file, string folders, string appFolder)
+        {
+            if (!string.IsNullOrEmpty(file.Content))
+            {
+                await AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Modifying {file.Filename}{file.Extension}");
+                Regex rg = new($"((\\\"|\\')(({folders})))");
+                Regex rgSplash = new($"((\\.\\/)({folders}))");
+                Regex rgSplash1 = new($"((\\(\\/|\\`\\/)(({folders})))");
+                if (rgSplash.IsMatch(file.Content))
+                {
+                    file.Content = rgSplash.Replace(file.Content, $"/{appFolder}/$3");
+                }
+                if (rgSplash1.IsMatch(file.Content))
+                {
+                    file.Content = rgSplash1.Replace(file.Content, $"$2{appFolder}/$3");
+                }
+                if (rg.IsMatch(file.Content))
+                {
+                    file.Content = rg.Replace(file.Content, $"$2/{appFolder}/$3");
+                }
+                file.Content = file.Content.Replace("[basePath]", $"/{appFolder}");
+
+                MixFileHelper.SaveFile(file);
             }
         }
 
@@ -148,10 +201,10 @@ namespace Mix.Portal.Domain.Services
                 string name = SeoHelper.GetSEOString(app.DisplayName);
                 var packages = app.AppSettings.Value<JArray>("packages") ?? new();
 
-                string appFolder = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{app.DisplayName}";
+                string appFolder = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{name}";
                 string package = await DownloadPackage(name, app.PackageFilePath, appFolder);
                 MixFileHelper.UnZipFile(package, appFolder);
-                var template = await SaveTemplate(app.TemplateId, name, appFolder, app.BaseRoute);
+                await SaveTemplate(app.TemplateId, name, appFolder, app.BaseRoute);
                 packages.Add(package);
                 app.AppSettings["activePackage"] = package;
                 app.AppSettings["packages"] = packages;
@@ -171,6 +224,7 @@ namespace Mix.Portal.Domain.Services
         {
             try
             {
+                await AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Extract Package {dto.PackageFilePath}");
                 var app = await MixApplicationViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.Id == dto.AppId);
                 if (app == null)
                 {
@@ -183,7 +237,9 @@ namespace Mix.Portal.Domain.Services
                 string name = SeoHelper.GetSEOString(app.DisplayName);
                 string appFolder = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{name}";
                 MixFileHelper.UnZipFile(dto.PackageFilePath, appFolder);
-                var template = await SaveTemplate(app.TemplateId, name, appFolder, app.BaseRoute);
+
+                await AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Extract Package {dto.PackageFilePath} Successfully");
+                await SaveTemplate(app.TemplateId, name, appFolder, app.BaseRoute);
                 app.AppSettings["activePackage"] = dto.PackageFilePath;
 
                 await app.SaveAsync(cancellationToken);
