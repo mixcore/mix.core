@@ -122,7 +122,8 @@ namespace Mix.Portal.Domain.Services
                     Styles = string.Empty,
                     CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext.User, MixClaims.Username)
                 };
-                template.Content = indexFile.Content.Replace("@", "@@");
+                template.Content = indexFile.Content.Replace("@", "@@")
+                                                    .Replace("<body>", "<body><pre id=\"app-settings-container\" style=\"display:none\">@Model.AppSettings.ToString()</pre>");
                 await template.SaveAsync();
                 _queueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), template);
                 MixFileHelper.SaveFile(indexFile);

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Account;
+using Mix.Database.Entities.Cms;
 using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
 using Mix.Heart.Exceptions;
@@ -32,7 +33,8 @@ namespace Mix.Service.Services
         {
             if (!GlobalConfigService.Instance.IsInit)
             {
-                UnitOfWorkInfo<MixDbDbContext> uow = new(new MixDbDbContext(_databaseService));
+                UnitOfWorkInfo<MixCmsContext> cmsUow = new(new MixCmsContext(_databaseService));
+                UnitOfWorkInfo<MixDbDbContext> mixdbUow = new(new MixDbDbContext(_databaseService));
                 try
                 {
                     RoleEndpoints = new Dictionary<string, string[]>();
@@ -42,17 +44,19 @@ namespace Mix.Service.Services
 
                     foreach (var role in roles)
                     {
-                        var permissionIds = uow.DbContext.MixDatabaseAssociation
+                        var permissionIds = cmsUow.DbContext.MixDatabaseAssociation
                                             .Where(m => m.GuidParentId == role.Id)
-                                            .Select(m => m.ChildId);
-                        var endpointIds = uow.DbContext.MixDatabaseAssociation
+                                            .Select(m => m.ChildId)
+                                            .ToList();
+                        var endpointIds = cmsUow.DbContext.MixDatabaseAssociation
                                             .Where(m => m.ParentDatabaseName == MixDatabaseNames.SYSTEM_PERMISSION
                                                         && m.ChildDatabaseName == MixDatabaseNames.SYSTEM_PERMISSION_ENDPOINT
                                                         && permissionIds.Contains(m.ParentId))
-                                            .Select(m => m.ChildId);
+                                            .Select(m => m.ChildId)
+                                            .ToList();
 
                         // TODO: PermissionEndpoint cannot initial at first time
-                        var endpoints = await uow.DbContext.PermissionEndpoint.Where(
+                        var endpoints = await mixdbUow.DbContext.PermissionEndpoint.Where(
                                                 m => endpointIds.Contains(m.Id)
                                                     && !string.IsNullOrEmpty(m.Path)
                                                 )
@@ -83,7 +87,8 @@ namespace Mix.Service.Services
                 }
                 finally
                 {
-                    uow.Dispose();
+                    cmsUow.Dispose();
+                    mixdbUow.Dispose();
                     accountDbContext.Dispose();
                 }
             }
