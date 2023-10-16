@@ -15,6 +15,7 @@ namespace Mix.Portal.Domain.Services
 {
     public sealed class MixApplicationService : TenantServiceBase, IMixApplicationService
     {
+        static string[] excludeFileNames = { "jquery" };
         private readonly IQueueService<MessageQueueModel> _queueService;
         private readonly IThemeService _themeService;
         private readonly MixIdentityService _mixIdentityService;
@@ -66,9 +67,9 @@ namespace Mix.Portal.Domain.Services
         {
             try
             {
-                templateId = await ReplaceIndex(templateId, name, deployUrl, baseHref);
                 var files = MixFileHelper.GetTopFiles(deployUrl, true);
                 var folders = string.Join('|', MixFileHelper.GetTopDirectories(deployUrl));
+                templateId = await ReplaceIndex(templateId, name, deployUrl, baseHref);
                 foreach (var file in files)
                 {
                     if (file.Extension == MixFileExtensions.Js || file.Extension == MixFileExtensions.Css)
@@ -97,11 +98,11 @@ namespace Mix.Portal.Domain.Services
                     throw new MixException(MixErrorStatus.Badrequest, "Invalid Application Package");
                 }
 
-                
-                Regex regex = new("((?<=src=\")|(?<=href=\"))(?!(http[^\\s]+))(.+?)(\\.+?)");
+
+                Regex regex = new("((\\\"|\\'|\\(|\\`){1}(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+).(js|css|svg|png|PNG|gif|GIF|jp[e]?g|JP[E]?G))");
                 Regex baseHrefRegex = new("(base href=\"(.+?)\")");
                 indexFile.Content = indexFile.Content.Replace("[basePath]/", string.Empty);
-                indexFile.Content = regex.Replace(indexFile.Content, $"/{deployUrl}/$3$4");
+                indexFile.Content = regex.Replace(indexFile.Content, $"$2/{deployUrl}/$5.$7");
                 indexFile.Content = baseHrefRegex.Replace(indexFile.Content, $"base href=\"{baseHref}\"")
                     .Replace("[baseRoute]", deployUrl)
 
@@ -137,29 +138,39 @@ namespace Mix.Portal.Domain.Services
             }
         }
 
-        private Task ReplaceContent(FileModel file, string folders, string appFolder)
+        private Task ReplaceContent(FileModel file, string folders, string deployUrl)
         {
-            if (!string.IsNullOrEmpty(file.Content))
+            if (!string.IsNullOrEmpty(file.Content) && !excludeFileNames.Contains(file.Filename))
             {
-                _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Modifying {file.Filename}{file.Extension}");
-                Regex rg = new($"((\\\"|\\')(({folders})))");
-                Regex rgSplash = new($"((\\.\\/)({folders}))");
-                Regex rgSplash1 = new($"((\\(\\/|\\`\\/)(({folders})))");
-                if (rgSplash.IsMatch(file.Content))
+                try
                 {
-                    file.Content = rgSplash.Replace(file.Content, $"/{appFolder}/$3");
-                }
-                if (rgSplash1.IsMatch(file.Content))
-                {
-                    file.Content = rgSplash1.Replace(file.Content, $"$2{appFolder}/$3");
-                }
-                if (rg.IsMatch(file.Content))
-                {
-                    file.Content = rg.Replace(file.Content, $"$2/{appFolder}/$3");
-                }
-                file.Content = file.Content.Replace("[basePath]", $"/{appFolder}");
+                    _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Modifying {file.Filename}{file.Extension}");
+                    Regex rg = null;
+                    if (string.IsNullOrEmpty(folders))
+                    {
+                        rg = new($"((\\\"|\\'|\\(|\\`){1}(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+).(js|css|svg|png|PNG|gif|GIF|jp[e]?g|JP[E]?G))");
+                        if (rg.IsMatch(file.Content))
+                        {
+                            file.Content = rg.Replace(file.Content, $"$2/{deployUrl}/$5.$7");
+                        }
+                    }
+                    else
+                    {
+                        rg = new($"((\\\"|\\'|\\(|\\`)(\\.)?(\\/)?({folders})(([0-9a-zA-Z\\/\\._-])+).(js|css|svg|png|PNG|gif|GIF|jp[e]?g|JP[E]?G))");
+                        if (rg.IsMatch(file.Content))
+                        {
+                            file.Content = rg.Replace(file.Content, $"$2/{deployUrl}/$5$6.$8");
+                        }
+                    }
+                     
+                    file.Content = file.Content.Replace("[basePath]", $"/{deployUrl}");
 
-                MixFileHelper.SaveFile(file);
+                    MixFileHelper.SaveFile(file);
+                }
+                catch (Exception ex)
+                {
+                    throw new MixException(MixErrorStatus.ServerError, ex);
+                }
             }
             return Task.CompletedTask;
         }
