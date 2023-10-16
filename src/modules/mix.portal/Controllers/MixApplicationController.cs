@@ -38,9 +38,9 @@ namespace Mix.Portal.Controllers
         [Route("install")]
         public async Task<ActionResult<MixApplicationViewModel>> Install([FromBody] MixApplicationViewModel app, CancellationToken cancellationToken = default)
         {
-            if (_cmsContext.MixApplication.Any(m => m.MixTenantId == CurrentTenant.Id && m.BaseRoute == app.BaseRoute && m.Id != app.Id))
+            if (_cmsContext.MixApplication.Any(m => m.MixTenantId == CurrentTenant.Id && m.BaseHref == app.BaseHref && m.Id != app.Id))
             {
-                return BadRequest($"BaseRoute: \"{app.BaseRoute}\" existed");
+                return BadRequest($"BaseHref: \"{app.BaseHref}\" existed");
             }
 
             await _applicationService.Install(app, cancellationToken);
@@ -72,7 +72,7 @@ namespace Mix.Portal.Controllers
             var result = await base.SearchHandler(req, cancellationToken);
             foreach (var item in result.Items)
             {
-                item.DetailUrl = $"{CurrentTenant.PrimaryDomain}{item.BaseRoute}";
+                item.DetailUrl = $"{CurrentTenant.PrimaryDomain}{item.BaseHref}";
             }
             return result;
         }

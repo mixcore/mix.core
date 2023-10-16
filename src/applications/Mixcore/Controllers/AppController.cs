@@ -53,12 +53,12 @@ namespace Mixcore.Controllers
         }
 
         #region Routes
-        [Route("{baseRoute}/{param1?}/{param2?}/{param3?}/{param4?}/{param5?}/{param6?}")]
-        public async Task<IActionResult> Index(string baseRoute)
+        [Route("{appName}/{param1?}/{param2?}/{param3?}/{param4?}/{param5?}/{param6?}")]
+        public async Task<IActionResult> Index(string appName)
         {
             if (IsValid)
             {
-                return await App($"/app/{baseRoute}");
+                return await App($"/app/{appName}");
             }
             else
             {
@@ -69,11 +69,11 @@ namespace Mixcore.Controllers
         #endregion Routes
 
         #region Helper
-        protected async Task<IActionResult> App(string baseRoute)
+        protected async Task<IActionResult> App(string baseHref)
         {
             // Home App
             var pageRepo = ApplicationViewModel.GetRepository(Uow, _cacheService);
-            var page = await pageRepo.GetSingleAsync(m => m.BaseRoute == baseRoute && m.MixTenantId == CurrentTenant.Id);
+            var page = await pageRepo.GetSingleAsync(m => m.BaseHref == baseHref && m.MixTenantId == CurrentTenant.Id);
             if (page == null)
                 return NotFound();
 

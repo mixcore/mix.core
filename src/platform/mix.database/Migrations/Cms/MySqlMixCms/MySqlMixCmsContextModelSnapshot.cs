@@ -42,16 +42,16 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("BaseHref"), "utf8");
 
-                    b.Property<string>("BaseRoute")
-                        .HasColumnType("varchar(250)");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("BaseRoute"), "utf8");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("DeployUrl")
+                        .HasColumnType("varchar(250)");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DeployUrl"), "utf8");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
