@@ -10,12 +10,13 @@ using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
 using System.IO.Packaging;
 using System.Text.RegularExpressions;
+using static NuGet.Packaging.PackagingConstants;
 
 namespace Mix.Portal.Domain.Services
 {
     public sealed class MixApplicationService : TenantServiceBase, IMixApplicationService
     {
-        static string[] excludeFileNames = { "jquery" };
+        static string[] excludeFileNames = { "jquery", "index" };
         private readonly IQueueService<MessageQueueModel> _queueService;
         private readonly IThemeService _themeService;
         private readonly MixIdentityService _mixIdentityService;
@@ -67,21 +68,35 @@ namespace Mix.Portal.Domain.Services
         {
             try
             {
-                var files = MixFileHelper.GetTopFiles(deployUrl, true);
-                var folders = string.Join('|', MixFileHelper.GetTopDirectories(deployUrl));
+                var folders = MixFileHelper.GetTopDirectories(deployUrl);
+                var topFolderPattern = string.Join('|', folders);
                 templateId = await ReplaceIndex(templateId, name, deployUrl, baseHref);
-                foreach (var file in files)
-                {
-                    if (file.Extension == MixFileExtensions.Js || file.Extension == MixFileExtensions.Css)
-                    {
-                        await ReplaceContent(file, folders, deployUrl);
-                    }
-                }
+
+                await ModifyFilesAndFolders(deployUrl, deployUrl, topFolderPattern);
+
                 return templateId;
             }
             catch (Exception ex)
             {
                 throw new MixException(MixErrorStatus.ServerError, ex);
+            }
+        }
+
+        private async Task ModifyFilesAndFolders(string deployUrl, string topFolder, string topFolderPattern)
+        {
+            var files = MixFileHelper.GetTopFiles(topFolder, true);
+            var folders = MixFileHelper.GetTopDirectories(topFolder);
+
+            foreach (var file in files)
+            {
+                if (file.Extension == MixFileExtensions.Js || file.Extension == MixFileExtensions.Css || file.Extension == MixFileExtensions.Html)
+                {
+                    await ReplaceContent(file, topFolderPattern, deployUrl);
+                }
+            }
+            foreach (var folder in folders)
+            {
+                await ModifyFilesAndFolders(deployUrl, $"{topFolder}/{folder}", topFolderPattern);
             }
         }
 
@@ -99,10 +114,10 @@ namespace Mix.Portal.Domain.Services
                 }
 
 
-                Regex regex = new("((\\\"|\\'|\\(|\\`){1}(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+).(js|css|svg|png|PNG|gif|GIF|jp[e]?g|JP[E]?G))");
+                Regex regex = new("((\\\"|\\'|\\(|\\`){1}(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+)\\.{1}(\\w+)(\"|\\'|\\(|\\`){1})");
                 Regex baseHrefRegex = new("(base href=\"(.+?)\")");
                 indexFile.Content = indexFile.Content.Replace("[basePath]/", string.Empty);
-                indexFile.Content = regex.Replace(indexFile.Content, $"$2/{deployUrl}/$5.$7");
+                indexFile.Content = regex.Replace(indexFile.Content, $"$2/{deployUrl}/$5.$7$2");
                 indexFile.Content = baseHrefRegex.Replace(indexFile.Content, $"base href=\"{baseHref}\"")
                     .Replace("[baseRoute]", deployUrl)
 
@@ -148,21 +163,21 @@ namespace Mix.Portal.Domain.Services
                     Regex rg = null;
                     if (string.IsNullOrEmpty(folders))
                     {
-                        rg = new($"((\\\"|\\'|\\(|\\`){1}(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+).(js|css|svg|png|PNG|gif|GIF|jp[e]?g|JP[E]?G))");
+                        rg = new("((\\\"|\\'|\\(|\\`){1}(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+)\\.{1}(\\w+)(\"|\\'|\\(|\\`){1})");
                         if (rg.IsMatch(file.Content))
                         {
-                            file.Content = rg.Replace(file.Content, $"$2/{deployUrl}/$5.$7");
+                            file.Content = rg.Replace(file.Content, $"$2/{deployUrl}/$5.$7$2");
                         }
                     }
                     else
                     {
-                        rg = new($"((\\\"|\\'|\\(|\\`)(\\.)?(\\/)?({folders})(([0-9a-zA-Z\\/\\._-])+).(js|css|svg|png|PNG|gif|GIF|jp[e]?g|JP[E]?G))");
+                        rg = new($"((\\\"|\\'|\\(|\\`)(\\.)?(\\/)?({folders})(([0-9a-zA-Z\\/\\._-])+)(\\\"|\\'|\\(|\\`))");
                         if (rg.IsMatch(file.Content))
                         {
-                            file.Content = rg.Replace(file.Content, $"$2/{deployUrl}/$5$6.$8");
+                            file.Content = rg.Replace(file.Content, $"$2/{deployUrl}/$5$6$2");
                         }
                     }
-                     
+
                     file.Content = file.Content.Replace("[basePath]", $"/{deployUrl}");
 
                     MixFileHelper.SaveFile(file);
