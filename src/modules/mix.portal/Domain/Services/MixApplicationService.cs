@@ -89,9 +89,14 @@ namespace Mix.Portal.Domain.Services
 
             foreach (var file in files)
             {
-                if (file.Extension == MixFileExtensions.Js || file.Extension == MixFileExtensions.Css || file.Extension == MixFileExtensions.Html)
+                switch (file.Extension)
                 {
-                    await ReplaceContent(file, topFolderPattern, deployUrl);
+                    case MixFileExtensions.Js:
+                    case MixFileExtensions.Css:
+                    case MixFileExtensions.Html:
+                    case MixFileExtensions.Json:
+                        await ReplaceContent(file, topFolderPattern, deployUrl);
+                        break;
                 }
             }
             foreach (var folder in folders)
@@ -160,16 +165,12 @@ namespace Mix.Portal.Domain.Services
                 try
                 {
                     _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Modifying {file.Filename}{file.Extension}");
-                    Regex rg = null;
-                    if (string.IsNullOrEmpty(folders))
+                    Regex rg = new("((\\\"|\\'|\\(\\/|\\`){1}(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+)\\.{1}(\\w+)(\"|\\'|\\)|\\`){1})");
+                    if (rg.IsMatch(file.Content))
                     {
-                        rg = new("((\\\"|\\'|\\(|\\`){1}(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+)\\.{1}(\\w+)(\"|\\'|\\(|\\`){1})");
-                        if (rg.IsMatch(file.Content))
-                        {
-                            file.Content = rg.Replace(file.Content, $"$2/{deployUrl}/$5.$7$2");
-                        }
+                        file.Content = rg.Replace(file.Content, $"$2/{deployUrl}/$5.$7$2");
                     }
-                    else
+                    if (!string.IsNullOrEmpty(folders))
                     {
                         rg = new($"((\\\"|\\'|\\(|\\`)(\\.)?(\\/)?({folders})(([0-9a-zA-Z\\/\\._-])+)(\\\"|\\'|\\(|\\`))");
                         if (rg.IsMatch(file.Content))
