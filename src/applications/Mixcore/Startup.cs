@@ -45,13 +45,24 @@ namespace Mixcore
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseMixCors();
 
             app.UseMixTenant();
 
             app.UseMiddleware<AuditlogMiddleware>();
 
             app.UseRouting();
+
+            // Typically, UseStaticFiles is called before UseCors. Apps that use JavaScript to retrieve static files cross site must call UseCors before UseStaticFiles.
+            app.UseMixStaticFiles(env.ContentRootPath);
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.ContentRootPath, MixFolders.TemplatesFolder))
+            });
+
+            // UseCors must be placed after UseRouting and before UseAuthorization. This is to ensure that CORS headers are included in the response for both authorized and unauthorized calls.
+            app.UseMixCors();
 
             // must go between app.UseRouting() and app.UseEndpoints.
             app.UseMixAuth();
@@ -60,13 +71,8 @@ namespace Mixcore
 
             app.UseResponseCompression();
             app.UseMixResponseCaching();
-            app.UseMixStaticFiles(env.ContentRootPath);
-            app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.ContentRootPath, MixFolders.TemplatesFolder))
-            });
+
+            
 
             if (GlobalConfigService.Instance.AppSettings.IsHttps)
             {

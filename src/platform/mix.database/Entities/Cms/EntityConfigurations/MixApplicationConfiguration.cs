@@ -26,7 +26,7 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
             builder.Property(e => e.BaseHref)
                 .HasColumnType($"{Config.String}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet);
-            builder.Property(e => e.BaseRoute)
+            builder.Property(e => e.DeployUrl)
                 .HasColumnType($"{Config.String}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet);
             builder.Property(e => e.Domain)

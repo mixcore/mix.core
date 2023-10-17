@@ -62,6 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     }
                 }
             }
+            services.TryAddScoped<OnepayService>();
         }
         public static void AddMixPaypal(this IServiceCollection services)
         {
@@ -80,6 +81,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     }
                 }
             }
+            services.TryAddScoped<PaypalService>();
         }
     }
 }

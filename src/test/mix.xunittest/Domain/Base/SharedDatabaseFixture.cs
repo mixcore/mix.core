@@ -11,7 +11,7 @@ namespace Mix.Xunittest.Domain.Base
         private static bool _databaseInitialized;
         protected static ConstructorInfo ctor;
         public TDbContext Context { get; set; }
-        public string ConnectionString = "Data Source=MixContent\\mix-test.db";
+        public string ConnectionString = "Data Source=mixcontent\\mix-test.sqlite";
         public MixDatabaseProvider DbProvider = MixDatabaseProvider.SQLITE;
 
         public SharedDatabaseFixture()

@@ -2,6 +2,8 @@
 using Mix.SignalR.Enums;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
+using System.Reflection.Metadata;
 
 namespace Mix.SignalR.Models
 {
@@ -12,7 +14,15 @@ namespace Mix.SignalR.Models
         }
         public SignalRMessageModel(object data)
         {
-            Data = ReflectionHelper.ParseObject(data).ToString(Newtonsoft.Json.Formatting.None);
+            Type valueType = data.GetType();
+            if (valueType.IsArray || valueType.IsAssignableTo(typeof(IList)))
+            {
+                Data = ReflectionHelper.ParseArray(data).ToString(Newtonsoft.Json.Formatting.None);
+            }
+            else
+            {
+                Data = ReflectionHelper.ParseObject(data).ToString(Newtonsoft.Json.Formatting.None);
+            }
         }
         public HubUserModel From { get; set; }
         public string Title { get; set; }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
+using Mix.Heart.Exceptions;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Mix.Lib.Models.Common;
@@ -9,6 +11,7 @@ using Mix.SignalR.Interfaces;
 
 namespace Mixcore.Controllers
 {
+    [EnableCors(MixCorsPolicies.PublicApis)]
     [Route("api/v2/rest/mixcore/post-content")]
     public sealed class PostContentApiController : MixQueryApiControllerBase<PostContentViewModel, MixCmsContext, MixPostContent, int>
     {
@@ -29,8 +32,8 @@ namespace Mixcore.Controllers
             IMixMetadataService metadataService,
             MixRepoDbRepository repoDbRepository,
             IPortalHubClientService portalHub,
-            IMixTenantService mixTenantService) 
-            : base(httpContextAccessor, configuration, 
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _postService = postService;
@@ -42,36 +45,48 @@ namespace Mixcore.Controllers
         [HttpPost("filter")]
         public async Task<ActionResult<PagingResponseModel<PostContentViewModel>>> Filter([FromBody] FilterContentRequestDto req)
         {
-            var searchRequest = BuildSearchRequest(req);
-            searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
-                !string.IsNullOrEmpty(req.MixDatabaseName), m => m.MixDatabaseName == req.MixDatabaseName);
-            if (!string.IsNullOrEmpty(req.MixDatabaseName) && req.Queries.Count > 0)
+            try
             {
-                _mixRepoDbRepository.InitTableName(req.MixDatabaseName);
-                var listData = await _mixRepoDbRepository.GetListByAsync(req.Queries, "id, parentId");
-                if (listData != null)
+                var searchRequest = BuildSearchRequest(req);
+                searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
+                    !string.IsNullOrEmpty(req.MixDatabaseName), m => m.MixDatabaseName == req.MixDatabaseName);
+                if (!string.IsNullOrEmpty(req.MixDatabaseName) && req.Queries.Count > 0)
                 {
-                    List<int> allowIds = new();
-                    foreach (var data in listData)
+                    _mixRepoDbRepository.InitTableName(req.MixDatabaseName);
+                    var listData = await _mixRepoDbRepository.GetListByAsync(req.Queries, "Id, ParentId");
+                    if (listData != null)
                     {
-                        allowIds.Add(ReflectionHelper.ParseObject(data).Value<int>("parentId"));
+                        List<int> allowIds = new();
+                        foreach (var data in listData)
+                        {
+                            // used JObject.FromObject to keep original reponse fieldName
+                            allowIds.Add(JObject.FromObject(data).Value<int>("ParentId"));
+                        }
+                        searchRequest.Predicate = searchRequest.Predicate.AndAlso(m => allowIds.Contains(m.Id));
                     }
-                    searchRequest.Predicate = searchRequest.Predicate.AndAlso(m => allowIds.Contains(m.Id));
                 }
+                var result = await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+                foreach (var item in result.Items)
+                {
+                    await item.LoadAdditionalDataAsync(_repoDbRepository, _metadataService, CacheService);
+                }
+                return Ok(ParseSearchResult(req, result));
             }
-            var result = await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
-            foreach (var item in result.Items)
+            catch (MixException)
             {
-                await item.LoadAdditionalDataAsync(_repoDbRepository, _metadataService, CacheService);
+                throw;
             }
-            return Ok(ParseSearchResult(req, result));
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
         }
 
         protected override async Task<PagingResponseModel<PostContentViewModel>> SearchHandler(SearchRequestDto req, CancellationToken cancellationToken = default)
         {
             var searchPostQuery = new SearchPostQueryModel(Request, req, CurrentTenant.Id);
-            
-            var result= await _postService.SearchPosts(searchPostQuery, cancellationToken);
+
+            var result = await _postService.SearchPosts(searchPostQuery, cancellationToken);
             foreach (var item in result.Items)
             {
                 await item.LoadAdditionalDataAsync(_mixRepoDbRepository, _metadataService, CacheService);

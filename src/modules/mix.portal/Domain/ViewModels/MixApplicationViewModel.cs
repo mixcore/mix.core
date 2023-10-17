@@ -6,8 +6,8 @@
         #region Properties
 
         public string BaseHref { get; set; }
-        public string BaseRoute { get; set; }
-        public JObject AppSettings { get; set; }
+        public string DeployUrl { get; set; }
+        public JObject AppSettings { get; set; } = new();
         public string Domain { get; set; }
         public string BaseApiUrl { get; set; }
         public int? TemplateId { get; set; }
@@ -15,7 +15,7 @@
         public int? MixDbId { get; set; }
 
         public string DetailUrl { get; set; }
-        public string PackateFilePath { get; set; }
+        public string PackageFilePath { get; set; }
         #endregion
 
         #region Constructors
@@ -41,7 +41,7 @@
 
         public override async Task Validate(CancellationToken cancellationToken)
         {
-            if (Context.MixApplication.Any(m => m.BaseRoute == BaseRoute && m.MixTenantId == MixTenantId && m.Id != Id))
+            if (Context.MixApplication.Any(m => m.DeployUrl == DeployUrl && m.MixTenantId == MixTenantId && m.Id != Id))
             {
                 IsValid = false;
                 Errors.Add(new("BaseRoute existed"));

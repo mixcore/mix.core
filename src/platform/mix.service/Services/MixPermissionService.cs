@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Account;
+using Mix.Database.Entities.Cms;
 using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
 using Mix.Heart.Exceptions;
@@ -37,19 +38,21 @@ namespace Mix.Service.Services
                 {
                     RoleEndpoints = new Dictionary<string, string[]>();
                     accountDbContext = new MixCmsAccountContext(_databaseService);
+                    using var cmsDbContext = new MixCmsContext(_databaseService);
 
                     var roles = await accountDbContext.MixRoles.ToListAsync();
 
                     foreach (var role in roles)
                     {
-                        var permissionIds = uow.DbContext.MixDatabaseAssociation
+                        var permissionIds = cmsDbContext.MixDatabaseAssociation
                                             .Where(m => m.GuidParentId == role.Id)
                                             .Select(m => m.ChildId);
-                        var endpointIds = uow.DbContext.MixDatabaseAssociation
+                        var endpointIds = cmsDbContext.MixDatabaseAssociation
                                             .Where(m => m.ParentDatabaseName == MixDatabaseNames.SYSTEM_PERMISSION
                                                         && m.ChildDatabaseName == MixDatabaseNames.SYSTEM_PERMISSION_ENDPOINT
                                                         && permissionIds.Contains(m.ParentId))
-                                            .Select(m => m.ChildId);
+                                            .Select(m => m.ChildId)
+                                            .ToList();
 
                         // TODO: PermissionEndpoint cannot initial at first time
                         var endpoints = await uow.DbContext.PermissionEndpoint.Where(

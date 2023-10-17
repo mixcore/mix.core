@@ -628,7 +628,7 @@ namespace Mix.RepoDb.Services
 
         private void InitBackupRepository(string databaseName)
         {
-            string cnn = $"Data Source=MixContent/Backup/backup_{databaseName}.db";
+            string cnn = $"Data Source=MixContent/Backup/backup_{databaseName}.sqlite";
             using var ctx = new BackupDbContext(cnn);
             ctx.Database.EnsureCreated();
             ctx.Dispose();
