@@ -46,7 +46,7 @@ namespace Mix.Portal.Controllers
             await _applicationService.Install(app, cancellationToken);
             return base.Ok(app);
         }
-        
+
         [HttpPost]
         [Route("restore-package")]
         public async Task<ActionResult<MixApplicationViewModel>> Restore([FromBody] RestoreMixApplicationPackageDto dto, CancellationToken cancellationToken = default)
@@ -65,7 +65,7 @@ namespace Mix.Portal.Controllers
                 await _applicationService.UpdatePackage(data, data.PackageFilePath, cancellationToken);
             }
             await base.UpdateHandler(id, data, cancellationToken);
-            
+
         }
         protected override async Task<PagingResponseModel<MixApplicationViewModel>> SearchHandler(SearchRequestDto req, CancellationToken cancellationToken = default)
         {
@@ -75,6 +75,16 @@ namespace Mix.Portal.Controllers
                 item.DetailUrl = $"{CurrentTenant.PrimaryDomain}{item.BaseHref}";
             }
             return result;
+        }
+
+        protected override async Task DeleteHandler(MixApplicationViewModel data, CancellationToken cancellationToken = default)
+        {
+            await base.DeleteHandler(data, cancellationToken);
+            if (data.TemplateId.HasValue)
+            {
+                await MixViewTemplateViewModel.GetRepository(Uow, CacheService).DeleteAsync(data.TemplateId.Value);
+            }
+            MixFileHelper.DeleteFolder(data.DeployUrl);
         }
 
         #endregion

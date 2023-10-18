@@ -17,6 +17,7 @@ namespace Mix.Portal.Domain.Services
     public sealed class MixApplicationService : TenantServiceBase, IMixApplicationService
     {
         static string[] excludeFileNames = { "jquery", "index" };
+        static string allowExtensionsPattern = "js|css|png|jpg|jpeg|gif|svg|webm|mp3|mp4|wmv";
         private readonly IQueueService<MessageQueueModel> _queueService;
         private readonly IThemeService _themeService;
         private readonly MixIdentityService _mixIdentityService;
@@ -119,7 +120,7 @@ namespace Mix.Portal.Domain.Services
                 }
 
 
-                Regex regex = new("((\\\"|\\'|\\(|\\`){1}(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+)\\.{1}(\\w+)(\"|\\'|\\(|\\`){1})");
+                Regex regex = new($"((\\\"|\\'|\\(\\/|\\`)(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+)\\.({allowExtensionsPattern})(\"|\\'|\\)|\\`))");
                 Regex baseHrefRegex = new("(base href=\"(.+?)\")");
                 indexFile.Content = indexFile.Content.Replace("[basePath]/", string.Empty);
                 indexFile.Content = regex.Replace(indexFile.Content, $"$2/{deployUrl}/$5.$7$2");
@@ -134,7 +135,7 @@ namespace Mix.Portal.Domain.Services
                 template ??= new(_cmsUow)
                 {
                     MixThemeId = activeTheme.Id,
-                    FileName = name,
+                    FileName = $"MixApp_{name}",
                     FileFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{activeTheme.SystemName}/{MixTemplateFolderType.Pages}",
                     FolderType = MixTemplateFolderType.Pages,
                     Extension = MixFileExtensions.CsHtml,
@@ -165,7 +166,7 @@ namespace Mix.Portal.Domain.Services
                 try
                 {
                     _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Modifying {file.Filename}{file.Extension}");
-                    Regex rg = new("((\\\"|\\'|\\(\\/|\\`){1}(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+)\\.{1}(\\w+)(\"|\\'|\\)|\\`){1})");
+                    Regex rg = new($"((\\\"|\\'|\\(\\/|\\`)(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+)\\.({allowExtensionsPattern})(\"|\\'|\\)|\\`))");
                     if (rg.IsMatch(file.Content))
                     {
                         file.Content = rg.Replace(file.Content, $"$2/{deployUrl}/$5.$7$2");
