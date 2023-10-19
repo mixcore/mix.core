@@ -1,4 +1,4 @@
-﻿namespace Mix.Portal.Domain.Dtos
+﻿namespace Mix.Lib.Dtos
 {
     public sealed class RestoreMixApplicationPackageDto
     {

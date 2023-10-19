@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mix.Communicator.Models;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
+using Mix.Lib.Interfaces;
 using Mix.Mixdb.Event.Services;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
@@ -23,7 +24,8 @@ namespace Mix.Lib.Subscribers
         private static string[] allowActions =
         {
             MixQueueActions.SendMail,
-            MixQueueActions.MixDbEvent
+            MixQueueActions.MixDbEvent,
+            MixQueueActions.InstallMixApplication
         };
         public MixBackgroundTaskSubscriber(
             IServiceProvider serviceProvider,
@@ -59,6 +61,10 @@ namespace Mix.Lib.Subscribers
 
             switch (model.Action)
             {
+                case MixQueueActions.InstallMixApplication:
+                    await InstallMixApplication(model);
+                    break;
+
                 case MixQueueActions.SendMail:
                     await SendMail(model);
                     break;
@@ -70,6 +76,18 @@ namespace Mix.Lib.Subscribers
                         await MixDbEventService.HandleMessage(evtCmd);
                     }
                     break;
+            }
+        }
+
+        private async Task InstallMixApplication(MessageQueueModel model)
+        {
+            using (ServiceScope = ServicesProvider.CreateScope())
+            {
+                var cmsUow = GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
+                IMixApplicationService _applicationService = GetRequiredService<IMixApplicationService>();
+                var app = model.ParseData<MixApplicationViewModel>();
+                await _applicationService.Install(app);
+                await cmsUow.CompleteAsync();
             }
         }
 

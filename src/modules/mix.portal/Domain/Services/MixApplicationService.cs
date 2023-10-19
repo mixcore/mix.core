@@ -142,7 +142,6 @@ namespace Mix.Portal.Domain.Services
                     MixTenantId = CurrentTenant.Id,
                     Scripts = string.Empty,
                     Styles = string.Empty,
-                    CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext.User, MixClaims.Username)
                 };
                 template.Content = indexFile.Content.Replace("@", "@@")
                                                     .Replace("<body>", "<body><pre id=\"app-settings-container\" style=\"display:none\">@Model.AppSettings.ToString()</pre>");
@@ -298,11 +297,11 @@ namespace Mix.Portal.Domain.Services
             var logMsg = new JObject()
                 {
                     new JProperty("created_at", DateTime.UtcNow),
-                    new JProperty("id",  HttpContextAccessor.HttpContext?.Request.HttpContext.Connection.Id.ToString()),
+                    //new JProperty("id",  HttpContextAccessor.HttpContext?.Request.HttpContext.Connection.Id.ToString()),
                     new JProperty("address", address),
-                    new JProperty("ip_address",  HttpContextAccessor.HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString()),
-                    new JProperty("user", _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext.User, MixClaims.Username)),
-                    new JProperty("request_url", HttpContextAccessor.HttpContext.Request.Path.Value),
+                    //new JProperty("ip_address",  HttpContextAccessor.HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString()),
+                    //new JProperty("user", _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext.User, MixClaims.Username)),
+                    //new JProperty("request_url", HttpContextAccessor.HttpContext.Request.Path.Value),
                     new JProperty("action", action),
                     new JProperty("status", status),
                     new JProperty("message", message)
