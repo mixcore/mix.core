@@ -5,9 +5,11 @@ using Mix.Heart.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Portal.Domain.Interfaces;
 using Mix.Shared.Helpers;
+using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
+using System.Configuration;
 using System.IO.Packaging;
 using System.Text.RegularExpressions;
 using static NuGet.Packaging.PackagingConstants;
@@ -17,7 +19,7 @@ namespace Mix.Portal.Domain.Services
     public sealed class MixApplicationService : TenantServiceBase, IMixApplicationService
     {
         static string[] excludeFileNames = { "jquery", "index" };
-        static string allowExtensionsPattern = "js|css|png|jpg|jpeg|gif|svg|webm|mp3|mp4|wmv";
+        static string allowExtensionsPattern = "js|css|webmanifest|ico|png|jpg|jpeg|gif|svg|webm|mp3|mp4|wmv";
         private readonly IQueueService<MessageQueueModel> _queueService;
         private readonly IThemeService _themeService;
         private readonly MixIdentityService _mixIdentityService;
@@ -121,14 +123,11 @@ namespace Mix.Portal.Domain.Services
 
 
                 Regex regex = new($"((\\\"|\\'|\\(\\/|\\`)(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+)\\.({allowExtensionsPattern})(\"|\\'|\\)|\\`))");
-                Regex baseHrefRegex = new("(base href=\"(.+?)\")");
-                indexFile.Content = indexFile.Content.Replace("[basePath]/", string.Empty);
+                Regex baseHrefRegex = new("(base href=\"(.{0,})\")");
+                Regex basePathRegex = new("(\\[\\[?basePath\\]\\]?\\/?)");
                 indexFile.Content = regex.Replace(indexFile.Content, $"$2/{deployUrl}/$5.$7$2");
-                indexFile.Content = baseHrefRegex.Replace(indexFile.Content, $"base href=\"{baseHref}\"")
-                    .Replace("[baseRoute]", deployUrl)
-
-                    .Replace("options['baseRoute']", $"'{deployUrl}'")
-                    .Replace("options['baseHref']", $"'/{baseHref}'");
+                indexFile.Content = baseHrefRegex.Replace(indexFile.Content, $"base href=\"{baseHref}\"");
+                indexFile.Content = basePathRegex.Replace(indexFile.Content, $"/{deployUrl}/");
 
                 var activeTheme = await _themeService.GetActiveTheme();
                 MixTemplateViewModel template = await MixTemplateViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.Id == templateId);
@@ -153,7 +152,6 @@ namespace Mix.Portal.Domain.Services
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -166,6 +164,8 @@ namespace Mix.Portal.Domain.Services
                 {
                     _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Modifying {file.Filename}{file.Extension}");
                     Regex rg = new($"((\\\"|\\'|\\(\\/|\\`)(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+)\\.({allowExtensionsPattern})(\"|\\'|\\)|\\`))");
+                    Regex basePathRegex = new("(\\[\\[?basePath\\]\\]?\\/?)");
+                    Regex apiEndpointRegex = new("(\\[\\[?apiEndpoint\\]\\]?\\/?)");
                     if (rg.IsMatch(file.Content))
                     {
                         file.Content = rg.Replace(file.Content, $"$2/{deployUrl}/$5.$7$2");
@@ -179,7 +179,8 @@ namespace Mix.Portal.Domain.Services
                         }
                     }
 
-                    file.Content = file.Content.Replace("[basePath]", $"/{deployUrl}");
+                    file.Content = basePathRegex.Replace(file.Content, $"/{deployUrl}/");
+                    file.Content = apiEndpointRegex.Replace(file.Content, $"/{CurrentTenant.Configurations.Domain.TrimEnd('/')}/");
 
                     MixFileHelper.SaveFile(file);
                 }

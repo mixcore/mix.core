@@ -81,14 +81,11 @@ namespace Mix.Lib.Subscribers
 
         private async Task InstallMixApplication(MessageQueueModel model)
         {
-            using (ServiceScope = ServicesProvider.CreateScope())
-            {
-                var cmsUow = GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
-                IMixApplicationService _applicationService = GetRequiredService<IMixApplicationService>();
-                var app = model.ParseData<MixApplicationViewModel>();
-                await _applicationService.Install(app);
-                await cmsUow.CompleteAsync();
-            }
+            var cmsUow = GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
+            IMixApplicationService _applicationService = GetRequiredService<IMixApplicationService>();
+            var app = model.ParseData<MixApplicationViewModel>();
+            await _applicationService.Install(app);
+            await cmsUow.CompleteAsync();
         }
 
         public override Task HandleException(MessageQueueModel model, Exception ex)
