@@ -64,6 +64,7 @@ namespace Mix.Portal.Domain.Services
                 filePath
             };
             await app.SaveAsync();
+            _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Finished", 200, string.Empty);
             return app;
         }
 
