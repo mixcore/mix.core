@@ -19,7 +19,7 @@ namespace Mix.Portal.Domain.Services
     public sealed class MixApplicationService : TenantServiceBase, IMixApplicationService
     {
         static string[] excludeFileNames = { "jquery", "index" };
-        static string allowExtensionsPattern = "js|css|webmanifest|ico|png|jpg|jpeg|gif|svg|webm|mp3|mp4|wmv";
+        static string allowExtensionsPattern = "json|js|css|webmanifest|ico|png|jpg|jpeg|gif|svg|webm|mp3|mp4|wmv";
         private readonly IQueueService<MessageQueueModel> _queueService;
         private readonly IThemeService _themeService;
         private readonly MixIdentityService _mixIdentityService;
@@ -123,7 +123,7 @@ namespace Mix.Portal.Domain.Services
                 }
 
 
-                Regex regex = new($"((\\\"|\\'|\\(\\/|\\`)(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+)\\.({allowExtensionsPattern})(\"|\\'|\\)|\\`))");
+                Regex regex = new($"((\\\"|\\'|\\(\\/|\\`)(\\.)?(\\/)?((.)+)\\.({allowExtensionsPattern})(\"|\\'|\\)|\\`))");
                 Regex baseHrefRegex = new("(base href=\"(.{0,})\")");
                 Regex basePathRegex = new("(\\[\\[?basePath\\]\\]?\\/?)");
                 indexFile.Content = regex.Replace(indexFile.Content, $"$2/{deployUrl}/$5.$7$2");
@@ -164,7 +164,7 @@ namespace Mix.Portal.Domain.Services
                 try
                 {
                     _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Modifying {file.Filename}{file.Extension}");
-                    Regex rg = new($"((\\\"|\\'|\\(\\/|\\`)(\\.)?(\\/)?(([0-9a-zA-Z\\/\\._-])+)\\.({allowExtensionsPattern})(\"|\\'|\\)|\\`))");
+                    Regex rg = new($"((\\\"|\\'|\\(\\/|\\`)(\\.)?(\\/)?((.)+)\\.({allowExtensionsPattern})(\"|\\'|\\)|\\`))");
                     Regex basePathRegex = new("(\\[\\[?basePath\\]\\]?\\/?)");
                     Regex apiEndpointRegex = new("(\\[\\[?apiEndpoint\\]\\]?\\/?)");
                     if (rg.IsMatch(file.Content))
@@ -181,7 +181,7 @@ namespace Mix.Portal.Domain.Services
                     }
 
                     file.Content = basePathRegex.Replace(file.Content, $"/{deployUrl}/");
-                    file.Content = apiEndpointRegex.Replace(file.Content, $"/{CurrentTenant.Configurations.Domain.TrimEnd('/')}/");
+                    file.Content = apiEndpointRegex.Replace(file.Content, $"{CurrentTenant.Configurations.Domain.TrimEnd('/')}");
 
                     MixFileHelper.SaveFile(file);
                 }
