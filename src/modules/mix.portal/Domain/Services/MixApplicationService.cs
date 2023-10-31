@@ -123,7 +123,7 @@ namespace Mix.Portal.Domain.Services
                 }
 
 
-                Regex regex = new($"((\\\"|\\'|\\(\\/|\\`)(\\.)?(\\/)?((.)+)\\.({allowExtensionsPattern})(\"|\\'|\\)|\\`))");
+                Regex regex = new($"((\\\"|\\'|\\(\\/|\\`)(\\.)?(\\/)?(([0-9a-zA-Z\\/\\.\\$\\{{\\}}_-])+)\\.({allowExtensionsPattern})(\\\"|\\'|\\)|\\`))");
                 Regex baseHrefRegex = new("(base href=\"(.{0,})\")");
                 Regex basePathRegex = new("(\\[\\[?basePath\\]\\]?\\/?)");
                 indexFile.Content = regex.Replace(indexFile.Content, $"$2/{deployUrl}/$5.$7$2");
@@ -164,7 +164,7 @@ namespace Mix.Portal.Domain.Services
                 try
                 {
                     _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Modifying {file.Filename}{file.Extension}");
-                    Regex rg = new($"((\\\"|\\'|\\(\\/|\\`)(\\.)?(\\/)?((.)+)\\.({allowExtensionsPattern})(\"|\\'|\\)|\\`))");
+                    Regex rg = new($"((\\\"|\\'|\\(\\/|\\`)(\\.)?(\\/)?(([0-9a-zA-Z\\/\\.\\$\\{{\\}}_-])+)\\.({allowExtensionsPattern})(\\\"|\\'|\\)|\\`))");
                     Regex basePathRegex = new("(\\[\\[?basePath\\]\\]?\\/?)");
                     Regex apiEndpointRegex = new("(\\[\\[?apiEndpoint\\]\\]?\\/?)");
                     if (rg.IsMatch(file.Content))

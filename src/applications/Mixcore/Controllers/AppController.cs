@@ -7,7 +7,7 @@ using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
 {
-    [Route("app")]
+    [Route("mixapp")]
     public class AppController : MixControllerBase
     {
         protected UnitOfWorkInfo Uow;
@@ -58,7 +58,7 @@ namespace Mixcore.Controllers
         {
             if (IsValid)
             {
-                return await App($"/app/{appName}");
+                return await App($"/mixapp/{appName}");
             }
             else
             {

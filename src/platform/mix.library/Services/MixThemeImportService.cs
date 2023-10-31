@@ -759,7 +759,7 @@ namespace Mix.Lib.Services
         private async Task ImportContentDataAsync<T>(List<T> data, Dictionary<int, int> dic, Dictionary<int, int> parentDic)
             where T : MultilingualContentBase<int>
         {
-            if (data.Count > 0)
+            if (data!= null && data.Count > 0)
             {
                 foreach (var item in data)
                 {

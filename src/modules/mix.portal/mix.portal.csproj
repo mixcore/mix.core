@@ -496,8 +496,4 @@
 	  </Content>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Domain\Services\NewFolder\" />
-	</ItemGroup>
-
 </Project>
