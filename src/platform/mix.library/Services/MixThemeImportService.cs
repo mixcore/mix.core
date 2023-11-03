@@ -278,7 +278,7 @@ namespace Mix.Lib.Services
                 }
             }
         }
-        
+
         private async Task MigrateSystemMixDatabaseAsync(IMixDbService mixDbService, CancellationToken cancellationToken = default)
         {
             await mixDbService.MigrateSystemDatabases(cancellationToken);
@@ -545,9 +545,9 @@ namespace Mix.Lib.Services
                         item.ChildId = _dicMixDatabaseIds[item.ChildId];
                         item.CreatedBy = _siteData.CreatedBy;
                         item.CreatedDateTime = DateTime.UtcNow;
-                        
+
                         if (!dbContext.MixDatabaseRelationship.Any(
-                                m => m.ParentId == item.ParentId 
+                                m => m.ParentId == item.ParentId
                                     && m.ChildId == item.ChildId
                                     && m.DisplayName == item.DisplayName))
                         {
@@ -759,7 +759,7 @@ namespace Mix.Lib.Services
         private async Task ImportContentDataAsync<T>(List<T> data, Dictionary<int, int> dic, Dictionary<int, int> parentDic)
             where T : MultilingualContentBase<int>
         {
-            if (data!= null && data.Count > 0)
+            if (data != null && data.Count > 0)
             {
                 foreach (var item in data)
                 {

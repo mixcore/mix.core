@@ -356,14 +356,14 @@ namespace Mix.RepoDb.Services
             return queries;
         }
 
-        private async Task<MixDatabaseViewModel?> GetMixDatabase(string tableName)
+        private async Task<RepoDbMixDatabaseViewModel?> GetMixDatabase(string tableName)
         {
             return await _memoryCache.TryGetValueAsync(
                 tableName,
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
+                    return RepoDbMixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
                 }
                 );
         }
@@ -486,7 +486,7 @@ namespace Mix.RepoDb.Services
         // TODO: check why need to restart application to load new database schema for Repo Db Context !important
         public async Task<bool> MigrateDatabase(string name)
         {
-            MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == name);
+            RepoDbMixDatabaseViewModel database = await RepoDbMixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == name);
 
             if (database.MixDatabaseContextId.HasValue)
             {
@@ -543,7 +543,7 @@ namespace Mix.RepoDb.Services
                     if (!_cmsUow.DbContext.MixDatabase.Any(m => m.SystemName == database.SystemName))
                     {
 
-                        MixDatabaseViewModel currentDb = new(database, _cmsUow);
+                        RepoDbMixDatabaseViewModel currentDb = new(database, _cmsUow);
                         currentDb.Id = 0;
                         currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
                         currentDb.CreatedDateTime = DateTime.UtcNow;
@@ -578,7 +578,7 @@ namespace Mix.RepoDb.Services
         {
             try
             {
-                MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == name);
+                RepoDbMixDatabaseViewModel database = await RepoDbMixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == name);
                 if (database is { Columns.Count: > 0 })
                 {
                     return await RestoreFromLocal(database);
@@ -597,7 +597,7 @@ namespace Mix.RepoDb.Services
 
         public async Task<bool> BackupDatabase(string databaseName, CancellationToken cancellationToken = default)
         {
-            var database = await MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == databaseName, cancellationToken);
+            var database = await RepoDbMixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == databaseName, cancellationToken);
             if (database != null)
             {
                 return await BackupToLocal(database, cancellationToken);
@@ -609,7 +609,7 @@ namespace Mix.RepoDb.Services
 
         #region Private
 
-        private async Task<bool> BackupToLocal(MixDatabaseViewModel database, CancellationToken cancellationToken = default)
+        private async Task<bool> BackupToLocal(RepoDbMixDatabaseViewModel database, CancellationToken cancellationToken = default)
         {
             var data = await GetCurrentData(database.SystemName, cancellationToken);
             if (data is { Count: > 0 })
@@ -636,7 +636,7 @@ namespace Mix.RepoDb.Services
 
         }
 
-        private async Task<bool> RestoreFromLocal(MixDatabaseViewModel database)
+        private async Task<bool> RestoreFromLocal(RepoDbMixDatabaseViewModel database)
         {
             InitBackupRepository(database.SystemName);
             var data = await _backupRepository.GetAllAsync();
@@ -702,7 +702,7 @@ namespace Mix.RepoDb.Services
             return await _repository.GetAllAsync(cancellationToken);
         }
 
-        private async Task<bool> Migrate(MixDatabaseViewModel database,
+        private async Task<bool> Migrate(RepoDbMixDatabaseViewModel database,
             MixDatabaseProvider databaseProvider,
             MixRepoDbRepository repo)
         {
