@@ -8,5 +8,6 @@ namespace Mix.Lib.Interfaces
         public Task<SiteDataViewModel> LoadSchema();
         public void ExtractTheme(IFormFile themeFile);
         public Task<SiteDataViewModel> ImportSelectedItemsAsync(SiteDataViewModel siteData);
+        Task<SiteDataViewModel> LoadSchema(string folder);
     }
 }

@@ -22,6 +22,7 @@ namespace Mix.Portal.Domain.Services
         static string allowExtensionsPattern = "json|js|css|webmanifest|ico|png|jpg|jpeg|gif|svg|webm|mp3|mp4|wmv";
         private readonly IQueueService<MessageQueueModel> _queueService;
         private readonly IThemeService _themeService;
+        private readonly IMixThemeImportService _importService;
         private readonly MixIdentityService _mixIdentityService;
         private readonly IHubContext<MixThemeHub> _hubContext;
         private readonly HttpService _httpService;
@@ -35,7 +36,8 @@ namespace Mix.Portal.Domain.Services
             IThemeService themeService,
             IQueueService<MessageQueueModel> queueService,
             MixCacheService cacheService,
-            IMixTenantService mixTenantService)
+            IMixTenantService mixTenantService,
+            IMixThemeImportService importService)
             : base(httpContextAccessor, cacheService, mixTenantService)
         {
             _cmsUow = cmsUow;
@@ -44,6 +46,7 @@ namespace Mix.Portal.Domain.Services
             _mixIdentityService = mixIdentityService;
             _themeService = themeService;
             _queueService = queueService;
+            _importService = importService;
         }
         public async Task<MixApplicationViewModel> Install(MixApplicationViewModel app, CancellationToken cancellationToken = default)
         {
@@ -53,6 +56,8 @@ namespace Mix.Portal.Domain.Services
             _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Extract Package {filePath} Successfully");
             MixFileHelper.UnZipFile(filePath, deployUrl);
             _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Extract Package {filePath} Successfully");
+
+            await ImportSchema($"{deployUrl}/schema", cancellationToken);
             app.TemplateId = await SaveTemplate(app.TemplateId, name, deployUrl, app.BaseHref);
             app.SetUowInfo(_cmsUow, CacheService);
             app.DeployUrl = deployUrl;
@@ -66,6 +71,89 @@ namespace Mix.Portal.Domain.Services
             await app.SaveAsync();
             _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Finished", 200, string.Empty);
             return app;
+        }
+        public async Task<MixApplicationViewModel> UpdatePackage(MixApplicationViewModel app, string packageFileUrl, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (app == null)
+                {
+                    throw new MixException(MixErrorStatus.NotFound, "App not found");
+                }
+                string name = SeoHelper.GetSEOString(app.DisplayName);
+                var packages = app.AppSettings.Value<JArray>("packages") ?? new();
+
+                string deployUrl = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{name}";
+                string package = await DownloadPackage(name, app.PackageFilePath, deployUrl);
+                MixFileHelper.UnZipFile(package, deployUrl);
+                
+                await ImportSchema($"{deployUrl}/schema", cancellationToken);
+                await SaveTemplate(app.TemplateId, name, deployUrl, app.BaseHref);
+                
+                packages.Add(package);
+                app.AppSettings["activePackage"] = package;
+                app.AppSettings["packages"] = packages;
+                return app;
+            }
+            catch (MixException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
+        }
+
+        public async Task<MixApplicationViewModel> RestorePackage(RestoreMixApplicationPackageDto dto, CancellationToken cancellationToken)
+        {
+            try
+            {
+                _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Extract Package {dto.PackageFilePath}");
+                var app = await MixApplicationViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.Id == dto.AppId);
+                if (app == null)
+                {
+                    throw new MixException(MixErrorStatus.NotFound, "App Not Found");
+                }
+                if (!File.Exists(dto.PackageFilePath))
+                {
+                    throw new MixException(MixErrorStatus.NotFound, $"Package {dto.PackageFilePath} Not Found");
+                }
+                string name = SeoHelper.GetSEOString(app.DisplayName);
+                string deployUrl = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{name}";
+                MixFileHelper.UnZipFile(dto.PackageFilePath, deployUrl);
+
+                _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Extract Package {dto.PackageFilePath} Successfully");
+                
+                await ImportSchema($"{deployUrl}/schema", cancellationToken);
+                await SaveTemplate(app.TemplateId, name, deployUrl, app.BaseHref);
+                
+                app.AppSettings["activePackage"] = dto.PackageFilePath;
+
+                await app.SaveAsync(cancellationToken);
+
+                return app;
+            }
+            catch (MixException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
+        }
+
+        private async Task ImportSchema(string schemaFolder, CancellationToken cancellationToken)
+        {
+            if (Directory.Exists(schemaFolder))
+            {
+                var schema = await _importService.LoadSchema(schemaFolder);
+                if (schema != null && schema.IsValid)
+                {
+                    await _importService.ImportSelectedItemsAsync(schema);
+                }
+            }
         }
 
         private async Task<int?> SaveTemplate(int? templateId, string name, string deployUrl, string baseHref)
@@ -222,71 +310,7 @@ namespace Mix.Portal.Domain.Services
             }
         }
 
-        public async Task<MixApplicationViewModel> UpdatePackage(MixApplicationViewModel app, string packageFileUrl, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                if (app == null)
-                {
-                    throw new MixException(MixErrorStatus.NotFound, "App not found");
-                }
-                string name = SeoHelper.GetSEOString(app.DisplayName);
-                var packages = app.AppSettings.Value<JArray>("packages") ?? new();
-
-                string deployUrl = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{name}";
-                string package = await DownloadPackage(name, app.PackageFilePath, deployUrl);
-                MixFileHelper.UnZipFile(package, deployUrl);
-                await SaveTemplate(app.TemplateId, name, deployUrl, app.BaseHref);
-                packages.Add(package);
-                app.AppSettings["activePackage"] = package;
-                app.AppSettings["packages"] = packages;
-                return app;
-            }
-            catch (MixException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, ex);
-            }
-        }
-
-        public async Task<MixApplicationViewModel> RestorePackage(RestoreMixApplicationPackageDto dto, CancellationToken cancellationToken)
-        {
-            try
-            {
-                _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Extract Package {dto.PackageFilePath}");
-                var app = await MixApplicationViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.Id == dto.AppId);
-                if (app == null)
-                {
-                    throw new MixException(MixErrorStatus.NotFound, "App Not Found");
-                }
-                if (!File.Exists(dto.PackageFilePath))
-                {
-                    throw new MixException(MixErrorStatus.NotFound, $"Package {dto.PackageFilePath} Not Found");
-                }
-                string name = SeoHelper.GetSEOString(app.DisplayName);
-                string deployUrl = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{name}";
-                MixFileHelper.UnZipFile(dto.PackageFilePath, deployUrl);
-
-                _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Extract Package {dto.PackageFilePath} Successfully");
-                await SaveTemplate(app.TemplateId, name, deployUrl, app.BaseHref);
-                app.AppSettings["activePackage"] = dto.PackageFilePath;
-
-                await app.SaveAsync(cancellationToken);
-
-                return app;
-            }
-            catch (MixException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, ex);
-            }
-        }
+        
 
         #region Helpers
         public async Task AlertAsync<T>(IClientProxy clients, string action, int status, T message)
