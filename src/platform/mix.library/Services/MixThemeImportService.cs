@@ -91,13 +91,19 @@ namespace Mix.Lib.Services
         }
 
 
-        public async Task<SiteDataViewModel> LoadSchema()
+        public Task<SiteDataViewModel> LoadSchema()
+        {
+            return LoadSchema($"{MixFolders.ThemePackage}/{MixThemePackageConstants.SchemaFolder}");
+        }
+
+
+        public async Task<SiteDataViewModel> LoadSchema(string folder)
         {
             using (var serviceScope = _serviceProvider.CreateScope())
             {
                 _uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
                 _context = _uow.DbContext;
-                var strSchema = MixFileHelper.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, $"{MixFolders.ThemePackage}/{MixThemePackageConstants.SchemaFolder}");
+                var strSchema = MixFileHelper.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, folder);
                 var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
                 await ValidateSiteData(siteStructures);
                 return siteStructures;
@@ -157,7 +163,7 @@ namespace Mix.Lib.Services
 
                     _currentCulture = _context.MixCulture.First(m =>
                 m.MixTenantId == CurrentTenant.Id
-                && (!string.IsNullOrEmpty(_siteData.Specificulture) || m.Specificulture == _siteData.Specificulture));
+                && (string.IsNullOrEmpty(_siteData.Specificulture) || m.Specificulture == _siteData.Specificulture));
 
                     if (_siteData.ThemeId == 0)
                     {
@@ -857,6 +863,7 @@ namespace Mix.Lib.Services
             siteData.InvalidDatabaseNames.AddRange(existedDbNameErrors);
             siteData.IsValid = !siteData.Errors.Any();
         }
+
         #endregion Import
     }
 }
