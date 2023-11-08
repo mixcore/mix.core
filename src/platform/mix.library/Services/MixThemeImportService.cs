@@ -30,7 +30,10 @@ namespace Mix.Lib.Services
             {
                 if (_currentTenant == null)
                 {
-                    _currentTenant = _session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
+                    _currentTenant = _session?.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant) ?? new()
+                    {
+                        Id = 1
+                    };
                 }
                 return _currentTenant;
             }
