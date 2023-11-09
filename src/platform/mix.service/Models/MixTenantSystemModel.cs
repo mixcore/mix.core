@@ -17,6 +17,7 @@ namespace Mix.Service.Models
         public List<MixDomain> Domains { get; set; }
 
         public List<MixCulture> Cultures { get; set; } = new();
+        public List<MixTheme> Themes { get; set; } = new();
 
         public TenantConfigurationModel Configurations { get; set; }
     }

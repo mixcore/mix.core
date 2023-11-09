@@ -11,6 +11,7 @@ namespace Mix.Lib.Services
         public List<MixTenantSystemModel> AllTenants { get; set; }
 
         public List<MixCulture> AllCultures { get; set; }
+        public List<MixTheme> AllThemes { get; set; }
 
         public MixTenantService(DatabaseService databaseService)
         {
@@ -29,6 +30,7 @@ namespace Mix.Lib.Services
 
                     var domains = await dbContext.MixDomain.Where(p => tenantIds.Contains(p.MixTenantId)).ToListAsync(cancellationToken);
                     AllCultures = await dbContext.MixCulture.ToListAsync(cancellationToken);
+                    AllThemes = await dbContext.MixTheme.ToListAsync(cancellationToken);
 
                     var tenants = mixTenants
                         .Select(p => new MixTenantSystemModel
@@ -41,6 +43,7 @@ namespace Mix.Lib.Services
                             Configurations = new TenantConfigService(p.SystemName).AppSettings,
                             Domains = domains.Where(d => d.MixTenantId == p.Id).ToList(),
                             Cultures = AllCultures.Where(c => c.MixTenantId == p.Id).ToList(),
+                            Themes = AllThemes.Where(c => c.MixTenantId == p.Id).ToList(),
                         })
                         .ToList();
 

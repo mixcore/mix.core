@@ -149,6 +149,7 @@ namespace Mix.Portal.Domain.Services
             if (Directory.Exists(schemaFolder))
             {
                 var schema = await _importService.LoadSchema(schemaFolder);
+                schema.ThemeId = CurrentTenant.Themes.FirstOrDefault().Id;
                 if (schema != null && schema.IsValid)
                 {
                     await _importService.ImportSelectedItemsAsync(schema);
