@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Mix.Lib.Dtos;
 
-namespace Mix.Portal.Domain.Interfaces
+namespace Mix.Lib.Interfaces
 {
     public interface IMixApplicationService
     {

@@ -26,7 +26,7 @@ namespace Mixcore.Domain.Services
 
             var language = (string)values[keys[0]];
             string seoName = string.Empty;
-            if (_tenantService.AllCultures.Any(m => m.Specificulture == language))
+            if (_tenantService.AllCultures != null && _tenantService.AllCultures.Any(m => m.Specificulture == language))
             {
                 seoName = string.Join('/', values.Values.Skip(1));
             }

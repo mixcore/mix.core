@@ -30,7 +30,10 @@ namespace Mix.Lib.Services
             {
                 if (_currentTenant == null)
                 {
-                    _currentTenant = _session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
+                    _currentTenant = _session?.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant) ?? new()
+                    {
+                        Id = 1
+                    };
                 }
                 return _currentTenant;
             }
@@ -91,13 +94,19 @@ namespace Mix.Lib.Services
         }
 
 
-        public async Task<SiteDataViewModel> LoadSchema()
+        public Task<SiteDataViewModel> LoadSchema()
+        {
+            return LoadSchema($"{MixFolders.ThemePackage}/{MixThemePackageConstants.SchemaFolder}");
+        }
+
+
+        public async Task<SiteDataViewModel> LoadSchema(string folder)
         {
             using (var serviceScope = _serviceProvider.CreateScope())
             {
                 _uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
                 _context = _uow.DbContext;
-                var strSchema = MixFileHelper.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, $"{MixFolders.ThemePackage}/{MixThemePackageConstants.SchemaFolder}");
+                var strSchema = MixFileHelper.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, folder);
                 var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
                 await ValidateSiteData(siteStructures);
                 return siteStructures;
@@ -157,7 +166,7 @@ namespace Mix.Lib.Services
 
                     _currentCulture = _context.MixCulture.First(m =>
                 m.MixTenantId == CurrentTenant.Id
-                && (!string.IsNullOrEmpty(_siteData.Specificulture) || m.Specificulture == _siteData.Specificulture));
+                && (string.IsNullOrEmpty(_siteData.Specificulture) || m.Specificulture == _siteData.Specificulture));
 
                     if (_siteData.ThemeId == 0)
                     {
@@ -278,7 +287,7 @@ namespace Mix.Lib.Services
                 }
             }
         }
-        
+
         private async Task MigrateSystemMixDatabaseAsync(IMixDbService mixDbService, CancellationToken cancellationToken = default)
         {
             await mixDbService.MigrateSystemDatabases(cancellationToken);
@@ -545,9 +554,9 @@ namespace Mix.Lib.Services
                         item.ChildId = _dicMixDatabaseIds[item.ChildId];
                         item.CreatedBy = _siteData.CreatedBy;
                         item.CreatedDateTime = DateTime.UtcNow;
-                        
+
                         if (!dbContext.MixDatabaseRelationship.Any(
-                                m => m.ParentId == item.ParentId 
+                                m => m.ParentId == item.ParentId
                                     && m.ChildId == item.ChildId
                                     && m.DisplayName == item.DisplayName))
                         {
@@ -759,7 +768,7 @@ namespace Mix.Lib.Services
         private async Task ImportContentDataAsync<T>(List<T> data, Dictionary<int, int> dic, Dictionary<int, int> parentDic)
             where T : MultilingualContentBase<int>
         {
-            if (data.Count > 0)
+            if (data != null && data.Count > 0)
             {
                 foreach (var item in data)
                 {
@@ -857,6 +866,7 @@ namespace Mix.Lib.Services
             siteData.InvalidDatabaseNames.AddRange(existedDbNameErrors);
             siteData.IsValid = !siteData.Errors.Any();
         }
+
         #endregion Import
     }
 }

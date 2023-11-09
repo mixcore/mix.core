@@ -6,8 +6,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mix.RepoDb.ViewModels
 {
-    public sealed class MixDatabaseViewModel
-        : TenantDataViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
+    public sealed class RepoDbMixDatabaseViewModel
+        : TenantDataViewModelBase<MixCmsContext, MixDatabase, int, RepoDbMixDatabaseViewModel>
     {
         #region Properties
         public int? MixDatabaseContextId { get; set; }
@@ -28,16 +28,16 @@ namespace Mix.RepoDb.ViewModels
 
         #region Constructors
 
-        public MixDatabaseViewModel()
+        public RepoDbMixDatabaseViewModel()
         {
 
         }
 
-        public MixDatabaseViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public RepoDbMixDatabaseViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        public MixDatabaseViewModel(MixDatabase entity, UnitOfWorkInfo? uowInfo = null)
+        public RepoDbMixDatabaseViewModel(MixDatabase entity, UnitOfWorkInfo? uowInfo = null)
             : base(entity, uowInfo)
         {
         }

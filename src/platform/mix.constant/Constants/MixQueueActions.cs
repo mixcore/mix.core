@@ -2,6 +2,7 @@
 {
     public class MixQueueActions
     {
+        public const string InstallMixApplication = "InstallMixApplication";
         public const string AuditLog = "AuditLog";
         public const string EnqueueLog = "QueueLog";
         public const string AckLog = "AckLog";

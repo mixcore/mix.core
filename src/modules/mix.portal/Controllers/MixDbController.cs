@@ -8,8 +8,10 @@ using Mix.Heart.Helpers;
 using Mix.Heart.Model;
 using Mix.Lib.Interfaces;
 using Mix.Lib.ViewModels.ReadOnly;
+using Mix.RepoDb.Helpers;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
+using Mix.RepoDb.ViewModels;
 using Mix.Service.Commands;
 using Mix.Service.Interfaces;
 using Mix.Service.Models;
@@ -53,7 +55,7 @@ namespace Mix.Portal.Controllers
         private readonly IMixDbService _mixDbService;
         private const string AssociationTableName = nameof(MixDatabaseAssociation);
         private IMixDbCommandHubClientService _mixDbCommandHubClientService;
-        private MixDatabaseViewModel _mixDb;
+        private RepoDbMixDatabaseViewModel _mixDb;
         public MixDbController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -167,7 +169,7 @@ namespace Mix.Portal.Controllers
             List<JObject> lstDto = new();
             foreach (var item in data)
             {
-                lstDto.Add(await ParseDtoToEntityAsync(item));
+                lstDto.Add(await MixDbHelper.ParseImportDtoToEntityAsync(item, _mixDb.Columns, CurrentTenant.Id, _idService.GetClaim(User, MixClaims.Username)));
             }
 
             var result = await _repository.InsertManyAsync(lstDto);
@@ -349,7 +351,7 @@ namespace Mix.Portal.Controllers
         [HttpPost]
         public async Task<ActionResult<object>> Create(JObject dto)
         {
-            JObject obj = await ParseDtoToEntityAsync(dto);
+            JObject obj = await MixDbHelper.ParseDtoToEntityAsync(dto, _mixDb.Columns, CurrentTenant.Id, _idService.GetClaim(User, MixClaims.Username));
             string username = _idService.GetClaim(User, MixClaims.Username);
             var id = await _repository.InsertAsync(obj);
             var resp = await _repository.GetSingleAsync(id);
@@ -363,7 +365,7 @@ namespace Mix.Portal.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<object>> Update(int id, [FromBody] JObject dto)
         {
-            JObject obj = await ParseDtoToEntityAsync(dto);
+            JObject obj = await MixDbHelper.ParseDtoToEntityAsync(dto, _mixDb.Columns, CurrentTenant.Id, _idService.GetClaim(User, MixClaims.Username));
             string username = _idService.GetClaim(User, MixClaims.Username);
             var data = await _repository.UpdateAsync(obj);
             if (data != null)
@@ -485,100 +487,7 @@ namespace Mix.Portal.Controllers
                 throw new MixException(MixErrorStatus.Badrequest, ex);
             }
         }
-        private Task<JObject> ParseDtoToEntityAsync(JObject dto)
-        {
-            try
-            {
-                string username = _idService.GetClaim(User, MixClaims.Username);
-                JObject result = new();
-                var encryptedColumnNames = _mixDb.Columns
-                    .Where(m => m.ColumnConfigurations.IsEncrypt)
-                    .Select(c => c.SystemName)
-                    .ToList();
-                foreach (var pr in dto.Properties())
-                {
-                    var col = _mixDb.Columns.FirstOrDefault(c => c.SystemName.Equals(pr.Name, StringComparison.InvariantCultureIgnoreCase));
-
-                    if (encryptedColumnNames.Contains(pr.Name))
-                    {
-                        result.Add(
-                            new JProperty(
-                                    pr.Name.ToTitleCase(), AesEncryptionHelper.EncryptString(pr.Value.ToString(),
-                                    GlobalConfigService.Instance.AppSettings.ApiEncryptKey)));
-                    }
-                    else
-                    {
-                        if (col != null)
-                        {
-                            if (col.DataType == MixDataType.Json || col.DataType == MixDataType.ArrayRadio)
-                            {
-                                result.Add(new JProperty(pr.Name.ToTitleCase(), JObject.FromObject(pr.Value).ToString(Formatting.None)));
-                            }
-                            else if (col.DataType == MixDataType.Array || col.DataType == MixDataType.ArrayMedia)
-                            {
-
-                                result.Add(new JProperty(pr.Name.ToTitleCase(), JArray.FromObject(pr.Value).ToString(Formatting.None)));
-                            }
-                            else
-                            {
-                                result.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
-                            }
-                        }
-                        else
-                        {
-                            result.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
-                        }
-                    }
-                }
-
-                if (!result.ContainsKey(IdFieldName))
-                {
-                    result.Add(new JProperty(IdFieldName, null));
-                    if (!result.ContainsKey(CreatedByFieldName))
-                    {
-                        result.Add(new JProperty(CreatedByFieldName, username));
-                    }
-                    if (!result.ContainsKey(CreatedDateFieldName))
-                    {
-                        result.Add(new JProperty(CreatedDateFieldName, DateTime.UtcNow));
-                    }
-                    if (!result.ContainsKey(CreatedByFieldName))
-                    {
-                        result.Add(new JProperty(CreatedByFieldName, username));
-                    }
-                }
-                else
-                {
-                    result[ModifiedByFieldName] = username;
-                    result[LastModifiedFieldName] = DateTime.UtcNow;
-                }
-
-                if (!result.ContainsKey(PriorityFieldName))
-                {
-                    result.Add(new JProperty(PriorityFieldName, 0));
-                }
-                if (!result.ContainsKey(TenantIdFieldName))
-                {
-                    result.Add(new JProperty(TenantIdFieldName, CurrentTenant.Id));
-                }
-
-                if (!result.ContainsKey(StatusFieldName))
-                {
-                    result.Add(new JProperty(StatusFieldName, MixContentStatus.Published.ToString()));
-                }
-
-                if (!result.ContainsKey(IsDeletedFieldName))
-                {
-                    result.Add(new JProperty(IsDeletedFieldName, false));
-                }
-                return Task.FromResult(result);
-            }
-            catch (Exception ex)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, ex);
-            }
-        }
-
+       
         private async Task<PagingResponseModel<JObject>> SearchHandler(SearchMixDbRequestDto request)
         {
             try
@@ -801,15 +710,15 @@ namespace Mix.Portal.Controllers
             return queries;
         }
 
-        private async Task<MixDatabaseViewModel> GetMixDatabase()
+        private async Task<RepoDbMixDatabaseViewModel> GetMixDatabase()
         {
-            string name = $"{typeof(MixDatabaseViewModel).FullName}_{_tableName}";
+            string name = $"{typeof(RepoDbMixDatabaseViewModel).FullName}_{_tableName}";
             return await _memoryCache.TryGetValueAsync(
                 name,
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == _tableName);
+                    return RepoDbMixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == _tableName);
                 }
                 );
         }

@@ -36,7 +36,7 @@ namespace Mix.RepoDb.Services
         private readonly MixRepoDbRepository _repository;
         private readonly MixRepoDbRepository _associationRepository;
         private readonly IMixMemoryCacheService _memoryCache;
-        private MixDatabaseViewModel? _mixDb;
+        private RepoDbMixDatabaseViewModel? _mixDb;
         #region Properties
 
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
@@ -339,14 +339,14 @@ namespace Mix.RepoDb.Services
             return queries;
         }
 
-        private async Task<MixDatabaseViewModel?> GetMixDatabase(string tableName)
+        private async Task<RepoDbMixDatabaseViewModel?> GetMixDatabase(string tableName)
         {
             return await _memoryCache.TryGetValueAsync(
                 tableName,
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return MixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
+                    return RepoDbMixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
                 }
                 );
         }

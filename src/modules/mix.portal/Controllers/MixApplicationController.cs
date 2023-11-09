@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FirebaseAdmin.Auth.Multitenancy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Mix.Database.Entities.AuditLog;
 using Mix.Lib.Interfaces;
-using Mix.Portal.Domain.Interfaces;
 using Mix.SignalR.Interfaces;
 
 namespace Mix.Portal.Controllers
@@ -36,15 +37,14 @@ namespace Mix.Portal.Controllers
 
         [HttpPost]
         [Route("install")]
-        public async Task<ActionResult<MixApplicationViewModel>> Install([FromBody] MixApplicationViewModel app, CancellationToken cancellationToken = default)
+        public ActionResult Install([FromBody] MixApplicationViewModel app, CancellationToken cancellationToken = default)
         {
             if (_cmsContext.MixApplication.Any(m => m.MixTenantId == CurrentTenant.Id && m.BaseHref == app.BaseHref && m.Id != app.Id))
             {
                 return BadRequest($"BaseHref: \"{app.BaseHref}\" existed");
             }
-
-            await _applicationService.Install(app, cancellationToken);
-            return base.Ok(app);
+            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.InstallMixApplication, app);
+            return NoContent();
         }
 
         [HttpPost]
