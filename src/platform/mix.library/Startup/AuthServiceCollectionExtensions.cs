@@ -47,19 +47,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             const string accessDeniedPath = "/security/login";
 
-            // Ref: https://www.abhith.net/blog/aspnet-core-oauth-2-0-client-access-token-management/
-            // Setup token management service
-            services.AddAccessTokenManagement(options =>
-            {
-                options.Client.Clients.Add("testClient", new ClientCredentialsTokenRequest
-                {
-                    Address = $"/connect/token", // Token service (IdentityServer) base URL
-                    ClientId = Configuration.GetValue<string>("Authentication:Sts:ClientId"),
-                    ClientSecret = Configuration.GetValue<string>("Authentication:Sts:ClientSecret"),
-                    Scope = $"{AppConsts.OrdersWriteScope} {AppConsts.OrdersReadScope}" // Any number of scopes, space separated
-                });
-            });
-
             services.AddIdentity<MixUser, MixRole>(options =>
             {
                 options.Password = pOpt;
