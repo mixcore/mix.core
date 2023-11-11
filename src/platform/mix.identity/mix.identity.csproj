@@ -28,6 +28,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\mix.database\mix.database.csproj" />
+		<ProjectReference Include="..\mix.oauth\mix.oauth.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Context\BaseDBContext.cs" />
     <Compile Remove="Services\Users\IUserManagerService.cs" />
     <Compile Remove="Services\Users\TenantUserManager.cs" />
   </ItemGroup>
@@ -17,11 +18,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\mix.identity\mix.identity.csproj" />
+    <Folder Include="Models\Context\" />
+    <Folder Include="Models\Entities\" />
+    <Folder Include="Services\Users\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Users\" />
+    <ProjectReference Include="..\mix.database\mix.database.csproj" />
+    <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
   </ItemGroup>
 
 </Project>

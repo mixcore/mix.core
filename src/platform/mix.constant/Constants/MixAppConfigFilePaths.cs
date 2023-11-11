@@ -5,6 +5,7 @@
         public const string Authentication = "mixcontent/shared/appconfigs/authentication";
         public const string AppConfigs = "mixcontent/appconfigs";
         public const string Shared = "mixcontent/shared";
+        public const string IdentityRSAKey = "mixcontent/shared/appconfigs/identity_rsa_key";
         public const string Database = "mixcontent/shared/appconfigs/database";
         public const string Culture = "mixcontent/shared/appconfigs/culture";
         public const string ConnectionString = "mixcontent/shared/appconfigs/connection_string";

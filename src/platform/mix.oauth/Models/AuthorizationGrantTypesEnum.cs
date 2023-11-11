@@ -10,7 +10,7 @@ using System.ComponentModel;
 
 namespace Mix.OAuth.Models
 {
-    internal enum AuthorizationGrantTypesEnum : byte
+    public enum AuthorizationGrantTypesEnum : byte
     {
         [Description("code")] Code,
 

@@ -7,8 +7,6 @@
  */
 
 using Mix.Database.Entities.Account;
-using Mix.OAuth.Models.Entities;
-using System.Collections.Generic;
 
 namespace Mix.OAuth.OauthResponse
 {

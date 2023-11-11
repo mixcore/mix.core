@@ -7,17 +7,12 @@
  */
 
 using Microsoft.AspNetCore.Http;
-using System.Linq;
-using System;
-using System.Threading.Tasks;
 using System.Text;
-using System.Collections;
 using Mix.OAuth.Common;
 using Mix.OAuth.Models;
 using Mix.OAuth.OauthRequest;
 using Mix.OAuth.OauthResponse;
 using Mix.OAuth.Validations.Response;
-using Mix.Identity.Entities;
 
 namespace Mix.OAuth.Validations
 {
@@ -42,7 +37,7 @@ namespace Mix.OAuth.Validations
             }
 
             var requestContentType = context.Request.ContentType;
-            if (requestContentType != null && !requestContentType.Equals(Constants.ContentTypeSupported.XwwwFormUrlEncoded))
+            if (requestContentType != null && !requestContentType.Equals(OAuthConstants.ContentTypeSupported.XwwwFormUrlEncoded))
             {
                 response.Succeeded = false;
                 response.Error = "Content Type is not supported";

@@ -7,23 +7,20 @@
  */
 
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-using System;
 using System.Text;
-using System.Linq;
 using Mix.OAuth.Common;
 using Mix.OAuth.Models;
 using Mix.OAuth.OauthResponse;
-using Mix.OAuth.Models.Context;
 using Mix.OAuth.Validations.Response;
+using Mix.Database.Entities.Account;
 
 namespace Mix.OAuth.Validations
 {
     public class TokenRevocationValidation : ITokenRevocationValidation
     {
-        private readonly BaseDBContext _dBContext;
+        private readonly MixCmsAccountContext _dBContext;
         private readonly ClientStore _clientStore = new ClientStore();
-        public TokenRevocationValidation(BaseDBContext dBContext)
+        public TokenRevocationValidation(MixCmsAccountContext dBContext)
         {
             _dBContext = dBContext;
         }

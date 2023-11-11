@@ -9,20 +9,15 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Mix.Database.Entities.Account;
 using Mix.OAuth.Configuration;
 using Mix.OAuth.Models;
-using Mix.OAuth.Models.Context;
 using Mix.OAuth.OauthRequest;
 using Mix.OAuth.OauthResponse;
 using Mix.OAuth.Validations;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.IO;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 
 namespace Mix.OAuth.Services
 {
@@ -30,13 +25,13 @@ namespace Mix.OAuth.Services
     {
         private readonly ITokenIntrospectionValidation _tokenIntrospectionValidation;
         private readonly ILogger<TokenIntrospectionService> _logger;
-        private readonly BaseDBContext _dbContext;
+        private readonly MixCmsAccountContext _dbContext;
         private readonly OAuthServerOptions _optionsMonitor;
         private readonly ClientStore _clientStore = new ClientStore();
         public TokenIntrospectionService(
             ITokenIntrospectionValidation tokenIntrospectionValidation,
             ILogger<TokenIntrospectionService> logger,
-            BaseDBContext dbContext,
+            MixCmsAccountContext dbContext,
             IOptionsMonitor<OAuthServerOptions> optionsMonitor
             )
         {

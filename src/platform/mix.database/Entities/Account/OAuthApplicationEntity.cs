@@ -9,7 +9,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Mix.OAuth.Models.Entities
+namespace Mix.Database.Entities.Account
 {
     [Table("OAuthApplications", Schema = "OAuth")]
     public class OAuthApplicationEntity

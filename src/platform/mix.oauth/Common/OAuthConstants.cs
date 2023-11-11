@@ -8,7 +8,7 @@
 
 namespace Mix.OAuth.Common
 {
-    public static class Constants
+    public static class OAuthConstants
     {
         public static string Plain = "plain";
         public static string SHA256 = "S256";

@@ -7,20 +7,17 @@
  */
 
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 using Mix.OAuth.Common;
 using Mix.OAuth.OauthResponse;
-using Mix.OAuth.Models.Context;
+using Mix.Database.Entities.Account;
 
 namespace Mix.OAuth.Services
 {
     public class TokenRevocationService : ITokenRevocationService
     {
-        private readonly BaseDBContext _dbContext;
-        public TokenRevocationService(BaseDBContext context)
+        private readonly MixCmsAccountContext _dbContext;
+        public TokenRevocationService(MixCmsAccountContext context)
         {
             _dbContext = context;
         }
@@ -28,7 +25,7 @@ namespace Mix.OAuth.Services
         public async Task<TokenRecovationResponse> RevokeTokenAsync(HttpContext httpContext, string clientId)
         {
             var response = new TokenRecovationResponse() { Succeeded = true };
-            if (httpContext.Request.ContentType != Constants.ContentTypeSupported.XwwwFormUrlEncoded)
+            if (httpContext.Request.ContentType != OAuthConstants.ContentTypeSupported.XwwwFormUrlEncoded)
             {
                 response.Succeeded = false;
                 response.Error = "not supported content type";

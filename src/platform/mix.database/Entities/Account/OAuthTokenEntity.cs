@@ -6,14 +6,12 @@
  of this license document, but changing it is not allowed.
  */
 
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Mix.OAuth.Models.Entities
+namespace Mix.Database.Entities.Account
 {
-    [Table("OAuthTokens", Schema = "OAuth")]
     public class OAuthTokenEntity
     {
         [Key]

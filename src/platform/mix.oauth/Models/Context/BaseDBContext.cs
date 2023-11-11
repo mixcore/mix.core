@@ -9,7 +9,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
-using Mix.OAuth.Models.Entities;
 
 namespace Mix.OAuth.Models.Context
 {
