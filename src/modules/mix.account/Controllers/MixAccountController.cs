@@ -22,16 +22,20 @@ using Newtonsoft.Json.Linq;
 using System.Web;
 using Mix.Identity.Models.ManageViewModels;
 using Mix.Lib.Interfaces;
+using Mix.OAuth.OauthRequest;
+using Mix.Identity.Services;
+using Mix.Identity.Interfaces;
 
 namespace Mix.Account.Controllers
 {
     [Route("api/v2/rest/mix-account/user")]
-    public class MixUserController : MixTenantApiControllerBase
+    public class MixAccountController : MixTenantApiControllerBase
     {
         private readonly TenantUserManager _userManager;
         private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<MixRole> _roleManager;
         private readonly MixIdentityService _idService;
+        private readonly IAuthorizeResultService _authResultService;
         private readonly IMixEdmService _edmService;
         private readonly EntityRepository<MixCmsAccountContext, MixUser, Guid> _repository;
         private readonly MixRepoDbRepository _repoDbRepository;
@@ -41,7 +45,7 @@ namespace Mix.Account.Controllers
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
         private readonly AuthConfigService _authConfigService;
 
-        public MixUserController(
+        public MixAccountController(
             TenantUserManager userManager,
             SignInManager<MixUser> signInManager,
             RoleManager<MixRole> roleManager,
@@ -58,7 +62,8 @@ namespace Mix.Account.Controllers
             IQueueService<MessageQueueModel> queueService,
             AuthConfigService authConfigService,
             IMixEdmService edmService,
-            IMixTenantService mixTenantService)
+            IMixTenantService mixTenantService,
+            IAuthorizeResultService authResultService)
             : base(httpContextAccessor, configuration, mixService,
                 translator, mixIdentityService, queueService, mixTenantService)
         {
@@ -76,6 +81,7 @@ namespace Mix.Account.Controllers
             _repoDbRepository = repoDbRepository;
             _authConfigService = authConfigService;
             _edmService = edmService;
+            _authResultService = authResultService;
         }
 
         #region Overrides
@@ -142,6 +148,22 @@ namespace Mix.Account.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost("connect/token")]
+        public JsonResult Token([FromBody] TokenRequest tokenRequest)
+        {
+            var result = _authResultService.GenerateToken(tokenRequest);
+
+            if (result.HasError)
+                return Json(new
+                {
+                    error = result.Error,
+                    error_description = result.ErrorDescription
+                });
+
+            return Json(result);
+        }
+
 
         [AllowAnonymous]
         [HttpGet("resend-confirm-email/{id}")]

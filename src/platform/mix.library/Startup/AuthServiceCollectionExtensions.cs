@@ -2,6 +2,7 @@
 // The mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -14,8 +15,11 @@ using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.MixDb;
 using Mix.Identity.Extensions;
+using Mix.Identity.Interfaces;
+using Mix.Identity.Services;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
+using Mix.OAuth.Services.CodeServce;
 using Mix.Shared.Models.Configurations;
 using System.Text;
 namespace Microsoft.Extensions.DependencyInjection
@@ -45,6 +49,7 @@ namespace Microsoft.Extensions.DependencyInjection
             };
 
             const string accessDeniedPath = "/security/login";
+
             services.AddIdentity<MixUser, MixRole>(options =>
             {
                 options.Password = pOpt;
@@ -118,6 +123,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<FirebaseService>();
             services.TryAddScoped<MixDbDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<MixDbDbContext>>();
+            services.AddScoped<IAuthorizeResultService, AuthorizeResultService>();
+            services.AddSingleton<ICodeStoreService, CodeStoreService>();
             services.AddScoped<MixIdentityService>();
             return services;
         }
