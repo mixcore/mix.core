@@ -40,18 +40,13 @@ namespace Mix.Identity.Services
         private readonly OAuthServerOptions _options;
         private readonly MixCmsAccountContext _context;
         private readonly MixAuthenticationConfigurations _authConfigs;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AuthorizeResultService(ICodeStoreService codeStoreService,
             IOptions<OAuthServerOptions> options,
-            MixCmsAccountContext context,
-            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration)
         {
             _codeStoreService = codeStoreService;
             _options = options.Value;
-            _context = context;
-            _httpContextAccessor = httpContextAccessor;
             _authConfigs = configuration.GetSection(MixAppSettingsSection.Authentication).Get<MixAuthenticationConfigurations>();
         }
         public AuthorizeResponse AuthorizeRequest(IHttpContextAccessor httpContextAccessor, AuthorizationRequest authorizationRequest)
@@ -143,28 +138,6 @@ namespace Mix.Identity.Services
         {
             CheckClientResult result = new CheckClientResult() { IsSuccess = false };
 
-            //if (!string.IsNullOrWhiteSpace(grantType) && grantType == AuthorizationGrantTypesEnum.ClientCredentials.GetEnumDescription())
-            //{
-            //    var data = _httpContextAccessor.HttpContext;
-            //    var authHeader = data!.Request.Headers["Authorization"].ToString();
-            //    if (authHeader == null)
-            //        return result;
-            //    if (!authHeader.StartsWith("Basic", StringComparison.OrdinalIgnoreCase))
-            //        return result;
-
-            //    var parameters = authHeader.Substring("Basic ".Length);
-            //    var authorizationKeys = Encoding.UTF8.GetString(Convert.FromBase64String(parameters));
-
-            //    var authorizationResult = authorizationKeys.IndexOf(':');
-            //    if (authorizationResult == -1)
-            //        return result;
-            //    clientId = authorizationKeys.Substring(0, authorizationResult);
-            //    clientSecret = authorizationKeys.Substring(authorizationResult + 1);
-
-            //}
-
-
-
             if (!string.IsNullOrWhiteSpace(clientId))
             {
                 var client = _clientStore.Clients.Where(x => x.ClientId.Equals(clientId, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
@@ -228,8 +201,6 @@ namespace Mix.Identity.Services
                 IEnumerable<string> scopes = checkClientResult.Client.AllowedScopes.Intersect(tokenRequest.scope);
 
                 var clientCredentialAccessTokenResult = GenerateJWTToken(scopes, OAuthConstants.TokenTypes.JWTAcceseccToken, checkClientResult.Client);
-                //SaveJWTTokenInBackStore(checkClientResult.Client.ClientId, clientCredentialAccessTokenResult.AccessToken, clientCredentialAccessTokenResult.ExpirationDate);
-
                 result.access_token = clientCredentialAccessTokenResult.AccessToken;
                 result.id_token = null; // I have to use data shaping here to remove this property or I can customize the return data in the json result, but for now null is ok.
                 result.code = tokenRequest.code;
@@ -304,22 +275,6 @@ namespace Mix.Identity.Services
                     SigningCredentials(rsaSecurityKey, SecurityAlgorithms.RsaSha256));
 
                 id_token = handler.WriteToken(token);
-
-                var idptoken = new OAuthTokenEntity
-                {
-                    ClientId = checkClientResult.Client.ClientId,
-                    CreationDate = DateTime.Now,
-                    ReferenceId = Guid.NewGuid().ToString(),
-                    Status = OAuthConstants.Statuses.Valid,
-                    Token = id_token,
-                    TokenType = OAuthConstants.TokenTypes.JWTIdentityToken,
-                    ExpirationDate = token.ValidTo,
-                    SubjectId = userId,
-                    Revoked = false
-                };
-                _context.OAuthTokens.Add(idptoken);
-                _context.SaveChanges();
-
             }
 
             var scopesinJWtAccessToken = from m in clientCodeChecker.RequestedScopes.ToList()
@@ -327,7 +282,6 @@ namespace Mix.Identity.Services
                                          select m;
 
             var accessTokenResult = GenerateJWTToken(scopesinJWtAccessToken, OAuthConstants.TokenTypes.JWTAcceseccToken, checkClientResult.Client);
-            SaveJWTTokenInBackStore(checkClientResult.Client.ClientId, accessTokenResult.AccessToken, accessTokenResult.ExpirationDate);
 
             // here remove the code from the Concurrent Dictionary
             _codeStoreService.RemoveClientDataByCode(tokenRequest.code);
@@ -336,25 +290,6 @@ namespace Mix.Identity.Services
             result.id_token = id_token;
             result.code = tokenRequest.code;
             return result;
-        }
-
-
-        private int SaveJWTTokenInBackStore(string clientId, string accessToken, DateTime expireIn)
-        {
-            var atoken = new OAuthTokenEntity
-            {
-                ClientId = clientId,
-                CreationDate = DateTime.Now,
-                ReferenceId = Guid.NewGuid().ToString(),
-                Status = OAuthConstants.Statuses.Valid,
-                Token = accessToken,
-                TokenType = OAuthConstants.TokenTypes.JWTAcceseccToken,
-                TokenTypeHint = OAuthConstants.TokenTypeHints.AccessToken,
-                ExpirationDate = expireIn,
-                Revoked = false
-            };
-            _context.OAuthTokens.Add(atoken);
-            return _context.SaveChanges();
         }
 
         private bool CodeVerifierIsSendByTheClientThatReceivedTheCode(string codeVerifier, string codeChallenge, string codeChallengeMethod)
@@ -399,7 +334,7 @@ namespace Mix.Identity.Services
                     new Claim("scope", string.Join(' ', scopes))
                 };
 
-                JwtSecurityTokenHandler handler1 = new JwtSecurityTokenHandler();
+                JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
                 var token1 = new JwtSecurityToken(
                     _options.IDPUri,
                     client.ClientUri,
@@ -410,7 +345,7 @@ namespace Mix.Identity.Services
                                                     Encoding.ASCII.GetBytes(_authConfigs.SecretKey)),
                                                     SecurityAlgorithms.HmacSha256));
 
-                string access_token = handler1.WriteToken(token1);
+                string access_token = handler.WriteToken(token1);
 
                 result.AccessToken = access_token;
                 result.TokenType = tokenType;

@@ -22,8 +22,6 @@ namespace Mix.Database.Entities.Account
         public virtual DbSet<RefreshTokens> RefreshTokens { get; set; }
         public virtual DbSet<MixUserTenant> MixUserTenants { get; set; }
         public virtual DbSet<MixRole> MixRoles { get; set; }
-        public virtual DbSet<OAuthApplicationEntity> OAuthApplications { get; set; }
-        public virtual DbSet<OAuthTokenEntity> OAuthTokens { get; set; }
 
 
         /// <summary>
