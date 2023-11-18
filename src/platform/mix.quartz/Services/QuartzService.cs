@@ -48,7 +48,7 @@ namespace Mix.Quartz.Services
                     // string property keys and values when serializing
                     store.UseProperties = true;
                     store.UseGenericDatabase(provider, db => db.ConnectionString = connectionString);
-                    store.UseJsonSerializer();
+                    store.UseNewtonsoftJsonSerializer();
                 });
 
                 ISchedulerFactory schedulerFactory = config.Build();

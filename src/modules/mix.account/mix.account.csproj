@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<RootNamespace>Mix.Account</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
@@ -52,7 +52,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Grpc.AspNetCore" Version="2.55.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.0" />
 	</ItemGroup>
 
 </Project>

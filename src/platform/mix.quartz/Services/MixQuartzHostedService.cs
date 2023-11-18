@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace Mix.Quartz.Services
 {
     // Ref: https://andrewlock.net/creating-a-quartz-net-hosted-service-with-asp-net-core/
-    public class QuartzHostedService : IHostedService
+    public class MixQuartzHostedService : IHostedService
     {
         private readonly IEnumerable<MixJobBase> _jobSchedules;
         private readonly IQuartzService _service;
 
-        public QuartzHostedService(IEnumerable<MixJobBase> jobSchedules, IQuartzService scheduler)
+        public MixQuartzHostedService(IEnumerable<MixJobBase> jobSchedules, IQuartzService scheduler)
         {
             _jobSchedules = jobSchedules;
             _service = scheduler;

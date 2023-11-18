@@ -66,8 +66,6 @@ namespace Mix.OAuth.Services
                 tokenValidationParameters.ValidateIssuer = true;
                 tokenValidationParameters.ValidIssuer = _optionsMonitor.IDPUri;
                 tokenValidationParameters.ValidateAudience = true;
-                tokenValidationParameters.AudienceValidator = ValidateAudienceHandler(jwtSecurityToken.Audiences, jwtSecurityToken,
-                    tokenValidationParameters, validationResult.Client, tokenIntrospectionRequest.Token);
 
                 try
                 {
@@ -100,30 +98,5 @@ namespace Mix.OAuth.Services
             return response;
         }
 
-        private AudienceValidator ValidateAudienceHandler(IEnumerable<string> audiences, SecurityToken securityToken,
-            TokenValidationParameters validationParameters, Client client, string token)
-        {
-            Func<IEnumerable<string>, SecurityToken, TokenValidationParameters, bool> handler = (audiences, securityToken, validationParameters) =>
-            {
-                // Check the Token the Back Store.
-                var tokenInDb = _dbContext.OAuthTokens.FirstOrDefault(x => x.Token == token);
-                if (tokenInDb == null)
-                    return false;
-
-                if (tokenInDb.Revoked)
-                    return false;
-
-                return true;
-            };
-            return new AudienceValidator(handler);
-        }
-
-        private IList<Claim> ParseClaims(JwtSecurityToken tokenContent)
-        {
-            var claims = tokenContent.Claims.ToList();
-
-            // claims.Add(new Claim(ClaimTypes.Name, tokenContent.Actor));
-            return claims;
-        }
     }
 }

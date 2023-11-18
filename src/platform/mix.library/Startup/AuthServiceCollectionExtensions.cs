@@ -2,7 +2,6 @@
 // The mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
