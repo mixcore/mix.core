@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Identity.Constants;
-using Mix.Identity.Models.AccountViewModels;
 using Mix.Shared.Extensions;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
@@ -16,6 +15,7 @@ using Mix.Lib.Interfaces;
 using Mix.Tenancy.Domain.Interfaces;
 using Mix.Quartz.Interfaces;
 using Mix.Database.Services;
+using Mix.Auth.Models;
 
 namespace Mix.Tenancy.Controllers
 {
@@ -116,7 +116,7 @@ namespace Mix.Tenancy.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("init-account")]
-        public async Task<ActionResult<bool>> InitAccount([FromBody] RegisterViewModel model)
+        public async Task<ActionResult<bool>> InitAccount([FromBody] RegisterRequestModel model)
         {
             if (model == null || GlobalConfigService.Instance.AppSettings.InitStatus != InitStep.InitTenant)
             {

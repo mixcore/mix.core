@@ -1,5 +1,4 @@
-﻿using Mix.Identity.Models.AccountViewModels;
-using Mix.Lib.Models;
+﻿using Mix.Auth.Models;
 using Mix.Tenancy.Domain.Dtos;
 
 namespace Mix.Tenancy.Domain.Interfaces
@@ -10,6 +9,6 @@ namespace Mix.Tenancy.Domain.Interfaces
 
         public Task InitTenantAsync(InitCmsDto model);
 
-        public Task<TokenResponseModel> InitAccountAsync(RegisterViewModel model);
+        public Task<TokenResponseModel> InitAccountAsync(RegisterRequestModel model);
     }
 }

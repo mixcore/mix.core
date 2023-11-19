@@ -16,7 +16,14 @@ namespace Mix.OAuth.Services
 
         public async Task<TokenRecovationResponse> RevokeTokenAsync(HttpContext httpContext, string clientId)
         {
-            return new TokenRecovationResponse() { Succeeded = true };
+            var response = new TokenRecovationResponse() { Succeeded = true };
+            if (httpContext.Request.ContentType != OAuthConstants.ContentTypeSupported.XwwwFormUrlEncoded)
+            {
+                response.Succeeded = false;
+                response.Error = "not supported content type";
+            }
+            string? token = httpContext.Request.Form["token"];
+            string? tokenTypeHint = httpContext.Request.Form["token_type_hint"];
 
             var oauthToken = await _dbContext.OAuthToken
                 .Where(x => x.Token == token && x.ClientId == clientId &&
