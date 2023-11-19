@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSchedulerJobs();
             services.TryAddSingleton<IJobFactory, SingletonJobFactory>();
             services.TryAddSingleton<IQuartzService, QuartzService>();
-            services.AddHostedService<QuartzHostedService>();
+            services.AddHostedService<MixQuartzHostedService>();
             return services;
         }
 
