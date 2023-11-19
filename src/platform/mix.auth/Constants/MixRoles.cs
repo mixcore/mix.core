@@ -1,4 +1,4 @@
-﻿namespace Mix.Identity.Constants
+﻿namespace Mix.Auth.Constants
 {
     public class MixRoles
     {

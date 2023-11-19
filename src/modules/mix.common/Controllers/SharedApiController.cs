@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Mix.Auth.Constants;
 using Mix.Common.Domain.Dtos;
 using Mix.Common.Domain.Models;
 using Mix.Common.Domain.ViewModels;
 using Mix.Database.Entities.MixDb;
 using Mix.Heart.Exceptions;
-using Mix.Identity.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Mixdb.ViewModels;

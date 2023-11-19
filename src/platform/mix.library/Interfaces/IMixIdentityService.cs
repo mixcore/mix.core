@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Mix.Auth.Dtos;
 using Mix.Auth.Enums;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Domain.Models;
-using Mix.Identity.Dtos;
 using Mix.Identity.ViewModels;
 using Mix.Shared.Models.Configurations;
 using System.Security.Claims;

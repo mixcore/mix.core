@@ -7,7 +7,6 @@ using Mix.Database.Entities.Account;
 using Mix.Database.Services;
 using Mix.Heart.Models;
 using Mix.Identity.Domain.Models;
-using Mix.Identity.Dtos;
 using Mix.Identity.Models;
 using Mix.Lib.Services;
 using Mix.RepoDb.Repositories;
@@ -23,6 +22,8 @@ using Mix.Identity.Models.ManageViewModels;
 using Mix.Lib.Interfaces;
 using Mix.OAuth.OauthRequest;
 using Mix.Identity.Interfaces;
+using Mix.Auth.Dtos;
+using Mix.Auth.Constants;
 
 namespace Mix.Account.Controllers
 {

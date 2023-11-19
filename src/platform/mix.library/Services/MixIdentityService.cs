@@ -2,14 +2,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Mix.Auth.Constants;
+using Mix.Auth.Dtos;
 using Mix.Auth.Enums;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
-using Mix.Identity.Constants;
 using Mix.Identity.Domain.Models;
-using Mix.Identity.Dtos;
 using Mix.Identity.Enums;
 using Mix.Identity.ViewModels;
 using Mix.Lib.Interfaces;

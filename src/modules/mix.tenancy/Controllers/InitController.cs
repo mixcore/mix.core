@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Mix.Identity.Constants;
 using Mix.Shared.Extensions;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
@@ -16,6 +15,7 @@ using Mix.Tenancy.Domain.Interfaces;
 using Mix.Quartz.Interfaces;
 using Mix.Database.Services;
 using Mix.Auth.Models;
+using Mix.Auth.Constants;
 
 namespace Mix.Tenancy.Controllers
 {

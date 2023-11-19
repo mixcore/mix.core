@@ -3,7 +3,6 @@ using Mix.Mixdb.ViewModels;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
-using Mix.Identity.Constants;
 using Mix.Lib.Services;
 using Mix.Services.Databases.Lib.Dtos;
 using System.Linq.Expressions;
@@ -11,6 +10,7 @@ using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Heart.Services;
 using Mix.Lib.Interfaces;
+using Mix.Auth.Constants;
 
 namespace Mix.Services.Databases.Lib.Services
 {

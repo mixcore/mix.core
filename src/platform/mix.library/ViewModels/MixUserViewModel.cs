@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Mix.Auth.Constants;
 using Mix.Database.Entities.Account;
-using Mix.Identity.Constants;
 using Mix.Identity.Models.ManageViewModels;
 using Mix.RepoDb.Repositories;
 using RepoDb;

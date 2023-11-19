@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Auth.Constants;
 using Mix.Heart.Exceptions;
-using Mix.Identity.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
