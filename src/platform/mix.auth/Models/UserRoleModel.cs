@@ -1,6 +1,6 @@
-﻿namespace Mix.Identity.Models.AccountViewModels
+﻿namespace Mix.Auth.Models
 {
-    public class UserRoleModel
+    public sealed class UserRoleModel
     {
         public string UserId { get; set; }
         public string RoleId { get; set; }

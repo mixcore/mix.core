@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Mix.Auth.Enums;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.MixDb;
@@ -10,10 +11,8 @@ using Mix.Identity.Constants;
 using Mix.Identity.Domain.Models;
 using Mix.Identity.Dtos;
 using Mix.Identity.Enums;
-using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
 using Mix.Lib.Interfaces;
-using Mix.Lib.Models;
 
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
@@ -119,7 +118,7 @@ namespace Mix.Lib.Services
             return null;
         }
 
-        public virtual async Task<JObject> LoginAsync(LoginViewModel model, CancellationToken cancellationToken = default)
+        public virtual async Task<JObject> LoginAsync(LoginRequestModel model, CancellationToken cancellationToken = default)
         {
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
@@ -210,7 +209,7 @@ namespace Mix.Lib.Services
             return default;
         }
 
-        public virtual async Task<MixUser> RegisterAsync(RegisterViewModel model, int tenantId, UnitOfWorkInfo cmsUow, CancellationToken cancellationToken = default)
+        public virtual async Task<MixUser> RegisterAsync(RegisterRequestModel model, int tenantId, UnitOfWorkInfo cmsUow, CancellationToken cancellationToken = default)
         {
             var user = new MixUser
             {
@@ -285,7 +284,7 @@ namespace Mix.Lib.Services
             }
         }
 
-        public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(
+        public async Task<TokenResponseModel> GenerateAccessTokenAsync(
             MixUser user,
             bool isRemember,
             string aesKey,
@@ -318,7 +317,7 @@ namespace Mix.Lib.Services
                     refreshTokenId = saveRefreshTokenResult;
                 }
 
-                var token = new AccessTokenViewModel()
+                var token = new TokenResponseModel()
                 {
                     Info = userInfo,
                     EmailConfirmed = user.EmailConfirmed,
@@ -366,7 +365,7 @@ namespace Mix.Lib.Services
                         {
                             user = await UserManager.FindByNameAsync(userName);
                             user ??= await RegisterAsync(
-                                new RegisterViewModel
+                                new RegisterRequestModel
                                 {
                                     Email = model.Email,
                                     PhoneNumber = model.PhoneNumber,

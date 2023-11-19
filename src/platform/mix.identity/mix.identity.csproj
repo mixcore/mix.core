@@ -7,6 +7,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Models\AccountViewModels\**" />
+	  <EmbeddedResource Remove="Models\AccountViewModels\**" />
+	  <None Remove="Models\AccountViewModels\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Using Include="Mix.Constant.Constants" />
 		<Using Include="Mix.Constant.Enums" />
 		<Using Include="Mix.Shared.Dtos" />
@@ -26,6 +32,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\mix.auth\mix.auth.csproj" />
 		<ProjectReference Include="..\mix.database\mix.database.csproj" />
 		<ProjectReference Include="..\mix.oauth\mix.oauth.csproj" />
 	</ItemGroup>

@@ -10,6 +10,6 @@ namespace Mix.Tenancy.Domain.Interfaces
 
         public Task InitTenantAsync(InitCmsDto model);
 
-        public Task<AccessTokenViewModel> InitAccountAsync(RegisterViewModel model);
+        public Task<TokenResponseModel> InitAccountAsync(RegisterViewModel model);
     }
 }

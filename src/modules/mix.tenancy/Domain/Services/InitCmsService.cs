@@ -59,7 +59,7 @@ namespace Mix.Tenancy.Domain.Services
             GlobalConfigService.Instance.SaveSettings();
         }
 
-        public async Task<AccessTokenViewModel> InitAccountAsync(RegisterViewModel model)
+        public async Task<TokenResponseModel> InitAccountAsync(RegisterViewModel model)
         {
             var accountContext = _databaseService.GetAccountDbContext();
             await accountContext.Database.MigrateAsync();

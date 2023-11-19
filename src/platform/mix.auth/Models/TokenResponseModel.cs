@@ -1,6 +1,8 @@
-﻿namespace Mix.Lib.Models
+﻿using Newtonsoft.Json.Linq;
+
+namespace Mix.Auth.Models
 {
-    public sealed class AccessTokenViewModel
+    public sealed class TokenResponseModel
     {
         public string AccessToken { get; set; }
 

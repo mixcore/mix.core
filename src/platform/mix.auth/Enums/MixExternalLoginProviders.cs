@@ -1,4 +1,4 @@
-﻿namespace Mix.Identity.Constants
+﻿namespace Mix.Auth.Enums
 {
     public enum MixExternalLoginProviders
     {

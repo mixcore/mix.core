@@ -41,6 +41,7 @@
 		<Using Include="Mix.Constant.Enums" />
 		<Using Include="Mix.Shared.Dtos" />
 		<Using Include="Mix.Service.Services" />
+		<Using Include="Mix.Auth.Models" />
 	</ItemGroup>
 
 	<ItemGroup>

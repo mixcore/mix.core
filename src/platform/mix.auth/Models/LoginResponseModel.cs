@@ -1,6 +1,6 @@
-﻿namespace Mix.Identity.Domain.Models
+﻿namespace Mix.Auth.Models
 {
-    public class LoginSuccessModel
+    public class LoginResponseModel
     {
         public string AESKey { get; set; }
         public string RSAKey { get; set; }

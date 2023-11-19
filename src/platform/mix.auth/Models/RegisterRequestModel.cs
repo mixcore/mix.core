@@ -1,14 +1,10 @@
-﻿// Licensed to the Mixcore Foundation under one or more agreements.
-// The Mixcore Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-using Mix.Identity.Constants;
+﻿using Mix.Auth.Enums;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
 
-namespace Mix.Identity.Models.AccountViewModels
+namespace Mix.Auth.Models
 {
-    public class RegisterViewModel
+    public sealed class RegisterRequestModel
     {
         [Required]
         public string UserName { get; set; }

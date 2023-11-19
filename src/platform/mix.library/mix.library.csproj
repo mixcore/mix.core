@@ -42,6 +42,7 @@
 		<Using Include="Mix.Service.Models" />
 		<Using Include="Mix.Shared.Extensions" />
 		<Using Include="Mix.Shared.Helpers" />
+		<Using Include="Mix.Auth.Models" />
 
 	</ItemGroup>
 	<ItemGroup>

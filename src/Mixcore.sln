@@ -113,7 +113,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.log.lib", "platform\mix
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.log", "modules\mix.log\mix.log.csproj", "{F37BBDB4-EB48-42E4-8CB1-D459F5EF3C3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.oauth", "platform\mix.oauth\mix.oauth.csproj", "{C59DE2E9-2CF8-4BA0-A91C-4986AC060525}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.oauth", "platform\mix.oauth\mix.oauth.csproj", "{C59DE2E9-2CF8-4BA0-A91C-4986AC060525}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.auth", "platform\mix.auth\mix.auth.csproj", "{67C7637A-1E86-49C0-8BBB-F91260F9058F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -265,6 +267,10 @@ Global
 		{C59DE2E9-2CF8-4BA0-A91C-4986AC060525}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C59DE2E9-2CF8-4BA0-A91C-4986AC060525}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C59DE2E9-2CF8-4BA0-A91C-4986AC060525}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67C7637A-1E86-49C0-8BBB-F91260F9058F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67C7637A-1E86-49C0-8BBB-F91260F9058F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67C7637A-1E86-49C0-8BBB-F91260F9058F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67C7637A-1E86-49C0-8BBB-F91260F9058F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -325,6 +331,7 @@ Global
 		{BC6B8583-4F0F-45AD-BF71-1D998AA65869} = {84C68A6F-ECE0-467E-91C0-AE63AC4FC4C7}
 		{F37BBDB4-EB48-42E4-8CB1-D459F5EF3C3F} = {B4C40E02-E06A-4359-BDC5-349E103366AD}
 		{C59DE2E9-2CF8-4BA0-A91C-4986AC060525} = {0027B7D2-664D-4872-AE99-BA2A2BCA6B2E}
+		{67C7637A-1E86-49C0-8BBB-F91260F9058F} = {0027B7D2-664D-4872-AE99-BA2A2BCA6B2E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0143C230-7F40-44B2-8BA3-EF5B92D55848}
