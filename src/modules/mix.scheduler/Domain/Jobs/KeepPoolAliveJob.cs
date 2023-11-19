@@ -32,11 +32,11 @@ namespace Mix.Scheduler.Domain.Jobs
 
         public override async Task ExecuteHandler(IJobExecutionContext context)
         {
-            string domain = context.Trigger.JobDataMap.GetString("domain");
-            if (!string.IsNullOrEmpty(domain))
+            if (context.Trigger.JobDataMap.ContainsKey("domain"))
             {
                 try
                 {
+                    string domain = context.Trigger.JobDataMap.GetString("domain");
                     var now = DateTime.UtcNow;
                     var ping = await _httpService.GetStringAsync($"{domain.TrimEnd('/')}");
 

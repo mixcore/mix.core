@@ -250,6 +250,10 @@ namespace Mix.Lib.Services
         {
             try
             {
+                if (GlobalConfig.IsInit)
+                {
+                    return new JObject();
+                }
                 var u = await MixDbDataService.GetSingleByParent(MixDatabaseNames.SYSTEM_USER_DATA, MixContentType.User, user.Id, true);
                 if (u == null && !GlobalConfig.IsInit)
                 {
@@ -357,7 +361,7 @@ namespace Mix.Lib.Services
                     else
                     {
                         string userName = model.UserName ?? model.Email ?? model.PhoneNumber;
-                        
+
                         if (!string.IsNullOrEmpty(userName))
                         {
                             user = await UserManager.FindByNameAsync(userName);

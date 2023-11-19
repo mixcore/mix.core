@@ -53,8 +53,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddMixCache(configuration);
             services.CustomValidationResponse();
             services.AddHttpClient();
-            services.AddLogging();
-
+            services.AddHttpLogging(opt => opt.CombineLogs = true);
             services.ApplyMigrations(globalConfig);
 
             services.AddQueues(executingAssembly, configuration);
