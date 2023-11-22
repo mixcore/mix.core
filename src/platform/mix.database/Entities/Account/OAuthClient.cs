@@ -1,6 +1,6 @@
 ﻿namespace Mix.Database.Entities.Account
 {
-    public partial class Clients
+    public partial class OAuthClient
     {
         public string Id { get; set; }
         public bool Active { get; set; }

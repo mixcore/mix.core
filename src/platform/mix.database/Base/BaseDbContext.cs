@@ -11,6 +11,10 @@ namespace Mix.Database.Base
         protected readonly string _connectionStringName;
         protected Type _dbContextType;
 
+        public BaseDbContext()
+        {
+            
+        }
         public BaseDbContext(DatabaseService databaseService, string connectionStringName)
         {
             _databaseService = databaseService;

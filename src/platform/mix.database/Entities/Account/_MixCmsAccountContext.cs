@@ -18,7 +18,7 @@ namespace Mix.Database.Entities.Account
         public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual DbSet<MixUser> MixUsers { get; set; }
         public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
-        public virtual DbSet<Clients> Clients { get; set; }
+        public virtual DbSet<OAuthClient> OAuthClient { get; set; }
         public virtual DbSet<RefreshTokens> RefreshTokens { get; set; }
         public virtual DbSet<MixUserTenant> MixUserTenants { get; set; }
         public virtual DbSet<MixRole> MixRoles { get; set; }

@@ -2,13 +2,13 @@
 
 namespace Mix.Database.Entities.Account.EntityConfigurations
 {
-    public class ClientsConfiguration : AccountEntityBaseConfiguration<Clients>
+    public class OAuthClientConfiguration : AccountEntityBaseConfiguration<OAuthClient>
     {
-        public ClientsConfiguration(DatabaseService databaseService) : base(databaseService)
+        public OAuthClientConfiguration(DatabaseService databaseService) : base(databaseService)
         {
         }
 
-        public override void Configure(EntityTypeBuilder<Clients> builder)
+        public override void Configure(EntityTypeBuilder<OAuthClient> builder)
         {
             builder.Property(e => e.Id)
                 .HasCharSet(Config.CharSet)
