@@ -5,48 +5,43 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Account;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.Account.PostgresSQLAccount
+namespace Mix.Database.Migrations.SqliteAccount
 {
-    [DbContext(typeof(PostgresSQLAccountContext))]
-    [Migration("20231122063439_AddOAuth")]
+    [DbContext(typeof(SqliteAccountContext))]
+    [Migration("20231122100647_AddOAuth")]
     partial class AddOAuth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
-
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoleClaims", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ClaimValue")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<Guid?>("MixRoleId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("RoleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
                     b.HasKey("Id");
 
@@ -61,30 +56,28 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ClaimValue")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<Guid?>("MixUserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("MixUserId1")
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
                     b.HasKey("Id");
 
@@ -101,29 +94,29 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ProviderKey")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<Guid?>("MixUserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("MixUserId1")
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
                     b.HasKey("LoginProvider", "ProviderKey")
                         .HasName("PK_AspNetUserLogins_1");
@@ -141,25 +134,25 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
                 {
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<Guid>("RoleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<Guid?>("MixRoleId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("MixUserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("MixUserId1")
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("UserId", "RoleId", "MixTenantId");
 
@@ -178,25 +171,25 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
                 {
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Name")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<Guid?>("MixUserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
                         .HasColumnType("varchar(4000)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
@@ -210,22 +203,22 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Name")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("NormalizedName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
@@ -237,84 +230,84 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Email")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsActived")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("NormalizedUserName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("RegisterType")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("UserName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
@@ -325,7 +318,7 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
-                        .HasFilter("(\"NormalizedUserName\" IS NOT NULL)");
+                        .HasFilter("(NormalizedUserName IS NOT NULL)");
 
                     b.ToTable("MixUsers");
                 });
@@ -334,11 +327,11 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
                 {
                     b.Property<Guid>("MixUserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<int>("TenantId")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("MixUserId", "TenantId");
 
@@ -353,33 +346,33 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("Active")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("AllowedOrigin")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("ApplicationType")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("RefreshTokenLifeTime")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Secret")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
@@ -391,40 +384,40 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("ClientId")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ExpirationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ReferenceId")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Revoked")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Status")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SubjectId")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Token")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("TokenType")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("TokenTypeHint")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -435,29 +428,28 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
-                    b.Property<string>("ClientId")
-                        .IsRequired()
+                    b.Property<Guid>("ClientId")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Email")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("ExpiresUtc")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime");
 
                     b.Property<DateTime>("IssuedUtc")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Username")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");

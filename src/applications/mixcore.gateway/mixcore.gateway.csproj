@@ -10,8 +10,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Ocelot" Version="19.0.2" />
-		<PackageReference Include="Ocelot.Cache.CacheManager" Version="19.0.2" />
+		<PackageReference Include="Ocelot" Version="21.0.0" />
+		<PackageReference Include="Ocelot.Cache.CacheManager" Version="21.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -16,578 +16,552 @@ namespace Mix.Database.Migrations.MySqlAccount
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.4")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoleClaims", b =>
-            {
-                b.Property<int>("Id")
-                    .HasColumnType("int");
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                b.Property<Guid?>("AspNetRolesId")
-                    .HasColumnType("char(36)");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                b.Property<string>("ClaimType")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClaimType"), "utf8");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClaimType"), "utf8");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                b.Property<string>("ClaimValue")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClaimValue"), "utf8");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClaimValue"), "utf8");
+                    b.Property<Guid?>("MixRoleId")
+                        .HasColumnType("char(36)");
 
-                b.Property<Guid?>("MixRoleId")
-                    .HasColumnType("char(36)");
+                    b.Property<Guid>("RoleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(uuid())");
 
-                b.Property<Guid>("RoleId")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("char(36)")
-                    .HasDefaultValueSql("(uuid())");
+                    b.HasKey("Id");
 
-                b.HasKey("Id");
+                    b.HasIndex("MixRoleId");
 
-                b.HasIndex("AspNetRolesId");
+                    b.HasIndex("RoleId");
 
-                b.HasIndex("MixRoleId");
-
-                b.HasIndex("RoleId");
-
-                b.ToTable("AspNetRoleClaims");
-            });
-
-            modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoles", b =>
-            {
-                b.Property<Guid>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("char(36)")
-                    .HasDefaultValueSql("(uuid())");
-
-                b.Property<string>("ConcurrencyStamp")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
-
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ConcurrencyStamp"), "utf8");
-
-                b.Property<string>("Name")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
-
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Name"), "utf8");
-
-                b.Property<string>("NormalizedName")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
-
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("NormalizedName"), "utf8");
-
-                b.HasKey("Id");
-
-                b.HasIndex("NormalizedName")
-                    .IsUnique()
-                    .HasDatabaseName("RoleNameIndex")
-                    .HasFilter("(NormalizedName IS NOT NULL)");
-
-                b.ToTable("AspNetRoles");
-            });
+                    b.ToTable("AspNetRoleClaims");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserClaims", b =>
-            {
-                b.Property<int>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("int");
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                b.Property<string>("ClaimType")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClaimType"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClaimType"), "utf8");
 
-                b.Property<string>("ClaimValue")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClaimValue"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClaimValue"), "utf8");
 
-                b.Property<Guid?>("MixUserId1")
-                    .HasColumnType("char(36)");
+                    b.Property<Guid?>("MixUserId")
+                        .HasColumnType("char(36)");
 
-                b.Property<Guid>("UserId")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("char(36)")
-                    .HasDefaultValueSql("(uuid())");
+                    b.Property<Guid?>("MixUserId1")
+                        .HasColumnType("char(36)");
 
-                b.HasKey("Id");
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(uuid())");
 
-                b.HasIndex("MixUserId1");
+                    b.HasKey("Id");
 
-                b.HasIndex("UserId");
+                    b.HasIndex("MixUserId");
 
-                b.ToTable("AspNetUserClaims");
-            });
+                    b.HasIndex("MixUserId1");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserLogins", b =>
-            {
-                b.Property<string>("LoginProvider")
-                    .HasColumnType("varchar(50)")
-                    .UseCollation("utf8_unicode_ci");
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("LoginProvider"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("LoginProvider"), "utf8");
 
-                b.Property<string>("ProviderKey")
-                    .HasColumnType("varchar(50)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ProviderKey"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ProviderKey"), "utf8");
 
-                b.Property<string>("ProviderDisplayName")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<Guid?>("MixUserId")
+                        .HasColumnType("char(36)");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ProviderDisplayName"), "utf8");
+                    b.Property<Guid?>("MixUserId1")
+                        .HasColumnType("char(36)");
 
-                b.Property<Guid>("UserId")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("char(36)")
-                    .HasDefaultValueSql("(uuid())");
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                b.HasKey("LoginProvider", "ProviderKey")
-                    .HasName("PK_AspNetUserLogins_1");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ProviderDisplayName"), "utf8");
 
-                b.HasIndex("UserId");
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(uuid())");
 
-                b.ToTable("AspNetUserLogins");
-            });
+                    b.HasKey("LoginProvider", "ProviderKey")
+                        .HasName("PK_AspNetUserLogins_1");
+
+                    b.HasIndex("MixUserId");
+
+                    b.HasIndex("MixUserId1");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserRoles", b =>
-            {
-                b.Property<Guid>("UserId")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("char(36)")
-                    .HasDefaultValueSql("(uuid())");
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(uuid())");
 
-                b.Property<Guid>("RoleId")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("char(36)")
-                    .HasDefaultValueSql("(uuid())");
+                    b.Property<Guid>("RoleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(uuid())");
 
-                b.Property<int>("MixTenantId")
-                    .HasColumnType("int");
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
 
-                b.Property<Guid?>("AspNetRolesId")
-                    .HasColumnType("char(36)");
+                    b.Property<Guid?>("MixRoleId")
+                        .HasColumnType("char(36)");
 
-                b.Property<Guid?>("MixRoleId")
-                    .HasColumnType("char(36)");
+                    b.Property<Guid?>("MixUserId")
+                        .HasColumnType("char(36)");
 
-                b.HasKey("UserId", "RoleId", "MixTenantId");
+                    b.Property<Guid?>("MixUserId1")
+                        .HasColumnType("char(36)");
 
-                b.HasIndex("AspNetRolesId");
+                    b.HasKey("UserId", "RoleId", "MixTenantId");
 
-                b.HasIndex("MixRoleId");
+                    b.HasIndex("MixRoleId");
 
-                b.HasIndex("RoleId");
+                    b.HasIndex("MixUserId");
 
-                b.ToTable("AspNetUserRoles");
-            });
+                    b.HasIndex("MixUserId1");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserTokens", b =>
-            {
-                b.Property<Guid>("UserId")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("char(36)")
-                    .HasDefaultValueSql("(uuid())");
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(uuid())");
 
-                b.Property<string>("LoginProvider")
-                    .HasColumnType("varchar(50)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("LoginProvider"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("LoginProvider"), "utf8");
 
-                b.Property<string>("Name")
-                    .HasColumnType("varchar(50)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Name"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Name"), "utf8");
 
-                b.Property<string>("Value")
-                    .HasColumnType("varchar(4000)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<Guid?>("MixUserId")
+                        .HasColumnType("char(36)");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Value"), "utf8");
+                    b.Property<string>("Value")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("utf8_unicode_ci");
 
-                b.HasKey("UserId", "LoginProvider", "Name");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Value"), "utf8");
 
-                b.ToTable("AspNetUserTokens");
-            });
+                    b.HasKey("UserId", "LoginProvider", "Name");
 
-            modelBuilder.Entity("Mix.Database.Entities.Account.Clients", b =>
-            {
-                b.Property<string>("Id")
-                    .HasColumnType("varchar(50)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.HasIndex("MixUserId");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Id"), "utf8");
-
-                b.Property<bool>("Active")
-                    .HasColumnType("tinyint(1)");
-
-                b.Property<string>("AllowedOrigin")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
-
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("AllowedOrigin"), "utf8");
-
-                b.Property<int>("ApplicationType")
-                    .HasColumnType("int");
-
-                b.Property<string>("Name")
-                    .IsRequired()
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
-
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Name"), "utf8");
-
-                b.Property<int>("RefreshTokenLifeTime")
-                    .HasColumnType("int");
-
-                b.Property<string>("Secret")
-                    .IsRequired()
-                    .HasColumnType("varchar(50)")
-                    .UseCollation("utf8_unicode_ci");
-
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Secret"), "utf8");
-
-                b.HasKey("Id");
-
-                b.ToTable("Clients");
-            });
+                    b.ToTable("AspNetUserTokens");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.MixRole", b =>
-            {
-                b.Property<Guid>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("char(36)")
-                    .HasDefaultValueSql("(uuid())");
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(uuid())");
 
-                b.Property<string>("ConcurrencyStamp")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ConcurrencyStamp"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ConcurrencyStamp"), "utf8");
 
-                b.Property<string>("Name")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Name"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Name"), "utf8");
 
-                b.Property<string>("NormalizedName")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("NormalizedName"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("NormalizedName"), "utf8");
 
-                b.HasKey("Id");
+                    b.HasKey("Id");
 
-                b.HasIndex("NormalizedName")
-                    .HasDatabaseName("MixRoleNameIndex")
-                    .HasFilter("(NormalizedName IS NOT NULL)");
-
-                b.ToTable("MixRoles");
-            });
+                    b.ToTable("MixRoles");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.MixUser", b =>
-            {
-                b.Property<Guid>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("char(36)")
-                    .HasDefaultValueSql("(uuid())");
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(uuid())");
 
-                b.Property<int>("AccessFailedCount")
-                    .HasColumnType("int");
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
 
-                b.Property<string>("Avatar")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Avatar"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ConcurrencyStamp"), "utf8");
 
-                b.Property<string>("ConcurrencyStamp")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ConcurrencyStamp"), "utf8");
+                    b.Property<string>("Email")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                b.Property<DateTime>("CreatedDateTime")
-                    .HasColumnType("datetime");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Email"), "utf8");
 
-                b.Property<DateTime?>("DOB")
-                    .HasColumnType("datetime(6)");
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("tinyint(1)");
 
-                b.Property<string>("Email")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<bool>("IsActived")
+                        .HasColumnType("tinyint(1)");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Email"), "utf8");
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime");
 
-                b.Property<bool>("EmailConfirmed")
-                    .HasColumnType("tinyint(1)");
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("tinyint(1)");
 
-                b.Property<string>("FirstName")
-                    .HasColumnType("varchar(50)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<DateTime?>("LockoutEnd")
+                        .HasColumnType("datetime");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FirstName"), "utf8");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                b.Property<string>("Gender")
-                    .HasColumnType("varchar(50)")
-                    .UseCollation("utf8_unicode_ci");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ModifiedBy"), "utf8");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Gender"), "utf8");
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                b.Property<bool>("IsActived")
-                    .HasColumnType("tinyint(1)");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("NormalizedEmail"), "utf8");
 
-                b.Property<DateTime?>("LastModified")
-                    .HasColumnType("datetime");
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                b.Property<string>("LastName")
-                    .HasColumnType("varchar(50)")
-                    .UseCollation("utf8_unicode_ci");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("NormalizedUserName"), "utf8");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("LastName"), "utf8");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                b.Property<bool>("LockoutEnabled")
-                    .HasColumnType("tinyint(1)");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("PasswordHash"), "utf8");
 
-                b.Property<DateTime?>("LockoutEnd")
-                    .HasColumnType("datetime");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
 
-                b.Property<string>("ModifiedBy")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("PhoneNumber"), "utf8");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ModifiedBy"), "utf8");
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("tinyint(1)");
 
-                b.Property<string>("NickName")
-                    .HasColumnType("varchar(50)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<string>("RegisterType")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("NickName"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("RegisterType"), "utf8");
 
-                b.Property<string>("NormalizedEmail")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("NormalizedEmail"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SecurityStamp"), "utf8");
 
-                b.Property<string>("NormalizedUserName")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("tinyint(1)");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("NormalizedUserName"), "utf8");
+                    b.Property<string>("UserName")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                b.Property<string>("PasswordHash")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UserName"), "utf8");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("PasswordHash"), "utf8");
+                    b.HasKey("Id");
 
-                b.Property<string>("PhoneNumber")
-                    .HasColumnType("varchar(50)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("PhoneNumber"), "utf8");
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("(NormalizedUserName IS NOT NULL)");
 
-                b.Property<bool>("PhoneNumberConfirmed")
-                    .HasColumnType("tinyint(1)");
-
-                b.Property<string>("RegisterType")
-                    .HasColumnType("varchar(50)")
-                    .UseCollation("utf8_unicode_ci");
-
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("RegisterType"), "utf8");
-
-                b.Property<string>("SecurityStamp")
-                    .HasColumnType("varchar(50)")
-                    .UseCollation("utf8_unicode_ci");
-
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SecurityStamp"), "utf8");
-
-                b.Property<bool>("TwoFactorEnabled")
-                    .HasColumnType("tinyint(1)");
-
-                b.Property<string>("UserName")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
-
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UserName"), "utf8");
-
-                b.HasKey("Id");
-
-                b.HasIndex("NormalizedEmail")
-                    .HasDatabaseName("EmailIndex");
-
-                b.HasIndex("NormalizedUserName")
-                    .IsUnique()
-                    .HasDatabaseName("UserNameIndex")
-                    .HasFilter("(NormalizedUserName IS NOT NULL)");
-
-                b.ToTable("MixUsers");
-            });
+                    b.ToTable("MixUsers");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.MixUserTenant", b =>
-            {
-                b.Property<Guid>("MixUserId")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("char(36)")
-                    .HasDefaultValueSql("(uuid())");
+                {
+                    b.Property<Guid>("MixUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(uuid())");
 
-                b.Property<int>("TenantId")
-                    .HasColumnType("int");
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
 
-                b.HasKey("MixUserId", "TenantId");
+                    b.HasKey("MixUserId", "TenantId");
 
-                b.HasIndex("MixUserId");
+                    b.HasIndex("MixUserId");
 
-                b.HasIndex("TenantId");
+                    b.HasIndex("TenantId");
 
-                b.ToTable("MixUserTenants");
-            });
+                    b.ToTable("MixUserTenants");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Account.OAuthClient", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Id"), "utf8");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("AllowedOrigin")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("AllowedOrigin"), "utf8");
+
+                    b.Property<int>("ApplicationType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Name"), "utf8");
+
+                    b.Property<int>("RefreshTokenLifeTime")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Secret")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Secret"), "utf8");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OAuthClient");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Account.OAuthToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(uuid())");
+
+                    b.Property<string>("ClientId")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClientId"), "utf8");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ReferenceId")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("Revoked")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SubjectId")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TokenType")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TokenTypeHint")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OAuthToken");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.RefreshTokens", b =>
-            {
-                b.Property<Guid>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("char(36)")
-                    .HasDefaultValueSql("(uuid())");
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(uuid())");
 
-                b.Property<string>("ClientId")
-                    .IsRequired()
-                    .HasColumnType("varchar(50)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClientId"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClientId"), "utf8");
 
-                b.Property<string>("Email")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<string>("Email")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Email"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Email"), "utf8");
 
-                b.Property<DateTime>("ExpiresUtc")
-                    .HasColumnType("datetime");
+                    b.Property<DateTime>("ExpiresUtc")
+                        .HasColumnType("datetime");
 
-                b.Property<DateTime>("IssuedUtc")
-                    .HasColumnType("datetime");
+                    b.Property<DateTime>("IssuedUtc")
+                        .HasColumnType("datetime");
 
-                b.Property<string>("Username")
-                    .HasColumnType("varchar(250)")
-                    .UseCollation("utf8_unicode_ci");
+                    b.Property<string>("Username")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
 
-                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Username"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Username"), "utf8");
 
-                b.HasKey("Id");
+                    b.HasKey("Id");
 
-                b.ToTable("RefreshTokens");
-            });
+                    b.ToTable("RefreshTokens");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoleClaims", b =>
-            {
-                b.HasOne("Mix.Database.Entities.Account.AspNetRoles", null)
-                    .WithMany("AspNetRoleClaims")
-                    .HasForeignKey("AspNetRolesId");
-
-                b.HasOne("Mix.Database.Entities.Account.MixRole", null)
-                    .WithMany("AspNetRoleClaims")
-                    .HasForeignKey("MixRoleId");
-            });
+                {
+                    b.HasOne("Mix.Database.Entities.Account.MixRole", null)
+                        .WithMany("AspNetRoleClaims")
+                        .HasForeignKey("MixRoleId");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserClaims", b =>
-            {
-                b.HasOne("Mix.Database.Entities.Account.MixUser", null)
-                    .WithMany("Claims")
-                    .HasForeignKey("MixUserId1");
+                {
+                    b.HasOne("Mix.Database.Entities.Account.MixUser", null)
+                        .WithMany("AspNetUserClaimsUser")
+                        .HasForeignKey("MixUserId");
 
-                b.HasOne("Mix.Database.Entities.Account.MixUser", "MixUser")
-                    .WithMany("AspNetUserClaimsUser")
-                    .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
-
-                b.Navigation("MixUser");
-            });
+                    b.HasOne("Mix.Database.Entities.Account.MixUser", null)
+                        .WithMany("Claims")
+                        .HasForeignKey("MixUserId1");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserLogins", b =>
-            {
-                b.HasOne("Mix.Database.Entities.Account.MixUser", "MixUser")
-                    .WithMany("AspNetUserLoginsUser")
-                    .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
+                {
+                    b.HasOne("Mix.Database.Entities.Account.MixUser", null)
+                        .WithMany("AspNetUserLoginsApplicationUser")
+                        .HasForeignKey("MixUserId");
 
-                b.Navigation("MixUser");
-            });
+                    b.HasOne("Mix.Database.Entities.Account.MixUser", null)
+                        .WithMany("AspNetUserLoginsUser")
+                        .HasForeignKey("MixUserId1");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserRoles", b =>
-            {
-                b.HasOne("Mix.Database.Entities.Account.AspNetRoles", null)
-                    .WithMany("AspNetUserRoles")
-                    .HasForeignKey("AspNetRolesId");
+                {
+                    b.HasOne("Mix.Database.Entities.Account.MixRole", null)
+                        .WithMany("AspNetUserRoles")
+                        .HasForeignKey("MixRoleId");
 
-                b.HasOne("Mix.Database.Entities.Account.MixRole", null)
-                    .WithMany("AspNetUserRoles")
-                    .HasForeignKey("MixRoleId");
+                    b.HasOne("Mix.Database.Entities.Account.MixUser", null)
+                        .WithMany("AspNetUserRolesApplicationUser")
+                        .HasForeignKey("MixUserId");
 
-                b.HasOne("Mix.Database.Entities.Account.MixUser", "MixUser")
-                    .WithMany("AspNetUserRolesUser")
-                    .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
-
-                b.Navigation("MixUser");
-            });
+                    b.HasOne("Mix.Database.Entities.Account.MixUser", null)
+                        .WithMany("AspNetUserRolesUser")
+                        .HasForeignKey("MixUserId1");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserTokens", b =>
-            {
-                b.HasOne("Mix.Database.Entities.Account.MixUser", "MixUser")
-                    .WithMany("AspNetUserTokens")
-                    .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
-
-                b.Navigation("MixUser");
-            });
-
-            modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoles", b =>
-            {
-                b.Navigation("AspNetRoleClaims");
-
-                b.Navigation("AspNetUserRoles");
-            });
+                {
+                    b.HasOne("Mix.Database.Entities.Account.MixUser", null)
+                        .WithMany("AspNetUserTokens")
+                        .HasForeignKey("MixUserId");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.MixRole", b =>
-            {
-                b.Navigation("AspNetRoleClaims");
+                {
+                    b.Navigation("AspNetRoleClaims");
 
-                b.Navigation("AspNetUserRoles");
-            });
+                    b.Navigation("AspNetUserRoles");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.MixUser", b =>
-            {
-                b.Navigation("AspNetUserClaimsUser");
+                {
+                    b.Navigation("AspNetUserClaimsUser");
 
-                b.Navigation("AspNetUserLoginsUser");
+                    b.Navigation("AspNetUserLoginsApplicationUser");
 
-                b.Navigation("AspNetUserRolesUser");
+                    b.Navigation("AspNetUserLoginsUser");
 
-                b.Navigation("AspNetUserTokens");
+                    b.Navigation("AspNetUserRolesApplicationUser");
 
-                b.Navigation("Claims");
-            });
+                    b.Navigation("AspNetUserRolesUser");
+
+                    b.Navigation("AspNetUserTokens");
+
+                    b.Navigation("Claims");
+                });
 #pragma warning restore 612, 618
         }
     }

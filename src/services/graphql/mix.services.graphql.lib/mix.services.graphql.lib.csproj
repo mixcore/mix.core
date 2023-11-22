@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GraphQL" Version="7.5.0" />
-    <PackageReference Include="GraphQL.Server.All" Version="7.5.0" />
+    <PackageReference Include="GraphQL" Version="7.6.1" />
+    <PackageReference Include="GraphQL.Server.All" Version="7.6.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.Account.PostgresSQLAccount
+namespace Mix.Database.Migrations.PostgresSQLAccount
 {
     /// <inheritdoc />
     public partial class AddOAuth : Migration
@@ -11,9 +11,6 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Clients");
-
             migrationBuilder.CreateTable(
                 name: "OAuthClient",
                 columns: table => new
@@ -61,23 +58,6 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
 
             migrationBuilder.DropTable(
                 name: "OAuthToken");
-
-            migrationBuilder.CreateTable(
-                name: "Clients",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    Active = table.Column<bool>(type: "boolean", nullable: false),
-                    AllowedOrigin = table.Column<string>(type: "text", nullable: true),
-                    ApplicationType = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    RefreshTokenLifeTime = table.Column<int>(type: "integer", nullable: false),
-                    Secret = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clients", x => x.Id);
-                });
         }
     }
 }

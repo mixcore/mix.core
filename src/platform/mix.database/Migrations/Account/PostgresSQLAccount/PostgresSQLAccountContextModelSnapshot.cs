@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.Account.PostgresSQLAccount
+namespace Mix.Database.Migrations.PostgresSQLAccount
 {
     [DbContext(typeof(PostgresSQLAccountContext))]
     partial class PostgresSQLAccountContextModelSnapshot : ModelSnapshot

@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.Account.PostgresSQLAccount
+namespace Mix.Database.Migrations.PostgresSQLAccount
 {
     /// <inheritdoc />
     public partial class Init : Migration
@@ -11,23 +12,6 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Clients",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    Active = table.Column<bool>(type: "boolean", nullable: false),
-                    AllowedOrigin = table.Column<string>(type: "text", nullable: true),
-                    ApplicationType = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    RefreshTokenLifeTime = table.Column<int>(type: "integer", nullable: false),
-                    Secret = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clients", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "MixRoles",
                 columns: table => new
@@ -329,9 +313,6 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "Clients");
 
             migrationBuilder.DropTable(
                 name: "MixUserTenants");
