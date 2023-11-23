@@ -5,30 +5,30 @@ namespace Mix.Database.Base
 {
     public abstract class BaseDbContext : DbContext
     {
-        protected static string _connectionString;
-        protected static MixDatabaseProvider? _databaseProvider;
-        protected static DatabaseService _databaseService;
+        private readonly string _connectionString;
+        protected MixDatabaseProvider? DatabaseProvider;
+        protected DatabaseService DatabaseService;
         protected readonly string _connectionStringName;
         protected Type _dbContextType;
 
         public BaseDbContext(DatabaseService databaseService, string connectionStringName)
         {
-            _databaseService = databaseService;
+            DatabaseService = databaseService;
             _connectionStringName = connectionStringName;
             _dbContextType = GetType();
         }
         public BaseDbContext(string connectionString, MixDatabaseProvider databaseProvider)
         {
             _connectionString = connectionString;
-            _databaseProvider = databaseProvider;
+            DatabaseProvider = databaseProvider;
             _dbContextType = GetType();
         }
 
         protected override void OnConfiguring(
            DbContextOptionsBuilder optionsBuilder)
         {
-            string cnn = _connectionString ?? _databaseService.GetConnectionString(_connectionStringName);
-            var databaseProvider = _databaseProvider ?? _databaseService.DatabaseProvider;
+            string cnn = _connectionString ?? DatabaseService.GetConnectionString(_connectionStringName);
+            var databaseProvider = DatabaseProvider ?? DatabaseService.DatabaseProvider;
             if (!string.IsNullOrEmpty(cnn))
             {
                 switch (databaseProvider)
@@ -50,6 +50,10 @@ namespace Mix.Database.Base
                         optionsBuilder.UseNpgsql(cnn);
                         break;
 
+                    case MixDatabaseProvider.INMEMORY:
+                        optionsBuilder.UseInMemoryDatabase(cnn);
+                        break;
+
                     default:
                         break;
                 }
@@ -57,7 +61,7 @@ namespace Mix.Database.Base
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyAllConfigurations(_databaseService, _dbContextType.Assembly, $"{_dbContextType.Namespace}.EntityConfigurations");
+            modelBuilder.ApplyAllConfigurations(DatabaseService, _dbContextType.Assembly, $"{_dbContextType.Namespace}.EntityConfigurations");
         }
     }
 }

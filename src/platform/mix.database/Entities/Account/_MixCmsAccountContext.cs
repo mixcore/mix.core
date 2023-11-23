@@ -32,7 +32,7 @@ namespace Mix.Database.Entities.Account
             DatabaseService databaseService)
                     : base(databaseService, MixConstants.CONST_ACCOUNT_CONNECTION)
         {
-            _databaseService = databaseService;
+            DatabaseService = databaseService;
         }
         public MixCmsAccountContext(string connectionString, MixDatabaseProvider databaseProvider) : base(connectionString, databaseProvider)
         {
@@ -42,9 +42,9 @@ namespace Mix.Database.Entities.Account
         public override void Dispose()
         {
             GC.SuppressFinalize(this);
-            if (_databaseService.AppSettings.ClearDbPool)
+            if (DatabaseService.AppSettings.ClearDbPool)
             {
-                switch (_databaseService.DatabaseProvider)
+                switch (DatabaseService.DatabaseProvider)
                 {
                     case MixDatabaseProvider.SQLSERVER:
                         SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());

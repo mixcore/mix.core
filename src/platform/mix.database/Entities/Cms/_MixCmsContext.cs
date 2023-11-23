@@ -21,7 +21,7 @@ namespace Mix.Database.Entities.Cms
 
         public override void Dispose()
         {
-            switch (_databaseProvider)
+            switch (DatabaseProvider)
             {
                 case MixDatabaseProvider.SQLSERVER:
                     SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
