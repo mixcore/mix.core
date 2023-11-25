@@ -121,8 +121,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<FirebaseService>();
             services.TryAddScoped<MixDbDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<MixDbDbContext>>();
+            services.AddSingleton<IOAuthClientService, OAuthClientService>();
+            services.AddSingleton<IOAuthCodeStoreService, OAuthCodeStoreService>();
             services.AddScoped<IOAuthTokenService, OAuthTokenService>();
-            services.AddSingleton<ICodeStoreService, CodeStoreService>();
             services.AddScoped<MixIdentityService>();
             return services;
         }

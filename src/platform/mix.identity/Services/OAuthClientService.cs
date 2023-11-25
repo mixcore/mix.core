@@ -1,4 +1,6 @@
-﻿using Mix.Database.Entities.Account;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Mix.Database.Entities.Account;
+using Mix.Identity.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,23 +9,28 @@ using System.Threading.Tasks;
 
 namespace Mix.Identity.Services
 {
-    public sealed class OAuthClientService
+    public sealed class OAuthClientService : IOAuthClientService
     {
-        private readonly MixCmsAccountContext _accContext;
+        private readonly IServiceProvider _serviceProvider;
 
         public List<OAuthClient> Clients { get; set; }
-        public OAuthClientService(MixCmsAccountContext accContext)
+        public OAuthClientService(IServiceProvider serviceProvider)
         {
-            _accContext = accContext;
+            this._serviceProvider = serviceProvider;
         }
 
         public List<OAuthClient> GetClients(bool isReload = false)
         {
-            if (isReload || Clients == null)
+            using (var scope = _serviceProvider.CreateScope())
             {
-                Clients = _accContext.OAuthClient.ToList();
+                var _accContext = scope.ServiceProvider.GetService<MixCmsAccountContext>();
+                if (isReload || Clients == null)
+                {
+                    Clients = _accContext.OAuthClient.ToList();
+                }
+                _accContext.Dispose();
+                return Clients;
             }
-            return Clients;
         }
     }
 }

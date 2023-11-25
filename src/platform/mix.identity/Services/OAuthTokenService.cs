@@ -26,7 +26,7 @@ namespace Mix.Identity.Services
     // for encrypted key see: https://stackoverflow.com/questions/18223868/how-to-encrypt-jwt-security-token
     public sealed class OAuthTokenService : IOAuthTokenService
     {
-        private readonly OAuthClientService _clientService;
+        private readonly IOAuthClientService _clientService;
         private readonly IOAuthCodeStoreService _codeStoreService;
         private readonly OAuthServerOptions _options;
         private readonly MixCmsAccountContext _context;
@@ -35,7 +35,7 @@ namespace Mix.Identity.Services
         public OAuthTokenService(IOAuthCodeStoreService codeStoreService,
             IOptions<OAuthServerOptions> options,
             IConfiguration configuration,
-            OAuthClientService clientService)
+            IOAuthClientService clientService)
         {
             _clientService = clientService;
             _codeStoreService = codeStoreService;

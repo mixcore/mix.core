@@ -13,9 +13,9 @@ namespace Mix.Identity.Services
     public class OAuthCodeStoreService : IOAuthCodeStoreService
     {
         private readonly ConcurrentDictionary<string, OAuthCode> _codeIssued = new ConcurrentDictionary<string, OAuthCode>();
-        private readonly OAuthClientService _clientService;
+        private readonly IOAuthClientService _clientService;
 
-        public OAuthCodeStoreService(OAuthClientService clientStore)
+        public OAuthCodeStoreService(IOAuthClientService clientStore)
         {
             _clientService = clientStore;
         }

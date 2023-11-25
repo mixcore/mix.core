@@ -13,7 +13,7 @@ namespace Mix.Database.Services
 {
     public class DatabaseService : ConfigurationServiceBase<DatabaseConfigurations>
     {
-        public MixDatabaseProvider DatabaseProvider => MixDatabaseProvider.SQLITE; //AppSettings.DatabaseProvider;
+        public MixDatabaseProvider DatabaseProvider => AppSettings.DatabaseProvider;
         protected IHttpContextAccessor HttpContextAccessor;
         public DatabaseService(IHttpContextAccessor httpContextAccessor) : base(MixAppConfigFilePaths.Database, true)
         {
@@ -29,7 +29,6 @@ namespace Mix.Database.Services
 
         public string GetConnectionString(string name)
         {
-            return "Data Source=MixContent\\mix-cms.sqlite";
             switch (name)
             {
                 case MixConstants.CONST_CMS_CONNECTION:
