@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Mix.OAuth.OauthRequest;
 using Mix.OAuth.OauthResponse;
 
-namespace Mix.Identity.Interfaces
+namespace Mix.OAuth.Services
 {
     public interface IAuthorizeResultService
     {

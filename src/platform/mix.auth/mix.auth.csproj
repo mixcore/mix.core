@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\mix.database\mix.database.csproj" />
     <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
   </ItemGroup>
 

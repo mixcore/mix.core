@@ -21,9 +21,9 @@ using System.Web;
 using Mix.Identity.Models.ManageViewModels;
 using Mix.Lib.Interfaces;
 using Mix.OAuth.OauthRequest;
-using Mix.Identity.Interfaces;
 using Mix.Auth.Dtos;
 using Mix.Auth.Constants;
+using Mix.OAuth.Services;
 
 namespace Mix.Account.Controllers
 {

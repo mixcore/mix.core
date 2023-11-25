@@ -18,7 +18,7 @@ namespace Mix.OAuth.Models.Context
         {
 
         }
-        public DbSet<OAuthApplicationEntity> OAuthApplications { get; set; }
-        public DbSet<OAuthTokenEntity> OAuthTokens { get; set; }
+        public DbSet<OAuthClient> OAuthApplications { get; set; }
+        public DbSet<OAuthToken> OAuthTokens { get; set; }
     }
 }

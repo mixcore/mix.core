@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mix.Database.Entities.Account
 {
-    public class OAuthToken: Entity
+    public class OAuthToken: EntityBase<Guid>
     {
         public string Token { get; set; }
         public string ClientId { get; set; }
@@ -25,7 +25,7 @@ namespace Mix.Database.Entities.Account
 
         public string TokenType { get; set; }
         public string TokenTypeHint { get; set; }
-        public string Status { get; set; }
+        public string TokenStatus { get; set; }
 
         /// <summary>
         /// A flag to indicate if the token is revoked
