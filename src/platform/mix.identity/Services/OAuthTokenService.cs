@@ -8,7 +8,6 @@ using Mix.OAuth.Models;
 using Mix.OAuth.OauthRequest;
 using Mix.OAuth.OauthResponse;
 using Mix.OAuth.Services.CodeServce;
-using Mix.OAuth.Services;
 using Mix.Shared.Models.Configurations;
 using System;
 using System.Collections.Generic;
@@ -17,21 +16,23 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Mix.Auth.Models;
+using Mix.Identity.Interfaces;
+using Mix.Auth.Models.Requests;
 
 namespace Mix.Identity.Services
 {
     // for encrypted key see: https://stackoverflow.com/questions/18223868/how-to-encrypt-jwt-security-token
-    public sealed class OAuthTokenService
+    public sealed class OAuthTokenService : IOAuthTokenService
     {
         private readonly OAuthClientService _clientService;
-        private readonly ICodeStoreService _codeStoreService;
+        private readonly IOAuthCodeStoreService _codeStoreService;
         private readonly OAuthServerOptions _options;
         private readonly MixCmsAccountContext _context;
         private readonly MixAuthenticationConfigurations _authConfigs;
 
-        public OAuthTokenService(ICodeStoreService codeStoreService,
+        public OAuthTokenService(IOAuthCodeStoreService codeStoreService,
             IOptions<OAuthServerOptions> options,
             IConfiguration configuration,
             OAuthClientService clientService)
@@ -41,7 +42,7 @@ namespace Mix.Identity.Services
             _options = options.Value;
             _authConfigs = configuration.GetSection(MixAppSettingsSection.Authentication).Get<MixAuthenticationConfigurations>();
         }
-        public AuthorizeResponse AuthorizeRequest(IHttpContextAccessor httpContextAccessor, AuthorizationRequest authorizationRequest)
+        public AuthorizeResponse AuthorizeRequest(IHttpContextAccessor httpContextAccessor, OAuthRequest authorizationRequest)
         {
             AuthorizeResponse response = new AuthorizeResponse();
 
@@ -98,7 +99,7 @@ namespace Mix.Identity.Services
             // (If no openid scope value is present,
             // the request may still be a valid OAuth 2.0 request, but is not an OpenID Connect request.)
 
-            var authoCode = new AuthorizationCode
+            var authoCode = new OAuthCode
             {
                 ClientId = authorizationRequest.client_id,
                 RedirectUri = authorizationRequest.redirect_uri,
@@ -118,7 +119,7 @@ namespace Mix.Identity.Services
                 return response;
             }
 
-            response.RedirectUri = client.Client.RedirectUri + "?response_type=code" + "&state=" + authorizationRequest.state;
+            response.RedirectUri = client.Client.RedirectUris.FirstOrDefault() + "?response_type=code" + "&state=" + authorizationRequest.state;
             response.Code = code;
             response.State = authorizationRequest.state;
             response.RequestedScopes = clientScopes.ToList();
@@ -126,13 +127,13 @@ namespace Mix.Identity.Services
             return response;
         }
 
-        private CheckClientResult VerifyClientById(string clientId, bool checkWithSecret = false, string clientSecret = null, string grantType = null)
+        private CheckOAuthClientResult VerifyClientById(Guid clientId, bool checkWithSecret = false, string clientSecret = null, string grantType = null)
         {
-            CheckClientResult result = new CheckClientResult() { IsSuccess = false };
+            CheckOAuthClientResult result = new CheckOAuthClientResult() { IsSuccess = false };
 
-            if (!string.IsNullOrWhiteSpace(clientId))
+            if (clientId != default)
             {
-                var client = _clientService.Clients.Where(x => x.Id.Equals(clientId, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                var client = _clientService.Clients.Where(x => x.Id.Equals(clientId)).FirstOrDefault();
 
                 if (client != null)
                 {
@@ -167,7 +168,7 @@ namespace Mix.Identity.Services
         }
 
 
-        public TokenResponse GenerateToken(TokenRequest tokenRequest)
+        public TokenResponse GenerateToken(OAuthTokenRequest tokenRequest)
         {
 
             var result = new TokenResponse();
@@ -257,7 +258,7 @@ namespace Mix.Identity.Services
 
                 var token = new JwtSecurityToken(
                                     _options.IDPUri,
-                                    checkClientResult.Client.ClientId,
+                                    checkClientResult.Client.Id.ToString(),
                                     claims,
                                     expires: DateTime.UtcNow.AddMinutes(int.Parse("50")),
                                     signingCredentials: new SigningCredentials(
@@ -314,7 +315,7 @@ namespace Mix.Identity.Services
         }
 
 
-        public TokenResult GenerateJWTToken(IEnumerable<string> scopes, string tokenType, Client client)
+        public TokenResult GenerateJWTToken(IEnumerable<string> scopes, string tokenType, OAuthClient client)
         {
             var result = new TokenResult();
 

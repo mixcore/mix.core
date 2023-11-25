@@ -56,14 +56,11 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
                 .HasConversion(
                     v => $"[{string.Join('.', v.ToArray())}]",
                     v => JArray.Parse(v ?? "[]").ToObject<List<string>>());
-            
-            builder.Property(e => e.ClientUris)
+
+            builder.Property(e => e.ClientUri)
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation)
-                .HasColumnType($"{Config.String}{Config.MaxLength}")
-                .HasConversion(
-                    v => $"[{string.Join('.', v.ToArray())}]",
-                    v => JArray.Parse(v ?? "[]").ToObject<List<string>>());
+                .HasColumnType($"{Config.String}{Config.MediumLength}");
             
             builder.Property(e => e.RedirectUris)
                 .HasCharSet(Config.CharSet)
