@@ -16,6 +16,8 @@
 		<Using Include="Mix.Constant.Constants" />
 		<Using Include="Mix.Constant.Enums" />
 		<Using Include="Mix.Shared.Dtos" />
+		<Using Include="Mix.Auth.Models.OAuthResponses" />
+		<Using Include="Mix.Auth.Models.OAuthRequests" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -34,7 +36,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\mix.auth\mix.auth.csproj" />
 		<ProjectReference Include="..\mix.database\mix.database.csproj" />
-		<ProjectReference Include="..\mix.oauth\mix.oauth.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

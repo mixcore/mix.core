@@ -1,7 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Mix.Auth.Models;
 using Mix.Identity.Interfaces;
-using Mix.OAuth.Models;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;

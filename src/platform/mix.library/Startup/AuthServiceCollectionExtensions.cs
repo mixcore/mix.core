@@ -16,8 +16,6 @@ using Mix.Identity.Extensions;
 using Mix.Identity.Interfaces;
 using Mix.Identity.Services;
 using Mix.Lib.Services;
-using Mix.OAuth.Services;
-using Mix.OAuth.Services.CodeServce;
 using Mix.Shared.Models.Configurations;
 using System.Text;
 namespace Microsoft.Extensions.DependencyInjection
@@ -124,6 +122,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<IOAuthClientService, OAuthClientService>();
             services.AddSingleton<IOAuthCodeStoreService, OAuthCodeStoreService>();
             services.AddScoped<IOAuthTokenService, OAuthTokenService>();
+            services.AddScoped<IOAuthTokenRevocationService, OAuthTokenRevocationService>();
             services.AddScoped<MixIdentityService>();
             return services;
         }

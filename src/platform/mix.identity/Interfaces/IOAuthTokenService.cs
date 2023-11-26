@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Auth.Models;
-using Mix.Auth.Models.Requests;
+using Mix.Auth.Models.OAuthRequests;
 using Mix.Database.Entities.Account;
-using Mix.OAuth.OauthResponse;
 using System.Collections.Generic;
 
 namespace Mix.Identity.Interfaces

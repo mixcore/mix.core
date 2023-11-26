@@ -2,12 +2,6 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Database.Entities.Account;
-using Mix.OAuth.Common;
-using Mix.OAuth.Configuration;
-using Mix.OAuth.Models;
-using Mix.OAuth.OauthRequest;
-using Mix.OAuth.OauthResponse;
-using Mix.OAuth.Services.CodeServce;
 using Mix.Shared.Models.Configurations;
 using System;
 using System.Collections.Generic;
@@ -19,7 +13,8 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Mix.Auth.Models;
 using Mix.Identity.Interfaces;
-using Mix.Auth.Models.Requests;
+using Mix.Auth.Common;
+using Mix.Auth.Enums;
 
 namespace Mix.Identity.Services
 {
