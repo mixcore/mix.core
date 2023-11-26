@@ -7,6 +7,6 @@ namespace Mix.Identity.Interfaces
     {
         List<OAuthClient> Clients { get; set; }
 
-        List<OAuthClient> GetClients(bool isReload = false);
+        List<OAuthClient> LoadClients(bool isReload = false);
     }
 }

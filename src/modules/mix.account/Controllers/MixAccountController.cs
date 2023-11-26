@@ -33,7 +33,7 @@ namespace Mix.Account.Controllers
         private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<MixRole> _roleManager;
         private readonly MixIdentityService _idService;
-        private readonly IOAuthTokenService _authResultService;
+        private readonly IOAuthTokenService _oauthTokenService;
         private readonly IMixEdmService _edmService;
         private readonly EntityRepository<MixCmsAccountContext, MixUser, Guid> _repository;
         private readonly MixRepoDbRepository _repoDbRepository;
@@ -79,7 +79,7 @@ namespace Mix.Account.Controllers
             _repoDbRepository = repoDbRepository;
             _authConfigService = authConfigService;
             _edmService = edmService;
-            _authResultService = authResultService;
+            _oauthTokenService = authResultService;
         }
 
         #region Overrides
@@ -150,7 +150,7 @@ namespace Mix.Account.Controllers
         [HttpPost("connect/token")]
         public JsonResult Token([FromBody] OAuthTokenRequest tokenRequest)
         {
-            var result = _authResultService.GenerateToken(tokenRequest);
+            var result = _oauthTokenService.GenerateToken(tokenRequest);
 
             if (result.HasError)
                 return Json(new

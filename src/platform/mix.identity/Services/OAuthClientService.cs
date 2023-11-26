@@ -17,9 +17,10 @@ namespace Mix.Identity.Services
         public OAuthClientService(IServiceProvider serviceProvider)
         {
             this._serviceProvider = serviceProvider;
+            LoadClients();
         }
 
-        public List<OAuthClient> GetClients(bool isReload = false)
+        public List<OAuthClient> LoadClients(bool isReload = false)
         {
             using (var scope = _serviceProvider.CreateScope())
             {

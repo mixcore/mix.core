@@ -38,7 +38,7 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
                 .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MaxLength}")
                 .HasConversion(
-                    v => $"[{string.Join('.', v.ToArray())}]",
+                    v => JArray.FromObject(v).ToString(Newtonsoft.Json.Formatting.None),
                     v => JArray.Parse(v ?? "[]").ToObject<List<string>>());
 
             builder.Property(e => e.AllowedProtectedResources)
@@ -46,7 +46,7 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
                 .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MaxLength}")
                 .HasConversion(
-                    v => $"[{string.Join('.', v.ToArray())}]",
+                    v => JArray.FromObject(v).ToString(Newtonsoft.Json.Formatting.None),
                     v => JArray.Parse(v ?? "[]").ToObject<List<string>>());
             
             builder.Property(e => e.AllowedScopes)
@@ -54,7 +54,7 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
                 .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MaxLength}")
                 .HasConversion(
-                    v => $"[{string.Join('.', v.ToArray())}]",
+                    v => JArray.FromObject(v).ToString(Newtonsoft.Json.Formatting.None),
                     v => JArray.Parse(v ?? "[]").ToObject<List<string>>());
 
             builder.Property(e => e.ClientUri)
