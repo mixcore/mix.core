@@ -16,5 +16,10 @@ namespace Mix.Database.Entities.Account
                     : base(databaseService)
         {
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+        }
     }
 }

@@ -36,22 +36,22 @@
 		<Using Include="Mix.Lib.Attributes" />
 		<Using Include="Mix.Lib.Helpers" />
 		<Using Include="Mix.Lib.ViewModels" />
-		<Using Include="Mix.Identity.Constants" />
+		<Using Include="Mix.Auth.Constants" />
 		<Using Include="Mix.Constant.Constants" />
 		<Using Include="Mix.Constant.Enums" />
 		<Using Include="Mix.Shared.Dtos" />
 		<Using Include="Mix.Service.Services" />
+		<Using Include="Mix.Auth.Models" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
 		<ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
-		<ProjectReference Include="..\..\platform\mix.oauth\mix.oauth.csproj" />
 		<ProjectReference Include="..\mix.grpc\mix.grpc.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Grpc.AspNetCore" Version="2.55.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.59.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.0" />
 	</ItemGroup>
 

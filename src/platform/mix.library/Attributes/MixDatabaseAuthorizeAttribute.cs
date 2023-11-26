@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Mix.Identity.Constants;
+using Mix.Auth.Constants;
 using Mix.Lib.Services;
 using System.Security.Claims;
 

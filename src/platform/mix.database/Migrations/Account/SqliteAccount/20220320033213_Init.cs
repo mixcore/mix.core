@@ -1,44 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Mix.Database.Migrations.SqliteAccount
 {
+    /// <inheritdoc />
     public partial class Init : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "AspNetRoles",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())"),
-                    ConcurrencyStamp = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
-                    NormalizedName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Clients",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
-                    Active = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AllowedOrigin = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
-                    ApplicationType = table.Column<int>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
-                    RefreshTokenLifeTime = table.Column<int>(type: "INTEGER", nullable: false),
-                    Secret = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clients", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "MixRoles",
                 columns: table => new
@@ -101,7 +73,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())"),
                     ClientId = table.Column<Guid>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
-                    Email = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
+                    Email = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     Username = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     ExpiresUtc = table.Column<DateTime>(type: "datetime", nullable: false),
                     IssuedUtc = table.Column<DateTime>(type: "datetime", nullable: false)
@@ -116,7 +88,6 @@ namespace Mix.Database.Migrations.SqliteAccount
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false),
-                    AspNetRolesId = table.Column<Guid>(type: "TEXT", nullable: true),
                     MixRoleId = table.Column<Guid>(type: "TEXT", nullable: true),
                     RoleId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())"),
                     ClaimType = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
@@ -125,11 +96,6 @@ namespace Mix.Database.Migrations.SqliteAccount
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_AspNetRolesId",
-                        column: x => x.AspNetRolesId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetRoleClaims_MixRoles_MixRoleId",
                         column: x => x.MixRoleId,
@@ -196,8 +162,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                 {
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())"),
                     RoleId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())"),
-                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AspNetRolesId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     MixRoleId = table.Column<Guid>(type: "TEXT", nullable: true),
                     MixUserId = table.Column<Guid>(type: "TEXT", nullable: true),
                     MixUserId1 = table.Column<Guid>(type: "TEXT", nullable: true)
@@ -205,11 +170,6 @@ namespace Mix.Database.Migrations.SqliteAccount
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId, x.MixTenantId });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_AspNetRolesId",
-                        column: x => x.AspNetRolesId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_MixRoles_MixRoleId",
                         column: x => x.MixRoleId,
@@ -248,11 +208,6 @@ namespace Mix.Database.Migrations.SqliteAccount
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoleClaims_AspNetRolesId",
-                table: "AspNetRoleClaims",
-                column: "AspNetRolesId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_MixRoleId",
                 table: "AspNetRoleClaims",
                 column: "MixRoleId");
@@ -261,13 +216,6 @@ namespace Mix.Database.Migrations.SqliteAccount
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "AspNetRoles",
-                column: "NormalizedName",
-                unique: true,
-                filter: "(NormalizedName IS NOT NULL)");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_MixUserId",
@@ -300,11 +248,6 @@ namespace Mix.Database.Migrations.SqliteAccount
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_AspNetRolesId",
-                table: "AspNetUserRoles",
-                column: "AspNetRolesId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_MixRoleId",
                 table: "AspNetUserRoles",
                 column: "MixRoleId");
@@ -330,12 +273,6 @@ namespace Mix.Database.Migrations.SqliteAccount
                 column: "MixUserId");
 
             migrationBuilder.CreateIndex(
-                name: "MixRoleNameIndex",
-                table: "MixRoles",
-                column: "NormalizedName",
-                filter: "(NormalizedName IS NOT NULL)");
-
-            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "MixUsers",
                 column: "NormalizedEmail");
@@ -358,6 +295,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                 column: "TenantId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
@@ -376,16 +314,10 @@ namespace Mix.Database.Migrations.SqliteAccount
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Clients");
-
-            migrationBuilder.DropTable(
                 name: "MixUserTenants");
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "MixRoles");

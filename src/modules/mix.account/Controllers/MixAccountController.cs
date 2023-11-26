@@ -7,9 +7,7 @@ using Mix.Database.Entities.Account;
 using Mix.Database.Services;
 using Mix.Heart.Models;
 using Mix.Identity.Domain.Models;
-using Mix.Identity.Dtos;
 using Mix.Identity.Models;
-using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Services;
 using Mix.RepoDb.Repositories;
 using Mix.Shared.Services;
@@ -22,8 +20,8 @@ using Newtonsoft.Json.Linq;
 using System.Web;
 using Mix.Identity.Models.ManageViewModels;
 using Mix.Lib.Interfaces;
-using Mix.OAuth.OauthRequest;
-using Mix.Identity.Services;
+using Mix.Auth.Dtos;
+using Mix.Auth.Models.OAuthRequests;
 using Mix.Identity.Interfaces;
 
 namespace Mix.Account.Controllers
@@ -35,7 +33,7 @@ namespace Mix.Account.Controllers
         private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<MixRole> _roleManager;
         private readonly MixIdentityService _idService;
-        private readonly IAuthorizeResultService _authResultService;
+        private readonly IOAuthTokenService _oauthTokenService;
         private readonly IMixEdmService _edmService;
         private readonly EntityRepository<MixCmsAccountContext, MixUser, Guid> _repository;
         private readonly MixRepoDbRepository _repoDbRepository;
@@ -63,7 +61,7 @@ namespace Mix.Account.Controllers
             AuthConfigService authConfigService,
             IMixEdmService edmService,
             IMixTenantService mixTenantService,
-            IAuthorizeResultService authResultService)
+            IOAuthTokenService authResultService)
             : base(httpContextAccessor, configuration, mixService,
                 translator, mixIdentityService, queueService, mixTenantService)
         {
@@ -81,7 +79,7 @@ namespace Mix.Account.Controllers
             _repoDbRepository = repoDbRepository;
             _authConfigService = authConfigService;
             _edmService = edmService;
-            _authResultService = authResultService;
+            _oauthTokenService = authResultService;
         }
 
         #region Overrides
@@ -119,7 +117,7 @@ namespace Mix.Account.Controllers
         [Route("register")]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> Register([FromBody] RegisterViewModel model)
+        public async Task<ActionResult> Register([FromBody] RegisterRequestModel model)
         {
             await _idService.RegisterAsync(model, CurrentTenant.Id, _cmsUow);
             var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
@@ -150,9 +148,9 @@ namespace Mix.Account.Controllers
         }
 
         [HttpPost("connect/token")]
-        public JsonResult Token([FromBody] TokenRequest tokenRequest)
+        public JsonResult Token([FromBody] OAuthTokenRequest tokenRequest)
         {
-            var result = _authResultService.GenerateToken(tokenRequest);
+            var result = _oauthTokenService.GenerateToken(tokenRequest);
 
             if (result.HasError)
                 return Json(new
@@ -233,7 +231,7 @@ namespace Mix.Account.Controllers
         {
             string key = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
             string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, key);
-            var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
+            var model = JsonConvert.DeserializeObject<LoginRequestModel>(decryptMsg);
             var loginResult = await _idService.LoginAsync(model);
             return Ok(loginResult);
         }
@@ -253,7 +251,7 @@ namespace Mix.Account.Controllers
         [Route("login-unsecure")]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> LoginUnSecure([FromBody] LoginViewModel model)
+        public async Task<ActionResult> LoginUnSecure([FromBody] LoginRequestModel model)
         {
             var loginResult = await _idService.LoginAsync(model);
             return Ok(loginResult);
@@ -488,7 +486,7 @@ namespace Mix.Account.Controllers
 
         [HttpPost]
         [Route("forgot-password")]
-        public async Task<ActionResult> ForgotPassword([FromBody] ForgotPasswordViewModel model)
+        public async Task<ActionResult> ForgotPassword([FromBody] ForgotPasswordRequestModel model)
         {
             if (string.IsNullOrEmpty(model.Email))
             {
@@ -519,7 +517,7 @@ namespace Mix.Account.Controllers
 
         [HttpPost]
         [Route("reset-password")]
-        public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordViewModel model)
+        public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordRequestModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)

@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
+using Mix.Auth.Enums;
+using Mix.Auth.Models;
 using Mix.Database.Entities.Account;
-using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
 using System.Security.Claims;

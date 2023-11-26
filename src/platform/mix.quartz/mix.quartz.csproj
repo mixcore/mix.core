@@ -12,7 +12,6 @@
     <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.8.0" />
     <PackageReference Include="Quartz.Serialization.Json" Version="3.8.0" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
-    <PackageReference Include="ZstdSharp" Version="0.7.2" />
   </ItemGroup>
 
 	<ItemGroup>

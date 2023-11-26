@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
@@ -16,9 +15,7 @@ using Mix.Database.Entities.MixDb;
 using Mix.Identity.Extensions;
 using Mix.Identity.Interfaces;
 using Mix.Identity.Services;
-using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
-using Mix.OAuth.Services.CodeServce;
 using Mix.Shared.Models.Configurations;
 using System.Text;
 namespace Microsoft.Extensions.DependencyInjection
@@ -122,8 +119,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<FirebaseService>();
             services.TryAddScoped<MixDbDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<MixDbDbContext>>();
-            services.AddScoped<IAuthorizeResultService, AuthorizeResultService>();
-            services.AddSingleton<ICodeStoreService, CodeStoreService>();
+            services.AddSingleton<IOAuthClientService, OAuthClientService>();
+            services.AddSingleton<IOAuthCodeStoreService, OAuthCodeStoreService>();
+            services.AddScoped<IOAuthTokenService, OAuthTokenService>();
+            services.AddScoped<IOAuthTokenRevocationService, OAuthTokenRevocationService>();
             services.AddScoped<MixIdentityService>();
             return services;
         }

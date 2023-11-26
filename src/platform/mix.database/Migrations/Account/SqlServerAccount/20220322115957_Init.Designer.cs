@@ -15,22 +15,20 @@ namespace Mix.Database.Migrations.SqlServerAccount
     [Migration("20220322115957_Init")]
     partial class Init
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.2")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoleClaims", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
-
-                    b.Property<Guid?>("AspNetRolesId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("varchar(250)")
@@ -52,45 +50,11 @@ namespace Mix.Database.Migrations.SqlServerAccount
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AspNetRolesId");
-
                     b.HasIndex("MixRoleId");
 
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoles", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("newid()");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("NormalizedName")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("(NormalizedName IS NOT NULL)");
-
-                    b.ToTable("AspNetRoles");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserClaims", b =>
@@ -99,7 +63,7 @@ namespace Mix.Database.Migrations.SqlServerAccount
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("varchar(250)")
@@ -188,9 +152,6 @@ namespace Mix.Database.Migrations.SqlServerAccount
                     b.Property<int>("MixTenantId")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("AspNetRolesId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("MixRoleId")
                         .HasColumnType("uniqueidentifier");
 
@@ -201,8 +162,6 @@ namespace Mix.Database.Migrations.SqlServerAccount
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserId", "RoleId", "MixTenantId");
-
-                    b.HasIndex("AspNetRolesId");
 
                     b.HasIndex("MixRoleId");
 
@@ -247,44 +206,6 @@ namespace Mix.Database.Migrations.SqlServerAccount
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Account.Clients", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("AllowedOrigin")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<int>("ApplicationType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<int>("RefreshTokenLifeTime")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Secret")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Clients");
-                });
-
             modelBuilder.Entity("Mix.Database.Entities.Account.MixRole", b =>
                 {
                     b.Property<Guid>("Id")
@@ -308,10 +229,6 @@ namespace Mix.Database.Migrations.SqlServerAccount
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .HasDatabaseName("MixRoleNameIndex")
-                        .HasFilter("(NormalizedName IS NOT NULL)");
 
                     b.ToTable("MixRoles");
                 });
@@ -432,6 +349,88 @@ namespace Mix.Database.Migrations.SqlServerAccount
                     b.ToTable("MixUserTenants");
                 });
 
+            modelBuilder.Entity("Mix.Database.Entities.Account.OAuthClient", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AllowedOrigin")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<int>("ApplicationType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<int>("RefreshTokenLifeTime")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Secret")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OAuthClient");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Account.OAuthToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("newid()");
+
+                    b.Property<string>("ClientId")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReferenceId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Revoked")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubjectId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TokenType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TokenTypeHint")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OAuthToken");
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Account.RefreshTokens", b =>
                 {
                     b.Property<Guid>("Id")
@@ -446,7 +445,6 @@ namespace Mix.Database.Migrations.SqlServerAccount
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("varchar(250)")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
@@ -469,10 +467,6 @@ namespace Mix.Database.Migrations.SqlServerAccount
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoleClaims", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Account.AspNetRoles", null)
-                        .WithMany("AspNetRoleClaims")
-                        .HasForeignKey("AspNetRolesId");
-
                     b.HasOne("Mix.Database.Entities.Account.MixRole", null)
                         .WithMany("AspNetRoleClaims")
                         .HasForeignKey("MixRoleId");
@@ -502,10 +496,6 @@ namespace Mix.Database.Migrations.SqlServerAccount
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserRoles", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Account.AspNetRoles", null)
-                        .WithMany("AspNetUserRoles")
-                        .HasForeignKey("AspNetRolesId");
-
                     b.HasOne("Mix.Database.Entities.Account.MixRole", null)
                         .WithMany("AspNetUserRoles")
                         .HasForeignKey("MixRoleId");
@@ -524,13 +514,6 @@ namespace Mix.Database.Migrations.SqlServerAccount
                     b.HasOne("Mix.Database.Entities.Account.MixUser", null)
                         .WithMany("AspNetUserTokens")
                         .HasForeignKey("MixUserId");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoles", b =>
-                {
-                    b.Navigation("AspNetRoleClaims");
-
-                    b.Navigation("AspNetUserRoles");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.MixRole", b =>

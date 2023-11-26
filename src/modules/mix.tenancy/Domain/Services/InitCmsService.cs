@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Mix.Auth.Models;
 using Mix.Database.Entities.Account;
 using Mix.Database.Services;
 using Mix.Identity.Enums;
-using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Interfaces;
-using Mix.Lib.Models;
 using Mix.Lib.Services;
 using Mix.Shared.Helpers;
 using Mix.Tenancy.Domain.Dtos;
@@ -59,7 +58,7 @@ namespace Mix.Tenancy.Domain.Services
             GlobalConfigService.Instance.SaveSettings();
         }
 
-        public async Task<AccessTokenViewModel> InitAccountAsync(RegisterViewModel model)
+        public async Task<TokenResponseModel> InitAccountAsync(RegisterRequestModel model)
         {
             var accountContext = _databaseService.GetAccountDbContext();
             await accountContext.Database.MigrateAsync();

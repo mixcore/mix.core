@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Mix.Identity.Constants;
+using Mix.Auth.Constants;
 using Mix.Lib.Services;
 using Mix.Log.Lib.Interfaces;
 using Mix.Log.Lib.Models;

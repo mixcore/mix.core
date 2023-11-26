@@ -1,4 +1,5 @@
-﻿using Mix.Database.Extensions;
+﻿using Microsoft.Data.Sqlite;
+using Mix.Database.Extensions;
 using Mix.Database.Services;
 
 namespace Mix.Database.Base
@@ -11,6 +12,10 @@ namespace Mix.Database.Base
         protected readonly string _connectionStringName;
         protected Type _dbContextType;
 
+        public BaseDbContext()
+        {
+            
+        }
         public BaseDbContext(DatabaseService databaseService, string connectionStringName)
         {
             _databaseService = databaseService;
@@ -43,7 +48,10 @@ namespace Mix.Database.Base
                         break;
 
                     case MixDatabaseProvider.SQLITE:
-                        optionsBuilder.UseSqlite(cnn);
+                        var c = new SqliteConnection(cnn);
+                        // SQLite not works with guid lower case
+                        c.CreateFunction("newid", () => Guid.NewGuid().ToString().ToUpper());
+                        optionsBuilder.UseSqlite(c);
                         break;
 
                     case MixDatabaseProvider.PostgreSQL:

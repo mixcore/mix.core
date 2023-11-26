@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Mix.Identity.Constants;
+using Mix.Auth.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Models.Common;
 using Mix.SignalR.Enums;

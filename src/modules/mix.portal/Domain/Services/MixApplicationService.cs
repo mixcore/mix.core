@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Wordprocessing;
 using Humanizer;
 using Microsoft.AspNetCore.SignalR;
+using Mix.Auth.Constants;
 using Mix.Heart.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Portal.Domain.Interfaces;

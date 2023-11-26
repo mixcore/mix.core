@@ -20,12 +20,10 @@ using Mix.RepoDb.Interfaces;
 using Mix.Service.Interfaces;
 using Mix.Constant.Constants;
 using Mix.Heart.Services;
-using Mix.Identity.Constants;
 using Mix.Shared.Services;
 using Mix.Database.Entities.MixDb;
 using Newtonsoft.Json;
 using Mix.Lib.Interfaces;
-using Mix.Heart.Entities;
 using Mix.Heart.Exceptions;
 
 namespace Mix.RepoDb.Services

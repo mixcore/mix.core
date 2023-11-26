@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.Account.PostgresSQLAccount
+namespace Mix.Database.Migrations.PostgresSQLAccount
 {
     [DbContext(typeof(PostgresSQLAccountContext))]
     [Migration("20221214113845_Init")]
@@ -20,7 +20,7 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -206,34 +206,6 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Account.Clients", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("AllowedOrigin")
-                        .HasColumnType("text");
-
-                    b.Property<int>("ApplicationType")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<int>("RefreshTokenLifeTime")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Secret")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Clients");
-                });
-
             modelBuilder.Entity("Mix.Database.Entities.Account.MixRole", b =>
                 {
                     b.Property<Guid>("Id")
@@ -375,6 +347,88 @@ namespace Mix.Database.Migrations.Account.PostgresSQLAccount
                     b.HasIndex("TenantId");
 
                     b.ToTable("MixUserTenants");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Account.OAuthClient", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("AllowedOrigin")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<int>("ApplicationType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<int>("RefreshTokenLifeTime")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Secret")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OAuthClient");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Account.OAuthToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<string>("ClientId")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ReferenceId")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Revoked")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SubjectId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TokenType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TokenTypeHint")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OAuthToken");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.RefreshTokens", b =>

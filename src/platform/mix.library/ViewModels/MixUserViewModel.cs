@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Mix.Auth.Constants;
 using Mix.Database.Entities.Account;
-using Mix.Identity.Constants;
-using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.Models.ManageViewModels;
 using Mix.RepoDb.Repositories;
 using RepoDb;
@@ -38,7 +37,7 @@ namespace Mix.Lib.ViewModels
 
         #region Change Password
 
-        public ResetPasswordViewModel ResetPassword { get; set; }
+        public ResetPasswordRequestModel ResetPassword { get; set; }
 
         public bool IsChangePassword { get; set; }
 

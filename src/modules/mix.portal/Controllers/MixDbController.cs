@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Azure.Amqp.Framing;
+using Mix.Auth.Constants;
 using Mix.Database.Constants;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;

@@ -1,4 +1,4 @@
-﻿using Mix.Identity.Models.AccountViewModels;
+﻿using Mix.Auth.Models;
 
 namespace Mix.Tenancy.Domain.Dtos
 {
@@ -6,7 +6,7 @@ namespace Mix.Tenancy.Domain.Dtos
     {
         public InitCmsDto TenantData { get; set; }
 
-        public RegisterViewModel AccountData { get; set; }
+        public RegisterRequestModel AccountData { get; set; }
 
         public InitFullSiteDto() { }
     }

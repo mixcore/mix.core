@@ -28,7 +28,7 @@
 		<Using Include="Mix.Lib.Attributes" />
 
 		<Using Include="Mix.Lib.Helpers" />
-		<Using Include="Mix.Identity.Constants" />
+		<Using Include="Mix.Auth.Constants" />
 		<Using Include="Mix.Queue.Interfaces" />
 		<Using Include="Mix.Queue.Models" />
 		<Using Include="Mixcore.Domain.Models" />

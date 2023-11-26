@@ -28,7 +28,7 @@
 		<Using Include="Mix.Lib.Attributes" />
 
 		<Using Include="Mix.Lib.Helpers" />
-		<Using Include="Mix.Identity.Constants" />
+		<Using Include="Mix.Auth.Constants" />
 		<Using Include="Mix.Queue.Interfaces" />
 		<Using Include="Mix.Queue.Models" />
 		<Using Include="Mixcore.Domain.Models" />
@@ -60,8 +60,8 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Ocelot" Version="19.0.2" />
-		<PackageReference Include="Ocelot.Cache.CacheManager" Version="19.0.2" />
+		<PackageReference Include="Ocelot" Version="21.0.0" />
+		<PackageReference Include="Ocelot.Cache.CacheManager" Version="21.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

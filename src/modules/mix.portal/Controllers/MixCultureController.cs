@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Auth.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Portal.Domain.Interfaces;
 using Mix.SignalR.Interfaces;

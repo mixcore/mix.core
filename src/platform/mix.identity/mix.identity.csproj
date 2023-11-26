@@ -7,9 +7,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Models\AccountViewModels\**" />
+	  <EmbeddedResource Remove="Models\AccountViewModels\**" />
+	  <None Remove="Models\AccountViewModels\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Using Include="Mix.Constant.Constants" />
 		<Using Include="Mix.Constant.Enums" />
 		<Using Include="Mix.Shared.Dtos" />
+		<Using Include="Mix.Auth.Models.OAuthResponses" />
+		<Using Include="Mix.Auth.Models.OAuthRequests" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -22,12 +30,12 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Identity.Web" Version="2.15.3" />
+		<PackageReference Include="Microsoft.Identity.Web" Version="2.15.5" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\mix.auth\mix.auth.csproj" />
 		<ProjectReference Include="..\mix.database\mix.database.csproj" />
-		<ProjectReference Include="..\mix.oauth\mix.oauth.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

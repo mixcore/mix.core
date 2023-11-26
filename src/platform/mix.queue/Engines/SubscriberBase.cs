@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Services;
@@ -65,7 +66,7 @@ namespace Mix.Queue.Engines
             }
             catch (Exception ex)
             {
-                throw new MixException(_subscriber.SubscriptionId, ex);
+                throw new MixException(MixErrorStatus.ServerError, _subscriber.SubscriptionId, ex);
             }
         }
 

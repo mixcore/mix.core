@@ -1,56 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Mix.Database.Migrations.MySqlAccount
 {
+    /// <inheritdoc />
     public partial class Init : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8");
-
-            migrationBuilder.CreateTable(
-                name: "AspNetRoles",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(uuid())", collation: "ascii_general_ci"),
-                    ConcurrencyStamp = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    NormalizedName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8");
-
-            migrationBuilder.CreateTable(
-                name: "Clients",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Active = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    AllowedOrigin = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    ApplicationType = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    RefreshTokenLifeTime = table.Column<int>(type: "int", nullable: false),
-                    Secret = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clients", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8");
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "MixRoles",
@@ -68,7 +31,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 {
                     table.PrimaryKey("PK_MixRoles", x => x.Id);
                 })
-                .Annotation("MySql:CharSet", "utf8");
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "MixUsers",
@@ -109,7 +72,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 {
                     table.PrimaryKey("PK_MixUsers", x => x.Id);
                 })
-                .Annotation("MySql:CharSet", "utf8");
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "MixUserTenants",
@@ -122,7 +85,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 {
                     table.PrimaryKey("PK_MixUserTenants", x => new { x.MixUserId, x.TenantId });
                 })
-                .Annotation("MySql:CharSet", "utf8");
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "RefreshTokens",
@@ -131,7 +94,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(uuid())", collation: "ascii_general_ci"),
                     ClientId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
-                    Email = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
+                    Email = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     Username = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
@@ -142,14 +105,13 @@ namespace Mix.Database.Migrations.MySqlAccount
                 {
                     table.PrimaryKey("PK_RefreshTokens", x => x.Id);
                 })
-                .Annotation("MySql:CharSet", "utf8");
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    AspNetRolesId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     MixRoleId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     RoleId = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(uuid())", collation: "ascii_general_ci"),
                     ClaimType = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
@@ -161,17 +123,12 @@ namespace Mix.Database.Migrations.MySqlAccount
                 {
                     table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_AspNetRolesId",
-                        column: x => x.AspNetRolesId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_AspNetRoleClaims_MixRoles_MixRoleId",
                         column: x => x.MixRoleId,
                         principalTable: "MixRoles",
                         principalColumn: "Id");
                 })
-                .Annotation("MySql:CharSet", "utf8");
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
@@ -201,7 +158,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                         principalTable: "MixUsers",
                         principalColumn: "Id");
                 })
-                .Annotation("MySql:CharSet", "utf8");
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserLogins",
@@ -231,7 +188,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                         principalTable: "MixUsers",
                         principalColumn: "Id");
                 })
-                .Annotation("MySql:CharSet", "utf8");
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
@@ -240,7 +197,6 @@ namespace Mix.Database.Migrations.MySqlAccount
                     UserId = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(uuid())", collation: "ascii_general_ci"),
                     RoleId = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(uuid())", collation: "ascii_general_ci"),
                     MixTenantId = table.Column<int>(type: "int", nullable: false),
-                    AspNetRolesId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     MixRoleId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     MixUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     MixUserId1 = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
@@ -248,11 +204,6 @@ namespace Mix.Database.Migrations.MySqlAccount
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId, x.MixTenantId });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_AspNetRolesId",
-                        column: x => x.AspNetRolesId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_MixRoles_MixRoleId",
                         column: x => x.MixRoleId,
@@ -269,7 +220,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                         principalTable: "MixUsers",
                         principalColumn: "Id");
                 })
-                .Annotation("MySql:CharSet", "utf8");
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
@@ -293,12 +244,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                         principalTable: "MixUsers",
                         principalColumn: "Id");
                 })
-                .Annotation("MySql:CharSet", "utf8");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoleClaims_AspNetRolesId",
-                table: "AspNetRoleClaims",
-                column: "AspNetRolesId");
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_MixRoleId",
@@ -309,13 +255,6 @@ namespace Mix.Database.Migrations.MySqlAccount
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "AspNetRoles",
-                column: "NormalizedName",
-                unique: true,
-                filter: "(NormalizedName IS NOT NULL)");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_MixUserId",
@@ -348,11 +287,6 @@ namespace Mix.Database.Migrations.MySqlAccount
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_AspNetRolesId",
-                table: "AspNetUserRoles",
-                column: "AspNetRolesId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_MixRoleId",
                 table: "AspNetUserRoles",
                 column: "MixRoleId");
@@ -378,12 +312,6 @@ namespace Mix.Database.Migrations.MySqlAccount
                 column: "MixUserId");
 
             migrationBuilder.CreateIndex(
-                name: "MixRoleNameIndex",
-                table: "MixRoles",
-                column: "NormalizedName",
-                filter: "(NormalizedName IS NOT NULL)");
-
-            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "MixUsers",
                 column: "NormalizedEmail");
@@ -406,6 +334,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 column: "TenantId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
@@ -424,16 +353,10 @@ namespace Mix.Database.Migrations.MySqlAccount
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Clients");
-
-            migrationBuilder.DropTable(
                 name: "MixUserTenants");
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "MixRoles");

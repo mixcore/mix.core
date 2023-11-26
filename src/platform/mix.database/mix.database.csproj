@@ -17,9 +17,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="7.3.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="8.3.7" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.0" />
-		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="8.0.0-beta.1" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="8.0.0-beta.2" />
 		
 	</ItemGroup>
 
@@ -41,7 +41,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Migrations\Account\PostgresSQLAccount\" />
 		<Folder Include="Migrations\MixQueueDb\" />
 		<Folder Include="Migrations\Quartz\" />
 	</ItemGroup>

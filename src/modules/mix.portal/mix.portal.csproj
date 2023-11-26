@@ -45,7 +45,7 @@
 		
 		
 		<Using Include="Mix.Lib.Helpers" />
-		<Using Include="Mix.Identity.Constants" />
+		<Using Include="Mix.Auth.Constants" />
 		<Using Include="Mix.Queue.Interfaces" />
 		<Using Include="Mix.Queue.Models" />
 		<Using Include="Mix.Queue.Attributes" />
@@ -71,7 +71,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Grpc.AspNetCore" Version="2.55.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.59.0" />
 	</ItemGroup>
 
 	<ItemGroup>
