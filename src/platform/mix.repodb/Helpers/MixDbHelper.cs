@@ -75,7 +75,7 @@ namespace Mix.RepoDb.Helpers
 
                 if (!result.ContainsKey(IdFieldName))
                 {
-                    result.Add(new JProperty(IdFieldName, null));
+                    result.Add(new JProperty(IdFieldName, string.Empty));
                     if (!result.ContainsKey(CreatedByFieldName))
                     {
                         result.Add(new JProperty(CreatedByFieldName, username));
@@ -176,7 +176,7 @@ namespace Mix.RepoDb.Helpers
 
                 if (!result.ContainsKey(IdFieldName))
                 {
-                    result.Add(new JProperty(IdFieldName, null));
+                    result.Add(new JProperty(IdFieldName, string.Empty));
                     if (!result.ContainsKey(CreatedByFieldName))
                     {
                         result.Add(new JProperty(CreatedByFieldName, username));

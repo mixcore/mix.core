@@ -12,7 +12,7 @@ namespace Mix.Database.Entities.Account
         public bool IsActive { get; set; } = false;
         public bool UsePkce { get; set; }
         public IList<string> AllowedOrigins { get; set; }
-        public IList<string?> GrantTypes { get; set; }
+        public IList<string> GrantTypes { get; set; }
         public IList<string> AllowedScopes { get; set; }
         public string ClientUri { get; set; }
         public IList<string> RedirectUris { get; set; }
