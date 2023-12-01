@@ -5,6 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<InvariantGlobalization>true</InvariantGlobalization>
+		<RootNamespace>Mixcore.Gateway</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
