@@ -66,7 +66,7 @@ namespace Mixcore.Controllers
         #endregion Routes
 
         #region Helper
-        protected async Task<IActionResult> Page(int pageId, string keyword = null)
+        protected async Task<IActionResult> Page(int pageId, string? keyword = null)
         {
             // Home Page
             var pageRepo = PageContentViewModel.GetRepository(Uow, _cacheService);

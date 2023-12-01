@@ -16,7 +16,7 @@ namespace Mixcore.Domain.ViewModels
         }
 
         public ModuleContentViewModel(MixModuleContent entity,
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+            UnitOfWorkInfo? uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -34,7 +34,7 @@ namespace Mixcore.Domain.ViewModels
 
         public string DetailUrl => $"/Module/{Id}/{SeoName}";
 
-        public JObject AdditionalData { get; set; }
+        public JObject? AdditionalData { get; set; }
         public PagingResponseModel<JObject> Data { get; set; }
         public PagingResponseModel<ModulePostAssociationViewModel> Posts { get; set; }
         #endregion
@@ -53,7 +53,7 @@ namespace Mixcore.Domain.ViewModels
 
         #region Public Methods
 
-        public T Property<T>(string fieldName)
+        public T? Property<T>(string fieldName)
         {
             return AdditionalData != null
                 ? AdditionalData.Value<T>(fieldName)

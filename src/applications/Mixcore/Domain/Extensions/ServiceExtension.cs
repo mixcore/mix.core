@@ -1,7 +1,4 @@
 ﻿using Newtonsoft.Json.Converters;
-using Ocelot.DependencyInjection;
-using Ocelot.Middleware;
-using Ocelot.Cache.CacheManager;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -13,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddControllersWithViews()
                 .AddSessionStateTempDataProvider()
-                .AddRazorRuntimeCompilation()
+                //.AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson(options =>
               {
                   options.SerializerSettings.Converters.Add(new StringEnumConverter());

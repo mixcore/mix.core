@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mix.Auth.Enums;
 using Mix.Auth.Models;
 using Mix.Database.Entities.Account;
+using Mix.Heart.Exceptions;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
 using System.Security.Claims;
@@ -71,7 +72,7 @@ namespace Mixcore.Controllers
         [Route("security/external-login-result")]
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<JObject>> ExternalLoginResultAsync(string returnUrl = null, string remoteError = null)
+        public async Task<ActionResult<JObject>> ExternalLoginResultAsync(string? returnUrl = null, string? remoteError = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             if (remoteError != null)
@@ -88,7 +89,11 @@ namespace Mixcore.Controllers
             var siginResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (siginResult.Succeeded)
             {
-                string email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                string? email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                if (string.IsNullOrEmpty(email))
+                {
+                    throw new MixException(MixErrorStatus.Badrequest, "Email not exist");
+                }
                 var user = await _userManager.FindByEmailAsync(email);
                 var token = await _idService.GetAuthData(user, true, CurrentTenant.Id);
                 return View(new ExternalLoginResultModel()
@@ -104,7 +109,11 @@ namespace Mixcore.Controllers
             else
             {
                 // If the user does not have an account, then ask the user to create an account.
-                string email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                string? email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                if (string.IsNullOrEmpty(email))
+                {
+                    throw new MixException(MixErrorStatus.Badrequest, "Email not exist");
+                }
                 var user = await _userManager.FindByEmailAsync(email);
                 if (user != null)
                 {

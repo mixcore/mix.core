@@ -17,7 +17,7 @@ namespace Mixcore.Domain.ViewModels
 
         public PagePostAssociationViewModel(MixPagePostAssociation entity,
 
-            UnitOfWorkInfo uowInfo = null)
+            UnitOfWorkInfo? uowInfo = null)
             : base(entity, uowInfo)
         {
         }
