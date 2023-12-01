@@ -20,7 +20,7 @@
         "Limit": 10
       },
       "FileCacheOptions": {
-        "TtlSeconds": 120,
+        "TtlSeconds": 0,
         "Region": "VN"
       },
       "HttpHandlerOptions": {

@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\mixcore.gateway\mixcore.gateway.csproj" />
     <ProjectReference Include="..\..\mixcore\mixcore.csproj" />
   </ItemGroup>
 

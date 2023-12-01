@@ -1,5 +1,9 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddProject<Projects.mixcore>("mixcore");
+var mixcore = builder.AddProject<Projects.mixcore>("mixcore");
+
+builder.AddProject<Projects.mixcore_gateway>("mixcore.gateway")
+            .WithReference(mixcore)
+            ;
 
 builder.Build().Run();

@@ -54,7 +54,11 @@
 		<Compile Remove="logs\**" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Content Remove="wwwroot\default-mixcontent\backup\readme.md" />
+	</ItemGroup>
+	<ItemGroup>
 	  <None Include="wwwroot\default-mixcontent\default.zip" />
+	  <None Include="wwwroot\default-mixcontent\backup\readme.md" />
 	  <None Include="wwwroot\default-mixcontent\staticfiles\readme.md" />
 	  <None Include="wwwroot\default-mixcontent\templates\readme.md" />
 	  <None Include="wwwroot\default-mixcontent\templates\_ViewImports.cshtml" />
@@ -757,5 +761,8 @@
 	  <None Include="wwwroot\mix-app\webfonts\fa-regular-400.woff2" />
 	  <None Include="wwwroot\mix-app\webfonts\fa-solid-900.svg" />
 	  <None Include="wwwroot\mix-app\webfonts\fa-solid-900.woff2" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.0" />
 	</ItemGroup>
 </Project>

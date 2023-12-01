@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddControllersWithViews()
                 .AddSessionStateTempDataProvider()
-                //.AddRazorRuntimeCompilation()
+                .AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson(options =>
               {
                   options.SerializerSettings.Converters.Add(new StringEnumConverter());
