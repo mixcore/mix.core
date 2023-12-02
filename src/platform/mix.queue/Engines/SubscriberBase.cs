@@ -14,6 +14,7 @@ using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Queue.Services;
 using Mix.Shared.Helpers;
+using Mix.Shared.Services;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,6 @@ namespace Mix.Queue.Engines
         protected IQueueService<MessageQueueModel> _memQueueService;
         protected readonly IQueueSubscriber _subscriber;
         protected readonly IConfiguration _configuration;
-        protected readonly MixQueueMessages<MessageQueueModel> _mixQueueService;
         protected readonly string _topicId;
         protected readonly int _timeout;
         protected MixCacheService CacheService;
@@ -39,16 +39,14 @@ namespace Mix.Queue.Engines
             int timeout,
             IServiceProvider servicesProvider,
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> mixQueueService,
             IQueueService<MessageQueueModel> queueService)
         {
             _timeout = timeout;
             _configuration = configuration;
-            _mixQueueService = mixQueueService;
             _topicId = topicId;
             _memQueueService = queueService;
-            _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{moduleName}");
             ServicesProvider = servicesProvider;
+            _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{moduleName}");
         }
 
         public virtual Task StartAsync(CancellationToken cancellationToken = default)
@@ -82,28 +80,28 @@ namespace Mix.Queue.Engines
             {
                 var providerSetting = _configuration["MessageQueueSetting:Provider"];
                 var provider = Enum.Parse<MixQueueProvider>(providerSetting);
-
+                var mixEndpointService = GetRequiredService<MixEndpointService>();
                 switch (provider)
                 {
                     case MixQueueProvider.AZURE:
                         var azureSettingPath = _configuration.GetSection("MessageQueueSetting:AzureServiceBus");
                         var azureSetting = new AzureQueueSetting();
                         azureSettingPath.Bind(azureSetting);
-                        return QueueEngineFactory.CreateSubscriber(
-                            provider, azureSetting, topicId, subscriptionId, MessageHandler, _mixQueueService, _memQueueService);
+                        return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
+                            provider, azureSetting, topicId, subscriptionId, MessageHandler, _memQueueService, mixEndpointService);
                     case MixQueueProvider.GOOGLE:
                         var googleSettingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
                         var googleSetting = new GoogleQueueSetting();
                         googleSettingPath.Bind(googleSetting);
                         googleSetting.CredentialFile = googleSetting.CredentialFile;
-                        return QueueEngineFactory.CreateSubscriber(
-                            provider, googleSetting, topicId, subscriptionId, MessageHandler, _mixQueueService, _memQueueService);
+                        return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
+                            provider, googleSetting, topicId, subscriptionId, MessageHandler, _memQueueService, mixEndpointService);
                     case MixQueueProvider.MIX:
                         var mixSettingPath = _configuration.GetSection("MessageQueueSetting:Mix");
                         var mixSetting = new MixQueueSetting();
                         mixSettingPath.Bind(mixSetting);
-                        return QueueEngineFactory.CreateSubscriber(
-                           provider, mixSetting, topicId, subscriptionId, MessageHandler, _mixQueueService, _memQueueService);
+                        return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
+                           provider, mixSetting, topicId, subscriptionId, MessageHandler, _memQueueService, mixEndpointService);
                 }
             }
             catch (Exception ex)

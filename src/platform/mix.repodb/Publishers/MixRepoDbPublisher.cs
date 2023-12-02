@@ -4,6 +4,7 @@ using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
+using Mix.Shared.Services;
 
 namespace Mix.RepoDb.Publishers
 {
@@ -12,8 +13,8 @@ namespace Mix.RepoDb.Publishers
         public MixRepoDbPublisher(
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> queue)
-            : base(MixQueueTopics.MixRepoDb, queueService, configuration, queue)
+            MixEndpointService mixEndpointService)
+            : base(MixQueueTopics.MixRepoDb, queueService, configuration, mixEndpointService)
         {
 
         }

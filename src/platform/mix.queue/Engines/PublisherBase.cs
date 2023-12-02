@@ -5,6 +5,7 @@ using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
+using Mix.Shared.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Mix.Queue.Engines
         private readonly IQueueService<MessageQueueModel> _queueService;
         private List<IQueuePublisher<MessageQueueModel>> _publishers;
         private readonly IConfiguration _configuration;
-        private readonly MixQueueMessages<MessageQueueModel> _queue;
+        private readonly MixEndpointService _mixEndpointService;
         private const int MaxConsumeLength = 100;
         private readonly string _topicId;
         private MixQueueProvider _provider;
@@ -26,12 +27,12 @@ namespace Mix.Queue.Engines
             string topicId,
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> queue)
+            MixEndpointService mixEndpointService)
         {
             _queueService = queueService;
             _configuration = configuration;
-            _queue = queue;
             _topicId = topicId;
+            _mixEndpointService = mixEndpointService;
         }
 
         private List<IQueuePublisher<MessageQueueModel>> CreatePublisher(
@@ -53,7 +54,7 @@ namespace Mix.Queue.Engines
 
                         queuePublishers.Add(
                             QueueEngineFactory.CreatePublisher<MessageQueueModel>(
-                                _provider, azureSetting, topicName));
+                                _provider, azureSetting, topicName, _mixEndpointService));
                         break;
                     case MixQueueProvider.GOOGLE:
                         var googleSettingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
@@ -63,15 +64,14 @@ namespace Mix.Queue.Engines
 
                         queuePublishers.Add(
                             QueueEngineFactory.CreatePublisher<MessageQueueModel>(
-                                _provider, googleSetting, topicName));
+                                _provider, googleSetting, topicName, _mixEndpointService));
                         break;
                     case MixQueueProvider.MIX:
                         var mixSettingPath = _configuration.GetSection("MessageQueueSetting:Mix");
                         var mixSetting = new MixQueueSetting();
                         mixSettingPath.Bind(mixSetting);
                         queuePublishers.Add(
-                           QueueEngineFactory.CreatePublisher(
-                               _provider, mixSetting, topicName, _queue));
+                           QueueEngineFactory.CreatePublisher<MessageQueueModel>(_provider, mixSetting, topicName, _mixEndpointService));
 
                         break;
                 }

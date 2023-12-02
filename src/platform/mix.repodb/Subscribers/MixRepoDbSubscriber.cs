@@ -21,11 +21,10 @@ namespace Mix.RepoDb.Subscribers
         private IMixDbService _mixDbService;
         public MixRepoDbSubscriber(
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> mixQueueService,
             IServiceProvider serviceProvider,
             IPortalHubClientService portalHub,
             IQueueService<MessageQueueModel> queueService)
-            : base(MixQueueTopics.MixRepoDb, nameof(MixRepoDbSubscriber), 20, serviceProvider, configuration, mixQueueService, queueService)
+            : base(MixQueueTopics.MixRepoDb, nameof(MixRepoDbSubscriber), 20, serviceProvider, configuration, queueService)
         {
             PortalHub = portalHub;
         }

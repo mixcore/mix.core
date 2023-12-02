@@ -4,7 +4,7 @@ using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
-
+using Mix.Shared.Services;
 using System;
 using System.Threading.Tasks;
 
@@ -13,8 +13,7 @@ namespace Mix.Queue.Engines
     public class QueueEngineFactory
     {
         public static IQueuePublisher<T> CreatePublisher<T>(
-            MixQueueProvider provider, QueueSetting queueSetting, string topicId,
-            MixQueueMessages<T> mixQueueMessages = null)
+            MixQueueProvider provider, QueueSetting queueSetting, string topicId, MixEndpointService mixEndpointService)
             where T : MessageQueueModel
         {
             IQueuePublisher<T> publisher = default;
@@ -29,7 +28,7 @@ namespace Mix.Queue.Engines
                     break;
 
                 case MixQueueProvider.MIX:
-                    publisher = new MixQueuePublisher<T>(queueSetting, topicId, mixQueueMessages);
+                    publisher = new MixQueuePublisher<T>(queueSetting, topicId, mixEndpointService);
                     break;
             }
             return publisher;
@@ -41,8 +40,8 @@ namespace Mix.Queue.Engines
             string topicId,
             string subscriptionId,
             Func<T, Task> handler,
-            MixQueueMessages<T> queueService,
-            IQueueService<MessageQueueModel> memQueues)
+            IQueueService<MessageQueueModel> memQueues,
+            MixEndpointService mixEndpointService)
             where T : MessageQueueModel
         {
             IQueueSubscriber subscriber = default;
@@ -55,7 +54,7 @@ namespace Mix.Queue.Engines
                     subscriber = new GoogleQueueSubscriber<T>(queueSetting, topicId, subscriptionId, handler);
                     break;
                 case MixQueueProvider.MIX:
-                    subscriber = new MixQueueSubscriber<T>(queueSetting, topicId, subscriptionId, handler, queueService, memQueues);
+                    subscriber = new MixQueueSubscriber<T>(queueSetting, topicId, subscriptionId, handler, memQueues, mixEndpointService);
                     break;
             }
             subscriber.SubscriptionId = subscriptionId;

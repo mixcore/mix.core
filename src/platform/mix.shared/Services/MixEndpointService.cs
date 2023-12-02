@@ -19,7 +19,12 @@
         }
 
         public string[] Endpoints;
-        public string Account
+        public string MixMq
+        {
+            get => GetConfig<string>(MixModuleNames.MixMq) ?? DefaultDomain;
+            set => SetConfig(MixModuleNames.MixMq, value);
+        }
+         public string Account
         {
             get => GetConfig<string>(MixModuleNames.Account) ?? DefaultDomain;
             set => SetConfig(MixModuleNames.Account, value);

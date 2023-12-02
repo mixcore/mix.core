@@ -11,8 +11,8 @@ namespace Mix.Lib.Publishers
         public MixDbCommandPublisher(
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> queueMessage)
-            : base(TopicId, queueService, configuration, queueMessage)
+            MixEndpointService mixEndpointService)
+            : base(TopicId, queueService, configuration, mixEndpointService)
         {
         }
     }

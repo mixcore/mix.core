@@ -15,11 +15,11 @@ namespace Mix.Log.Lib.Services
     public class MixQueueLogService : IMixQueueLog
     {
         private MixQueueDbContext _dbContext;
-        private readonly MixQueueMessages<MessageQueueModel> _mixQueueService;
+        private MixQueueMessages<MessageQueueModel> _mixQueueService;
         public int TenantId { get; set; }
-        public MixQueueLogService(MixQueueMessages<MessageQueueModel> mixQueueService)
+        public MixQueueLogService()
         {
-            _mixQueueService = mixQueueService;
+            _mixQueueService = new();
         }
 
 

@@ -30,11 +30,10 @@ namespace Mix.Lib.Subscribers
         public MixBackgroundTaskSubscriber(
             IServiceProvider serviceProvider,
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> mixQueueService,
             IPortalHubClientService portalHub,
             MixDbEventService mixDbEventService,
             IQueueService<MessageQueueModel> queueService)
-            : base(TopicId, nameof(MixBackgroundTaskSubscriber), 20, serviceProvider, configuration, mixQueueService, queueService)
+            : base(TopicId, nameof(MixBackgroundTaskSubscriber), 20, serviceProvider, configuration, queueService)
         {
             PortalHub = portalHub;
             MixDbEventService = mixDbEventService;

@@ -10,5 +10,6 @@
         public const string Messenger = "Messenger";
         public const string Scheduler = "Scheduler";
         public const string Grpc = "Grpc";
+        public const string MixMq = "MixMq";
     }
 }

@@ -75,8 +75,8 @@ public static class Extensions
         }
 
         // Uncomment the following lines to enable the Prometheus exporter (requires the OpenTelemetry.Exporter.Prometheus.AspNetCore package)
-        // builder.Services.AddOpenTelemetry()
-        //    .WithMetrics(metrics => metrics.AddPrometheusExporter());
+        builder.Services.AddOpenTelemetry()
+           .WithMetrics(metrics => metrics.AddPrometheusExporter());
 
         // Uncomment the following lines to enable the Azure Monitor exporter (requires the Azure.Monitor.OpenTelemetry.Exporter package)
         // builder.Services.AddOpenTelemetry()

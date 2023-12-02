@@ -29,11 +29,10 @@ namespace Mix.Storage.Lib.Subscribers
         public StorageBackgroundTaskSubscriber(
             IServiceProvider serviceProvider,
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> mixQueueService,
             IAuditLogService auditLogService,
             IPortalHubClientService portalHub,
             IQueueService<MessageQueueModel> queueService)
-            : base(TopicId, nameof(StorageBackgroundTaskSubscriber), 20, serviceProvider, configuration, mixQueueService, queueService)
+            : base(TopicId, nameof(StorageBackgroundTaskSubscriber), 20, serviceProvider, configuration, queueService)
         {
             AuditLogService = auditLogService;
             PortalHub = portalHub;
