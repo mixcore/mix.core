@@ -37,12 +37,11 @@ namespace Mix.Log.Lib.Subscribers
         public MixLogSubscriber(
             IServiceProvider serviceProvider,
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> mixQueueService,
             IPortalHubClientService portalHub,
             IQueueService<MessageQueueModel> queueService,
             IMixQueueLog queueMessageLogService,
             IAuditLogService auditLogService)
-            : base(TopicId, nameof(MixLogSubscriber), 20, serviceProvider, configuration, mixQueueService, queueService)
+            : base(TopicId, nameof(MixLogSubscriber), 20, serviceProvider, configuration, queueService)
         {
             _queueMessageLogService = queueMessageLogService;
             _portalHub = portalHub;

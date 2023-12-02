@@ -34,7 +34,6 @@ namespace Mix.Queue.Engines.MixQueue
             string topicId,
             string subscriptionId,
             Func<T, Task> messageHandler,
-            MixQueueMessages<T> queue,
             IQueueService<MessageQueueModel> memQueues,
             MixEndpointService mixEndpointService)
         {

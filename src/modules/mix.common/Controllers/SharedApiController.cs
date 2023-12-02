@@ -25,7 +25,6 @@ namespace Mix.Common.Controllers
     [ApiController]
     public sealed class SharedApiController : MixTenantApiControllerBase
     {
-        private readonly MixQueueMessages<MessageQueueModel> _mixMemoryMessageQueue;
         private readonly MixCacheService _cacheService;
         private readonly ApplicationLifetime _applicationLifetime;
         private readonly UnitOfWorkInfo<MixCmsContext> _uow;
@@ -44,7 +43,6 @@ namespace Mix.Common.Controllers
             ApplicationLifetime applicationLifetime,
             MixCacheService cacheService,
             IHttpContextAccessor httpContextAccessor,
-            MixQueueMessages<MessageQueueModel> mixMemoryMessageQueue,
             IMixTenantService mixTenantService,
             IMixCmsService mixCmsService)
             : base(httpContextAccessor, configuration,
@@ -56,7 +54,6 @@ namespace Mix.Common.Controllers
             _langRepo = MixLanguageContentViewModel.GetRepository(_uow, _cacheService);
             _routeProvider = routeProvider;
             _applicationLifetime = applicationLifetime;
-            _mixMemoryMessageQueue = mixMemoryMessageQueue;
             _mixCmsService = mixCmsService;
         }
 
@@ -117,13 +114,6 @@ namespace Mix.Common.Controllers
             };
 
             return Ok(res);
-        }
-
-        [HttpGet]
-        [Route("queues")]
-        public ActionResult GetQueues()
-        {
-            return Ok(ReflectionHelper.ParseArray(_mixMemoryMessageQueue.GetAllTopic()));
         }
 
         [MixAuthorize(roles: MixRoles.SuperAdmin)]

@@ -14,20 +14,21 @@ public class MixMqService : MixMq.MixMqBase
 {
     private readonly ILogger<MixMqService> _logger;
     private readonly MixQueueMessages<MessageQueueModel> _queue;
+    private bool _isBusy;
     public MixMqService(ILogger<MixMqService> logger, MixQueueMessages<MessageQueueModel> queue)
     {
         _logger = logger;
         _queue = queue;
     }
 
-    public override Task Subscribe(SubscribeRequest request, IServerStreamWriter<SubscribeReply> responseStream, ServerCallContext context)
+    public override async Task Subscribe(SubscribeRequest request, IServerStreamWriter<SubscribeReply> responseStream, ServerCallContext context)
     {
         var _topic = _queue.GetTopic(request.TopicId);
         Initialize(_topic, request.SubsctiptionId);
 
         while (!context.CancellationToken.IsCancellationRequested)
         {
-            var inQueueItems = _topic.ConsumeQueue(request.SubsctiptionId, 10);
+            var inQueueItems = _queue.GetTopic(request.TopicId).ConsumeQueue(request.SubsctiptionId, 10);
             if (inQueueItems.Count > 0)
             {
                 var result = new SubscribeReply
@@ -38,13 +39,12 @@ public class MixMqService : MixMq.MixMqBase
                 {
                     result.Messages.Add(JObject.FromObject(item).ToString(Newtonsoft.Json.Formatting.None));
                 }
-                return Task.FromResult(result);
+                await responseStream.WriteAsync(result);
             }
+            Thread.Sleep(1000);
         }
 
         _logger.LogInformation($"Request {request.TopicId} - {request.SubsctiptionId} canceled");
-
-        return Task.CompletedTask;
     }
 
     public override Task<Empty> Publish(PublishMessageRequest request, ServerCallContext context)

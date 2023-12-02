@@ -13,9 +13,8 @@ namespace Mix.RepoDb.Publishers
         public MixRepoDbPublisher(
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> queue,
             MixEndpointService mixEndpointService)
-            : base(MixQueueTopics.MixRepoDb, queueService, configuration, queue, mixEndpointService)
+            : base(MixQueueTopics.MixRepoDb, queueService, configuration, mixEndpointService)
         {
 
         }

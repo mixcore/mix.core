@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Mix.Mq.Lib.Models
@@ -6,25 +7,25 @@ namespace Mix.Mq.Lib.Models
     public class MixQueueMessages<T>
         where T : MessageQueueModel
     {
-        private readonly List<MixTopicModel<T>> _topics = new();
-
+        private readonly ConcurrentQueue<MixTopicModel<T>> _topics = new();
+       
         public MixQueueMessages()
         {
         }
         public List<MixTopicModel<T>> GetAllTopic()
         {
-            return _topics;
+            return _topics.ToList();
         }
         public MixTopicModel<T> GetTopic(string topicId)
         {
             if (_topics.All(m => m.Id != topicId))
             {
-                _topics.Add(new MixTopicModel<T>()
+                _topics.Enqueue(new MixTopicModel<T>()
                 {
                     Id = topicId
                 });
             }
-            return _topics.Find(m => m.Id == topicId);
+            return _topics.First(m => m.Id == topicId);
         }
     }
 }

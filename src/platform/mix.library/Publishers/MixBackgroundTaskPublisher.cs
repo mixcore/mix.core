@@ -11,9 +11,8 @@ namespace Mix.Lib.Publishers
         public MixBackgroundTaskPublisher(
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> queueMessage,
             MixEndpointService mixEndpointService)
-            : base(TopicId, queueService, configuration, queueMessage, mixEndpointService)
+            : base(TopicId, queueService, configuration, mixEndpointService)
         {
         }
     }
