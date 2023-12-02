@@ -120,45 +120,55 @@ namespace Mix.Lib.Services
 
         public virtual async Task<JObject> LoginAsync(LoginRequestModel model, CancellationToken cancellationToken = default)
         {
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-            MixUser user = null;
-            if (!string.IsNullOrEmpty(model.Email))
+            try
             {
-                user = await UserManager.FindByEmailAsync(model.Email);
-            }
-            if (user == null && !string.IsNullOrEmpty(model.UserName))
-            {
-                user = await UserManager.FindByNameAsync(model.UserName);
-                user ??= await UserManager.FindByEmailAsync(model.UserName);
-                user ??= await UserManager.FindByPhoneNumberAsync(model.UserName);
-            }
-            if (user == null && !string.IsNullOrEmpty(model.PhoneNumber))
-            {
-                user = await UserManager.FindByPhoneNumberAsync(model.PhoneNumber);
-            }
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                MixUser user = null;
+                if (!string.IsNullOrEmpty(model.Email))
+                {
+                    user = await UserManager.FindByEmailAsync(model.Email);
+                }
+                if (user == null && !string.IsNullOrEmpty(model.UserName))
+                {
+                    user = await UserManager.FindByNameAsync(model.UserName);
+                    user ??= await UserManager.FindByEmailAsync(model.UserName);
+                    user ??= await UserManager.FindByPhoneNumberAsync(model.UserName);
+                }
+                if (user == null && !string.IsNullOrEmpty(model.PhoneNumber))
+                {
+                    user = await UserManager.FindByPhoneNumberAsync(model.PhoneNumber);
+                }
 
-            if (user == null)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, "Login failed");
-            }
+                if (user == null)
+                {
+                    throw new MixException(MixErrorStatus.Badrequest, "Login failed");
+                }
 
-            var result = await SignInManager.PasswordSignInAsync(user, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
+                var result = await SignInManager.PasswordSignInAsync(user, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
 
-            if (result.IsLockedOut)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, "This account has been locked out, please try again later.");
-            }
+                if (result.IsLockedOut)
+                {
+                    throw new MixException(MixErrorStatus.Badrequest, "This account has been locked out, please try again later.");
+                }
 
-            if (result.Succeeded)
-            {
-                return await GetAuthData(user, model.RememberMe, CurrentTenant.Id, cancellationToken);
+                if (result.Succeeded)
+                {
+                    return await GetAuthData(user, model.RememberMe, CurrentTenant.Id, cancellationToken);
+                }
+                else
+                {
+                    throw new MixException(MixErrorStatus.Badrequest, "Login failed");
+                }
             }
-            else
+            catch (MixException)
             {
-                throw new MixException(MixErrorStatus.Badrequest, "Login failed");
+                throw;
             }
-
+            catch(Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
         }
 
         public virtual async Task<JObject> GetAuthData(MixUser user, bool rememberMe, int tenantId, CancellationToken cancellationToken = default)

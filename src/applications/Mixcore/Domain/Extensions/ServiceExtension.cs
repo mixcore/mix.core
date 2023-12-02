@@ -1,7 +1,4 @@
 ﻿using Newtonsoft.Json.Converters;
-using Ocelot.DependencyInjection;
-using Ocelot.Middleware;
-using Ocelot.Cache.CacheManager;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

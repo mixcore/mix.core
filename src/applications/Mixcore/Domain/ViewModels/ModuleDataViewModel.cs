@@ -12,7 +12,7 @@
 
         public ModuleDataViewModel(MixModuleData entity,
 
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+            UnitOfWorkInfo? uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -46,7 +46,7 @@
         #endregion
 
         #region Helper
-        public string Property(string name)
+        public string? Property(string name)
         {
             return Data.Property(name)?.Value.ToString();
         }

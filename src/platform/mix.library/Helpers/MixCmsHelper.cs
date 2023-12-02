@@ -1,10 +1,10 @@
 ﻿using ClosedXML.Excel;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System.Text.RegularExpressions;
-
 namespace Mix.Lib.Helpers
 {
     public class MixCmsHelper
@@ -59,6 +59,38 @@ namespace Mix.Lib.Helpers
             };
         }
 
+        public static WebApplicationBuilder CreateWebApplicationBuilder(string[] args)
+        {
+            var mixContentFolder = new DirectoryInfo(MixFolders.MixContentFolder);
+
+            // Clone Settings from shared folder
+            if (!mixContentFolder.Exists)
+            {
+                MixHelper.CopyFolder(MixFolders.DefaultMixContentFolder, MixFolders.MixContentFolder);
+                Console.WriteLine("Clone Settings from shared folder completed.");
+            }
+            var builder = WebApplication.CreateBuilder(args);
+            builder.WebHost.UseContentRoot(Directory.GetCurrentDirectory());
+
+            builder.Configuration
+                       .AddJsonFile("appsettings.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/global.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/azure.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/ocelot.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/storage.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/queue.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/mix_heart.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/authentication.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/google_credential.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/google_firebase.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/smtp.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/payments.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/redis.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/log.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/rate_limit.json", true, true)
+                       .AddEnvironmentVariables();
+            return builder;
+        }
         public static IHostBuilder CreateHostBuilder<TStartup>(string[] args) where TStartup : class
         {
             var mixContentFolder = new DirectoryInfo(MixFolders.MixContentFolder);

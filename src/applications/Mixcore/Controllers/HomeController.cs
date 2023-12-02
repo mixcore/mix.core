@@ -57,7 +57,7 @@ namespace Mixcore.Controllers
         [Route("{seoName?}")]
         public async Task<IActionResult> Index()
         {
-            string seoName = Request.RouteValues["seoName"]?.ToString();
+            string? seoName = Request.RouteValues["seoName"]?.ToString();
             if (!IsValid)
             {
                 return Redirect(RedirectUrl);
@@ -71,7 +71,7 @@ namespace Mixcore.Controllers
         }
 
 
-        private async Task<PageContentViewModel> LoadPage(string seoName = null)
+        private async Task<PageContentViewModel?> LoadPage(string? seoName = null)
         {
             var pageRepo = PageContentViewModel.GetRepository(Uow, CacheService);
             Expression<Func<MixPageContent, bool>> predicate = p => p.MixTenantId == CurrentTenant.Id
@@ -101,7 +101,7 @@ namespace Mixcore.Controllers
             }
             return page;
         }
-        private async Task<IActionResult> LoadAlias(string seoName)
+        private async Task<IActionResult> LoadAlias(string? seoName)
         {
             var alias = await MixUrlAliasViewModel.GetRepository(Uow, CacheService).GetSingleAsync(m => m.MixTenantId == CurrentTenant.Id && m.Alias == seoName);
             if (alias != null)

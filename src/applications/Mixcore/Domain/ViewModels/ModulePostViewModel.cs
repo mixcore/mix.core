@@ -15,7 +15,7 @@
 
         public ModulePostAssociationViewModel(MixModulePostAssociation entity,
 
-            UnitOfWorkInfo uowInfo = null)
+            UnitOfWorkInfo? uowInfo = null)
             : base(entity, uowInfo)
         {
         }

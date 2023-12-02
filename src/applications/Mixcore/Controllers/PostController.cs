@@ -80,7 +80,7 @@ namespace Mixcore.Controllers
         #endregion Routes
 
         #region Helper
-        protected async Task<IActionResult> Post(int postId, string seoName = null)
+        protected async Task<IActionResult> Post(int postId, string? seoName = null)
         {
             // Home Post
             var postRepo = PostContentViewModel.GetRepository(Uow, _cacheService);

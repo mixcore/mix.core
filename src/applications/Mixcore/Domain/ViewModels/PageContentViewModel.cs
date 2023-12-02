@@ -18,7 +18,7 @@ namespace Mixcore.Domain.ViewModels
 
         public PageContentViewModel(MixPageContent entity,
 
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+            UnitOfWorkInfo? uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -39,7 +39,7 @@ namespace Mixcore.Domain.ViewModels
 
         public List<ModuleContentViewModel> Modules { get; set; }
         public PagingResponseModel<PagePostAssociationViewModel> Posts { get; set; }
-        public JObject AdditionalData { get; set; }
+        public JObject? AdditionalData { get; set; }
         #endregion
 
         #region Overrides
@@ -62,11 +62,11 @@ namespace Mixcore.Domain.ViewModels
         }
 
 
-        public ModuleContentViewModel GetModule(string moduleName)
+        public ModuleContentViewModel? GetModule(string moduleName)
         {
             return Modules?.FirstOrDefault(m => m.SystemName == moduleName);
         }
-        public T Property<T>(string fieldName)
+        public T? Property<T>(string fieldName)
         {
             return AdditionalData != null
                 ? AdditionalData.Value<T>(fieldName)

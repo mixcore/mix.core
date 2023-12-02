@@ -37,7 +37,7 @@ namespace Mixcore.Domain.Models
 
         public List<MenuItem> MenuItems { get; set; }
 
-        public T Property<T>(string fieldName)
+        public T? Property<T>(string fieldName)
         {
             if (Obj != null)
             {
