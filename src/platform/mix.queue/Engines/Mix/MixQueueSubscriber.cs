@@ -1,10 +1,15 @@
 ﻿using Google.Cloud.PubSub.V1;
+using Grpc.Core;
 using Microsoft.Extensions.Hosting;
 using Mix.Heart.Helpers;
+using Mix.Mq;
+using Mix.Mq.Services;
 using Mix.Queue.Engines.Mix;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
+using Mix.Shared.Services;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,65 +25,60 @@ namespace Mix.Queue.Engines.MixQueue
         private MixTopicModel<T> _topic;
         private readonly MixQueueSetting _queueSetting;
         private readonly Func<T, Task> _messageHandler;
-        private readonly MixQueueMessages<T> _queue;
         private readonly IQueueService<MessageQueueModel> _memQueues;
+        private readonly MixEndpointService _mixEndpointService;
+        private GrpcChannelModel<MixMq.MixMqClient> _mixMqSubscriber;
+        private SubscribeRequest _subscribeRequest;
         public MixQueueSubscriber(
             QueueSetting queueSetting,
             string topicId,
             string subscriptionId,
             Func<T, Task> messageHandler,
             MixQueueMessages<T> queue,
-            IQueueService<MessageQueueModel> memQueues)
+            IQueueService<MessageQueueModel> memQueues,
+            MixEndpointService mixEndpointService)
         {
             _queueSetting = queueSetting as MixQueueSetting;
-            _queue = queue;
             _subscriptionId = subscriptionId;
             _messageHandler = messageHandler;
             _memQueues = memQueues;
-            Initialize(topicId, subscriptionId);
-        }
-
-        private void Initialize(string topicId, string subscriptionId)
-        {
-            while (_topic == null)
+            _mixEndpointService = mixEndpointService;
+            _mixMqSubscriber = new GrpcChannelModel<MixMq.MixMqClient>(_mixEndpointService.MixMq);
+            _subscribeRequest = new SubscribeRequest()
             {
-                _topic = _queue.GetTopic(topicId);
-                Thread.Sleep(1000);
-            }
-            _topic.CreateSubscription(subscriptionId);
+                TopicId = topicId,
+                SubsctiptionId = _subscriptionId,
+            };
         }
 
         /// <summary>
         /// Process message queue
         /// </summary>
         /// <returns></returns>
-        public Task ProcessQueue(CancellationToken cancellationToken = default)
+        public async Task ProcessQueue(CancellationToken cancellationToken = default)
         {
-            Task.Run(async () =>
+            using var call = _mixMqSubscriber.Client.Subscribe(_subscribeRequest);
+
+            while (await call.ResponseStream.MoveNext())
             {
-                while (!cancellationToken.IsCancellationRequested)
+                if (!IsProcessing)
                 {
-                    if (!IsProcessing)
+                    IsProcessing = true;
+
+                    
+                    if (call.ResponseStream.Current.Messages.Count > 0)
                     {
-                        IsProcessing = true;
-                        _topic = _queue.GetTopic(_topic.Id);
-                        var inQueueItems = _topic.ConsumeQueue(_subscriptionId, 10);
-                        if (inQueueItems.Count > 0)
+                        foreach (var msg in call.ResponseStream.Current.Messages)
                         {
-                            foreach (var msg in inQueueItems)
-                            {
-                                AckQueueMessage(msg);
-                                await _messageHandler.Invoke(msg);
-                            }
+                            var obj = JObject.Parse(msg).ToObject<T>();
+                            AckQueueMessage(obj);
+                            await _messageHandler.Invoke(obj);
                         }
-                        IsProcessing = false;
-                        await Task.Delay(1000, cancellationToken);
                     }
+                    IsProcessing = false;
+                    await Task.Delay(1000, cancellationToken);
                 }
-            }, cancellationToken);
-
-
-            return Task.CompletedTask;
+            }
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -86,7 +86,7 @@ namespace Mix.Queue.Engines.MixQueue
             return ProcessQueue(stoppingToken);
         }
 
-        private void AckQueueMessage(MessageQueueModel model)
+        private void AckQueueMessage(T model)
         {
             if (model.TopicId != MixQueueTopics.MixLog)
             {

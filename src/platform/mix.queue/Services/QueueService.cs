@@ -11,6 +11,7 @@ namespace Mix.Queue.Services
 {
     public class QueueService : IQueueService<MessageQueueModel>
     {
+        // Memory queue store message to local memory before push to MQ engine
         private readonly ConcurrentDictionary<string, ConcurrentQueue<MessageQueueModel>> _queues;
         public QueueService()
         {
@@ -77,6 +78,7 @@ namespace Mix.Queue.Services
             PushQueue(msg);
         }
 
+        // Push message to MQ Engine
         public void PushMessage<T>(int tenantId, T data, string action, bool success)
         {
             var msg = new MessageQueueModel(tenantId)

@@ -5,6 +5,7 @@ using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
+using Mix.Shared.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace Mix.Queue.Engines
         private readonly IQueueService<MessageQueueModel> _queueService;
         private List<IQueuePublisher<MessageQueueModel>> _publishers;
         private readonly IConfiguration _configuration;
+        private readonly MixEndpointService _mixEndpointService;
         private readonly MixQueueMessages<MessageQueueModel> _queue;
         private const int MaxConsumeLength = 100;
         private readonly string _topicId;
@@ -26,12 +28,14 @@ namespace Mix.Queue.Engines
             string topicId,
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> queue)
+            MixQueueMessages<MessageQueueModel> queue,
+            MixEndpointService mixEndpointService)
         {
             _queueService = queueService;
             _configuration = configuration;
             _queue = queue;
             _topicId = topicId;
+            _mixEndpointService = mixEndpointService;
         }
 
         private List<IQueuePublisher<MessageQueueModel>> CreatePublisher(
@@ -71,7 +75,7 @@ namespace Mix.Queue.Engines
                         mixSettingPath.Bind(mixSetting);
                         queuePublishers.Add(
                            QueueEngineFactory.CreatePublisher(
-                               _provider, mixSetting, topicName, _queue));
+                               _provider, mixSetting, topicName, _queue, _mixEndpointService));
 
                         break;
                 }

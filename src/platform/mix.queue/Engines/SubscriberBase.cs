@@ -14,6 +14,7 @@ using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Queue.Services;
 using Mix.Shared.Helpers;
+using Mix.Shared.Services;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -82,7 +83,7 @@ namespace Mix.Queue.Engines
             {
                 var providerSetting = _configuration["MessageQueueSetting:Provider"];
                 var provider = Enum.Parse<MixQueueProvider>(providerSetting);
-
+                var mixEndpointService = GetRequiredService<MixEndpointService>();
                 switch (provider)
                 {
                     case MixQueueProvider.AZURE:
@@ -90,20 +91,20 @@ namespace Mix.Queue.Engines
                         var azureSetting = new AzureQueueSetting();
                         azureSettingPath.Bind(azureSetting);
                         return QueueEngineFactory.CreateSubscriber(
-                            provider, azureSetting, topicId, subscriptionId, MessageHandler, _mixQueueService, _memQueueService);
+                            provider, azureSetting, topicId, subscriptionId, MessageHandler, _mixQueueService, _memQueueService, mixEndpointService);
                     case MixQueueProvider.GOOGLE:
                         var googleSettingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
                         var googleSetting = new GoogleQueueSetting();
                         googleSettingPath.Bind(googleSetting);
                         googleSetting.CredentialFile = googleSetting.CredentialFile;
                         return QueueEngineFactory.CreateSubscriber(
-                            provider, googleSetting, topicId, subscriptionId, MessageHandler, _mixQueueService, _memQueueService);
+                            provider, googleSetting, topicId, subscriptionId, MessageHandler, _mixQueueService, _memQueueService, mixEndpointService);
                     case MixQueueProvider.MIX:
                         var mixSettingPath = _configuration.GetSection("MessageQueueSetting:Mix");
                         var mixSetting = new MixQueueSetting();
                         mixSettingPath.Bind(mixSetting);
                         return QueueEngineFactory.CreateSubscriber(
-                           provider, mixSetting, topicId, subscriptionId, MessageHandler, _mixQueueService, _memQueueService);
+                           provider, mixSetting, topicId, subscriptionId, MessageHandler, _mixQueueService, _memQueueService, mixEndpointService);
                 }
             }
             catch (Exception ex)

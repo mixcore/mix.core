@@ -6,6 +6,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Protos\mixmq.proto" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Using Include="Mix.Constant.Constants" />
 		<Using Include="Mix.Constant.Enums" />
 		<Using Include="Mix.Shared.Dtos" />
@@ -15,16 +19,27 @@
 		<PackageReference Include="Azure.ResourceManager.ServiceBus" Version="1.1.0-beta.3" />
 		<PackageReference Include="Google.Api.Gax" Version="4.4.0" />
 		<PackageReference Include="Google.Cloud.PubSub.V1" Version="3.8.0" />
+		<PackageReference Include="Google.Protobuf" Version="3.25.1" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.59.0" />
 		<PackageReference Include="Grpc.Net.Client" Version="2.59.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.60.0-pre1" PrivateAssets="All">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\services\mix-message-queue\mix.mq\mix.mq.csproj" />
 		<ProjectReference Include="..\mix.shared\mix.shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="Engines\Kafka\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Protobuf Include="Protos\mixmq.proto" GrpcServices="Client" />
 	</ItemGroup>
 
 </Project>

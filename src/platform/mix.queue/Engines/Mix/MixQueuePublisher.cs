@@ -1,8 +1,11 @@
 ﻿using Google.Cloud.PubSub.V1;
+using Mix.Mq;
 using Mix.Queue.Engines.Mix;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
+using Mix.Shared.Services;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,34 +16,30 @@ namespace Mix.Queue.Engines.MixQueue
     public class MixQueuePublisher<T> : IQueuePublisher<T>
         where T : MessageQueueModel
     {
-        private readonly MixQueueMessages<T> _queue;
-        private MixTopicModel<T> _topic;
         private string _topicId;
+        private readonly MixEndpointService _mixEndpointService;
+        private GrpcChannelModel<MixMq.MixMqClient> _mixMqSubscriber;
 
-        public MixQueuePublisher(QueueSetting queueSetting, string topicName, MixQueueMessages<T> queue)
+        public MixQueuePublisher(QueueSetting queueSetting, string topicName, MixQueueMessages<T> queue, MixEndpointService mixEndpointService)
         {
-            _queue = queue;
             _topicId = topicName;
-            //InitializeQueue(topicName);
-        }
-
-        private void InitializeQueue(string topicId)
-        {
-            if (_topic == null)
-            {
-                // First create a topic.
-                _topic = _queue.GetTopic(topicId);
-            }
+            _mixEndpointService = mixEndpointService;
+            _mixMqSubscriber = new GrpcChannelModel<MixMq.MixMqClient>(_mixEndpointService.MixMq);
         }
 
         public Task SendMessage(T message)
         {
-            if (message.Id == default(Guid))
+            if (message.Id == default)
             {
                 message.Id = Guid.NewGuid();
             }
             message.CreatedDate = DateTime.UtcNow;
-            _queue.GetTopic(_topicId).PushQueue(message);
+            _mixMqSubscriber.Client.Publish(new PublishMessageRequest
+            {
+                TopicId = _topicId,
+                Message = JObject.FromObject(message).ToString(Newtonsoft.Json.Formatting.None)
+            });
+
             return Task.CompletedTask;
         }
 

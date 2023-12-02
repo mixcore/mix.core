@@ -4,6 +4,7 @@ using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
+using Mix.Shared.Services;
 
 namespace Mix.Log.Lib.Publishers
 {
@@ -14,8 +15,9 @@ namespace Mix.Log.Lib.Publishers
         public MixLogPublisher(
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> queueMessage)
-            : base(TopicId, queueService, configuration, queueMessage)
+            MixQueueMessages<MessageQueueModel> queueMessage,
+            MixEndpointService mixEndpointService)
+            : base(TopicId, queueService, configuration, queueMessage, mixEndpointService)
         {
         }
     }

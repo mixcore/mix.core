@@ -11,8 +11,9 @@ namespace Mix.Lib.Publishers
         public MixViewModelChangedPublisher(
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
-            MixQueueMessages<MessageQueueModel> queueMessage)
-            : base(TopicId, queueService, configuration, queueMessage)
+            MixQueueMessages<MessageQueueModel> queueMessage,
+            MixEndpointService mixEndpointService)
+            : base(TopicId, queueService, configuration, queueMessage, mixEndpointService)
         {
         }
     }
