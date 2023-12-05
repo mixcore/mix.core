@@ -7,6 +7,7 @@
   "Messenger": null,
   "Scheduler": null,
   "Grpc": null,
+  "MixMq": "https://localhost:5010",
   "Storage": "",
   "Store": "https://store.mixcore.org",
   "UniversalPortal": "https://universal.mixcore.net",
