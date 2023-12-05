@@ -9,7 +9,10 @@ var builder = MixCmsHelper.CreateWebApplicationBuilder(args);
 
 builder.AddServiceDefaults();
 
-//MixFileHelper.CopyFolder(MixFolders.MixCoreConfigurationFolder, MixFolders.MixContentFolder);
+if (!Directory.Exists(MixFolders.MixContentSharedFolder))
+{
+    MixFileHelper.CopyFolder(MixFolders.MixCoreConfigurationFolder, MixFolders.MixContentSharedFolder);
+}
 
 
 builder.Services.AddMixServices(Assembly.GetExecutingAssembly(), builder.Configuration);
