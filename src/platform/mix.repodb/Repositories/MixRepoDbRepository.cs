@@ -2,6 +2,7 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Options;
 using Mix.Constant.Constants;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
@@ -14,6 +15,7 @@ using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.RepoDb.Models;
 using Mix.RepoDb.Services;
+using Mix.RepoDb.ViewModels;
 using Mix.Service.Services;
 using Mix.Shared.Dtos;
 using Mix.Shared.Models;
@@ -360,12 +362,13 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<long> InsertAsync(JObject obj)
+        public async Task<long> InsertAsync(JObject obj, RepoDbMixDatabaseViewModel mixDb)
         {
             try
             {
                 BeginTransaction();
-                var dicObj = obj.ToObject<Dictionary<string, object>>();
+                Dictionary<string, object> dicObj = ParseDictionary(obj, mixDb);
+                
                 var fields = dicObj!.Keys.Select(m => new Field(m)).ToList();
                 var result = await _connection.InsertAsync<long>(
                         _tableName,
@@ -383,7 +386,8 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<int?> InsertManyAsync(List<JObject> entities)
+
+        public async Task<int?> InsertManyAsync(List<JObject> entities, RepoDbMixDatabaseViewModel mixDb)
         {
             try
             {
@@ -396,7 +400,7 @@ namespace Mix.RepoDb.Repositories
 
                 foreach (var entity in entities)
                 {
-                    var dicObj = entity.ToObject<Dictionary<string, object>>();
+                    var dicObj = ParseDictionary(entity, mixDb);
                     if (dicObj != null)
                     {
                         dicObjs.Add(dicObj);
@@ -445,7 +449,7 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<object?> UpdateAsync(JObject entity)
+        public async Task<object?> UpdateAsync(JObject entity, RepoDbMixDatabaseViewModel mixDb)
         {
             try
             {
@@ -453,7 +457,7 @@ namespace Mix.RepoDb.Repositories
                 int id = entity.Value<int>("Id");
                 if (_connection.Exists(_tableName, new { Id = id }, transaction: _dbTransaction))
                 {
-                    object obj = entity.ToObject<Dictionary<string, object>>()!;
+                    var obj = ParseDictionary(entity, mixDb);
                     var cacheFolder = MixDbDataService.GetCacheFolder(_tableName);
                     MixFileHelper.EmptyFolder($"{MixFolders.MixCacheFolder}/{cacheFolder}/{id}");
                     return await _connection.UpdateAsync(_tableName, obj,
@@ -723,6 +727,23 @@ namespace Mix.RepoDb.Repositories
                 }
                 _connection.Close();
             }
+        }
+
+        private Dictionary<string, object> ParseDictionary(JObject obj, RepoDbMixDatabaseViewModel mixDb)
+        {
+            var dicObj = obj.ToObject<Dictionary<string, object>>();
+
+            // npgsql cannot auto parse from string to Guid
+            var guidCols = mixDb.Columns.Where(c => c.DataType == MixDataType.Guid).ToList();
+            foreach (var item in guidCols)
+            {
+                var colTitle = item.SystemName.ToTitleCase();
+                if (dicObj.ContainsKey(colTitle) && dicObj[colTitle] != null)
+                {
+                    dicObj[colTitle] = Guid.Parse(dicObj[colTitle].ToString()!);
+                }
+            }
+            return dicObj;
         }
     }
 }

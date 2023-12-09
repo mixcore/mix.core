@@ -173,7 +173,7 @@ namespace Mix.Portal.Controllers
                 lstDto.Add(await MixDbHelper.ParseImportDtoToEntityAsync(item, _mixDb.Columns, CurrentTenant.Id, _idService.GetClaim(User, MixClaims.Username)));
             }
 
-            var result = await _repository.InsertManyAsync(lstDto);
+            var result = await _repository.InsertManyAsync(lstDto, _mixDb);
             return Ok(result);
         }
 
@@ -221,7 +221,7 @@ namespace Mix.Portal.Controllers
             foreach (var item in query.OrderBy(m => m[PriorityFieldName]))
             {
                 item.Priority = start;
-                await _repository.UpdateAsync(item);
+                await _repository.UpdateAsync(item, _mixDb);
                 start++;
             }
 
@@ -230,7 +230,7 @@ namespace Mix.Portal.Controllers
                 data[PriorityFieldName] = start;
             }
 
-            await _repository.UpdateAsync(data);
+            await _repository.UpdateAsync(data, _mixDb);
 
             return Ok();
         }
@@ -354,7 +354,7 @@ namespace Mix.Portal.Controllers
         {
             JObject obj = await MixDbHelper.ParseDtoToEntityAsync(dto, _mixDb.Columns, CurrentTenant.Id, _idService.GetClaim(User, MixClaims.Username));
             string username = _idService.GetClaim(User, MixClaims.Username);
-            var id = await _repository.InsertAsync(obj);
+            var id = await _repository.InsertAsync(obj, _mixDb);
             var resp = await _repository.GetSingleAsync(id);
             var result = resp != null ? ReflectionHelper.ParseObject(resp) : obj;
             QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
@@ -368,7 +368,7 @@ namespace Mix.Portal.Controllers
         {
             JObject obj = await MixDbHelper.ParseDtoToEntityAsync(dto, _mixDb.Columns, CurrentTenant.Id, _idService.GetClaim(User, MixClaims.Username));
             string username = _idService.GetClaim(User, MixClaims.Username);
-            var data = await _repository.UpdateAsync(obj);
+            var data = await _repository.UpdateAsync(obj, _mixDb);
             if (data != null)
             {
                 var result = await _mixDbService.GetById(_tableName, id, true);
@@ -479,7 +479,7 @@ namespace Mix.Portal.Controllers
                     }
                 }
 
-                await _repository.UpdateAsync(objDto);
+                await _repository.UpdateAsync(objDto, _mixDb);
                 QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
                     new MixDbEventCommand(username, "PATCH", _tableName, objDto));
             }
