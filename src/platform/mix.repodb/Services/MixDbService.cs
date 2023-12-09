@@ -638,21 +638,24 @@ namespace Mix.RepoDb.Services
 
         private async Task<bool> RestoreFromLocal(RepoDbMixDatabaseViewModel database)
         {
-            InitBackupRepository(database.SystemName);
-            var data = await _backupRepository.GetAllAsync();
-            if (data is { Count: > 0 })
+            if (File.Exists($"MixContent/Backup/backup_{database.SystemName}.sqlite"))
             {
-                var dbColumns = database.Columns.Select(c => c.SystemName.ToTitleCase()).Union(DefaultProperties).ToList();
-                string insertQuery = $"INSERT INTO {database.SystemName} ({string.Join(',', dbColumns.Select(m => $"{_databaseConstant.BacktickOpen}{m}{_databaseConstant.BacktickClose}"))}) VALUES ";
-                List<string> queries = new();
-                foreach (var item in data)
+                InitBackupRepository(database.SystemName);
+                var data = await _backupRepository.GetAllAsync();
+                if (data is { Count: > 0 })
                 {
-                    queries.Add(GetInsertQuery(item, dbColumns));
+                    var dbColumns = database.Columns.Select(c => c.SystemName.ToTitleCase()).Union(DefaultProperties).ToList();
+                    string insertQuery = $"INSERT INTO {database.SystemName} ({string.Join(',', dbColumns.Select(m => $"{_databaseConstant.BacktickOpen}{m}{_databaseConstant.BacktickClose}"))}) VALUES ";
+                    List<string> queries = new();
+                    foreach (var item in data)
+                    {
+                        queries.Add(GetInsertQuery(item, dbColumns));
+                    }
+                    insertQuery += string.Join(',', queries);
+                    _repository.InitTableName(database.SystemName);
+                    var result = await _repository.ExecuteCommand(insertQuery);
+                    return result >= 0;
                 }
-                insertQuery += string.Join(',', queries);
-                _repository.InitTableName(database.SystemName);
-                var result = await _repository.ExecuteCommand(insertQuery);
-                return result >= 0;
             }
             return true;
         }

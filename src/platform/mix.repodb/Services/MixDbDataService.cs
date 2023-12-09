@@ -193,7 +193,7 @@ namespace Mix.RepoDb.Services
             {
                 await InitRepository(tableName);
                 var obj = await ParseDto(tableName, data);
-                return await _repository.InsertAsync(obj);
+                return await _repository.InsertAsync(obj, _mixDb);
             }
             catch (MixException)
             {
@@ -216,7 +216,7 @@ namespace Mix.RepoDb.Services
                 {
                     throw new MixException(MixErrorStatus.NotFound);
                 }
-                return await _repository.UpdateAsync(obj);
+                return await _repository.UpdateAsync(obj, _mixDb);
             }
             catch (MixException)
             {
