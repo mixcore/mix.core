@@ -4,6 +4,9 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>aeea975a-4fec-4193-846d-3a3d92606bd7</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>..\..</DockerfileContext>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -17,9 +20,9 @@
 		<ProjectReference Include="..\..\modules\mix.scheduler\mix.scheduler.csproj" />
 		<ProjectReference Include="..\..\modules\mix.storage\mix.storage.csproj" />
 		<ProjectReference Include="..\..\modules\mix.tenancy\mix.tenancy.csproj" />
-		<ProjectReference Include="..\..\services\ecommerces\mix.services.ecommerce\mix.services.ecommerce.csproj" />
-		<ProjectReference Include="..\..\services\graphql\mix.services.graphql\mix.services.graphql.csproj" />
-		<ProjectReference Include="..\..\services\mix-databases\mix.servives.databases\mix.services.databases.csproj" />
+		<ProjectReference Include="..\..\services\core\ecommerces\mix.services.ecommerce\mix.services.ecommerce.csproj" />
+		<ProjectReference Include="..\..\services\core\graphql\mix.services.graphql\mix.services.graphql.csproj" />
+		<ProjectReference Include="..\..\services\core\mix-databases\mix.servives.databases\mix.services.databases.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Using Include="System" />
@@ -764,5 +767,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.0" />
+	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
 	</ItemGroup>
 </Project>

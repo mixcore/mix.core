@@ -63,23 +63,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{C0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ecommerces", "ecommerces", "{362A9E6F-A253-4D17-B164-C037609DD67B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.ecommerce.lib", "services\ecommerces\mix.services.ecommerce.lib\mix.services.ecommerce.lib.csproj", "{9ADA8E1F-F444-472C-914C-9AF2386B2D0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.ecommerce.lib", "services\core\ecommerces\mix.services.ecommerce.lib\mix.services.ecommerce.lib.csproj", "{9ADA8E1F-F444-472C-914C-9AF2386B2D0D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mix-databases", "mix-databases", "{9052327F-0A55-43C2-808A-B315D12A1EB1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.databases.lib", "services\mix-databases\mix.services.databases.lib\mix.services.databases.lib.csproj", "{973AC418-7E56-44F0-83B8-C316565BB0E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.databases.lib", "services\core\mix-databases\mix.services.databases.lib\mix.services.databases.lib.csproj", "{973AC418-7E56-44F0-83B8-C316565BB0E5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.ecommerce", "services\ecommerces\mix.services.ecommerce\mix.services.ecommerce.csproj", "{309813E4-D6E9-4B25-949F-49B808F4DFF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.ecommerce", "services\core\ecommerces\mix.services.ecommerce\mix.services.ecommerce.csproj", "{309813E4-D6E9-4B25-949F-49B808F4DFF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.databases", "services\mix-databases\mix.servives.databases\mix.services.databases.csproj", "{53FDEAC2-ADEB-4E02-AF44-DC986672A02E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.databases", "services\core\mix-databases\mix.servives.databases\mix.services.databases.csproj", "{53FDEAC2-ADEB-4E02-AF44-DC986672A02E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.mixdb", "platform\mix.mixdb\mix.mixdb.csproj", "{356FB416-1C32-4B59-91B4-62F62CBE394E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "graphql", "graphql", "{7212EE31-82F0-4741-B55F-7BCE0A3DFC5A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.graphql.lib", "services\graphql\mix.services.graphql.lib\mix.services.graphql.lib.csproj", "{4C1341A9-F5E2-4AB1-A504-5D815CAEEAF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.graphql.lib", "services\core\graphql\mix.services.graphql.lib\mix.services.graphql.lib.csproj", "{4C1341A9-F5E2-4AB1-A504-5D815CAEEAF3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.graphql", "services\graphql\mix.services.graphql\mix.services.graphql.csproj", "{4C7CFA3D-355B-434F-8442-2B0970BF02C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.graphql", "services\core\graphql\mix.services.graphql\mix.services.graphql.csproj", "{4C7CFA3D-355B-434F-8442-2B0970BF02C5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.mixdb.event", "platform\core\mix.mixdb.event\mix.mixdb.event.csproj", "{9508136B-0879-4BF2-B694-3B6242715BE7}"
 EndProject
@@ -97,7 +97,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "level_5", "level_5", "{84C6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "level_7", "level_7", "{98FE9DF6-4B31-4A0D-A4F9-74196114CD9D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "level_0", "level_0", "{7C9FFA1B-D992-4E3F-B2B1-74D86E81512D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{7C9FFA1B-D992-4E3F-B2B1-74D86E81512D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "level_0", "level_0", "{6F925183-31E6-4DEB-BAB1-80F330B9E199}"
 EndProject
@@ -121,7 +121,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.portal", "modules\mix.p
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mix-message-queue", "mix-message-queue", "{C93898B7-2001-4C29-9BBE-33A2E61C350A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.mq.lib", "services\mix-message-queue\mix.mq.lib\mix.mq.lib.csproj", "{70E0E3FE-11A6-4342-AFD7-D2E5E3CB2658}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.mq.lib", "services\mix-message-queue\mix.mq.lib\mix.mq.lib.csproj", "{70E0E3FE-11A6-4342-AFD7-D2E5E3CB2658}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.mq", "services\mix-message-queue\mix.mq\mix.mq.csproj", "{BB464A87-7C6E-4B4D-805A-91560D81EAA3}"
 EndProject
@@ -353,7 +353,7 @@ Global
 		{3BADD396-E830-468B-B2D8-A52FD5E6C6BD} = {4E880812-C336-4EB2-9FED-2E437957F50A}
 		{5FA252B6-6FDA-451E-BE5E-F6D82EDE9AB1} = {4E880812-C336-4EB2-9FED-2E437957F50A}
 		{F5D4C70F-DD2E-4EC9-A191-56A717B1B5EE} = {B4C40E02-E06A-4359-BDC5-349E103366AD}
-		{C93898B7-2001-4C29-9BBE-33A2E61C350A} = {7C9FFA1B-D992-4E3F-B2B1-74D86E81512D}
+		{C93898B7-2001-4C29-9BBE-33A2E61C350A} = {C0A05428-767E-46C5-A31F-0D220E41F7C5}
 		{70E0E3FE-11A6-4342-AFD7-D2E5E3CB2658} = {C93898B7-2001-4C29-9BBE-33A2E61C350A}
 		{BB464A87-7C6E-4B4D-805A-91560D81EAA3} = {C93898B7-2001-4C29-9BBE-33A2E61C350A}
 	EndGlobalSection

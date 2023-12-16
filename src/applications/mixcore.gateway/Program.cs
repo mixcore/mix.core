@@ -46,7 +46,11 @@ static void Configure(WebApplication app, IWebHostEnvironment env)
     }
     //app.UseResponseCompression();
     app.UseRouting();
-    app.UseMixAuth();
+
+    // ref: app.UseMixAuth();
+    app.UseAuthentication();
+    app.UseAuthorization();
+
     app.UseSwagger();
     app.UseSwaggerUI();
     app.MapControllers();
