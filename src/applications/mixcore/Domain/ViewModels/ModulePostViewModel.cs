@@ -15,7 +15,7 @@
 
         public ModulePostAssociationViewModel(MixModulePostAssociation entity,
 
-            UnitOfWorkInfo? uowInfo = null)
+            UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {
         }
@@ -29,7 +29,7 @@
         #region Overrides
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Post = await PostContentViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(ChildId);
+            Post = await PostContentViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(ChildId, cancellationToken);
         }
         #endregion
 

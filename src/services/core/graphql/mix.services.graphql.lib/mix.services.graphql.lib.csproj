@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\platform\mix.library\mix.library.csproj" />
+    <ProjectReference Include="..\..\..\..\platform\mix.library\mix.library.csproj" />
   </ItemGroup>
 
   <ItemGroup>

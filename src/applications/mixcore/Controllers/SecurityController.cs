@@ -12,38 +12,33 @@ using System.Security.Claims;
 
 namespace Mixcore.Controllers
 {
-    public class SecurityController : MixControllerBase
+    public class SecurityController(
+        IHttpContextAccessor httpContextAccessor,
+        IMixCmsService mixCmsService,
+        IPSecurityConfigService ipSecurityConfigService,
+        SignInManager<MixUser> signInManager,
+        ILogger<ExternalLoginModel> logger,
+        MixIdentityService idService,
+        TenantUserManager userManager,
+        MixEndpointService mixEndpointService,
+        IMixTenantService tenantService,
+         IConfiguration configuration) : MixControllerBase(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
     {
-        private readonly SignInManager<MixUser> _signInManager;
-        private readonly TenantUserManager _userManager;
-        private readonly ILogger<ExternalLoginModel> _logger;
-        private readonly MixIdentityService _idService;
-        private readonly MixEndpointService _mixEndpointService;
-
-        public SecurityController(
-            IHttpContextAccessor httpContextAccessor,
-            IMixCmsService mixCmsService,
-            IPSecurityConfigService ipSecurityConfigService,
-            SignInManager<MixUser> signInManager,
-            ILogger<ExternalLoginModel> logger,
-            MixIdentityService idService,
-            TenantUserManager userManager,
-            MixEndpointService mixEndpointService,
-            IMixTenantService tenantService,
-             IConfiguration configuration)
-            : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
-        {
-            _signInManager = signInManager;
-            _logger = logger;
-            _idService = idService;
-            _userManager = userManager;
-            _mixEndpointService = mixEndpointService;
-        }
+        private readonly SignInManager<MixUser> _signInManager = signInManager;
+        private readonly TenantUserManager _userManager = userManager;
+        private readonly ILogger<ExternalLoginModel> _logger = logger;
+        private readonly MixIdentityService _idService = idService;
+        private readonly MixEndpointService _mixEndpointService = mixEndpointService;
 
         [HttpGet]
         [Route("security/{page}")]
         public IActionResult Index(string page)
         {
+            if (page is null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, nameof(page));
+            }
+
             if (IsValid)
             {
                 return View();
@@ -72,9 +67,9 @@ namespace Mixcore.Controllers
         [Route("security/external-login-result")]
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<JObject>> ExternalLoginResultAsync(string? returnUrl = null, string? remoteError = null)
+        public async Task<ActionResult<JObject>> ExternalLoginResultAsync(string returnUrl = null, string remoteError = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl ??= Url.Content("~/");
             if (remoteError != null)
             {
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
@@ -89,7 +84,7 @@ namespace Mixcore.Controllers
             var siginResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (siginResult.Succeeded)
             {
-                string? email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                string email = info.Principal.FindFirstValue(ClaimTypes.Email);
                 if (string.IsNullOrEmpty(email))
                 {
                     throw new MixException(MixErrorStatus.Badrequest, "Email not exist");
@@ -109,7 +104,7 @@ namespace Mixcore.Controllers
             else
             {
                 // If the user does not have an account, then ask the user to create an account.
-                string? email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                string email = info.Principal.FindFirstValue(ClaimTypes.Email);
                 if (string.IsNullOrEmpty(email))
                 {
                     throw new MixException(MixErrorStatus.Badrequest, "Email not exist");

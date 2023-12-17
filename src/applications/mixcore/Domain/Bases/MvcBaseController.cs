@@ -6,29 +6,21 @@ using Mix.Shared.Services;
 namespace Mixcore.Domain.Bases
 {
     [ResponseCache(CacheProfileName = "Default")]
-    public class MvcBaseController : MixControllerBase
+    public class MvcBaseController(
+        IHttpContextAccessor httpContextAccessor,
+        IPSecurityConfigService ipSecurityConfigService,
+        IMixCmsService mixCmsService,
+        TranslatorService translator,
+        DatabaseService databaseService,
+        UnitOfWorkInfo<MixCmsContext> uow,
+        MixCacheService cacheService,
+        IMixTenantService tenantService,
+         IConfiguration configuration) : MixControllerBase(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
     {
-        protected UnitOfWorkInfo<MixCmsContext> Uow;
-        protected readonly MixCacheService CacheService;
-        protected readonly TranslatorService Translator;
-        protected readonly DatabaseService DatabaseService;
-        public MvcBaseController(
-            IHttpContextAccessor httpContextAccessor,
-            IPSecurityConfigService ipSecurityConfigService,
-            IMixCmsService mixCmsService,
-            TranslatorService translator,
-            DatabaseService databaseService,
-            UnitOfWorkInfo<MixCmsContext> uow,
-            MixCacheService cacheService,
-            IMixTenantService tenantService,
-             IConfiguration configuration) : 
-            base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
-        {
-            Translator = translator;
-            DatabaseService = databaseService;
-            Uow = uow;
-            CacheService = cacheService;
-        }
+        protected UnitOfWorkInfo<MixCmsContext> Uow = uow;
+        protected readonly MixCacheService CacheService = cacheService;
+        protected readonly TranslatorService Translator = translator;
+        protected readonly DatabaseService DatabaseService = databaseService;
 
         protected override void ValidateRequest()
         {
@@ -51,7 +43,7 @@ namespace Mixcore.Domain.Bases
         }
 
         #region Helper
-        protected async Task<IActionResult> Page(int pageId, string? keyword = null)
+        protected async Task<IActionResult> Page(int pageId, string keyword = null)
         {
             // Home Page
             var pageRepo = PageContentViewModel.GetRepository(Uow, CacheService);

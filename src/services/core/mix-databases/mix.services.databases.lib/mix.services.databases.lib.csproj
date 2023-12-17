@@ -14,8 +14,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\platform\mix.library\mix.library.csproj" />
-		<ProjectReference Include="..\..\..\platform\mix.mixdb\mix.mixdb.csproj" />
+		<ProjectReference Include="..\..\..\..\modules\mix.messenger\mix.messenger.csproj" />
+		<ProjectReference Include="..\..\..\..\platform\mix.mixdb\mix.mixdb.csproj" />
 		<Using Include="Mix.Database.Entities.MixDb" />
 	</ItemGroup>
 

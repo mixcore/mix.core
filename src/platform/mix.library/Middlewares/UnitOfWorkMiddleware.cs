@@ -7,16 +7,11 @@ using System.Data.Common;
 
 namespace Mix.Lib.Middlewares
 {
-    public class UnitOfWorkMiddleware
+    public class UnitOfWorkMiddleware(RequestDelegate next, IConfiguration configuration)
     {
-        private readonly RequestDelegate _next;
-        private static readonly List<Type> UowInfos = new();
-        private GlobalSettingsModel _globalConfig;
-        public UnitOfWorkMiddleware(RequestDelegate next, IConfiguration configuration)
-        {
-            _next = next;
-            _globalConfig = configuration.Get<GlobalSettingsModel>();
-        }
+        private readonly RequestDelegate _next = next;
+        private static readonly List<Type> UowInfos = [];
+        private readonly GlobalSettingsModel _globalConfig = configuration.Get<GlobalSettingsModel>();
 
         public static void AddUnitOfWork<T>() where T : IUnitOfWorkInfo
         {
@@ -61,7 +56,7 @@ namespace Mix.Lib.Middlewares
 
                     var uowService = (IUnitOfWorkInfo)context.RequestServices.GetService(uowType);
                     var cnn = uowService.ActiveDbContext.Database.GetConnectionString();
-                    IDbContextTransaction transaction = dicTransactions.ContainsKey(cnn) ? dicTransactions[cnn] : default;
+                    IDbContextTransaction transaction = dicTransactions.TryGetValue(cnn, out IDbContextTransaction value) ? value : default;
                     if (uowService.ActiveTransaction == null && transaction == null)
                     {
                         uowService.Begin();
@@ -83,7 +78,7 @@ namespace Mix.Lib.Middlewares
             }
         }
 
-        private async Task CompleteUow(IUnitOfWorkInfo cmsUow, int statusCode)
+        private static async Task CompleteUow(IUnitOfWorkInfo cmsUow, int statusCode)
         {
             if (cmsUow.ActiveTransaction != null)
             {

@@ -16,7 +16,7 @@ namespace Mixcore.Domain.ViewModels
 
         public ApplicationViewModel(MixApplication entity,
 
-            UnitOfWorkInfo? uowInfo = null) : base(entity, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -35,7 +35,7 @@ namespace Mixcore.Domain.ViewModels
         public string MixDatabaseName { get; set; }
         public int? MixDbId { get; set; }
 
-        public JObject? ExtraData { get; set; }
+        public JObject ExtraData { get; set; }
         public TemplateViewModel Template { get; set; }
         #endregion
 
@@ -54,7 +54,7 @@ namespace Mixcore.Domain.ViewModels
 
         #region Public Method
 
-        public T? Property<T>(string fieldName)
+        public T Property<T>(string fieldName)
         {
             return ExtraData != null
                 ? ExtraData.Value<T>(fieldName)

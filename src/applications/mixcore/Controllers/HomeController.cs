@@ -11,28 +11,21 @@ using System.Linq.Expressions;
 
 namespace Mixcore.Controllers
 {
-    public class HomeController : MvcBaseController
+    public class HomeController(
+        IHttpContextAccessor httpContextAccessor,
+        IPSecurityConfigService ipSecurityConfigService,
+        IMixCmsService mixCmsService,
+        TranslatorService translator,
+        DatabaseService databaseService,
+        UnitOfWorkInfo<MixCmsContext> uow,
+        MixRepoDbRepository repoDbRepository,
+        IMixMetadataService metadataService,
+        MixCacheService cacheService,
+        IMixTenantService tenantService,
+         IConfiguration configuration) : MvcBaseController(httpContextAccessor, ipSecurityConfigService, mixCmsService, translator, databaseService, uow, cacheService, tenantService, configuration)
     {
-        private readonly IMixMetadataService _metadataService;
-        private readonly MixRepoDbRepository _repoDbRepository;
-
-        public HomeController(
-            IHttpContextAccessor httpContextAccessor,
-            IPSecurityConfigService ipSecurityConfigService,
-            IMixCmsService mixCmsService,
-            TranslatorService translator,
-            DatabaseService databaseService,
-            UnitOfWorkInfo<MixCmsContext> uow,
-            MixRepoDbRepository repoDbRepository,
-            IMixMetadataService metadataService,
-            MixCacheService cacheService,
-            IMixTenantService tenantService,
-             IConfiguration configuration)
-            : base(httpContextAccessor, ipSecurityConfigService, mixCmsService, translator, databaseService, uow, cacheService, tenantService, configuration)
-        {
-            _repoDbRepository = repoDbRepository;
-            _metadataService = metadataService;
-        }
+        private readonly IMixMetadataService _metadataService = metadataService;
+        private readonly MixRepoDbRepository _repoDbRepository = repoDbRepository;
 
         protected override void ValidateRequest()
         {
@@ -54,10 +47,10 @@ namespace Mixcore.Controllers
             }
         }
 
-        [Route("{seoName?}")]
+        [Route("")]
         public async Task<IActionResult> Index()
         {
-            string? seoName = Request.RouteValues["seoName"]?.ToString();
+            string seoName = Request.RouteValues["seoName"]?.ToString();
             if (!IsValid)
             {
                 return Redirect(RedirectUrl);
@@ -71,7 +64,7 @@ namespace Mixcore.Controllers
         }
 
 
-        private async Task<PageContentViewModel?> LoadPage(string? seoName = null)
+        private async Task<PageContentViewModel> LoadPage(string seoName = null)
         {
             var pageRepo = PageContentViewModel.GetRepository(Uow, CacheService);
             Expression<Func<MixPageContent, bool>> predicate = p => p.MixTenantId == CurrentTenant.Id
@@ -101,7 +94,7 @@ namespace Mixcore.Controllers
             }
             return page;
         }
-        private async Task<IActionResult> LoadAlias(string? seoName)
+        private async Task<IActionResult> LoadAlias(string seoName = null)
         {
             var alias = await MixUrlAliasViewModel.GetRepository(Uow, CacheService).GetSingleAsync(m => m.MixTenantId == CurrentTenant.Id && m.Alias == seoName);
             if (alias != null)
