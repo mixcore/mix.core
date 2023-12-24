@@ -1,7 +1,0 @@
-﻿{
-  "isCache": true,
-  "connectionString": "Data Source=mixcontent\\mix-cms.sqlite",
-  "databaseProvider": "SQLITE",
-  "cacheMode": "JSON",
-  "cacheFolder": "MixContent/cache"
-}

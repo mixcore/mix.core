@@ -25,16 +25,6 @@ Configure(app, builder.Environment);
 app.UseOutputCache();
 app.MapDefaultEndpoints();
 app.Run();
-static void ConfigureServices(WebApplicationBuilder builder)
-{
-    builder.Services.AddOutputCache();
-    builder.Services.AddControllers();
-    builder.Services.AddOcelot(builder.Configuration);
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-
-}
 
 // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 static void Configure(WebApplication app, IWebHostEnvironment env)
@@ -46,7 +36,11 @@ static void Configure(WebApplication app, IWebHostEnvironment env)
     }
     //app.UseResponseCompression();
     app.UseRouting();
-    app.UseMixAuth();
+
+    // ref: app.UseMixAuth();
+    app.UseAuthentication();
+    app.UseAuthorization();
+
     app.UseSwagger();
     app.UseSwaggerUI();
     app.MapControllers();

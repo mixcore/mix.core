@@ -60,15 +60,7 @@ namespace Mix.Lib.Helpers
         }
 
         public static WebApplicationBuilder CreateWebApplicationBuilder(string[] args)
-        {
-            var mixContentFolder = new DirectoryInfo(MixFolders.MixContentFolder);
-
-            // Clone Settings from shared folder
-            if (!mixContentFolder.Exists)
-            {
-                MixHelper.CopyFolder(MixFolders.DefaultMixContentFolder, MixFolders.MixContentFolder);
-                Console.WriteLine("Clone Settings from shared folder completed.");
-            }
+        {            
             var builder = WebApplication.CreateBuilder(args);
             builder.WebHost.UseContentRoot(Directory.GetCurrentDirectory());
 

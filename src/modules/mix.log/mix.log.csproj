@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Using Include="Mix.Mq.Lib.Models" />
 		<ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
 	</ItemGroup>
 

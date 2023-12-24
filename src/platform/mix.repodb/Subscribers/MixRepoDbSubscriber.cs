@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.UnitOfWork;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;

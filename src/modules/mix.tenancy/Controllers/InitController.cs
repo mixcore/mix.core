@@ -16,6 +16,7 @@ using Mix.Quartz.Interfaces;
 using Mix.Database.Services;
 using Mix.Auth.Models;
 using Mix.Auth.Constants;
+using Mix.Mq.Lib.Models;
 
 namespace Mix.Tenancy.Controllers
 {

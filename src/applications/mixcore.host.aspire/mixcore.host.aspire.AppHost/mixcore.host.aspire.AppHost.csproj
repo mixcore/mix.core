@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\services\mix-auth-service\mix.auth.service\mix.auth.service.csproj" />
     <ProjectReference Include="..\..\..\services\mix-message-queue\mix.mq\mix.mq.csproj" />
     <ProjectReference Include="..\..\mixcore.gateway\mixcore.gateway.csproj" />
     <ProjectReference Include="..\..\mixcore\mixcore.csproj" />

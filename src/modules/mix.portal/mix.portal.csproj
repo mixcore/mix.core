@@ -48,6 +48,7 @@
 		<Using Include="Mix.Constant.Enums" />
 		<Using Include="Mix.Shared.Dtos" />
 		<Using Include="Mix.Service.Services" />
+		<Using Include="Mix.Mq.Lib.Models" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -56,7 +57,7 @@
 		<ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
 		<ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
 		<ProjectReference Include="..\..\platform\mix.signalr.hub\mix.signalr.hub.csproj" />
-		<ProjectReference Include="..\..\services\mix-databases\mix.services.databases.lib\mix.services.databases.lib.csproj" />
+		<ProjectReference Include="..\..\services\core\mix-databases\mix.services.databases.lib\mix.services.databases.lib.csproj" />
 		<ProjectReference Include="..\mix.grpc\mix.grpc.csproj" />
 		<ProjectReference Include="..\mix.messenger\mix.messenger.csproj" />
 		<ProjectReference Include="..\mix.scheduler\mix.scheduler.csproj" />

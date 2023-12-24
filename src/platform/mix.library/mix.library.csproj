@@ -43,6 +43,7 @@
 		<Using Include="Mix.Shared.Extensions" />
 		<Using Include="Mix.Shared.Helpers" />
 		<Using Include="Mix.Auth.Models" />
+		<Using Include="Mix.Mq.Lib.Models" />
 
 	</ItemGroup>
 	<ItemGroup>

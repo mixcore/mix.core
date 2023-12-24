@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using Mix.Constant.Constants;
 using Mix.Heart.Helpers;
 using Mix.Lib.Interfaces;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Service.Interfaces;
