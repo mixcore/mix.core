@@ -5,6 +5,7 @@ using Mix.Heart.Models;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.RepoDb.Repositories;

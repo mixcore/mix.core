@@ -2,6 +2,7 @@
 using Google.Cloud.PubSub.V1;
 using Grpc.Auth;
 using Grpc.Core;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;

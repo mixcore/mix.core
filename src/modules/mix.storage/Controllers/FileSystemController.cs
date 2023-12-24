@@ -2,6 +2,7 @@
 using Mix.Auth.Constants;
 using Mix.Heart.Constants;
 using Mix.Lib.Interfaces;
+using Mix.Mq.Lib.Models;
 using Mix.Storage.Lib.Models;
 
 namespace Mix.Storage.Controllers

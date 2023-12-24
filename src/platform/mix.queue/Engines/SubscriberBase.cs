@@ -97,6 +97,11 @@ namespace Mix.Queue.Engines
                         return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
                             provider, googleSetting, topicId, subscriptionId, MessageHandler, _memQueueService, mixEndpointService);
                     case MixQueueProvider.MIX:
+                        if (string.IsNullOrEmpty(mixEndpointService.MixMq))
+                        {
+                            return default;
+                        }
+
                         var mixSettingPath = _configuration.GetSection("MessageQueueSetting:Mix");
                         var mixSetting = new MixQueueSetting();
                         mixSettingPath.Bind(mixSetting);

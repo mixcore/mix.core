@@ -15,6 +15,7 @@ using Mix.Database.Entities.MixDb;
 using Mix.SignalR.Interfaces;
 using Mix.Lib.Interfaces;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Mix.Mq.Lib.Models;
 
 namespace Mix.Services.Databases.Controllers
 {

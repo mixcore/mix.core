@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Database.Entities.Queue;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Models;
 using Mix.Service.Models;
 using Newtonsoft.Json.Linq;

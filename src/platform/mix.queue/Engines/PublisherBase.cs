@@ -67,6 +67,11 @@ namespace Mix.Queue.Engines
                                 _provider, googleSetting, topicName, _mixEndpointService));
                         break;
                     case MixQueueProvider.MIX:
+                        if (string.IsNullOrEmpty(_mixEndpointService.MixMq))
+                        {
+                            return default;
+                        }
+
                         var mixSettingPath = _configuration.GetSection("MessageQueueSetting:Mix");
                         var mixSetting = new MixQueueSetting();
                         mixSettingPath.Bind(mixSetting);

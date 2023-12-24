@@ -6,6 +6,7 @@ using Mix.Heart.Helpers;
 using Mix.Log.Lib.Commands;
 using Mix.Log.Lib.Interfaces;
 using Mix.Log.Lib.Models;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Service.Services;

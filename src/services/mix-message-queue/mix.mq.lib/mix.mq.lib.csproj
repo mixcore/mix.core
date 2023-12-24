@@ -1,21 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <RootNamespace>Mix.Mq.Lib</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Mix.Mq.Lib</RootNamespace>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.25.1" />
-    <PackageReference Include="Grpc.AspNetCore.Server" Version="2.59.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Google.Protobuf" Version="3.25.1" />
+		<PackageReference Include="Grpc.AspNetCore.Server" Version="2.59.0" />
+		<PackageReference Include="Grpc.AspNetCore.Web" Version="2.60.0-pre1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\applications\mixcore.host.aspire\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\..\..\platform\core\mix-heart\src\Mix.Heart\mix.heart.csproj" />
-    <ProjectReference Include="..\..\..\platform\mix.constant\mix.constant.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\applications\mixcore.host.aspire\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
+		<ProjectReference Include="..\..\..\platform\core\mix-heart\src\Mix.Heart\mix.heart.csproj" />
+		<ProjectReference Include="..\..\..\platform\mix.constant\mix.constant.csproj" />
+	</ItemGroup>
 
 </Project>

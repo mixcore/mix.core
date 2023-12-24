@@ -13,7 +13,7 @@ public class Program
         var builder = MixCmsHelper.CreateHostBuilder<Startup>(args);
         builder.ConfigureAppConfiguration((hostingContext, config) =>
         {
-            config.AddJsonFile("MixContent/Shared/AppConfigs/kiotviet.json", true, true);
+            config.AddJsonFile("mixcontent/shared/appconfigs/kiotviet.json", true, true);
         });
         return builder;
     }

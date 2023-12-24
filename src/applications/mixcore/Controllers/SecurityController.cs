@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Mix.Auth.Enums;
 using Mix.Auth.Models;
@@ -17,7 +16,7 @@ namespace Mixcore.Controllers
         IMixCmsService mixCmsService,
         IPSecurityConfigService ipSecurityConfigService,
         SignInManager<MixUser> signInManager,
-        ILogger<ExternalLoginModel> logger,
+        ILogger<SecurityController> logger,
         MixIdentityService idService,
         TenantUserManager userManager,
         MixEndpointService mixEndpointService,
@@ -26,7 +25,7 @@ namespace Mixcore.Controllers
     {
         private readonly SignInManager<MixUser> _signInManager = signInManager;
         private readonly TenantUserManager _userManager = userManager;
-        private readonly ILogger<ExternalLoginModel> _logger = logger;
+        private readonly ILogger<SecurityController> _logger = logger;
         private readonly MixIdentityService _idService = idService;
         private readonly MixEndpointService _mixEndpointService = mixEndpointService;
 

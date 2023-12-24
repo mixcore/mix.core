@@ -15,6 +15,7 @@ using Mix.Database.Entities.MixDb;
 using Mix.SignalR.Interfaces;
 using Mix.Lib.Interfaces;
 using Mix.Auth.Constants;
+using Mix.Mq.Lib.Models;
 
 namespace Mix.Services.Databases.Controllers
 {

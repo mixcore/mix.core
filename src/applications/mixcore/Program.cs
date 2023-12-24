@@ -7,6 +7,16 @@ using Mix.Log.Lib;
 using Microsoft.Extensions.FileProviders;
 using Mix.Lib.Middlewares;
 using Mix.Shared.Services;
+using Mix.Shared.Helpers;
+
+var mixContentFolder = new DirectoryInfo(MixFolders.StaticFiles);
+
+// Clone Settings from shared folder
+if (!mixContentFolder.Exists)
+{
+    MixHelper.CopyFolder($"{Environment.CurrentDirectory}/{MixFolders.DefaultMixContentFolder}", MixFolders.MixContentFolder);
+    Console.WriteLine("Clone Settings from shared folder completed.");
+}
 var builder = MixCmsHelper.CreateWebApplicationBuilder(args);
 
 builder.AddServiceDefaults();

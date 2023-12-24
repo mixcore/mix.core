@@ -2,6 +2,7 @@
 {
     public class MixModuleNames
     {
+        public const string Default = "Default";
         public const string Account = "Account";
         public const string Common = "Common";
         public const string Portal = "Portal";

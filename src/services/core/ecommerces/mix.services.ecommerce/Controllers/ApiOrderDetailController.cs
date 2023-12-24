@@ -5,6 +5,7 @@ using Mix.Lib.Attributes;
 using Mix.Lib.Base;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Services.Ecommerce.Lib.Dtos;

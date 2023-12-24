@@ -11,6 +11,7 @@ using Mix.Heart.Exceptions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Mixdb.ViewModels;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;

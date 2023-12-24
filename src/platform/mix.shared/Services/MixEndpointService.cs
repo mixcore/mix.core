@@ -2,7 +2,6 @@
 {
     public sealed class MixEndpointService : JsonConfigurationServiceBase
     {
-        public string DefaultDomain;
         public MixEndpointService() : base(MixAppConfigFilePaths.Endpoint)
         {
         }
@@ -19,6 +18,11 @@
         }
 
         public string[] Endpoints;
+        public string DefaultDomain
+        {
+            get => GetConfig<string>(MixModuleNames.Default);
+            set => SetConfig(MixModuleNames.Default, value);
+        }
         public string MixMq
         {
             get => GetConfig<string>(MixModuleNames.MixMq) ?? DefaultDomain;

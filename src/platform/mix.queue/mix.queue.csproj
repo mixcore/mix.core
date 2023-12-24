@@ -13,6 +13,7 @@
 		<Using Include="Mix.Constant.Constants" />
 		<Using Include="Mix.Constant.Enums" />
 		<Using Include="Mix.Shared.Dtos" />
+		<Using Include="Mix.Mq.Lib.Models" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.17.0" />
