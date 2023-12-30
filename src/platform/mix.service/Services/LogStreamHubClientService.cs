@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Mix.Shared.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Interfaces;
@@ -9,8 +10,8 @@ namespace Mix.Service.Services
 {
     public class LogStreamHubClientService : BaseHubClientService, ILogStreamHubClientService
     {
-        public LogStreamHubClientService(MixEndpointService mixEndpointService)
-            : base(HubEndpoints.LogStreamHub, mixEndpointService)
+        public LogStreamHubClientService(MixEndpointService mixEndpointService, ILogger<LogStreamHubClientService> logger)
+            : base(HubEndpoints.LogStreamHub, mixEndpointService, logger)
         {
         }
 

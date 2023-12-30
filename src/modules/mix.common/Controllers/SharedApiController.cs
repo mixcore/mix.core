@@ -84,15 +84,9 @@ namespace Mix.Common.Controllers
         [HttpGet]
         [MixAuthorize(roles: $"{MixRoles.SuperAdmin},{MixRoles.Owner}")]
         [Route("stop-application")]
-        public async Task<ActionResult> StopApplication()
+        public void StopApplication()
         {
             _applicationLifetime.StopApplication();
-            string _currentProcess = Path.GetFullPath(Process.GetCurrentProcess().MainModule.FileName);
-
-            Process.Start(_currentProcess);
-
-            await Task.FromResult(0);
-            return Ok(DateTime.UtcNow);
         }
 
         [HttpGet]

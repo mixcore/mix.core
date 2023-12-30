@@ -8,6 +8,9 @@
 
         public void SetDefaultDomain(string domain)
         {
+            Messenger ??= domain;
+            MixMq ??= domain;
+            Mixcore ??= domain;
         }
 
         protected override void LoadAppSettings()
