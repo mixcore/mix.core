@@ -2,7 +2,9 @@
 using Grpc.Net.Client;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Grpc.Net.Client.Web;
 
 namespace Mix.Queue.Models
 {
@@ -25,20 +27,28 @@ namespace Mix.Queue.Models
 
         private GrpcChannel CreateChannel(string address)
         {
-            var credentials = CallCredentials.FromInterceptor((context, metadata) =>
-            {
-                if (!string.IsNullOrEmpty(_token))
-                {
-                    metadata.Add("Authorization", _token);
-                }
-                return Task.CompletedTask;
-            });
+            //var credentials = CallCredentials.FromInterceptor((context, metadata) =>
+            //{
+            //    if (!string.IsNullOrEmpty(_token))
+            //    {
+            //        metadata.Add("Authorization", _token);
+            //    }
+            //    return Task.CompletedTask;
+            //});
+
+            var handler = new HttpClientHandler();
+            handler.ServerCertificateCustomValidationCallback =
+                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+
+            // This switch must be set before creating the GrpcChannel/HttpClient.
+            AppContext.SetSwitch(
+                "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
             // SslCredentials is used here because this channel is using TLS.
             // CallCredentials can't be used with ChannelCredentials.Insecure on non-TLS channels.
             var channel = GrpcChannel.ForAddress(address, new GrpcChannelOptions
             {
-                Credentials = ChannelCredentials.Create(new SslCredentials(), credentials)
+                HttpHandler = new GrpcWebHandler(handler)
             });
             return channel;
         }

@@ -26,7 +26,7 @@
         public const string Storage = "mixcontent/shared/appconfigs/storage";
         public const string Queue = "mixcontent/shared/appconfigs/queue";
         public const string Payments = "mixcontent/shared/appconfigs/payments";
-        public const string Kiotviet = "mixcontent/shared/appconfigs/kiotviet";
+        public const string Redis = "mixcontent/shared/appconfigs/redis";
         public const string Log = "mixcontent/shared/appconfigs/log";
         public const string RateLimit = "mixcontent/shared/appconfigs/rate_limit";
         public const string GoogleFirebase = "mixcontent/shared/appconfigs/google_firebase";

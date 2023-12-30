@@ -60,26 +60,34 @@ namespace Mix.Lib.Helpers
         }
 
         public static WebApplicationBuilder CreateWebApplicationBuilder(string[] args)
-        {            
+        {
+            var mixContentFolder = new DirectoryInfo($"{Environment.CurrentDirectory}/{MixFolders.MixContentSharedFolder}");
+
+            // Clone Settings from shared folder
+            if (!mixContentFolder.Exists)
+            {
+                MixHelper.CopyFolder($"{Environment.CurrentDirectory}/{MixFolders.DefaultMixContentFolder}", $"{Environment.CurrentDirectory}/{MixFolders.MixContentFolder}");
+                Console.WriteLine("Clone Settings from shared folder completed.");
+            }
             var builder = WebApplication.CreateBuilder(args);
             builder.WebHost.UseContentRoot(Directory.GetCurrentDirectory());
 
             builder.Configuration
-                       .AddJsonFile("appsettings.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/global.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/azure.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/ocelot.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/storage.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/queue.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/mix_heart.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/authentication.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/google_credential.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/google_firebase.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/smtp.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/payments.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/redis.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/log.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/rate_limit.json", true, true)
+                       .AddJsonFile("appsettings.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/global.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/ocelot.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/storage.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/azure.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/queue.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/mix_heart.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/authentication.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/google_credential.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/google_firebase.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/smtp.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/payments.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/redis.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/log.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/rate_limit.json",true, true)
                        .AddEnvironmentVariables();
             return builder;
         }
@@ -99,21 +107,21 @@ namespace Mix.Lib.Helpers
                {
                    config
                        .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
-                       .AddJsonFile("appsettings.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/global.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/azure.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/ocelot.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/storage.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/queue.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/mix_heart.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/authentication.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/google_credential.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/google_firebase.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/smtp.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/payments.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/redis.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/log.json", true, true)
-                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/rate_limit.json", true, true)
+                       .AddJsonFile("appsettings.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/global.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/azure.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/ocelot.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/storage.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/queue.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/mix_heart.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/authentication.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/google_credential.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/google_firebase.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/smtp.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/payments.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/redis.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/log.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/rate_limit.json",true, true)
                        .AddEnvironmentVariables();
                })
                 .ConfigureWebHostDefaults(webBuilder =>

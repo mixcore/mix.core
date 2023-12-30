@@ -4,7 +4,6 @@ using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Mix.Shared.Services;
 
 namespace Mix.RepoDb.Publishers

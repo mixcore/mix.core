@@ -42,6 +42,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddHostedService<MixBackgroundTaskSubscriber>();
             services.AddHostedService<MixDbCommandPublisher>();
             services.AddHostedService<MixDbCommandSubscriber>();
+
+            MixPermissionService permissionSrv = services.GetService<MixPermissionService>();
+            permissionSrv.Reload().GetAwaiter().GetResult();
             return services;
         }
     }

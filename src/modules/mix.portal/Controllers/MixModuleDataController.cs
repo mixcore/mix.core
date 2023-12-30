@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Lib.Interfaces;
+using Mix.Mq.Lib.Models;
 using Mix.RepoDb.Interfaces;
 using Mix.SignalR.Interfaces;
 

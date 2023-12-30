@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Communicator.Models;
 using Mix.Lib.Interfaces;
+using Mix.Mq.Lib.Models;
 
 namespace Mix.Lib.Services
 {

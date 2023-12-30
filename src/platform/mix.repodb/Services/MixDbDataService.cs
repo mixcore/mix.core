@@ -25,6 +25,7 @@ using Mix.Database.Entities.MixDb;
 using Newtonsoft.Json;
 using Mix.Lib.Interfaces;
 using Mix.Heart.Exceptions;
+using Mix.RepoDb.Helpers;
 
 namespace Mix.RepoDb.Services
 {
@@ -515,19 +516,7 @@ namespace Mix.RepoDb.Services
                 }
                 else
                 {
-                    if (col != null &&
-                        (col.DataType == MixDataType.Json
-                        || col.DataType == MixDataType.Array
-                        || col.DataType == MixDataType.ArrayMedia
-                        || col.DataType == MixDataType.ArrayRadio))
-                    {
-                        result.Add(new JProperty(pr.Name.ToTitleCase(), JObject.FromObject(pr.Value).ToString(Formatting.None)));
-                    }
-                    else
-                    {
-                        result.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
-                    }
-
+                    result.Add(new JProperty(pr.Name.ToTitleCase(), MixDbHelper.ParseObjectValue(col?.DataType, pr.Value)));
                 }
             }
 
@@ -563,6 +552,26 @@ namespace Mix.RepoDb.Services
                 result.Add(new JProperty(IsDeletedFieldName, false));
             }
             return result;
+        }
+
+        private object? ParseObjectValue(MixDataType? dataType, JToken value)
+        {
+            if (value != null)
+            {
+
+                switch (dataType)
+                {
+                    case MixDataType.Integer:
+                    case MixDataType.Reference:
+                        return int.Parse(value.ToString());
+                    case MixDataType.Double:
+                        return double.Parse(value.ToString());
+                    default:
+                        return value.ToString();
+
+                }
+            }
+            return null;
         }
 
         public void Dispose()

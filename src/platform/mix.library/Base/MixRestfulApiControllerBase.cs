@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Mix.Database.Entities.Account;
 using Mix.Lib.Dtos;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
+using Mix.Mq.Lib.Models;
 using Mix.SignalR.Interfaces;
 
 namespace Mix.Lib.Base
@@ -17,6 +19,10 @@ namespace Mix.Lib.Base
         where TEntity : EntityBase<TPrimaryKey>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
+        private UnitOfWorkInfo<MixCmsAccountContext> uow;
+        private IQueueService<MessageQueueModel> queueService;
+        private IPortalHubClientService portalHub;
+
         public MixRestfulApiControllerBase(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration, MixCacheService cacheService,
@@ -28,6 +34,17 @@ namespace Mix.Lib.Base
             : base(httpContextAccessor, configuration, 
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
+        }
+
+        public MixRestfulApiControllerBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<TDbContext> uow, UnitOfWorkInfo<MixCmsAccountContext> accUow, IQueueService<MessageQueueModel> queueService, IPortalHubClientService portalHub, IMixTenantService mixTenantService)
+             : base(httpContextAccessor, configuration,
+                  cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
+        {
+            HttpContextAccessor = httpContextAccessor;
+            this.uow = accUow;
+            this.queueService = queueService;
+            this.portalHub = portalHub;
+            MixTenantService = mixTenantService;
         }
 
         #region Routes

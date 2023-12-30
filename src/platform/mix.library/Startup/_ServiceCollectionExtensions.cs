@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Azure.Amqp.Framing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
@@ -41,7 +42,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromHours(4);
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.None;
                 options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.HttpOnly = true;
                 // Make the session cookie essential if you wish
@@ -194,10 +195,13 @@ namespace Microsoft.Extensions.DependencyInjection
                     Path.Combine(contentRootPath, MixFolders.StaticFiles)),
                 RequestPath = $"/{MixFolders.StaticFiles}"
             });
-
             // Use staticfile for wwwroot
             app.UseStaticFiles();
-
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(contentRootPath, MixFolders.TemplatesFolder))
+            });
             return app;
         }
 

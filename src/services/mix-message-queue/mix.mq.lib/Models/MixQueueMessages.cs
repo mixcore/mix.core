@@ -8,7 +8,7 @@ namespace Mix.Mq.Lib.Models
         where T : MessageQueueModel
     {
         private readonly ConcurrentQueue<MixTopicModel<T>> _topics = new();
-       
+
         public MixQueueMessages()
         {
         }

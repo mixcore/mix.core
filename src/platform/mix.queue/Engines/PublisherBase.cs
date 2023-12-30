@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Mix.Heart.Exceptions;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Shared.Services;
 using System;
@@ -42,6 +42,10 @@ namespace Mix.Queue.Engines
             {
                 var queuePublishers = new List<IQueuePublisher<MessageQueueModel>>();
                 var providerSetting = _configuration["MessageQueueSetting:Provider"];
+                if (string.IsNullOrEmpty(providerSetting))
+                {
+                    return default;
+                }
 
                 _provider = Enum.Parse<MixQueueProvider>(providerSetting);
 
@@ -67,17 +71,14 @@ namespace Mix.Queue.Engines
                                 _provider, googleSetting, topicName, _mixEndpointService));
                         break;
                     case MixQueueProvider.MIX:
-                        if (string.IsNullOrEmpty(_mixEndpointService.MixMq))
+                        if (_mixEndpointService.MixMq != null)
                         {
-                            return default;
+                            var mixSettingPath = _configuration.GetSection("MessageQueueSetting:Mix");
+                            var mixSetting = new MixQueueSetting();
+                            mixSettingPath.Bind(mixSetting);
+                            queuePublishers.Add(
+                               QueueEngineFactory.CreatePublisher<MessageQueueModel>(_provider, mixSetting, topicName, _mixEndpointService));
                         }
-
-                        var mixSettingPath = _configuration.GetSection("MessageQueueSetting:Mix");
-                        var mixSetting = new MixQueueSetting();
-                        mixSettingPath.Bind(mixSetting);
-                        queuePublishers.Add(
-                           QueueEngineFactory.CreatePublisher<MessageQueueModel>(_provider, mixSetting, topicName, _mixEndpointService));
-
                         break;
                 }
 

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Mix.Heart.Helpers;
 using Mix.Mq;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;

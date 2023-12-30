@@ -4,6 +4,7 @@ using Mix.Communicator.Models;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.MixDb;
 using Mix.Mixdb.Event.Services;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 using Mix.RepoDb.Interfaces;

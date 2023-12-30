@@ -3,8 +3,8 @@ using Mix.Auth.Constants;
 using Mix.Heart.Exceptions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Mix.Service.Models;
 using MySqlX.XDevAPI.Common;
 
@@ -137,7 +137,7 @@ namespace Mix.Common.Controllers
                 MixAppConfigEnums.Queue => MixAppConfigFilePaths.Queue,
                 MixAppConfigEnums.Storage => MixAppConfigFilePaths.Storage,
                 MixAppConfigEnums.Payments => MixAppConfigFilePaths.Payments,
-                MixAppConfigEnums.Kiotviet => MixAppConfigFilePaths.Kiotviet,
+                MixAppConfigEnums.Redis => MixAppConfigFilePaths.Redis,
                 MixAppConfigEnums.Log => MixAppConfigFilePaths.Log,
                 MixAppConfigEnums.RateLimit => MixAppConfigFilePaths.RateLimit,
                 MixAppConfigEnums.GoogleFirebase => MixAppConfigFilePaths.GoogleFirebase,

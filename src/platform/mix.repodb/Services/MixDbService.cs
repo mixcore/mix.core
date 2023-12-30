@@ -269,30 +269,46 @@ namespace Mix.RepoDb.Services
             _repository.InitTableName(tableName);
             foreach (var item in database.Relationships)
             {
-                List<QueryField> associationQueries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
-                var associations = await _associationRepository.GetListByAsync(associationQueries);
-                if (associations != null && associations.Count > 0)
+                string pIdName = $"{item.SourceDatabaseName.ToTitleCase()}Id";
+                _repository.InitTableName(item.DestinateDatabaseName);
+                List<QueryField> query = new() { new(pIdName, Operation.Equal, id) };
+                var nestedData = await _repository.GetListByAsync(query);
+                if (nestedData is null)
                 {
-                    var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
-                    _repository.InitTableName(item.DestinateDatabaseName);
-                    List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
-                    var nestedData = await _repository.GetListByAsync(query);
-                    if (nestedData is null)
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
-                    JArray result = new();
-                    foreach (var nd in nestedData)
-                    {
-                        result.Add(await ParseDataAsync(item.DestinateDatabaseName, nd));
-                    }
-                    data.Add(new JProperty(item.DisplayName, result));
-                }
-                else
+                JArray result = new();
+                foreach (var nd in nestedData)
                 {
-                    data.Add(new JProperty(item.DisplayName, new JArray()));
+                    result.Add(await ParseDataAsync(item.DestinateDatabaseName, nd));
                 }
+                data.Add(new JProperty(item.DisplayName, result));
+
+                //List<QueryField> associationQueries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
+                //var associations = await _associationRepository.GetListByAsync(associationQueries);
+                //if (associations != null && associations.Count > 0)
+                //{
+                //    var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
+                //    _repository.InitTableName(item.DestinateDatabaseName);
+                //    List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
+                //    var nestedData = await _repository.GetListByAsync(query);
+                //    if (nestedData is null)
+                //    {
+                //        continue;
+                //    }
+
+                //    JArray result = new();
+                //    foreach (var nd in nestedData)
+                //    {
+                //        result.Add(await ParseDataAsync(item.DestinateDatabaseName, nd));
+                //    }
+                //    data.Add(new JProperty(item.DisplayName, result));
+                //}
+                //else
+                //{
+                //    data.Add(new JProperty(item.DisplayName, new JArray()));
+                //}
             }
         }
 
@@ -571,6 +587,66 @@ namespace Mix.RepoDb.Services
 
             }
             return false;
+        }
+
+        public async Task<bool> MigrateInitNewDbContextDatabases(MixDatabaseContext dbContext, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            try
+            {
+                var strMixDbs = MixFileHelper.GetFile(
+                        "init-new-dbcontext-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
+                var obj = JObject.Parse(strMixDbs.Content);
+                var databases = obj.Value<JArray>("databases")?.ToObject<List<MixDatabase>>();
+                var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
+                if (databases != null)
+                {
+
+                    foreach (var database in databases)
+                    {
+                        string newDbName = $"{dbContext.SystemName}_{database.SystemName}";
+                        _repository.Init(newDbName, dbContext.DatabaseProvider, dbContext.ConnectionString);
+
+                        if (!_cmsUow.DbContext.MixDatabase.Any(m => m.SystemName == newDbName))
+                        {
+
+                            RepoDbMixDatabaseViewModel currentDb = new(database, _cmsUow);
+                            currentDb.Id = 0;
+                            currentDb.SystemName = newDbName;
+                            currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
+                            currentDb.MixDatabaseContextId = dbContext.Id;
+                            currentDb.CreatedDateTime = DateTime.UtcNow;
+                            currentDb.Columns = new();
+
+                            if (columns is not null)
+                            {
+                                var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
+                                foreach (var col in cols)
+                                {
+                                    col.Id = 0;
+                                    col.MixDatabaseName = newDbName;
+                                    currentDb.Columns.Add(new(col, _cmsUow));
+                                }
+                            }
+
+                            await currentDb.SaveAsync(cancellationToken);
+                            if (currentDb is { Columns.Count: > 0 })
+                            {
+                                await Migrate(currentDb, _databaseService.DatabaseProvider, _repository);
+
+                            }
+                        }
+                    }
+                    return true;
+
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
         }
 
         // TODO: check why need to restart application to load new database schema for Repo Db Context !important

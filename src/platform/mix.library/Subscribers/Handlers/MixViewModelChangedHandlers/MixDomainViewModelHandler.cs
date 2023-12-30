@@ -1,5 +1,6 @@
 ﻿using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
+using Mix.Mq.Lib.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

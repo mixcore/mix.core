@@ -1,4 +1,4 @@
-/* Sat Sep 09 2023 14:08:55 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
+/* Sat Dec 30 2023 10:43:01 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
   max-width: 100%; }
 
 fb-login {
@@ -33,9 +33,6 @@ mix-module-data-table .preview-container {
   max-height: 4em;
   overflow: hidden; }
 
-qr-code .qr-output canvas {
-  max-width: 100%; }
-
 #dlg-preview-popup .modal-body img {
   display: block;
   margin: 0 auto;
@@ -44,6 +41,9 @@ qr-code .qr-output canvas {
 
 #dlg-preview-popup pre {
   overflow: visible; }
+
+qr-code .qr-output canvas {
+  max-width: 100%; }
 
 /* PROPORTIONALLY resize the canvas to the intended viewing size */
 /* canvas{width:300px; height:380px;} */

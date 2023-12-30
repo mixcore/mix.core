@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Auth.Constants;
 using Mix.Lib.Interfaces;
+using Mix.Mq.Lib.Models;
 using Mix.SignalR.Interfaces;
 
 namespace Mix.Portal.Controllers

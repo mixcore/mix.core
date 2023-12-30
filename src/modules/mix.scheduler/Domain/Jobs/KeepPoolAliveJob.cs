@@ -1,5 +1,4 @@
 ﻿using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Mix.Shared.Services;
 using Quartz;
 using System;
@@ -8,6 +7,7 @@ using Mix.Quartz.Enums;
 using Mix.Quartz.Jobs;
 using Mix.Quartz.Models;
 using NuGet.Packaging.Signing;
+using Mix.Mq.Lib.Models;
 
 namespace Mix.Scheduler.Domain.Jobs
 {

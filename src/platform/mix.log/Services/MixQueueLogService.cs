@@ -6,7 +6,6 @@ using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Mix.Log.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
-using Mix.Queue.Engines.MixQueue;
 using Mix.Service.Services;
 using Newtonsoft.Json.Linq;
 

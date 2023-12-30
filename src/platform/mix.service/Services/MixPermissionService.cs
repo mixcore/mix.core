@@ -20,10 +20,11 @@ namespace Mix.Service.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         public Dictionary<string, string[]> RoleEndpoints { get; private set; }
         private MixCmsAccountContext accountDbContext;
+        private UnitOfWorkInfo<MixDbDbContext> uow;
         private int? _tenantId;
         public MixPermissionService(
                 IHttpContextAccessor httpContextAccessor)
-        {
+        { 
             _httpContextAccessor = httpContextAccessor;
             _databaseService = new(httpContextAccessor);
             _tenantId = _httpContextAccessor.HttpContext?.Session.GetInt32(MixRequestQueryKeywords.TenantId) ?? 1;
@@ -33,9 +34,9 @@ namespace Mix.Service.Services
         {
             if (!GlobalConfigService.Instance.IsInit)
             {
-                UnitOfWorkInfo<MixDbDbContext> uow = new(new MixDbDbContext(_databaseService));
                 try
                 {
+                    uow = new(new MixDbDbContext(_databaseService));
                     RoleEndpoints = new Dictionary<string, string[]>();
                     accountDbContext = new MixCmsAccountContext(_databaseService);
                     using var cmsDbContext = new MixCmsContext(_databaseService);

@@ -5,7 +5,6 @@ using Mix.Heart.Helpers;
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Mix.Service.Interfaces;
 using Mix.Service.Models;
 using Mix.Signalr.Hub.Models;

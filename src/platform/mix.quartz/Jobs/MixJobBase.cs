@@ -1,6 +1,5 @@
 ﻿using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using System;
 using System.Threading.Tasks;
 

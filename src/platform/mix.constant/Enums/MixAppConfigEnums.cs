@@ -3,7 +3,7 @@
     public enum MixAppConfigEnums
     {
         Global,
-        Kiotviet,
+        Redis,
         Log,
         RateLimit,
         Authentication,

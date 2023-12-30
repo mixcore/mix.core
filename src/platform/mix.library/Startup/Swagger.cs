@@ -57,8 +57,8 @@ namespace Microsoft.Extensions.DependencyInjection
             string routeTemplate = "swagger/{documentName}/swagger.json";
             string endPoint = $"/swagger/{version}/swagger.json";
 
-            if (isDevelop)
-            {
+            //if (isDevelop)
+            //{
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 
                 app.UseSwagger(opt =>
@@ -76,7 +76,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     c.EnableFilter();
                     c.EnableDeepLinking();
                 });
-            }
+            //}
             return app;
         }
 
