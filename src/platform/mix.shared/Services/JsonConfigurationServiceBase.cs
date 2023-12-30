@@ -13,7 +13,6 @@ namespace Mix.Shared.Services
         {
             FilePath = filePath;
             LoadAppSettings();
-            //WatchFile();
         }
 
         public T GetConfig<T>(string name, T defaultValue = default)
