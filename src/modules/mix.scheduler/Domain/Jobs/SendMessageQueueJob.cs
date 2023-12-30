@@ -1,6 +1,6 @@
-﻿using Mix.Quartz.Jobs;
+﻿using Mix.Mq.Lib.Models;
+using Mix.Quartz.Jobs;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Newtonsoft.Json.Linq;
 using Quartz;
 using System;

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Auth.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Models.Common;
+using Mix.Mq.Lib.Models;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;

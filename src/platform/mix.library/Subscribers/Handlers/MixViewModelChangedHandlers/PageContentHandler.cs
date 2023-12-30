@@ -1,4 +1,6 @@
-﻿namespace Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers
+﻿using Mix.Mq.Lib.Models;
+
+namespace Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers
 {
     public class PageContentHandler
     {

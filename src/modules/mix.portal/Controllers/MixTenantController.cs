@@ -5,6 +5,7 @@ using Mix.Database.Entities.Account;
 using Mix.Heart.Helpers;
 using Mix.Identity.Enums;
 using Mix.Lib.Interfaces;
+using Mix.Mq.Lib.Models;
 using Mix.SignalR.Interfaces;
 
 namespace Mix.Portal.Controllers

@@ -56,8 +56,13 @@ namespace Mix.Mq.Lib.Models
             var messages = Messages.Where(m => !m.Subscriptions.Any(s => s.Id == subscriptionId));
             while (i <= length && messages.Any())
             {
-                T data = messages.First();
-                if (!data.Subscriptions.Any(m => m.Id == subscription.Id))
+                T? data = messages.FirstOrDefault();
+                if (data == null)
+                {
+                    Messages.TryDequeue(out _);
+                    continue;
+                }
+                if (!data!.Subscriptions.Any(m => m.Id == subscription.Id))
                 {
                     data.Subscriptions.Add(subscription);
                     result.Add(data);

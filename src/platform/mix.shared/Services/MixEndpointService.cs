@@ -8,7 +8,6 @@
 
         public void SetDefaultDomain(string domain)
         {
-            DefaultDomain = domain;
         }
 
         protected override void LoadAppSettings()
@@ -28,7 +27,7 @@
             get => GetConfig<string>(MixModuleNames.MixMq) ?? DefaultDomain;
             set => SetConfig(MixModuleNames.MixMq, value);
         }
-         public string Account
+        public string Account
         {
             get => GetConfig<string>(MixModuleNames.Account) ?? DefaultDomain;
             set => SetConfig(MixModuleNames.Account, value);

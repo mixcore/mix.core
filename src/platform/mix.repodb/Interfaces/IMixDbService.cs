@@ -1,5 +1,7 @@
 ﻿using Mix.Constant.Enums;
+using Mix.Database.Entities.Cms;
 using Mix.Heart.Models;
+using Mix.RepoDb.ViewModels;
 using Mix.Shared.Dtos;
 using Newtonsoft.Json.Linq;
 
@@ -21,5 +23,6 @@ namespace Mix.RepoDb.Interfaces
         Task<JObject?> GetByParentIdAsync(string tableName, MixContentType parentType, int parentId, bool loadNestedData);
         Task<JObject> ParseDataAsync(string tableName, dynamic obj);
         Task<bool> MigrateSystemDatabases(CancellationToken cancellationToken = default);
+        Task<bool> MigrateInitNewDbContextDatabases(MixDatabaseContext dbContext, CancellationToken cancellationToken = default);
     }
 }

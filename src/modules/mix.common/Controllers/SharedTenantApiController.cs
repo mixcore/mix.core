@@ -4,8 +4,8 @@ using Mix.Common.Domain.ViewModels;
 using Mix.Common.Models;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 

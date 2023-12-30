@@ -124,6 +124,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IOAuthTokenService, OAuthTokenService>();
             services.AddScoped<IOAuthTokenRevocationService, OAuthTokenRevocationService>();
             services.AddScoped<MixIdentityService>();
+
+           
             return services;
         }
 

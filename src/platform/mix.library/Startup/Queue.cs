@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Services;
 using System.Reflection;

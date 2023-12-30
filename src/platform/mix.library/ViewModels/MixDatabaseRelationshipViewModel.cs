@@ -63,26 +63,26 @@ namespace Mix.Lib.ViewModels
             await base.Validate(cancellationToken);
         }
 
-        protected override async Task SaveEntityRelationshipAsync(MixDatabaseRelationship parentEntity, CancellationToken cancellationToken = default)
-        {
-            if (!Context.MixDatabaseColumn.Any(m => m.MixDatabaseName == DestinateDatabaseName && m.SystemName == ReferenceColumnName))
-            {
-                var srcDb = Context.MixDatabase.FirstOrDefault(m => m.SystemName == SourceDatabaseName);
-                var destDb = Context.MixDatabase.FirstOrDefault(m => m.SystemName == DestinateDatabaseName);
-                var refCol = new MixDatabaseColumnViewModel(UowInfo)
-                {
-                    MixDatabaseName = DestinateDatabaseName,
-                    MixDatabaseId = destDb.Id,
-                    DataType = MixDataType.Reference,
-                    CreatedBy = CreatedBy,
-                    DisplayName = ReferenceColumnName.ToTitleCase(),
-                    SystemName = ReferenceColumnName
-                };
+        //protected override async Task SaveEntityRelationshipAsync(MixDatabaseRelationship parentEntity, CancellationToken cancellationToken = default)
+        //{
+        //    if (!Context.MixDatabaseColumn.Any(m => m.MixDatabaseName == DestinateDatabaseName && m.SystemName == ReferenceColumnName))
+        //    {
+        //        var srcDb = Context.MixDatabase.FirstOrDefault(m => m.SystemName == SourceDatabaseName);
+        //        var destDb = Context.MixDatabase.FirstOrDefault(m => m.SystemName == DestinateDatabaseName);
+        //        var refCol = new MixDatabaseColumnViewModel(UowInfo)
+        //        {
+        //            MixDatabaseName = DestinateDatabaseName,
+        //            MixDatabaseId = destDb.Id,
+        //            DataType = MixDataType.Reference,
+        //            CreatedBy = CreatedBy,
+        //            DisplayName = ReferenceColumnName.ToTitleCase(),
+        //            SystemName = ReferenceColumnName
+        //        };
 
-                await refCol.SaveAsync(cancellationToken);
-                ModifiedEntities.AddRange(refCol.ModifiedEntities);
-            }
-        }
+        //        await refCol.SaveAsync(cancellationToken);
+        //        ModifiedEntities.AddRange(refCol.ModifiedEntities);
+        //    }
+        //}
 
         #endregion
     }

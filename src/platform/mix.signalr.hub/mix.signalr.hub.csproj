@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\core\mix-heart\src\Mix.Heart\mix.heart.csproj" />
+		<ProjectReference Include="..\core\mix-heart\src\mix.heart\mix.heart.csproj" />
 		<ProjectReference Include="..\mix.log\mix.log.lib.csproj" />
 		<ProjectReference Include="..\mix.service\mix.service.csproj" />
 		<Using Include="Mix.Log.Lib.Interfaces" />

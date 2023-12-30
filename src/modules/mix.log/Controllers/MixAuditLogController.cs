@@ -15,8 +15,8 @@ using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using Mix.Log.Lib.Models;
 using Mix.Log.Lib.ViewModels;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Mix.Shared.Dtos;
 using Mix.SignalR.Interfaces;
 

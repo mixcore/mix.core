@@ -8,9 +8,9 @@ using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Services;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Queue.Services;
 using Mix.Shared.Helpers;
@@ -79,6 +79,11 @@ namespace Mix.Queue.Engines
             try
             {
                 var providerSetting = _configuration["MessageQueueSetting:Provider"];
+                if (string.IsNullOrEmpty(providerSetting))
+                {
+                    return default;
+                }
+
                 var provider = Enum.Parse<MixQueueProvider>(providerSetting);
                 var mixEndpointService = GetRequiredService<MixEndpointService>();
                 switch (provider)

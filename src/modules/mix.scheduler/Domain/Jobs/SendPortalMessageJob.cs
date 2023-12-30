@@ -1,5 +1,4 @@
 ﻿using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Mix.SignalR.Models;
 using Newtonsoft.Json.Linq;
 using Quartz;
@@ -7,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Mix.Quartz.Jobs;
 using Mix.SignalR.Interfaces;
+using Mix.Mq.Lib.Models;
 
 namespace Mix.Scheduler.Domain.Jobs
 {

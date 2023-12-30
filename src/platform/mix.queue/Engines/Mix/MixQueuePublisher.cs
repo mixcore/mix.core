@@ -1,4 +1,5 @@
 ﻿using Mix.Mq;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
@@ -27,17 +28,24 @@ namespace Mix.Queue.Engines.MixQueue
 
         public Task SendMessage(T message)
         {
-            if (message.Id == default)
+            try
             {
-                message.Id = Guid.NewGuid();
+                if (message.Id == default)
+                {
+                    message.Id = Guid.NewGuid();
+                }
+                message.CreatedDate = DateTime.UtcNow;
+                _mixMqSubscriber.Client.Publish(new PublishMessageRequest
+                {
+                    TopicId = _topicId,
+                    Message = JObject.FromObject(message).ToString(Newtonsoft.Json.Formatting.None)
+                });
             }
-            message.CreatedDate = DateTime.UtcNow;
-            _mixMqSubscriber.Client.Publish(new PublishMessageRequest
+            catch (Exception ex)
             {
-                TopicId = _topicId,
-                Message = JObject.FromObject(message).ToString(Newtonsoft.Json.Formatting.None)
-            });
-
+                Console.WriteLine($"Cannot publish message to {_mixEndpointService.MixMq}");
+                Console.WriteLine(ex);
+            }
             return Task.CompletedTask;
         }
 

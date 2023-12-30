@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\core\mix-heart\src\Mix.Heart\mix.heart.csproj" />
+    <ProjectReference Include="..\core\mix-heart\src\mix.heart\mix.heart.csproj" />
   </ItemGroup>
 
 </Project>

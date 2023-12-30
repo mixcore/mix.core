@@ -15,7 +15,7 @@ namespace Mix.SignalR.Models
         public SignalRMessageModel(object data)
         {
             Type valueType = data.GetType();
-            if (valueType.IsArray || valueType.IsAssignableTo(typeof(IList)))
+            if (valueType.IsArray)
             {
                 Data = ReflectionHelper.ParseArray(data).ToString(Newtonsoft.Json.Formatting.None);
             }

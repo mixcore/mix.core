@@ -4,7 +4,6 @@ using Mix.Shared.Extensions;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
 using Mix.Tenancy.Domain.Dtos;

@@ -2,6 +2,7 @@
 using Mix.Auth.Constants;
 using Mix.Heart.Helpers;
 using Mix.Lib.Interfaces;
+using Mix.Mq.Lib.Models;
 using Mix.RepoDb.Repositories;
 using RepoDb;
 using RepoDb.Enumerations;

@@ -51,10 +51,10 @@ namespace Mix.Lib.Middlewares
                         await configService.Reload();
                     }
 
-                    if (permissionService.RoleEndpoints == null)
-                    {
-                        await permissionService.Reload();
-                    }
+                    //if (permissionService.RoleEndpoints == null)
+                    //{
+                    //    await permissionService.Reload();
+                    //}
 
                     await _next.Invoke(context);
                 }

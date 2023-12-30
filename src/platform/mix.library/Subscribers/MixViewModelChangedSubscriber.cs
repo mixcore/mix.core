@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Mix.Heart.Model;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 using Org.BouncyCastle.Asn1.X509.Qualified;

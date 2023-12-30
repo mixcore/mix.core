@@ -1,4 +1,4 @@
-﻿using Mix.Queue.Models;
+﻿using Mix.Mq.Lib.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

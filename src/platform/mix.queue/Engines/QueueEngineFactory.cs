@@ -1,8 +1,8 @@
-﻿using Mix.Queue.Engines.Azure;
+﻿using Mix.Mq.Lib.Models;
+using Mix.Queue.Engines.Azure;
 using Mix.Queue.Engines.GooglePubSub;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Shared.Services;
 using System;

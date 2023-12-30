@@ -13,7 +13,6 @@ namespace Mix.Shared.Services
         {
             FilePath = filePath;
             LoadAppSettings();
-            WatchFile();
         }
 
         public T GetConfig<T>(string name, T defaultValue = default)
@@ -63,21 +62,6 @@ namespace Mix.Shared.Services
                 return false;
             }
         }
-
-        protected void WatchFile()
-        {
-            watcher.Path = FilePath[..FilePath.LastIndexOf('/')];
-            watcher.Filter = "";
-            watcher.Changed += new FileSystemEventHandler(OnChanged);
-            watcher.EnableRaisingEvents = true;
-        }
-
-        private void OnChanged(object sender, FileSystemEventArgs e)
-        {
-            Thread.Sleep(500);
-            LoadAppSettings();
-        }
-
         protected virtual void LoadAppSettings()
         {
             var settings = MixFileHelper.GetFileByFullName($"{FilePath}{MixFileExtensions.Json}", true);

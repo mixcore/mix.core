@@ -9,8 +9,7 @@ namespace Mix.Lib.Middlewares
 {
     public class UnitOfWorkMiddleware(RequestDelegate next, IConfiguration configuration)
     {
-        private readonly RequestDelegate _next = next;
-        private static readonly List<Type> UowInfos = [];
+        private static readonly List<Type> UowInfos = new();
         private readonly GlobalSettingsModel _globalConfig = configuration.Get<GlobalSettingsModel>();
 
         public static void AddUnitOfWork<T>() where T : IUnitOfWorkInfo
@@ -27,11 +26,11 @@ namespace Mix.Lib.Middlewares
 
             if (GlobalConfigService.Instance.InitStatus == InitStep.Blank || MixCmsHelper.CheckStaticFileRequest(context.Request.Path))
             {
-                await _next.Invoke(context);
+                await next.Invoke(context);
             }
             else
             {
-                await _next.Invoke(context);
+                await next.Invoke(context);
 
                 foreach (var uowType in UowInfos)
                 {

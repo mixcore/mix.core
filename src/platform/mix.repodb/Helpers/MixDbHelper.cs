@@ -5,6 +5,7 @@ using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Mix.RepoDb.ViewModels;
 using Mix.Shared.Services;
+using MySqlX.XDevAPI.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -48,23 +49,7 @@ namespace Mix.RepoDb.Helpers
                     {
                         if (col != null)
                         {
-                            if (col.DataType == MixDataType.Json || col.DataType == MixDataType.ArrayRadio)
-                            {
-                                result.Add(new JProperty(pr.Name.ToTitleCase(), JObject.FromObject(pr.Value).ToString(Formatting.None)));
-                            }
-                            else if (col.DataType == MixDataType.Array || col.DataType == MixDataType.ArrayMedia)
-                            {
-
-                                result.Add(new JProperty(pr.Name.ToTitleCase(), JArray.FromObject(pr.Value).ToString(Formatting.None)));
-                            }
-                            else if (col.DataType == MixDataType.Boolean)
-                            {
-                                result.Add(new JProperty(pr.Name.ToTitleCase(), bool.Parse(pr.Value.ToString())));
-                            }
-                            else
-                            {
-                                result.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
-                            }
+                            result.Add(new JProperty(pr.Name.ToTitleCase(), ParseObjectValue(col.DataType, pr.Value)));
                         }
                         else
                         {
@@ -222,6 +207,33 @@ namespace Mix.RepoDb.Helpers
             {
                 throw new MixException(MixErrorStatus.Badrequest, ex);
             }
+        }
+
+        public static object? ParseObjectValue(MixDataType? dataType, JToken value)
+        {
+            if (value != null)
+            {
+                switch (dataType)
+                {
+                    case MixDataType.Boolean:
+                        return bool.Parse(value.ToString());
+                    case MixDataType.Array:
+                    case MixDataType.ArrayMedia:
+                        return JArray.FromObject(value).ToString(Formatting.None);
+                    case MixDataType.Json:
+                    case MixDataType.ArrayRadio:
+                        return JObject.FromObject(value).ToString(Formatting.None);
+                    case MixDataType.Integer:
+                    case MixDataType.Reference:
+                        return int.Parse(value.ToString());
+                    case MixDataType.Double:
+                        return double.Parse(value.ToString());
+                    default:
+                        return value.ToString();
+
+                }
+            }
+            return null;
         }
     }
 }
