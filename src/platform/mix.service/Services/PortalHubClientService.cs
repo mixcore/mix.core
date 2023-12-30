@@ -1,6 +1,7 @@
 ﻿using MessagePack;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Enums;
@@ -28,8 +29,12 @@ namespace Mix.Service.Services
 
         private readonly IServiceProvider _serviceProvider;
         private readonly IMixTenantService _mixTenantService;
-        public PortalHubClientService(IServiceProvider serviceProvider, MixEndpointService mixEndpointService, IMixTenantService mixTenantService)
-            : base(HubEndpoints.PortalHub, mixEndpointService)
+        public PortalHubClientService(
+            IServiceProvider serviceProvider, 
+            MixEndpointService mixEndpointService, 
+            IMixTenantService mixTenantService, 
+            ILogger<PortalHubClientService> logger)
+            : base(HubEndpoints.PortalHub, mixEndpointService, logger)
         {
             _serviceProvider = serviceProvider;
             _mixTenantService = mixTenantService;

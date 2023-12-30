@@ -33,7 +33,6 @@ namespace Mix.RepoDb.Services
     {
         private const string LastModifiedFieldName = "LastModified";
         private readonly MixRepoDbRepository _repository;
-        private readonly MixRepoDbRepository _associationRepository;
         private readonly IMixMemoryCacheService _memoryCache;
         private RepoDbMixDatabaseViewModel? _mixDb;
         #region Properties
@@ -65,8 +64,6 @@ namespace Mix.RepoDb.Services
         {
             _cmsUow = uow;
             _repository = repository;
-            _associationRepository = new MixRepoDbRepository(cache, databaseService, uow);
-            _associationRepository.InitTableName(nameof(MixDatabaseAssociation));
             _memoryCache = memoryCache;
         }
 
@@ -130,12 +127,13 @@ namespace Mix.RepoDb.Services
                     return default;
                 }
 
+                _repository.InitTableName(GetRelationshipDbName());
                 foreach (var item in database.Relationships)
                 {
                     if (loadNestedData)
                     {
                         List<QueryField> associationQueries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
-                        var associations = await _associationRepository.GetListByAsync(associationQueries);
+                        var associations = await _repository.GetListByAsync(associationQueries);
                         if (associations is null)
                         {
                             continue;
@@ -247,7 +245,12 @@ namespace Mix.RepoDb.Services
         #endregion
 
         #region Helper
-
+        private string GetRelationshipDbName()
+        {
+            return _mixDb.MixDatabaseContextId.HasValue
+                        ? $"{_mixDb.MixDatabaseContext.SystemName}_{MixDatabaseNames.DATA_RELATIONSHIP}"
+                        : MixDatabaseNames.DATA_RELATIONSHIP;
+        }
         public static string GetCacheFolder(string databaseName)
         {
             return $"{MixFolders.MixDbCacheFolder}/{databaseName}";
@@ -261,11 +264,11 @@ namespace Mix.RepoDb.Services
             {
                 return;
             }
-
+            _repository.InitTableName(GetRelationshipDbName());
             foreach (var item in database.Relationships)
             {
                 List<QueryField> queries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, data.Value<int>("id"));
-                var associations = await _associationRepository.GetListByAsync(queries);
+                var associations = await _repository.GetListByAsync(queries);
                 if (associations is { Count: > 0 })
                 {
                     var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
@@ -294,12 +297,13 @@ namespace Mix.RepoDb.Services
                 var data = ReflectionHelper.ParseObject(item);
                 if (loadNestedData)
                 {
+                    _repository.InitTableName(GetRelationshipDbName());
                     foreach (var rel in database.Relationships)
                     {
                         var id = data.Value<int>("id");
 
                         List<QueryField> nestedQueries = GetAssociationQueries(rel.SourceDatabaseName, rel.DestinateDatabaseName, id);
-                        var associations = await _associationRepository.GetListByAsync(nestedQueries);
+                        var associations = await _repository.GetListByAsync(nestedQueries);
                         if (associations is { Count: > 0 })
                         {
                             var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();

@@ -97,7 +97,6 @@ namespace Mix.Tenancy.Controllers
                 await _mixTenantService.Reload();
                 Session.Put(MixRequestQueryKeywords.Tenant, _mixTenantService.AllTenants.First());
                 _mixEndpointService.SetDefaultDomain($"https://{model.PrimaryDomain}");
-
                 return Ok();
             }
             catch (Exception ex)

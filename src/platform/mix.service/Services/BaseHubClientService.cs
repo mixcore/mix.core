@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Mix.SignalR.Interfaces;
 using Mix.Heart.Helpers;
 using Mix.Heart.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace Mix.Service.Services
 {
@@ -21,13 +22,15 @@ namespace Mix.Service.Services
     {
         public HubConnection Connection { get; set; }
         protected string HubName;
+        protected ILogger _logger;
         protected string AccessToken;
         public bool IsStarted => Connection != null;
         protected readonly MixEndpointService MixEndpointService;
-        protected BaseHubClientService(string hub, MixEndpointService mixEndpointService)
+        protected BaseHubClientService(string hub, MixEndpointService mixEndpointService, ILogger logger)
         {
             HubName = hub;
             MixEndpointService = mixEndpointService;
+            _logger = logger;
         }
 
         public Task SendMessageAsync(string title, string description, object data, MessageType messageType = MessageType.Info)
@@ -49,10 +52,11 @@ namespace Mix.Service.Services
                 {
                     await StartConnection();
                     await Connection.InvokeAsync(HubMethods.SendPrivateMessage, message, connectionId, selfReceive);
+                    _logger.LogInformation("Start SignalR client successfully");
                 }
                 else
                 {
-                    Console.WriteLine("Cannot Start SignalR Hub: MixEndpointService.Messenger is null or empty");
+                    _logger.LogWarning("Cannot Start SignalR Hub: MixEndpointService.Messenger is null or empty");
                 }
             }
             catch (Exception ex)
@@ -72,7 +76,7 @@ namespace Mix.Service.Services
                 }
                 else
                 {
-                    Console.WriteLine("Cannot Start SignalR Hub: MixEndpointService.Messenger is null or empty");
+                    _logger.LogWarning($"{_logger.GetType().FullName}: Cannot Start SignalR Hub: MixEndpointService.Messenger is null or empty");
                 }
             }
             catch (Exception ex)

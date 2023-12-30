@@ -39,7 +39,7 @@ namespace Mix.Shared.Services
 
         public void SetConfig<T>(string name, T value)
         {
-            AppSettings[name] = object.Equals(value, default(T)) ? JToken.FromObject(value) : null;
+            AppSettings[name] = object.Equals(value, default(T)) ? JToken.FromObject(value) : value.ToString();
             SaveSettings();
         }
 
