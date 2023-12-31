@@ -24,7 +24,7 @@ namespace Mix.Service.Services
         protected string HubName;
         protected ILogger _logger;
         protected string AccessToken;
-        public bool IsStarted => Connection != null;
+        public bool IsStarting = false;
         protected readonly MixEndpointService MixEndpointService;
         protected BaseHubClientService(string hub, MixEndpointService mixEndpointService, ILogger logger)
         {
@@ -100,14 +100,16 @@ namespace Mix.Service.Services
             {
                 try
                 {
-                    if (Connection.State == HubConnectionState.Disconnected)
+                    if (!IsStarting && Connection.State == HubConnectionState.Disconnected)
                     {
+                        IsStarting = true;
                         await Connection.StartAsync();
                     }
                 }
 
                 catch (Exception ex)
                 {
+                    IsStarting = false;
                     Console.WriteLine(ex);
                 }
             }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
-using Mix.Queue.Engines.MixQueue;
 
 namespace Mix.Lib.Publishers
 {
@@ -12,8 +12,9 @@ namespace Mix.Lib.Publishers
         public MixBackgroundTaskPublisher(
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
-            MixEndpointService mixEndpointService)
-            : base(TopicId, queueService, configuration, mixEndpointService)
+            MixEndpointService mixEndpointService,
+            ILogger<MixBackgroundTaskPublisher> logger)
+            : base(TopicId, queueService, configuration, mixEndpointService, logger)
         {
         }
     }

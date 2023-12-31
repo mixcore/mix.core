@@ -1,5 +1,6 @@
 ﻿using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
+using Mix.Shared.Interfaces;
 using Mix.Tenancy.Domain.Interfaces;
 using Mix.Tenancy.Domain.Services;
 

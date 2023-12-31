@@ -22,6 +22,8 @@
 		<PackageReference Include="Google.Protobuf" Version="3.25.1" />
 		<PackageReference Include="Grpc.AspNetCore" Version="2.59.0" />
 		<PackageReference Include="Grpc.Net.Client" Version="2.59.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
+		<PackageReference Include="Grpc.Net.Client.Web" Version="2.60.0-pre1" />
 		<PackageReference Include="Grpc.Tools" Version="2.60.0-pre1" PrivateAssets="All">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -30,7 +32,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\services\mix-message-queue\mix.mq\mix.mq.csproj" />
 		<ProjectReference Include="..\mix.shared\mix.shared.csproj" />
 	</ItemGroup>
 

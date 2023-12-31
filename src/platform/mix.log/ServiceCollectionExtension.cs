@@ -39,9 +39,6 @@ namespace Mix.Log.Lib
             {
                 services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
                 services.TryAddSingleton<IMixQueueLog, MixQueueLogService>();
-
-                services.AddHostedService<MixLogPublisher>();
-                services.AddHostedService<MixLogSubscriber>();
             }
             return services;
         }

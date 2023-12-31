@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Mix.Constant.Constants;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
@@ -13,8 +14,9 @@ namespace Mix.RepoDb.Publishers
         public MixRepoDbPublisher(
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
-            MixEndpointService mixEndpointService)
-            : base(MixQueueTopics.MixRepoDb, queueService, configuration, mixEndpointService)
+            MixEndpointService mixEndpointService,
+            ILogger<MixRepoDbPublisher> logger)
+            : base(MixQueueTopics.MixRepoDb, queueService, configuration, mixEndpointService, logger)
         {
 
         }

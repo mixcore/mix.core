@@ -3,12 +3,11 @@ using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Mix.Heart.Extensions;
-using Mix.Mq;
 using Mix.Mq.Lib.Models;
 using Newtonsoft.Json.Linq;
 using System.Threading;
 
-namespace Mix.Mq.Services;
+namespace Mix.Mq.Server.Domain.Services;
 
 public class MixMqService : MixMq.MixMqBase
 {

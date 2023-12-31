@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Mix.Heart.Exceptions;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines.MixQueue;
@@ -23,16 +24,19 @@ namespace Mix.Queue.Engines
         private const int MaxConsumeLength = 100;
         private readonly string _topicId;
         private MixQueueProvider _provider;
+        protected ILogger<PublisherBase> _logger;
         protected PublisherBase(
             string topicId,
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
-            MixEndpointService mixEndpointService)
+            MixEndpointService mixEndpointService,
+            ILogger<PublisherBase> logger)
         {
             _queueService = queueService;
             _configuration = configuration;
             _topicId = topicId;
             _mixEndpointService = mixEndpointService;
+            _logger = logger;
         }
 
         private List<IQueuePublisher<MessageQueueModel>> CreatePublisher(
@@ -108,8 +112,20 @@ namespace Mix.Queue.Engines
                             foreach (var publisher in _publishers)
                             {
                                 // Publish messages to current Message Queue Provider
-                                // If use Mix Queue => push to MixQueueMessages<MessageQueueModel> queue
-                                await publisher.SendMessages(inQueueItems);
+                                // If cannot send msg, try to wait 1s then retry
+                                bool publishing = true;
+                                while (publishing)
+                                {
+                                    try
+                                    {
+                                        await publisher.SendMessages(inQueueItems);
+                                        publishing = false;
+                                    }
+                                    catch (Exception ex) {
+                                        _logger.LogError(ex, $"{_logger.GetType().FullName}: Cannot Send message to queue");
+                                        await Task.Delay(1000, cancellationToken);
+                                    }
+                                }
                             }
                         }
                         isProcessing = false;

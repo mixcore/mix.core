@@ -10,7 +10,6 @@ namespace Mix.Storage.Lib.Extensions
         public static IServiceCollection AddMixStorage(this IServiceCollection services)
         {
             services.TryAddScoped<MixStorageService>();
-            services.AddHostedService<StorageBackgroundTaskSubscriber>();
             return services;
         }
     }

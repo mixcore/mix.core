@@ -1,5 +1,5 @@
-﻿using Mix.Lib.Interfaces;
-using Mix.Services.Graphql.Lib;
+﻿using Mix.Services.Graphql.Lib;
+using Mix.Shared.Interfaces;
 
 namespace Mix.Services.Graphql.Domain
 {

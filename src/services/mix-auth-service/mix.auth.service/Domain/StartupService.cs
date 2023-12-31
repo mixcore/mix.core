@@ -1,5 +1,5 @@
 ﻿using Mix.Database.Entities.Account;
-using Mix.Lib.Interfaces;
+using Mix.Shared.Interfaces;
 
 namespace mix.auth.service.Domain
 {

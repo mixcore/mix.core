@@ -34,15 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddScoped<EmailService>();
             services.TryAddScoped<IMixEdmService, MixEdmService>();
-
-            services.AddHostedService<MixViewModelChangedPublisher>();
-            services.AddHostedService<MixViewModelChangedSubscriber>();
-
-            services.AddHostedService<MixBackgroundTaskPublisher>();
-            services.AddHostedService<MixBackgroundTaskSubscriber>();
-            services.AddHostedService<MixDbCommandPublisher>();
-            services.AddHostedService<MixDbCommandSubscriber>();
-
+            
             MixPermissionService permissionSrv = services.GetService<MixPermissionService>();
             permissionSrv.Reload().GetAwaiter().GetResult();
             return services;
