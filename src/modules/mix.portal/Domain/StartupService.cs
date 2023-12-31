@@ -1,6 +1,6 @@
-﻿using Mix.Lib.Interfaces;
-using Mix.Portal.Domain.Interfaces;
+﻿using Mix.Portal.Domain.Interfaces;
 using Mix.Portal.Domain.Services;
+using Mix.Shared.Interfaces;
 
 namespace Mix.Portal.Domain
 {

@@ -1,18 +1,10 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using Humanizer;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Azure.Amqp.Framing;
-using Mix.Auth.Constants;
-using Mix.Database.Constants;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
 using Mix.Heart.Model;
 using Mix.Lib.Interfaces;
-using Mix.Lib.ViewModels.ReadOnly;
 using Mix.Mq.Lib.Models;
-using Mix.Mq.Services;
 using Mix.RepoDb.Helpers;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
@@ -21,15 +13,12 @@ using Mix.Service.Commands;
 using Mix.Service.Interfaces;
 using Mix.Service.Models;
 using Mix.Shared.Models;
-using Mix.Shared.Services;
 using Mix.SignalR.Enums;
-using Mix.SignalR.Hubs;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
-using System.Linq.Expressions;
 
 namespace Mix.Portal.Controllers
 {

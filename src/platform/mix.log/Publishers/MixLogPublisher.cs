@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Mix.Constant.Constants;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
@@ -15,8 +16,9 @@ namespace Mix.Log.Lib.Publishers
         public MixLogPublisher(
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
-            MixEndpointService mixEndpointService)
-            : base(TopicId, queueService, configuration, mixEndpointService)
+            MixEndpointService mixEndpointService,
+            ILogger<MixLogPublisher> logger)
+            : base(TopicId, queueService, configuration, mixEndpointService, logger)
         {
         }
     }

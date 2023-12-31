@@ -1,6 +1,6 @@
-﻿
+﻿using Mix.Constant.Enums;
 
-namespace Mix.Queue.Models
+namespace Mix.Mq.Lib.Models
 {
     public class MixSubscriptionModel
     {

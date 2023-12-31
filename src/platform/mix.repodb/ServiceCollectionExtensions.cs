@@ -19,8 +19,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IMixDbDataService, MixDbDataService>();
             services.TryAddScoped<MixRepoDbRepository>();
             services.TryAddScoped<IMixDbService, MixDbService>();
-            services.AddHostedService<MixRepoDbPublisher>();
-            services.AddHostedService<MixRepoDbSubscriber>();
 
             return services;
         }

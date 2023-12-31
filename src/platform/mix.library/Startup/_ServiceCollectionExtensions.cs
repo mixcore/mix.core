@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
-using Mix.Lib.Interfaces;
 using Mix.Lib.Middlewares;
 using Mix.Mixdb.Event.Services;
 using Mix.Service.Interfaces;

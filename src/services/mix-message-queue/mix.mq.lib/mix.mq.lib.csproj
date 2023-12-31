@@ -17,6 +17,8 @@
     <ProjectReference Include="..\..\..\applications\mixcore.host.aspire\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\..\platform\core\mix-heart\src\mix.heart\mix.heart.csproj" />
     <ProjectReference Include="..\..\..\platform\mix.constant\mix.constant.csproj" />
+    <ProjectReference Include="..\..\..\platform\mix.queue\mix.queue.csproj" />
+    <ProjectReference Include="..\..\..\platform\mix.shared\mix.shared.csproj" />
   </ItemGroup>
 
 </Project>

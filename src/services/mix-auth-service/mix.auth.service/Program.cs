@@ -7,14 +7,13 @@ using Mix.Log.Lib;
 using Microsoft.Azure.Amqp.Framing;
 using Mix.Lib.Middlewares;
 
-if (!Directory.Exists(MixFolders.MixContentSharedFolder))
+if (Directory.Exists("../../../applications/mixcore/mixcontent"))
 {
-    MixFileHelper.CopyFolder($"../{MixFolders.MixCoreConfigurationFolder}", MixFolders.MixContentSharedFolder);
+    MixFileHelper.CopyFolder("../../../applications/mixcore/mixcontent", MixFolders.MixContentFolder);
 }
-var builder = WebApplication.CreateBuilder(args);
-//var builder = MixCmsHelper.CreateWebApplicationBuilder(args);
+var builder = MixCmsHelper.CreateWebApplicationBuilder(args);
 
-//builder.AddServiceDefaults();
+builder.AddServiceDefaults();
 
 // Add services to the container.
 
@@ -31,6 +30,8 @@ builder.Services.AddMixAuthorize<MixCmsAccountContext>(builder.Configuration);
 
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 app.UseMixTenant();
 app.UseMiddleware<AuditlogMiddleware>();

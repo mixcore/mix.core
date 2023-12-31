@@ -6,8 +6,8 @@ builder.AddProject<Projects.mixcore_gateway>("mixcore.gateway")
             .WithReference(mixcore)
             ;
 
-builder.AddProject<Projects.mix_mq>("mix.mq");
+builder.AddProject<Projects.mix_mq_server>("mix.mq.server");
 
-//builder.AddProject<Projects.mix_auth_service>("mix.auth.service");
+builder.AddProject<Projects.mix_auth_service>("mix.auth.service");
 
 builder.Build().Run();
