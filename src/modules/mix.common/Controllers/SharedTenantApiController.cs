@@ -20,6 +20,7 @@ namespace Mix.Common.Controllers
         private readonly ViewQueryRepository<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel> _configRepo;
         private readonly ViewQueryRepository<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel> _langRepo;
         private readonly MixAuthenticationConfigurations _authConfigurations;
+        private readonly MixEndpointService _endpointService;
         public SharedTenantApiController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -29,7 +30,8 @@ namespace Mix.Common.Controllers
             AuthConfigService authConfigService,
             MixCmsContext context,
             IQueueService<MessageQueueModel> queueService,
-            IMixTenantService mixTenantService)
+            IMixTenantService mixTenantService,
+            MixEndpointService endpointService)
             : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
@@ -38,6 +40,7 @@ namespace Mix.Common.Controllers
             Uow = new(Context);
             _configRepo = MixConfigurationContentViewModel.GetRepository(Uow, CacheService);
             _langRepo = MixLanguageContentViewModel.GetRepository(Uow, CacheService);
+            _endpointService = endpointService;
         }
 
         #region Routes
@@ -90,7 +93,8 @@ namespace Mix.Common.Controllers
             {
                 GlobalSettings = CommonHelper.GetAppSettings(_authConfigurations, CurrentTenant),
                 MixConfigurations = await _configRepo.GetListAsync(m => m.Specificulture == lang, cancellationToken),
-                Translator = _langRepo.GetListQuery(m => m.Specificulture == lang).ToList()
+                Translator = _langRepo.GetListQuery(m => m.Specificulture == lang).ToList(),
+                Endpoints = _endpointService.AppSettings
             };
         }
     }
