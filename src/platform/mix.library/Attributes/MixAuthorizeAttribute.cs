@@ -61,7 +61,7 @@ namespace Mix.Lib.Attributes
 
         private bool ValidEnpointPermission(AuthorizationFilterContext context)
         {
-            return _permissionService.CheckEndpointPermission(UserRoles, context.HttpContext.Request.Path, context.HttpContext.Request.Method);
+            return _permissionService.CheckEndpointPermissionAsync(UserRoles, context.HttpContext.Request.Path, context.HttpContext.Request.Method).Result;
         }
 
         private bool ValidToken()

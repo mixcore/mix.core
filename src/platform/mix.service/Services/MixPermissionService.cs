@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Cms;
@@ -16,17 +17,18 @@ namespace Mix.Service.Services
 {
     public sealed class MixPermissionService
     {
-        private readonly DatabaseService _databaseService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         public Dictionary<string, string[]> RoleEndpoints { get; private set; }
         private MixCmsAccountContext accountDbContext;
         private UnitOfWorkInfo<MixDbDbContext> uow;
         private int? _tenantId;
+        private IServiceScope _serviceScope { get; set; }
+        private readonly IServiceProvider _servicesProvider;
         public MixPermissionService(
-                IHttpContextAccessor httpContextAccessor)
-        { 
+                IHttpContextAccessor httpContextAccessor, IServiceProvider servicesProvider)
+        {
+            _servicesProvider = servicesProvider;
             _httpContextAccessor = httpContextAccessor;
-            _databaseService = new(httpContextAccessor);
             _tenantId = _httpContextAccessor.HttpContext?.Session.GetInt32(MixRequestQueryKeywords.TenantId) ?? 1;
         }
 
@@ -36,10 +38,10 @@ namespace Mix.Service.Services
             {
                 try
                 {
-                    uow = new(new MixDbDbContext(_databaseService));
+                    uow = GetRequiredService<UnitOfWorkInfo<MixDbDbContext>>();
                     RoleEndpoints = new Dictionary<string, string[]>();
-                    accountDbContext = new MixCmsAccountContext(_databaseService);
-                    using var cmsDbContext = new MixCmsContext(_databaseService);
+                    accountDbContext = GetRequiredService<MixCmsAccountContext>();
+                    var cmsDbContext = GetRequiredService<MixCmsContext>();
 
                     var roles = await accountDbContext.MixRoles.ToListAsync();
 
@@ -85,16 +87,22 @@ namespace Mix.Service.Services
                 {
                     throw new MixException(Heart.Enums.MixErrorStatus.Badrequest, ex);
                 }
-                finally
-                {
-                    uow.Dispose();
-                    accountDbContext.Dispose();
-                }
             }
         }
 
-        public bool CheckEndpointPermission(string[] userRoles, PathString path, string method)
+        private T GetRequiredService<T>()
+            where T : class
         {
+            _serviceScope ??= _servicesProvider.CreateScope();
+            return _serviceScope.ServiceProvider.GetRequiredService<T>();
+        }
+
+        public async Task<bool> CheckEndpointPermissionAsync(string[] userRoles, PathString path, string method)
+        {
+            if(RoleEndpoints == null)
+            {
+                await Reload();
+            }
             if (userRoles == null)
             {
                 return false;

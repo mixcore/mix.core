@@ -35,8 +35,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<EmailService>();
             services.TryAddScoped<IMixEdmService, MixEdmService>();
             
-            MixPermissionService permissionSrv = services.GetService<MixPermissionService>();
-            permissionSrv.Reload().GetAwaiter().GetResult();
             return services;
         }
     }
