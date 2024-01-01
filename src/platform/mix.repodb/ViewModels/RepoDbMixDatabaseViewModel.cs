@@ -15,10 +15,10 @@ namespace Mix.RepoDb.ViewModels
         public string SystemName { get; set; }
 
         public MixDatabaseType Type { get; set; } = MixDatabaseType.Service;
-        public string ReadPermissions { get; set; }
-        public string CreatePermissions { get; set; }
-        public string UpdatePermissions { get; set; }
-        public string DeletePermissions { get; set; }
+        public List<string> ReadPermissions { get; set; }
+        public List<string> CreatePermissions { get; set; }
+        public List<string> UpdatePermissions { get; set; }
+        public List<string> DeletePermissions { get; set; }
         public bool SelfManaged { get; set; }
 
         public List<MixDatabaseColumnViewModel> Columns { get; set; } = new();
