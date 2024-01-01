@@ -53,7 +53,7 @@ namespace Mix.Lib.Attributes
             {
                 if (ValidToken())
                 {
-                    if (!IsInRoles(context.HttpContext.Request.Method, database))
+                    if (!IsInRoles(context.HttpContext.Request.Method, database, context.HttpContext.Request.Path))
                     {
                         if (!ValidEnpointPermission(context))
                         {
@@ -72,20 +72,27 @@ namespace Mix.Lib.Attributes
 
         private bool CheckByPassAuthenticate(string method, string path, MixDatabase database)
         {
-            return
-                (method == "GET" && (string.IsNullOrEmpty(database.ReadPermissions) || JArray.Parse(database.ReadPermissions).Count == 0))
-                || (method == "POST" && path.EndsWith("filter") && (string.IsNullOrEmpty(database.ReadPermissions) || JArray.Parse(database.ReadPermissions).Count == 0))
-                || (method == "POST" && (string.IsNullOrEmpty(database.CreatePermissions) || JArray.Parse(database.CreatePermissions).Count == 0))
-                || ((method == "PUT" || method == "PATCH") && (string.IsNullOrEmpty(database.UpdatePermissions) || JArray.Parse(database.UpdatePermissions).Count == 0))
-                || (method == "DELETE" && (string.IsNullOrEmpty(database.DeletePermissions) || JArray.Parse(database.DeletePermissions).Count == 0));
+            return method switch {
+                "GET" => database.ReadPermissions == null
+                           || database.ReadPermissions.Count == 0,
+                "POST" => (path.EndsWith("filter") && (database.ReadPermissions == null || database.ReadPermissions.Count == 0))
+                            || (!path.EndsWith("filter") && (database.CreatePermissions == null || database.CreatePermissions.Count == 0)),
+                "PUT" => database.UpdatePermissions == null
+                           || database.UpdatePermissions.Count == 0,
+                "PATCH" => database.UpdatePermissions == null
+                    || database.UpdatePermissions.Count == 0,
+                "DELETE" => database.DeletePermissions == null
+                    || database.DeletePermissions.Count == 0,
+                _ => false
+            };
         }
 
         #region Privates
 
         private bool ValidEnpointPermission(AuthorizationFilterContext context)
         {
-            return _permissionService.CheckEndpointPermission(
-                    UserRoles, context.HttpContext.Request.Path, context.HttpContext.Request.Method);
+            return _permissionService.CheckEndpointPermissionAsync(
+                    UserRoles, context.HttpContext.Request.Path, context.HttpContext.Request.Method).Result;
         }
 
         private bool ValidToken()
@@ -95,7 +102,7 @@ namespace Mix.Lib.Attributes
                     && DateTime.UtcNow < expireAt;
         }
 
-        private bool IsInRoles(string method, MixDatabase database)
+        private bool IsInRoles(string method, MixDatabase database, string path)
         {
 
             UserRoles = _idService.GetClaim(userPrinciple, MixClaims.Role).Split(',', StringSplitOptions.RemoveEmptyEntries)
@@ -109,7 +116,15 @@ namespace Mix.Lib.Attributes
             switch (method)
             {
                 case "GET": return CheckUserInRoles(database.ReadPermissions, UserRoles);
-                case "POST": return CheckUserInRoles(database.CreatePermissions, UserRoles);
+                case "POST":
+                    if (path.EndsWith("filter"))
+                    {
+                        return CheckUserInRoles(database.ReadPermissions, UserRoles);
+                    }
+                    else
+                    {
+                        return CheckUserInRoles(database.CreatePermissions, UserRoles);
+                    }
                 case "PATCH":
                 case "PUT": return CheckUserInRoles(database.UpdatePermissions, UserRoles);
                 case "DELETE": return CheckUserInRoles(database.DeletePermissions, UserRoles);
@@ -118,10 +133,9 @@ namespace Mix.Lib.Attributes
             }
         }
 
-        private bool CheckUserInRoles(string roles, string[] userRoles)
+        private bool CheckUserInRoles(List<string> allowedRoles, string[] userRoles)
         {
-            var allowedRoles = JArray.Parse(roles).Values<string>().ToArray();
-            return allowedRoles.Length == 0 || allowedRoles.Any(r => userRoles.Any(ur => ur == $"{r}-{_idService.CurrentTenant.Id}"));
+            return allowedRoles == null || allowedRoles.Count == 0 || allowedRoles.Any(r => userRoles.Any(ur => ur == $"{r}-{_idService.CurrentTenant.Id}"));
         }
 
         #endregion
