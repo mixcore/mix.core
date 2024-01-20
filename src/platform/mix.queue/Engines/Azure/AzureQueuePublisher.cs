@@ -19,7 +19,7 @@ namespace Mix.Queue.Engines.Azure
         private static ServiceBusClient _client;
         private readonly AzureQueueSetting _queueSetting;
 
-        public AzureQueuePublisher(QueueSetting queueSetting, string topicName)
+        public AzureQueuePublisher(IQueueSetting queueSetting, string topicName)
         {
             _queueSetting = queueSetting as AzureQueueSetting;
             InitializeQueue(topicName);

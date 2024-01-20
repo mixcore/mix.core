@@ -19,7 +19,7 @@ namespace Mix.Queue.Engines.MixQueue
         private readonly MixEndpointService _mixEndpointService;
         private GrpcChannelModel<MixMq.MixMqClient> _mixMqPublisher;
 
-        public MixQueuePublisher(QueueSetting queueSetting, string topicName, MixEndpointService mixEndpointService)
+        public MixQueuePublisher(IQueueSetting queueSetting, string topicName, MixEndpointService mixEndpointService)
         {
             _topicId = topicName;
             _mixEndpointService = mixEndpointService;

@@ -1,10 +1,13 @@
-﻿using Mix.Mq.Lib.Models;
+﻿using Microsoft.Extensions.ObjectPool;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines.Azure;
 using Mix.Queue.Engines.GooglePubSub;
 using Mix.Queue.Engines.MixQueue;
+using Mix.Queue.Engines.RabitMQ;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Shared.Services;
+using RabbitMQ.Client;
 using System;
 using System.Threading.Tasks;
 
@@ -12,8 +15,10 @@ namespace Mix.Queue.Engines
 {
     public class QueueEngineFactory
     {
+        #region Publishers
+
         public static IQueuePublisher<T> CreatePublisher<T>(
-            MixQueueProvider provider, QueueSetting queueSetting, string topicId, MixEndpointService mixEndpointService)
+            MixQueueProvider provider, IQueueSetting queueSetting, string topicId, MixEndpointService mixEndpointService)
             where T : MessageQueueModel
         {
             IQueuePublisher<T> publisher = default;
@@ -34,9 +39,17 @@ namespace Mix.Queue.Engines
             return publisher;
         }
 
+        public static IQueuePublisher<T> CreateRabbitMqPublisher<T>(IPooledObjectPolicy<IModel> objectPolicy, string topicId)
+             where T : MessageQueueModel
+        {
+            return new RabitMQPublisher<T>(objectPolicy, topicId);
+        }
+        #endregion
+
+        #region Subscribers
         public static IQueueSubscriber CreateSubscriber<T>(
             MixQueueProvider provider,
-            QueueSetting queueSetting,
+            IQueueSetting queueSetting,
             string topicId,
             string subscriptionId,
             Func<T, Task> handler,
@@ -60,6 +73,12 @@ namespace Mix.Queue.Engines
             subscriber.SubscriptionId = subscriptionId;
             return subscriber;
         }
+        public static IQueueSubscriber CreateRabbitMQSubscriber<T>(IPooledObjectPolicy<IModel> objectPolicy, string topicId, string subscriptionId, Func<T, Task> handler)
+            where T : MessageQueueModel
+        {
+            return new RabitMQSubscriber<T>(objectPolicy, topicId, subscriptionId, handler);
+        }
+        #endregion
 
     }
 }

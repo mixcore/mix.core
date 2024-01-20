@@ -18,7 +18,7 @@ namespace Mix.Queue.Engines.GooglePubSub
         private PublisherClient _publisher;
         private readonly GoogleQueueSetting _queueSetting;
 
-        public GoogleQueuePublisher(QueueSetting queueSetting, string topicName)
+        public GoogleQueuePublisher(IQueueSetting queueSetting, string topicName)
         {
             _queueSetting = queueSetting as GoogleQueueSetting;
             InitializeQueue(topicName);

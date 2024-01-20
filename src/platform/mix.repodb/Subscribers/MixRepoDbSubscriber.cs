@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.ObjectPool;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Services;
@@ -29,8 +30,9 @@ namespace Mix.RepoDb.Subscribers
             IServiceProvider serviceProvider,
             IPortalHubClientService portalHub,
             IMemoryQueueService<MessageQueueModel> queueService,
-            ILogger<MixRepoDbSubscriber> logger)
-            : base(MixQueueTopics.MixRepoDb, nameof(MixRepoDbSubscriber), 20, serviceProvider, configuration, queueService, logger)
+            ILogger<MixRepoDbSubscriber> logger,
+            IPooledObjectPolicy<RabbitMQ.Client.IModel> rabbitMqObjectPolicy = null)
+            : base(MixQueueTopics.MixRepoDb, nameof(MixRepoDbSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMqObjectPolicy)
         {
             PortalHub = portalHub;
         }

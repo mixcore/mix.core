@@ -30,7 +30,7 @@ namespace Mix.Queue.Engines.MixQueue
         private AsyncServerStreamingCall<SubscribeReply> _call;
         private CancellationToken _startCancellationToken;
         public MixQueueSubscriber(
-            QueueSetting queueSetting,
+            IQueueSetting queueSetting,
             string topicId,
             string subscriptionId,
             Func<T, Task> messageHandler,

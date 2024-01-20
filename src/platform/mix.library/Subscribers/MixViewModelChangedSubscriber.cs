@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.ObjectPool;
 using Mix.Heart.Model;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers;
@@ -20,8 +21,9 @@ namespace Mix.Lib.Subscribers
             IConfiguration configuration,
             IMixTenantService mixTenantService,
             IMemoryQueueService<MessageQueueModel> queueService,
-            ILogger<MixViewModelChangedSubscriber> logger)
-            : base(TopicId, nameof(MixDbCommandSubscriber), 20, serviceProvider, configuration, queueService, logger)
+            ILogger<MixViewModelChangedSubscriber> logger,
+            IPooledObjectPolicy<RabbitMQ.Client.IModel> rabbitMqObjectPolicy = null)
+            : base(TopicId, nameof(MixDbCommandSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMqObjectPolicy)
         {
             _mixTenantService = mixTenantService;
         }

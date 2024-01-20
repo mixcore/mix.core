@@ -8,6 +8,7 @@ using Microsoft.Extensions.FileProviders;
 using Mix.Lib.Middlewares;
 using Mix.Shared.Services;
 using Mix.Shared.Models.Configurations;
+using Mix.Queue.Extensions;
 var builder = MixCmsHelper.CreateWebApplicationBuilder(args);
 
 if (builder.Environment.IsDevelopment())
@@ -25,7 +26,9 @@ builder.Services.AddWebEncoders(options =>
 var globalConfig = builder.Configuration.GetSection(MixAppSettingsSection.GlobalSettings)
                                             .Get<GlobalSettingsModel>();
 builder.Services.AddEndpointsApiExplorer();
+builder.AddMixQueue();
 builder.Services.AddMixServices(Assembly.GetExecutingAssembly(), builder.Configuration);
+
 builder.Services.ApplyMigrations(globalConfig);
 builder.Services.AddMixCors();
 builder.Services.AddScoped<MixNavigationService>();
