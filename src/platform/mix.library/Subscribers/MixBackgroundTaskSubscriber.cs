@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Mix.Communicator.Models;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
@@ -33,8 +34,9 @@ namespace Mix.Lib.Subscribers
             IConfiguration configuration,
             IPortalHubClientService portalHub,
             MixDbEventService mixDbEventService,
-            IQueueService<MessageQueueModel> queueService)
-            : base(TopicId, nameof(MixBackgroundTaskSubscriber), 20, serviceProvider, configuration, queueService)
+            IMemoryQueueService<MessageQueueModel> queueService,
+            ILogger<MixBackgroundTaskSubscriber> logger)
+            : base(TopicId, nameof(MixBackgroundTaskSubscriber), 20, serviceProvider, configuration, queueService, logger)
         {
             PortalHub = portalHub;
             MixDbEventService = mixDbEventService;
@@ -42,15 +44,23 @@ namespace Mix.Lib.Subscribers
 
         public override Task StartAsync(CancellationToken cancellationToken = default)
         {
-            Task.Run(async () =>
+            base.StartAsync(cancellationToken);
+            
+            return Task.Run(async () =>
             {
                 while (PortalHub.Connection == null || PortalHub.Connection.State != Microsoft.AspNetCore.SignalR.Client.HubConnectionState.Connected)
                 {
-                    await Task.Delay(5000);
-                    await PortalHub.StartConnection();
+                    try
+                    {
+                        await Task.Delay(5000);
+                        await PortalHub.StartConnection();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(GetType().Name, ex);
+                    }
                 }
             });
-            return base.StartAsync(cancellationToken);
         }
         public override async Task Handler(MessageQueueModel model)
         {

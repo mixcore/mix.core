@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Mix.Communicator.Models;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.MixDb;
@@ -24,8 +25,9 @@ namespace Mix.Lib.Subscribers
         public MixDbCommandSubscriber(
             IServiceProvider serviceProvider,
             IConfiguration configuration,
-            IQueueService<MessageQueueModel> queueService)
-            : base(TopicId, nameof(MixDbCommandSubscriber), 20, serviceProvider, configuration, queueService)
+            IMemoryQueueService<MessageQueueModel> queueService,
+            ILogger<MixDbCommandSubscriber> logger)
+            : base(TopicId, nameof(MixDbCommandSubscriber), 20, serviceProvider, configuration, queueService, logger)
         {
         }
 

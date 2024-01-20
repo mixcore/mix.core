@@ -39,7 +39,7 @@ namespace Mix.Log.Lib.Services
                             Action = queueMessage.Action,
                             TopicId = queueMessage.TopicId,
                             DataTypeFullName = queueMessage.DataTypeFullName,
-                            Subscriptions = ReflectionHelper.ParseArray(_mixQueueService.GetTopic(queueMessage.TopicId).Subscriptions),
+                            Subscriptions = ReflectionHelper.ParseArray(_mixQueueService.GetTopic(queueMessage.TopicId).Subscriptions.Select(m => m.Value).ToList()),
                             State = MixQueueMessageLogState.NACK,
                             Status = MixContentStatus.Published
                         };
@@ -74,7 +74,7 @@ namespace Mix.Log.Lib.Services
                     var rootLog = await _dbContext.MixQueueMessage.FirstOrDefaultAsync(m => m.Id == ackQueueMessage.Id);
                     if (rootLog != null)
                     {
-                        var subs = rootLog.Subscriptions.FirstOrDefault(m => 
+                        var subs = rootLog.Subscriptions.FirstOrDefault(m =>
                             m.Value<string>("id") == ackQueueMessage.Sender) as JObject;
                         if (subs != null)
                         {
@@ -104,7 +104,7 @@ namespace Mix.Log.Lib.Services
                 using (_dbContext = new())
                 {
                     InitDbContext();
-                   
+
                     var rootLog = await _dbContext.MixQueueMessage.FirstOrDefaultAsync(m => m.Id == log.Id);
                     if (rootLog != null)
                     {

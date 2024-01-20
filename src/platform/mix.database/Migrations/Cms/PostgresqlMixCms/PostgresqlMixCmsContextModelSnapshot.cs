@@ -17,7 +17,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -669,6 +669,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
+
+                    b.Property<string>("NamingConvention")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");

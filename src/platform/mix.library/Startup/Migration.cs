@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static partial class ServiceCollectionExtensions
     {
 
-        private static void ApplyMigrations(this IServiceCollection services, GlobalSettingsModel options)
+        public static void ApplyMigrations(this IServiceCollection services, GlobalSettingsModel options)
         {
             if (!options.IsInit)
             {

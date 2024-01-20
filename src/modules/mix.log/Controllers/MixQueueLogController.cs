@@ -35,7 +35,7 @@ namespace Mix.Log.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixQueueDbContext> uow,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
             : base(

@@ -17,13 +17,13 @@ namespace Mix.Queue.Engines.MixQueue
     {
         private string _topicId;
         private readonly MixEndpointService _mixEndpointService;
-        private GrpcChannelModel<MixMq.MixMqClient> _mixMqSubscriber;
+        private GrpcChannelModel<MixMq.MixMqClient> _mixMqPublisher;
 
         public MixQueuePublisher(QueueSetting queueSetting, string topicName, MixEndpointService mixEndpointService)
         {
             _topicId = topicName;
             _mixEndpointService = mixEndpointService;
-            _mixMqSubscriber = new GrpcChannelModel<MixMq.MixMqClient>(_mixEndpointService.MixMq);
+            _mixMqPublisher = new GrpcChannelModel<MixMq.MixMqClient>(_mixEndpointService.MixMq);
         }
 
         public Task SendMessage(T message)
@@ -35,7 +35,7 @@ namespace Mix.Queue.Engines.MixQueue
                     message.Id = Guid.NewGuid();
                 }
                 message.CreatedDate = DateTime.UtcNow;
-                _mixMqSubscriber.Client.Publish(new PublishMessageRequest
+                _mixMqPublisher.Client.Publish(new PublishMessageRequest
                 {
                     TopicId = _topicId,
                     Message = JObject.FromObject(message).ToString(Newtonsoft.Json.Formatting.None)

@@ -30,7 +30,7 @@ namespace Mix.Lib.Base
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             TDbContext context,
-            IQueueService<MessageQueueModel> queueService, MixCacheDbContext cacheDbContext,
+            IMemoryQueueService<MessageQueueModel> queueService, MixCacheDbContext cacheDbContext,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, 
                   configuration, cacheService, translator, mixIdentityService, queueService, mixTenantService)

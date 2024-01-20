@@ -2,22 +2,23 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
+		<ServerGarbageCollection>false</ServerGarbageCollection>
+		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 		<InvariantGlobalization>true</InvariantGlobalization>
 		<UserSecretsId>e7c022bb-c2da-4d62-b3ed-5a0574c52280</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..\..</DockerfileContext>
+		<RootNamespace>Mix.Auth.Api</RootNamespace>
 	</PropertyGroup>
-
 	<ItemGroup>
-	  <Compile Remove="mixcontent\templates\**" />
-	  <Content Remove="mixcontent\templates\**" />
-	  <EmbeddedResource Remove="mixcontent\templates\**" />
-	  <None Remove="mixcontent\templates\**" />
+		<Compile Remove="mixcontent\templates\**" />
+		<Content Remove="mixcontent\templates\**" />
+		<EmbeddedResource Remove="mixcontent\templates\**" />
+		<None Remove="mixcontent\templates\**" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6-Preview.2" />
 	</ItemGroup>

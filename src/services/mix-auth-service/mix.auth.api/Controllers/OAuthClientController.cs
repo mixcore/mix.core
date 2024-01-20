@@ -17,7 +17,7 @@ namespace mix.auth.service.Controllers
     public class OAuthClientController : MixRestfulApiControllerBase<OAuthClientViewModel, MixCmsAccountContext, OAuthClient, Guid>
     {
         private readonly IOAuthClientService _oauthClientService;
-        public OAuthClientController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsAccountContext> uow, IQueueService<MessageQueueModel> queueService, IPortalHubClientService portalHub, IMixTenantService mixTenantService, IOAuthClientService oauthClientService) : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
+        public OAuthClientController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsAccountContext> uow, IMemoryQueueService<MessageQueueModel> queueService, IPortalHubClientService portalHub, IMixTenantService mixTenantService, IOAuthClientService oauthClientService) : base(httpContextAccessor, configuration, cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _oauthClientService = oauthClientService;
         }

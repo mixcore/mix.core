@@ -20,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static void AddSchedulerJobs(this IServiceCollection services)
         {
-            var assemblies = MixAssemblyFinder.GetMixAssemblies();
+            var assemblies = MixAssemblyFinder.GetAssembliesByPrefix("mix");
 
             foreach (var assembly in assemblies)
             {

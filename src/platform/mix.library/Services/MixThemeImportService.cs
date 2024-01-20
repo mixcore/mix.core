@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Vml;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Google.Protobuf.WellKnownTypes;
 using Humanizer;
 using Microsoft.AspNetCore.Http;
@@ -10,12 +11,14 @@ using Mix.Database.Services;
 using Mix.Lib.Interfaces;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
+using Mix.RepoDb.ViewModels;
 
 namespace Mix.Lib.Services
 {
     public class MixThemeImportService : IMixThemeImportService
     {
         private MixRepoDbRepository _repository { get; set; }
+        private MixCacheService _cacheService{ get; set; }
         private readonly CancellationTokenSource _cts;
         private readonly DatabaseService _databaseService;
         private readonly IDatabaseConstants _databaseConstant;
@@ -60,10 +63,12 @@ namespace Mix.Lib.Services
         public MixThemeImportService(
             IHttpContextAccessor httpContext,
             DatabaseService databaseService,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            MixCacheService cacheService)
         {
             _cts = new CancellationTokenSource();
             _session = httpContext.HttpContext?.Session;
+            _cacheService = cacheService;
             _databaseService = databaseService;
             _serviceProvider = serviceProvider;
             _databaseConstant = _databaseService.DatabaseProvider switch
@@ -109,6 +114,7 @@ namespace Mix.Lib.Services
                 var strSchema = MixFileHelper.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, folder);
                 var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
                 await ValidateSiteData(siteStructures);
+                serviceScope.Dispose();
                 return siteStructures;
             }
         }
@@ -123,6 +129,7 @@ namespace Mix.Lib.Services
                     var formFile = new FileModel(themeFile.FileName, fileStream, MixFolders.ThemePackage);
                     var templateAsset = MixFileHelper.SaveFile(formFile);
                     MixFileHelper.UnZipFile(formFile.FullPath, MixFolders.ThemePackage);
+                    fileStream.Dispose();
                 }
             }
             else
@@ -178,6 +185,7 @@ namespace Mix.Lib.Services
 
                     await _uow.CompleteAsync();
                     await mixdbUow.CompleteAsync();
+                    serviceScope.Dispose();
                     return _siteData;
                 }
             }
@@ -196,8 +204,9 @@ namespace Mix.Lib.Services
                     uow.Begin();
                     var mixDbService = serviceScope.ServiceProvider.GetRequiredService<IMixDbService>();
 
-                    await ImportMixDatabases(uow.DbContext, mixDbService);
+                    await ImportMixDatabases(uow, _cacheService, mixDbService);
                     await uow.CompleteAsync();
+                    serviceScope.Dispose();
                 }
             }
             catch (Exception ex)
@@ -266,24 +275,28 @@ namespace Mix.Lib.Services
             await ImportContentDataAsync(_siteData.ConfigurationContents, _dicConfigurationContentIds, _dicConfigurationIds);
         }
 
-        private async Task ImportMixDatabases(MixCmsContext dbContext, IMixDbService mixDbService, CancellationToken cancellationToken = default)
+        private async Task ImportMixDatabases(UnitOfWorkInfo<MixCmsContext> uow, MixCacheService cacheService, IMixDbService mixDbService, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            await ImportDatabaseContextsAsync(dbContext);
-            await ImportDatabasesAsync(dbContext);
-            await ImportDatabaseRelationshipsAsync(dbContext);
-            await MigrateMixDatabaseAsync(mixDbService);
+            await ImportDatabaseContextsAsync(uow.DbContext);
+            await ImportDatabasesAsync(uow.DbContext);
+            await ImportDatabaseRelationshipsAsync(uow.DbContext);
+            await MigrateMixDatabaseAsync(uow, cacheService, mixDbService);
             await MigrateSystemMixDatabaseAsync(mixDbService, cancellationToken);
         }
 
-        private async Task MigrateMixDatabaseAsync(IMixDbService mixDbService)
+        private async Task MigrateMixDatabaseAsync(UnitOfWorkInfo<MixCmsContext> uow, MixCacheService cacheService, IMixDbService mixDbService)
         {
             foreach (var item in _siteData.MixDatabases)
             {
                 if (_dicMixDatabaseNames.ContainsKey(item.SystemName))
                 {
-                    await mixDbService.MigrateDatabase(_dicMixDatabaseNames[item.SystemName]);
+
+                    RepoDbMixDatabaseViewModel database = await RepoDbMixDatabaseViewModel
+                        .GetRepository(uow, cacheService).GetSingleAsync(m => m.SystemName == _dicMixDatabaseNames[item.SystemName]);
+
+                    await mixDbService.MigrateDatabase(database);
                 }
             }
         }

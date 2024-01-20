@@ -2,20 +2,21 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
+		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>aeea975a-4fec-4193-846d-3a3d92606bd7</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..</DockerfileContext>
+		<ServerGarbageCollection>false</ServerGarbageCollection>
+		<ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\services\mix-auth-service\mix.auth.service\mix.auth.service.csproj" />
-		<ProjectReference Include="..\..\services\mix-message-queue\mix.mq.server\mix.mq.server.csproj" />
 		<ProjectReference Include="..\mixcore.host.aspire\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
 		<ProjectReference Include="..\..\modules\mix.grpc\mix.grpc.csproj" />
-		<ProjectReference Include="..\..\modules\mix.messenger\mix.messenger.csproj" />
 		<ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
 		<ProjectReference Include="..\..\modules\mix.log\mix.log.csproj" />
 		<ProjectReference Include="..\..\modules\mix.scheduler\mix.scheduler.csproj" />
@@ -58,6 +59,38 @@
 		<Compile Remove="logs\**" />
 	</ItemGroup>
 	<ItemGroup>
+	  <None Remove="Domain\Protos\mixmq.proto" />
+	</ItemGroup>
+	<ItemGroup>
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.0" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6-Preview.2" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Grpc.AspNetCore" Version="2.59.0" />
+		<Protobuf Include="Domain\Protos\mixmq.proto" GrpcServices="Client" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Update="mixcontent\shared\appconfigs\ocelot.Development.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="mixcontent\shared\appconfigs\ocelot.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="mixcontent\shared\appconfigs\ocelot.Production.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="mixcontent\backup\" />
 	</ItemGroup>
 </Project>

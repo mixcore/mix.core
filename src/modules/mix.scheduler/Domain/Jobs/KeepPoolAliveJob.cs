@@ -8,6 +8,9 @@ using Mix.Quartz.Jobs;
 using Mix.Quartz.Models;
 using NuGet.Packaging.Signing;
 using Mix.Mq.Lib.Models;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace Mix.Scheduler.Domain.Jobs
 {
@@ -17,7 +20,7 @@ namespace Mix.Scheduler.Domain.Jobs
         public KeepPoolAliveJob(
             HttpService httpService,
             IServiceProvider serviceProvider,
-            IQueueService<MessageQueueModel> queueService)
+            IMemoryQueueService<MessageQueueModel> queueService)
             : base(serviceProvider, queueService)
         {
             _httpService = httpService;
@@ -32,19 +35,23 @@ namespace Mix.Scheduler.Domain.Jobs
 
         public override async Task ExecuteHandler(IJobExecutionContext context)
         {
-            if (context.Trigger.JobDataMap.ContainsKey("domain"))
+            if (context.Trigger.JobDataMap.ContainsKey("data"))
             {
-                try
+                var objData = JObject.Parse(context.Trigger.JobDataMap.GetString("data") ?? "{}");
+                var domains = objData.Value<JArray>("domains");
+                foreach (var domain in domains)
                 {
-                    string domain = context.Trigger.JobDataMap.GetString("domain");
-                    var now = DateTime.UtcNow;
-                    var ping = await _httpService.GetStringAsync($"{domain.TrimEnd('/')}");
+                    try
+                    {
+                        var now = DateTime.UtcNow;
+                        var ping = await _httpService.GetStringAsync($"{domain.ToString().TrimEnd('/')}");
 
-                    Console.WriteLine($"Ping at {now}: {(DateTime.Now - now).TotalMilliseconds}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Cannot Ping: " + ex.Message);
+                        Console.WriteLine($"Ping {domain} at {now}: {(DateTime.Now - now).TotalMilliseconds}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Cannot Ping: {domain}" + ex.Message);
+                    }
                 }
             }
             Console.WriteLine(DateTime.UtcNow);

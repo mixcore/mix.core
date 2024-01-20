@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.MixDb;
 using Mix.Database.Entities.Quartz;
@@ -7,6 +8,8 @@ using Mix.Heart.Entities.Cache;
 using Mix.Heart.Services;
 using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
+using Newtonsoft.Json.Linq;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mix.Database.Services
@@ -15,9 +18,11 @@ namespace Mix.Database.Services
     {
         public MixDatabaseProvider DatabaseProvider => AppSettings.DatabaseProvider;
         protected IHttpContextAccessor HttpContextAccessor;
-        public DatabaseService(IHttpContextAccessor httpContextAccessor) : base(MixAppConfigFilePaths.Database, true)
+        protected IConfiguration Configuration;
+        public DatabaseService(IHttpContextAccessor httpContextAccessor, IConfiguration configuration) : base(MixAppConfigFilePaths.Database, true)
         {
             HttpContextAccessor = httpContextAccessor;
+            Configuration = configuration;
             AesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
         }
 
@@ -40,7 +45,8 @@ namespace Mix.Database.Services
                 case MixConstants.CONST_QUARTZ_CONNECTION:
                     return AppSettings.ConnectionStrings?.MixQuartzConnection;
                 default:
-                    return string.Empty;
+                    return RawSettings.Value<JObject>("connectionStrings").Value<string>(name) 
+                        ?? Configuration.GetConnectionString(name);
             }
         }
 
@@ -120,10 +126,10 @@ namespace Mix.Database.Services
         {
             return DatabaseProvider switch
             {
-                MixDatabaseProvider.SQLSERVER => new SQLServerQuartzDbContext(HttpContextAccessor, this),
-                MixDatabaseProvider.MySQL => new MySQLQuartzDbContext(HttpContextAccessor, this),
-                MixDatabaseProvider.SQLITE => new SQLiteQuartzDbContext(HttpContextAccessor, this),
-                MixDatabaseProvider.PostgreSQL => new PostgresSQLQuartzDbContext(HttpContextAccessor, this),
+                MixDatabaseProvider.SQLSERVER => new SQLServerQuartzDbContext(HttpContextAccessor, Configuration, this),
+                MixDatabaseProvider.MySQL => new MySQLQuartzDbContext(HttpContextAccessor, Configuration, this),
+                MixDatabaseProvider.SQLITE => new SQLiteQuartzDbContext(HttpContextAccessor, Configuration, this),
+                MixDatabaseProvider.PostgreSQL => new PostgresSQLQuartzDbContext(HttpContextAccessor, Configuration, this),
                 _ => null,
             };
         }
@@ -176,13 +182,17 @@ namespace Mix.Database.Services
         public void UpdateMixCmsContext()
         {
             using var ctx = GetDbContext();
-            ctx.Database.Migrate();
+            if (ctx.Database.GetPendingMigrations().Count() > 0)
+                ctx.Database.Migrate();
             using var cacheCtx = GetCacheDbContext();
-            cacheCtx.Database.Migrate();
+            if (cacheCtx.Database.GetPendingMigrations().Count() > 0)
+                cacheCtx.Database.Migrate();
             using var accCtx = GetAccountDbContext();
-            accCtx.Database.Migrate();
+            if (accCtx.Database.GetPendingMigrations().Count() > 0)
+                accCtx.Database.Migrate();
             using var mixdbCtx = GetMixDbDbContext();
-            mixdbCtx.Database.Migrate();
+            if (mixdbCtx.Database.GetPendingMigrations().Count() > 0)
+                mixdbCtx.Database.Migrate();
         }
 
         public async Task InitQuartzContextAsync()

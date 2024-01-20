@@ -48,6 +48,7 @@ namespace Mix.Lib.Services
                         .ToList();
 
                     AllTenants = tenants;
+                    dbContext.Dispose();
                 }
             }
         }

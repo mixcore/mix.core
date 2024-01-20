@@ -15,6 +15,7 @@ namespace mix.auth.service.Controllers
     [ApiController]
     public class MixRoleController : MixRestEntityApiControllerBase<MixCmsAccountContext, MixRole, Guid>
     {
+        private readonly TenantRoleManager _roleManager;
         public MixRoleController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -23,13 +24,18 @@ namespace mix.auth.service.Controllers
             MixIdentityService mixIdentityService,
             MixCacheDbContext cacheDbContext,
             MixCmsAccountContext context,
-            IQueueService<MessageQueueModel> queueService,
-            IMixTenantService mixTenantService)
+            IMemoryQueueService<MessageQueueModel> queueService,
+            IMixTenantService mixTenantService,
+            TenantRoleManager roleManager)
             : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, cacheDbContext, context, queueService, mixTenantService)
         {
-
+            _roleManager = roleManager;
         }
-
+        protected override async Task DeleteHandler(MixRole data)
+        {
+            await _roleManager.DeleteAsync(data);
+            await base.DeleteHandler(data);
+        }
     }
 }

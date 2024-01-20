@@ -320,17 +320,14 @@ namespace Mix.RepoDb.Repositories
 
         // Get
 
-        public async Task<dynamic?> GetSingleAsync(long id)
+        public async Task<dynamic?> GetSingleAsync(QueryField idQuery)
         {
             try
             {
                 BeginTransaction();
                 return (await _connection.QueryAsync<dynamic>(
                     _tableName,
-                    new
-                    {
-                        Id = id
-                    },
+                   idQuery,
                     commandTimeout: _settings.CommandTimeout,
                     transaction: _dbTransaction,
                     trace: _trace))?.SingleOrDefault();

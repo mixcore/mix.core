@@ -16,7 +16,7 @@ namespace Mix.Lib.Base
         protected ISession Session;
         protected string Lang;
         protected MixCulture Culture;
-        protected readonly IQueueService<MessageQueueModel> QueueService;
+        protected readonly IMemoryQueueService<MessageQueueModel> QueueService;
         protected readonly IConfiguration Configuration;
         protected readonly MixIdentityService MixIdentityService;
         protected readonly TranslatorService Translator;
@@ -28,7 +28,7 @@ namespace Mix.Lib.Base
             MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IMixTenantService mixTenantService)
         {
             HttpContextAccessor = httpContextAccessor;

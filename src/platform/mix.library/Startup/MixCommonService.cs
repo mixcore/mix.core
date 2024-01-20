@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Communicator.Services;
 using Mix.Database.Services;
@@ -13,8 +14,9 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static partial class ServiceCollectionExtensions
     {
-        private static IServiceCollection AddMixCommonServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
+        public static IServiceCollection AddMixCommonServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<HttpService>();
             services.TryAddSingleton<DatabaseService>();
             services.TryAddSingleton<ILogStreamHubClientService, LogStreamHubClientService>();
@@ -25,13 +27,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<AuthConfigService>();
             services.TryAddScoped<SmtpConfigService>();
             services.TryAddScoped<IPSecurityConfigService>();
-
-            services.TryAddScoped<MixConfigurationService>();
+            
             services.TryAddSingleton<MixPermissionService>();
-            services.TryAddScoped<IMixCmsService, MixCmsService>();
-            services.TryAddScoped<MixCacheService>();
             services.TryAddScoped<TranslatorService>();
-
+            
             services.TryAddScoped<EmailService>();
             services.TryAddScoped<IMixEdmService, MixEdmService>();
             

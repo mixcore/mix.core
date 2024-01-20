@@ -30,6 +30,13 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
                .HasConversion(new EnumToStringConverter<MixDatabaseProvider>())
                .HasColumnType($"{Config.NString}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
+
+            builder.Property(e => e.NamingConvention)
+              .IsRequired()
+              .HasConversion(new EnumToStringConverter<MixDatabaseNamingConvention>())
+              .HasColumnType($"{Config.NString}{Config.SmallLength}")
+              .HasCharSet(Config.CharSet);
+
         }
     }
 }

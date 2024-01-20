@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.Amqp.Framing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Mix.Constant.Constants;
 using Mix.Constant.Enums;
 using Mix.Database.Base;
@@ -22,7 +24,6 @@ using Mix.Service.Interfaces;
 using Mix.Service.Services;
 using Mix.Shared.Dtos;
 using Mix.Shared.Models;
-using Mix.Shared.Services;
 using Newtonsoft.Json.Linq;
 using RepoDb;
 using RepoDb.Enumerations;
@@ -32,43 +33,20 @@ using System.Linq.Dynamic.Core;
 
 namespace Mix.RepoDb.Services
 {
-    public class MixDbService : TenantServiceBase, IMixDbService
+    public class MixDbService : TenantServiceBase, IMixDbService, IDisposable
     {
+        #region Properties
         private IDatabaseConstants _databaseConstant;
         private MixDatabaseProvider _databaseProvider;
         private readonly ICache _cache;
         private MixRepoDbRepository _repository;
         private MixRepoDbRepository _backupRepository;
-        private MixRepoDbRepository _associationRepository;
         private IMixMemoryCacheService _memoryCache;
 
-        #region Properties
 
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private readonly DatabaseService _databaseService;
 
-        private const string CreatedDateFieldName = "CreatedDateTime";
-        private const string CreatedByFieldName = "CreatedBy";
-        private const string PriorityFieldName = "Priority";
-        private const string IdFieldName = "Id";
-        private const string ParentIdFieldName = "ParentId";
-        private const string ChildIdFieldName = "ChildId";
-        private const string TenantIdFieldName = "MixTenantId";
-        private const string StatusFieldName = "Status";
-        private const string IsDeletedFieldName = "IsDeleted";
-
-        private static readonly string[] DefaultProperties =
-        {
-            "Id",
-            "CreatedDateTime",
-            "LastModified",
-            "MixTenantId",
-            "CreatedBy",
-            "ModifiedBy",
-            "Priority",
-            "Status",
-            "IsDeleted"
-        };
         #endregion
 
         public MixDbService(
@@ -86,8 +64,6 @@ namespace Mix.RepoDb.Services
             _cmsUow = uow;
             _databaseService = databaseService;
             _repository = repository;
-            _associationRepository = new MixRepoDbRepository(cache, databaseService, uow);
-            _associationRepository.InitTableName(nameof(MixDatabaseAssociation));
             _backupRepository = new MixRepoDbRepository(cache, databaseService, uow);
             _databaseProvider = _databaseService.DatabaseProvider;
             _databaseConstant = _databaseProvider switch
@@ -103,7 +79,7 @@ namespace Mix.RepoDb.Services
 
         #region Methods
 
-        #region CRUD
+        #region Implements
         public async Task<PagingResponseModel<JObject>> GetMyData(string tableName, SearchMixDbRequestDto req, string username)
         {
             var paging = new PagingRequestModel()
@@ -113,19 +89,24 @@ namespace Mix.RepoDb.Services
                 SortBy = req.OrderBy,
                 SortDirection = req.Direction
             };
-            var queries = await BuildSearchQueryAsync(tableName, req);
-            queries.Add(new(CreatedByFieldName, Operation.Equal, username));
+            var mixDb = await GetMixDatabase(tableName);
+
+            var fieldNameService = new FieldNameService(mixDb.NamingConvention);
+            var queries = await BuildSearchQueryAsync(tableName, req, fieldNameService);
+            queries.Add(new(fieldNameService.CreatedBy, Operation.Equal, username));
             return await GetResult(tableName, queries, paging, req.LoadNestedData);
         }
 
         public async Task<JObject?> GetMyDataById(string tableName, string username, int id, bool loadNestedData)
         {
+            var mixDb = await GetMixDatabase(tableName);
+            var fieldNameService = new FieldNameService(mixDb.NamingConvention);
             _repository.InitTableName(tableName);
             var queries = new List<QueryField>()
             {
-                new QueryField(TenantIdFieldName, CurrentTenant.Id),
-                new QueryField(IdFieldName, id),
-                new QueryField(CreatedByFieldName, username)
+                new QueryField(fieldNameService.TenantId, CurrentTenant.Id),
+                new QueryField(fieldNameService.Id, id),
+                new QueryField(fieldNameService.CreatedBy, username)
             };
 
             var obj = await _repository.GetSingleByAsync(queries);
@@ -134,7 +115,7 @@ namespace Mix.RepoDb.Services
                 var data = ReflectionHelper.ParseObject(obj);
                 if (loadNestedData)
                 {
-                    await LoadNestedData(id, data, tableName);
+                    await LoadNestedData(id, data, mixDb, fieldNameService);
                 }
                 return data;
             }
@@ -145,9 +126,12 @@ namespace Mix.RepoDb.Services
         {
             try
             {
+                var mixDb = await GetMixDatabase(tableName);
+                var fieldNameService = new FieldNameService(mixDb.NamingConvention);
+
                 _repository.InitTableName(tableName);
 
-                var obj = await _repository.GetSingleAsync(id);
+                var obj = await _repository.GetSingleAsync(new QueryField(fieldNameService.Id, id));
                 if (obj != null)
                 {
                     var data = await ParseDataAsync(tableName, obj);
@@ -155,11 +139,15 @@ namespace Mix.RepoDb.Services
 
                     if (loadNestedData)
                     {
-                        await LoadNestedData(id, data, tableName);
+                        await LoadNestedData(id, data, mixDb, fieldNameService);
                     }
                     return data;
                 }
                 return default;
+            }
+            catch (MixException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
@@ -169,20 +157,33 @@ namespace Mix.RepoDb.Services
 
         public async Task<JObject?> GetByParentIdAsync(string tableName, MixContentType parentType, int parentId, bool loadNestedData)
         {
-            _repository.InitTableName(tableName);
-
-            var obj = await _repository.GetSingleByParentAsync(parentType, parentId);
-            if (obj != null)
+            try
             {
-                var data = await ParseDataAsync(tableName, obj);
+                var mixDb = await GetMixDatabase(tableName);
+                var fieldNameService = new FieldNameService(mixDb.NamingConvention);
+                _repository.InitTableName(tableName);
 
-                if (loadNestedData)
+                var obj = await _repository.GetSingleByParentAsync(parentType, parentId);
+                if (obj != null)
                 {
-                    await LoadNestedData(data.Value<int>("id"), data, tableName);
+                    var data = await ParseDataAsync(tableName, obj);
+
+                    if (loadNestedData)
+                    {
+                        await LoadNestedData(data.Value<int>("id"), data, mixDb, fieldNameService);
+                    }
+                    return data;
                 }
-                return data;
+                return default;
             }
-            return default;
+            catch (MixException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
         }
 
         public async Task<JObject> ParseDataAsync(string tableName, dynamic obj)
@@ -219,6 +220,190 @@ namespace Mix.RepoDb.Services
             return data;
         }
 
+
+        // TODO: check why need to restart application to load new database schema for Repo Db Context !important
+        public async Task<bool> MigrateDatabase(RepoDbMixDatabaseViewModel database)
+        {
+            if (database.MixDatabaseContextId.HasValue)
+            {
+                await SwitchDbContext(database.MixDatabaseContext);
+            }
+
+            if (database is { Columns.Count: > 0 })
+            {
+                await Migrate(database, _databaseProvider, _repository);
+                _repository.CompleteTransaction();
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> BackupDatabase(RepoDbMixDatabaseViewModel database, CancellationToken cancellationToken = default)
+        {
+            if (database != null)
+            {
+                var data = await GetCurrentData(database, cancellationToken);
+                var fieldNameService = new FieldNameService(database.NamingConvention);
+                if (data is { Count: > 0 })
+                {
+                    InitBackupRepository(database.SystemName);
+                    await Migrate(database, _backupRepository.DatabaseProvider, _backupRepository);
+                    foreach (var item in data)
+                    {
+                        GetMembers(item, database.Columns.Select(c => c.SystemName).ToList(), fieldNameService);
+                    }
+                    var result = await _backupRepository.InsertManyAsync(data);
+                    return result > 0;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> RestoreFromLocal(RepoDbMixDatabaseViewModel database, FieldNameService fieldNameService)
+        {
+            try
+            {
+                if (File.Exists($"{MixFolders.BackupFolder}/backup_{database.SystemName}.sqlite"))
+                {
+                    InitBackupRepository(database.SystemName);
+                    var data = await _backupRepository.GetAllAsync();
+                    if (data is { Count: > 0 })
+                    {
+                        var dbColumns = database.Columns.Select(c => c.SystemName).Union(fieldNameService.GetAllFieldName()).ToList();
+                        string insertQuery = $"INSERT INTO {_databaseConstant.BacktickOpen}{database.SystemName}{_databaseConstant.BacktickClose} ({string.Join(',', dbColumns.Select(m => $"{_databaseConstant.BacktickOpen}{m}{_databaseConstant.BacktickClose}"))}) VALUES ";
+                        List<string> queries = new();
+                        foreach (var item in data)
+                        {
+                            queries.Add(GetInsertQuery(item, dbColumns));
+                        }
+                        insertQuery += string.Join(',', queries);
+                        if (database.MixDatabaseContextId.HasValue)
+                        {
+                            _repository.Init(database.SystemName, database.MixDatabaseContext.DatabaseProvider, database.MixDatabaseContext.ConnectionString);
+                        }
+                        else
+                        {
+                            _repository.InitTableName(database.SystemName);
+                        }
+                        var result = await _repository.ExecuteCommand(insertQuery);
+                        return result >= 0;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
+        }
+        public async Task<bool> MigrateSystemDatabases(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var strMixDbs = MixFileHelper.GetFile(
+                    "system-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
+            var obj = JObject.Parse(strMixDbs.Content);
+            var databases = obj.Value<JArray>("databases")?.ToObject<List<MixDatabase>>();
+            var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
+            if (databases != null)
+            {
+                foreach (var database in databases)
+                {
+                    if (!_cmsUow.DbContext.MixDatabase.Any(m => m.SystemName == database.SystemName))
+                    {
+
+                        RepoDbMixDatabaseViewModel currentDb = new(database, _cmsUow);
+                        currentDb.Id = 0;
+                        currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
+                        currentDb.CreatedDateTime = DateTime.UtcNow;
+                        currentDb.Columns = new();
+
+                        if (columns is not null)
+                        {
+                            var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
+                            foreach (var col in cols)
+                            {
+                                col.Id = 0;
+                                currentDb.Columns.Add(new(col, _cmsUow));
+                            }
+                        }
+
+                        await currentDb.SaveAsync(cancellationToken);
+
+                        if (currentDb is { Columns.Count: > 0 })
+                        {
+                            await Migrate(currentDb, _databaseService.DatabaseProvider, _repository);
+
+                        }
+                    }
+                }
+                return true;
+
+            }
+            return false;
+        }
+
+        public async Task<bool> MigrateInitNewDbContextDatabases(MixDatabaseContext dbContext, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            try
+            {
+                var strMixDbs = MixFileHelper.GetFile(
+                        "init-new-dbcontext-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
+                var obj = JObject.Parse(strMixDbs.Content);
+                var databases = obj.Value<JArray>("databases")?.ToObject<List<MixDatabase>>();
+                var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
+                if (databases != null)
+                {
+
+                    foreach (var database in databases)
+                    {
+                        string newDbName = $"{dbContext.SystemName}_{database.SystemName}";
+                        _repository.Init(newDbName, dbContext.DatabaseProvider, dbContext.ConnectionString);
+                        var currentDb = await RepoDbMixDatabaseViewModel.GetRepository(_cmsUow, CacheService)
+                                            .GetSingleAsync(m => m.SystemName == newDbName);
+                        if (currentDb == null)
+                        {
+
+                            currentDb = new(database, _cmsUow);
+                            currentDb.Id = 0;
+                            currentDb.SystemName = newDbName;
+                            currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
+                            currentDb.MixDatabaseContextId = dbContext.Id;
+                            currentDb.CreatedDateTime = DateTime.UtcNow;
+                            currentDb.Columns = new();
+
+                            if (columns is not null)
+                            {
+                                var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
+                                foreach (var col in cols)
+                                {
+                                    col.Id = 0;
+                                    col.MixDatabaseName = newDbName;
+                                    currentDb.Columns.Add(new(col, _cmsUow));
+                                }
+                            }
+
+                            await currentDb.SaveAsync(cancellationToken);
+
+                        }
+                        if (currentDb is { Columns.Count: > 0 })
+                        {
+                            await Migrate(currentDb, _databaseService.DatabaseProvider, _repository);
+
+                        }
+                    }
+                    return true;
+
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
+        }
 
         //public Task<int> CreateData(string tableName, JObject data)
         //{
@@ -258,65 +443,14 @@ namespace Mix.RepoDb.Services
 
         #region Helper
 
-        private async Task LoadNestedData(int id, JObject data, string tableName)
-        {
-            var database = await GetMixDatabase(tableName);
-            if (database is null)
-            {
-                return;
-            }
-
-            _repository.InitTableName(tableName);
-            foreach (var item in database.Relationships)
-            {
-                string pIdName = $"{item.SourceDatabaseName.ToTitleCase()}Id";
-                _repository.InitTableName(item.DestinateDatabaseName);
-                List<QueryField> query = new() { new(pIdName, Operation.Equal, id) };
-                var nestedData = await _repository.GetListByAsync(query);
-                if (nestedData is null)
-                {
-                    continue;
-                }
-
-                JArray result = new();
-                foreach (var nd in nestedData)
-                {
-                    result.Add(await ParseDataAsync(item.DestinateDatabaseName, nd));
-                }
-                data.Add(new JProperty(item.DisplayName, result));
-
-                //List<QueryField> associationQueries = GetAssociationQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
-                //var associations = await _associationRepository.GetListByAsync(associationQueries);
-                //if (associations != null && associations.Count > 0)
-                //{
-                //    var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
-                //    _repository.InitTableName(item.DestinateDatabaseName);
-                //    List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
-                //    var nestedData = await _repository.GetListByAsync(query);
-                //    if (nestedData is null)
-                //    {
-                //        continue;
-                //    }
-
-                //    JArray result = new();
-                //    foreach (var nd in nestedData)
-                //    {
-                //        result.Add(await ParseDataAsync(item.DestinateDatabaseName, nd));
-                //    }
-                //    data.Add(new JProperty(item.DisplayName, result));
-                //}
-                //else
-                //{
-                //    data.Add(new JProperty(item.DisplayName, new JArray()));
-                //}
-            }
-        }
+        
 
         private async Task<PagingResponseModel<JObject>> GetResult(string tableName,
             IEnumerable<QueryField> queries, PagingRequestModel paging, bool loadNestedData)
         {
             var result = await _repository.GetPagingAsync(queries, paging);
-
+            var mixDb = await GetMixDatabase(tableName);
+            var fieldNameService = new FieldNameService(mixDb.NamingConvention);
             var items = new List<JObject>();
             var database = await GetMixDatabase(tableName);
             if (database is null)
@@ -329,52 +463,95 @@ namespace Mix.RepoDb.Services
                 var data = ReflectionHelper.ParseObject(item);
                 if (loadNestedData)
                 {
-                    foreach (var rel in database.Relationships)
-                    {
-                        var id = data.Value<int>("id");
-
-                        List<QueryField> nestedQueries = GetAssociationQueries(rel.SourceDatabaseName, rel.DestinateDatabaseName, id);
-                        var associations = await _associationRepository.GetListByAsync(nestedQueries);
-                        if (associations is { Count: > 0 })
-                        {
-                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
-                            _repository.InitTableName(rel.DestinateDatabaseName);
-                            List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
-                            var nestedData = await _repository.GetListByAsync(query);
-                            data.Add(new JProperty(rel.DisplayName, ReflectionHelper.ParseArray(nestedData)));
-                        }
-                    }
+                    var id = data.Value<int>("id");
+                    LoadNestedData(id, data, mixDb, fieldNameService);
                 }
                 items.Add(data);
             }
             return new PagingResponseModel<JObject> { Items = items, PagingData = result.PagingData };
         }
+        private async Task LoadNestedData(int id, JObject data, RepoDbMixDatabaseViewModel database, FieldNameService fieldNameService)
+        {
+            
+            foreach (var item in database.Relationships)
+            {
+                // Many to many
+                if (item.Type == MixDatabaseRelationshipType.ManyToMany)
+                {
+                    var relDb = await GetMixDatabase(GetRelationshipDbName(database));
+                    var relFieldName = new FieldNameService(relDb.NamingConvention);
+                    _repository.InitTableName(relDb.SystemName);
+                    data = await LoadManyToManyData(relFieldName, item, id, fieldNameService);
+                }
+                else if(item.Type == MixDatabaseRelationshipType.OneToMany)
+                {
+                    data = await LoadOneToManyData(item, id, fieldNameService);
+                }
+            }
+        }
 
-        private List<QueryField> GetAssociationQueries(string? parentDatabaseName = null, string? childDatabaseName = null, int? parentId = null, int? childId = null)
+        private async Task<JObject> LoadOneToManyData(MixDatabaseRelationshipViewModel item, int id, FieldNameService fieldNameService)
+        {
+            JObject data = new JObject();
+            string pIdName = fieldNameService.GetParentId(item.SourceDatabaseName);
+            _repository.InitTableName(item.DestinateDatabaseName);
+            List<QueryField> query = new() { new(pIdName, Operation.Equal, id) };
+            var nestedData = await _repository.GetListByAsync(query);
+
+            JArray result = new();
+            foreach (var nd in nestedData)
+            {
+                result.Add(await ParseDataAsync(item.DestinateDatabaseName, nd));
+            }
+            data.Add(new JProperty(item.DisplayName, result));
+            return data;
+        }
+
+        private async Task<JObject> LoadManyToManyData(FieldNameService relFieldName, MixDatabaseRelationshipViewModel item, int id, FieldNameService fieldNameService)
+        {
+            JObject data = new JObject();
+            List<QueryField> queries = GetAssociationQueries(relFieldName, item.SourceDatabaseName, item.DestinateDatabaseName, id);
+            var associations = await _repository.GetListByAsync(queries);
+            if (associations is { Count: > 0 })
+            {
+                var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(fieldNameService.ChildId)).ToList();
+                _repository.InitTableName(item.DestinateDatabaseName);
+                List<QueryField> query = new() { new(fieldNameService.Id, Operation.In, nestedIds) };
+                var nestedData = await _repository.GetListByAsync(query);
+                if (nestedData != null)
+                {
+                    data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
+                }
+            }
+
+            return data;
+        }
+
+        private List<QueryField> GetAssociationQueries(FieldNameService fieldNameService, string? parentDatabaseName = null, string? childDatabaseName = null, int? parentId = null, int? childId = null)
         {
             var queries = new List<QueryField>();
             if (!string.IsNullOrEmpty(parentDatabaseName))
             {
-                queries.Add(new QueryField("ParentDatabaseName", parentDatabaseName));
+                queries.Add(new QueryField(fieldNameService.ParentDatabaseName, parentDatabaseName));
             }
             if (!string.IsNullOrEmpty(childDatabaseName))
             {
-                queries.Add(new QueryField("ChildDatabaseName", childDatabaseName));
+                queries.Add(new QueryField(fieldNameService.ChildDatabaseName, childDatabaseName));
             }
             if (parentId.HasValue)
             {
-                queries.Add(new QueryField(ParentIdFieldName, parentId));
+                queries.Add(new QueryField(fieldNameService.ParentId, parentId));
             }
             if (childId.HasValue)
             {
-                queries.Add(new QueryField(ChildIdFieldName, parentId));
+                queries.Add(new QueryField(fieldNameService.Id, parentId));
             }
             return queries;
         }
 
-        private async Task<RepoDbMixDatabaseViewModel?> GetMixDatabase(string tableName)
+        private async Task<RepoDbMixDatabaseViewModel> GetMixDatabase(string tableName)
         {
-            return await _memoryCache.TryGetValueAsync(
+            var result = await _memoryCache.TryGetValueAsync(
                 tableName,
                 cache =>
                 {
@@ -382,11 +559,21 @@ namespace Mix.RepoDb.Services
                     return RepoDbMixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
                 }
                 );
+            if (result == null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, "Invalid table name");
+            }
+            return result;
         }
-
-        private async Task<List<QueryField>> BuildSearchQueryAsync(string tableName, SearchMixDbRequestDto request)
+        private string GetRelationshipDbName(RepoDbMixDatabaseViewModel mixDb)
         {
-            var queries = BuildSearchPredicate(request);
+            return mixDb.MixDatabaseContextId.HasValue
+                        ? $"{mixDb.MixDatabaseContext.SystemName}_{MixDatabaseNames.DATA_RELATIONSHIP}"
+                        : MixDatabaseNames.DATA_RELATIONSHIP;
+        }
+        private async Task<List<QueryField>> BuildSearchQueryAsync(string tableName, SearchMixDbRequestDto request, FieldNameService fieldNameService)
+        {
+            var queries = BuildSearchPredicate(request, fieldNameService);
             if (request.ParentId.HasValue)
             {
                 var database = await GetMixDatabase(tableName);
@@ -397,14 +584,14 @@ namespace Mix.RepoDb.Services
 
                 if (database.Type == MixDatabaseType.AdditionalData || database.Type == MixDatabaseType.GuidAdditionalData)
                 {
-                    queries.Add(new(ParentIdFieldName, request.ParentId));
+                    queries.Add(new(fieldNameService.ParentId, request.ParentId));
                 }
                 else
                 {
                     var allowsIds = _cmsUow.DbContext.MixDatabaseAssociation
                             .Where(m => m.ParentDatabaseName == request.ParentName && m.ParentId == request.ParentId.Value && m.ChildDatabaseName == tableName)
                             .Select(m => m.ChildId).ToList();
-                    queries.Add(new(IdFieldName, Operation.In, allowsIds));
+                    queries.Add(new(fieldNameService.Id, Operation.In, allowsIds));
                 }
             }
 
@@ -419,11 +606,11 @@ namespace Mix.RepoDb.Services
             return queries;
         }
 
-        private List<QueryField> BuildSearchPredicate(SearchMixDbRequestDto req)
+        private List<QueryField> BuildSearchPredicate(SearchMixDbRequestDto req, FieldNameService fieldNameService)
         {
             var queries = new List<QueryField>()
             {
-                new QueryField(TenantIdFieldName, CurrentTenant.Id)
+                new QueryField(fieldNameService.TenantId, CurrentTenant.Id)
             };
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword))
             {
@@ -499,34 +686,11 @@ namespace Mix.RepoDb.Services
 
 
         #endregion
-        // TODO: check why need to restart application to load new database schema for Repo Db Context !important
-        public async Task<bool> MigrateDatabase(string name)
+        private async Task SwitchDbContext(MixDatabaseContextReadViewModel dbContext)
         {
-            RepoDbMixDatabaseViewModel database = await RepoDbMixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == name);
-
-            if (database.MixDatabaseContextId.HasValue)
-            {
-                await SwitchDbContext(database.MixDatabaseContextId.Value);
-            }
-
-            if (database is { Columns.Count: > 0 })
-            {
-                //await BackupDatabase(database.SystemName);
-                await Migrate(database, _databaseProvider, _repository);
-                _repository.CompleteTransaction();
-                //await RestoreFromLocal(database);
-                return true;
-            }
-            return false;
-        }
-
-        private async Task SwitchDbContext(int dbContextId)
-        {
-            var dbContext = await _cmsUow.DbContext.MixDatabaseContext.FirstOrDefaultAsync(m => m.Id == dbContextId);
-
             if (dbContext == null)
             {
-                throw new MixException(MixErrorStatus.Badrequest, $"Invalid MixDatabaseContext Id {dbContextId}");
+                throw new MixException(MixErrorStatus.Badrequest, $"Invalid MixDatabaseContext");
             }
             _databaseProvider = dbContext.DatabaseProvider;
             _databaseConstant = _databaseProvider switch
@@ -543,168 +707,17 @@ namespace Mix.RepoDb.Services
 
         // Only run after init CMS success
         // TODO: Add version to systemDatabases and update if have newer version
-        public async Task<bool> MigrateSystemDatabases(CancellationToken cancellationToken = default)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
 
-            var strMixDbs = MixFileHelper.GetFile(
-                    "system-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
-            var obj = JObject.Parse(strMixDbs.Content);
-            var databases = obj.Value<JArray>("databases")?.ToObject<List<MixDatabase>>();
-            var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
-            if (databases != null)
-            {
-                foreach (var database in databases)
-                {
-                    if (!_cmsUow.DbContext.MixDatabase.Any(m => m.SystemName == database.SystemName))
-                    {
-
-                        RepoDbMixDatabaseViewModel currentDb = new(database, _cmsUow);
-                        currentDb.Id = 0;
-                        currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
-                        currentDb.CreatedDateTime = DateTime.UtcNow;
-                        currentDb.Columns = new();
-
-                        if (columns is not null)
-                        {
-                            var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
-                            foreach (var col in cols)
-                            {
-                                col.Id = 0;
-                                currentDb.Columns.Add(new(col, _cmsUow));
-                            }
-                        }
-
-                        await currentDb.SaveAsync(cancellationToken);
-                        if (currentDb is { Columns.Count: > 0 })
-                        {
-                            await Migrate(currentDb, _databaseService.DatabaseProvider, _repository);
-
-                        }
-                    }
-                }
-                return true;
-
-            }
-            return false;
-        }
-
-        public async Task<bool> MigrateInitNewDbContextDatabases(MixDatabaseContext dbContext, CancellationToken cancellationToken = default)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            try
-            {
-                var strMixDbs = MixFileHelper.GetFile(
-                        "init-new-dbcontext-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
-                var obj = JObject.Parse(strMixDbs.Content);
-                var databases = obj.Value<JArray>("databases")?.ToObject<List<MixDatabase>>();
-                var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
-                if (databases != null)
-                {
-
-                    foreach (var database in databases)
-                    {
-                        string newDbName = $"{dbContext.SystemName}_{database.SystemName}";
-                        _repository.Init(newDbName, dbContext.DatabaseProvider, dbContext.ConnectionString);
-
-                        if (!_cmsUow.DbContext.MixDatabase.Any(m => m.SystemName == newDbName))
-                        {
-
-                            RepoDbMixDatabaseViewModel currentDb = new(database, _cmsUow);
-                            currentDb.Id = 0;
-                            currentDb.SystemName = newDbName;
-                            currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
-                            currentDb.MixDatabaseContextId = dbContext.Id;
-                            currentDb.CreatedDateTime = DateTime.UtcNow;
-                            currentDb.Columns = new();
-
-                            if (columns is not null)
-                            {
-                                var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
-                                foreach (var col in cols)
-                                {
-                                    col.Id = 0;
-                                    col.MixDatabaseName = newDbName;
-                                    currentDb.Columns.Add(new(col, _cmsUow));
-                                }
-                            }
-
-                            await currentDb.SaveAsync(cancellationToken);
-                            if (currentDb is { Columns.Count: > 0 })
-                            {
-                                await Migrate(currentDb, _databaseService.DatabaseProvider, _repository);
-
-                            }
-                        }
-                    }
-                    return true;
-
-                }
-                return false;
-            }
-            catch (Exception ex)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, ex);
-            }
-        }
-
-        // TODO: check why need to restart application to load new database schema for Repo Db Context !important
-        public async Task<bool> RestoreFromLocal(string name)
-        {
-            try
-            {
-                RepoDbMixDatabaseViewModel database = await RepoDbMixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == name);
-                if (database is { Columns.Count: > 0 })
-                {
-                    return await RestoreFromLocal(database);
-                }
-                return false;
-            }
-            catch (MixException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new MixException(MixErrorStatus.ServerError, ex);
-            }
-        }
-
-        public async Task<bool> BackupDatabase(string databaseName, CancellationToken cancellationToken = default)
-        {
-            var database = await RepoDbMixDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == databaseName, cancellationToken);
-            if (database != null)
-            {
-                return await BackupToLocal(database, cancellationToken);
-            }
-            return false;
-        }
 
         #endregion
 
         #region Private
 
-        private async Task<bool> BackupToLocal(RepoDbMixDatabaseViewModel database, CancellationToken cancellationToken = default)
-        {
-            var data = await GetCurrentData(database.SystemName, cancellationToken);
-            if (data is { Count: > 0 })
-            {
-                InitBackupRepository(database.SystemName);
-                await Migrate(database, _backupRepository.DatabaseProvider, _backupRepository);
-                foreach (var item in data)
-                {
-                    GetMembers(item, database.Columns.Select(c => c.SystemName.ToTitleCase()).ToList());
-                }
-                var result = await _backupRepository.InsertManyAsync(data);
-                return result > 0;
-            }
-            return true;
-        }
 
         private void InitBackupRepository(string databaseName)
         {
-            string cnn = $"Data Source=MixContent/Backup/backup_{databaseName}.sqlite";
+            MixFileHelper.CreateFolderIfNotExist(MixFolders.BackupFolder);
+            string cnn = $"Data Source={MixFolders.BackupFolder}/backup_{databaseName}.sqlite";
             using var ctx = new BackupDbContext(cnn);
             ctx.Database.EnsureCreated();
             ctx.Dispose();
@@ -712,36 +725,13 @@ namespace Mix.RepoDb.Services
 
         }
 
-        private async Task<bool> RestoreFromLocal(RepoDbMixDatabaseViewModel database)
-        {
-            if (File.Exists($"MixContent/Backup/backup_{database.SystemName}.sqlite"))
-            {
-                InitBackupRepository(database.SystemName);
-                var data = await _backupRepository.GetAllAsync();
-                if (data is { Count: > 0 })
-                {
-                    var dbColumns = database.Columns.Select(c => c.SystemName.ToTitleCase()).Union(DefaultProperties).ToList();
-                    string insertQuery = $"INSERT INTO {database.SystemName} ({string.Join(',', dbColumns.Select(m => $"{_databaseConstant.BacktickOpen}{m}{_databaseConstant.BacktickClose}"))}) VALUES ";
-                    List<string> queries = new();
-                    foreach (var item in data)
-                    {
-                        queries.Add(GetInsertQuery(item, dbColumns));
-                    }
-                    insertQuery += string.Join(',', queries);
-                    _repository.InitTableName(database.SystemName);
-                    var result = await _repository.ExecuteCommand(insertQuery);
-                    return result >= 0;
-                }
-            }
-            return true;
-        }
 
-        private void GetMembers(ExpandoObject obj, List<string> selectMembers)
+        private void GetMembers(ExpandoObject obj, List<string> selectMembers, FieldNameService fieldNameService)
         {
             var result = obj.ToList();
             foreach (KeyValuePair<string, object?> kvp in result)
             {
-                if (DefaultProperties.All(m => m != kvp.Key) && selectMembers.All(m => m != kvp.Key))
+                if (fieldNameService.GetAllFieldName().All(m => m != kvp.Key) && selectMembers.All(m => m != kvp.Key))
                 {
                     obj!.Remove(kvp.Key, out _);
                 }
@@ -774,10 +764,17 @@ namespace Mix.RepoDb.Services
             return $"({string.Join(',', values)})";
         }
 
-        private async Task<List<dynamic>?> GetCurrentData(string databaseName, CancellationToken cancellationToken = default)
+        private async Task<List<dynamic>?> GetCurrentData(RepoDbMixDatabaseViewModel database, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            _repository.InitTableName(databaseName);
+            if (database.MixDatabaseContextId.HasValue)
+            {
+                _repository.Init(database.SystemName, database.MixDatabaseContext.DatabaseProvider, database.MixDatabaseContext.ConnectionString);
+            }
+            else
+            {
+                _repository.InitTableName(database.SystemName);
+            }
             return await _repository.GetAllAsync(cancellationToken);
         }
 
@@ -785,6 +782,7 @@ namespace Mix.RepoDb.Services
             MixDatabaseProvider databaseProvider,
             MixRepoDbRepository repo)
         {
+            var fieldNameService = new FieldNameService(database.NamingConvention);
             var colsSql = new List<string>();
             var tableName = database.SystemName;
 
@@ -793,7 +791,7 @@ namespace Mix.RepoDb.Services
                 colsSql.Add(GenerateColumnSql(col));
             }
 
-            var commandText = GetMigrateTableSql(tableName, databaseProvider, colsSql);
+            var commandText = GetMigrateTableSql(tableName, databaseProvider, colsSql, fieldNameService);
             if (!string.IsNullOrEmpty(commandText))
             {
                 await repo.ExecuteCommand($"DROP TABLE IF EXISTS {_databaseConstant.BacktickOpen}{tableName}{_databaseConstant.BacktickClose};");
@@ -804,18 +802,18 @@ namespace Mix.RepoDb.Services
             return false;
         }
 
-        private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, List<string> colsSql)
+        private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, List<string> colsSql, FieldNameService fieldNameService)
         {
             return $"CREATE TABLE {_databaseConstant.BacktickOpen}{tableName}{_databaseConstant.BacktickClose} " +
-                $"({_databaseConstant.BacktickOpen}Id{_databaseConstant.BacktickClose} {GetAutoIncreaseIdSyntax(databaseProvider)}, " +
-                $"{_databaseConstant.BacktickOpen}CreatedDateTime{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.DateTime)}, " +
-                $"{_databaseConstant.BacktickOpen}LastModified{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.DateTime)} NULL, " +
-                $"{_databaseConstant.BacktickOpen}MixTenantId{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Integer)} NULL, " +
-                $"{_databaseConstant.BacktickOpen}CreatedBy{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NULL, " +
-                $"{_databaseConstant.BacktickOpen}ModifiedBy{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NULL, " +
-                $"{_databaseConstant.BacktickOpen}Priority{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Integer)} NOT NULL, " +
-                $"{_databaseConstant.BacktickOpen}Status{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NOT NULL, " +
-                $"{_databaseConstant.BacktickOpen}IsDeleted{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Boolean)} NOT NULL, " +
+                $"({_databaseConstant.BacktickOpen}{fieldNameService.Id}{_databaseConstant.BacktickClose} {GetAutoIncreaseIdSyntax(databaseProvider)}, " +
+                $"{_databaseConstant.BacktickOpen}{fieldNameService.CreatedDateTime}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.DateTime)}, " +
+                $"{_databaseConstant.BacktickOpen}{fieldNameService.LastModified}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.DateTime)} NULL, " +
+                $"{_databaseConstant.BacktickOpen}{fieldNameService.TenantId}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Integer)} NULL, " +
+                $"{_databaseConstant.BacktickOpen}{fieldNameService.CreatedBy}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NULL, " +
+                $"{_databaseConstant.BacktickOpen}{fieldNameService.ModifiedBy}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NULL, " +
+                $"{_databaseConstant.BacktickOpen}{fieldNameService.Priority}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Integer)} NOT NULL, " +
+                $"{_databaseConstant.BacktickOpen}{fieldNameService.Status}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NOT NULL, " +
+                $"{_databaseConstant.BacktickOpen}{fieldNameService.IsDeleted}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Boolean)} NOT NULL, " +
                 $" {string.Join(",", colsSql.ToArray())})";
         }
 
@@ -838,7 +836,7 @@ namespace Mix.RepoDb.Services
             string unique = col.ColumnConfigurations.IsUnique ? "Unique" : "";
             string defaultValue = !IsLongTextColumn(col) && !string.IsNullOrEmpty(col.DefaultValue)
                                     ? $"DEFAULT '{@col.DefaultValue}'" : string.Empty;
-            return $"{_databaseConstant.BacktickOpen}{col.SystemName.ToTitleCase()}{_databaseConstant.BacktickClose} {colType} {nullable} {unique} {defaultValue}";
+            return $"{_databaseConstant.BacktickOpen}{col.SystemName}{_databaseConstant.BacktickClose} {colType} {nullable} {unique} {defaultValue}";
         }
 
         private bool IsLongTextColumn(MixDatabaseColumnViewModel col)
@@ -906,6 +904,11 @@ namespace Mix.RepoDb.Services
             _repository.Dispose();
             _backupRepository.Dispose();
             _cmsUow.Dispose();
+        }
+
+        public Task<bool> RestoreFromLocal(RepoDbMixDatabaseViewModel database)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

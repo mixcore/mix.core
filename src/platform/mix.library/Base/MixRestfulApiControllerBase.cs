@@ -20,7 +20,7 @@ namespace Mix.Lib.Base
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         private UnitOfWorkInfo<MixCmsAccountContext> uow;
-        private IQueueService<MessageQueueModel> queueService;
+        private IMemoryQueueService<MessageQueueModel> queueService;
         private IPortalHubClientService portalHub;
 
         public MixRestfulApiControllerBase(
@@ -28,7 +28,7 @@ namespace Mix.Lib.Base
             IConfiguration configuration, MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService,
+            UnitOfWorkInfo<TDbContext> uow, IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration, 
@@ -36,7 +36,7 @@ namespace Mix.Lib.Base
         {
         }
 
-        public MixRestfulApiControllerBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<TDbContext> uow, UnitOfWorkInfo<MixCmsAccountContext> accUow, IQueueService<MessageQueueModel> queueService, IPortalHubClientService portalHub, IMixTenantService mixTenantService)
+        public MixRestfulApiControllerBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<TDbContext> uow, UnitOfWorkInfo<MixCmsAccountContext> accUow, IMemoryQueueService<MessageQueueModel> queueService, IPortalHubClientService portalHub, IMixTenantService mixTenantService)
              : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {

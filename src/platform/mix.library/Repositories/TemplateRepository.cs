@@ -120,6 +120,7 @@ namespace Mix.Lib.Repositories
                     using (var writer = File.CreateText(fileName))
                     {
                         writer.WriteLine(file.Content);
+                        writer.Dispose();
                         return true;
                     }
                 }

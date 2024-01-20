@@ -9,7 +9,7 @@ namespace Mix.Lib.Base
 {
     public abstract class MixApiControllerBase : Controller
     {
-        protected readonly IQueueService<MessageQueueModel> QueueService;
+        protected readonly IMemoryQueueService<MessageQueueModel> QueueService;
         protected readonly IConfiguration Configuration;
         protected readonly IMixCmsService MixCmsService;
         protected readonly IHttpContextAccessor HttpContextAccessor;
@@ -23,7 +23,7 @@ namespace Mix.Lib.Base
             MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService) : base()
+            IMemoryQueueService<MessageQueueModel> queueService) : base()
         {
             HttpContextAccessor = httpContextAccessor;
             CacheService = cacheService;

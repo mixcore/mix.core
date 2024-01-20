@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
 using Mix.Auth.Constants;
 using Mix.Lib.Services;
 using System.Security.Claims;
@@ -19,6 +20,7 @@ namespace Mix.Lib.Attributes
     {
         public string[] AllowedRoles { get; set; }
         public string[] UserRoles { get; set; }
+        protected readonly ILogger<MixAuthorizeAttribute> _logger;
         protected readonly MixIdentityService _idService;
         protected readonly MixPermissionService _permissionService;
         private readonly TenantUserManager _userManager;
@@ -27,11 +29,13 @@ namespace Mix.Lib.Attributes
             string roles,
             MixIdentityService idService,
             MixPermissionService permissionService,
-            TenantUserManager userManager)
+            TenantUserManager userManager,
+            ILogger<MixAuthorizeAttribute> logger)
         {
             _idService = idService;
             _permissionService = permissionService;
             _userManager = userManager;
+            _logger = logger;
             AllowedRoles = roles.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(r => r.Trim()).ToArray();
         }
 
@@ -43,8 +47,10 @@ namespace Mix.Lib.Attributes
             {
                 if (!IsInRoles())
                 {
+                    _logger.LogError("Not in role");
                     if (!ValidEnpointPermission(context))
                     {
+                        _logger.LogError("forbidden");
                         context.Result = new ForbidResult();
                         return;
                     }
@@ -52,6 +58,7 @@ namespace Mix.Lib.Attributes
             }
             else
             {
+                _logger.LogError("Invalid Token");
                 context.Result = new UnauthorizedResult();
                 return;
             }

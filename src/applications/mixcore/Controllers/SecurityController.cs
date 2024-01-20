@@ -54,11 +54,11 @@ namespace Mixcore.Controllers
         public ActionResult<JObject> ExternalLogin([FromForm] string returnUrl, [FromForm] MixExternalLoginProviders provider)
         {
             // Request a redirect to the external login provider.
-            returnUrl ??= _mixEndpointService.DefaultDomain;
-            returnUrl = returnUrl.Contains(_mixEndpointService.DefaultDomain) || returnUrl.StartsWith("http")
+            returnUrl ??= _mixEndpointService.Mixcore;
+            returnUrl = returnUrl.Contains(_mixEndpointService.Mixcore) || returnUrl.StartsWith("http")
                                 ? returnUrl
-                                : $"{_mixEndpointService.DefaultDomain.TrimEnd('/')}/{returnUrl.TrimStart('/')}";
-            var redirectUrl = $"/security/external-login-result?returnUrl={returnUrl}";
+                                : $"{_mixEndpointService.Mixcore.TrimEnd('/')}/{returnUrl.TrimStart('/')}";
+            var redirectUrl = $"{_mixEndpointService.Mixcore}/security/external-login-result";
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider.ToString(), redirectUrl);
             return new ChallengeResult(provider.ToString(), properties);
         }

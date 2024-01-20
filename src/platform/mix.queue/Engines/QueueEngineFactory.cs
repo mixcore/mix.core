@@ -40,7 +40,7 @@ namespace Mix.Queue.Engines
             string topicId,
             string subscriptionId,
             Func<T, Task> handler,
-            IQueueService<MessageQueueModel> memQueues,
+            IMemoryQueueService<MessageQueueModel> memQueues,
             MixEndpointService mixEndpointService)
             where T : MessageQueueModel
         {

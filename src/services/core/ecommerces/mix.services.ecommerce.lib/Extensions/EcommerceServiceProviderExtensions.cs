@@ -60,6 +60,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     {
                         context.Database.Migrate();
                     }
+                    context.Dispose();
                 }
             }
             services.TryAddScoped<OnepayService>();
@@ -79,6 +80,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     {
                         context.Database.Migrate();
                     }
+                    context.Dispose();  
                 }
             }
             services.TryAddScoped<PaypalService>();

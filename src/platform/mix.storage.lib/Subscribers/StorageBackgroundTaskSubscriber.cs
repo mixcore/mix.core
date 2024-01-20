@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Mix.Communicator.Models;
 using Mix.Communicator.Services;
 using Mix.Lib.Subscribers;
@@ -32,8 +33,9 @@ namespace Mix.Storage.Lib.Subscribers
             IConfiguration configuration,
             IAuditLogService auditLogService,
             IPortalHubClientService portalHub,
-            IQueueService<MessageQueueModel> queueService)
-            : base(TopicId, nameof(StorageBackgroundTaskSubscriber), 20, serviceProvider, configuration, queueService)
+            IMemoryQueueService<MessageQueueModel> queueService,
+            ILogger<StorageBackgroundTaskSubscriber> logger)
+            : base(TopicId, nameof(StorageBackgroundTaskSubscriber), 20, serviceProvider, configuration, queueService, logger)
         {
             AuditLogService = auditLogService;
             PortalHub = portalHub;

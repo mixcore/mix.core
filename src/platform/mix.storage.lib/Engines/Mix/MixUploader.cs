@@ -13,13 +13,13 @@ namespace Mix.Storage.Lib.Engines.Mix
 {
     public class MixUploader : UploaderBase
     {
-        protected readonly IQueueService<MessageQueueModel> _queueService;
+        protected readonly IMemoryQueueService<MessageQueueModel> _queueService;
         public StorageSettingsModel Settings { get; set; } = new();
         public MixUploader(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IQueueService<MessageQueueModel> queueService)
+            IMemoryQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, cmsUow)
         {
             Configuration.Bind("StorageSetting", Settings);
@@ -49,7 +49,7 @@ namespace Mix.Storage.Lib.Engines.Mix
 
                 if (Settings.IsAutoScaleImage && ImageHelper.IsImageResizeable(fileModel.Extension))
                 {
-                    _queueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.ScaleImage, fileModel.FullPath);
+                    _queueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.ScaleImage, fileModel.FullPath);
                 }
 
                 if (saveResult)

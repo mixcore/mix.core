@@ -17,6 +17,7 @@ using Mix.Identity.Interfaces;
 using Mix.Identity.Services;
 using Mix.Lib.Services;
 using Mix.Shared.Models.Configurations;
+using System.Reflection;
 using System.Text;
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -103,18 +104,17 @@ namespace Microsoft.Extensions.DependencyInjection
                  .AddMicrosoftIdentityWebApiIf(
                     !string.IsNullOrEmpty(authConfigurations.AzureAd?.ClientId),
                     configuration);
-
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.Cookie.HttpOnly = true;
-                options.Cookie.MaxAge = TimeSpan.FromMinutes(authConfigurations.AccessTokenExpiration);
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(authConfigurations.AccessTokenExpiration);
-                options.LoginPath = accessDeniedPath;
-                options.LogoutPath = "/";
-                options.AccessDeniedPath = accessDeniedPath;
-                options.SlidingExpiration = true;
-            });
-
+            //services.ConfigureApplicationCookie(options =>
+            //{
+            //    options.Cookie.Name = authConfigurations.Issuer;
+            //    options.Cookie.HttpOnly = true;
+            //    options.Cookie.MaxAge = TimeSpan.FromMinutes(authConfigurations.AccessTokenExpiration);
+            //    options.ExpireTimeSpan = TimeSpan.FromMinutes(authConfigurations.AccessTokenExpiration);
+            //    options.LoginPath = accessDeniedPath;
+            //    options.LogoutPath = "/";
+            //    options.AccessDeniedPath = accessDeniedPath;
+            //    options.SlidingExpiration = true;
+            //});
             // Firebase service must be singleton (only one firebase default instance)
             services.TryAddSingleton<FirebaseService>();
             services.TryAddScoped<MixDbDbContext>();

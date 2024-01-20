@@ -1,20 +1,25 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Azure.Amqp.Framing;
+using Microsoft.Build.Framework;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Middlewares;
+using Mix.Lib.Services;
 using Mix.Mixdb.Event.Services;
 using Mix.Service.Interfaces;
 using Mix.Shared;
 using Mix.Shared.Interfaces;
 using Mix.Shared.Models.Configurations;
 using Mix.SignalR.Interfaces;
+using StackExchange.Redis;
 using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -23,7 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static List<Assembly> MixAssemblies
         {
-            get => MixAssemblyFinder.GetMixAssemblies();
+            get => MixAssemblyFinder.GetAssembliesByPrefix("mix");
         }
 
         #region Services
@@ -32,42 +37,62 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var globalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings)
                                             .Get<GlobalSettingsModel>();
+            
+            var authConfig = configuration.GetSection(MixAppSettingsSection.Authentication)
+                                            .Get<MixAuthenticationConfigurations>();
+            
+            var redisCnn = configuration.GetSection("Redis").GetValue<string>("ConnectionString");
+
             services.AddOptions<GlobalSettingsModel>()
                  .Bind(configuration.GetSection(MixAppSettingsSection.GlobalSettings))
                  .ValidateDataAnnotations();
-
             services.AddMvc().AddSessionStateTempDataProvider();
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSession(options =>
+
+            if (!string.IsNullOrEmpty(redisCnn))
             {
-                options.IdleTimeout = TimeSpan.FromHours(4);
-                options.Cookie.SecurePolicy = CookieSecurePolicy.None;
-                options.Cookie.SameSite = SameSiteMode.Strict;
-                options.Cookie.HttpOnly = true;
-                // Make the session cookie essential if you wish
-                //options.Cookie.IsEssential = true;
-            });
-            services.AddMixCommonServices(executingAssembly, configuration);
+                var redis = ConnectionMultiplexer.Connect(configuration.GetSection("Redis").GetValue<string>("ConnectionString"));
+                services.AddDataProtection()
+                    .SetApplicationName(authConfig.Issuer)
+                    .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
+
+                var sp = services.BuildServiceProvider();
+
+                // perform a protect operation to force the system to put at least
+                // one key in the key ring
+                sp.GetDataProtector("Sample.KeyManager.v1").Protect("payload");
+                Console.WriteLine("Performed a protect operation.");
+                Thread.Sleep(2000);
+            }
+            else
+            {
+                services.AddDataProtection()
+                .UnprotectKeysWithAnyCertificate()
+                .SetApplicationName(authConfig.Issuer);
+            }
+
+            
+            services.AddMixCommonServices(configuration);
+            services.TryAddScoped<MixConfigurationService>();
+            services.TryAddScoped<IMixCmsService, MixCmsService>();
+
             services.AddMixDbContexts();
             services.AddUoWs();
-            services.AddMixCache(configuration);
             services.CustomValidationResponse();
             services.AddHttpClient();
             services.AddHttpLogging(opt => opt.CombineLogs = true);
-            services.ApplyMigrations(globalConfig);
 
             services.AddQueues(executingAssembly, configuration);
 
             // Don't need to inject all entity repository by default
             //services.AddEntityRepositories();
 
-            services.AddMixTenant();
+            services.AddMixTenant(configuration);
             services.AddGeneratedPublisher();
 
 
             services.AddMixModuleServices(configuration);
 
-            services.AddGeneratedRestApi();
+            services.AddGeneratedRestApi(MixAssemblies);
             services.AddMixSwaggerServices(executingAssembly);
             services.AddSSL();
 
@@ -90,13 +115,17 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             // Clone Settings from shared folder
             var globalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
-
+            var authConfig = configuration.GetSection(MixAppSettingsSection.Authentication)
+                                            .Get<MixAuthenticationConfigurations>(); 
             services.AddMvc().AddSessionStateTempDataProvider();
-            services.AddSession();
-            services.AddMixCommonServices(executingAssembly, configuration);
+          
+
+            services.AddMixCommonServices(configuration);
+            services.TryAddScoped<MixConfigurationService>();
+            services.TryAddScoped<IMixCmsService, MixCmsService>();
+
             services.AddMixDbContexts();
             services.AddUoWs();
-            services.AddMixCache(configuration);
             services.CustomValidationResponse();
             services.AddHttpClient();
             services.AddLogging();
@@ -105,13 +134,13 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddQueues(executingAssembly, configuration);
 
-            services.AddMixTenant();
+            services.AddMixTenant(configuration);
             services.AddGeneratedPublisher();
 
 
             services.AddMixModuleServices(configuration);
 
-            services.AddGeneratedRestApi();
+            services.AddGeneratedRestApi(MixAssemblies);
             services.AddMixSwaggerServices(executingAssembly);
             services.AddSSL();
 

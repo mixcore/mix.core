@@ -24,7 +24,7 @@ namespace Mix.Common.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             MixRepoDbRepository mixRepoDbRepository,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)

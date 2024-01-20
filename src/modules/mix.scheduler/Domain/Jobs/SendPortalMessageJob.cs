@@ -15,7 +15,7 @@ namespace Mix.Scheduler.Domain.Jobs
         private readonly IPortalHubClientService _portalHub;
         public SendPortalMessageJob(
             IServiceProvider serviceProvider,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub)
             : base(serviceProvider, queueService)
         {

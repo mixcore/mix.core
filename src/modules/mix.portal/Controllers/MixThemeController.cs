@@ -35,7 +35,7 @@ namespace Mix.Portal.Controllers
             IMixThemeImportService importService,
             IMixThemeExportService exportService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             HttpService httpService,
             IHubContext<MixThemeHub> hubContext,
             MixConfigurationService configService,

@@ -1,9 +1,11 @@
 ﻿using Azure.Core;
 using Google.Api;
+using Google.Apis.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
@@ -21,16 +23,18 @@ using System.Threading.Tasks;
 
 namespace Mix.Queue.Engines
 {
-    public abstract class SubscriberBase : IHostedService
+    public abstract class SubscriberBase : BackgroundService
     {
-        protected IQueueService<MessageQueueModel> _memQueueService;
-        protected readonly IQueueSubscriber _subscriber;
+        protected IMemoryQueueService<MessageQueueModel> _memQueueService;
+        protected IQueueSubscriber _subscriber;
         protected readonly IConfiguration _configuration;
         protected readonly string _topicId;
+        protected readonly string _moduleName;
         protected readonly int _timeout;
         protected MixCacheService CacheService;
         protected readonly IServiceProvider ServicesProvider;
         protected IServiceScope ServiceScope { get; set; }
+        protected ILogger<SubscriberBase> _logger { get; set; }
 
 
         protected SubscriberBase(
@@ -39,39 +43,67 @@ namespace Mix.Queue.Engines
             int timeout,
             IServiceProvider servicesProvider,
             IConfiguration configuration,
-            IQueueService<MessageQueueModel> queueService)
+            IMemoryQueueService<MessageQueueModel> queueService,
+            ILogger<SubscriberBase> logger)
         {
             _timeout = timeout;
             _configuration = configuration;
             _topicId = topicId;
+            _moduleName = moduleName;
             _memQueueService = queueService;
             ServicesProvider = servicesProvider;
-            _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{moduleName}");
+            _logger = logger;
         }
-
-        public virtual Task StartAsync(CancellationToken cancellationToken = default)
+        protected async override Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            try
-            {
-                Task.Run(async () =>
-                {
-                    if (_subscriber != null)
-                    {
-                        await _subscriber.ProcessQueue(cancellationToken);
-                    }
-                }, cancellationToken);
-                return Task.CompletedTask;
-            }
-            catch (Exception ex)
-            {
-                throw new MixException(MixErrorStatus.ServerError, _subscriber.SubscriptionId, ex);
-            }
+            _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{_moduleName}");
+            await StartProcessQueue(cancellationToken);
         }
 
-        public virtual Task StopAsync(CancellationToken cancellationToken = default)
+        public virtual async Task StopAsync(CancellationToken cancellationToken)
         {
             Console.Error.WriteLine($"{_subscriber.SubscriptionId} stopped at {DateTime.UtcNow}");
-            return Task.CompletedTask;
+            if (_subscriber is MixQueueSubscriber<MessageQueueModel>)
+            {
+                await (_subscriber as MixQueueSubscriber<MessageQueueModel>).Disconnect();
+            }
+        }
+
+        #region Privates
+        private async Task StartProcessQueue(CancellationToken cancellationToken)
+        {
+            _logger.LogInformation($"StartProcessQueue: {_subscriber.SubscriptionId} started at {DateTime.UtcNow.AddHours(7)}");
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+
+                    if (_subscriber != null)
+                    {
+                        
+                        await _subscriber.ProcessQueue(cancellationToken);
+                    }
+                    await Task.Delay(1000, cancellationToken);
+                    if (_subscriber is MixQueueSubscriber<MessageQueueModel>)
+                    {
+                        await (_subscriber as MixQueueSubscriber<MessageQueueModel>).Disconnect();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (_subscriber is MixQueueSubscriber<MessageQueueModel>)
+                    {
+                        await (_subscriber as MixQueueSubscriber<MessageQueueModel>).Disconnect();
+                    }
+
+                    _logger.LogError($"StartProcessQueue: {_subscriber.SubscriptionId} is broken at {DateTime.UtcNow.AddHours(7)}, Trying to reconnect from client: {ex.Message}", ex);
+
+                    await Task.Delay(2000, cancellationToken);
+                    _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{_moduleName}");
+                    await StartProcessQueue(cancellationToken);
+                }
+            }
+            _logger.LogInformation($"StartProcessQueue: {_subscriber.SubscriptionId} stopped at {DateTime.UtcNow.AddHours(7)}");
         }
 
         private IQueueSubscriber CreateSubscriber(string topicId, string subscriptionId)
@@ -122,10 +154,10 @@ namespace Mix.Queue.Engines
             return default;
         }
 
-        protected T GetRequiredService<T>()
+        protected T? GetRequiredService<T>()
         {
             ServiceScope ??= ServicesProvider.CreateScope();
-            return ServiceScope.ServiceProvider.GetRequiredService<T>();
+            return ServiceScope.ServiceProvider.GetRequiredService<T?>();
         }
 
         public async Task MessageHandler(MessageQueueModel data)
@@ -137,7 +169,6 @@ namespace Mix.Queue.Engines
                     return;
                 }
 
-                CacheService ??= GetRequiredService<MixCacheService>();
                 if (Handler(data).Wait(TimeSpan.FromSeconds(_timeout)))
                 {
                     return;
@@ -149,11 +180,16 @@ namespace Mix.Queue.Engines
             {
                 await HandleException(data, ex);
             }
+            finally
+            {
+                ServiceScope?.Dispose();
+                ServiceScope = null;
+            }
         }
 
         public virtual Task HandleDeadLetter(MessageQueueModel message)
         {
-            _memQueueService.PushQueue(new MessageQueueModel(1)
+            _memQueueService.PushMemoryQueue(new MessageQueueModel(1)
             {
                 Action = MixQueueActions.DeadLetter,
                 TopicId = MixQueueTopics.MixLog,
@@ -165,7 +201,7 @@ namespace Mix.Queue.Engines
 
         public virtual Task HandleException(MessageQueueModel data, Exception ex)
         {
-            _memQueueService.PushQueue(new MessageQueueModel(1)
+            _memQueueService.PushMemoryQueue(new MessageQueueModel(1)
             {
                 Action = MixQueueActions.QueueFailed,
                 TopicId = MixQueueTopics.MixLog,
@@ -179,5 +215,6 @@ namespace Mix.Queue.Engines
         }
 
         public abstract Task Handler(MessageQueueModel model);
+        #endregion
     }
 }

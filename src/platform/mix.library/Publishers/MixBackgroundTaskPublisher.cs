@@ -10,7 +10,7 @@ namespace Mix.Lib.Publishers
         private const string TopicId = MixQueueTopics.MixBackgroundTasks;
 
         public MixBackgroundTaskPublisher(
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
             MixEndpointService mixEndpointService,
             ILogger<MixBackgroundTaskPublisher> logger)

@@ -5,6 +5,7 @@
     {
         #region Properties
         public MixDatabaseProvider DatabaseProvider { get; set; }
+        public MixDatabaseNamingConvention NamingConvention { get; set; }
         public string ConnectionString { get; set; }
         public string Schema { get; set; }
         public string SystemName { get; set; }

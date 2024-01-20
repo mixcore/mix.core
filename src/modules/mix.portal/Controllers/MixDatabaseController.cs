@@ -3,6 +3,7 @@ using Mix.Auth.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.RepoDb.Interfaces;
+using Mix.RepoDb.ViewModels;
 using Mix.SignalR.Interfaces;
 
 namespace Mix.Portal.Controllers
@@ -21,7 +22,7 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IMixDbService mixDbService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
@@ -62,7 +63,9 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult> Migrate(string name)
         {
             //await _mixDbService.BackupDatabase(name);
-            var result = await _mixDbService.MigrateDatabase(name);
+            RepoDbMixDatabaseViewModel database = await RepoDbMixDatabaseViewModel
+                       .GetRepository(Uow, CacheService).GetSingleAsync(m => m.SystemName == name);
+            var result = await _mixDbService.MigrateDatabase(database);
             //await _mixDbService.RestoreFromLocal(name);
             return result ? Ok() : BadRequest();
         }
@@ -72,7 +75,7 @@ namespace Mix.Portal.Controllers
         public ActionResult Backup(string name)
         {
             var msg = new MessageQueueModel(CurrentTenant.Id, MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Backup, name);
-            QueueService.PushQueue(msg);
+            QueueService.PushMemoryQueue(msg);
             return Ok();
         }
 
@@ -81,7 +84,7 @@ namespace Mix.Portal.Controllers
         public ActionResult RestoreAsync(string name)
         {
             var msg = new MessageQueueModel(CurrentTenant.Id, MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Restore, name);
-            QueueService.PushQueue(msg);
+            QueueService.PushMemoryQueue(msg);
             return Ok();
         }
 
@@ -90,7 +93,7 @@ namespace Mix.Portal.Controllers
         public ActionResult UpdateAsync(string name)
         {
             var msg = new MessageQueueModel(CurrentTenant.Id, MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Update, name);
-            QueueService.PushQueue(msg);
+            QueueService.PushMemoryQueue(msg);
             return Ok();
         }
 

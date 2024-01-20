@@ -9,6 +9,7 @@ package mixmq;
 service MixMq {
   // Sends a greeting
   rpc Subscribe (SubscribeRequest) returns (stream SubscribeReply);
+  rpc Disconnect (SubscribeRequest) returns (google.protobuf.Empty);
   rpc Publish (PublishMessageRequest) returns (google.protobuf.Empty);
 }
 

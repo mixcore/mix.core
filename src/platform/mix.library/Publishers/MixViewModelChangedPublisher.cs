@@ -12,7 +12,7 @@ namespace Mix.Lib.Publishers
         private const string TopicId = MixQueueTopics.MixViewModelChanged;
 
         public MixViewModelChangedPublisher(
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
             MixEndpointService mixEndpointService,
             ILogger<MixViewModelChangedPublisher> logger)

@@ -11,7 +11,7 @@ namespace Mix.Scheduler.Domain.Jobs
     public class SendMessageQueueJob : MixJobBase
     {
         public SendMessageQueueJob(
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IServiceProvider serviceProvider) : base(serviceProvider, queueService)
         {
         }
@@ -19,7 +19,7 @@ namespace Mix.Scheduler.Domain.Jobs
         public override Task ExecuteHandler(IJobExecutionContext context)
         {
             var objData = JObject.Parse(context.Trigger.JobDataMap.GetString("data") ?? "{}");
-            int tenantId = objData.Value<int>("tenantId");
+            int tenantId = objData.Value<int?>("tenantId") ?? 1;
 
             var msg = new MessageQueueModel(tenantId)
             {
@@ -29,7 +29,7 @@ namespace Mix.Scheduler.Domain.Jobs
                 Data = objData.Value<JObject>("data").ToString()
             };
 
-            QueueService.PushQueue(msg);
+            QueueService.PushMemoryQueue(msg);
 
             return Task.CompletedTask;
         }

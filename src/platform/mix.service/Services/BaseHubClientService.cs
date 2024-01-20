@@ -108,8 +108,9 @@ namespace Mix.Service.Services
                 }
 
                 catch (Exception ex)
-                {
+                {   
                     IsStarting = false;
+                    await Task.Delay(2000);
                     Console.WriteLine(ex);
                 }
             }

@@ -1,4 +1,5 @@
-﻿using Mix.Shared.Interfaces;
+﻿using Mix.Lib.Interfaces;
+using Mix.Shared.Interfaces;
 using Mix.Storage.Lib.Extensions;
 
 namespace Mix.Storage.Domain

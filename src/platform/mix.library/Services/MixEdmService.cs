@@ -7,15 +7,15 @@ namespace Mix.Lib.Services
 {
     public class MixEdmService : TenantServiceBase, IMixEdmService
     {
-        protected readonly IQueueService<MessageQueueModel> _queueService;
+        protected readonly IMemoryQueueService<MessageQueueModel> _queueService;
         protected readonly UnitOfWorkInfo<MixCmsContext> _uow;
 
         public MixEdmService(
             IHttpContextAccessor httpContextAccessor,
-            UnitOfWorkInfo<MixCmsContext> uow,
-            IQueueService<MessageQueueModel> queueService,
-            MixCacheService cacheService,
-            IMixTenantService mixTenantService) : base(httpContextAccessor, cacheService, mixTenantService)
+            IMemoryQueueService<MessageQueueModel> queueService,
+            MixCacheService cacheService = null,
+            IMixTenantService mixTenantService = null,
+            UnitOfWorkInfo<MixCmsContext> uow = null) : base(httpContextAccessor, cacheService, mixTenantService)
         {
             _uow = uow;
             _queueService = queueService;
@@ -23,6 +23,11 @@ namespace Mix.Lib.Services
 
         public async Task<string> GetEdmTemplate(string filename)
         {
+            if (_uow == null )
+            {
+                return string.Empty;
+            }
+
             var edmTemplate = await MixTemplateViewModel.GetRepository(_uow, CacheService).GetSingleAsync(
                m => m.FolderType == MixTemplateFolderType.Edms
                         && m.FileName == filename);
@@ -30,13 +35,13 @@ namespace Mix.Lib.Services
         }
 
         public virtual async Task SendMailWithEdmTemplate(
-            string subject, string templateName, JObject data, 
-            string to, 
+            string subject, string templateName, JObject data,
+            string to,
             string cc = null,
             string from = null)
         {
             var template = await GetEdmTemplate(templateName);
-            if (template == null)
+            if (string.IsNullOrEmpty(template))
             {
                 throw new MixException(MixErrorStatus.Badrequest, $"Edm {templateName} not found");
             }
@@ -57,7 +62,32 @@ namespace Mix.Lib.Services
                 CC = cc,
                 To = to
             };
-            _queueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.SendMail, msg);
+            _queueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.SendMail, msg);
+        }
+        
+        public virtual async Task SendMailWithTemplate(
+            string subject, string template, JObject data,
+            string to,
+            string cc = null,
+            string from = null)
+        {
+            foreach (var prop in data.Properties().ToList())
+            {
+                if (data.ContainsKey(prop.Name))
+                {
+                    template = template.Replace($"[[{prop.Name}]]", data.GetValue(prop.Name).ToString());
+                }
+            }
+
+            EmailMessageModel msg = new()
+            {
+                Subject = subject,
+                Message = template,
+                From = from,
+                CC = cc,
+                To = to
+            };
+            _queueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.SendMail, msg);
         }
     }
 }

@@ -1,10 +1,25 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Constant.Constants;
+using Mix.Heart.Services;
+using Mix.Lib.Helpers;
+using Mix.Log.Lib;
 using Mix.Mq.Lib.Models;
 using Mix.Mq.Server.Domain.Services;
+using OpenTelemetry;
+using System.Configuration;
+using System.Reflection;
 
-var builder = WebApplication.CreateBuilder(args);
+if (Directory.Exists($"../{MixFolders.MixCoreConfigurationFolder}"))
+{
+    MixFileHelper.CopyFolder($"../{MixFolders.MixCoreConfigurationFolder}", MixFolders.MixContentSharedFolder);
+}
 
-builder.AddServiceDefaults();
+
+var builder = MixCmsHelper.CreateWebApplicationBuilder(args);
+if (builder.Environment.IsDevelopment())
+{
+    builder.AddServiceDefaults();
+}
 
 // Add services to the container.
 
@@ -13,11 +28,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 
+builder.Services.TryAddSingleton<GrpcStreamingService>();
 builder.Services.TryAddSingleton<MixQueueMessages<MessageQueueModel>>();
+builder.Services.AddHostedService<MixMqSubscriptionService>();
 
 // Add services to the container.
 builder.Services.AddGrpc();
-builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
+builder.Services.AddMixCors();
+builder.Services.AddCors(o => o.AddPolicy("AllowAllGrpc", builder =>
 {
     builder.AllowAnyOrigin()
            .AllowAnyMethod()
@@ -25,21 +43,31 @@ builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
            .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
 }));
 
+builder.Services.AddMixLog(builder.Configuration);
+builder.Services.AddMixSignalR(builder.Configuration);
+builder.Services.AddMixCommunicators();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
-app.MapDefaultEndpoints();
+if (app.Environment.IsDevelopment())
+{
+    app.MapDefaultEndpoints();
+}
 
 // Configure the HTTP request pipeline.
 
 app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
 app.UseRouting();
-app.UseCors();
+app.UseMixCors();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapGrpcService<MixMqService>().EnableGrpcWeb()
-    .RequireCors("AllowAll"); ;
+    .RequireCors("AllowAllGrpc");
+    endpoints.UseMixSignalRApp();
 });
-
-app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
-
+app.UseSwagger();
+app.UseSwaggerUI();
+app.UseMixSwaggerApps(app.Environment.IsDevelopment(), Assembly.GetExecutingAssembly());
+app.MapControllers();
 app.Run();

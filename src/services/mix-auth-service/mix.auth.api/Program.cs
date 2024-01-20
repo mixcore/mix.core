@@ -7,20 +7,23 @@ using Mix.Log.Lib;
 using Microsoft.Azure.Amqp.Framing;
 using Mix.Lib.Middlewares;
 
-if (Directory.Exists("../../../applications/mixcore/mixcontent"))
+if (Directory.Exists($"../{MixFolders.MixCoreConfigurationFolder}"))
 {
-    MixFileHelper.CopyFolder("../../../applications/mixcore/mixcontent", MixFolders.MixContentFolder);
+    MixFileHelper.CopyFolder($"../{MixFolders.MixCoreConfigurationFolder}", MixFolders.MixContentSharedFolder);
 }
+
 var builder = MixCmsHelper.CreateWebApplicationBuilder(args);
 
-builder.AddServiceDefaults();
+if (builder.Environment.IsDevelopment())
+{
+    builder.AddServiceDefaults();
+}
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddMixServices(Assembly.GetExecutingAssembly(), builder.Configuration);
 builder.Services.AddMixCors();
@@ -31,13 +34,11 @@ builder.Services.AddMixAuthorize<MixCmsAccountContext>(builder.Configuration);
 
 var app = builder.Build();
 
-app.MapDefaultEndpoints();
-
 app.UseMixTenant();
 app.UseMiddleware<AuditlogMiddleware>();
-app.UseMixAuth();
 app.UseMixCors();
 app.UseRouting();
+app.UseMixAuth();
 app.UseMixCors();
 app.UseMixApps(Assembly.GetExecutingAssembly(), builder.Configuration, builder.Environment.ContentRootPath, builder.Environment.IsDevelopment());
 

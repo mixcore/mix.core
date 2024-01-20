@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Lib.ViewModels.ReadOnly;
 using System.ComponentModel.DataAnnotations;
+using System.Threading;
 
 namespace Mix.Lib.ViewModels
 {
@@ -10,7 +11,6 @@ namespace Mix.Lib.ViewModels
         public int? MixDatabaseContextId { get; set; }
         [Required]
         public string SystemName { get; set; }
-
         public MixDatabaseType Type { get; set; } = MixDatabaseType.Service;
         public List<string> ReadPermissions { get; set; }
         public List<string> CreatePermissions { get; set; }
@@ -113,7 +113,43 @@ namespace Mix.Lib.ViewModels
                     item.ParentId = parentEntity.Id;
                     item.SourceDatabaseName = parentEntity.SystemName;
                     await item.SaveAsync(cancellationToken);
+
+                    await CreateRefColumn(item);
+
                     ModifiedEntities.AddRange(item.ModifiedEntities);
+                }
+            }
+        }
+
+        private async Task CreateRefColumn(MixDatabaseRelationshipViewModel item, CancellationToken cancellationToken = default)
+        {
+            if (item.Type == MixDatabaseRelationshipType.OneToMany)
+            {
+                var referenceColumnName = $"{item.SourceDatabaseName}Id";
+                var fieldNameService = new FieldNameService(MixDatabaseNamingConvention.TitleCase);
+                if (MixDatabaseContextId.HasValue)
+                {
+                    var dbContext = Context.MixDatabaseContext.First(m => m.Id == MixDatabaseContextId);
+                    fieldNameService = new FieldNameService(dbContext.NamingConvention);
+                    referenceColumnName = $"{item.SourceDatabaseName}_id";
+                }
+
+                if (!Context.MixDatabaseColumn.Any(m => m.MixDatabaseName == item.DestinateDatabaseName && m.SystemName == referenceColumnName))
+                {
+                    var srcDb = Context.MixDatabase.FirstOrDefault(m => m.SystemName == item.SourceDatabaseName);
+                    var destDb = Context.MixDatabase.FirstOrDefault(m => m.SystemName == item.DestinateDatabaseName);
+                    var refCol = new MixDatabaseColumnViewModel(UowInfo)
+                    {
+                        MixDatabaseName = item.DestinateDatabaseName,
+                        MixDatabaseId = destDb.Id,
+                        DataType = MixDataType.Reference,
+                        CreatedBy = CreatedBy,
+                        DisplayName = item.ReferenceColumnName.ToTitleCase(),
+                        SystemName = referenceColumnName
+                    };
+
+                    await refCol.SaveAsync(cancellationToken);
+                    ModifiedEntities.AddRange(refCol.ModifiedEntities);
                 }
             }
         }

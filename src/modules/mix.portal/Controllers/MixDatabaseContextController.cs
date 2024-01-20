@@ -15,7 +15,7 @@ namespace Mix.Portal.Controllers
         : MixRestfulApiControllerBase<MixDatabaseContextViewModel, MixCmsContext, MixDatabaseContext, int>
     {
         private readonly IMixDbService _mixDbService;
-        public MixDatabaseContextController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> uow, IQueueService<MessageQueueModel> queueService,
+        public MixDatabaseContextController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> uow, IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService, IMixDbService mixDbService)
             : base(httpContextAccessor, configuration,

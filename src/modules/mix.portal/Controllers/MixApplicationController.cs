@@ -23,7 +23,7 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> uow,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService,
             IMixApplicationService applicationService)
@@ -44,7 +44,7 @@ namespace Mix.Portal.Controllers
             {
                 return BadRequest($"BaseHref: \"{app.BaseHref}\" existed");
             }
-            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.InstallMixApplication, app);
+            QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.InstallMixApplication, app);
             return NoContent();
         }
 

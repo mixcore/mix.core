@@ -216,6 +216,7 @@ namespace Mix.Lib.Helpers
                             workbook.SaveAs(stream);
                             var content = stream.ToArray();
                             MixFileHelper.SaveFileBytes(folderPath, filename, content);
+                            stream.Dispose();
                             return repositoryResponse;
                         }
                     }
@@ -236,42 +237,46 @@ namespace Mix.Lib.Helpers
 
             //create a new Excel package in a memorystream
             using (var stream = file.OpenReadStream())
-            using (XLWorkbook excelPackage = new XLWorkbook(stream))
             {
-                //loop all worksheets
-                foreach (var worksheet in excelPackage.Worksheets)
+                using (XLWorkbook excelPackage = new XLWorkbook(stream))
                 {
-                    bool FirstRow = true;
-                    //Range for reading the cells based on the last cell used.  
-                    string readRange = "1:1";
-                    List<string> columnNames = new();
-                    foreach (IXLRow row in worksheet.RowsUsed())
+                    //loop all worksheets
+                    foreach (var worksheet in excelPackage.Worksheets)
                     {
-                        //If Reading the First Row (used) then add them as column name  
-                        if (FirstRow)
+                        bool FirstRow = true;
+                        //Range for reading the cells based on the last cell used.  
+                        string readRange = "1:1";
+                        List<string> columnNames = new();
+                        foreach (IXLRow row in worksheet.RowsUsed())
                         {
-                            readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
-                            foreach (IXLCell cell in row.Cells(readRange))
+                            //If Reading the First Row (used) then add them as column name  
+                            if (FirstRow)
                             {
-                                columnNames.Add(cell.Value.ToString());
+                                readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
+                                foreach (IXLCell cell in row.Cells(readRange))
+                                {
+                                    columnNames.Add(cell.Value.ToString());
+                                }
+                                FirstRow = false;
                             }
-                            FirstRow = false;
-                        }
-                        else
-                        {
-                            JObject obj = new JObject();
-                            int colIndex = 0;
-                            foreach (IXLCell cell in row.Cells(readRange))
+                            else
                             {
-                                obj.Add(new JProperty(columnNames[colIndex], cell.Value.ToString()));
-                                colIndex++;
+                                JObject obj = new JObject();
+                                int colIndex = 0;
+                                foreach (IXLCell cell in row.Cells(readRange))
+                                {
+                                    obj.Add(new JProperty(columnNames[colIndex], cell.Value.ToString()));
+                                    colIndex++;
+                                }
+                                excelData.Add(obj);
                             }
-                            excelData.Add(obj);
                         }
                     }
+                    stream.Dispose();
+                    return excelData;
                 }
-                return excelData;
             }
+            
         }
     }
 }

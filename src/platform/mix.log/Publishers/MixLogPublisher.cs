@@ -14,7 +14,7 @@ namespace Mix.Log.Lib.Publishers
         private const string TopicId = MixQueueTopics.MixLog;
 
         public MixLogPublisher(
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
             MixEndpointService mixEndpointService,
             ILogger<MixLogPublisher> logger)

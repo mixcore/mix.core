@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Mix.Database.EntityConfigurations.MYSQL.Quartz;
 using Mix.Database.Services;
 
@@ -7,8 +8,8 @@ namespace Mix.Database.Entities.Quartz
 {
     public partial class MySQLQuartzDbContext : QuartzDbContext
     {
-        public MySQLQuartzDbContext(IHttpContextAccessor httpContextAccessor, DatabaseService databaseService)
-            : base(httpContextAccessor)
+        public MySQLQuartzDbContext(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, DatabaseService databaseService)
+            : base(httpContextAccessor, configuration)
         {
             DbProvider = MixDatabaseProvider.MySQL;
             ConnectionString = databaseService.GetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION);
@@ -20,7 +21,7 @@ namespace Mix.Database.Entities.Quartz
             ConnectionString = connectionString;
         }
 
-        public MySQLQuartzDbContext(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public MySQLQuartzDbContext(IHttpContextAccessor httpContextAccessor, IConfiguration configuration) : base(httpContextAccessor, configuration)
         {
         }
 

@@ -17,7 +17,7 @@ namespace Mix.Storage.Lib.Services
 {
     public class MixStorageService
     {
-        protected readonly IQueueService<MessageQueueModel> _queueService;
+        protected readonly IMemoryQueueService<MessageQueueModel> _queueService;
         private readonly IMixUploader _uploader;
         private readonly IConfiguration _configuration;
         private readonly HttpService _httpService;
@@ -26,7 +26,7 @@ namespace Mix.Storage.Lib.Services
             IHttpContextAccessor httpContext, 
             UnitOfWorkInfo<MixCmsContext> cmsUow, 
             IConfiguration configuration, 
-            HttpService httpService, IQueueService<MessageQueueModel> queueService)
+            HttpService httpService, IMemoryQueueService<MessageQueueModel> queueService)
         {
             _configuration = configuration;
             _httpService = httpService;

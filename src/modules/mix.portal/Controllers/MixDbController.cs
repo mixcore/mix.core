@@ -28,21 +28,6 @@ namespace Mix.Portal.Controllers
     public class MixDbController : MixTenantApiControllerBase
     {
         ILogger<MixDbController> _logger;
-        private const string CreatedByFieldName = "CreatedBy";
-        private const string ModifiedByFieldName = "ModifiedBy";
-        private const string LastModifiedFieldName = "LastModified";
-        private const string CreatedDateFieldName = "CreatedDateTime";
-        private const string PriorityFieldName = "Priority";
-        private const string IdFieldName = "Id";
-        private const string GuidParentIdFieldName = "GuidParentId";
-        private const string ParentIdFieldName = "ParentId";
-        private const string ParentNameFieldName = "ParentDatabaseName";
-        private const string ChildNameFieldName = "ChildDatabaseName";
-        private const string GuidChildIdFieldName = "GuidChildId";
-        private const string ChildIdFieldName = "ChildId";
-        private const string TenantIdFieldName = "MixTenantId";
-        private const string StatusFieldName = "Status";
-        private const string IsDeletedFieldName = "IsDeleted";
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private readonly MixRepoDbRepository _repository;
         private readonly IMixMemoryCacheService _memoryCache;
@@ -55,13 +40,14 @@ namespace Mix.Portal.Controllers
         private const string AssociationTableName = nameof(MixDatabaseAssociation);
         private IMixDbCommandHubClientService _mixDbCommandHubClientService;
         private RepoDbMixDatabaseViewModel _mixDb;
+        private FieldNameService _fieldNameService;
         public MixDbController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             MixRepoDbRepository repository,
             IMixMemoryCacheService memoryCache,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
@@ -93,6 +79,7 @@ namespace Mix.Portal.Controllers
         {
             _tableName = RouteData?.Values["name"].ToString();
             _mixDb = await GetMixDatabase();
+            _fieldNameService = new FieldNameService(_mixDb.NamingConvention);
             if (_mixDb.MixDatabaseContextId.HasValue)
             {
                 _repository.Init(_tableName, _mixDb.MixDatabaseContext.DatabaseProvider, _mixDb.MixDatabaseContext.ConnectionString);
@@ -170,7 +157,7 @@ namespace Mix.Portal.Controllers
             List<JObject> lstDto = new();
             foreach (var item in data)
             {
-                lstDto.Add(await MixDbHelper.ParseImportDtoToEntityAsync(item, _mixDb.Columns, CurrentTenant.Id, _idService.GetClaim(User, MixClaims.Username)));
+                lstDto.Add(await MixDbHelper.ParseImportDtoToEntityAsync(item, _mixDb.Columns, _fieldNameService, CurrentTenant.Id, _idService.GetClaim(User, MixClaims.Username)));
             }
 
             var result = await _repository.InsertManyAsync(lstDto, _mixDb);
@@ -183,7 +170,7 @@ namespace Mix.Portal.Controllers
         {
             var result = await _mixDbService.GetById(_tableName, id, loadNestedData);
             string username = _idService.GetClaim(User, MixClaims.Username);
-            QueueService.PushQueue(CurrentTenant.Id,
+            QueueService.PushMemoryQueue(CurrentTenant.Id,
                                     MixQueueTopics.MixBackgroundTasks,
                                     MixQueueActions.MixDbEvent
                                     , new MixDbEventCommand(username, "GET", _tableName, result));
@@ -200,25 +187,25 @@ namespace Mix.Portal.Controllers
                 return NotFound();
             }
 
-            var min = Math.Min((int)data[PriorityFieldName], dto.Priority);
-            var max = Math.Max((int)data[PriorityFieldName], dto.Priority);
+            var min = Math.Min((int)data[_fieldNameService.Priority], dto.Priority);
+            var max = Math.Max((int)data[_fieldNameService.Priority], dto.Priority);
 
             var queryFields = new List<SearchQueryField>
             {
-                new SearchQueryField(IdFieldName, id, MixCompareOperator.NotEqual),
-                new SearchQueryField(PriorityFieldName, max, MixCompareOperator.LessThanOrEqual),
-                new SearchQueryField(PriorityFieldName, max, MixCompareOperator.LessThanOrEqual)
+                new SearchQueryField(_fieldNameService.Id, id, MixCompareOperator.NotEqual),
+                new SearchQueryField(_fieldNameService.Priority, max, MixCompareOperator.LessThanOrEqual),
+                new SearchQueryField(_fieldNameService.Priority, max, MixCompareOperator.LessThanOrEqual)
             };
 
             var query = await _repository.GetListByAsync(queryFields);
             int start = min;
             if (dto.Priority == min)
             {
-                data[PriorityFieldName] = dto.Priority;
+                data[_fieldNameService.Priority] = dto.Priority;
                 start++;
             }
 
-            foreach (var item in query.OrderBy(m => m[PriorityFieldName]))
+            foreach (var item in query.OrderBy(m => m[_fieldNameService.Priority]))
             {
                 item.Priority = start;
                 await _repository.UpdateAsync(item, _mixDb);
@@ -227,7 +214,7 @@ namespace Mix.Portal.Controllers
 
             if (dto.Priority == max)
             {
-                data[PriorityFieldName] = start;
+                data[_fieldNameService.Priority] = start;
             }
 
             await _repository.UpdateAsync(data, _mixDb);
@@ -253,9 +240,9 @@ namespace Mix.Portal.Controllers
                             var associations = await _associationRepository.GetListByAsync(queries);
                             if (associations is { Count: > 0 })
                             {
-                                var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
+                                var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(_fieldNameService.ChildId)).ToList();
                                 _repository.InitTableName(item.DestinateDatabaseName);
-                                List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
+                                List<QueryField> query = new() { new(_fieldNameService.Id, Operation.In, nestedIds) };
                                 var nestedData = await _repository.GetListByAsync(query);
                                 if (nestedData != null)
                                 {
@@ -303,9 +290,9 @@ namespace Mix.Portal.Controllers
                             var associations = await _associationRepository.GetListByAsync(queries);
                             if (associations is { Count: > 0 })
                             {
-                                var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
+                                var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(_fieldNameService.ChildId)).ToList();
                                 _repository.InitTableName(item.DestinateDatabaseName);
-                                List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
+                                List<QueryField> query = new() { new(_fieldNameService.Id, Operation.In, nestedIds) };
                                 var nestedData = await _repository.GetListByAsync(query);
                                 if (nestedData != null)
                                 {
@@ -344,7 +331,7 @@ namespace Mix.Portal.Controllers
                 Body = JObject.FromObject(dto),
                 MixDbName = _tableName
             };
-            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixDbCommand, MixDbCommandQueueActions.Create, obj);
+            QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixDbCommand, MixDbCommandQueueActions.Create, obj);
 
             return Ok();
         }
@@ -353,17 +340,17 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult<object>> Create(JObject dto)
         {
             string username = _idService.GetClaim(User, MixClaims.Username);
-            JObject obj = await MixDbHelper.ParseDtoToEntityAsync(dto, _mixDb.Columns, CurrentTenant.Id, username);
+            JObject obj = await MixDbHelper.ParseDtoToEntityAsync(dto, _mixDb.Columns, _fieldNameService, CurrentTenant.Id, username);
             var id = await _repository.InsertAsync(obj, _mixDb);
-            var resp = await _repository.GetSingleAsync(id);
+            var resp = await _repository.GetSingleAsync(new QueryField(_fieldNameService.Id, id));
 
-            if (obj.ContainsKey(ParentIdFieldName))
+            if (obj.ContainsKey(_fieldNameService.ParentId))
             {
-                await CreateDataRelationship(obj.Value<string>(ParentNameFieldName), obj.Value<string>(ParentIdFieldName), obj.Value<string>(ChildNameFieldName), id.ToString(), username);
+                await CreateDataRelationship(obj.Value<string>(_fieldNameService.ParentDatabaseName), obj.Value<string>(_fieldNameService.ParentId), obj.Value<string>(_fieldNameService.ChildDatabaseName), id.ToString(), username);
             }
 
             var result = resp != null ? ReflectionHelper.ParseObject(resp) : obj;
-            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
+            QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
                 new MixDbEventCommand(username, "POST", _tableName, result));
             return Ok(result);
         }
@@ -373,13 +360,13 @@ namespace Mix.Portal.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<object>> Update(int id, [FromBody] JObject dto)
         {
-            JObject obj = await MixDbHelper.ParseDtoToEntityAsync(dto, _mixDb.Columns, CurrentTenant.Id, _idService.GetClaim(User, MixClaims.Username));
+            JObject obj = await MixDbHelper.ParseDtoToEntityAsync(dto, _mixDb.Columns, _fieldNameService, CurrentTenant.Id, _idService.GetClaim(User, MixClaims.Username));
 
             var data = await _repository.UpdateAsync(obj, _mixDb);
 
             if (data != null)
             {
-                var result = await _repository.GetSingleAsync(id);
+                var result = await _repository.GetSingleAsync(new QueryField(_fieldNameService.Id, id));
                 var resp = result != null ? ReflectionHelper.ParseObject(result) : obj;
                 await NotifyResult(id, resp);
                 return Ok(ReflectionHelper.ParseObject(resp));
@@ -392,7 +379,7 @@ namespace Mix.Portal.Controllers
             try
             {
                 string username = _idService.GetClaim(User, MixClaims.Username);
-                QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
+                QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
                                             new MixDbEventCommand(username, "PUT", _tableName, obj));
                 var modifiedEnties = new List<ModifiedEntityModel>()
                 {
@@ -447,7 +434,7 @@ namespace Mix.Portal.Controllers
             await _repository.DeleteAsync(childAssociationsQueries);
             await _repository.DeleteAsync(parentAssociationsQueries);
             string username = _idService.GetClaim(User, MixClaims.Username);
-            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
+            QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
                 new MixDbEventCommand(username, "DELETE", _tableName, new(new JProperty("data", id))));
             return data > 0 ? Ok() : NotFound();
         }
@@ -481,7 +468,8 @@ namespace Mix.Portal.Controllers
             string relDbName = GetRelationshipDbName();
             _repository.InitTableName(relDbName);
             var relDb = await GetMixDatabase(relDbName);
-            var obj = await MixDbHelper.ParseDtoToEntityAsync(JObject.FromObject(rel), relDb.Columns, CurrentTenant.Id, username);
+            var fieldNameService = new FieldNameService(relDb.NamingConvention);
+            var obj = await MixDbHelper.ParseDtoToEntityAsync(JObject.FromObject(rel), relDb.Columns, fieldNameService, CurrentTenant.Id, username);
             await _repository.InsertAsync(obj, relDb);
         }
 
@@ -489,7 +477,7 @@ namespace Mix.Portal.Controllers
         {
             return _mixDb.MixDatabaseContextId.HasValue
                         ? $"{_mixDb.MixDatabaseContext.SystemName}_{MixDatabaseNames.DATA_RELATIONSHIP}"
-                        : MixDatabaseNames.DATA_RELATIONSHIP;
+                        : $"sys{MixDatabaseNames.DATA_RELATIONSHIP}";
         }
 
         private async Task PatchManyHandler(IEnumerable<JObject> lstObj, CancellationToken cancellationToken)
@@ -516,7 +504,7 @@ namespace Mix.Portal.Controllers
             try
             {
                 var id = objDto.Value<int>("id");
-                var data = await _repository.GetSingleAsync(id);
+                var data = await _repository.GetSingleAsync(new QueryField(_fieldNameService.Id, id));
                 if (data == null)
                 {
                     throw new MixException(MixErrorStatus.NotFound);
@@ -530,7 +518,7 @@ namespace Mix.Portal.Controllers
 
                 foreach (var prop in objDto.Properties())
                 {
-                    var propName = prop.Name.ToTitleCase();
+                    var propName = prop.Name;
                     if (obj.ContainsKey(propName))
                     {
                         obj[propName] = prop.Value;
@@ -538,7 +526,7 @@ namespace Mix.Portal.Controllers
                 }
 
                 await _repository.UpdateAsync(objDto, _mixDb);
-                QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
+                QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
                     new MixDbEventCommand(username, "PATCH", _tableName, objDto));
             }
             catch (Exception ex)
@@ -594,11 +582,11 @@ namespace Mix.Portal.Controllers
                         if (associations is { Count: > 0 })
                         {
                             JArray nestedDataList = new();
-                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(ChildIdFieldName)).ToList();
+                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(_fieldNameService.ChildId)).ToList();
 
                             _repository.InitTableName(rel.DestinateDatabaseName);
 
-                            List<QueryField> query = new() { new(IdFieldName, Operation.In, nestedIds) };
+                            List<QueryField> query = new() { new(_fieldNameService.Id, Operation.In, nestedIds) };
                             var nestedData = await _repository.GetListByAsync(query);
                             foreach (var nestedId in nestedIds)
                             {
@@ -649,22 +637,23 @@ namespace Mix.Portal.Controllers
         {
             if (_mixDb.Type == MixDatabaseType.AdditionalData)
             {
-                queries.Add(new(ParentIdFieldName, request.ParentId));
+                queries.Add(new(_fieldNameService.ParentId, request.ParentId));
             }
             else
             {
                 _repository.InitTableName(GetRelationshipDbName());
+                
                 var relQuery = new List<QueryField>() {
-                        new QueryField(ParentNameFieldName, request.ParentName),
-                        new QueryField(ChildNameFieldName, _tableName)
+                        new QueryField(_fieldNameService.ParentDatabaseName, request.ParentName),
+                        new QueryField(_fieldNameService.ChildDatabaseName, _tableName)
                     };
 
                 if (request.ParentId.HasValue)
                 {
-                    relQuery.Add(new(ParentIdFieldName, request.ParentId.Value));
+                    relQuery.Add(new(_fieldNameService.ParentId, request.ParentId.Value));
                 }
                 var allowsIds = await _repository.GetListByAsync(relQuery);
-                queries.Add(new(IdFieldName, Operation.In, allowsIds.Select(m => m.ChildId)));
+                queries.Add(new(_fieldNameService.Id, Operation.In, allowsIds.Select(m => m.ChildId)));
                 _repository.InitTableName(_tableName);
             }
         }
@@ -673,22 +662,29 @@ namespace Mix.Portal.Controllers
         {
             if (_mixDb.Type == MixDatabaseType.GuidAdditionalData)
             {
-                queries.Add(new(ParentIdFieldName, request.GuidParentId));
+                queries.Add(new(_fieldNameService.ParentId, request.GuidParentId));
             }
             else
             {
                 _repository.InitTableName(GetRelationshipDbName());
                 var relQuery = new List<QueryField>() {
-                        new QueryField(ParentNameFieldName, request.ParentName),
-                        new QueryField(ChildNameFieldName, _tableName)
+                        new QueryField(_fieldNameService.ParentDatabaseName, request.ParentName),
+                        new QueryField(_fieldNameService.ChildDatabaseName, _tableName)
                     };
                 if (request.GuidParentId.HasValue)
                 {
-                    relQuery.Add(new(GuidParentIdFieldName, request.GuidParentId.Value));
+                    relQuery.Add(new(_fieldNameService.ParentId, request.GuidParentId.Value));
                 }
 
                 var allowsIds = await _repository.GetListByAsync(relQuery);
-                queries.Add(new(IdFieldName, Operation.In, allowsIds.Select(m => m.GuildChildId)));
+                if (request.ParentName == "Role" || request.ParentName == "User")
+                {
+                    queries.Add(new(_fieldNameService.Id, Operation.In, allowsIds.Select(m => m.ChildId)));
+                }
+                else
+                {
+                    queries.Add(new(_fieldNameService.Id, Operation.In, allowsIds.Select(m => m.GuildChildId)));
+                }
                 _repository.InitTableName(_tableName);
             }
         }
@@ -726,10 +722,11 @@ namespace Mix.Portal.Controllers
 
         private IEnumerable<QueryField> BuildSearchPredicate(SearchMixDbRequestDto req)
         {
+            req.OrderBy = ReflectionHelper.GetPropertyValue(_fieldNameService, req.OrderBy).ToString();
             var operation = ParseSearchOperation(req.SearchMethod);
             var queries = new List<QueryField>()
             {
-                new QueryField(TenantIdFieldName, CurrentTenant.Id)
+                new QueryField(_fieldNameService.TenantId, CurrentTenant.Id)
             };
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword))
             {
@@ -795,11 +792,11 @@ namespace Mix.Portal.Controllers
             }
             if (parentId.HasValue)
             {
-                queries.Add(new QueryField(ParentIdFieldName, parentId));
+                queries.Add(new QueryField(_fieldNameService.ParentId, parentId));
             }
             if (childId.HasValue)
             {
-                queries.Add(new QueryField(ChildIdFieldName, childId));
+                queries.Add(new QueryField(_fieldNameService.ChildId, childId));
             }
             return queries;
         }

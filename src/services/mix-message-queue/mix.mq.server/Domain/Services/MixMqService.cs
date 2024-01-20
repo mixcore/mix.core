@@ -4,7 +4,10 @@ using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Mix.Heart.Extensions;
 using Mix.Mq.Lib.Models;
+using Mix.Signalr.Hub.Models;
 using Newtonsoft.Json.Linq;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Mix.Mq.Server.Domain.Services;
@@ -13,43 +16,34 @@ public class MixMqService : MixMq.MixMqBase
 {
     private readonly ILogger<MixMqService> _logger;
     private readonly MixQueueMessages<MessageQueueModel> _queue;
-    public MixMqService(ILogger<MixMqService> logger, MixQueueMessages<MessageQueueModel> queue)
+    private readonly GrpcStreamingService _subscriptionService;
+    public MixMqService(ILogger<MixMqService> logger, MixQueueMessages<MessageQueueModel> queue, GrpcStreamingService subscriptionService)
     {
         _logger = logger;
         _queue = queue;
+        _subscriptionService = subscriptionService;
     }
 
     public override async Task Subscribe(SubscribeRequest request, IServerStreamWriter<SubscribeReply> responseStream, ServerCallContext context)
     {
-        var _topic = _queue.GetTopic(request.TopicId);
-        Initialize(_topic, request.SubsctiptionId);
-
-        while (!context.CancellationToken.IsCancellationRequested)
+        try
         {
-            try
-            {
-                var inQueueItems = _queue.GetTopic(request.TopicId).ConsumeQueue(request.SubsctiptionId, 10);
-                if (inQueueItems.Count > 0)
-                {
-                    var result = new SubscribeReply
-                    {
-                        Messages = { }
-                    };
-                    foreach (var item in inQueueItems)
-                    {
-                        result.Messages.Add(JObject.FromObject(item).ToString(Newtonsoft.Json.Formatting.None));
-                    }
-                    await responseStream.WriteAsync(result);
-                }
-                Thread.Sleep(1000);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Cannot consume queue");
-            }
+            _logger.LogInformation($"{request.SubsctiptionId} started at {DateTime.UtcNow.AddHours(7)}");
+            await _subscriptionService.AddSubscription(request, responseStream);
+            await Task.Delay(100, context.CancellationToken);
         }
+        catch (Exception e)
+        {
+            _logger.LogError($"{request.SubsctiptionId} broken at {DateTime.UtcNow.AddHours(7)}: {e.Message}", e);
+            await _subscriptionService.RemoveSubscription(request);
+        }
+    }
 
-        _logger.LogInformation($"Request {request.TopicId} - {request.SubsctiptionId} canceled");
+    public override async Task<Empty> Disconnect(SubscribeRequest request, ServerCallContext context)
+    {
+        await _subscriptionService.RemoveSubscription(request);
+        _logger.LogInformation($"{request.SubsctiptionId} disconnected at {DateTime.UtcNow.AddHours(7)}");
+        return new();
     }
 
     public override Task<Empty> Publish(PublishMessageRequest request, ServerCallContext context)
@@ -66,15 +60,6 @@ public class MixMqService : MixMq.MixMqBase
         }
 
         return Task.FromResult<Empty>(new());
-    }
-
-    private void Initialize(MixTopicModel<MessageQueueModel> topic, string subscriptionId)
-    {
-        while (topic == null)
-        {
-            Thread.Sleep(1000);
-        }
-        topic.CreateSubscription(subscriptionId);
     }
 
     private MessageQueueModel? TryParseMessage(string message)

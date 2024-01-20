@@ -15,13 +15,12 @@ namespace Mix.RepoDb.Interfaces
 
         public Task<JObject?> GetById(string tableName, int id, bool loadNestedData);
 
-        public Task<bool> MigrateDatabase(string name);
-
-        public Task<bool> RestoreFromLocal(string name);
-
-        public Task<bool> BackupDatabase(string databaseName, CancellationToken cancellationToken = default);
         Task<JObject?> GetByParentIdAsync(string tableName, MixContentType parentType, int parentId, bool loadNestedData);
         Task<JObject> ParseDataAsync(string tableName, dynamic obj);
+        public Task<bool> MigrateDatabase(RepoDbMixDatabaseViewModel database);
+
+        public Task<bool> BackupDatabase(RepoDbMixDatabaseViewModel database, CancellationToken cancellationToken = default);
+        public Task<bool> RestoreFromLocal(RepoDbMixDatabaseViewModel database);
         Task<bool> MigrateSystemDatabases(CancellationToken cancellationToken = default);
         Task<bool> MigrateInitNewDbContextDatabases(MixDatabaseContext dbContext, CancellationToken cancellationToken = default);
     }

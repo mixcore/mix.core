@@ -2,6 +2,7 @@
 {
     public class MixDatabaseNames
     {
+        public const string ROLE = "Role";
         public const string PAGE_COLUMN = "sysPageColumn";
         public const string POST_COLUMN = "sysPostColumn";
         public const string MODULE_COLUMN = "sysModuleColumn";
@@ -16,6 +17,7 @@
         public const string SYSTEM_PERMISSION = "sysPermission";
         public const string SYSTEM_PERMISSION_ENDPOINT = "sysPermissionEndpoint";
         public const string SYSTEM_USER_PERMISSION = "sysUserPermission";
+        public const string SYSTEM_DATA_RELATIONSHIP = "sysMixDatabaseAssociation";
         public const string DATA_RELATIONSHIP = "MixDatabaseAssociation";
     }
 }

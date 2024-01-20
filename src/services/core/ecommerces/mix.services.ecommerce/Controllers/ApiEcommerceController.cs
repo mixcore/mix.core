@@ -9,7 +9,6 @@ using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Dtos;
 using Mix.Services.Ecommerce.Lib.Enums;
@@ -39,7 +38,7 @@ namespace Mix.Services.ecommerce.Controllers
             MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IEcommerceService ecommerceService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IOrderService orderService,
@@ -150,7 +149,7 @@ namespace Mix.Services.ecommerce.Controllers
                 return BadRequest();
             }
             var url = await _ecommerceService.CheckoutGuest(gateway.Value, cart, cancellationToken);
-            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.PlacedOrder, cart);
+            QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.PlacedOrder, cart);
             return !string.IsNullOrEmpty(url) ? Ok(new JObject(new JProperty("url", url))) : BadRequest();
         }
 
@@ -181,7 +180,7 @@ namespace Mix.Services.ecommerce.Controllers
                 ? $"{_paymentConfiguration.Urls.PaymentSuccessUrl}?id={orderId}"
                 : $"{_paymentConfiguration.Urls.PaymentFailUrl}?id={orderId}";
 
-            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.PaymentResponse, result);
+            QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.PaymentResponse, result);
             return Redirect(url);
         }
 

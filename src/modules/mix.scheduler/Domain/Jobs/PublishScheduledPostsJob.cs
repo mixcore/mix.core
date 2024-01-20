@@ -11,7 +11,7 @@ namespace Mix.Scheduler.Domain.Jobs
     {
         public PublishScheduledPostsJob(
             IServiceProvider serviceProvider,
-            IQueueService<MessageQueueModel> queueService) : base(serviceProvider, queueService)
+            IMemoryQueueService<MessageQueueModel> queueService) : base(serviceProvider, queueService)
         {
         }
 

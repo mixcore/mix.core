@@ -47,22 +47,36 @@ namespace Mix.Mixdb.Event.Services
             IServiceProvider servicesProvider,
             IConfiguration configuration)
         {
+            ServicesProvider = servicesProvider;
+            PortalHub = portalHub;
             _databaseService = databaseService;
             _globalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
             LoadEvents();
             _httpService = httpService;
-            PortalHub = portalHub;
             _mixPermissionService = mixPermissionService;
-            ServicesProvider = servicesProvider;
         }
 
-        public void LoadEvents()
+        public void LoadEvents(IServiceScope? serviceScope = null)
         {
             if (!_globalConfig.IsInit)
             {
-                var repo = MixDbEventSubscriberViewModel.GetRootRepository(new MixDbDbContext(_databaseService), null);
-                Subscribers = repo.GetAllAsync(m => !m.IsDeleted).GetAwaiter().GetResult();
-                repo.UowInfo.Complete();
+                try
+                {
+                    var _serviceScope = serviceScope ?? ServicesProvider.CreateScope();
+                    var mixDbDbContext = _serviceScope.ServiceProvider.GetRequiredService<MixDbDbContext>();
+                    var repo = MixDbEventSubscriberViewModel.GetRootRepository(mixDbDbContext, null);
+                    Subscribers = repo.GetAllAsync(m => !m.IsDeleted).GetAwaiter().GetResult();
+
+                    if (serviceScope == null)
+                    {
+                        repo.UowInfo.Complete();
+                        _serviceScope.Dispose();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
             }
         }
 
@@ -79,7 +93,7 @@ namespace Mix.Mixdb.Event.Services
                 else
                 if (model.MixDbName == MixDbDatabaseNames.MixDbEvent || model.MixDbName == MixDbDatabaseNames.MixDbEventSubscriber)
                 {
-                    LoadEvents();
+                    LoadEvents(serviceScope);
                 }
                 else
                 {
@@ -99,6 +113,7 @@ namespace Mix.Mixdb.Event.Services
                         }
                     }
                 }
+                serviceScope.Dispose();
             }
         }
 

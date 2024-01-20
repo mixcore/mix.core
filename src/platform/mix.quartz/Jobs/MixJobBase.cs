@@ -8,10 +8,10 @@ namespace Mix.Quartz.Jobs
     public abstract class MixJobBase : IJob
     {
         protected readonly IServiceProvider ServiceProvider;
-        protected readonly IQueueService<MessageQueueModel> QueueService;
+        protected readonly IMemoryQueueService<MessageQueueModel> QueueService;
         protected MixJobBase(
             IServiceProvider serviceProvider,
-            IQueueService<MessageQueueModel> queueService)
+            IMemoryQueueService<MessageQueueModel> queueService)
         {
             ServiceProvider = serviceProvider;
             JobType = GetType();

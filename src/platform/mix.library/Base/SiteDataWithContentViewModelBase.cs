@@ -50,6 +50,7 @@ namespace Mix.Lib.Base
             using (var contentRepository = ViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>.GetRepository(UowInfo, CacheService))
             {
                 Contents = await contentRepository.GetListAsync(m => m.ParentId.Equals(Id), cancellationToken);
+                contentRepository.Dispose();
             }
         }
 
@@ -73,6 +74,7 @@ namespace Mix.Lib.Base
             {
                 await contentRepository.DeleteManyAsync(m => m.ParentId.Equals(Id), cancellationToken);
                 await base.DeleteHandlerAsync(cancellationToken);
+                contentRepository.Dispose();
             }
         }
         #endregion

@@ -17,7 +17,7 @@ namespace Mix.Queue.Engines
 {
     public abstract class PublisherBase : BackgroundService
     {
-        private readonly IQueueService<MessageQueueModel> _queueService;
+        private readonly IMemoryQueueService<MessageQueueModel> _queueService;
         private List<IQueuePublisher<MessageQueueModel>> _publishers;
         private readonly IConfiguration _configuration;
         private readonly MixEndpointService _mixEndpointService;
@@ -27,7 +27,7 @@ namespace Mix.Queue.Engines
         protected ILogger<PublisherBase> _logger;
         protected PublisherBase(
             string topicId,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
             MixEndpointService mixEndpointService,
             ILogger<PublisherBase> logger)
@@ -105,7 +105,7 @@ namespace Mix.Queue.Engines
                     {
                         isProcessing = true;
                         // Get messages from IQueueService 
-                        var inQueueItems = _queueService.ConsumeQueue(MaxConsumeLength, _topicId);
+                        var inQueueItems = _queueService.ConsumeMemoryQueue(MaxConsumeLength, _topicId);
 
                         if (inQueueItems.Any() && _publishers != null)
                         {

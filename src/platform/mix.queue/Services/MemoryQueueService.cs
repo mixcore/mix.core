@@ -8,24 +8,24 @@ using System.Linq;
 
 namespace Mix.Queue.Services
 {
-    public class QueueService : IQueueService<MessageQueueModel>
+    public class MemoryQueueService : IMemoryQueueService<MessageQueueModel>
     {
         // Memory queue store message to local memory before push to MQ engine
         private readonly ConcurrentDictionary<string, ConcurrentQueue<MessageQueueModel>> _queues;
-        public QueueService()
+        public MemoryQueueService()
         {
             _queues = new ConcurrentDictionary<string, ConcurrentQueue<MessageQueueModel>>();
         }
 
         public bool Any(string topicId)
         {
-            var queue = GetQueue(topicId);
+            var queue = GetMemoryQueue(topicId);
             return queue.Any();
         }
 
-        public IList<MessageQueueModel> ConsumeQueue(int length, string topicId)
+        public IList<MessageQueueModel> ConsumeMemoryQueue(int length, string topicId)
         {
-            var queue = GetQueue(topicId);
+            var queue = GetMemoryQueue(topicId);
             List<MessageQueueModel> result = new();
             if (queue.All(m => m.TopicId != topicId))
             {
@@ -45,7 +45,16 @@ namespace Mix.Queue.Services
             return result;
         }
 
-        public ConcurrentQueue<MessageQueueModel> GetQueue(string topicId)
+        public IList<MessageQueueModel> ConsumeAllMemoryQueue(int length)
+        {
+            List<MessageQueueModel> result = new();
+            foreach (var topic in _queues)
+            {
+                result.AddRange(ConsumeMemoryQueue(length, topic.Key));
+            }
+            return result;
+        }
+        public ConcurrentQueue<MessageQueueModel> GetMemoryQueue(string topicId)
         {
             if (string.IsNullOrEmpty(topicId))
             {
@@ -59,9 +68,9 @@ namespace Mix.Queue.Services
             return _queues[topicId];
         }
 
-        public void PushQueue(MessageQueueModel model)
+        public void PushMemoryQueue(MessageQueueModel model)
         {
-            var queue = GetQueue(model.TopicId);
+            var queue = GetMemoryQueue(model.TopicId);
             if (queue != null)
             {
                 model.Id = Guid.NewGuid();
@@ -71,14 +80,14 @@ namespace Mix.Queue.Services
 
         }
 
-        public void PushQueue(int tenantId, string topicId, string action, object data)
+        public void PushMemoryQueue(int tenantId, string topicId, string action, object data)
         {
             var msg = new MessageQueueModel(tenantId, topicId, action, data);
-            PushQueue(msg);
+            PushMemoryQueue(msg);
         }
 
         // Push message to MQ Engine
-        public void PushMessage<T>(int tenantId, T data, string action, bool success)
+        public void PushMessageToMemoryQueue<T>(int tenantId, T data, string action, bool success)
         {
             var msg = new MessageQueueModel(tenantId)
             {
@@ -86,7 +95,7 @@ namespace Mix.Queue.Services
                 Success = success,
             };
             msg.Package(data);
-            PushQueue(msg);
+            PushMemoryQueue(msg);
         }
 
 
@@ -94,7 +103,7 @@ namespace Mix.Queue.Services
         {
             if (model.TopicId != MixQueueTopics.MixLog)
             {
-                var logQueue = GetQueue(MixQueueTopics.MixLog);
+                var logQueue = GetMemoryQueue(MixQueueTopics.MixLog);
                 if (logQueue != null)
                 {
                     logQueue.Enqueue(new MessageQueueModel()
