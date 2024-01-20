@@ -54,10 +54,14 @@ namespace Mix.Queue.Engines
             ServicesProvider = servicesProvider;
             _logger = logger;
         }
-        protected async override Task ExecuteAsync(CancellationToken cancellationToken)
+        protected override Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{_moduleName}");
-            await StartProcessQueue(cancellationToken);
+            Task.Run(() =>
+            {
+                _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{_moduleName}");
+                StartProcessQueue(cancellationToken);
+            });
+            return Task.CompletedTask;
         }
 
         public virtual async Task StopAsync(CancellationToken cancellationToken)

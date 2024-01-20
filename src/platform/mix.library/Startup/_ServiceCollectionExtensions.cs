@@ -9,6 +9,7 @@ using Microsoft.Build.Framework;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Middlewares;
@@ -42,7 +43,11 @@ namespace Microsoft.Extensions.DependencyInjection
                                             .Get<MixAuthenticationConfigurations>();
             
             var redisCnn = configuration.GetSection("Redis").GetValue<string>("ConnectionString");
-
+            services.Configure<HostOptions>(options =>
+            {
+                options.ServicesStartConcurrently = true;
+                options.ServicesStopConcurrently = false;
+            });
             services.AddOptions<GlobalSettingsModel>()
                  .Bind(configuration.GetSection(MixAppSettingsSection.GlobalSettings))
                  .ValidateDataAnnotations();
