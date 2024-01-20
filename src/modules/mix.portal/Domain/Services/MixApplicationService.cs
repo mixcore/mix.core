@@ -22,7 +22,7 @@ namespace Mix.Portal.Domain.Services
     {
         static string[] excludeFileNames = { "jquery", "index" };
         static string allowExtensionsPattern = "json|js|css|webmanifest|ico|png|jpg|jpeg|gif|svg|webm|mp3|mp4|wmv";
-        private readonly IQueueService<MessageQueueModel> _queueService;
+        private readonly IMemoryQueueService<MessageQueueModel> _queueService;
         private readonly IThemeService _themeService;
         private readonly IMixThemeImportService _importService;
         private readonly MixIdentityService _mixIdentityService;
@@ -36,7 +36,7 @@ namespace Mix.Portal.Domain.Services
             HttpService httpService,
             MixIdentityService mixIdentityService,
             IThemeService themeService,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             MixCacheService cacheService,
             IMixTenantService mixTenantService,
             IMixThemeImportService importService)
@@ -237,7 +237,7 @@ namespace Mix.Portal.Domain.Services
                 template.Content = indexFile.Content.Replace("@", "@@")
                                                     .Replace("<body>", "<body><pre id=\"app-settings-container\" style=\"display:none\">@Model.AppSettings.ToString()</pre>");
                 await template.SaveAsync();
-                _queueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), template);
+                _queueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), template);
                 MixFileHelper.SaveFile(indexFile);
                 _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Modified {name}.cshtml successfully");
                 return template.Id;

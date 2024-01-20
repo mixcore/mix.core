@@ -4,6 +4,7 @@ using Mix.Heart.Exceptions;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Mix.RepoDb.ViewModels;
+using Mix.Service.Services;
 using Mix.Shared.Services;
 using MySqlX.XDevAPI.Common;
 using Newtonsoft.Json;
@@ -13,19 +14,7 @@ namespace Mix.RepoDb.Helpers
 {
     public class MixDbHelper
     {
-        public const string CreatedByFieldName = "CreatedBy";
-        public const string ModifiedByFieldName = "ModifiedBy";
-        public const string LastModifiedFieldName = "LastModified";
-        public const string CreatedDateFieldName = "CreatedDateTime";
-        public const string PriorityFieldName = "Priority";
-        public const string IdFieldName = "Id";
-        public const string ParentIdFieldName = "ParentId";
-        public const string ChildIdFieldName = "ChildId";
-        public const string TenantIdFieldName = "MixTenantId";
-        public const string StatusFieldName = "Status";
-        public const string IsDeletedFieldName = "IsDeleted";
-
-        public static Task<JObject> ParseDtoToEntityAsync(JObject dto, List<MixDatabaseColumnViewModel> columns, int? tenantId = null, string? username = null)
+        public static Task<JObject> ParseDtoToEntityAsync(JObject dto, List<MixDatabaseColumnViewModel> columns, FieldNameService fieldNameService, int? tenantId = null, string? username = null)
         {
             try
             {
@@ -42,61 +31,61 @@ namespace Mix.RepoDb.Helpers
                     {
                         result.Add(
                             new JProperty(
-                                    pr.Name.ToTitleCase(), AesEncryptionHelper.EncryptString(pr.Value.ToString(),
+                                    pr.Name, AesEncryptionHelper.EncryptString(pr.Value.ToString(),
                                     GlobalConfigService.Instance.AppSettings.ApiEncryptKey)));
                     }
                     else
                     {
                         if (col != null)
                         {
-                            result.Add(new JProperty(pr.Name.ToTitleCase(), ParseObjectValue(col.DataType, pr.Value)));
+                            result.Add(new JProperty(pr.Name, ParseObjectValue(col.DataType, pr.Value)));
                         }
                         else
                         {
-                            result.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
+                            result.Add(new JProperty(pr.Name, pr.Value));
                         }
                     }
                 }
 
-                if (!result.ContainsKey(IdFieldName))
+                if (!result.ContainsKey(fieldNameService.Id))
                 {
-                    result.Add(new JProperty(IdFieldName, string.Empty));
-                    if (!result.ContainsKey(CreatedByFieldName))
+                    result.Add(new JProperty(fieldNameService.Id, string.Empty));
+                    if (!result.ContainsKey(fieldNameService.CreatedBy))
                     {
-                        result.Add(new JProperty(CreatedByFieldName, username));
+                        result.Add(new JProperty(fieldNameService.CreatedBy, username));
                     }
-                    if (!result.ContainsKey(CreatedDateFieldName))
+                    if (!result.ContainsKey(fieldNameService.CreatedDateTime))
                     {
-                        result.Add(new JProperty(CreatedDateFieldName, DateTime.UtcNow));
+                        result.Add(new JProperty(fieldNameService.CreatedDateTime, DateTime.UtcNow));
                     }
-                    if (!result.ContainsKey(CreatedByFieldName))
+                    if (!result.ContainsKey(fieldNameService.CreatedBy))
                     {
-                        result.Add(new JProperty(CreatedByFieldName, username));
+                        result.Add(new JProperty(fieldNameService.CreatedBy, username));
                     }
                 }
                 else
                 {
-                    result[ModifiedByFieldName] = username;
-                    result[LastModifiedFieldName] = DateTime.UtcNow;
+                    result[fieldNameService.ModifiedBy] = username;
+                    result[fieldNameService.LastModified] = DateTime.UtcNow;
                 }
 
-                if (!result.ContainsKey(PriorityFieldName))
+                if (!result.ContainsKey(fieldNameService.Priority))
                 {
-                    result.Add(new JProperty(PriorityFieldName, 0));
+                    result.Add(new JProperty(fieldNameService.Priority, 0));
                 }
-                if (!result.ContainsKey(TenantIdFieldName))
+                if (!result.ContainsKey(fieldNameService.TenantId))
                 {
-                    result.Add(new JProperty(TenantIdFieldName, tenantId));
-                }
-
-                if (!result.ContainsKey(StatusFieldName))
-                {
-                    result.Add(new JProperty(StatusFieldName, MixContentStatus.Published.ToString()));
+                    result.Add(new JProperty(fieldNameService.TenantId, tenantId));
                 }
 
-                if (!result.ContainsKey(IsDeletedFieldName))
+                if (!result.ContainsKey(fieldNameService.Status))
                 {
-                    result.Add(new JProperty(IsDeletedFieldName, false));
+                    result.Add(new JProperty(fieldNameService.Status, MixContentStatus.Published.ToString()));
+                }
+
+                if (!result.ContainsKey(fieldNameService.IsDeleted))
+                {
+                    result.Add(new JProperty(fieldNameService.IsDeleted, false));
                 }
                 return Task.FromResult(result);
             }
@@ -106,7 +95,9 @@ namespace Mix.RepoDb.Helpers
             }
         }
         
-        public static Task<JObject> ParseImportDtoToEntityAsync(JObject dto, List<MixDatabaseColumnViewModel> columns, int? tenantId = null, string? username = null)
+        public static Task<JObject> ParseImportDtoToEntityAsync(JObject dto, List<MixDatabaseColumnViewModel> columns, 
+            FieldNameService fieldNameService,
+            int? tenantId = null, string? username = null)
         {
             try
             {
@@ -123,7 +114,7 @@ namespace Mix.RepoDb.Helpers
                     {
                         result.Add(
                             new JProperty(
-                                    pr.Name.ToTitleCase(), AesEncryptionHelper.EncryptString(pr.Value.ToString(),
+                                    pr.Name, AesEncryptionHelper.EncryptString(pr.Value.ToString(),
                                     GlobalConfigService.Instance.AppSettings.ApiEncryptKey)));
                     }
                     else
@@ -132,74 +123,74 @@ namespace Mix.RepoDb.Helpers
                         {
                             if (col.DataType == MixDataType.Json || col.DataType == MixDataType.ArrayRadio)
                             {
-                                result.Add(new JProperty(pr.Name.ToTitleCase(), JObject.FromObject(pr.Value).ToString(Formatting.None)));
+                                result.Add(new JProperty(pr.Name, JObject.FromObject(pr.Value).ToString(Formatting.None)));
                             }
                             else if (col.DataType == MixDataType.Array || col.DataType == MixDataType.ArrayMedia)
                             {
 
-                                result.Add(new JProperty(pr.Name.ToTitleCase(), JArray.FromObject(pr.Value).ToString(Formatting.None)));
+                                result.Add(new JProperty(pr.Name, JArray.FromObject(pr.Value).ToString(Formatting.None)));
                             }
                             else if (col.DataType == MixDataType.Date || col.DataType == MixDataType.DateTime)
                             {
-                                result.Add(new JProperty(pr.Name.ToTitleCase(), DateTime.Parse(pr.Value.ToString())));
+                                result.Add(new JProperty(pr.Name, DateTime.Parse(pr.Value.ToString())));
                             }
                             else if (col.DataType == MixDataType.Boolean)
                             {
-                                result.Add(new JProperty(pr.Name.ToTitleCase(), bool.Parse(pr.Value.ToString())));
+                                result.Add(new JProperty(pr.Name, bool.Parse(pr.Value.ToString())));
                             }
                             else
                             {
-                                result.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
+                                result.Add(new JProperty(pr.Name, pr.Value));
                             }
                         }
                         else
                         {
-                            result.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
+                            result.Add(new JProperty(pr.Name, pr.Value));
                         }
                     }
                 }
 
-                if (!result.ContainsKey(IdFieldName))
+                if (!result.ContainsKey(fieldNameService.Id))
                 {
-                    result.Add(new JProperty(IdFieldName, string.Empty));
-                    if (!result.ContainsKey(CreatedByFieldName))
+                    result.Add(new JProperty(fieldNameService.Id, string.Empty));
+                    if (!result.ContainsKey(fieldNameService.CreatedBy))
                     {
-                        result.Add(new JProperty(CreatedByFieldName, username));
+                        result.Add(new JProperty(fieldNameService.CreatedBy, username));
                     }
-                    if (!result.ContainsKey(CreatedDateFieldName))
+                    if (!result.ContainsKey(fieldNameService.CreatedDateTime))
                     {
-                        result.Add(new JProperty(CreatedDateFieldName, DateTime.UtcNow));
+                        result.Add(new JProperty(fieldNameService.CreatedDateTime, DateTime.UtcNow));
                     }
-                    if (!result.ContainsKey(CreatedByFieldName))
+                    if (!result.ContainsKey(fieldNameService.CreatedBy))
                     {
-                        result.Add(new JProperty(CreatedByFieldName, username));
+                        result.Add(new JProperty(fieldNameService.CreatedBy, username));
                     }
                 }
                 else
                 {
-                    result[CreatedDateFieldName] = DateTime.Parse(result[CreatedDateFieldName]!.ToString());
-                    result[ModifiedByFieldName] = username;
-                    result[LastModifiedFieldName] = DateTime.UtcNow;
-                    result[IsDeletedFieldName] = bool.Parse(result[IsDeletedFieldName]!.ToString());
+                    result[fieldNameService.CreatedDateTime] = DateTime.Parse(result[fieldNameService.CreatedDateTime]!.ToString());
+                    result[fieldNameService.ModifiedBy] = username;
+                    result[fieldNameService.LastModified] = DateTime.UtcNow;
+                    result[fieldNameService.IsDeleted] = bool.Parse(result[fieldNameService.IsDeleted]!.ToString());
                 }
 
-                if (!result.ContainsKey(PriorityFieldName))
+                if (!result.ContainsKey(fieldNameService.Priority))
                 {
-                    result.Add(new JProperty(PriorityFieldName, 0));
+                    result.Add(new JProperty(fieldNameService.Priority, 0));
                 }
-                if (!result.ContainsKey(TenantIdFieldName))
+                if (!result.ContainsKey(fieldNameService.TenantId))
                 {
-                    result.Add(new JProperty(TenantIdFieldName, tenantId));
-                }
-
-                if (!result.ContainsKey(StatusFieldName))
-                {
-                    result.Add(new JProperty(StatusFieldName, MixContentStatus.Published.ToString()));
+                    result.Add(new JProperty(fieldNameService.TenantId, tenantId));
                 }
 
-                if (!result.ContainsKey(IsDeletedFieldName))
+                if (!result.ContainsKey(fieldNameService.Status))
                 {
-                    result.Add(new JProperty(IsDeletedFieldName, false));
+                    result.Add(new JProperty(fieldNameService.Status, MixContentStatus.Published.ToString()));
+                }
+
+                if (!result.ContainsKey(fieldNameService.IsDeleted))
+                {
+                    result.Add(new JProperty(fieldNameService.IsDeleted, false));
                 }
                 return Task.FromResult(result);
             }
@@ -228,6 +219,9 @@ namespace Mix.RepoDb.Helpers
                         return int.Parse(value.ToString());
                     case MixDataType.Double:
                         return double.Parse(value.ToString());
+                    case MixDataType.Guid:
+                        Guid.TryParse(value.ToString(), out var guildResult);
+                        return guildResult;
                     default:
                         return value.ToString();
 

@@ -1,4 +1,8 @@
-﻿namespace Mix.Lib.Services
+﻿using Mix.Constant.Constants;
+using Mix.Heart.Services;
+using Mix.Service.Models;
+
+namespace Mix.Service.Services
 {
     public class TenantConfigService : ConfigurationServiceBase<TenantConfigurationModel>
     {

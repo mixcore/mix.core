@@ -23,7 +23,7 @@ namespace Mix.Common.Controllers
             MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration, 
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)

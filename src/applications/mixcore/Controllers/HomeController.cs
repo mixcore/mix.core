@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
+using Mix.Heart.Exceptions;
 using Mix.Heart.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
@@ -66,86 +67,101 @@ namespace Mixcore.Controllers
 
         private async Task<PageContentViewModel> LoadPage(string seoName = null)
         {
-            var pageRepo = PageContentViewModel.GetRepository(Uow, CacheService);
-            Expression<Func<MixPageContent, bool>> predicate = p => p.MixTenantId == CurrentTenant.Id
-                    && p.Specificulture == Culture;
-            predicate = predicate.AndAlsoIf(string.IsNullOrEmpty(seoName), m => m.Type == MixPageType.Home);
-            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(seoName), m => m.SeoName == seoName);
-            var page = await pageRepo.GetFirstAsync(predicate);
-
-            if (page != null)
+            try
             {
-                await page.LoadDataAsync(_repoDbRepository, _metadataService, new(Request)
+                var pageRepo = PageContentViewModel.GetRepository(Uow, CacheService);
+                Expression<Func<MixPageContent, bool>> predicate = p => p.MixTenantId == CurrentTenant.Id
+                        && p.Specificulture == Culture;
+                predicate = predicate.AndAlsoIf(string.IsNullOrEmpty(seoName), m => m.Type == MixPageType.Home);
+                predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(seoName), m => m.SeoName == seoName);
+                var page = await pageRepo.GetFirstAsync(predicate);
+
+                if (page != null)
                 {
-                    SortBy = MixQueryColumnName.Priority
-                }, CacheService);
+                    await page.LoadDataAsync(_repoDbRepository, _metadataService, new(Request)
+                    {
+                        SortBy = MixQueryColumnName.Priority
+                    }, CacheService);
 
-                ViewData["Tenant"] = CurrentTenant;
-                ViewData["Title"] = page.SeoTitle;
-                ViewData["Description"] = page.SeoDescription;
-                ViewData["Keywords"] = page.SeoKeywords;
-                ViewData["Image"] = page.Image;
-                ViewData["Layout"] = page.Layout?.FilePath;
-                ViewData["BodyClass"] = page.ClassName;
-                ViewData["ViewMode"] = MixMvcViewMode.Page;
-                ViewData["Keyword"] = page.SeoKeywords;
+                    ViewData["Tenant"] = CurrentTenant;
+                    ViewData["Title"] = page.SeoTitle;
+                    ViewData["Description"] = page.SeoDescription;
+                    ViewData["Keywords"] = page.SeoKeywords;
+                    ViewData["Image"] = page.Image;
+                    ViewData["Layout"] = page.Layout?.FilePath;
+                    ViewData["BodyClass"] = page.ClassName;
+                    ViewData["ViewMode"] = MixMvcViewMode.Page;
+                    ViewData["Keyword"] = page.SeoKeywords;
 
-                ViewData["ViewMode"] = MixMvcViewMode.Page;
+                    ViewData["ViewMode"] = MixMvcViewMode.Page;
+                }
+
+                return page;
             }
-            return page;
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
         }
         private async Task<IActionResult> LoadAlias(string seoName = null)
         {
-            var alias = await MixUrlAliasViewModel.GetRepository(Uow, CacheService).GetSingleAsync(m => m.MixTenantId == CurrentTenant.Id && m.Alias == seoName);
-            if (alias != null)
+            try
             {
-                switch (alias.Type)
+                var alias = await MixUrlAliasViewModel.GetRepository(Uow, CacheService).GetSingleAsync(m => m.MixTenantId == CurrentTenant.Id && m.Alias == seoName);
+                if (alias != null)
                 {
-                    case MixUrlAliasType.Page:
-                        var pageRepo = PageContentViewModel.GetRepository(Uow, CacheService);
-                        pageRepo.CacheService = CacheService;
-                        var page = await pageRepo.GetSingleAsync(m => m.Id == alias.SourceContentId);
-                        if (page != null)
-                        {
-                            await page.LoadDataAsync(_repoDbRepository, _metadataService, new(Request)
+                    switch (alias.Type)
+                    {
+                        case MixUrlAliasType.Page:
+                            var pageRepo = PageContentViewModel.GetRepository(Uow, CacheService);
+                            pageRepo.CacheService = CacheService;
+                            var page = await pageRepo.GetSingleAsync(m => m.Id == alias.SourceContentId);
+                            if (page != null)
                             {
-                                SortBy = MixQueryColumnName.Priority
-                            }, CacheService);
-                            ViewData["Tenant"] = CurrentTenant;
-                            ViewData["Title"] = page.SeoTitle;
-                            ViewData["Description"] = page.SeoDescription;
-                            ViewData["Keywords"] = page.SeoKeywords;
-                            ViewData["Image"] = page.Image;
-                            ViewData["Layout"] = page.Layout?.FilePath;
-                            ViewData["BodyClass"] = page.ClassName;
-                            ViewData["ViewMode"] = MixMvcViewMode.Page;
-                            ViewData["Keyword"] = page.SeoKeywords;
+                                await page.LoadDataAsync(_repoDbRepository, _metadataService, new(Request)
+                                {
+                                    SortBy = MixQueryColumnName.Priority
+                                }, CacheService);
+                                ViewData["Tenant"] = CurrentTenant;
+                                ViewData["Title"] = page.SeoTitle;
+                                ViewData["Description"] = page.SeoDescription;
+                                ViewData["Keywords"] = page.SeoKeywords;
+                                ViewData["Image"] = page.Image;
+                                ViewData["Layout"] = page.Layout?.FilePath;
+                                ViewData["BodyClass"] = page.ClassName;
+                                ViewData["ViewMode"] = MixMvcViewMode.Page;
+                                ViewData["Keyword"] = page.SeoKeywords;
 
-                            ViewData["ViewMode"] = MixMvcViewMode.Page;
-                            return View("Page", page);
-                        }
-                        break;
-                    case MixUrlAliasType.Post:
-                        var postRepo = PostContentViewModel.GetRepository(Uow, CacheService);
-                        postRepo.CacheService = CacheService;
-                        var post = await postRepo.GetSingleAsync(m => m.Id == alias.SourceContentId);
-                        if (post != null)
-                            return View("Post", post);
-                        break;
-                    case MixUrlAliasType.Module:
-                        break;
-                    case MixUrlAliasType.ModuleData:
-                        break;
-                    case MixUrlAliasType.MixApplication:
-                        var appRepo = ApplicationViewModel.GetRepository(Uow, CacheService);
-                        appRepo.CacheService = CacheService;
-                        var app = await appRepo.GetSingleAsync(m => m.Id == alias.SourceContentId);
-                        if (app != null)
-                            return View("App", app);
-                        break;
+                                ViewData["ViewMode"] = MixMvcViewMode.Page;
+                                return View("Page", page);
+                            }
+                            break;
+                        case MixUrlAliasType.Post:
+                            var postRepo = PostContentViewModel.GetRepository(Uow, CacheService);
+                            postRepo.CacheService = CacheService;
+                            var post = await postRepo.GetSingleAsync(m => m.Id == alias.SourceContentId);
+                            if (post != null)
+                                return View("Post", post);
+                            break;
+                        case MixUrlAliasType.Module:
+                            break;
+                        case MixUrlAliasType.ModuleData:
+                            break;
+                        case MixUrlAliasType.MixApplication:
+                            var appRepo = ApplicationViewModel.GetRepository(Uow, CacheService);
+                            appRepo.CacheService = CacheService;
+                            var app = await appRepo.GetSingleAsync(m => m.Id == alias.SourceContentId);
+                            if (app != null)
+                                return View("App", app);
+                            break;
+                    }
                 }
+                return NotFound();
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
         }
     }
 }

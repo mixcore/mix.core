@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Enums;
 using Mix.Heart.UnitOfWork;
@@ -11,6 +12,7 @@ namespace Mix.RepoDb.ViewModels
         : TenantDataViewModelBase<MixCmsContext, MixDatabaseContext, int, MixDatabaseContextReadViewModel>
     {
         #region Properties
+        public MixDatabaseNamingConvention NamingConvention { get; set; }
         public MixDatabaseProvider DatabaseProvider { get; set; }
         public string ConnectionString { get; set; }
         public string Schema { get; set; }

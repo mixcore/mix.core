@@ -18,10 +18,10 @@ namespace Mix.Log.Lib.Services
     public class AuditLogService : IAuditLogService
     {
         private readonly ILogStreamHubClientService _logStreamHub;
-        private readonly IQueueService<MessageQueueModel> _queueService;
+        private readonly IMemoryQueueService<MessageQueueModel> _queueService;
         private AuditLogDbContext _dbContext;
         public int TenantId { get; set; }
-        public AuditLogService(IQueueService<MessageQueueModel> queueService, ILogStreamHubClientService logStreamHub)
+        public AuditLogService(IMemoryQueueService<MessageQueueModel> queueService, ILogStreamHubClientService logStreamHub)
         {
             _queueService = queueService;
             _logStreamHub = logStreamHub;
@@ -60,7 +60,7 @@ namespace Mix.Log.Lib.Services
         public void QueueRequest(AuditLogDataModel request)
         {
             var cmd = new LogAuditLogCommand(request);
-            _queueService.PushQueue(TenantId, MixQueueTopics.MixLog, MixQueueActions.AuditLog, cmd);
+            _queueService.PushMemoryQueue(TenantId, MixQueueTopics.MixLog, MixQueueActions.AuditLog, cmd);
         }
 
         #region Helpers

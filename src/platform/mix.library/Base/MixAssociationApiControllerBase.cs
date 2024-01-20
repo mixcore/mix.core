@@ -17,7 +17,7 @@ namespace Mix.Lib.Base
         where TEntity : AssociationBase<int>
         where TView : AssociationViewModelBase<TDbContext, TEntity, int, TView>
     {
-        public MixAssociationApiControllerBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService,
+        public MixAssociationApiControllerBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<TDbContext> uow, IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService) 
             : base(httpContextAccessor, configuration, 

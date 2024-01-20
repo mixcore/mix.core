@@ -13,7 +13,7 @@ namespace Mix.RepoDb.ViewModels
         public int? MixDatabaseContextId { get; set; }
         [Required]
         public string SystemName { get; set; }
-
+        public MixDatabaseNamingConvention NamingConvention { get; set; } = MixDatabaseNamingConvention.TitleCase;
         public MixDatabaseType Type { get; set; } = MixDatabaseType.Service;
         public List<string> ReadPermissions { get; set; }
         public List<string> CreatePermissions { get; set; }
@@ -52,6 +52,7 @@ namespace Mix.RepoDb.ViewModels
             if (MixDatabaseContextId.HasValue)
             {
                 MixDatabaseContext = await MixDatabaseContextReadViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(m => m.Id == MixDatabaseContextId.Value);
+                NamingConvention = MixDatabaseContext.NamingConvention;
             }
         }
 

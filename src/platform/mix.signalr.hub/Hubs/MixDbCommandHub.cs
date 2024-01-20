@@ -15,8 +15,8 @@ namespace Mix.SignalR.Hubs
 {
     public class MixDbCommandHub : BaseSignalRHub
     {
-        private readonly IQueueService<MessageQueueModel> _queueService;
-        public MixDbCommandHub(IAuditLogService auditLogService, IMixTenantService mixTenantService, IQueueService<MessageQueueModel> queueService) : base(auditLogService, mixTenantService)
+        private readonly IMemoryQueueService<MessageQueueModel> _queueService;
+        public MixDbCommandHub(IAuditLogService auditLogService, IMixTenantService mixTenantService, IMemoryQueueService<MessageQueueModel> queueService) : base(auditLogService, mixTenantService)
         {
             _queueService = queueService;
         }
@@ -27,7 +27,7 @@ namespace Mix.SignalR.Hubs
             obj.MixTenantId = CurrentUser?.TenantId ?? 1;
             obj.RequestedBy = Context.User?.Identity?.Name;
             obj.ConnectionId = Context.ConnectionId;
-            _queueService.PushQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueActions.Create, obj);
+            _queueService.PushMemoryQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueActions.Create, obj);
         }
         
         public virtual void UpdateData(string message)
@@ -35,7 +35,7 @@ namespace Mix.SignalR.Hubs
             var obj = ReflectionHelper.ParseStringToObject<MixDbCommandModel>(message);
             obj.RequestedBy = Context.User?.Identity?.Name;
             obj.ConnectionId = Context.ConnectionId;
-            _queueService.PushQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueActions.Update, obj);
+            _queueService.PushMemoryQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueActions.Update, obj);
         }
     }
 }

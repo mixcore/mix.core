@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -8,7 +9,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddMixCors(this IServiceCollection services)
         {
-
+            services.TryAddSingleton<MixEndpointService>();
             var mixEndpointService = services.GetService<MixEndpointService>();
             origins = mixEndpointService.Endpoints
             .Where(e => !string.IsNullOrEmpty(e))

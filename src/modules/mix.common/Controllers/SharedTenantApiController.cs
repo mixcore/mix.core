@@ -29,7 +29,7 @@ namespace Mix.Common.Controllers
             MixIdentityService mixIdentityService,
             AuthConfigService authConfigService,
             MixCmsContext context,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IMixTenantService mixTenantService,
             MixEndpointService endpointService)
             : base(httpContextAccessor, configuration,

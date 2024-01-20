@@ -23,7 +23,7 @@ namespace Mix.Lib.Base
             MixIdentityService mixIdentityService,
             MixCacheDbContext cacheDbContext,
             TDbContext context,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, context, queueService, cacheDbContext, mixTenantService)
@@ -106,7 +106,7 @@ namespace Mix.Lib.Base
         protected virtual async Task<TPrimaryKey> CreateHandlerAsync(TEntity data)
         {
             await Repository.CreateAsync(data);
-            QueueService.PushMessage(CurrentTenant.Id, data, MixRestAction.Post.ToString(), true);
+            QueueService.PushMessageToMemoryQueue(CurrentTenant.Id, data, MixRestAction.Post.ToString(), true);
             return data.Id;
         }
 
@@ -114,14 +114,14 @@ namespace Mix.Lib.Base
         {
             await Repository.UpdateAsync(data);
             await CacheService.RemoveCacheAsync(id, typeof(TEntity).FullName);
-            QueueService.PushMessage(CurrentTenant.Id, data, MixRestAction.Put.ToString(), true);
+            QueueService.PushMessageToMemoryQueue(CurrentTenant.Id, data, MixRestAction.Put.ToString(), true);
         }
 
         protected virtual async Task DeleteHandler(TEntity data)
         {
             await Repository.DeleteAsync(data);
             await CacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TEntity).FullName);
-            QueueService.PushMessage(CurrentTenant.Id, data, MixRestAction.Delete.ToString(), true);
+            QueueService.PushMessageToMemoryQueue(CurrentTenant.Id, data, MixRestAction.Delete.ToString(), true);
         }
 
 
@@ -129,7 +129,7 @@ namespace Mix.Lib.Base
         {
             await Repository.SaveFieldsAsync(data, properties);
             await CacheService.RemoveCacheAsync(id.ToString(), typeof(TEntity).FullName);
-            QueueService.PushMessage(CurrentTenant.Id, data, MixRestAction.Patch.ToString(), true);
+            QueueService.PushMessageToMemoryQueue(CurrentTenant.Id, data, MixRestAction.Patch.ToString(), true);
         }
 
         protected virtual async Task SaveManyHandler(List<TEntity> data)

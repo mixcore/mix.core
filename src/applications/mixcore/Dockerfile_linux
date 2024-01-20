@@ -7,10 +7,7 @@ EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
-COPY ["src/platform/core/mix-heart/nuget.config", "src/platform/core/mix-heart/"]
-COPY ["src/services/mix-auth-service/mix.auth.service/mix.auth.service.csproj", "src/services/mix-auth-service/mix.auth.service/"]
-COPY ["src/applications/mixcore.host.aspire/mixcore.host.aspire.ServiceDefaults/mixcore.host.aspire.ServiceDefaults.csproj", "src/applications/mixcore.host.aspire/mixcore.host.aspire.ServiceDefaults/"]
-COPY ["src/modules/mix.grpc/mix.grpc.csproj", "src/modules/mix.grpc/"]
+COPY ["src/applications/mixcore.gateway/mixcore.gateway.csproj", "src/applications/mixcore.gateway/"]
 COPY ["src/platform/mix.library/mix.library.csproj", "src/platform/mix.library/"]
 COPY ["src/platform/core/mix.mixdb.event/mix.mixdb.event.csproj", "src/platform/core/mix.mixdb.event/"]
 COPY ["src/platform/mix.mixdb/mix.mixdb.csproj", "src/platform/mix.mixdb/"]
@@ -23,21 +20,22 @@ COPY ["src/platform/mix.identity/mix.identity.csproj", "src/platform/mix.identit
 COPY ["src/platform/mix.auth/mix.auth.csproj", "src/platform/mix.auth/"]
 COPY ["src/platform/mix.quartz/mix.quartz.csproj", "src/platform/mix.quartz/"]
 COPY ["src/platform/mix.queue/mix.queue.csproj", "src/platform/mix.queue/"]
-COPY ["src/services/mix-message-queue/mix.mq/mix.mq.csproj", "src/services/mix-message-queue/mix.mq/"]
+COPY ["src/services/mix-message-queue/mix.mq.server/mix.mq.server.csproj", "src/services/mix-message-queue/mix.mq/"]
+COPY ["src/applications/mixcore.host.aspire/mixcore.host.aspire.ServiceDefaults/mixcore.host.aspire.ServiceDefaults.csproj", "src/applications/mixcore.host.aspire/mixcore.host.aspire.ServiceDefaults/"]
 COPY ["src/services/mix-message-queue/mix.mq.lib/mix.mq.lib.csproj", "src/services/mix-message-queue/mix.mq.lib/"]
 COPY ["src/platform/mix.signalr/mix.signalr.csproj", "src/platform/mix.signalr/"]
 COPY ["src/platform/mix.repodb/mix.repodb.csproj", "src/platform/mix.repodb/"]
 COPY ["src/platform/mix.communicator/mix.communicator.csproj", "src/platform/mix.communicator/"]
 COPY ["src/platform/mix.signalr.hub/mix.signalr.hub.csproj", "src/platform/mix.signalr.hub/"]
 COPY ["src/platform/mix.log/mix.log.lib.csproj", "src/platform/mix.log/"]
-RUN dotnet restore "src/services/mix-auth-service/mix.auth.service/mix.auth.service.csproj"
+RUN dotnet restore "src/applications/mixcore.gateway/mixcore.gateway.csproj"
 COPY . .
-RUN dotnet build "src/services/mix-auth-service/mix.auth.service/mix.auth.service.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "/src/applications/mixcore.gateway/mixcore.gateway.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "src/services/mix-auth-service/mix.auth.service/mix.auth.service.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "/src/applications/mixcore.gateway/mixcore.gateway.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "mix.auth.service.dll"]
+ENTRYPOINT ["dotnet", "mixcore.gateway.dll"]

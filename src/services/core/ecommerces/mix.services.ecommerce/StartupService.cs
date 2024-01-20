@@ -1,11 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Constant.Constants;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Services.Databases.Lib.Services;
-using Mix.Services.Ecommerce.Lib.Interfaces;
-using Mix.Services.Ecommerce.Lib.Models;
-using Mix.Services.Ecommerce.Lib.Services;
 using Mix.Shared.Interfaces;
 using Mix.Shared.Models.Configurations;
 

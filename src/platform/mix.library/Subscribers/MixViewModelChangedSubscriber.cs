@@ -19,14 +19,16 @@ namespace Mix.Lib.Subscribers
             IServiceProvider serviceProvider,
             IConfiguration configuration,
             IMixTenantService mixTenantService,
-            IQueueService<MessageQueueModel> queueService)
-            : base(TopicId, nameof(MixDbCommandSubscriber), 20, serviceProvider, configuration, queueService)
+            IMemoryQueueService<MessageQueueModel> queueService,
+            ILogger<MixViewModelChangedSubscriber> logger)
+            : base(TopicId, nameof(MixDbCommandSubscriber), 20, serviceProvider, configuration, queueService, logger)
         {
             _mixTenantService = mixTenantService;
         }
 
         public override async Task Handler(MessageQueueModel data)
         {
+            CacheService ??= GetRequiredService<MixCacheService>();
             await UpdateCacheHandler(data);
             switch (data.DataTypeFullName)
             {
@@ -71,6 +73,7 @@ namespace Mix.Lib.Subscribers
                             default:
                                 break;
                         }
+                        serviceScope.Dispose();
                     }
                 }
             }

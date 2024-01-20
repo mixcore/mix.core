@@ -18,7 +18,7 @@ namespace Mix.Lib.Services
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         protected readonly MixIdentityService MixIdentityService;
-        protected readonly IQueueService<MessageQueueModel> QueueService;
+        protected readonly IMemoryQueueService<MessageQueueModel> QueueService;
         protected readonly IPortalHubClientService PortalHub;
         protected UnitOfWorkInfo Uow;
         protected UnitOfWorkInfo CacheUow;
@@ -29,7 +29,7 @@ namespace Mix.Lib.Services
             IHttpContextAccessor httpContextAccessor,
             MixIdentityService identityService,
             UnitOfWorkInfo<TDbContext> uow,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             MixCacheService cacheService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
@@ -74,14 +74,14 @@ namespace Mix.Lib.Services
                 Data = ReflectionHelper.ParseObject(data).ToString(),
                 Type = MessageType.Success,
             });
-            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), data);
+            QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), data);
             return id;
         }
 
         public virtual async Task UpdateHandler(TPrimaryKey id, TView data, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var currentId = ReflectionHelper.GetPropertyValue(data, "id").ToString();
+            var currentId = ReflectionHelper.GetPropertyValue(data, "Id").ToString();
             if (id.ToString() != currentId)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Invalid Id");
@@ -97,7 +97,7 @@ namespace Mix.Lib.Services
                 Data = ReflectionHelper.ParseObject(data).ToString(),
                 Type = MessageType.Success,
             });
-            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Put.ToString(), data);
+            QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Put.ToString(), data);
         }
 
         public virtual async Task DeleteHandler(TView data, CancellationToken cancellationToken = default)
@@ -114,7 +114,7 @@ namespace Mix.Lib.Services
                 Data = ReflectionHelper.ParseObject(data).ToString(),
                 Type = MessageType.Success,
             });
-            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Delete.ToString(), data);
+            QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Delete.ToString(), data);
         }
 
 
@@ -124,7 +124,7 @@ namespace Mix.Lib.Services
             data.SetUowInfo(Uow, CacheService);
             await data.SaveFieldsAsync(properties, cancellationToken);
             await CacheService.RemoveCacheAsync(id.ToString(), Repository.CacheFolder, cancellationToken);
-            QueueService.PushQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Patch.ToString(), data);
+            QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Patch.ToString(), data);
         }
 
         public virtual async Task SaveManyHandler(List<TView> data, CancellationToken cancellationToken = default)
@@ -142,8 +142,15 @@ namespace Mix.Lib.Services
         #region Query Handlers
         public virtual async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req, SearchQueryModel<TEntity, TPrimaryKey> searchRequest, CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            return await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, cancellationToken);
+            try
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
         }
 
         public virtual PagingResponseModel<TView> ParseSearchResult(SearchRequestDto req, PagingResponseModel<TView> result, CancellationToken cancellationToken = default)

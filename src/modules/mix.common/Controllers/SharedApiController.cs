@@ -39,7 +39,7 @@ namespace Mix.Common.Controllers
             IActionDescriptorCollectionProvider routeProvider,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> uow,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             ApplicationLifetime applicationLifetime,
             MixCacheService cacheService,
             IHttpContextAccessor httpContextAccessor,
@@ -84,9 +84,15 @@ namespace Mix.Common.Controllers
         [HttpGet]
         [MixAuthorize(roles: $"{MixRoles.SuperAdmin},{MixRoles.Owner}")]
         [Route("stop-application")]
-        public void StopApplication()
+        public async Task<ActionResult> StopApplication()
         {
             _applicationLifetime.StopApplication();
+            string _currentProcess = Path.GetFullPath(Process.GetCurrentProcess().MainModule.FileName);
+
+            Process.Start(_currentProcess);
+
+            await Task.FromResult(0);
+            return Ok(DateTime.UtcNow);
         }
 
         [HttpGet]

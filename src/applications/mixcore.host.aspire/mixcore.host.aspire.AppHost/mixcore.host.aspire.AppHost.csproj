@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -9,11 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting" Version="8.0.0-preview.1.23557.2" />
+    <PackageReference Include="Aspire.Hosting" Version="8.0.0-preview.2.23619.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\services\mix-auth-service\mix.auth.service\mix.auth.service.csproj" />
+    <ProjectReference Include="..\..\..\services\mix-message-queue\mix.mq.server\mix.mq.server.csproj" />
+    <ProjectReference Include="..\..\..\services\mix-auth-service\mix.auth.api\mix.auth.api.csproj" />
     <ProjectReference Include="..\..\mixcore.gateway\mixcore.gateway.csproj" />
     <ProjectReference Include="..\..\mixcore\mixcore.csproj" />
   </ItemGroup>

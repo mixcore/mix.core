@@ -23,16 +23,18 @@ namespace Mix.Queue.Engines.MixQueue
         private MixTopicModel<T> _topic;
         private readonly MixQueueSetting _queueSetting;
         private readonly Func<T, Task> _messageHandler;
-        private readonly IQueueService<MessageQueueModel> _memQueues;
+        private readonly IMemoryQueueService<MessageQueueModel> _memQueues;
         private readonly MixEndpointService _mixEndpointService;
         private GrpcChannelModel<MixMq.MixMqClient> _mixMqSubscriber;
         private SubscribeRequest _subscribeRequest;
+        private AsyncServerStreamingCall<SubscribeReply> _call;
+        private CancellationToken _startCancellationToken;
         public MixQueueSubscriber(
             QueueSetting queueSetting,
             string topicId,
             string subscriptionId,
             Func<T, Task> messageHandler,
-            IQueueService<MessageQueueModel> memQueues,
+            IMemoryQueueService<MessageQueueModel> memQueues,
             MixEndpointService mixEndpointService)
         {
             _queueSetting = queueSetting as MixQueueSetting;
@@ -54,40 +56,61 @@ namespace Mix.Queue.Engines.MixQueue
         /// <returns></returns>
         public async Task ProcessQueue(CancellationToken cancellationToken = default)
         {
-            using var call = _mixMqSubscriber.Client.Subscribe(_subscribeRequest);
-
-            while (await call.ResponseStream.MoveNext())
+            try
             {
-                if (!IsProcessing)
+                _call = _mixMqSubscriber.Client.Subscribe(_subscribeRequest);
+                while (await _call.ResponseStream.MoveNext())
                 {
-                    IsProcessing = true;
-
-                    
-                    if (call.ResponseStream.Current.Messages.Count > 0)
+                    if (!IsProcessing)
                     {
-                        foreach (var msg in call.ResponseStream.Current.Messages)
+                        IsProcessing = true;
+
+                        if (_call.ResponseStream.Current.Messages.Count > 0)
                         {
-                            var obj = JObject.Parse(msg).ToObject<T>();
-                            AckQueueMessage(obj);
-                            await _messageHandler.Invoke(obj);
+                            foreach (var msg in _call.ResponseStream.Current.Messages)
+                            {
+                                var obj = JObject.Parse(msg).ToObject<T>();
+                                AckQueueMessage(obj);
+                                await _messageHandler.Invoke(obj);
+                            }
                         }
+                        IsProcessing = false;
                     }
-                    IsProcessing = false;
-                    await Task.Delay(1000, cancellationToken);
                 }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task Disconnect(CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await _mixMqSubscriber.Client.DisconnectAsync(_subscribeRequest);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex);
             }
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            return ProcessQueue(stoppingToken);
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                return ProcessQueue(stoppingToken);
+            }
+            return Task.CompletedTask;
         }
 
         private void AckQueueMessage(T model)
         {
             if (model.TopicId != MixQueueTopics.MixLog)
             {
-                var logQueue = _memQueues.GetQueue(MixQueueTopics.MixLog);
+                var logQueue = _memQueues.GetMemoryQueue(MixQueueTopics.MixLog);
                 if (logQueue != null)
                 {
                     logQueue.Enqueue(new MessageQueueModel()
@@ -102,5 +125,6 @@ namespace Mix.Queue.Engines.MixQueue
                 }
             }
         }
+
     }
 }

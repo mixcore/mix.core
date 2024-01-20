@@ -57,6 +57,10 @@ namespace Mix.Lib.Services
                 if (_currentTenant == null)
                 {
                     _currentTenant = Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
+                    _currentTenant ??= new MixTenantSystemModel()
+                    {
+                        Id = 1
+                    };
                 }
                 return _currentTenant;
             }
@@ -255,7 +259,7 @@ namespace Mix.Lib.Services
             throw new MixException(MixErrorStatus.Badrequest, createResult.Errors.First().Description);
         }
 
-        public async Task<JObject> GetOrCreateUserData(MixUser user, CancellationToken cancellationToken = default)
+        public virtual async Task<JObject> GetOrCreateUserData(MixUser user, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -294,7 +298,7 @@ namespace Mix.Lib.Services
             }
         }
 
-        public async Task<TokenResponseModel> GenerateAccessTokenAsync(
+        public virtual async Task<TokenResponseModel> GenerateAccessTokenAsync(
             MixUser user,
             bool isRemember,
             string aesKey,
@@ -308,7 +312,7 @@ namespace Mix.Lib.Services
                 var dtRefreshTokenExpired = dtIssued.AddMinutes(AuthConfigService.AppSettings.RefreshTokenExpiration);
                 var refreshTokenId = Guid.Empty;
                 var refreshToken = Guid.Empty;
-                var userInfo = await GetOrCreateUserData(user, cancellationToken);
+                //var userInfo = await GetOrCreateUserData(user, cancellationToken);
                 if (isRemember)
                 {
                     refreshToken = Guid.NewGuid();
@@ -329,11 +333,11 @@ namespace Mix.Lib.Services
 
                 var token = new TokenResponseModel()
                 {
-                    Info = userInfo,
+                    Info = new(),
                     EmailConfirmed = user.EmailConfirmed,
                     IsActive = user.IsActived,
                     AccessToken = await GenerateTokenAsync(
-                        user, userInfo, dtExpired, refreshToken.ToString(), aesKey, rsaPublicKey, AuthConfigService.AppSettings),
+                        user, new(), dtExpired, refreshToken.ToString(), aesKey, rsaPublicKey, AuthConfigService.AppSettings),
                     RefreshToken = refreshTokenId,
                     TokenType = AuthConfigService.AppSettings.TokenType,
                     ExpiresIn = AuthConfigService.AppSettings.AccessTokenExpiration,

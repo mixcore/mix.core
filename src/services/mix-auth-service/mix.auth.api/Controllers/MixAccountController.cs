@@ -57,7 +57,7 @@ namespace mix.auth.service.Controllers
             MixCacheService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             AuthConfigService authConfigService,
             IMixEdmService edmService,
             IMixTenantService mixTenantService,

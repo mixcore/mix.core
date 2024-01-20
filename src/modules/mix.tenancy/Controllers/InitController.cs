@@ -42,7 +42,7 @@ namespace Mix.Tenancy.Controllers
             TranslatorService translator,
             IInitCmsService initCmsService,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IMixThemeImportService importService,
             IQuartzService quartzService,
             HttpService httpService,
@@ -97,6 +97,7 @@ namespace Mix.Tenancy.Controllers
                 await _mixTenantService.Reload();
                 Session.Put(MixRequestQueryKeywords.Tenant, _mixTenantService.AllTenants.First());
                 _mixEndpointService.SetDefaultDomain($"https://{model.PrimaryDomain}");
+
                 return Ok();
             }
             catch (Exception ex)

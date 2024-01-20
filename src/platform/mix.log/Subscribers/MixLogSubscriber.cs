@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Mix.Constant.Constants;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Queue;
@@ -38,10 +39,11 @@ namespace Mix.Log.Lib.Subscribers
             IServiceProvider serviceProvider,
             IConfiguration configuration,
             IPortalHubClientService portalHub,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IMixQueueLog queueMessageLogService,
-            IAuditLogService auditLogService)
-            : base(TopicId, nameof(MixLogSubscriber), 20, serviceProvider, configuration, queueService)
+            IAuditLogService auditLogService,
+            ILogger<MixLogSubscriber> logger)
+            : base(TopicId, nameof(MixLogSubscriber), 20, serviceProvider, configuration, queueService, logger)
         {
             _queueMessageLogService = queueMessageLogService;
             _portalHub = portalHub;
@@ -50,15 +52,23 @@ namespace Mix.Log.Lib.Subscribers
 
         public override Task StartAsync(CancellationToken cancellationToken = default)
         {
-            Task.Run(async () =>
+            base.StartAsync(cancellationToken);
+            
+            return Task.Run(async () =>
             {
                 while (_portalHub.Connection == null || _portalHub.Connection.State != Microsoft.AspNetCore.SignalR.Client.HubConnectionState.Connected)
                 {
-                    await Task.Delay(5000);
-                    await _portalHub.StartConnection();
+                    try
+                    {
+                        await Task.Delay(5000);
+                        await _portalHub.StartConnection();
+                    }
+                    catch(Exception ex)
+                    {
+                        _logger.LogError(GetType().Name, ex);
+                    }
                 }
             });
-            return base.StartAsync(cancellationToken);
         }
         public override async Task Handler(MessageQueueModel model)
         {
@@ -70,10 +80,10 @@ namespace Mix.Log.Lib.Subscribers
             switch (model.Action)
             {
                 case MixQueueActions.AuditLog:
-                    var aditLogCmd = model.ParseData<LogAuditLogCommand>();
-                    if (aditLogCmd != null)
+                    var auditLogCmd = model.ParseData<LogAuditLogCommand>();
+                    if (auditLogCmd != null)
                     {
-                        await _auditLogService.SaveRequestAsync(aditLogCmd.Request);
+                        await _auditLogService.SaveRequestAsync(auditLogCmd.Request);
                     }
                     break;
 

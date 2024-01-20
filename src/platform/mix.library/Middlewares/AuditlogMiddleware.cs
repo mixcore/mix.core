@@ -72,6 +72,7 @@ namespace Mix.Lib.Middlewares
                         await responseBody.CopyToAsync(originalBodyStream);
 
                         _auditlogService.QueueRequest(_auditlogData);
+                        responseBody.Dispose();
                     }
                 }
             }

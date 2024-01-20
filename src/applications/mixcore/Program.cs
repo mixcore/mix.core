@@ -7,20 +7,13 @@ using Mix.Log.Lib;
 using Microsoft.Extensions.FileProviders;
 using Mix.Lib.Middlewares;
 using Mix.Shared.Services;
-using Mix.Shared.Helpers;
-
-var mixContentFolder = new DirectoryInfo(MixFolders.StaticFiles);
-
-// Clone Settings from shared folder
-if (!mixContentFolder.Exists)
-{
-    MixHelper.CopyFolder($"{Environment.CurrentDirectory}/{MixFolders.DefaultMixContentFolder}", MixFolders.MixContentFolder);
-    Console.WriteLine("Clone Settings from shared folder completed.");
-}
+using Mix.Shared.Models.Configurations;
 var builder = MixCmsHelper.CreateWebApplicationBuilder(args);
 
-builder.AddServiceDefaults();
-
+if (builder.Environment.IsDevelopment())
+{
+    builder.AddServiceDefaults();
+}
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -29,8 +22,11 @@ builder.Services.AddWebEncoders(options =>
 {
     options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
 });
-
+var globalConfig = builder.Configuration.GetSection(MixAppSettingsSection.GlobalSettings)
+                                            .Get<GlobalSettingsModel>();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddMixServices(Assembly.GetExecutingAssembly(), builder.Configuration);
+builder.Services.ApplyMigrations(globalConfig);
 builder.Services.AddMixCors();
 builder.Services.AddScoped<MixNavigationService>();
 builder.Services.AddMixLog(builder.Configuration);
@@ -52,7 +48,7 @@ void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfiguration 
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
     }
-
+    app.UseHttpsRedirection();
     app.UseMixTenant();
 
     app.UseMiddleware<AuditlogMiddleware>();
@@ -61,12 +57,7 @@ void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfiguration 
 
     // Typically, UseStaticFiles is called before UseCors. Apps that use JavaScript to retrieve static files cross site must call UseCors before UseStaticFiles.
     app.UseMixStaticFiles(env.ContentRootPath);
-    app.UseStaticFiles();
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new PhysicalFileProvider(
-            Path.Combine(env.ContentRootPath, MixFolders.TemplatesFolder))
-    });
+   
 
     // UseCors must be placed after UseRouting and before UseAuthorization. This is to ensure that CORS headers are included in the response for both authorized and unauthorized calls.
     app.UseMixCors();
@@ -75,16 +66,16 @@ void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfiguration 
     app.UseMixAuth();
 
     app.UseMixApps(Assembly.GetExecutingAssembly(), configuration, env.ContentRootPath, env.IsDevelopment());
-
+    app.UseMixSwaggerApps(env.IsDevelopment(), Assembly.GetExecutingAssembly());
     app.UseResponseCompression();
     app.UseMixResponseCaching();
 
 
 
-    if (GlobalConfigService.Instance.AppSettings.IsHttps)
-    {
-        app.UseHttpsRedirection();
-    }
+    //if (GlobalConfigService.Instance.AppSettings.IsHttps)
+    //{
+    //    app.UseHttpsRedirection();
+    //}
 
 
 }

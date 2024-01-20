@@ -27,7 +27,7 @@ namespace Mixcore.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> uow,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             MixcorePostService postService,
             MixRepoDbRepository mixRepoDbRepository,
             IMixMetadataService metadataService,

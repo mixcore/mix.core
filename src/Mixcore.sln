@@ -121,9 +121,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mix-message-queue", "mix-me
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mix-auth-service", "mix-auth-service", "{EC933357-1D95-4CDD-B290-7A5984FC1AA2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.auth.service", "services\mix-auth-service\mix.auth.service\mix.auth.service.csproj", "{D503F737-90E6-438F-ACB2-1074CACEE407}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.mq.server", "services\mix-message-queue\mix.mq.server\mix.mq.server.csproj", "{7C5101F3-E3E6-42DB-8585-D08C2BE5E30C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.auth.api", "services\mix-auth-service\mix.auth.api\mix.auth.api.csproj", "{9C04921A-38D5-4EC9-8FF5-0E0D74681049}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -279,14 +279,14 @@ Global
 		{F5D4C70F-DD2E-4EC9-A191-56A717B1B5EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5D4C70F-DD2E-4EC9-A191-56A717B1B5EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5D4C70F-DD2E-4EC9-A191-56A717B1B5EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D503F737-90E6-438F-ACB2-1074CACEE407}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D503F737-90E6-438F-ACB2-1074CACEE407}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D503F737-90E6-438F-ACB2-1074CACEE407}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D503F737-90E6-438F-ACB2-1074CACEE407}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7C5101F3-E3E6-42DB-8585-D08C2BE5E30C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7C5101F3-E3E6-42DB-8585-D08C2BE5E30C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C5101F3-E3E6-42DB-8585-D08C2BE5E30C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C5101F3-E3E6-42DB-8585-D08C2BE5E30C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C04921A-38D5-4EC9-8FF5-0E0D74681049}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C04921A-38D5-4EC9-8FF5-0E0D74681049}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C04921A-38D5-4EC9-8FF5-0E0D74681049}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C04921A-38D5-4EC9-8FF5-0E0D74681049}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -350,8 +350,8 @@ Global
 		{F5D4C70F-DD2E-4EC9-A191-56A717B1B5EE} = {B4C40E02-E06A-4359-BDC5-349E103366AD}
 		{C93898B7-2001-4C29-9BBE-33A2E61C350A} = {C0A05428-767E-46C5-A31F-0D220E41F7C5}
 		{EC933357-1D95-4CDD-B290-7A5984FC1AA2} = {C0A05428-767E-46C5-A31F-0D220E41F7C5}
-		{D503F737-90E6-438F-ACB2-1074CACEE407} = {EC933357-1D95-4CDD-B290-7A5984FC1AA2}
 		{7C5101F3-E3E6-42DB-8585-D08C2BE5E30C} = {C93898B7-2001-4C29-9BBE-33A2E61C350A}
+		{9C04921A-38D5-4EC9-8FF5-0E0D74681049} = {EC933357-1D95-4CDD-B290-7A5984FC1AA2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0143C230-7F40-44B2-8BA3-EF5B92D55848}

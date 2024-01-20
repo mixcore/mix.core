@@ -1,15 +1,16 @@
 ﻿using Mix.Lib.Conventions;
 using Mix.Lib.Providers;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static partial class ServiceCollectionExtensions
     {
-        private static IServiceCollection AddGeneratedRestApi(this IServiceCollection services)
+        public static IServiceCollection AddGeneratedRestApi(this IServiceCollection services, List<Assembly> assemblies)
         {
             List<Type> restCandidates = GetCandidatesByAttributeType(
-                MixAssemblies, typeof(GenerateRestApiControllerAttribute));
+                assemblies, typeof(GenerateRestApiControllerAttribute));
             services.
                 AddControllers(o => o.Conventions.Add(
                     new GenericControllerRouteConvention()

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
+using Mix.Heart.Exceptions;
 using Mix.Quartz.Constants;
 using Mix.Quartz.Extensions;
 using Mix.Quartz.Interfaces;
@@ -23,9 +25,9 @@ namespace Mix.Quartz.Services
         private readonly DatabaseService _databaseService;
         public IScheduler Scheduler;
 
-        public QuartzService(IJobFactory jobFactory, IHttpContextAccessor httpContextAccessor)
+        public QuartzService(IJobFactory jobFactory, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
         {
-            _databaseService = new DatabaseService(httpContextAccessor);
+            _databaseService = new DatabaseService(httpContextAccessor, configuration);
             LoadScheduler().GetAwaiter().GetResult();
             Scheduler.JobFactory = jobFactory;
         }
@@ -177,7 +179,7 @@ namespace Mix.Quartz.Services
             }
             catch (Exception ex)
             {
-                LogException(ex);
+                throw new MixException(MixErrorStatus.Badrequest, ex);
             }
         }
 
@@ -215,7 +217,7 @@ namespace Mix.Quartz.Services
                 .Create()
                 .ForJobIf(job != null, job)
                 .WithIdentity(schedule.Name)
-                .WithDescription(schedule.CronExpression)
+                .WithDescription(schedule.Description)
                 .UsingJobDataIf(schedule.JobData != null, schedule.JobData)
                 .WithCronScheduleIf(!string.IsNullOrEmpty(schedule.CronExpression), schedule.CronExpression)
                 .StartNowIf(schedule.IsStartNow)
@@ -227,7 +229,7 @@ namespace Mix.Quartz.Services
 
         private Type FindJobType(string jobName)
         {
-            var assemblies = MixAssemblyFinder.GetMixAssemblies();
+            var assemblies = MixAssemblyFinder.GetAssembliesByPrefix("mix");
             Type jobType = null;
             foreach (var assembly in assemblies)
             {

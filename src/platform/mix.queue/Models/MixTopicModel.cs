@@ -10,12 +10,11 @@ namespace Mix.Mq.Lib.Models
     {
         public string Id { get; set; }
         public bool IsProcessing { get; set; }
-        public List<MixSubscriptionModel> Subscriptions { get; set; } = new();
+        public ConcurrentDictionary<string, MixSubscriptionModel> Subscriptions { get; set; } = new();
         public ConcurrentQueue<T> Messages { get; private set; } = new();
         public MixSubscriptionModel CreateSubscription(string subscriptionId)
         {
-            var subscription = Subscriptions.Find(m => m.Id == subscriptionId);
-            if (subscription == null)
+            if (!Subscriptions.TryGetValue(subscriptionId, out var subscription))
             {
                 subscription = new MixSubscriptionModel()
                 {
@@ -23,14 +22,19 @@ namespace Mix.Mq.Lib.Models
                     Status = MixQueueMessageLogState.NACK,
                     TopicId = Id
                 };
-                Subscriptions.Add(subscription);
+                Subscriptions.TryAdd(subscriptionId, subscription);
             }
             return subscription;
         }
 
         public MixSubscriptionModel GetSubscription(string subscriptionId)
         {
-            return Subscriptions.Find(m => m.Id == subscriptionId);
+            return Subscriptions.GetValueOrDefault(subscriptionId);
+        }
+        
+        public bool RemoveSubscription(string subscriptionId)
+        {
+            return Subscriptions.TryRemove(subscriptionId, out _);
         }
 
         public bool Any()
@@ -41,9 +45,8 @@ namespace Mix.Mq.Lib.Models
         public IList<T> ConsumeQueue(string subscriptionId, int length)
         {
             var result = new List<T>();
-            var subscription = Subscriptions.Find(m => m.Id == subscriptionId);
 
-            if (subscription == null)
+            if (!Subscriptions.TryGetValue(subscriptionId, out var subscription))
             {
                 return result;
             }

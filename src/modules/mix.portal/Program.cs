@@ -6,9 +6,10 @@ using Microsoft.Azure.Amqp.Framing;
 using Mix.Lib.Middlewares;
 
 var builder = MixCmsHelper.CreateWebApplicationBuilder(args);
-
-builder.AddServiceDefaults();
-
+if (builder.Environment.IsDevelopment())
+{
+    builder.AddServiceDefaults();
+}
 if (!Directory.Exists(MixFolders.MixContentSharedFolder))
 {
     MixFileHelper.CopyFolder(MixFolders.MixCoreConfigurationFolder, MixFolders.MixContentSharedFolder);

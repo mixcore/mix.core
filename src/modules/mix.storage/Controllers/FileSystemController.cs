@@ -18,7 +18,7 @@ namespace Mix.Storage.Controllers
             MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             MixStorageService storageService,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration, 

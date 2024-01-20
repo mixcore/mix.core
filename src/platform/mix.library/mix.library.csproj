@@ -81,6 +81,7 @@
 	<ItemGroup>
 		<PackageReference Include="ClosedXML" Version="0.104.0-preview2" />
 		<PackageReference Include="CommandLineParser" Version="2.9.1" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />

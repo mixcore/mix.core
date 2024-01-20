@@ -5,7 +5,6 @@ using Mix.Lib.Attributes;
 using Mix.Lib.Base;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Dtos;
 using Mix.Services.Databases.Lib.Interfaces;
@@ -34,7 +33,7 @@ namespace Mix.Services.Databases.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixDbDbContext> uow,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration,

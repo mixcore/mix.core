@@ -23,7 +23,7 @@ namespace Mix.Portal.Controllers
             MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             TenantUserManager userManager,
             MixRepoDbRepository repoDbRepository,
             IMixTenantService mixTenantService)

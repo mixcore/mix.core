@@ -23,7 +23,7 @@ namespace Mix.Lib.Base
             MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService,
+            UnitOfWorkInfo<TDbContext> uow, IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration, 

@@ -10,7 +10,7 @@ namespace Mix.Lib.Publishers
         private const string TopicId = MixQueueTopics.MixDbCommand;
 
         public MixDbCommandPublisher(
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
             MixEndpointService mixEndpointService,
             ILogger<MixDbCommandPublisher> logger)

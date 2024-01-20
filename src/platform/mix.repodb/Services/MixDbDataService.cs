@@ -35,6 +35,7 @@ namespace Mix.RepoDb.Services
         private readonly MixRepoDbRepository _repository;
         private readonly IMixMemoryCacheService _memoryCache;
         private RepoDbMixDatabaseViewModel? _mixDb;
+        private FieldNameService _fieldNameService;
         #region Properties
 
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
@@ -162,7 +163,7 @@ namespace Mix.RepoDb.Services
         public async Task<JObject?> GetById(string tableName, int id, bool loadNestedData)
         {
             await InitRepository(tableName);
-            var obj = await _repository.GetSingleAsync(id);
+            var obj = await _repository.GetSingleAsync(new QueryField(_fieldNameService.Id, id));
             if (obj != null)
             {
                 var data = ReflectionHelper.ParseObject(obj);
@@ -479,6 +480,7 @@ namespace Mix.RepoDb.Services
         private async Task InitRepository(string tableName)
         {
             _mixDb = await GetMixDatabase(tableName);
+            _fieldNameService = new FieldNameService(_mixDb.NamingConvention);
             if (_mixDb == null)
             {
                 throw new MixException(MixErrorStatus.Badrequest, $"Invalid Mix Db {tableName}");

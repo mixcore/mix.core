@@ -13,7 +13,7 @@ namespace Mix.Lib.Publishers
     {
         static string topicId = typeof(T).FullName;
         public MixPublisher(
-            IQueueService<MessageQueueModel> queueService,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IConfiguration configuration, IWebHostEnvironment environment,
             MixEndpointService mixEndpointService,
             ILogger<MixRepoDbPublisher> logger)
