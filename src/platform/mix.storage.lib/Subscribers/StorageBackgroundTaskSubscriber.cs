@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.ObjectPool;
 using Mix.Communicator.Models;
 using Mix.Communicator.Services;
 using Mix.Lib.Subscribers;
@@ -34,8 +35,9 @@ namespace Mix.Storage.Lib.Subscribers
             IAuditLogService auditLogService,
             IPortalHubClientService portalHub,
             IMemoryQueueService<MessageQueueModel> queueService,
-            ILogger<StorageBackgroundTaskSubscriber> logger)
-            : base(TopicId, nameof(StorageBackgroundTaskSubscriber), 20, serviceProvider, configuration, queueService, logger)
+            ILogger<StorageBackgroundTaskSubscriber> logger,
+            IPooledObjectPolicy<RabbitMQ.Client.IModel> rabbitMqObjectPolicy = null)
+            : base(TopicId, nameof(StorageBackgroundTaskSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMqObjectPolicy)
         {
             AuditLogService = auditLogService;
             PortalHub = portalHub;

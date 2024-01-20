@@ -23,7 +23,7 @@ namespace Mix.Queue.Engines.GooglePubSub
         private readonly Func<T, Task> _messageHandler;
 
         public GoogleQueueSubscriber(
-            QueueSetting queueSetting,
+            IQueueSetting queueSetting,
             string topicId,
             string subscriptionId,
             Func<T, Task> messageHandler)

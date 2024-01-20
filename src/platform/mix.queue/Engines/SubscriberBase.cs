@@ -6,12 +6,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.ObjectPool;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Services;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines.MixQueue;
+using Mix.Queue.Engines.RabitMQ;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Queue.Services;
@@ -35,7 +37,7 @@ namespace Mix.Queue.Engines
         protected readonly IServiceProvider ServicesProvider;
         protected IServiceScope ServiceScope { get; set; }
         protected ILogger<SubscriberBase> _logger { get; set; }
-
+        private readonly IPooledObjectPolicy<RabbitMQ.Client.IModel> _rabbitMqObjectPolicy;
 
         protected SubscriberBase(
             string topicId,
@@ -44,7 +46,8 @@ namespace Mix.Queue.Engines
             IServiceProvider servicesProvider,
             IConfiguration configuration,
             IMemoryQueueService<MessageQueueModel> queueService,
-            ILogger<SubscriberBase> logger)
+            ILogger<SubscriberBase> logger,
+            IPooledObjectPolicy<RabbitMQ.Client.IModel> rabbitMqObjectPolicy)
         {
             _timeout = timeout;
             _configuration = configuration;
@@ -53,15 +56,16 @@ namespace Mix.Queue.Engines
             _memQueueService = queueService;
             ServicesProvider = servicesProvider;
             _logger = logger;
+            _rabbitMqObjectPolicy = rabbitMqObjectPolicy;
         }
-        protected override Task ExecuteAsync(CancellationToken cancellationToken)
+        protected async override Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            Task.Run(() =>
+            cancellationToken.ThrowIfCancellationRequested();
+            _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{_moduleName}");
+            if (_subscriber is not RabitMQSubscriber<MessageQueueModel>)
             {
-                _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{_moduleName}");
-                StartProcessQueue(cancellationToken);
-            });
-            return Task.CompletedTask;
+                await StartProcessQueue(cancellationToken);
+            }
         }
 
         public virtual async Task StopAsync(CancellationToken cancellationToken)
@@ -137,6 +141,8 @@ namespace Mix.Queue.Engines
                         googleSetting.CredentialFile = googleSetting.CredentialFile;
                         return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
                             provider, googleSetting, topicId, subscriptionId, MessageHandler, _memQueueService, mixEndpointService);
+                    case MixQueueProvider.RABITMQ:
+                        return QueueEngineFactory.CreateRabbitMQSubscriber<MessageQueueModel>(_rabbitMqObjectPolicy, topicId,subscriptionId, MessageHandler);
                     case MixQueueProvider.MIX:
                         if (string.IsNullOrEmpty(mixEndpointService.MixMq))
                         {

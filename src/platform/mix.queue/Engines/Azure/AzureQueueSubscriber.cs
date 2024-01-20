@@ -19,7 +19,7 @@ namespace Mix.Queue.Engines.Azure
         private readonly AzureQueueSetting _queueSetting;
         private readonly Func<T, Task> _messageHandler;
         public AzureQueueSubscriber(
-            QueueSetting queueSetting,
+            IQueueSetting queueSetting,
             string topicId,
             string subscriptionId,
             Func<T, Task> messageHandler)

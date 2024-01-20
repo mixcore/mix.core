@@ -11,6 +11,13 @@
     },
     "Mix": {
       "ProjectId": ""
+    },
+    "RabitMqQueueSetting": {
+      "HostName": "localhost",
+      "UserName": "",
+      "Password": "",
+      "VHost": null,
+      "Port": 5672
     }
   }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.ObjectPool;
 using Mix.Constant.Constants;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Queue;
@@ -42,8 +43,9 @@ namespace Mix.Log.Lib.Subscribers
             IMemoryQueueService<MessageQueueModel> queueService,
             IMixQueueLog queueMessageLogService,
             IAuditLogService auditLogService,
-            ILogger<MixLogSubscriber> logger)
-            : base(TopicId, nameof(MixLogSubscriber), 20, serviceProvider, configuration, queueService, logger)
+            ILogger<MixLogSubscriber> logger,
+            IPooledObjectPolicy<RabbitMQ.Client.IModel> rabbitMqObjectPolicy = null)
+            : base(TopicId, nameof(MixLogSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMqObjectPolicy)
         {
             _queueMessageLogService = queueMessageLogService;
             _portalHub = portalHub;

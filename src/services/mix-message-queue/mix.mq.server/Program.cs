@@ -8,6 +8,7 @@ using Mix.Mq.Server.Domain.Services;
 using OpenTelemetry;
 using System.Configuration;
 using System.Reflection;
+using Mix.Queue.Extensions;
 
 if (Directory.Exists($"../{MixFolders.MixCoreConfigurationFolder}"))
 {
@@ -26,13 +27,12 @@ if (builder.Environment.IsDevelopment())
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.Configure<HostOptions>(options =>
 {
     options.ServicesStartConcurrently = true;
-    options.ServicesStopConcurrently = false; 
+    options.ServicesStopConcurrently = false;
 });
-
+builder.AddMixQueue();
 builder.Services.TryAddSingleton<GrpcStreamingService>();
 builder.Services.TryAddSingleton<MixQueueMessages<MessageQueueModel>>();
 builder.Services.AddHostedService<MixMqSubscriptionService>();

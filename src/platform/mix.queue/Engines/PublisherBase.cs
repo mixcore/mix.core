@@ -1,12 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.ObjectPool;
 using Mix.Heart.Exceptions;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Shared.Services;
+using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,22 +27,25 @@ namespace Mix.Queue.Engines
         private readonly string _topicId;
         private MixQueueProvider _provider;
         protected ILogger<PublisherBase> _logger;
+        private readonly IPooledObjectPolicy<IModel> _rabbitMqObjectPolicy;
         protected PublisherBase(
             string topicId,
             IMemoryQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
             MixEndpointService mixEndpointService,
-            ILogger<PublisherBase> logger)
+            ILogger<PublisherBase> logger,
+            IPooledObjectPolicy<IModel> rabbitMqObjectPolicy)
         {
             _queueService = queueService;
             _configuration = configuration;
             _topicId = topicId;
             _mixEndpointService = mixEndpointService;
             _logger = logger;
+            _rabbitMqObjectPolicy = rabbitMqObjectPolicy;
         }
 
         private List<IQueuePublisher<MessageQueueModel>> CreatePublisher(
-            string topicName)
+            string topicId)
         {
             try
             {
@@ -62,7 +67,7 @@ namespace Mix.Queue.Engines
 
                         queuePublishers.Add(
                             QueueEngineFactory.CreatePublisher<MessageQueueModel>(
-                                _provider, azureSetting, topicName, _mixEndpointService));
+                                _provider, azureSetting, topicId, _mixEndpointService));
                         break;
                     case MixQueueProvider.GOOGLE:
                         var googleSettingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
@@ -72,8 +77,14 @@ namespace Mix.Queue.Engines
 
                         queuePublishers.Add(
                             QueueEngineFactory.CreatePublisher<MessageQueueModel>(
-                                _provider, googleSetting, topicName, _mixEndpointService));
+                                _provider, googleSetting, topicId, _mixEndpointService));
                         break;
+
+                    case MixQueueProvider.RABITMQ:
+                        queuePublishers.Add(
+                            QueueEngineFactory.CreateRabbitMqPublisher<MessageQueueModel>(_rabbitMqObjectPolicy, topicId));
+                        break;
+
                     case MixQueueProvider.MIX:
                         if (_mixEndpointService.MixMq != null)
                         {
@@ -81,7 +92,7 @@ namespace Mix.Queue.Engines
                             var mixSetting = new MixQueueSetting();
                             mixSettingPath.Bind(mixSetting);
                             queuePublishers.Add(
-                               QueueEngineFactory.CreatePublisher<MessageQueueModel>(_provider, mixSetting, topicName, _mixEndpointService));
+                               QueueEngineFactory.CreatePublisher<MessageQueueModel>(_provider, mixSetting, topicId, _mixEndpointService));
                         }
                         break;
                 }
