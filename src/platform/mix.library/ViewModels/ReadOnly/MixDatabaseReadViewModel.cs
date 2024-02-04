@@ -11,6 +11,7 @@ namespace Mix.Lib.ViewModels.ReadOnly
         public string ConnectionString { get; set; }
         public string Schema { get; set; }
         public string SystemName { get; set; }
+        public MixDatabaseNamingConvention NamingConvention { get; set; }
         #endregion
 
         #region Constructors

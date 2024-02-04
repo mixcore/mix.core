@@ -11,7 +11,7 @@ namespace Mix.Service.Services
     public class MixDbCommandHubClientService : BaseHubClientService, IMixDbCommandHubClientService
     {
         public MixDbCommandHubClientService(MixEndpointService mixEndpointService, ILogger<MixDbCommandHubClientService> logger)
-            : base(HubEndpoints.MixDbCommandHub, mixEndpointService, logger)
+            : base(HubEndpoints.MixDbCommandHub, mixEndpointService.MixMq, logger)
         {
         }
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Web;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Enums;
@@ -30,11 +31,11 @@ namespace Mix.Service.Services
         private readonly IServiceProvider _serviceProvider;
         private readonly IMixTenantService _mixTenantService;
         public PortalHubClientService(
-            IServiceProvider serviceProvider, 
-            MixEndpointService mixEndpointService, 
-            IMixTenantService mixTenantService, 
+            IServiceProvider serviceProvider,
+            MixEndpointService mixEndpointService,
+            IMixTenantService mixTenantService,
             ILogger<PortalHubClientService> logger)
-            : base(HubEndpoints.PortalHub, mixEndpointService, logger)
+            : base(HubEndpoints.PortalHub, mixEndpointService.MixMq, logger)
         {
             _serviceProvider = serviceProvider;
             _mixTenantService = mixTenantService;
@@ -56,9 +57,9 @@ namespace Mix.Service.Services
                 switch (message.Title)
                 {
                     case MixQueueTopics.MixViewModelChanged:
-                        if (message.Data.IsJsonString())
+                        if (message.Data != null && message.Data.GetType() != typeof(string))
                         {
-                            var obj = JObject.Parse(message.Data);
+                            var obj = JObject.FromObject(message.Data);
                             if (obj.ContainsKey("modifiedEntities"))
                             {
                                 var modifiedEntities = obj.Value<JArray>("modifiedEntities")?.ToObject<List<ModifiedEntityModel>>();
@@ -74,6 +75,11 @@ namespace Mix.Service.Services
                                 }
                             }
 
+                        }
+                        if (message.Message == MixQueueActions.ClearCache)
+                        {
+                            var cacheService = serviceScope.ServiceProvider.GetRequiredService<MixCacheService>();
+                            await cacheService.ClearAllCacheAsync();
                         }
 
                         break;

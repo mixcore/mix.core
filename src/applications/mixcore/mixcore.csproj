@@ -15,6 +15,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\modules\mix.messenger\mix.messenger.csproj" />
+		<ProjectReference Include="..\..\services\mix-auth-service\mix.auth.api\mix.auth.api.csproj" />
 		<ProjectReference Include="..\..\services\mix-message-queue\mix.mq.server\mix.mq.server.csproj" />
 		<ProjectReference Include="..\mixcore.host.aspire\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
@@ -58,9 +59,6 @@
 		<Using Include="Mix.Lib.Interfaces" />
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Remove="logs\**" />
-	</ItemGroup>
-	<ItemGroup>
 	  <None Remove="Domain\Protos\mixmq.proto" />
 	</ItemGroup>
 	<ItemGroup>
@@ -90,6 +88,9 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\default-mixcontent\shared\appconfigs\ocelot.Development.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>
 	<ItemGroup>

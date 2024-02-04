@@ -49,36 +49,38 @@ namespace Mix.Lib.Attributes
                 return;
             }
 
-            if (!CheckByPassAuthenticate(context.HttpContext.Request.Method, context.HttpContext.Request.Path, database))
+            // Not allow bypass by default for security => if not set, only superadmin can access this database
+            //if (!CheckByPassAuthenticate(context.HttpContext.Request.Method, context.HttpContext.Request.Path, database))
+            //{
+            if (ValidToken())
             {
-                if (ValidToken())
+                if (!IsInRoles(context.HttpContext.Request.Method, database, context.HttpContext.Request.Path))
                 {
-                    if (!IsInRoles(context.HttpContext.Request.Method, database, context.HttpContext.Request.Path))
+                    if (!ValidEnpointPermission(context))
                     {
-                        if (!ValidEnpointPermission(context))
-                        {
-                            context.Result = new ForbidResult();
-                            return;
-                        }
+                        context.Result = new ForbidResult();
+                        return;
                     }
                 }
-                else
-                {
-                    context.Result = new UnauthorizedResult();
-                    return;
-                }
             }
+            else
+            {
+                context.Result = new UnauthorizedResult();
+                return;
+            }
+            //}
         }
 
         private bool CheckByPassAuthenticate(string method, string path, MixDatabase database)
         {
-            return method switch {
+            return method switch
+            {
                 "GET" => database.ReadPermissions == null
-                           || database.ReadPermissions.Count == 0,
+                    || database.ReadPermissions.Count == 0,
                 "POST" => (path.EndsWith("filter") && (database.ReadPermissions == null || database.ReadPermissions.Count == 0))
-                            || (!path.EndsWith("filter") && (database.CreatePermissions == null || database.CreatePermissions.Count == 0)),
+                    || (!path.EndsWith("filter") && (database.CreatePermissions == null || database.CreatePermissions.Count == 0)),
                 "PUT" => database.UpdatePermissions == null
-                           || database.UpdatePermissions.Count == 0,
+                    || database.UpdatePermissions.Count == 0,
                 "PATCH" => database.UpdatePermissions == null
                     || database.UpdatePermissions.Count == 0,
                 "DELETE" => database.DeletePermissions == null

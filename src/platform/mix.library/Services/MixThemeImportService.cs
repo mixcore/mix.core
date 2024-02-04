@@ -107,15 +107,22 @@ namespace Mix.Lib.Services
 
         public async Task<SiteDataViewModel> LoadSchema(string folder)
         {
-            using (var serviceScope = _serviceProvider.CreateScope())
+            try
             {
-                _uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
-                _context = _uow.DbContext;
-                var strSchema = MixFileHelper.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, folder);
-                var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
-                await ValidateSiteData(siteStructures);
-                serviceScope.Dispose();
-                return siteStructures;
+                using (var serviceScope = _serviceProvider.CreateScope())
+                {
+                    _uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
+                    _context = _uow.DbContext;
+                    var strSchema = MixFileHelper.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, folder);
+                    var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
+                    await ValidateSiteData(siteStructures);
+                    serviceScope.Dispose();
+                    return siteStructures;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
             }
         }
 

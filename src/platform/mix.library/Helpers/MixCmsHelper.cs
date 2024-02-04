@@ -74,7 +74,7 @@ namespace Mix.Lib.Helpers
 
             builder.Configuration
                        .AddJsonFile("appsettings.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/global.json",true, true)
+                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/global.json", true, true)
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/ocelot.json",true, true)
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/storage.json",true, true)
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/azure.json",true, true)

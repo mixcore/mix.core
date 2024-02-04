@@ -251,3 +251,5 @@ src/applications/**/ServiceDependencies/
 src/applications/Mixcore/wwwroot/portal-apps/
 src/**/__pycache__/
 src/**/logs/
+
+src/**/mixcontent/

@@ -27,13 +27,13 @@ using RepoDb.Enumerations;
 using RepoDb.Interfaces;
 using System.Data;
 using System.Reflection.Metadata;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Mix.RepoDb.Repositories
 {
     public class MixRepoDbRepository : IDisposable
     {
         #region Properties
-        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private IDbConnection _connection;
         private IDbTransaction? _dbTransaction;
         private MixdbTrace _trace;
@@ -56,7 +56,6 @@ namespace Mix.RepoDb.Repositories
                 CommandTimeout = 1000
             };
 
-            _cmsUow = cmsUow;
             DatabaseProvider = databaseService.DatabaseProvider;
             ConnectionString = databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
             InitializeRepoDb();
@@ -72,7 +71,6 @@ namespace Mix.RepoDb.Repositories
                 CommandTimeout = 1000
             };
 
-            _cmsUow = cmsUow;
             DatabaseProvider = databaseProvider;
             ConnectionString = connectionString;
             InitializeRepoDb();
@@ -226,6 +224,7 @@ namespace Mix.RepoDb.Repositories
                     }
                 }
                 var data = await _connection.QueryAsync(_tableName, queryFields, selectedFields, orderFields, transaction: _dbTransaction);
+
                 return data.ToList();
             }
             catch (Exception ex)
@@ -251,7 +250,7 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<dynamic?> GetSingleByParentAsync(MixContentType parentType, object parentId)
+        public async Task<dynamic?> GetSingleByParentAsync(MixContentType parentType, object parentId, FieldNameService fieldNameService)
         {
             try
             {
@@ -259,8 +258,8 @@ namespace Mix.RepoDb.Repositories
                 return (await _connection.QueryAsync<dynamic>(
                     _tableName,
                     new List<QueryField>() {
-                    new QueryField("ParentType", parentType.ToString()),
-                    new QueryField("ParentId", parentId)
+                    new QueryField(fieldNameService.ParentType, parentType.ToString()),
+                    new QueryField(fieldNameService.ParentId, parentId)
                     },
                     commandTimeout: _settings.CommandTimeout,
                     transaction: _dbTransaction,
@@ -427,13 +426,15 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<object?> UpdateAsync(JObject entity, RepoDbMixDatabaseViewModel mixDb)
+        public async Task<object?> UpdateAsync(int id, JObject entity, RepoDbMixDatabaseViewModel mixDb)
         {
             try
             {
                 BeginTransaction();
-                int id = entity.Value<int>("Id");
-                if (_connection.Exists(_tableName, new { Id = id }, transaction: _dbTransaction))
+                QueryField idQuery = mixDb.NamingConvention == MixDatabaseNamingConvention.SnakeCase
+                ? new QueryField("id", id)
+                    : new QueryField("Id", id);
+                if (_connection.Exists(_tableName, idQuery, transaction: _dbTransaction))
                 {
                     var obj = ParseDictionary(entity, mixDb);
                     var cacheFolder = MixDbDataService.GetCacheFolder(_tableName);
@@ -453,12 +454,13 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<int> DeleteAsync(int id)
+        public async Task<int> DeleteAsync(int id, FieldNameService fieldNameService)
         {
             try
             {
                 BeginTransaction();
-                if (_connection.Exists(_tableName, new { Id = id }, transaction: _dbTransaction))
+                QueryField idQuery = new QueryField(fieldNameService.Id, id);
+                if (_connection.Exists(_tableName, idQuery, transaction: _dbTransaction))
                 {
                     return await _connection.DeleteAsync(_tableName, id,
                         commandTimeout: _settings.CommandTimeout,
@@ -583,36 +585,6 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        private void SetDbConnection()
-        {
-            if (DatabaseProvider != MixDatabaseProvider.SQLITE)
-            {
-                _cmsUow.Begin();
-                _connection = _cmsUow.DbContext.Database.GetDbConnection();
-                _dbTransaction = _cmsUow.ActiveTransaction.GetDbTransaction();
-                _isRoot = false;
-
-                switch (DatabaseProvider)
-                {
-                    case MixDatabaseProvider.SQLSERVER:
-                        GlobalConfiguration.Setup().UseSqlServer();
-                        break;
-                    case MixDatabaseProvider.MySQL:
-                        GlobalConfiguration.Setup().UseMySqlConnector();
-                        break;
-                    case MixDatabaseProvider.PostgreSQL:
-                        GlobalConfiguration.Setup().UsePostgreSql();
-                        break;
-                    case MixDatabaseProvider.SQLITE:
-                        GlobalConfiguration.Setup().UseSqlite();
-                        break;
-                    default:
-                        GlobalConfiguration.Setup().UseSqlite();
-                        break;
-                }
-            }
-        }
-
         public void SetDbConnection(UnitOfWorkInfo dbUow)
         {
             dbUow.Begin();
@@ -630,7 +602,7 @@ namespace Mix.RepoDb.Repositories
             _isRoot = false;
         }
 
-        public IDbConnection? CreateConnection(bool isRoot = false, bool isRenew = false)
+        public IDbConnection? CreateConnection(bool isRoot = true, bool isRenew = false)
         {
             if (!string.IsNullOrEmpty(ConnectionString))
             {
@@ -646,13 +618,9 @@ namespace Mix.RepoDb.Repositories
 
                 if (_isRoot || DatabaseProvider == MixDatabaseProvider.SQLITE)
                 {
-                    _connection = (Activator.CreateInstance(connectionType) as IDbConnection)!;
-                    _connection.ConnectionString = ConnectionString;
                 }
-                else
-                {
-                    SetDbConnection();
-                }
+                _connection = (Activator.CreateInstance(connectionType) as IDbConnection)!;
+                _connection.ConnectionString = ConnectionString;
             }
             return _connection;
         }

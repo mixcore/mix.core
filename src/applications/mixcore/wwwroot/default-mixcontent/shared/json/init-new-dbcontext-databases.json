@@ -5,10 +5,10 @@
       "displayName": "Data Relationship",
       "description": null,
       "type": "Service",
-      "readPermissions": "[\"Owner\"]",
-      "createPermissions": "[\"Owner\"]",
-      "updatePermissions": "[\"Owner\"]",
-      "deletePermissions": "[\"Owner\"]",
+      "readPermissions": [ "Owner" ],
+      "createPermissions": [ "Owner" ],
+      "updatePermissions": [ "Owner" ],
+      "deletePermissions": [ "Owner" ],
       "selfManaged": false,
       "mixDatabaseColumns": null,
       "sourceRelationships": null,
@@ -25,8 +25,8 @@
   ],
   "columns": [
     {
+      "displayName": "Parent Database Name",
       "systemName": "ParentDatabaseName",
-      "displayName": "Source Database Name",
       "mixDatabaseName": "MixDatabaseAssociation",
       "dataType": "Text",
       "configurations": {
@@ -60,8 +60,8 @@
       "isDeleted": false
     },
     {
+      "displayName": "Child Database Name",
       "systemName": "ChildDatabaseName",
-      "displayName": "Destination Database Name",
       "mixDatabaseName": "MixDatabaseAssociation",
       "dataType": "Text",
       "configurations": {
@@ -95,8 +95,8 @@
       "isDeleted": false
     },
     {
+      "displayName": "Guid Parent Id",
       "systemName": "GuidParentId",
-      "displayName": "Guid Source Id",
       "mixDatabaseName": "MixDatabaseAssociation",
       "dataType": "Guid",
       "configurations": {
@@ -130,8 +130,8 @@
       "isDeleted": false
     },
     {
+      "displayName": "Child Parent Id",
       "systemName": "GuidChildId",
-      "displayName": "Destination Guid Id",
       "mixDatabaseName": "MixDatabaseAssociation",
       "dataType": "Guid",
       "configurations": {
@@ -165,8 +165,8 @@
       "isDeleted": false
     },
     {
+      "displayName": "Parent Id",
       "systemName": "ParentId",
-      "displayName": "Source Integer Id",
       "mixDatabaseName": "MixDatabaseAssociation",
       "dataType": "Integer",
       "configurations": {
@@ -200,8 +200,8 @@
       "isDeleted": false
     },
     {
+      "displayName": "Child Id",
       "systemName": "ChildId",
-      "displayName": "Destination Integer Id",
       "mixDatabaseName": "MixDatabaseAssociation",
       "dataType": "Integer",
       "configurations": {

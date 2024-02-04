@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DocumentFormat.OpenXml.Vml.Spreadsheet;
+using Microsoft.EntityFrameworkCore;
 using Mix.Lib.ViewModels.ReadOnly;
+using Mix.Service.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 
@@ -21,6 +23,7 @@ namespace Mix.Lib.ViewModels
         public List<MixDatabaseColumnViewModel> Columns { get; set; } = new();
         public List<MixDatabaseRelationshipViewModel> Relationships { get; set; } = new();
         public MixDatabaseContextReadViewModel MixDatabaseContext { get; set; }
+        public MixDatabaseNamingConvention NamingConvention { get; set; }
         #endregion
 
         #region Constructors
@@ -61,32 +64,36 @@ namespace Mix.Lib.ViewModels
             if (MixDatabaseContextId.HasValue)
             {
                 MixDatabaseContext = await MixDatabaseContextReadViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(m => m.Id == MixDatabaseContextId.Value);
+                NamingConvention = MixDatabaseContext.NamingConvention;
             }
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity, CancellationToken cancellationToken = default)
         {
+            var fieldNameService = GetFielNameService();
+            
+
             if (Columns != null)
             {
                 if ((Type == MixDatabaseType.AdditionalData || Type == MixDatabaseType.GuidAdditionalData))
                 {
-                    if (!Columns.Any(m => m.SystemName == "parentId"))
+                    if (!Columns.Any(m => m.SystemName == fieldNameService.ParentId))
                     {
 
                         Columns.Add(new()
                         {
                             DisplayName = "Parent Id",
-                            SystemName = "parentId",
+                            SystemName = fieldNameService.ParentId,
                             DataType = Type == MixDatabaseType.AdditionalData ? MixDataType.Reference : MixDataType.Guid
                         });
                     }
-                    if (!Columns.Any(m => m.SystemName == "parentType"))
+                    if (!Columns.Any(m => m.SystemName == fieldNameService.ParentType))
                     {
                         Columns.Add(new()
                         {
                             DisplayName = "Parent Type",
-                            SystemName = "parentType",
-                            DataType = MixDataType.Text,
+                            SystemName = fieldNameService.ParentType,
+                            DataType = MixDataType.String,
                             ColumnConfigurations = new()
                             {
                                 MaxLength = 20
@@ -114,26 +121,29 @@ namespace Mix.Lib.ViewModels
                     item.SourceDatabaseName = parentEntity.SystemName;
                     await item.SaveAsync(cancellationToken);
 
-                    await CreateRefColumn(item);
+                    await CreateRefColumn(item, fieldNameService, cancellationToken);
 
                     ModifiedEntities.AddRange(item.ModifiedEntities);
                 }
             }
         }
 
-        private async Task CreateRefColumn(MixDatabaseRelationshipViewModel item, CancellationToken cancellationToken = default)
+        private FieldNameService GetFielNameService()
+        {
+            if (MixDatabaseContextId.HasValue)
+            {
+                var dbContext = Context.MixDatabaseContext.First(m => m.Id == MixDatabaseContextId);
+                return new FieldNameService(dbContext.NamingConvention);
+            }
+            return new FieldNameService(MixDatabaseNamingConvention.TitleCase);
+        }
+
+        private async Task CreateRefColumn(MixDatabaseRelationshipViewModel item, FieldNameService fieldNameService, CancellationToken cancellationToken = default)
         {
             if (item.Type == MixDatabaseRelationshipType.OneToMany)
             {
-                var referenceColumnName = $"{item.SourceDatabaseName}Id";
-                var fieldNameService = new FieldNameService(MixDatabaseNamingConvention.TitleCase);
-                if (MixDatabaseContextId.HasValue)
-                {
-                    var dbContext = Context.MixDatabaseContext.First(m => m.Id == MixDatabaseContextId);
-                    fieldNameService = new FieldNameService(dbContext.NamingConvention);
-                    referenceColumnName = $"{item.SourceDatabaseName}_id";
-                }
-
+                var referenceColumnName = fieldNameService.GetParentId(item.SourceDatabaseName);
+                
                 if (!Context.MixDatabaseColumn.Any(m => m.MixDatabaseName == item.DestinateDatabaseName && m.SystemName == referenceColumnName))
                 {
                     var srcDb = Context.MixDatabase.FirstOrDefault(m => m.SystemName == item.SourceDatabaseName);

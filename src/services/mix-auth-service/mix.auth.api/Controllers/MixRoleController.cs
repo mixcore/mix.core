@@ -32,6 +32,20 @@ namespace mix.auth.service.Controllers
         {
             _roleManager = roleManager;
         }
+
+        protected override async Task<Guid> CreateHandlerAsync(MixRole data)
+        {
+            data.Id = Guid.NewGuid();
+            var result = await _roleManager.CreateAsync(data);
+            if (result.Succeeded)
+            {
+                return data.Id;
+            }
+            else
+            {
+                throw new MixException(MixErrorStatus.Badrequest, "Invalid Role", result.Errors.Select(m=>m.Description).ToArray());
+            }
+        }
         protected override async Task DeleteHandler(MixRole data)
         {
             await _roleManager.DeleteAsync(data);

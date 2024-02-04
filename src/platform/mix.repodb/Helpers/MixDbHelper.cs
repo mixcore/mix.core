@@ -14,7 +14,7 @@ namespace Mix.RepoDb.Helpers
 {
     public class MixDbHelper
     {
-        public static Task<JObject> ParseDtoToEntityAsync(JObject dto, List<MixDatabaseColumnViewModel> columns, FieldNameService fieldNameService, int? tenantId = null, string? username = null)
+        public static Task<JObject> ParseDtoToEntityAsync(JObject dto, List<RepoDbMixDatabaseColumnViewModel> columns, FieldNameService fieldNameService, int? tenantId = null, string? username = null)
         {
             try
             {
@@ -25,24 +25,25 @@ namespace Mix.RepoDb.Helpers
                     .ToList();
                 foreach (var pr in dto.Properties())
                 {
-                    var col = columns.FirstOrDefault(c => c.SystemName.Equals(pr.Name, StringComparison.InvariantCultureIgnoreCase));
+                    var colName = fieldNameService.NamingConvention == MixDatabaseNamingConvention.TitleCase? pr.Name.ToTitleCase() : pr.Name;
+                    var col = columns.FirstOrDefault(c => c.SystemName.Equals(colName, StringComparison.InvariantCultureIgnoreCase));
 
-                    if (encryptedColumnNames.Contains(pr.Name))
+                    if (encryptedColumnNames.Contains(colName))
                     {
                         result.Add(
                             new JProperty(
-                                    pr.Name, AesEncryptionHelper.EncryptString(pr.Value.ToString(),
+                                    colName, AesEncryptionHelper.EncryptString(pr.Value.ToString(),
                                     GlobalConfigService.Instance.AppSettings.ApiEncryptKey)));
                     }
                     else
                     {
                         if (col != null)
                         {
-                            result.Add(new JProperty(pr.Name, ParseObjectValue(col.DataType, pr.Value)));
+                            result.Add(new JProperty(colName, ParseObjectValue(col.DataType, pr.Value)));
                         }
                         else
                         {
-                            result.Add(new JProperty(pr.Name, pr.Value));
+                            result.Add(new JProperty(colName, pr.Value));
                         }
                     }
                 }
@@ -94,8 +95,8 @@ namespace Mix.RepoDb.Helpers
                 throw new MixException(MixErrorStatus.Badrequest, ex);
             }
         }
-        
-        public static Task<JObject> ParseImportDtoToEntityAsync(JObject dto, List<MixDatabaseColumnViewModel> columns, 
+
+        public static Task<JObject> ParseImportDtoToEntityAsync(JObject dto, List<RepoDbMixDatabaseColumnViewModel> columns,
             FieldNameService fieldNameService,
             int? tenantId = null, string? username = null)
         {
@@ -204,10 +205,18 @@ namespace Mix.RepoDb.Helpers
         {
             if (value != null)
             {
+                string strValue = value.ToString();
+                if (string.IsNullOrEmpty(strValue))
+                {
+                    return default;
+                }
                 switch (dataType)
                 {
+                    case MixDataType.Date:
+                    case MixDataType.DateTime:
+                        return DateTime.Parse(strValue).ToUniversalTime();
                     case MixDataType.Boolean:
-                        return bool.Parse(value.ToString());
+                        return bool.Parse(strValue);
                     case MixDataType.Array:
                     case MixDataType.ArrayMedia:
                         return JArray.FromObject(value).ToString(Formatting.None);
@@ -216,9 +225,9 @@ namespace Mix.RepoDb.Helpers
                         return JObject.FromObject(value).ToString(Formatting.None);
                     case MixDataType.Integer:
                     case MixDataType.Reference:
-                        return int.Parse(value.ToString());
+                        return int.Parse(strValue);
                     case MixDataType.Double:
-                        return double.Parse(value.ToString());
+                        return double.Parse(strValue);
                     case MixDataType.Guid:
                         Guid.TryParse(value.ToString(), out var guildResult);
                         return guildResult;

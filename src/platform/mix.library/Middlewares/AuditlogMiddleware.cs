@@ -85,7 +85,7 @@ namespace Mix.Lib.Middlewares
         }
         private bool CheckAuditLogPath(string path)
         {
-            return !_globalConfig.IsInit && (path.IndexOf("/api") == 0 && path.IndexOf("audit-log") < 0 && path.IndexOf("queue-log") < 0);
+            return !_globalConfig.IsInit && (path.IndexOf("/api") >= 0 && path.IndexOf("audit-log") < 0 && path.IndexOf("queue-log") < 0);
         }
 
         private async Task LogRequest(HttpContext context)

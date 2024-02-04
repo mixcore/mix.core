@@ -18,8 +18,8 @@ namespace Mix.Lib.Conventions
                 {
                     string moduleName = genericType.Assembly.GetName().Name;
                     string modelName = genericType.Name.Replace("ViewModel", string.Empty);
-                    string route = customNameAttribute.Route ?? $"api/v2/rest/{moduleName.Replace(".", "-")}/{modelName.ToHypenCase()[1..]}";
-                    string name = customNameAttribute.Name ?? modelName.ToHypenCase(' ', false);
+                    string route = customNameAttribute.Route ?? $"api/v2/rest/{moduleName.Replace(".", "-")}/{modelName.ToHyphenCase('-')[1..]}";
+                    string name = customNameAttribute.Name ?? modelName.ToHyphenCase(' ', false);
                     if (!controller.Selectors.Any(s => s.AttributeRouteModel?.Template == route))
                     {
                         controller.Selectors.Add(new SelectorModel

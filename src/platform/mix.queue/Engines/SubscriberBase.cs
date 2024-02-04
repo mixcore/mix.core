@@ -61,7 +61,7 @@ namespace Mix.Queue.Engines
         protected async override Task ExecuteAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{_moduleName}");
+            _subscriber = CreateSubscriber(_topicId, $"{_topicId}.{_moduleName}");
             if (_subscriber is not RabitMQSubscriber<MessageQueueModel>)
             {
                 await StartProcessQueue(cancellationToken);
@@ -141,7 +141,7 @@ namespace Mix.Queue.Engines
                         googleSetting.CredentialFile = googleSetting.CredentialFile;
                         return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
                             provider, googleSetting, topicId, subscriptionId, MessageHandler, _memQueueService, mixEndpointService);
-                    case MixQueueProvider.RABITMQ:
+                    case MixQueueProvider.RABBITMQ:
                         return QueueEngineFactory.CreateRabbitMQSubscriber<MessageQueueModel>(_rabbitMqObjectPolicy, topicId,subscriptionId, MessageHandler);
                     case MixQueueProvider.MIX:
                         if (string.IsNullOrEmpty(mixEndpointService.MixMq))

@@ -41,16 +41,15 @@ namespace Mix.Queue.Engines.RabitMQ
             _topicId = topicId;
             _objectPool = new DefaultObjectPool<IModel>(objectPolicy, Environment.ProcessorCount * 2);
             _channel = _objectPool.Get();
-            _channel.QueueDeclare(queue: _topicId,
+            _channel.ExchangeDeclare(exchange: topicId, type: ExchangeType.Topic);
+            var queueResult = _channel.QueueDeclare(queue: subscriptionId,
                      durable: true,
                      exclusive: false,
                      autoDelete: false,
                      arguments: null);
-            _channel.ExchangeDeclare(exchange: topicId, type: ExchangeType.Topic);
-            var queueName = _channel.QueueDeclare().QueueName;
-            _channel.QueueBind(queue: queueName,
+            _channel.QueueBind(queue: queueResult.QueueName,
                               exchange: _topicId,
-                              routingKey: subscriptionId);
+                              routingKey: _topicId);
             _channel.BasicQos(0, 1, false);
             _consumer = new EventingBasicConsumer(_channel);
             _consumer.Received += (ch, ea) =>
@@ -58,11 +57,10 @@ namespace Mix.Queue.Engines.RabitMQ
                 // received message  
                 string body = System.Text.Encoding.UTF8.GetString(ea.Body.ToArray());
                 var msg = JsonConvert.DeserializeObject<T>(body);
-                Console.WriteLine(msg);
                 _messageHandler(msg);
                 _channel.BasicAck(ea.DeliveryTag, false);
             };
-            _channel.BasicConsume(_topicId, false, _consumer);
+            _channel.BasicConsume(queueResult.QueueName, false, _consumer);
         }
 
         /// <summary>

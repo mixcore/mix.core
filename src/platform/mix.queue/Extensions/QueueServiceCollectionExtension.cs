@@ -24,7 +24,7 @@ namespace Mix.Queue.Extensions
                 case MixQueueProvider.GOOGLE:
                     builder.AddGooglePubSub();
                     break;
-                case MixQueueProvider.RABITMQ:
+                case MixQueueProvider.RABBITMQ:
                     builder.AddRabbit();
                     break;
                 case MixQueueProvider.AWS:

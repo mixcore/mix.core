@@ -38,7 +38,7 @@ namespace Mix.Lib.Base
         #region Routes
 
         [HttpGet]
-        public async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchRequestDto req)
+        public virtual async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchRequestDto req)
         {
             var result = await SearchHandler(req);
             return Ok(ParseSearchResult(req, result));
@@ -46,7 +46,7 @@ namespace Mix.Lib.Base
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TView>> GetSingle(TPrimaryKey id)
+        public virtual async Task<ActionResult<TView>> GetSingle(TPrimaryKey id)
         {
             var data = await GetById(id);
             return data != null ? Ok(data) : throw new MixException(MixErrorStatus.NotFound, id);
@@ -55,7 +55,7 @@ namespace Mix.Lib.Base
 
 
         [HttpGet("default")]
-        public async Task<ActionResult<TView>> GetDefaultAsync()
+        public virtual async Task<ActionResult<TView>> GetDefaultAsync()
         {
             var result = (TView)Activator.CreateInstance(typeof(TView), Uow);
             if (result == null)

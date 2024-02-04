@@ -21,7 +21,7 @@ namespace Mix.RepoDb.ViewModels
         public List<string> DeletePermissions { get; set; }
         public bool SelfManaged { get; set; }
 
-        public List<MixDatabaseColumnViewModel> Columns { get; set; } = new();
+        public List<RepoDbMixDatabaseColumnViewModel> Columns { get; set; } = new();
         public List<MixDatabaseRelationshipViewModel> Relationships { get; set; } = new();
         public MixDatabaseContextReadViewModel MixDatabaseContext { get; set; }
         #endregion
@@ -47,7 +47,7 @@ namespace Mix.RepoDb.ViewModels
         #region Overrides
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Columns = await MixDatabaseColumnViewModel.GetRepository(UowInfo, CacheService).GetListAsync(c => c.MixDatabaseId == Id, cancellationToken);
+            Columns = await RepoDbMixDatabaseColumnViewModel.GetRepository(UowInfo, CacheService).GetListAsync(c => c.MixDatabaseId == Id, cancellationToken);
             Relationships = await MixDatabaseRelationshipViewModel.GetRepository(UowInfo, CacheService).GetListAsync(c => c.ParentId == Id, cancellationToken);
             if (MixDatabaseContextId.HasValue)
             {
@@ -78,7 +78,7 @@ namespace Mix.RepoDb.ViewModels
                         {
                             DisplayName = "Parent Type",
                             SystemName = "parentType",
-                            DataType = MixDataType.Text,
+                            DataType = MixDataType.String,
                             ColumnConfigurations = new()
                             {
                                 MaxLength = 20

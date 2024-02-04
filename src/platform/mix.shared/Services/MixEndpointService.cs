@@ -20,6 +20,12 @@
         }
 
         public string[] Endpoints;
+
+        public string GetEndpoint(string name)
+        {
+            return AppSettings.Value<string>(name);
+        }
+
         public string DefaultDomain
         {
             get => GetConfig<string>(MixModuleNames.Default);

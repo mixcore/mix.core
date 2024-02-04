@@ -31,7 +31,7 @@ namespace Mix.Mq.Lib.Models
         {
             return Subscriptions.GetValueOrDefault(subscriptionId);
         }
-        
+
         public bool RemoveSubscription(string subscriptionId)
         {
             return Subscriptions.TryRemove(subscriptionId, out _);
@@ -46,12 +46,17 @@ namespace Mix.Mq.Lib.Models
         {
             var result = new List<T>();
 
-            if (!Subscriptions.TryGetValue(subscriptionId, out var subscription))
+            if (Messages.FirstOrDefault() == null)
+            {
+                Messages.TryDequeue(out _);
+            }
+
+            if (!Messages.Any())
             {
                 return result;
             }
 
-            if (!Messages.Any())
+            if (!Subscriptions.TryGetValue(subscriptionId, out var subscription))
             {
                 return result;
             }
@@ -64,7 +69,6 @@ namespace Mix.Mq.Lib.Models
                 T? data = messages.FirstOrDefault();
                 if (data == null)
                 {
-                    Messages.TryDequeue(out _);
                     continue;
                 }
                 if (!data!.Subscriptions.Any(m => m.Id == subscription.Id))
@@ -72,11 +76,11 @@ namespace Mix.Mq.Lib.Models
                     data.Subscriptions.Add(subscription);
                     result.Add(data);
                 }
-                if (data.Subscriptions.Count == Subscriptions.Count)
-                {
-                    Messages.TryDequeue(out _);
-                }
-                i++;
+            }
+
+            while (Messages.FirstOrDefault()?.Subscriptions.Count == Subscriptions.Count)
+            {
+                Messages.TryDequeue(out _);
             }
 
             return result;

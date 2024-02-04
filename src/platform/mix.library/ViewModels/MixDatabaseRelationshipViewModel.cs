@@ -14,7 +14,7 @@ namespace Mix.Lib.ViewModels
         public string DestinateDatabaseName { get; set; }
         public MixDatabaseRelationshipType Type { get; set; }
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public string ReferenceColumnName => $"{SourceDatabaseName.ToTitleCase()}Id";
         #endregion
 

@@ -1,4 +1,4 @@
-/* Sat Dec 30 2023 10:43:01 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
+/* Sun Feb 04 2024 20:54:58 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
   max-width: 100%; }
 
 fb-login {
@@ -127,6 +127,10 @@ div[dnd-list] .dnd-item.selected {
   background-color: #dff0d8;
   color: #3c763d; }
 
+.table-data td.preview {
+  max-width: 120px;
+  overflow: hidden; }
+
 .mouse {
   z-index: 9999999;
   width: 70px;
@@ -188,14 +192,13 @@ mix-database-nav-values mix-column-preview .rowx {
   max-height: 110px;
   overflow: hidden; }
 
+.attr-set-value-item:last-child {
+  border-bottom: 0 !important; }
+
 @media (min-width: 992px) {
   #modal-content-filter .modal-lg,
   #modal-content-filter .modal-xl {
     max-width: 80vw; } }
-
-.table-data td.preview {
-  max-width: 120px;
-  overflow: hidden; }
 
 .content {
   width: 100%;

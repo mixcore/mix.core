@@ -47,10 +47,10 @@ namespace Mix.Lib.Attributes
             {
                 if (!IsInRoles())
                 {
-                    _logger.LogError("Not in role");
+                    //_logger.LogError("Not in role");
                     if (!ValidEnpointPermission(context))
                     {
-                        _logger.LogError("forbidden");
+                        //_logger.LogError("forbidden");
                         context.Result = new ForbidResult();
                         return;
                     }
@@ -58,7 +58,7 @@ namespace Mix.Lib.Attributes
             }
             else
             {
-                _logger.LogError("Invalid Token");
+                //_logger.LogError("Invalid Token");
                 context.Result = new UnauthorizedResult();
                 return;
             }

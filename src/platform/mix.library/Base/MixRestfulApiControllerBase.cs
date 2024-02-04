@@ -52,7 +52,7 @@ namespace Mix.Lib.Base
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<TView>> Create([FromBody] TView data)
+        public virtual async Task<ActionResult<TView>> Create([FromBody] TView data)
         {
             var id = await CreateHandlerAsync(data);
             var result = await GetById(id);
@@ -62,7 +62,7 @@ namespace Mix.Lib.Base
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(TPrimaryKey id, [FromBody] TView data)
+        public virtual async Task<IActionResult> Update(TPrimaryKey id, [FromBody] TView data)
         {
             await UpdateHandler(id, data);
             var result = await GetById(id);
@@ -70,20 +70,15 @@ namespace Mix.Lib.Base
         }
 
         [HttpDelete("remove-cache/{id}")]
-        public async Task<ActionResult> DeleteCache(TPrimaryKey id, [FromServices] MixCacheService cacheService, CancellationToken cancellationToken = default)
+        public virtual async Task<ActionResult> DeleteCache(TPrimaryKey id, [FromServices] MixCacheService cacheService, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             await RemoveCacheHandler(cacheService, id);
             return Ok();
         }
 
-        private async Task RemoveCacheHandler(MixCacheService cacheService, TPrimaryKey id)
-        {
-            await cacheService.RemoveCacheAsync(id, typeof(TEntity).FullName);
-        }
-
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(TPrimaryKey id)
+        public virtual async Task<ActionResult> Delete(TPrimaryKey id)
         {
             var data = await Repository.GetSingleAsync(id);
             if (data != null)
@@ -95,7 +90,7 @@ namespace Mix.Lib.Base
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Patch([FromBody] JObject obj)
+        public virtual async Task<IActionResult> Patch([FromBody] JObject obj)
         {
             await PatchHandler(obj);
             return Ok();
@@ -103,7 +98,7 @@ namespace Mix.Lib.Base
 
 
         [HttpPatch("patch-many")]
-        public async Task<IActionResult> PatchMany([FromBody] IEnumerable<JObject> lstObj,
+        public virtual async Task<IActionResult> PatchMany([FromBody] IEnumerable<JObject> lstObj,
                 CancellationToken cancellationToken = default)
         {
             await PatchManyHandler(lstObj, cancellationToken);
@@ -114,7 +109,7 @@ namespace Mix.Lib.Base
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost("save-many")]
-        public async Task<ActionResult> SaveMany([FromBody] List<TView> data)
+        public virtual async Task<ActionResult> SaveMany([FromBody] List<TView> data)
         {
             if (data == null)
             {
@@ -126,7 +121,7 @@ namespace Mix.Lib.Base
 
 
         [HttpPut("update-priority/{id}")]
-        public async Task<ActionResult> UpdatePriority(UpdatePriorityDto<TPrimaryKey> dto)
+        public virtual async Task<ActionResult> UpdatePriority(UpdatePriorityDto<TPrimaryKey> dto)
         {
             var data = await Repository.GetSingleAsync(dto.Id);
             if (data == null)
@@ -161,5 +156,14 @@ namespace Mix.Lib.Base
 
 
         #endregion Routes
+
+        #region Privates
+
+        private async Task RemoveCacheHandler(MixCacheService cacheService, TPrimaryKey id)
+        {
+            await cacheService.RemoveCacheAsync(id, typeof(TEntity).FullName);
+        }
+
+        #endregion
     }
 }

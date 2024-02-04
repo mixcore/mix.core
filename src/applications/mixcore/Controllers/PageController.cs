@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
+using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Services;
@@ -13,20 +14,20 @@ namespace Mixcore.Controllers
         protected readonly MixCmsContext CmsContext;
         private readonly DatabaseService _databaseService;
         private readonly MixCacheService _cacheService;
-        private readonly MixRepoDbRepository _repoDbRepository;
         private readonly IMixMetadataService _metadataService;
+        private readonly IMixDbDataService _mixDbDataService;
 
-        public PageController(IHttpContextAccessor httpContextAccessor, IPSecurityConfigService ipSecurityConfigService, IMixCmsService mixCmsService, DatabaseService databaseService, MixCmsContext cmsContext, MixRepoDbRepository repoDbRepository, IMixMetadataService metadataService, MixCacheService cacheService, IMixTenantService tenantService,
-             IConfiguration configuration) :
+        public PageController(IHttpContextAccessor httpContextAccessor, IPSecurityConfigService ipSecurityConfigService, IMixCmsService mixCmsService, DatabaseService databaseService, MixCmsContext cmsContext, IMixMetadataService metadataService, MixCacheService cacheService, IMixTenantService tenantService,
+             IConfiguration configuration, IMixDbDataService mixDbDataService) :
             base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
         {
             CmsContext = cmsContext;
             Uow = new(CmsContext);
             _databaseService = databaseService;
             CmsContext = cmsContext;
-            _repoDbRepository = repoDbRepository;
             _metadataService = metadataService;
             _cacheService = cacheService;
+            _mixDbDataService = mixDbDataService;
         }
 
         protected override void ValidateRequest()
@@ -74,7 +75,7 @@ namespace Mixcore.Controllers
             if (page == null)
                 return NotFound();
 
-            await page.LoadDataAsync(_repoDbRepository, _metadataService, new(Request)
+            await page.LoadDataAsync(_mixDbDataService, _metadataService, new(Request)
             {
                 SortBy = MixQueryColumnName.Priority
             }, _cacheService);

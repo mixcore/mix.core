@@ -57,7 +57,7 @@ namespace Mix.SignalR.Hubs
         public virtual async Task SendMessage(SignalRMessageModel message)
         {
             message.From ??= GetCurrentUser();
-            await Clients.All.SendAsync(HubMethods.ReceiveMethod, ReflectionHelper.ParseObject(message).ToString());
+            await Clients.All.SendAsync(HubMethods.ReceiveMethod, message.ToString());
         }
 
         private string? GetIPAddress()
@@ -90,7 +90,7 @@ namespace Mix.SignalR.Hubs
             try
             {
                 message.From ??= GetCurrentUser();
-                return Clients.Caller.SendAsync(HubMethods.ReceiveMethod, message);
+                return Clients.Caller.SendAsync(HubMethods.ReceiveMethod, message.ToString());
             }
             catch (Exception ex)
             {
@@ -104,8 +104,8 @@ namespace Mix.SignalR.Hubs
             {
                 message.From ??= GetCurrentUser();
                 return exceptCaller
-                    ? Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(HubMethods.ReceiveMethod, message)
-                    : Clients.Group(groupName).SendAsync(HubMethods.ReceiveMethod, message);
+                    ? Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(HubMethods.ReceiveMethod, message.ToString())
+                    : Clients.Group(groupName).SendAsync(HubMethods.ReceiveMethod, message.ToString());
             }
             catch (Exception ex)
             {
@@ -115,7 +115,7 @@ namespace Mix.SignalR.Hubs
         }
 
         #region Private
-        private async Task AddUserToRoom(string roomName)
+        protected async Task AddUserToRoom(string roomName)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
             if (!Rooms.ContainsKey(roomName))

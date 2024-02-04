@@ -4,6 +4,7 @@ using Mix.Heart.Exceptions;
 using Mix.Heart.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
+using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Services;
@@ -23,11 +24,12 @@ namespace Mixcore.Controllers
         IMixMetadataService metadataService,
         MixCacheService cacheService,
         IMixTenantService tenantService,
-         IConfiguration configuration) : MvcBaseController(httpContextAccessor, ipSecurityConfigService, mixCmsService, translator, databaseService, uow, cacheService, tenantService, configuration)
+         IConfiguration configuration,
+         IMixDbDataService mixDbDataService) : MvcBaseController(httpContextAccessor, ipSecurityConfigService, mixCmsService, translator, databaseService, uow, cacheService, tenantService, configuration)
     {
         private readonly IMixMetadataService _metadataService = metadataService;
         private readonly MixRepoDbRepository _repoDbRepository = repoDbRepository;
-
+        private readonly IMixDbDataService _mixDbDataService = mixDbDataService;
         protected override void ValidateRequest()
         {
             base.ValidateRequest();
@@ -78,7 +80,7 @@ namespace Mixcore.Controllers
 
                 if (page != null)
                 {
-                    await page.LoadDataAsync(_repoDbRepository, _metadataService, new(Request)
+                    await page.LoadDataAsync(_mixDbDataService, _metadataService, new(Request)
                     {
                         SortBy = MixQueryColumnName.Priority
                     }, CacheService);
@@ -118,7 +120,7 @@ namespace Mixcore.Controllers
                             var page = await pageRepo.GetSingleAsync(m => m.Id == alias.SourceContentId);
                             if (page != null)
                             {
-                                await page.LoadDataAsync(_repoDbRepository, _metadataService, new(Request)
+                                await page.LoadDataAsync(_mixDbDataService, _metadataService, new(Request)
                                 {
                                     SortBy = MixQueryColumnName.Priority
                                 }, CacheService);

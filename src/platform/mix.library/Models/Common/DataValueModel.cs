@@ -2,7 +2,7 @@
 {
     public sealed class DataValueModel
     {
-        public MixDataType DataType { get; set; } = MixDataType.Text;
+        public MixDataType DataType { get; set; } = MixDataType.String;
 
         public string Value { get; set; }
 

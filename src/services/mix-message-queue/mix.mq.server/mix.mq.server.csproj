@@ -29,9 +29,4 @@
 		<ProjectReference Include="..\..\..\applications\mixcore.host.aspire\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\..\..\modules\mix.messenger\mix.messenger.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Protobuf Include="Domain\Protos\mixmq.proto" GrpcServices="Server" />
-	</ItemGroup>
-
 </Project>

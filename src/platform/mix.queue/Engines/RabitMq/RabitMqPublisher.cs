@@ -34,19 +34,13 @@ namespace Mix.Queue.Engines.RabitMQ
             var channel = _objectPool.Get();
             try
             {
-                channel.QueueDeclare(queue: _topicId,
-                     durable: true,
-                     exclusive: false,
-                     autoDelete: false,
-                     arguments: null);
-
                 var sendBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
 
                 var properties = channel.CreateBasicProperties();
                 properties.Persistent = true;
 
-                channel.BasicPublish(exchange: string.Empty,
-                     routingKey: _topicId,
+                channel.BasicPublish(exchange: _topicId,
+                     routingKey: $"{_topicId}",
                      basicProperties: properties,
                      body: sendBytes);
                 return Task.CompletedTask;

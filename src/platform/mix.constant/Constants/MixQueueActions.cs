@@ -6,6 +6,7 @@
         public const string AuditLog = "AuditLog";
         public const string EnqueueLog = "QueueLog";
         public const string AckLog = "AckLog";
+        public const string ClearCache = "ClearCache";
         public const string ExceptionLog = "ExceptionLog";
         public const string QueueFailed = "QueueFailed";
         public const string DeadLetter = "DeadLetter";

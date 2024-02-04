@@ -78,7 +78,7 @@ namespace Mix.RepoDb.ViewModels
                     return;
                 }
 
-                var refCol = new MixDatabaseColumnViewModel(UowInfo)
+                var refCol = new RepoDbMixDatabaseColumnViewModel(UowInfo)
                 {
                     MixDatabaseName = DestinateDatabaseName,
                     MixDatabaseId = destDb.Id,
@@ -104,7 +104,7 @@ namespace Mix.RepoDb.ViewModels
 
             string leftColName = $"{leftDb.SystemName}Id";
             string rightColName = $"{rightDb.SystemName}Id";
-            await MixDatabaseColumnViewModel.GetRepository(UowInfo, CacheService)
+            await RepoDbMixDatabaseColumnViewModel.GetRepository(UowInfo, CacheService)
                 .DeleteManyAsync(m =>
                 (m.MixDatabaseId == ParentId && m.SystemName == rightColName)
                 || (m.MixDatabaseId == ChildId && m.SystemName == leftColName),

@@ -10,12 +10,12 @@ namespace Mix.Lib.ViewModels
         public string SystemName { get; set; }
         public string DisplayName { get; set; }
         public string MixDatabaseName { get; set; }
-        public MixDataType DataType { get; set; } = MixDataType.Text;
+        public MixDataType DataType { get; set; } = MixDataType.String;
         public int? ReferenceId { get; set; }
 
         public string DefaultValue { get; set; }
         public int MixDatabaseId { get; set; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public JObject Configurations { get; set; }
         public ColumnConfigurations ColumnConfigurations { get; set; }
         #endregion
