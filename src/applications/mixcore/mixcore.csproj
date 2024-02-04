@@ -15,6 +15,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\modules\mix.messenger\mix.messenger.csproj" />
+		<ProjectReference Include="..\..\services\mix-auth-service\mix.auth.api\mix.auth.api.csproj" />
 		<ProjectReference Include="..\..\services\mix-message-queue\mix.mq.server\mix.mq.server.csproj" />
 		<ProjectReference Include="..\mixcore.host.aspire\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
