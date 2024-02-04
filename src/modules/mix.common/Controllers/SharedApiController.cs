@@ -16,6 +16,10 @@ using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
+using Mix.SignalR.Enums;
+using Mix.SignalR.Hubs;
+using Mix.SignalR.Interfaces;
+using Mix.SignalR.Models;
 using System.Diagnostics;
 using ApplicationLifetime = Microsoft.Extensions.Hosting.IHostApplicationLifetime;
 
@@ -25,6 +29,7 @@ namespace Mix.Common.Controllers
     [ApiController]
     public sealed class SharedApiController : MixTenantApiControllerBase
     {
+        private readonly IPortalHubClientService _portalHub;
         private readonly MixCacheService _cacheService;
         private readonly ApplicationLifetime _applicationLifetime;
         private readonly UnitOfWorkInfo<MixCmsContext> _uow;
@@ -44,7 +49,8 @@ namespace Mix.Common.Controllers
             MixCacheService cacheService,
             IHttpContextAccessor httpContextAccessor,
             IMixTenantService mixTenantService,
-            IMixCmsService mixCmsService)
+            IMixCmsService mixCmsService,
+            IPortalHubClientService portalHub)
             : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
@@ -55,6 +61,7 @@ namespace Mix.Common.Controllers
             _routeProvider = routeProvider;
             _applicationLifetime = applicationLifetime;
             _mixCmsService = mixCmsService;
+            _portalHub = portalHub;
         }
 
         #region Routes
@@ -122,6 +129,13 @@ namespace Mix.Common.Controllers
         public async Task<ActionResult> ClearCacheAsync(CancellationToken cancellationToken = default)
         {
             await _cacheService.ClearAllCacheAsync(cancellationToken);
+            await _portalHub.SendMessageAsync(new SignalRMessageModel()
+            {
+                Action = MessageAction.NewQueueMessage,
+                Title = MixQueueTopics.MixViewModelChanged,
+                Message = MixQueueActions.ClearCache,
+                Type = MessageType.Success,
+            });
             return Ok();
         }
 

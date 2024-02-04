@@ -93,7 +93,8 @@ namespace Mix.Shared.Services
             string requestUrl,
             Dictionary<string, string> queryParams = null,
             string bearerToken = null,
-            List<KeyValuePair<string, string>> requestHeaders = null)
+            List<KeyValuePair<string, string>> requestHeaders = null,
+            CancellationToken cancellationToken = default)
         {
             var urlQueryParamsPart = queryParams != null
                 ? string.Join("&", queryParams.Select(p => $"{p.Key}={WebUtility.UrlEncode(p.Value)}"))
@@ -101,14 +102,15 @@ namespace Mix.Shared.Services
             var requestUrlWithQueryParams = !string.IsNullOrEmpty(urlQueryParamsPart)
                 ? (!requestUrl.Contains('?') ? $"{requestUrl}?{urlQueryParamsPart}" : $"{requestUrl}&{urlQueryParamsPart}")
                 : requestUrl;
-            return SendRequestAsync<T>(client => client.GetAsync(requestUrlWithQueryParams), bearerToken, requestHeaders);
+            return SendRequestAsync<T>(client => client.GetAsync(requestUrlWithQueryParams, cancellationToken), bearerToken, requestHeaders);
         }
 
         public Task<string> GetStringAsync(
             string requestUrl,
             List<KeyValuePair<string, string>> queryParams = null,
             string bearerToken = null,
-            List<KeyValuePair<string, string>> requestHeaders = null)
+            List<KeyValuePair<string, string>> requestHeaders = null,
+            CancellationToken cancellationToken = default)
         {
             var urlQueryParamsPart = queryParams != null
                 ? string.Join("&", queryParams.Select(p => $"{p.Key}={WebUtility.UrlEncode(p.Value)}"))
@@ -116,14 +118,15 @@ namespace Mix.Shared.Services
             var requestUrlWithQueryParams = !string.IsNullOrEmpty(urlQueryParamsPart)
                 ? (!requestUrl.Contains('?') ? $"{requestUrl}?{urlQueryParamsPart}" : $"{requestUrl}&{urlQueryParamsPart}")
                 : requestUrl;
-            return GetResponseStringAsync(client => client.GetAsync(requestUrlWithQueryParams), bearerToken, requestHeaders);
+            return GetResponseStringAsync(client => client.GetAsync(requestUrlWithQueryParams, cancellationToken), bearerToken, requestHeaders);
         }
 
         public Task DeleteAsync(
             string requestUrl,
             List<KeyValuePair<string, string>> queryParams = null,
             string bearerToken = null,
-            List<KeyValuePair<string, string>> requestHeaders = null)
+            List<KeyValuePair<string, string>> requestHeaders = null,
+            CancellationToken cancellationToken = default)
         {
             var urlQueryParamsPart = queryParams != null
                 ? string.Join("&", queryParams.Select(p => $"{p.Key}={WebUtility.UrlEncode(p.Value)}"))
@@ -131,29 +134,31 @@ namespace Mix.Shared.Services
             var requestUrlWithQueryParams = !string.IsNullOrEmpty(urlQueryParamsPart)
                 ? (!requestUrl.Contains('?') ? $"{requestUrl}?{urlQueryParamsPart}" : $"{requestUrl}&{urlQueryParamsPart}")
                 : requestUrl;
-            return SendRequestAsync(client => client.DeleteAsync(requestUrlWithQueryParams), bearerToken, requestHeaders);
+            return SendRequestAsync(client => client.DeleteAsync(requestUrlWithQueryParams, cancellationToken), bearerToken, requestHeaders);
         }
 
         public Task<T> PostAsync<T, T1>(string requestUrl, T1 body,
                 string bearerToken = null,
                 List<KeyValuePair<string, string>> requestHeaders = null,
-                string contentType = "application/json"
+                string contentType = "application/json",
+                CancellationToken cancellationToken = default
             )
         {
             var content = CreateHttpContent(body, contentType);
             return SendRequestAsync<T>(
-                client => client.PostAsync(requestUrl, content), bearerToken, requestHeaders);
+                client => client.PostAsync(requestUrl, content, cancellationToken), bearerToken, requestHeaders);
         }
 
         public Task<T> PutAsync<T, T1>(string requestUrl, T1 body,
                 string bearerToken = null,
                 List<KeyValuePair<string, string>> requestHeaders = null,
-                string contentType = "application/json"
+                string contentType = "application/json",
+                CancellationToken cancellationToken = default
             )
         {
             var content = CreateHttpContent(body, contentType);
             return SendRequestAsync<T>(
-                client => client.PutAsync(requestUrl, content), bearerToken, requestHeaders);
+                client => client.PutAsync(requestUrl, content, cancellationToken), bearerToken, requestHeaders);
         }
         #region Privates
 
@@ -214,7 +219,7 @@ namespace Mix.Shared.Services
             {
                 if (token != null)
                 {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Replace("Bearer ", string.Empty));
                 }
 
                 requestHeaders?.ForEach(p => client.DefaultRequestHeaders.Add(p.Key, p.Value));

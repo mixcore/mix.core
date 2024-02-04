@@ -6,7 +6,7 @@ namespace Mix.Portal.Domain.Models
     {
         public string SystemName { get; set; }
         public string DisplayName { get; set; }
-        public MixDataType DataType { get; set; } = MixDataType.Text;
+        public MixDataType DataType { get; set; } = MixDataType.String;
 
         public string DefaultValue { get; set; }
         public int Priority { get; set; }

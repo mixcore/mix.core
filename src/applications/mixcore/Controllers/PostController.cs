@@ -2,7 +2,7 @@
 using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
 using Mix.Lib.Interfaces;
-
+using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Services;
@@ -18,6 +18,7 @@ namespace Mixcore.Controllers
         private readonly MixCacheService _cacheService;
         private readonly MixRepoDbRepository _repoDbRepository;
         private readonly IMixMetadataService _metadataService;
+        private readonly IMixDbDataService _mixDbDataService;
         public PostController(
             IHttpContextAccessor httpContextAccessor,
             IPSecurityConfigService ipSecurityConfigService,
@@ -29,7 +30,8 @@ namespace Mixcore.Controllers
             UnitOfWorkInfo<MixDbDbContext> dbUow,
             MixCacheService cacheService,
             IMixTenantService tenantService,
-             IConfiguration configuration)
+             IConfiguration configuration,
+             IMixDbDataService mixDbDataService)
             : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
         {
             CmsContext = cmsContext;
@@ -40,6 +42,7 @@ namespace Mixcore.Controllers
             _metadataService = metadataService;
             _repoDbRepository.SetDbConnection(dbUow);
             _cacheService = cacheService;
+            _mixDbDataService = mixDbDataService;
         }
 
         protected override void ValidateRequest()
@@ -89,7 +92,7 @@ namespace Mixcore.Controllers
             {
                 return NotFound();
             }
-            await post.LoadAdditionalDataAsync(_repoDbRepository, _metadataService, _cacheService);
+            await post.LoadAdditionalDataAsync(_mixDbDataService, _metadataService, _cacheService);
             
             ViewData["Title"] = post.SeoTitle;
             ViewData["Description"] = post.SeoDescription;

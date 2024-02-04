@@ -19,15 +19,15 @@ namespace Mix.Queue.Engines
 {
     public abstract class PublisherBase : BackgroundService
     {
-        private readonly IMemoryQueueService<MessageQueueModel> _queueService;
-        private List<IQueuePublisher<MessageQueueModel>> _publishers;
-        private readonly IConfiguration _configuration;
-        private readonly MixEndpointService _mixEndpointService;
-        private const int MaxConsumeLength = 100;
-        private readonly string _topicId;
-        private MixQueueProvider _provider;
+        protected readonly IMemoryQueueService<MessageQueueModel> _queueService;
+        protected List<IQueuePublisher<MessageQueueModel>> _publishers;
+        protected readonly IConfiguration _configuration;
+        protected readonly MixEndpointService _mixEndpointService;
+        protected const int MaxConsumeLength = 100;
+        protected readonly string _topicId;
+        protected MixQueueProvider _provider;
         protected ILogger<PublisherBase> _logger;
-        private readonly IPooledObjectPolicy<IModel> _rabbitMqObjectPolicy;
+        protected readonly IPooledObjectPolicy<IModel> _rabbitMqObjectPolicy;
         protected PublisherBase(
             string topicId,
             IMemoryQueueService<MessageQueueModel> queueService,
@@ -44,7 +44,7 @@ namespace Mix.Queue.Engines
             _rabbitMqObjectPolicy = rabbitMqObjectPolicy;
         }
 
-        private List<IQueuePublisher<MessageQueueModel>> CreatePublisher(
+        protected List<IQueuePublisher<MessageQueueModel>> CreatePublisher(
             string topicId)
         {
             try
@@ -80,7 +80,7 @@ namespace Mix.Queue.Engines
                                 _provider, googleSetting, topicId, _mixEndpointService));
                         break;
 
-                    case MixQueueProvider.RABITMQ:
+                    case MixQueueProvider.RABBITMQ:
                         queuePublishers.Add(
                             QueueEngineFactory.CreateRabbitMqPublisher<MessageQueueModel>(_rabbitMqObjectPolicy, topicId));
                         break;
@@ -105,7 +105,7 @@ namespace Mix.Queue.Engines
             }
         }
 
-        private Task StartMixQueueEngine(CancellationToken cancellationToken = default)
+        protected virtual Task StartMixQueueEngine(CancellationToken cancellationToken = default)
         {
             return Task.Run(async () =>
             {

@@ -2,7 +2,9 @@
 using Mix.Auth.Constants;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Models.ManageViewModels;
+using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
+using Mix.RepoDb.Services;
 using RepoDb;
 using System.Text.Json.Serialization;
 
@@ -42,7 +44,7 @@ namespace Mix.Lib.ViewModels
         public bool IsChangePassword { get; set; }
 
         public ChangePasswordViewModel ChangePassword { get; set; }
-        [JsonIgnore] private UnitOfWorkInfo<MixCmsContext> _cmsUow { get; }
+        [Newtonsoft.Json.JsonIgnore] private UnitOfWorkInfo<MixCmsContext> _cmsUow { get; }
 
         #endregion Change Password
 
@@ -53,48 +55,20 @@ namespace Mix.Lib.ViewModels
             _cmsUow = uow;
         }
 
-        public async Task LoadUserDataAsync(int tenantId, MixRepoDbRepository repoDbRepository,
+        public async Task LoadUserDataAsync(int tenantId, IMixDbDataService mixDbService,
             MixCmsAccountContext accContext, MixCacheService cacheService)
         {
             if (!GlobalConfigService.Instance.IsInit)
             {
                 try
                 {
-                    var database = await MixDatabaseViewModel.GetRepository(_cmsUow, cacheService)
-                        .GetSingleAsync(m => m.SystemName == MixDatabaseNames.SYSTEM_USER_DATA);
-                    repoDbRepository.InitTableName(MixDatabaseNames.SYSTEM_USER_DATA);
-                    dynamic data = await repoDbRepository.GetSingleByParentAsync(MixContentType.User, Id);
-                    if (data != null)
-                    {
-                        UserData = ReflectionHelper.ParseObject(data);
-                        foreach (var relation in database.Relationships)
-                        {
-                            var associations = _cmsUow.DbContext.MixDatabaseAssociation.Where(m =>
-                                m.ParentDatabaseName == MixDatabaseNames.SYSTEM_USER_DATA
-                                && m.ChildDatabaseName == relation.DestinateDatabaseName
-                                && m.ParentId == UserData.Value<int>("id"));
-                            if (associations.Count() > 0)
-                            {
-                                var ids = associations.Select(m => m.ChildId).ToList();
-
-                                repoDbRepository.InitTableName(relation.DestinateDatabaseName);
-                                var nestedData = await repoDbRepository.GetListByAsync(new List<QueryField>
-                                {
-                                    new("id", ids.First())
-                                });
-                                if (nestedData != null)
-                                {
-                                    UserData.Add(new JProperty(relation.DisplayName, JArray.FromObject(nestedData)));
-                                }
-                            }
-                        }
-                    }
-
+                    UserData = await mixDbService.GetSingleByGuidParent(MixDatabaseNames.SYSTEM_USER_DATA, MixContentType.User, Id, true);
+                    
                     var roles = from ur in accContext.AspNetUserRoles
-                        join r in accContext.MixRoles
-                            on ur.RoleId equals r.Id
-                        where ur.UserId == Id && ur.MixTenantId == tenantId
-                        select ur;
+                                join r in accContext.MixRoles
+                                    on ur.RoleId equals r.Id
+                                where ur.UserId == Id && ur.MixTenantId == tenantId
+                                select ur;
                     Roles = await roles.ToListAsync();
                 }
                 catch (Exception ex)

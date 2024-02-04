@@ -21,15 +21,13 @@ namespace Mix.Service.Services
     public abstract class BaseHubClientService : IHubClientService
     {
         public HubConnection Connection { get; set; }
-        protected string HubName;
+        protected string HubEndpoint;
         protected ILogger _logger;
         protected string AccessToken;
         public bool IsStarting = false;
-        protected readonly MixEndpointService MixEndpointService;
-        protected BaseHubClientService(string hub, MixEndpointService mixEndpointService, ILogger logger)
+        protected BaseHubClientService(string hub, string endpoint, ILogger logger)
         {
-            HubName = hub;
-            MixEndpointService = mixEndpointService;
+            HubEndpoint = $"{endpoint.TrimEnd('/')}/{hub.TrimStart('/')}";
             _logger = logger;
         }
 
@@ -43,12 +41,23 @@ namespace Mix.Service.Services
             };
             return SendMessageAsync(msg);
         }
+        
+        public Task SendGroupMessageAsync(string groupName, string title, string description, object data, MessageType messageType = MessageType.Info, bool exceptCaller = true)
+        {
+            var msg = new SignalRMessageModel(data)
+            {
+                Title = title,
+                Message = description,
+                Type = messageType
+            };
+            return SendGroupMessageAsync(msg, groupName, exceptCaller);
+        }
 
         public async Task SendPrivateMessageAsync(SignalRMessageModel message, string connectionId, bool selfReceive = false)
         {
             try
             {
-                if (!string.IsNullOrEmpty(MixEndpointService.Messenger))
+                if (!string.IsNullOrEmpty(HubEndpoint))
                 {
                     await StartConnection();
                     await Connection.InvokeAsync(HubMethods.SendPrivateMessage, message, connectionId, selfReceive);
@@ -69,10 +78,30 @@ namespace Mix.Service.Services
         {
             try
             {
-                if (!string.IsNullOrEmpty(MixEndpointService.Messenger))
+                if (!string.IsNullOrEmpty(HubEndpoint))
                 {
                     await StartConnection();
                     await Connection.InvokeAsync(HubMethods.SendMessage, message);
+                }
+                else
+                {
+                    _logger.LogWarning($"{_logger.GetType().FullName}: Cannot Start SignalR Hub: MixEndpointService.Messenger is null or empty");
+                }
+            }
+            catch (Exception ex)
+            {
+                await MixLogService.LogExceptionAsync(ex);
+            }
+        }
+
+        public async Task SendGroupMessageAsync(SignalRMessageModel message, string groupName, bool exceptCaller = true)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(HubEndpoint))
+                {
+                    await StartConnection();
+                    await Connection.InvokeAsync(HubMethods.SendGroupMessage, message, groupName, exceptCaller);
                 }
                 else
                 {
@@ -108,7 +137,7 @@ namespace Mix.Service.Services
                 }
 
                 catch (Exception ex)
-                {   
+                {
                     IsStarting = false;
                     await Task.Delay(2000);
                     Console.WriteLine(ex);
@@ -118,12 +147,10 @@ namespace Mix.Service.Services
 
         private void Init()
         {
-            if (!string.IsNullOrEmpty(MixEndpointService.Messenger))
+            if (!string.IsNullOrEmpty(HubEndpoint))
             {
-
-                string endpoint = $"{MixEndpointService.Messenger}{HubName}";
                 Connection = new HubConnectionBuilder()
-                   .WithUrl(endpoint, options =>
+                   .WithUrl(HubEndpoint, options =>
                    {
                        options.AccessTokenProvider = async () => await Task.FromResult(AccessToken);
                    })

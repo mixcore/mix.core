@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
         // Swagger must be after AddMvc()
         public static IServiceCollection AddMixSwaggerServices(this IServiceCollection services, Assembly assembly)
         {
-            string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty).ToHypenCase(' ');
+            string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty).ToHyphenCase(' ');
             string version = "v2";
             string swaggerBasePath = string.Empty;
 

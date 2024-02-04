@@ -7,6 +7,7 @@ using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
+using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.SignalR.Interfaces;
 
@@ -16,6 +17,7 @@ namespace Mix.Common.Controllers
     [ApiController]
     public class PostContentApiController : MixQueryApiControllerBase<PostContentViewModel, MixCmsContext, MixPostContent, int>
     {
+        private readonly IMixDbDataService _mixDbDataService;
         private readonly MixRepoDbRepository _mixRepoDbRepository;
         public PostContentApiController(
             IHttpContextAccessor httpContextAccessor,
@@ -27,11 +29,13 @@ namespace Mix.Common.Controllers
             IMemoryQueueService<MessageQueueModel> queueService,
             MixRepoDbRepository mixRepoDbRepository,
             IPortalHubClientService portalHub,
-            IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            IMixTenantService mixTenantService,
+            IMixDbDataService mixDbDataService)
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
             _mixRepoDbRepository = mixRepoDbRepository;
+            _mixDbDataService = mixDbDataService;
         }
 
 
@@ -64,7 +68,7 @@ namespace Mix.Common.Controllers
             var result = await base.GetById(id);
             if (result.AdditionalData == null)
             {
-                await result.LoadAdditionalDataAsync(_mixRepoDbRepository);
+                await result.LoadAdditionalDataAsync(_mixDbDataService);
                 await CacheService.SetAsync($"{id}/{typeof(PostContentViewModel).FullName}", result, typeof(MixPostContent).FullName, "full");
             }
             return result;

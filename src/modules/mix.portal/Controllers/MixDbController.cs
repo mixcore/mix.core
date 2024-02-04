@@ -1,13 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Amazon.SQS.Model.Internal.MarshallTransformations;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
 using Mix.Heart.Model;
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
+using Mix.RepoDb.Dtos;
 using Mix.RepoDb.Helpers;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
+using Mix.RepoDb.Services;
 using Mix.RepoDb.ViewModels;
 using Mix.Service.Commands;
 using Mix.Service.Interfaces;
@@ -16,6 +23,8 @@ using Mix.Shared.Models;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
+using MySqlX.XDevAPI.Common;
+using Org.BouncyCastle.Ocsp;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
@@ -36,7 +45,7 @@ namespace Mix.Portal.Controllers
         private string _tableName;
         private MixDatabaseViewModel _database;
         private readonly MixIdentityService _idService;
-        private readonly IMixDbService _mixDbService;
+        private readonly IMixDbDataService _mixDbDataService;
         private const string AssociationTableName = nameof(MixDatabaseAssociation);
         private IMixDbCommandHubClientService _mixDbCommandHubClientService;
         private RepoDbMixDatabaseViewModel _mixDb;
@@ -54,7 +63,7 @@ namespace Mix.Portal.Controllers
             ICache cache,
             DatabaseService databaseService,
             MixIdentityService idService,
-            IMixDbService mixDbService,
+            IMixDbDataService mixDbService,
             IMixDbCommandHubClientService mixDbCommandHubClientService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService,
@@ -68,7 +77,7 @@ namespace Mix.Portal.Controllers
             _cmsUow = cmsUow;
             _memoryCache = memoryCache;
             _idService = idService;
-            _mixDbService = mixDbService;
+            _mixDbDataService = mixDbService;
             _mixDbCommandHubClientService = mixDbCommandHubClientService;
             PortalHub = portalHub;
             _logger = logger;
@@ -97,7 +106,7 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult<PagingResponseModel<JObject>>> MyData([FromQuery] SearchMixDbRequestDto req)
         {
             string username = _idService.GetClaim(User, MixClaims.Username);
-            PagingResponseModel<JObject> result = await _mixDbService.GetMyData(_tableName, req, username);
+            PagingResponseModel<JObject> result = await _mixDbDataService.GetMyData(_tableName, req, username);
             return Ok(result);
         }
 
@@ -105,7 +114,7 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult<JObject>> GetMyDataById(int id, [FromQuery] bool loadNestedData)
         {
             string username = _idService.GetClaim(User, MixClaims.Username);
-            JObject result = await _mixDbService.GetMyDataById(_tableName, username, id, loadNestedData);
+            JObject result = await _mixDbDataService.GetMyDataById(_tableName, username, id, loadNestedData);
             return Ok(result);
         }
 
@@ -140,6 +149,13 @@ namespace Mix.Portal.Controllers
             return Ok(result);
         }
 
+        [HttpPost("nested-data/filter")]
+        public async Task<ActionResult<PagingResponseModel<JObject>>> NestedFilter([FromBody] SearchMixDbRequestDto req)
+        {
+            var result = await SearchManyToManyDataHandler(req);
+            return Ok(result);
+        }
+
         [HttpPost("export")]
         public async Task<ActionResult<FileModel>> Export([FromBody] SearchMixDbRequestDto req)
         {
@@ -168,12 +184,12 @@ namespace Mix.Portal.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<JObject>> GetSingle(int id, [FromQuery] bool loadNestedData)
         {
-            var result = await _mixDbService.GetById(_tableName, id, loadNestedData);
+            var result = await _mixDbDataService.GetById(_tableName, id, loadNestedData);
             string username = _idService.GetClaim(User, MixClaims.Username);
             QueueService.PushMemoryQueue(CurrentTenant.Id,
                                     MixQueueTopics.MixBackgroundTasks,
                                     MixQueueActions.MixDbEvent
-                                    , new MixDbEventCommand(username, "GET", _tableName, result));
+                                    , new MixDbEventCommand(username, MixDbCommandQueueActions.Read, _tableName, result));
             return result != default ? Ok(result) : NotFound(id);
         }
 
@@ -181,7 +197,7 @@ namespace Mix.Portal.Controllers
         [HttpPut("update-priority/{dbName}/{id}")]
         public async Task<ActionResult<JObject>> UpdatePriority(string dbName, int id, [FromBody] UpdatePriorityDto<int> dto)
         {
-            var data = await _mixDbService.GetById(dbName, id, false);
+            var data = await _mixDbDataService.GetById(dbName, id, false);
             if (data == null)
             {
                 return NotFound();
@@ -208,7 +224,7 @@ namespace Mix.Portal.Controllers
             foreach (var item in query.OrderBy(m => m[_fieldNameService.Priority]))
             {
                 item.Priority = start;
-                await _repository.UpdateAsync(item, _mixDb);
+                await _repository.UpdateAsync(id, item, _mixDb);
                 start++;
             }
 
@@ -217,7 +233,7 @@ namespace Mix.Portal.Controllers
                 data[_fieldNameService.Priority] = start;
             }
 
-            await _repository.UpdateAsync(data, _mixDb);
+            await _repository.UpdateAsync(id, data, _mixDb);
 
             return Ok();
         }
@@ -225,7 +241,7 @@ namespace Mix.Portal.Controllers
         [HttpGet("get-by-parent/{parentType}/{parentId}")]
         public async Task<ActionResult<JObject>> GetSingleByParent(MixContentType parentType, int parentId, [FromQuery] bool loadNestedData)
         {
-            dynamic obj = await _repository.GetSingleByParentAsync(parentType, parentId);
+            dynamic obj = await _repository.GetSingleByParentAsync(parentType, parentId, _fieldNameService);
             if (obj != null)
             {
                 try
@@ -275,7 +291,7 @@ namespace Mix.Portal.Controllers
         [HttpGet("get-by-guid-parent/{parentType}/{parentId}")]
         public async Task<ActionResult<JObject>> GetSingleByGuidParent(MixContentType parentType, Guid parentId, [FromQuery] bool loadNestedData)
         {
-            dynamic obj = await _repository.GetSingleByParentAsync(parentType, parentId);
+            dynamic obj = await _repository.GetSingleByParentAsync(parentType, parentId, _fieldNameService);
             if (obj != null)
             {
                 try
@@ -351,7 +367,7 @@ namespace Mix.Portal.Controllers
 
             var result = resp != null ? ReflectionHelper.ParseObject(resp) : obj;
             QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
-                new MixDbEventCommand(username, "POST", _tableName, result));
+                new MixDbEventCommand(username, MixDbCommandQueueActions.Create, _tableName, result));
             return Ok(result);
         }
 
@@ -362,7 +378,7 @@ namespace Mix.Portal.Controllers
         {
             JObject obj = await MixDbHelper.ParseDtoToEntityAsync(dto, _mixDb.Columns, _fieldNameService, CurrentTenant.Id, _idService.GetClaim(User, MixClaims.Username));
 
-            var data = await _repository.UpdateAsync(obj, _mixDb);
+            var data = await _repository.UpdateAsync(id, obj, _mixDb);
 
             if (data != null)
             {
@@ -380,7 +396,7 @@ namespace Mix.Portal.Controllers
             {
                 string username = _idService.GetClaim(User, MixClaims.Username);
                 QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
-                                            new MixDbEventCommand(username, "PUT", _tableName, obj));
+                                            new MixDbEventCommand(username, MixDbCommandQueueActions.Update, _tableName, obj));
                 var modifiedEnties = new List<ModifiedEntityModel>()
                 {
                     new ModifiedEntityModel()
@@ -415,6 +431,20 @@ namespace Mix.Portal.Controllers
             return Ok();
         }
 
+        [HttpPost("data-relationship")]
+        public async Task<IActionResult> CreateDataRelationship([FromBody] CreateDataRelationshipDto obj, CancellationToken cancellationToken = default)
+        {
+            await _mixDbDataService.CreateDataRelationship(obj, cancellationToken);
+            return Ok();
+        }
+
+        [HttpDelete("data-relationship/{id}")]
+        public async Task<IActionResult> DeleteDataRelationship(int id, CancellationToken cancellationToken = default)
+        {
+            var relDbName = GetRelationshipDbName();
+            await _mixDbDataService.DeleteDataRelationship(relDbName, id, cancellationToken);
+            return Ok();
+        }
 
         [HttpPatch("patch-many")]
         public async Task<IActionResult> PatchMany([FromBody] IEnumerable<JObject> lstObj,
@@ -427,7 +457,7 @@ namespace Mix.Portal.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<object>> Delete(int id)
         {
-            var data = await _repository.DeleteAsync(id);
+            var data = await _repository.DeleteAsync(id, _fieldNameService);
             var childAssociationsQueries = GetAssociationQueries(parentDatabaseName: _tableName, parentId: id);
             var parentAssociationsQueries = GetAssociationQueries(childDatabaseName: _tableName, childId: id);
             _repository.InitTableName(AssociationTableName);
@@ -435,7 +465,7 @@ namespace Mix.Portal.Controllers
             await _repository.DeleteAsync(parentAssociationsQueries);
             string username = _idService.GetClaim(User, MixClaims.Username);
             QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
-                new MixDbEventCommand(username, "DELETE", _tableName, new(new JProperty("data", id))));
+                new MixDbEventCommand(username, MixDbCommandQueueActions.Delete, _tableName, new(new JProperty("data", id))));
             return data > 0 ? Ok() : NotFound();
         }
 
@@ -475,9 +505,12 @@ namespace Mix.Portal.Controllers
 
         private string GetRelationshipDbName()
         {
+            string relName = _mixDb.NamingConvention == MixDatabaseNamingConvention.SnakeCase
+                            ? MixDatabaseNames.DATA_RELATIONSHIP_SNAKE_CASE
+                            : MixDatabaseNames.DATA_RELATIONSHIP_TITLE_CASE;
             return _mixDb.MixDatabaseContextId.HasValue
-                        ? $"{_mixDb.MixDatabaseContext.SystemName}_{MixDatabaseNames.DATA_RELATIONSHIP}"
-                        : $"sys{MixDatabaseNames.DATA_RELATIONSHIP}";
+                        ? $"{_mixDb.MixDatabaseContext.SystemName}_{relName}"
+                        : MixDatabaseNames.SYSTEM_DATA_RELATIONSHIP;
         }
 
         private async Task PatchManyHandler(IEnumerable<JObject> lstObj, CancellationToken cancellationToken)
@@ -525,9 +558,9 @@ namespace Mix.Portal.Controllers
                     }
                 }
 
-                await _repository.UpdateAsync(objDto, _mixDb);
+                await _repository.UpdateAsync(id, objDto, _mixDb);
                 QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
-                    new MixDbEventCommand(username, "PATCH", _tableName, objDto));
+                    new MixDbEventCommand(username, MixDbCommandQueueActions.Patch, _tableName, objDto));
             }
             catch (Exception ex)
             {
@@ -556,6 +589,84 @@ namespace Mix.Portal.Controllers
             }
         }
 
+        private async Task<PagingResponseModel<JObject>> SearchManyToManyDataHandler(SearchMixDbRequestDto request)
+        {
+            try
+            {
+                if (!request.ParentId.HasValue && !request.GuidParentId.HasValue)
+                {
+                    throw new MixException(MixErrorStatus.Badrequest, "Bad Request");
+                }
+
+                var relDbName = GetRelationshipDbName();
+                _repository.InitTableName(relDbName);
+                var relQuery = new List<QueryField>() {
+                        new QueryField(_fieldNameService.ParentDatabaseName, request.ParentName),
+                        new QueryField(_fieldNameService.ChildDatabaseName, _tableName)
+                };
+
+                if (request.ParentId.HasValue)
+                {
+                    relQuery.Add(new(_fieldNameService.ParentId, request.ParentId.Value));
+                }
+
+                if (request.GuidParentId.HasValue)
+                {
+                    relQuery.Add(new(_fieldNameService.GuidParentId, request.GuidParentId.Value));
+                }
+                var allowsRels = await _mixDbDataService.ParseListDataAsync(relDbName, await _repository.GetListByAsync(relQuery));
+
+                _repository.InitTableName(_tableName);
+                var queries = BuildSearchPredicate(request).ToList();
+
+                if (request.Queries != null)
+                {
+                    foreach (var query in request.Queries)
+                    {
+                        Operation op = ParseOperator(query.CompareOperator);
+                        queries.Add(new(query.FieldName, op, ParseSearchKeyword(query.CompareOperator, query.Value)));
+                    }
+                }
+                queries.Add(
+                    new(
+                        _fieldNameService.Id, 
+                        Operation.In, 
+                        allowsRels.Select(m => m.Value<int>(_fieldNameService.ChildId)).ToList()
+                    ));
+
+                var paging = new PagingRequestModel()
+                {
+                    PageIndex = request.PageIndex,
+                    PageSize = request.PageSize,
+                    SortBy = request.OrderBy,
+                    SortDirection = request.Direction
+                };
+                var nestedData = await GetResult(queries, paging, request.LoadNestedData);
+                var items = new List<JObject>();
+                
+                foreach (var item in nestedData.Items)
+                {
+                    var relId = allowsRels.FirstOrDefault(m => m.Value<int>(_fieldNameService.ChildId) == item.Value<int>(_fieldNameService.Id));
+                    if (relId != null)
+                        items.Add(
+                            new JObject(
+                                new JProperty(_fieldNameService.Id, relId.Value<int>(_fieldNameService.Id)),
+                                new JProperty("data", item)
+                            ));
+                }
+                
+                return new PagingResponseModel<JObject>()
+                {
+                    Items = items,
+                    PagingData = nestedData.PagingData
+                }; ;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
+        }
+
 
         private async Task<PagingResponseModel<JObject>> GetResult(IEnumerable<QueryField> queries, PagingRequestModel paging, bool loadNestedData)
         {
@@ -565,7 +676,7 @@ namespace Mix.Portal.Controllers
 
             foreach (var item in result.Items)
             {
-                var data = await _mixDbService.ParseDataAsync(_tableName, item);
+                var data = await _mixDbDataService.ParseDataAsync(_tableName, item);
                 if (loadNestedData)
                 {
                     foreach (var rel in _mixDb.Relationships)
@@ -575,7 +686,7 @@ namespace Mix.Portal.Controllers
                         List<QueryField> nestedQueries = GetAssociationQueries(rel.SourceDatabaseName, rel.DestinateDatabaseName, id);
                         var orderFields = new List<OrderField>
                         {
-                            new("Priority", Order.Ascending)
+                            new(_fieldNameService.Priority, Order.Ascending)
                         };
 
                         var associations = await _associationRepository.GetListByAsync(nestedQueries, orderFields: orderFields);
@@ -593,7 +704,7 @@ namespace Mix.Portal.Controllers
                                 var nd = nestedData.FirstOrDefault(m => m.Id == nestedId);
                                 if (nd is not null)
                                 {
-                                    nestedDataList.Add(await _mixDbService.ParseDataAsync(rel.DestinateDatabaseName, nd));
+                                    nestedDataList.Add(await _mixDbDataService.ParseDataAsync(rel.DestinateDatabaseName, nd));
                                 }
                             }
 
@@ -635,14 +746,18 @@ namespace Mix.Portal.Controllers
 
         private async Task FilterByIntegerId(List<QueryField> queries, SearchMixDbRequestDto request)
         {
-            if (_mixDb.Type == MixDatabaseType.AdditionalData)
+            if (request.RelationShip == MixDatabaseRelationshipType.OneToMany)
+            {
+                queries.Add(new(_fieldNameService.GetParentId(request.ParentName), request.ParentId));
+            }
+            else if (_mixDb.Type == MixDatabaseType.AdditionalData)
             {
                 queries.Add(new(_fieldNameService.ParentId, request.ParentId));
             }
             else
             {
                 _repository.InitTableName(GetRelationshipDbName());
-                
+
                 var relQuery = new List<QueryField>() {
                         new QueryField(_fieldNameService.ParentDatabaseName, request.ParentName),
                         new QueryField(_fieldNameService.ChildDatabaseName, _tableName)
@@ -652,8 +767,9 @@ namespace Mix.Portal.Controllers
                 {
                     relQuery.Add(new(_fieldNameService.ParentId, request.ParentId.Value));
                 }
-                var allowsIds = await _repository.GetListByAsync(relQuery);
-                queries.Add(new(_fieldNameService.Id, Operation.In, allowsIds.Select(m => m.ChildId)));
+                var allowsIds = JArray.FromObject(await _repository.GetListByAsync(relQuery))
+                                        .Select(m => m.Value<int>(_fieldNameService.ChildId)).ToList();
+                queries.Add(new(_fieldNameService.Id, Operation.In, allowsIds));
                 _repository.InitTableName(_tableName);
             }
         }
@@ -726,7 +842,7 @@ namespace Mix.Portal.Controllers
             var operation = ParseSearchOperation(req.SearchMethod);
             var queries = new List<QueryField>()
             {
-                new QueryField(_fieldNameService.TenantId, CurrentTenant.Id)
+                //new QueryField(_fieldNameService.TenantId, CurrentTenant.Id)
             };
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword))
             {

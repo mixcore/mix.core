@@ -23,6 +23,7 @@ namespace Mix.Log.Lib.Models
         public JObject Response { get; set; }
         public JObject Exception { get; set; }
         public string CreatedBy { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         public AuditLogDataModel()
         {

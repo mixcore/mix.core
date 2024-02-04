@@ -18,6 +18,7 @@
         public const string SYSTEM_PERMISSION_ENDPOINT = "sysPermissionEndpoint";
         public const string SYSTEM_USER_PERMISSION = "sysUserPermission";
         public const string SYSTEM_DATA_RELATIONSHIP = "sysMixDatabaseAssociation";
-        public const string DATA_RELATIONSHIP = "MixDatabaseAssociation";
+        public const string DATA_RELATIONSHIP_TITLE_CASE = "DataRelationship";
+        public const string DATA_RELATIONSHIP_SNAKE_CASE = "data_relationship";
     }
 }

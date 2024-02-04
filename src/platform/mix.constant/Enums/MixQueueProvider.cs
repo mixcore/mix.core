@@ -3,7 +3,7 @@
     public enum MixQueueProvider
     {
         GOOGLE,
-        RABITMQ,
+        RABBITMQ,
         AWS,
         AZURE,
         MIX

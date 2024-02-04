@@ -23,6 +23,7 @@ using Mix.Auth.Dtos;
 using Mix.Auth.Models.OAuthRequests;
 using Mix.Identity.Interfaces;
 using Mix.Mq.Lib.Models;
+using Mix.RepoDb.Interfaces;
 
 namespace mix.auth.service.Controllers
 {
@@ -35,6 +36,7 @@ namespace mix.auth.service.Controllers
         private readonly MixIdentityService _idService;
         private readonly IOAuthTokenService _oauthTokenService;
         private readonly IMixEdmService _edmService;
+        private readonly IMixDbDataService _mixDbDataService;
         private readonly EntityRepository<MixCmsAccountContext, MixUser, Guid> _repository;
         private readonly MixRepoDbRepository _repoDbRepository;
         private readonly UnitOfWorkInfo _accountUow;
@@ -61,7 +63,8 @@ namespace mix.auth.service.Controllers
             AuthConfigService authConfigService,
             IMixEdmService edmService,
             IMixTenantService mixTenantService,
-            IOAuthTokenService authResultService)
+            IOAuthTokenService authResultService,
+            IMixDbDataService mixDbDataService)
             : base(httpContextAccessor, configuration, mixService,
                 translator, mixIdentityService, queueService, mixTenantService)
         {
@@ -80,6 +83,7 @@ namespace mix.auth.service.Controllers
             _authConfigService = authConfigService;
             _edmService = edmService;
             _oauthTokenService = authResultService;
+            _mixDbDataService = mixDbDataService;
         }
 
         #region Overrides
@@ -297,7 +301,7 @@ namespace mix.auth.service.Controllers
                 }
 
                 var result = new MixUserViewModel(user, _cmsUow);
-                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext, CacheService);
+                await result.LoadUserDataAsync(CurrentTenant.Id, _mixDbDataService, _accContext, CacheService);
                 return Ok(result);
             }
             catch (MixException)
@@ -319,7 +323,7 @@ namespace mix.auth.service.Controllers
             if (user != null)
             {
                 var result = new MixUserViewModel(user, _cmsUow);
-                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext, CacheService);
+                await result.LoadUserDataAsync(CurrentTenant.Id, _mixDbDataService, _accContext, CacheService);
                 return Ok(result);
             }
 
@@ -430,7 +434,7 @@ namespace mix.auth.service.Controllers
             foreach (var user in data.Items)
             {
                 var result = new MixUserViewModel(user, _cmsUow);
-                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext, CacheService);
+                await result.LoadUserDataAsync(CurrentTenant.Id, _mixDbDataService, _accContext, CacheService);
                 items.Add(result);
             }
 

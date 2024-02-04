@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Helpers;
+using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Models;
@@ -52,13 +53,13 @@ namespace Mixcore.Domain.ViewModels
 
         #region Public Method
 
-        public async Task LoadDataAsync(MixRepoDbRepository mixRepoDbRepository, 
+        public async Task LoadDataAsync(IMixDbDataService mixDbDataService, 
                             IMixMetadataService metadataService, 
                             PagingRequestModel pagingModel, MixCacheService cacheService)
         {
-            await LoadAdditionalDataAsync(mixRepoDbRepository);
-            await LoadModulesAsync(mixRepoDbRepository, metadataService, cacheService);
-            await LoadPostsAsync(pagingModel, mixRepoDbRepository, metadataService, cacheService);
+            await LoadAdditionalDataAsync(mixDbDataService);
+            await LoadModulesAsync(mixDbDataService, metadataService, cacheService);
+            await LoadPostsAsync(pagingModel, mixDbDataService, metadataService, cacheService);
         }
 
 
@@ -76,16 +77,15 @@ namespace Mixcore.Domain.ViewModels
         #endregion
 
         #region Private Methods
-        private async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository)
+        private async Task LoadAdditionalDataAsync(IMixDbDataService mixDbDataService)
         {
             if (!string.IsNullOrEmpty(MixDatabaseName))
             {
-                mixRepoDbRepository.InitTableName(MixDatabaseName);
-                var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Page, Id);
+                var obj = await mixDbDataService.GetSingleByParent(MixDatabaseName, MixContentType.Page, Id, true);
                 AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
             }
         }
-        private async Task LoadModulesAsync(MixRepoDbRepository mixRepoDbRepository, IMixMetadataService metadataService, MixCacheService cacheService)
+        private async Task LoadModulesAsync(IMixDbDataService mixDbDataService, IMixMetadataService metadataService, MixCacheService cacheService)
         {
             var moduleIds = await Context.MixPageModuleAssociation
                     .AsNoTracking()
@@ -98,16 +98,16 @@ namespace Mixcore.Domain.ViewModels
             var paging = new PagingModel();
             foreach (var item in Modules)
             {
-                await item.LoadData(paging, mixRepoDbRepository, metadataService, cacheService);
+                await item.LoadData(paging, mixDbDataService, metadataService, cacheService);
             }
         }
-        private async Task LoadPostsAsync(PagingRequestModel pagingModel, MixRepoDbRepository mixRepoDbRepository, IMixMetadataService metadataService, MixCacheService cacheService)
+        private async Task LoadPostsAsync(PagingRequestModel pagingModel, IMixDbDataService mixDbDataService, IMixMetadataService metadataService, MixCacheService cacheService)
         {
             Posts = await PagePostAssociationViewModel.GetRepository(UowInfo, CacheService).GetPagingAsync(m => m.ParentId == Id, pagingModel);
             foreach (var item in Posts.Items)
             {
                 item.SetUowInfo(UowInfo, CacheService);
-                await item.LoadPost(mixRepoDbRepository, metadataService, cacheService);
+                await item.LoadPost(mixDbDataService, metadataService, cacheService);
             }
         }
 

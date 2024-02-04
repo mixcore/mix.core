@@ -4,6 +4,7 @@ using Mix.Heart.Helpers;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using Mix.Mq.Lib.Models;
+using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Models;
@@ -14,8 +15,8 @@ namespace Mixcore.Controllers
     [Route("api/v2/rest/mixcore/page-content")]
     public sealed class PageContentApiController : MixQueryApiControllerBase<PageContentViewModel, MixCmsContext, MixPageContent, int>
     {
-        private readonly MixRepoDbRepository _mixRepoDbRepository;
         private readonly IMixMetadataService _metadataService;
+        private readonly IMixDbDataService _mixDbDataService;
         public PageContentApiController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -24,21 +25,21 @@ namespace Mixcore.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> uow,
             IMemoryQueueService<MessageQueueModel> queueService,
-            MixRepoDbRepository mixRepoDbRepository,
             IMixMetadataService metadataService,
             IPortalHubClientService portalHub,
-            IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            IMixTenantService mixTenantService,
+            IMixDbDataService mixDbDataService)
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
-            _mixRepoDbRepository = mixRepoDbRepository;
             _metadataService = metadataService;
+            _mixDbDataService = mixDbDataService;
         }
 
         protected override async Task<PageContentViewModel> GetById(int id)
         {
             var result = await base.GetById(id);
-            await result.LoadDataAsync(_mixRepoDbRepository, _metadataService, new(), CacheService);
+            await result.LoadDataAsync(_mixDbDataService, _metadataService, new(), CacheService);
             return result;
         }
     }

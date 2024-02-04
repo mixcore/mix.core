@@ -42,7 +42,7 @@ namespace Mix.Log.Lib.Services
                     {
                         Id = Guid.NewGuid(),
                         Success = request.Exception == null,
-                        CreatedDateTime = DateTime.UtcNow,
+                        CreatedDateTime = request.CreatedAt,
                         Status = MixContentStatus.Published
                     };
                     ReflectionHelper.Map(request, log);
@@ -59,6 +59,7 @@ namespace Mix.Log.Lib.Services
 
         public void QueueRequest(AuditLogDataModel request)
         {
+            request.CreatedAt = DateTime.UtcNow;
             var cmd = new LogAuditLogCommand(request);
             _queueService.PushMemoryQueue(TenantId, MixQueueTopics.MixLog, MixQueueActions.AuditLog, cmd);
         }

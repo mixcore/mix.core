@@ -4,6 +4,7 @@ using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.ViewModels;
+using Mix.Service.Interfaces;
 using Mix.SignalR.Interfaces;
 
 namespace Mix.Portal.Controllers
@@ -15,6 +16,7 @@ namespace Mix.Portal.Controllers
         : MixRestfulApiControllerBase<MixDatabaseViewModel, MixCmsContext, MixDatabase, int>
     {
         private readonly IMixDbService _mixDbService;
+        private readonly IMixMemoryCacheService _memoryCache;
         public MixDatabaseController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -25,11 +27,13 @@ namespace Mix.Portal.Controllers
             IMemoryQueueService<MessageQueueModel> queueService,
             IMixDbService mixDbService,
             IPortalHubClientService portalHub,
-            IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            IMixTenantService mixTenantService,
+            IMixMemoryCacheService memoryCache)
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
             _mixDbService = mixDbService;
+            _memoryCache = memoryCache;
         }
 
         #region Routes
@@ -37,7 +41,7 @@ namespace Mix.Portal.Controllers
         [HttpGet("get-by-name/{name}")]
         public async Task<ActionResult<MixDatabaseViewModel>> GetByName(string name)
         {
-            var result = await Repository.GetSingleAsync(m => m.SystemName == name);
+            var result = await GetMixDatabase(name);
             if (result != null)
                 return Ok(result);
             return NotFound();
@@ -117,8 +121,16 @@ namespace Mix.Portal.Controllers
         {
             try
             {
-                //await _mixDbService.BackupDatabase(data.SystemName, cancellationToken);
+                var newColumnNames = data.Columns
+                                    .Where(m => m.Id == 0)
+                                    .Select(m => m.SystemName)
+                                    .ToList();
                 await base.UpdateHandler(id, data, cancellationToken);
+                var newColumns = data.Columns.Where(m => newColumnNames.Any(n => n == m.SystemName));
+                foreach (var col in newColumns)
+                {
+                    QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), col);
+                }
             }
             catch (Exception ex)
             {
@@ -133,6 +145,22 @@ namespace Mix.Portal.Controllers
             //}
             return base.DeleteHandler(data, cancellationToken);
         }
+        #endregion
+
+        #region Privates
+        private async Task<RepoDbMixDatabaseViewModel> GetMixDatabase(string tableName)
+        {
+            string name = $"{typeof(RepoDbMixDatabaseViewModel).FullName}_{tableName}";
+            return await _memoryCache.TryGetValueAsync(
+                name,
+                cache =>
+                {
+                    cache.SlidingExpiration = TimeSpan.FromSeconds(20);
+                    return RepoDbMixDatabaseViewModel.GetRepository(Uow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
+                }
+                );
+        }
+
         #endregion
     }
 }

@@ -11,12 +11,15 @@ namespace Mix.Service.Services
 {
     public sealed class FieldNameService
     {
-        private MixDatabaseNamingConvention _namingConvention;
+        public MixDatabaseNamingConvention NamingConvention { get; set; }
         #region Properties
         public string Id { get; set; }
         public string ParentId { get; set; }
+        public string GuidParentId { get; set; }
+        public string ParentType { get; set; }
         public string ParentDatabaseName { get; set; }
         public string ChildId { get; set; }
+        public string GuidChildId { get; set; }
         public string ChildDatabaseName { get; set; }
         public string CreatedDateTime { get; set; }
         public string LastModified { get; set; }
@@ -29,14 +32,17 @@ namespace Mix.Service.Services
         #endregion
         public FieldNameService(MixDatabaseNamingConvention namingConvention)
         {
-            _namingConvention = namingConvention;
+            NamingConvention = namingConvention;
             switch (namingConvention)
             {
                 case MixDatabaseNamingConvention.TitleCase:
                     Id = "Id";
                     ParentId = "ParentId";
+                    GuidParentId = "GuidParentId";
+                    ParentType = "ParentType";
                     ParentDatabaseName = "ParentDatabaseName";
                     ChildId = "ChildId";
+                    GuidChildId = "GuidChildId";
                     ChildDatabaseName = "ChildDatabaseName";
                     CreatedDateTime = "CreatedDateTime";
                     LastModified = "LastModified";
@@ -50,8 +56,11 @@ namespace Mix.Service.Services
                 case MixDatabaseNamingConvention.SnakeCase:
                     Id = "id";
                     ParentId = "parent_id";
+                    GuidParentId = "guid_parent_id";
+                    ParentType = "parent_type";
                     ParentDatabaseName = "parent_database_name";
                     ChildId = "child_id";
+                    GuidChildId = "guid_child_id";
                     ChildDatabaseName = "child_database_name";
                     CreatedDateTime = "created_date_time";
                     LastModified = "last_modified";
@@ -67,7 +76,7 @@ namespace Mix.Service.Services
 
         public string GetParentId(string parentName)
         {
-            switch (_namingConvention)
+            switch (NamingConvention)
             {
                 case MixDatabaseNamingConvention.SnakeCase:
                     return $"{parentName}_id";

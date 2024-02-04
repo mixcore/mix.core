@@ -2,6 +2,7 @@
 using Mix.Heart.Helpers;
 using Mix.Lib.Services;
 using Mix.RepoDb.Repositories;
+using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Interfaces;
 using RepoDb;
 using RepoDb.Enumerations;
@@ -123,7 +124,8 @@ namespace Mix.Portal.Domain.ViewModels
                 isChanged = true;
                 var relationships = Context.MixDatabaseRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName).ToList();
                 mixRepoDbRepository.InitTableName(MixDatabaseName);
-                var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Post, Id);
+                var fieldNameService = new FieldNameService(MixDatabaseNamingConvention.TitleCase);
+                var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Post, Id, fieldNameService);
                 if (obj != null)
                 {
                     AdditionalData = ReflectionHelper.ParseObject(obj);

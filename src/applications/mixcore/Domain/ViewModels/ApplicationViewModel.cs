@@ -1,5 +1,6 @@
 ﻿using Mix.Heart.Helpers;
 using Mix.Lib.ViewModels.ReadOnly;
+using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 
 namespace Mixcore.Domain.ViewModels
@@ -64,10 +65,9 @@ namespace Mixcore.Domain.ViewModels
         #endregion
 
         #region Private Methods
-        public async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository)
+        public async Task LoadAdditionalDataAsync(IMixDbDataService mixDbDataService)
         {
-            mixRepoDbRepository.InitTableName(MixDatabaseName);
-            var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Page, Id);
+            var obj = await mixDbDataService.GetSingleByParent(MixDatabaseName, MixContentType.Post, Id, true);
             ExtraData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
         }
 

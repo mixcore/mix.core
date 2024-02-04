@@ -114,7 +114,7 @@ namespace Mix.Lib.Services
             {
                 var userInfo = new MixUserViewModel(user, CmsUow);
                 var roles = await UserManager.GetRolesAsync(user);
-                await userInfo.LoadUserDataAsync(CurrentTenant.Id, RepoDbRepository, _accContext, CacheService);
+                await userInfo.LoadUserDataAsync(CurrentTenant.Id, MixDbDataService, _accContext, CacheService);
                 await userInfo.LoadUserPortalMenus(roles.ToArray(), CurrentTenant.Id, RepoDbRepository);
 
                 return userInfo;
@@ -267,7 +267,7 @@ namespace Mix.Lib.Services
                 {
                     return new JObject();
                 }
-                var u = await MixDbDataService.GetSingleByParent(MixDatabaseNames.SYSTEM_USER_DATA, MixContentType.User, user.Id, true);
+                var u = await MixDbDataService.GetSingleByGuidParent(MixDatabaseNames.SYSTEM_USER_DATA, MixContentType.User, user.Id, true);
                 if (u == null && !GlobalConfig.IsInit)
                 {
                     u = new JObject()

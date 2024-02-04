@@ -58,9 +58,6 @@
 		<Using Include="Mix.Lib.Interfaces" />
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Remove="logs\**" />
-	</ItemGroup>
-	<ItemGroup>
 	  <None Remove="Domain\Protos\mixmq.proto" />
 	</ItemGroup>
 	<ItemGroup>
@@ -90,6 +87,9 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\default-mixcontent\shared\appconfigs\ocelot.Development.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>
 	<ItemGroup>

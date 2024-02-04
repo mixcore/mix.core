@@ -33,6 +33,7 @@ namespace Mix.Shared.Dtos
 
         public List<SearchQueryField> Queries { get; set; } = new();
         public int? ParentId { get; set; }
+        public MixDatabaseRelationshipType? RelationShip { get; set; } = MixDatabaseRelationshipType.OneToMany;
         public Guid? GuidParentId { get; set; }
         public string ParentName { get; set; } = default;
     }

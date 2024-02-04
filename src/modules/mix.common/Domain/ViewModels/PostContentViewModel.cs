@@ -1,4 +1,5 @@
-﻿using Mix.RepoDb.Repositories;
+﻿using Mix.RepoDb.Interfaces;
+using Mix.RepoDb.Repositories;
 using RepoDb;
 using RepoDb.Enumerations;
 
@@ -50,36 +51,12 @@ namespace Mix.Common.Domain.ViewModels
                 : default;
         }
 
-        public async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository)
+        public async Task LoadAdditionalDataAsync(IMixDbDataService mixDbDataService)
         {
             if (AdditionalData == null)
             {
-                var relationships = Context.MixDatabaseRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName).ToList();
-                mixRepoDbRepository.InitTableName(MixDatabaseName);
-                var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Post, Id);
+                var obj = await mixDbDataService.GetSingleByParent(MixDatabaseName, MixContentType.Post, Id, true);
                 AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
-
-                foreach (var item in relationships)
-                {
-                    mixRepoDbRepository.InitTableName(item.DestinateDatabaseName);
-                    var allowsIds = Context.MixDatabaseAssociation
-                            .Where(m => m.ParentDatabaseName == MixDatabaseName
-                                        && m.ParentId == AdditionalData.Value<int>("id")
-                                        && m.ChildDatabaseName == item.DestinateDatabaseName)
-                            .Select(m => m.ChildId).ToList();
-                    var queries = new List<QueryField>()
-                    {
-                        new QueryField("Id", Operation.In, allowsIds)
-                    };
-                    var data = await mixRepoDbRepository.GetListByAsync(queries);
-                    var arr = new JArray();
-                    foreach (var dataItem in data)
-                    {
-                        arr.Add(ReflectionHelper.ParseObject(dataItem));
-                    }
-                    AdditionalData.Add(new JProperty(item.DisplayName, JArray.FromObject(arr)));
-                }
-
             }
         }
         #endregion

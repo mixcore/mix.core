@@ -8,12 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Dtos\**" />
-    <EmbeddedResource Remove="Dtos\**" />
-    <None Remove="Dtos\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="RepoDb" Version="1.13.1" />
     <PackageReference Include="RepoDb.MySql" Version="1.13.1" />
     <PackageReference Include="RepoDb.MySqlConnector" Version="1.13.1" />

@@ -16,6 +16,7 @@ using Mix.Heart.Models;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Interfaces;
+using Mix.RepoDb.Dtos;
 using Mix.RepoDb.Entities;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
@@ -24,12 +25,14 @@ using Mix.Service.Interfaces;
 using Mix.Service.Services;
 using Mix.Shared.Dtos;
 using Mix.Shared.Models;
+using MySqlX.XDevAPI.Common;
 using Newtonsoft.Json.Linq;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
 using System.Dynamic;
 using System.Linq.Dynamic.Core;
+using ZstdSharp.Unsafe;
 
 namespace Mix.RepoDb.Services
 {
@@ -80,148 +83,60 @@ namespace Mix.RepoDb.Services
         #region Methods
 
         #region Implements
-        public async Task<PagingResponseModel<JObject>> GetMyData(string tableName, SearchMixDbRequestDto req, string username)
-        {
-            var paging = new PagingRequestModel()
-            {
-                PageIndex = req.PageIndex,
-                PageSize = req.PageSize,
-                SortBy = req.OrderBy,
-                SortDirection = req.Direction
-            };
-            var mixDb = await GetMixDatabase(tableName);
-
-            var fieldNameService = new FieldNameService(mixDb.NamingConvention);
-            var queries = await BuildSearchQueryAsync(tableName, req, fieldNameService);
-            queries.Add(new(fieldNameService.CreatedBy, Operation.Equal, username));
-            return await GetResult(tableName, queries, paging, req.LoadNestedData);
-        }
-
-        public async Task<JObject?> GetMyDataById(string tableName, string username, int id, bool loadNestedData)
-        {
-            var mixDb = await GetMixDatabase(tableName);
-            var fieldNameService = new FieldNameService(mixDb.NamingConvention);
-            _repository.InitTableName(tableName);
-            var queries = new List<QueryField>()
-            {
-                new QueryField(fieldNameService.TenantId, CurrentTenant.Id),
-                new QueryField(fieldNameService.Id, id),
-                new QueryField(fieldNameService.CreatedBy, username)
-            };
-
-            var obj = await _repository.GetSingleByAsync(queries);
-            if (obj != null)
-            {
-                var data = ReflectionHelper.ParseObject(obj);
-                if (loadNestedData)
-                {
-                    await LoadNestedData(id, data, mixDb, fieldNameService);
-                }
-                return data;
-            }
-            return default;
-        }
-
-        public async Task<JObject?> GetById(string tableName, int id, bool loadNestedData)
-        {
-            try
-            {
-                var mixDb = await GetMixDatabase(tableName);
-                var fieldNameService = new FieldNameService(mixDb.NamingConvention);
-
-                _repository.InitTableName(tableName);
-
-                var obj = await _repository.GetSingleAsync(new QueryField(fieldNameService.Id, id));
-                if (obj != null)
-                {
-                    var data = await ParseDataAsync(tableName, obj);
-                    ParseDataAsync(tableName, data);
-
-                    if (loadNestedData)
-                    {
-                        await LoadNestedData(id, data, mixDb, fieldNameService);
-                    }
-                    return data;
-                }
-                return default;
-            }
-            catch (MixException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new MixException(MixErrorStatus.ServerError, ex);
-            }
-        }
-
-        public async Task<JObject?> GetByParentIdAsync(string tableName, MixContentType parentType, int parentId, bool loadNestedData)
-        {
-            try
-            {
-                var mixDb = await GetMixDatabase(tableName);
-                var fieldNameService = new FieldNameService(mixDb.NamingConvention);
-                _repository.InitTableName(tableName);
-
-                var obj = await _repository.GetSingleByParentAsync(parentType, parentId);
-                if (obj != null)
-                {
-                    var data = await ParseDataAsync(tableName, obj);
-
-                    if (loadNestedData)
-                    {
-                        await LoadNestedData(data.Value<int>("id"), data, mixDb, fieldNameService);
-                    }
-                    return data;
-                }
-                return default;
-            }
-            catch (MixException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new MixException(MixErrorStatus.ServerError, ex);
-            }
-        }
-
-        public async Task<JObject> ParseDataAsync(string tableName, dynamic obj)
-        {
-            var data = ReflectionHelper.ParseObject(obj);
-            var db = await GetMixDatabase(tableName);
-            if (db is null)
-            {
-                return data;
-            }
-
-            var jsonColumns = db.Columns.Where(
-                                    c => c.DataType == MixDataType.Json
-                                            || c.DataType == MixDataType.ArrayMedia
-                                            || c.DataType == MixDataType.Array
-                                            || c.DataType == MixDataType.ArrayRadio)
-                                .ToList();
-            foreach (var col in jsonColumns)
-            {
-                var strValue = data.Value<string>(col.SystemName);
-                if (!string.IsNullOrEmpty(strValue))
-                {
-                    data.Remove(col.SystemName);
-                    if (col.DataType == MixDataType.Json || col.DataType == MixDataType.ArrayRadio)
-                    {
-                        data.Add(new JProperty(col.SystemName, JObject.Parse(strValue)));
-                    }
-                    else
-                    {
-                        data.Add(new JProperty(col.SystemName, JArray.Parse(strValue)));
-                    }
-                }
-            }
-            return data;
-        }
-
 
         // TODO: check why need to restart application to load new database schema for Repo Db Context !important
+        public async Task<bool> AddColumn(RepoDbMixDatabaseColumnViewModel col)
+        {
+            var database = await GetMixDatabase(col.MixDatabaseName);
+            if (database == null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, $"Invalid table {col.MixDatabaseName}");
+            }
+            if (database.MixDatabaseContextId.HasValue)
+            {
+                await SwitchDbContext(database.MixDatabaseContext);
+            }
+            var commandText = GenerateAddColumnSql(col);
+            var result = await _repository.ExecuteCommand(commandText);
+            _repository.CompleteTransaction();
+            return result >= 0;
+        }
+
+        public async Task<bool> DropColumn(RepoDbMixDatabaseColumnViewModel col)
+        {
+            var database = await GetMixDatabase(col.MixDatabaseName);
+            if (database == null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, $"Invalid table {col.MixDatabaseName}");
+            }
+            if (database.MixDatabaseContextId.HasValue)
+            {
+                await SwitchDbContext(database.MixDatabaseContext);
+            }
+            var commandText = GenerateDropColumnSql(col);
+            var result = await _repository.ExecuteCommand(commandText);
+            _repository.CompleteTransaction();
+            return result >= 0;
+        }
+
+        public async Task<bool> AlterColumn(AlterColumnDto colDto)
+        {
+            var database = await GetMixDatabase(colDto.MixDatabaseName);
+            if (database == null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, $"Invalid table {colDto.MixDatabaseName}");
+            }
+            var col = new RepoDbMixDatabaseColumnViewModel(colDto);
+            if (database.MixDatabaseContextId.HasValue)
+            {
+                await SwitchDbContext(database.MixDatabaseContext);
+            }
+            var dropCommandText = GenerateAlterColumnSql(col);
+            var result = await _repository.ExecuteCommand(dropCommandText);
+            _repository.CompleteTransaction();
+            return result >= 0;
+        }
+
         public async Task<bool> MigrateDatabase(RepoDbMixDatabaseViewModel database)
         {
             if (database.MixDatabaseContextId.HasValue)
@@ -359,7 +274,9 @@ namespace Mix.RepoDb.Services
 
                     foreach (var database in databases)
                     {
-                        string newDbName = $"{dbContext.SystemName}_{database.SystemName}";
+                        string newDbName = dbContext.NamingConvention == MixDatabaseNamingConvention.SnakeCase
+                            ? $"{dbContext.SystemName}_{database.DisplayName.ToColumnName(false)}"
+                            : $"{dbContext.SystemName.ToTitleCase()}{database.DisplayName.ToColumnName(true)}";
                         _repository.Init(newDbName, dbContext.DatabaseProvider, dbContext.ConnectionString);
                         var currentDb = await RepoDbMixDatabaseViewModel.GetRepository(_cmsUow, CacheService)
                                             .GetSingleAsync(m => m.SystemName == newDbName);
@@ -379,7 +296,11 @@ namespace Mix.RepoDb.Services
                                 var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
                                 foreach (var col in cols)
                                 {
+                                    string newColName = dbContext.NamingConvention == MixDatabaseNamingConvention.SnakeCase
+                                    ? col.DisplayName.ToColumnName(false)
+                                    : col.DisplayName.ToColumnName(false);
                                     col.Id = 0;
+                                    col.SystemName = newColName;
                                     col.MixDatabaseName = newDbName;
                                     currentDb.Columns.Add(new(col, _cmsUow));
                                 }
@@ -404,150 +325,9 @@ namespace Mix.RepoDb.Services
                 throw new MixException(MixErrorStatus.Badrequest, ex);
             }
         }
-
-        //public Task<int> CreateData(string tableName, JObject data)
-        //{
-        //    _repository.InitTableName(tableName);
-        //    JObject obj = new JObject();
-        //    foreach (var pr in data.Properties())
-        //    {
-        //        obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
-        //    }
-        //    if (!obj.ContainsKey(createdDateFieldName))
-        //    {
-        //        obj.Add(new JProperty(createdDateFieldName, DateTime.UtcNow));
-        //    }
-        //    if (!obj.ContainsKey(priorityFieldName))
-        //    {
-        //        obj.Add(new JProperty(priorityFieldName, 0));
-        //    }
-        //    if (!obj.ContainsKey(tenantIdFieldName))
-        //    {
-        //        obj.Add(new JProperty(tenantIdFieldName, CurrentTenant.Id));
-        //    }
-
-        //    if (!obj.ContainsKey(statusFieldName))
-        //    {
-        //        obj.Add(new JProperty(statusFieldName, MixContentStatus.Published.ToString()));
-        //    }
-
-        //    if (!obj.ContainsKey(isDeletedFieldName))
-        //    {
-        //        obj.Add(new JProperty(isDeletedFieldName, false));
-        //    }
-        //    return await _repository.InsertAsync(obj);
-        //}
-
-
         #endregion
 
         #region Helper
-
-        
-
-        private async Task<PagingResponseModel<JObject>> GetResult(string tableName,
-            IEnumerable<QueryField> queries, PagingRequestModel paging, bool loadNestedData)
-        {
-            var result = await _repository.GetPagingAsync(queries, paging);
-            var mixDb = await GetMixDatabase(tableName);
-            var fieldNameService = new FieldNameService(mixDb.NamingConvention);
-            var items = new List<JObject>();
-            var database = await GetMixDatabase(tableName);
-            if (database is null)
-            {
-                return new PagingResponseModel<JObject>();
-            }
-
-            foreach (var item in result.Items)
-            {
-                var data = ReflectionHelper.ParseObject(item);
-                if (loadNestedData)
-                {
-                    var id = data.Value<int>("id");
-                    LoadNestedData(id, data, mixDb, fieldNameService);
-                }
-                items.Add(data);
-            }
-            return new PagingResponseModel<JObject> { Items = items, PagingData = result.PagingData };
-        }
-        private async Task LoadNestedData(int id, JObject data, RepoDbMixDatabaseViewModel database, FieldNameService fieldNameService)
-        {
-            
-            foreach (var item in database.Relationships)
-            {
-                // Many to many
-                if (item.Type == MixDatabaseRelationshipType.ManyToMany)
-                {
-                    var relDb = await GetMixDatabase(GetRelationshipDbName(database));
-                    var relFieldName = new FieldNameService(relDb.NamingConvention);
-                    _repository.InitTableName(relDb.SystemName);
-                    data = await LoadManyToManyData(relFieldName, item, id, fieldNameService);
-                }
-                else if(item.Type == MixDatabaseRelationshipType.OneToMany)
-                {
-                    data = await LoadOneToManyData(item, id, fieldNameService);
-                }
-            }
-        }
-
-        private async Task<JObject> LoadOneToManyData(MixDatabaseRelationshipViewModel item, int id, FieldNameService fieldNameService)
-        {
-            JObject data = new JObject();
-            string pIdName = fieldNameService.GetParentId(item.SourceDatabaseName);
-            _repository.InitTableName(item.DestinateDatabaseName);
-            List<QueryField> query = new() { new(pIdName, Operation.Equal, id) };
-            var nestedData = await _repository.GetListByAsync(query);
-
-            JArray result = new();
-            foreach (var nd in nestedData)
-            {
-                result.Add(await ParseDataAsync(item.DestinateDatabaseName, nd));
-            }
-            data.Add(new JProperty(item.DisplayName, result));
-            return data;
-        }
-
-        private async Task<JObject> LoadManyToManyData(FieldNameService relFieldName, MixDatabaseRelationshipViewModel item, int id, FieldNameService fieldNameService)
-        {
-            JObject data = new JObject();
-            List<QueryField> queries = GetAssociationQueries(relFieldName, item.SourceDatabaseName, item.DestinateDatabaseName, id);
-            var associations = await _repository.GetListByAsync(queries);
-            if (associations is { Count: > 0 })
-            {
-                var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(fieldNameService.ChildId)).ToList();
-                _repository.InitTableName(item.DestinateDatabaseName);
-                List<QueryField> query = new() { new(fieldNameService.Id, Operation.In, nestedIds) };
-                var nestedData = await _repository.GetListByAsync(query);
-                if (nestedData != null)
-                {
-                    data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
-                }
-            }
-
-            return data;
-        }
-
-        private List<QueryField> GetAssociationQueries(FieldNameService fieldNameService, string? parentDatabaseName = null, string? childDatabaseName = null, int? parentId = null, int? childId = null)
-        {
-            var queries = new List<QueryField>();
-            if (!string.IsNullOrEmpty(parentDatabaseName))
-            {
-                queries.Add(new QueryField(fieldNameService.ParentDatabaseName, parentDatabaseName));
-            }
-            if (!string.IsNullOrEmpty(childDatabaseName))
-            {
-                queries.Add(new QueryField(fieldNameService.ChildDatabaseName, childDatabaseName));
-            }
-            if (parentId.HasValue)
-            {
-                queries.Add(new QueryField(fieldNameService.ParentId, parentId));
-            }
-            if (childId.HasValue)
-            {
-                queries.Add(new QueryField(fieldNameService.Id, parentId));
-            }
-            return queries;
-        }
 
         private async Task<RepoDbMixDatabaseViewModel> GetMixDatabase(string tableName)
         {
@@ -567,9 +347,12 @@ namespace Mix.RepoDb.Services
         }
         private string GetRelationshipDbName(RepoDbMixDatabaseViewModel mixDb)
         {
+            string relName = mixDb.NamingConvention == MixDatabaseNamingConvention.SnakeCase
+                            ? MixDatabaseNames.DATA_RELATIONSHIP_SNAKE_CASE
+                            : MixDatabaseNames.DATA_RELATIONSHIP_TITLE_CASE;
             return mixDb.MixDatabaseContextId.HasValue
-                        ? $"{mixDb.MixDatabaseContext.SystemName}_{MixDatabaseNames.DATA_RELATIONSHIP}"
-                        : MixDatabaseNames.DATA_RELATIONSHIP;
+                        ? $"{mixDb.MixDatabaseContext.SystemName}_{relName}"
+                        : MixDatabaseNames.SYSTEM_DATA_RELATIONSHIP;
         }
         private async Task<List<QueryField>> BuildSearchQueryAsync(string tableName, SearchMixDbRequestDto request, FieldNameService fieldNameService)
         {
@@ -809,10 +592,10 @@ namespace Mix.RepoDb.Services
                 $"{_databaseConstant.BacktickOpen}{fieldNameService.CreatedDateTime}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.DateTime)}, " +
                 $"{_databaseConstant.BacktickOpen}{fieldNameService.LastModified}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.DateTime)} NULL, " +
                 $"{_databaseConstant.BacktickOpen}{fieldNameService.TenantId}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Integer)} NULL, " +
-                $"{_databaseConstant.BacktickOpen}{fieldNameService.CreatedBy}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NULL, " +
-                $"{_databaseConstant.BacktickOpen}{fieldNameService.ModifiedBy}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NULL, " +
+                $"{_databaseConstant.BacktickOpen}{fieldNameService.CreatedBy}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.String)} NULL, " +
+                $"{_databaseConstant.BacktickOpen}{fieldNameService.ModifiedBy}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.String)} NULL, " +
                 $"{_databaseConstant.BacktickOpen}{fieldNameService.Priority}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Integer)} NOT NULL, " +
-                $"{_databaseConstant.BacktickOpen}{fieldNameService.Status}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Text)} NOT NULL, " +
+                $"{_databaseConstant.BacktickOpen}{fieldNameService.Status}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.String)} NOT NULL, " +
                 $"{_databaseConstant.BacktickOpen}{fieldNameService.IsDeleted}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Boolean)} NOT NULL, " +
                 $" {string.Join(",", colsSql.ToArray())})";
         }
@@ -829,7 +612,7 @@ namespace Mix.RepoDb.Services
             };
         }
 
-        private string GenerateColumnSql(MixDatabaseColumnViewModel col)
+        private string GenerateColumnSql(RepoDbMixDatabaseColumnViewModel col)
         {
             string colType = GetColumnType(col.DataType, col.ColumnConfigurations.MaxLength);
             string nullable = col.ColumnConfigurations.IsRequire ? "NOT NUll" : "NULL";
@@ -839,7 +622,52 @@ namespace Mix.RepoDb.Services
             return $"{_databaseConstant.BacktickOpen}{col.SystemName}{_databaseConstant.BacktickClose} {colType} {nullable} {unique} {defaultValue}";
         }
 
-        private bool IsLongTextColumn(MixDatabaseColumnViewModel col)
+        private string GenerateAddColumnSql(RepoDbMixDatabaseColumnViewModel col)
+        {
+            return $"ALTER TABLE {_databaseConstant.BacktickOpen}{col.MixDatabaseName}{_databaseConstant.BacktickClose}" +
+                $" ADD {GenerateColumnSql(col)};";
+        }
+        private string GenerateDropColumnSql(RepoDbMixDatabaseColumnViewModel col)
+        {
+            return $"ALTER TABLE {_databaseConstant.BacktickOpen}{col.MixDatabaseName}{_databaseConstant.BacktickClose}" +
+                $" DROP COLUMN IF EXISTS {_databaseConstant.BacktickOpen}{col.SystemName}{_databaseConstant.BacktickClose};";
+        }
+        private string GenerateAlterColumnSql(RepoDbMixDatabaseColumnViewModel col)
+        {
+            string colType = GetColumnType(col.DataType, col.ColumnConfigurations.MaxLength);
+            string colName = $"{_databaseConstant.BacktickOpen}{col.SystemName}{_databaseConstant.BacktickClose}";
+            string tableName = $"{_databaseConstant.BacktickOpen}{col.MixDatabaseName}{_databaseConstant.BacktickClose}";
+            string uniqueKey = $"{_databaseConstant.BacktickOpen}{col.MixDatabaseName}_{col.SystemName}_key{_databaseConstant.BacktickClose}";
+            string defaultValue = !IsLongTextColumn(col) && !string.IsNullOrEmpty(col.DefaultValue)
+                                    ? $"DEFAULT '{@col.DefaultValue}'" : string.Empty;
+            string alterTable = $"ALTER TABLE {tableName} ";
+            var result = alterTable +
+                $" ALTER COLUMN {colName} TYPE {colType} USING {colName}::{colType};"
+            + alterTable
+            + $" ALTER COLUMN {colName} DROP NOT NULL;";
+
+            if (col.ColumnConfigurations.IsRequire)
+            {
+                result += alterTable
+                + $" ALTER COLUMN {colName} SET NOT NULL;";
+            }
+            if (!string.IsNullOrEmpty(defaultValue))
+            {
+                result += alterTable
+                + $" ALTER COLUMN {colName} SET {defaultValue};";
+            }
+
+            result += alterTable
+                + $" DROP CONSTRAINT IF EXISTS {uniqueKey};";
+            if (col.ColumnConfigurations.IsUnique)
+            {
+                result += alterTable
+               + $" ADD CONSTRAINT {uniqueKey} UNIQUE ({colName});";
+            }
+            return result;
+        }
+
+        private bool IsLongTextColumn(RepoDbMixDatabaseColumnViewModel col)
         {
             return col.DataType == MixDataType.Text
                 | col.DataType == MixDataType.Array
@@ -875,11 +703,12 @@ namespace Mix.RepoDb.Services
                 case MixDataType.Array:
                 case MixDataType.ArrayMedia:
                 case MixDataType.ArrayRadio:
+                case MixDataType.Text:
                     return _databaseConstant.Text;
                 case MixDataType.Duration:
                 case MixDataType.Custom:
                 case MixDataType.PhoneNumber:
-                case MixDataType.Text:
+                case MixDataType.String:
                 case MixDataType.MultilineText:
                 case MixDataType.EmailAddress:
                 case MixDataType.Password:

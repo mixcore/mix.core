@@ -11,7 +11,7 @@ namespace Mix.Service.Services
     public class LogStreamHubClientService : BaseHubClientService, ILogStreamHubClientService
     {
         public LogStreamHubClientService(MixEndpointService mixEndpointService, ILogger<LogStreamHubClientService> logger)
-            : base(HubEndpoints.LogStreamHub, mixEndpointService, logger)
+            : base(HubEndpoints.LogStreamHub, mixEndpointService.MixMq, logger)
         {
         }
 
