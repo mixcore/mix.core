@@ -6,7 +6,6 @@ using Mix.Lib.Services;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Service.Models;
-using MySqlX.XDevAPI.Common;
 
 namespace Mix.Common.Controllers
 {
@@ -25,7 +24,7 @@ namespace Mix.Common.Controllers
             MixIdentityService mixIdentityService,
             IMemoryQueueService<MessageQueueModel> queueService,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
         }

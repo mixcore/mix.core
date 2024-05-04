@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Mix.Lib.Interfaces;
-using Mix.Service.Interfaces;
 using Mix.Signalr.Hub.Models;
 using Mix.SignalR.Hubs;
 using Newtonsoft.Json.Linq;

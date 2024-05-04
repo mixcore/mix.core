@@ -2,10 +2,9 @@
 using Mix.Auth.Constants;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.AuditLog;
-using Mix.Database.Entities.Queue;
+using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
-using Mix.Heart.Models;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
@@ -28,6 +27,7 @@ namespace Mix.Log.Controllers
     public class AuditLogController
         : MixQueryApiControllerBase<AuditLogViewModel, AuditLogDbContext, AuditLog, Guid>
     {
+        private readonly DatabaseService _databaseService;
         public AuditLogController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -37,11 +37,12 @@ namespace Mix.Log.Controllers
             UnitOfWorkInfo<AuditLogDbContext> uow,
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
-            IMixTenantService mixTenantService)
+            IMixTenantService mixTenantService,
+            DatabaseService databaseService)
             : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
-
+            _databaseService = databaseService;
         }
 
         #region Routes
@@ -107,7 +108,7 @@ namespace Mix.Log.Controllers
                     };
                 }
 
-                using (var context = new AuditLogDbContext(searchDate))
+                using (var context = _databaseService.GetAuditLogDbContext())
                 {
                     using (var AuditLogUow = new UnitOfWorkInfo(context))
                     {

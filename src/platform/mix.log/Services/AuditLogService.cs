@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Mix.Constant.Constants;
+﻿using Mix.Constant.Constants;
 using Mix.Database.Entities.AuditLog;
+using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.Helpers;
 using Mix.Log.Lib.Commands;
@@ -17,27 +17,24 @@ namespace Mix.Log.Lib.Services
 {
     public class AuditLogService : IAuditLogService
     {
+        private readonly DatabaseService _databaseService;
         private readonly ILogStreamHubClientService _logStreamHub;
         private readonly IMemoryQueueService<MessageQueueModel> _queueService;
         private AuditLogDbContext _dbContext;
         public int TenantId { get; set; }
-        public AuditLogService(IMemoryQueueService<MessageQueueModel> queueService, ILogStreamHubClientService logStreamHub)
+        public AuditLogService(IMemoryQueueService<MessageQueueModel> queueService, ILogStreamHubClientService logStreamHub, DatabaseService databaseService)
         {
             _queueService = queueService;
             _logStreamHub = logStreamHub;
+            _databaseService = databaseService;
         }
 
         public async Task SaveRequestAsync(AuditLogDataModel request)
         {
             try
             {
-                using (_dbContext = new())
+                using (_dbContext = _databaseService.GetAuditLogDbContext())
                 {
-                    if (_dbContext.Database.GetPendingMigrations().Any())
-                    {
-                        _dbContext.Database.Migrate();
-                    }
-
                     var log = new AuditLog()
                     {
                         Id = Guid.NewGuid(),

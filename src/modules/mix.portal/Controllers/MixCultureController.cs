@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Auth.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.Portal.Domain.Interfaces;
@@ -25,7 +24,7 @@ namespace Mix.Portal.Controllers
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _cloneCultureService = cloneCultureService;

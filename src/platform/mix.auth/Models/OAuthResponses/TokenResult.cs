@@ -6,8 +6,6 @@
  of this license document, but changing it is not allowed.
  */
 
-using System;
-
 namespace Mix.Auth.Models.OAuthResponses
 {
     public class TokenResult

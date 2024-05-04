@@ -27,7 +27,7 @@ namespace Mix.Lib.Models.Common
                 {
                     string seoContent = arr[2];
                     var contents = httpRequest.Query[key].ToString().TrimEnd(',').Split(',', StringSplitOptions.TrimEntries);
-                    
+
                     MetadataQueries.Add(new()
                     {
                         FieldName = seoContent,

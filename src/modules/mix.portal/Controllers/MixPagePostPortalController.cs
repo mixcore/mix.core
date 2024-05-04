@@ -14,8 +14,8 @@ namespace Mix.Portal.Controllers
 
         public MixPagePostController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> cmsUow, IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
-            IMixTenantService mixTenantService) 
-            : base(httpContextAccessor, configuration, 
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
             _cmsUow = cmsUow;

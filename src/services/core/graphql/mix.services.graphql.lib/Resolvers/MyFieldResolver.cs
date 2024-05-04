@@ -1,9 +1,7 @@
 ﻿using GraphQL;
 using GraphQL.Resolvers;
 using Microsoft.EntityFrameworkCore;
-using Mix.Database.Base;
 using Mix.Heart.Extensions;
-using Mix.Services.Graphql.Lib;
 using Mix.Services.Graphql.Lib.Models;
 using System.Linq.Dynamic.Core;
 

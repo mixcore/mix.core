@@ -5,6 +5,7 @@ using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
+using Mix.Lib.Interfaces;
 using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Entities.Paypal;
 using Mix.Services.Ecommerce.Lib.Enums;
@@ -12,17 +13,11 @@ using Mix.Services.Ecommerce.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.Models.Paypal;
 using Mix.Services.Ecommerce.Lib.ViewModels;
 using Mix.Services.Ecommerce.Lib.ViewModels.Paypal;
-using Mix.Shared.Services;
-using Newtonsoft.Json.Linq;
-using System.Text;
-using Newtonsoft.Json;
-using System.Net.Http.Headers;
-using System.Net.Http;
 using Mix.Services.Payments.Lib.Constants;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using System.Text.RegularExpressions;
-using Quartz.Util;
-using Mix.Lib.Interfaces;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
@@ -76,7 +71,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
         {
             try
             {
-                if (orderDetail.PaymentStatus == PaymentStatus.SUCCESS || orderDetail.PaymentStatus == PaymentStatus.FAILED)
+                if (orderDetail.PaymentStatus == PaymentStatus.Success || orderDetail.PaymentStatus == PaymentStatus.Failed)
                 {
                     return orderDetail.PaymentStatus;
                 }
@@ -84,7 +79,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 string? token = response.Value<string>("token");
                 string? payerId = response.Value<string>("PayerID");
                 var result = await CaptureOrderResult(token);
-                if (string.IsNullOrEmpty(result?.id) && orderDetail.PaymentStatus == PaymentStatus.SENT)
+                if (string.IsNullOrEmpty(result?.id) && orderDetail.PaymentStatus == PaymentStatus.Sent)
                 {
                     result = await GetOrderResult(token);
                 }
@@ -95,7 +90,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 }
 
                 var reference = result.purchase_units[0].reference_id;
-                var status = !string.IsNullOrEmpty(reference) ? PaymentStatus.SUCCESS : PaymentStatus.FAILED;
+                var status = !string.IsNullOrEmpty(reference) ? PaymentStatus.Success : PaymentStatus.Failed;
                 await SaveResponse(result, status, cancellationToken);
                 return status;
 

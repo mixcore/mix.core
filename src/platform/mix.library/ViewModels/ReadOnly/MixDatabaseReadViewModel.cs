@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-
-namespace Mix.Lib.ViewModels.ReadOnly
+﻿namespace Mix.Lib.ViewModels.ReadOnly
 {
     public sealed class MixDatabaseContextReadViewModel
         : TenantDataViewModelBase<MixCmsContext, MixDatabaseContext, int, MixDatabaseContextReadViewModel>

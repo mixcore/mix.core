@@ -23,8 +23,8 @@ namespace Mix.Portal.Controllers
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(MixContentType.Page, identityService, userManager, 
-                  httpContextAccessor, configuration, cacheService, translator, 
+            : base(MixContentType.Page, identityService, userManager,
+                  httpContextAccessor, configuration, cacheService, translator,
                   mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
 

@@ -1,16 +1,13 @@
-﻿using Mix.Queue.Interfaces;
-using Mix.Shared.Services;
-using Quartz;
-using System;
-using System.Threading.Tasks;
+﻿using Mix.Mq.Lib.Models;
 using Mix.Quartz.Enums;
 using Mix.Quartz.Jobs;
 using Mix.Quartz.Models;
-using NuGet.Packaging.Signing;
-using Mix.Mq.Lib.Models;
+using Mix.Queue.Interfaces;
+using Mix.Shared.Services;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.Collections.Immutable;
+using Quartz;
+using System;
+using System.Threading.Tasks;
 
 namespace Mix.Scheduler.Domain.Jobs
 {

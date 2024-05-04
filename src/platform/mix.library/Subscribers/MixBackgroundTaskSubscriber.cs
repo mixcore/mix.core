@@ -4,16 +4,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Mix.Communicator.Models;
 using Mix.Communicator.Services;
-using Mix.Database.Entities.Account;
 using Mix.Lib.Interfaces;
 using Mix.Mixdb.Event.Services;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
-using Mix.Queue.Engines.MixQueue;
 using Mix.Service.Commands;
-using Mix.Service.Interfaces;
 using Mix.SignalR.Enums;
-using Mix.SignalR.Hubs;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
 
@@ -47,7 +43,7 @@ namespace Mix.Lib.Subscribers
         public override Task StartAsync(CancellationToken cancellationToken = default)
         {
             base.StartAsync(cancellationToken);
-            
+
             return Task.Run(async () =>
             {
                 while (PortalHub.Connection == null || PortalHub.Connection.State != Microsoft.AspNetCore.SignalR.Client.HubConnectionState.Connected)
@@ -59,7 +55,7 @@ namespace Mix.Lib.Subscribers
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(GetType().Name, ex);
+                        Logger.LogError(GetType().Name, ex);
                     }
                 }
             });

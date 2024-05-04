@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Constant.Enums;
-using Mix.Database.Entities.Queue;
+using Mix.Database.Entities.QueueLog;
+using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
@@ -13,12 +14,14 @@ namespace Mix.Log.Lib.Services
 {
     public class MixQueueLogService : IMixQueueLog
     {
-        private MixQueueDbContext _dbContext;
+        private QueueLogDbContext _dbContext;
+        private readonly DatabaseService _databaseService;
         private MixQueueMessages<MessageQueueModel> _mixQueueService;
         public int TenantId { get; set; }
-        public MixQueueLogService()
+        public MixQueueLogService(DatabaseService databaseService)
         {
             _mixQueueService = new();
+            _databaseService = databaseService;
         }
 
 
@@ -26,12 +29,12 @@ namespace Mix.Log.Lib.Services
         {
             try
             {
-                using (_dbContext = new())
+                using (_dbContext = _databaseService.GetQueueLogDbContext())
                 {
                     InitDbContext();
                     if (queueMessage != null)
                     {
-                        var queueLog = new MixQueueMessageLog()
+                        var queueLog = new QueueLog()
                         {
                             Id = queueMessage.Id,
                             QueueMessageId = queueMessage.Id,
@@ -51,7 +54,7 @@ namespace Mix.Log.Lib.Services
                         {
                             queueLog.StringData = queueMessage.Data;
                         }
-                        _dbContext.MixQueueMessage.Add(queueLog);
+                        _dbContext.QueueLog.Add(queueLog);
                         await _dbContext.SaveChangesAsync();
                     }
 
@@ -67,11 +70,11 @@ namespace Mix.Log.Lib.Services
         {
             try
             {
-                using (_dbContext = new())
+                using (_dbContext = _databaseService.GetQueueLogDbContext())
                 {
                     InitDbContext();
 
-                    var rootLog = await _dbContext.MixQueueMessage.FirstOrDefaultAsync(m => m.Id == ackQueueMessage.Id);
+                    var rootLog = await _dbContext.QueueLog.FirstOrDefaultAsync(m => m.Id == ackQueueMessage.Id);
                     if (rootLog != null)
                     {
                         var subs = rootLog.Subscriptions.FirstOrDefault(m =>
@@ -86,7 +89,7 @@ namespace Mix.Log.Lib.Services
                             rootLog.State = MixQueueMessageLogState.ACK;
                         }
                         rootLog.LastModified = DateTime.UtcNow;
-                        _dbContext.MixQueueMessage.Update(rootLog);
+                        _dbContext.QueueLog.Update(rootLog);
                         await _dbContext.SaveChangesAsync();
                     }
                 }
@@ -101,11 +104,11 @@ namespace Mix.Log.Lib.Services
         {
             try
             {
-                using (_dbContext = new())
+                using (_dbContext = _databaseService.GetQueueLogDbContext())
                 {
                     InitDbContext();
 
-                    var rootLog = await _dbContext.MixQueueMessage.FirstOrDefaultAsync(m => m.Id == log.Id);
+                    var rootLog = await _dbContext.QueueLog.FirstOrDefaultAsync(m => m.Id == log.Id);
                     if (rootLog != null)
                     {
                         var subs = rootLog.Subscriptions.FirstOrDefault(m => m.Value<string>("id") == log.Sender) as JObject;
@@ -117,7 +120,7 @@ namespace Mix.Log.Lib.Services
                             rootLog.State = MixQueueMessageLogState.FAILED;
                         }
                         rootLog.LastModified = DateTime.UtcNow;
-                        _dbContext.MixQueueMessage.Update(rootLog);
+                        _dbContext.QueueLog.Update(rootLog);
                         await _dbContext.SaveChangesAsync();
                     }
                 }
@@ -132,11 +135,11 @@ namespace Mix.Log.Lib.Services
         {
             try
             {
-                using (_dbContext = new())
+                using (_dbContext = _databaseService.GetQueueLogDbContext())
                 {
                     InitDbContext();
 
-                    var rootLog = await _dbContext.MixQueueMessage.FirstOrDefaultAsync(m => m.Id == deadLetterQueueMessage.Id);
+                    var rootLog = await _dbContext.QueueLog.FirstOrDefaultAsync(m => m.Id == deadLetterQueueMessage.Id);
                     if (rootLog != null)
                     {
                         var subs = rootLog.Subscriptions.FirstOrDefault(m => m.Value<string>("id") == deadLetterQueueMessage.Sender);
@@ -147,7 +150,7 @@ namespace Mix.Log.Lib.Services
                         }
                         rootLog.State = MixQueueMessageLogState.DEADLETTER;
                         rootLog.LastModified = DateTime.UtcNow;
-                        _dbContext.MixQueueMessage.Update(rootLog);
+                        _dbContext.QueueLog.Update(rootLog);
                         await _dbContext.SaveChangesAsync();
                     }
                 }

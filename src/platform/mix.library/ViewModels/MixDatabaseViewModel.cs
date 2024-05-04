@@ -1,9 +1,6 @@
-﻿using DocumentFormat.OpenXml.Vml.Spreadsheet;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Mix.Lib.ViewModels.ReadOnly;
-using Mix.Service.Services;
 using System.ComponentModel.DataAnnotations;
-using System.Threading;
 
 namespace Mix.Lib.ViewModels
 {
@@ -71,7 +68,7 @@ namespace Mix.Lib.ViewModels
         protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity, CancellationToken cancellationToken = default)
         {
             var fieldNameService = GetFielNameService();
-            
+
 
             if (Columns != null)
             {
@@ -143,7 +140,7 @@ namespace Mix.Lib.ViewModels
             if (item.Type == MixDatabaseRelationshipType.OneToMany)
             {
                 var referenceColumnName = fieldNameService.GetParentId(item.SourceDatabaseName);
-                
+
                 if (!Context.MixDatabaseColumn.Any(m => m.MixDatabaseName == item.DestinateDatabaseName && m.SystemName == referenceColumnName))
                 {
                     var srcDb = Context.MixDatabase.FirstOrDefault(m => m.SystemName == item.SourceDatabaseName);
@@ -152,7 +149,7 @@ namespace Mix.Lib.ViewModels
                     {
                         MixDatabaseName = item.DestinateDatabaseName,
                         MixDatabaseId = destDb.Id,
-                        DataType = MixDataType.Reference,
+                        DataType = srcDb.Type == MixDatabaseType.GuidService ? MixDataType.Guid : MixDataType.Integer,
                         CreatedBy = CreatedBy,
                         DisplayName = item.ReferenceColumnName.ToTitleCase(),
                         SystemName = referenceColumnName

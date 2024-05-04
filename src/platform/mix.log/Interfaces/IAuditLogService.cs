@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Mix.Log.Lib.Models;
-using Newtonsoft.Json.Linq;
+﻿using Mix.Log.Lib.Models;
 
 namespace Mix.Log.Lib.Interfaces
 {

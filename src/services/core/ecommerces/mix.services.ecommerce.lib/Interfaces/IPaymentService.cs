@@ -1,5 +1,4 @@
 ﻿using Mix.Services.Ecommerce.Lib.Enums;
-using Mix.Services.Ecommerce.Lib.Models.Onepay;
 using Mix.Services.Ecommerce.Lib.ViewModels;
 using Newtonsoft.Json.Linq;
 

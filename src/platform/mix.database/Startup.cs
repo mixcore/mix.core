@@ -1,5 +1,4 @@
 ﻿using Mix.Database.Entities.Account;
-using Mix.Database.Entities.AuditLog;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

@@ -1,17 +1,13 @@
-﻿using Google.Api;
-using Microsoft.AspNetCore.Http.Features;
+﻿using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Auth.Constants;
 using Mix.Constant.Constants;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
-using Mix.Heart.Helpers;
 using Mix.Lib.Interfaces;
-using Mix.Signalr.Hub.Models;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
-using System.Security.Claims;
 
 namespace Mix.SignalR.Hubs
 {
@@ -109,7 +105,7 @@ namespace Mix.SignalR.Hubs
             }
             catch (Exception ex)
             {
-                throw new MixException(Heart.Enums.MixErrorStatus.ServerError, ex);
+                throw new MixException(MixErrorStatus.ServerError, ex);
             }
 
         }
@@ -138,15 +134,16 @@ namespace Mix.SignalR.Hubs
             }
         }
 
-
         protected HubUserModel GetCurrentUser()
         {
+            var userContext = Context.User;
             return new()
             {
                 TenantId = TenantId,
                 ConnectionId = Context.ConnectionId,
-                Username = Context.User?.Identity?.Name ?? "Annonymous",
-                Avatar = Context.User?.Claims.FirstOrDefault(m => m.Type == MixClaims.Avatar)?.Value ?? MixConstants.CONST_DEFAULT_EXTENSIONS_FILE_PATH,
+                Username = userContext?.Identity?.Name ?? "Anonymous",
+                Avatar = userContext?.Claims.FirstOrDefault(m => m.Type == MixClaims.Avatar)?.Value ?? MixConstants.CONST_DEFAULT_EXTENSIONS_FILE_PATH,
+                Role = userContext?.Claims.FirstOrDefault(m => m.Type == MixClaims.Role)?.Value,
             };
         }
         #endregion

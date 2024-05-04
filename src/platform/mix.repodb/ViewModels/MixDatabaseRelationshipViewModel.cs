@@ -1,6 +1,5 @@
 ﻿using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
-using Mix.Heart.Extensions;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Mix.Shared.Helpers;
@@ -64,53 +63,6 @@ namespace Mix.RepoDb.ViewModels
             }
 
             await base.Validate(cancellationToken);
-        }
-
-        protected override async Task SaveEntityRelationshipAsync(MixDatabaseRelationship parentEntity, CancellationToken cancellationToken = default)
-        {
-            string parentColIdName = $"{SourceDatabaseName.ToTitleCase()}Id";
-            if (!Context.MixDatabaseColumn.Any(m => m.MixDatabaseName == DestinateDatabaseName && m.SystemName == parentColIdName))
-            {
-                var destDb = Context.MixDatabase.FirstOrDefault(m => m.SystemName == DestinateDatabaseName);
-
-                if (destDb is null)
-                {
-                    return;
-                }
-
-                var refCol = new RepoDbMixDatabaseColumnViewModel(UowInfo)
-                {
-                    MixDatabaseName = DestinateDatabaseName,
-                    MixDatabaseId = destDb.Id,
-                    DataType = MixDataType.Reference,
-                    CreatedBy = CreatedBy,
-                    DisplayName = parentColIdName.ToTitleCase(),
-                    SystemName = parentColIdName
-                };
-
-                await refCol.SaveAsync(cancellationToken);
-                ModifiedEntities.AddRange(refCol.ModifiedEntities);
-            }
-        }
-
-        protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
-        {
-            var leftDb = await Context.MixDatabase.FindAsync(new object?[] { ParentId }, cancellationToken: cancellationToken);
-            var rightDb = await Context.MixDatabase.FindAsync(new object?[] { ChildId }, cancellationToken: cancellationToken);
-            if (leftDb is null || rightDb is null)
-            {
-                return;
-            }
-
-            string leftColName = $"{leftDb.SystemName}Id";
-            string rightColName = $"{rightDb.SystemName}Id";
-            await RepoDbMixDatabaseColumnViewModel.GetRepository(UowInfo, CacheService)
-                .DeleteManyAsync(m =>
-                (m.MixDatabaseId == ParentId && m.SystemName == rightColName)
-                || (m.MixDatabaseId == ChildId && m.SystemName == leftColName),
-                cancellationToken);
-
-            await base.DeleteHandlerAsync(cancellationToken);
         }
 
         #endregion

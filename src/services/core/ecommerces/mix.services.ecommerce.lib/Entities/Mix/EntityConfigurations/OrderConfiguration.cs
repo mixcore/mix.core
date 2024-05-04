@@ -6,7 +6,6 @@ using Mix.Database.Services;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Payments.Lib.Constants;
 using Newtonsoft.Json.Linq;
-using Quartz;
 
 namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
 {

@@ -6,8 +6,6 @@
  of this license document, but changing it is not allowed.
  */
 
-using System.Collections.Generic;
-
 namespace Mix.Auth.Common
 {
     public class OAuth2ServerHelpers

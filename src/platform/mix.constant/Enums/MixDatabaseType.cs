@@ -4,6 +4,7 @@
     {
         System,
         Service,
+        GuidService,
         AdditionalData,
         GuidAdditionalData,
         Association

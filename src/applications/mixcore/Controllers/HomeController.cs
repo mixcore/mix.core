@@ -2,7 +2,6 @@
 using Mix.Database.Services;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Extensions;
-using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;

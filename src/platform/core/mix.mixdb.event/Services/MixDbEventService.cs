@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.Amqp.Framing;
-using Microsoft.CodeAnalysis.Elfie.Serialization;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Constant.Constants;
 using Mix.Database.Constants;
@@ -9,11 +6,8 @@ using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
 using Mix.Heart.Extensions;
 using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
 
 using Mix.Mixdb.Event.ViewModels;
-using Mix.Queue.Models;
-using Mix.RepoDb.Services;
 using Mix.Service.Commands;
 using Mix.Service.Services;
 using Mix.Shared.Models;
@@ -23,12 +17,6 @@ using Mix.SignalR.Enums;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace Mix.Mixdb.Event.Services
 {
@@ -75,7 +63,7 @@ namespace Mix.Mixdb.Event.Services
                 }
                 catch (Exception ex)
                 {
-
+                    MixLogService.LogExceptionAsync(ex);
                 }
             }
         }
@@ -85,7 +73,11 @@ namespace Mix.Mixdb.Event.Services
             using (var serviceScope = ServicesProvider.CreateScope())
             {
                 var _cacheService = serviceScope.ServiceProvider.GetRequiredService<MixCacheService>();
-                await _cacheService.RemoveCacheAsync(model.Data.Value<string>("Id"), $"{MixFolders.MixDbCacheFolder}/{model.MixDbName}");
+                if (model.Data != null)
+                {
+                    var id = model.Data.GetValue("id", StringComparison.OrdinalIgnoreCase)?.Value<string>();
+                    await _cacheService.RemoveCacheAsync(id, $"{MixFolders.MixDbCacheFolder}/{model.MixDbName}");
+                }
                 if (model.MixDbName == MixDatabaseNames.SYSTEM_PERMISSION || model.MixDbName == MixDatabaseNames.SYSTEM_PERMISSION_ENDPOINT)
                 {
                     await _mixPermissionService.Reload();

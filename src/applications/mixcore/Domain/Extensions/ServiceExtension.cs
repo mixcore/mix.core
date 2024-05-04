@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             string notStartWithPattern = "regex(^(?!(mix-app|graph|app|init|page|post|security|portal|api|vue|error|swagger|graphql|ReDoc|OpenAPI|.+Hub))(.+)$)";
             //string urlPathPattern = @"regex((([A-z0-9\-\%]+\/)*[A-z0-9\-\%]+$)?)";
-            
+
             routes.MapDynamicControllerRoute<MixSEORouteTransformer>(
                 pattern: "{seoName:" + notStartWithPattern + "}");
             routes.MapDynamicControllerRoute<MixSEORouteTransformer>(

@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Mix.Shared.Models.Configurations;
-using System.Configuration;
 using System.Globalization;
 using System.Net;
 using System.Threading.RateLimiting;
@@ -78,7 +76,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     return RateLimitPartition.GetNoLimiter(IPAddress.Loopback);
                 });
             });
-            
+
             return services;
         }
         static string GetUserEndPoint(HttpContext context) =>

@@ -1,5 +1,4 @@
 ﻿using Mix.Shared.Models;
-using Newtonsoft.Json;
 
 namespace Mix.Lib.ViewModels
 {
@@ -30,7 +29,7 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixDatabaseColumnViewModel(MixDatabaseColumn entity, UnitOfWorkInfo uowInfo) 
+        public MixDatabaseColumnViewModel(MixDatabaseColumn entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

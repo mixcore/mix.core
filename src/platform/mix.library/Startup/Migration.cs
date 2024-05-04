@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Mix.Database.Services;
-using Mix.RepoDb.Interfaces;
-using Mix.RepoDb.Services;
+﻿using Mix.Database.Services;
 using Mix.Shared.Models.Configurations;
 
 namespace Microsoft.Extensions.DependencyInjection

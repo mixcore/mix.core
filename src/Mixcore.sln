@@ -109,9 +109,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.auth", "platform\mix.au
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mixcore", "applications\mixcore\mixcore.csproj", "{BEFA0F34-2594-4E77-88A9-4DF2B535343A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mixcore.host.aspire.AppHost", "applications\mixcore.host.aspire\mixcore.host.aspire.AppHost\mixcore.host.aspire.AppHost.csproj", "{803BBEFE-A5AF-4C43-87FC-DA9132F18498}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mixcore.host.aspire.AppHost", "applications\mixcore.host.aspire.AppHost\mixcore.host.aspire.AppHost.csproj", "{803BBEFE-A5AF-4C43-87FC-DA9132F18498}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mixcore.host.aspire.ServiceDefaults", "applications\mixcore.host.aspire\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj", "{3BADD396-E830-468B-B2D8-A52FD5E6C6BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mixcore.host.aspire.ServiceDefaults", "applications\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj", "{3BADD396-E830-468B-B2D8-A52FD5E6C6BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mixcore.gateway", "applications\mixcore.gateway\mixcore.gateway.csproj", "{5FA252B6-6FDA-451E-BE5E-F6D82EDE9AB1}"
 EndProject
@@ -121,9 +121,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mix-message-queue", "mix-me
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mix-auth-service", "mix-auth-service", "{EC933357-1D95-4CDD-B290-7A5984FC1AA2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.mq.server", "services\mix-message-queue\mix.mq.server\mix.mq.server.csproj", "{7C5101F3-E3E6-42DB-8585-D08C2BE5E30C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.mq.server", "services\core\mix-message-queue\mix.mq.server\mix.mq.server.csproj", "{7C5101F3-E3E6-42DB-8585-D08C2BE5E30C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.auth.api", "services\mix-auth-service\mix.auth.api\mix.auth.api.csproj", "{9C04921A-38D5-4EC9-8FF5-0E0D74681049}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.auth.api", "services\core\mix-auth-service\mix.auth.api\mix.auth.api.csproj", "{9C04921A-38D5-4EC9-8FF5-0E0D74681049}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -348,8 +348,8 @@ Global
 		{3BADD396-E830-468B-B2D8-A52FD5E6C6BD} = {4E880812-C336-4EB2-9FED-2E437957F50A}
 		{5FA252B6-6FDA-451E-BE5E-F6D82EDE9AB1} = {4E880812-C336-4EB2-9FED-2E437957F50A}
 		{F5D4C70F-DD2E-4EC9-A191-56A717B1B5EE} = {B4C40E02-E06A-4359-BDC5-349E103366AD}
-		{C93898B7-2001-4C29-9BBE-33A2E61C350A} = {C0A05428-767E-46C5-A31F-0D220E41F7C5}
-		{EC933357-1D95-4CDD-B290-7A5984FC1AA2} = {C0A05428-767E-46C5-A31F-0D220E41F7C5}
+		{C93898B7-2001-4C29-9BBE-33A2E61C350A} = {7C9FFA1B-D992-4E3F-B2B1-74D86E81512D}
+		{EC933357-1D95-4CDD-B290-7A5984FC1AA2} = {7C9FFA1B-D992-4E3F-B2B1-74D86E81512D}
 		{7C5101F3-E3E6-42DB-8585-D08C2BE5E30C} = {C93898B7-2001-4C29-9BBE-33A2E61C350A}
 		{9C04921A-38D5-4EC9-8FF5-0E0D74681049} = {EC933357-1D95-4CDD-B290-7A5984FC1AA2}
 	EndGlobalSection

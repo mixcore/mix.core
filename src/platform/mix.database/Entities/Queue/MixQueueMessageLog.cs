@@ -1,13 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Database.Entities.Queue
 {
-    public sealed class MixQueueMessageLog: EntityBase<Guid>
+    public sealed class MixQueueMessageLog : EntityBase<Guid>
     {
         public Guid? QueueMessageId { get; set; }
         public string TopicId { get; set; }

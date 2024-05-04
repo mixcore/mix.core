@@ -1,5 +1,4 @@
 ﻿using Mix.Constant.Enums;
-using Mix.Database.Entities.MixDb;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Newtonsoft.Json.Linq;

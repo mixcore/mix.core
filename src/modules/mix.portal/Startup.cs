@@ -23,6 +23,7 @@ namespace Mix.Portal
             services.AddMixLog(Configuration);
             // Must app Auth config after Add mixservice to init App config 
             services.AddMixAuthorize<MixCmsAccountContext>(Configuration);
+            services.AddScoped<MixIdentityService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

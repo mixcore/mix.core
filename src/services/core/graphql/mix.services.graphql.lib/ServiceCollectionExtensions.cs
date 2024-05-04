@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Constant.Constants;
 using Mix.Database.Services;
 using Mix.Mixdb.Services;
 using Mix.Services.Graphql.Lib.Entities;
@@ -28,8 +29,10 @@ namespace Mix.Services.Graphql.Lib
             services.TryAddSingleton<ITableNameLookup, TableNameLookup>();
             services.TryAddSingleton<ISchema>((resolver) =>
             {
+                string mixdbCnn = dbService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
                 var runtimeDbContextService = resolver.GetRequiredService<RuntimeDbContextService>();
-                var dbContext = runtimeDbContextService.GetMixDatabaseDbContext()!;
+                runtimeDbContextService.LoadDbContextAssembly(mixdbCnn);
+                var dbContext = runtimeDbContextService.GetMixDatabaseDbContext(mixdbCnn)!;
                 var tableNameLookup = resolver.GetRequiredService<ITableNameLookup>();
                 DatabaseMetadata metaDatabase = new(dbContext, tableNameLookup);
                 var schema = new Schema { Query = new GraphQLQuery(dbContext, metaDatabase, tableNameLookup) };

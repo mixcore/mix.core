@@ -1,5 +1,4 @@
 ﻿using Mix.Lib.Interfaces;
-using Mix.Service.Interfaces;
 
 namespace Mix.SignalR.Hubs
 {

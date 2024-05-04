@@ -2,7 +2,6 @@
 using Mix.Database.Entities.Base;
 using Mix.Lib.Interfaces;
 using Mix.Portal.Domain.Interfaces;
-using System.Linq.Expressions;
 
 namespace Mix.Portal.Domain.Services
 {

@@ -2,7 +2,6 @@
 using Mix.Heart.ViewModel;
 using Mix.Services.Ecommerce.Lib.Entities.Paypal;
 using Mix.Services.Ecommerce.Lib.Enums;
-using Mix.Services.Ecommerce.Lib.Models.Paypal;
 using Newtonsoft.Json.Linq;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels.Paypal

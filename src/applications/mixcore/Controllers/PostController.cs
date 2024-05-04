@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
-using Mix.Lib.Interfaces;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
@@ -93,7 +92,7 @@ namespace Mixcore.Controllers
                 return NotFound();
             }
             await post.LoadAdditionalDataAsync(_mixDbDataService, _metadataService, _cacheService);
-            
+
             ViewData["Title"] = post.SeoTitle;
             ViewData["Description"] = post.SeoDescription;
             ViewData["Keywords"] = post.SeoKeywords;

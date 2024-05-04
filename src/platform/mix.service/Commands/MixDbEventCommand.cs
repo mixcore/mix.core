@@ -1,7 +1,4 @@
-﻿using Mix.Heart.Helpers;
-using Mix.Service.Models;
-using Mix.Shared.Models;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 
 namespace Mix.Service.Commands
 {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mix.Mq.Lib.Models;
+﻿using Mix.Mq.Lib.Models;
 
 namespace Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers
 {

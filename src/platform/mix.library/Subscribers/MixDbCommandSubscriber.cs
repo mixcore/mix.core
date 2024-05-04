@@ -1,19 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
-using Mix.Communicator.Models;
-using Mix.Communicator.Services;
 using Mix.Database.Entities.MixDb;
-using Mix.Mixdb.Event.Services;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
-using Mix.Queue.Engines.MixQueue;
 using Mix.RepoDb.Interfaces;
-using Mix.Service.Commands;
-using Mix.Service.Interfaces;
 using Mix.SignalR.Enums;
-using Mix.SignalR.Hubs;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
 
@@ -21,6 +13,7 @@ namespace Mix.Lib.Subscribers
 {
     public class MixDbCommandSubscriber : SubscriberBase
     {
+        private readonly string[] _allowActions;
         private const string TopicId = MixQueueTopics.MixDbCommand;
 
         public MixDbCommandSubscriber(
@@ -31,17 +24,24 @@ namespace Mix.Lib.Subscribers
             IPooledObjectPolicy<RabbitMQ.Client.IModel> rabbitMqObjectPolicy = null)
             : base(TopicId, nameof(MixDbCommandSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMqObjectPolicy)
         {
+            _allowActions = [.. Enum.GetNames(typeof(MixDbCommandQueueAction))];
         }
 
         public override async Task Handler(MessageQueueModel model)
         {
+            if (!_allowActions.Contains(model.Action))
+            {
+                return;
+            }
+
             IMixDbDataService mixDbDataService = GetRequiredService<IMixDbDataService>();
             IMixDbCommandHubClientService mixDbCommandHub = GetRequiredService<IMixDbCommandHubClientService>();
             UnitOfWorkInfo<MixDbDbContext> uow = GetRequiredService<UnitOfWorkInfo<MixDbDbContext>>();
             mixDbDataService.SetUOW(uow);
-            switch (model.Action)
+            Enum.TryParse(model.Action, out MixDbCommandQueueAction action);
+            switch (action)
             {
-                case MixDbCommandQueueActions.Create:
+                case MixDbCommandQueueAction.Create:
                     var cmd = model.ParseData<MixDbCommandModel>();
                     if (cmd != null)
                     {
@@ -53,7 +53,7 @@ namespace Mix.Lib.Subscribers
                         }
                     }
                     break;
-                case MixDbCommandQueueActions.Update:
+                case MixDbCommandQueueAction.Update:
                     var updCmd = model.ParseData<MixDbCommandModel>();
                     if (updCmd != null)
                     {

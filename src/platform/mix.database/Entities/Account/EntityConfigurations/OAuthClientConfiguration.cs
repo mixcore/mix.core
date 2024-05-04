@@ -20,7 +20,7 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
                .HasConversion(new EnumToStringConverter<ApplicationType>())
                .HasColumnType($"{Config.String}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
-            
+
             builder.Property(e => e.Name)
                 .IsRequired()
                 .HasCharSet(Config.CharSet)
@@ -48,7 +48,7 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
                 .HasConversion(
                     v => JArray.FromObject(v).ToString(Newtonsoft.Json.Formatting.None),
                     v => JArray.Parse(v ?? "[]").ToObject<List<string>>());
-            
+
             builder.Property(e => e.AllowedScopes)
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation)
@@ -61,7 +61,7 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
-            
+
             builder.Property(e => e.RedirectUris)
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation)

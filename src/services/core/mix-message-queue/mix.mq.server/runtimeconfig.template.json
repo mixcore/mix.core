@@ -1,0 +1,12 @@
+{
+    "configProperties": {
+      "System.GC.RetainVM": false,
+      "System.GC.NoAffinitize": false,
+      "System.GC.ConserveMemory": 5,
+      "System.GC.Server": false,
+      "System.GC.Concurrent": true,
+      "System.GC.HeapCount": 12,
+      "System.Threading.Thread.EnableAutoreleasePool": true
+    }
+  }
+  

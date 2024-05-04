@@ -1,10 +1,5 @@
 ﻿using GraphQL;
 using GraphQL.Resolvers;
-using GraphQL.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Mix.Heart.Extensions;
 
 namespace Mix.Services.Graphql.Lib.Resolvers

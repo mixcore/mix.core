@@ -1,7 +1,4 @@
-﻿using FirebaseAdmin.Auth.Multitenancy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Elfie.Diagnostics;
-using Mix.Database.Entities.AuditLog;
+﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.SignalR.Interfaces;

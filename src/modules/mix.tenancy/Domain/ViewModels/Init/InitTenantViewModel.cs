@@ -1,4 +1,3 @@
-using Mix.Lib.Services;
 using Mix.Tenancy.Domain.Dtos;
 
 namespace Mix.Tenancy.Domain.ViewModels.Init

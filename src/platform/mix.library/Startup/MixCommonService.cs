@@ -4,11 +4,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Communicator.Services;
 using Mix.Database.Services;
 using Mix.Lib.Interfaces;
-using Mix.Lib.Publishers;
 using Mix.Lib.Services;
-using Mix.Lib.Subscribers;
 using Mix.SignalR.Interfaces;
-using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -27,13 +24,13 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<AuthConfigService>();
             services.TryAddScoped<SmtpConfigService>();
             services.TryAddScoped<IPSecurityConfigService>();
-            
+
             services.TryAddSingleton<MixPermissionService>();
             services.TryAddScoped<TranslatorService>();
-            
+
             services.TryAddScoped<EmailService>();
             services.TryAddScoped<IMixEdmService, MixEdmService>();
-            
+
             return services;
         }
     }

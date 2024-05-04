@@ -1,10 +1,7 @@
 ﻿using Mix.Heart.Helpers;
 using Mix.RepoDb.Interfaces;
-using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Services.Databases.Lib.Models;
-using RepoDb;
-using RepoDb.Enumerations;
 
 namespace Mixcore.Domain.ViewModels
 {

@@ -14,10 +14,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\modules\mix.messenger\mix.messenger.csproj" />
-		<ProjectReference Include="..\..\services\mix-auth-service\mix.auth.api\mix.auth.api.csproj" />
-		<ProjectReference Include="..\..\services\mix-message-queue\mix.mq.server\mix.mq.server.csproj" />
-		<ProjectReference Include="..\mixcore.host.aspire\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
+		<ProjectReference Include="..\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
 		<ProjectReference Include="..\..\modules\mix.grpc\mix.grpc.csproj" />
 		<ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
@@ -59,18 +56,21 @@
 		<Using Include="Mix.Lib.Interfaces" />
 	</ItemGroup>
 	<ItemGroup>
+		<Compile Remove="logs\**" />
+	</ItemGroup>
+	<ItemGroup>
 	  <None Remove="Domain\Protos\mixmq.proto" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.0" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
+	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.4" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
+	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Grpc.AspNetCore" Version="2.59.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.62.0" />
 		<Protobuf Include="Domain\Protos\mixmq.proto" GrpcServices="Client" />
 	</ItemGroup>
 	<ItemGroup>
@@ -88,9 +88,6 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-	  </Content>
-	  <Content Update="wwwroot\default-mixcontent\shared\appconfigs\ocelot.Development.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>
 	<ItemGroup>

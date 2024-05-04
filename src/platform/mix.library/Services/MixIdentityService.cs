@@ -169,7 +169,7 @@ namespace Mix.Lib.Services
             {
                 throw;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new MixException(MixErrorStatus.ServerError, ex);
             }
@@ -534,7 +534,7 @@ namespace Mix.Lib.Services
             return parsedToken;
         }
 
-        public async Task<string> GenerateTokenAsync(
+        public virtual async Task<string> GenerateTokenAsync(
             MixUser user,
             JObject info,
             DateTime expires,

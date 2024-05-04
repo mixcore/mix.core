@@ -1,30 +1,21 @@
-﻿using Mix.Database.Entities.AuditLog.EntityConfigurations;
-using Mix.Heart.Services;
+﻿using Mix.Database.Services;
 
 namespace Mix.Database.Entities.AuditLog
 {
-    public class AuditLogDbContext : DbContext
+    public class AuditLogDbContext : BaseDbContext
     {
-        private string _folder = DateTime.UtcNow.ToString("MM_yyyy");
-        private string _cnn;
-        public AuditLogDbContext()
+        public AuditLogDbContext(DatabaseService databaseService) : base(databaseService, MixConstants.CONST_AUDIT_LOG_CONNECTION)
         {
-            _cnn = $"Data Source={MixFolders.MixAuditLogFolder}/{_folder}/auditlog_{DateTime.Now.ToString("dd_MM_yyyy")}.sqlite";
         }
-        public AuditLogDbContext(DateTime date)
+
+        public AuditLogDbContext(DatabaseService databaseService, string connectionStringName) : base(databaseService, connectionStringName)
         {
-            _folder = date.ToString("MM_yyyy");
-            _cnn = $"Data Source={MixFolders.MixAuditLogFolder}/{_folder}/auditlog_{date.ToString("dd_MM_yyyy")}.sqlite";
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        public AuditLogDbContext(string connectionString, MixDatabaseProvider databaseProvider) : base(connectionString, databaseProvider)
         {
-            MixFileHelper.CreateFolderIfNotExist($"{MixFolders.MixAuditLogFolder}/{_folder}");
-            optionsBuilder.UseSqlite(_cnn);
         }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfiguration(new AuditLogConfiguration());
-        }
+
         public virtual DbSet<AuditLog> AuditLog { get; set; }
 
     }

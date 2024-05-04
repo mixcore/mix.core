@@ -16,7 +16,7 @@ namespace Mix.Database.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.1");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.9");
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixApplication", b =>
                 {
@@ -657,11 +657,6 @@ namespace Mix.Database.Migrations
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
-
-                    b.Property<string>("NamingConvention")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
                         .HasColumnType("integer");

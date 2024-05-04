@@ -1,20 +1,13 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using Humanizer;
-using Microsoft.AspNetCore.SignalR;
-using Mix.Auth.Constants;
+﻿using Microsoft.AspNetCore.SignalR;
 using Mix.Heart.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.Portal.Domain.Interfaces;
 using Mix.Shared.Helpers;
-using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
-using System.Configuration;
-using System.IO.Packaging;
 using System.Text.RegularExpressions;
-using static NuGet.Packaging.PackagingConstants;
 
 namespace Mix.Portal.Domain.Services
 {
@@ -88,10 +81,10 @@ namespace Mix.Portal.Domain.Services
                 string deployUrl = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{name}";
                 string package = await DownloadPackage(name, app.PackageFilePath, deployUrl);
                 MixFileHelper.UnZipFile(package, deployUrl);
-                
+
                 await ImportSchema($"{deployUrl}/schema", cancellationToken);
                 await SaveTemplate(app.TemplateId, name, deployUrl, app.BaseHref);
-                
+
                 packages.Add(package);
                 app.AppSettings["activePackage"] = package;
                 app.AppSettings["packages"] = packages;
@@ -126,10 +119,10 @@ namespace Mix.Portal.Domain.Services
                 MixFileHelper.UnZipFile(dto.PackageFilePath, deployUrl);
 
                 _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Extract Package {dto.PackageFilePath} Successfully");
-                
+
                 await ImportSchema($"{deployUrl}/schema", cancellationToken);
                 await SaveTemplate(app.TemplateId, name, deployUrl, app.BaseHref);
-                
+
                 app.AppSettings["activePackage"] = dto.PackageFilePath;
 
                 await app.SaveAsync(cancellationToken);
@@ -313,7 +306,7 @@ namespace Mix.Portal.Domain.Services
             }
         }
 
-        
+
 
         #region Helpers
         public async Task AlertAsync<T>(IClientProxy clients, string action, int status, T message)

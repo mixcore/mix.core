@@ -17,7 +17,6 @@ using Mix.Identity.Interfaces;
 using Mix.Identity.Services;
 using Mix.Lib.Services;
 using Mix.Shared.Models.Configurations;
-using System.Reflection;
 using System.Text;
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -27,15 +26,25 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMixAuthorize<TDbContext>(this IServiceCollection services, IConfiguration configuration)
             where TDbContext : DbContext
         {
-            AuthConfigService authConfigService = services.GetService<AuthConfigService>();
             var _globalConfig = configuration.Get<GlobalSettingsModel>()!;
+            var authConfigService = services.GetService<AuthConfigService>();
             if (_globalConfig.IsInit)
             {
                 authConfigService.AppSettings.SecretKey = Guid.NewGuid().ToString("N");
                 authConfigService.SaveSettings();
             }
+            services.AddMixIdentityConfigurations<TDbContext>(configuration);
 
-            var authConfigurations = authConfigService.AppSettings;
+            services.AddMixIdentityServices();
+            return services;
+        }
+
+        public static IServiceCollection AddMixIdentityConfigurations<TDbContext>(this IServiceCollection services, IConfiguration configuration)
+            where TDbContext : DbContext
+        {
+
+
+            var authConfigurations = configuration.GetSection(MixAppSettingsSection.Authentication).Get<MixAuthenticationConfigurations>();
             PasswordOptions pOpt = new()
             {
                 RequireDigit = false,
@@ -116,16 +125,20 @@ namespace Microsoft.Extensions.DependencyInjection
             //    options.SlidingExpiration = true;
             //});
             // Firebase service must be singleton (only one firebase default instance)
+
+            services.TryAddSingleton<IOAuthClientService, OAuthClientService>();
+            services.TryAddSingleton<IOAuthCodeStoreService, OAuthCodeStoreService>();
+            services.TryAddScoped<IOAuthTokenService, OAuthTokenService>();
+            services.TryAddScoped<IOAuthTokenRevocationService, OAuthTokenRevocationService>();
+            return services;
+        }
+
+        public static IServiceCollection AddMixIdentityServices(this IServiceCollection services)
+        {
             services.TryAddSingleton<FirebaseService>();
             services.TryAddScoped<MixDbDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<MixDbDbContext>>();
-            services.AddSingleton<IOAuthClientService, OAuthClientService>();
-            services.AddSingleton<IOAuthCodeStoreService, OAuthCodeStoreService>();
-            services.AddScoped<IOAuthTokenService, OAuthTokenService>();
-            services.AddScoped<IOAuthTokenRevocationService, OAuthTokenRevocationService>();
-            services.AddScoped<MixIdentityService>();
-
-           
+            services.TryAddScoped<MixIdentityService>();
             return services;
         }
 

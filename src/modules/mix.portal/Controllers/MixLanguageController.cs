@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Auth.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.SignalR.Interfaces;
@@ -14,8 +13,8 @@ namespace Mix.Portal.Controllers
     {
         public MixLanguageController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> uow, IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
-            IMixTenantService mixTenantService) 
-            : base(httpContextAccessor, configuration, 
+            IMixTenantService mixTenantService)
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
 

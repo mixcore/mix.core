@@ -1,5 +1,4 @@
-﻿using Mix.Services.Ecommerce.Lib.Interfaces;
-using Mix.Services.Ecommerce.Lib.ViewModels;
+﻿using Mix.Services.Ecommerce.Lib.ViewModels;
 using Newtonsoft.Json.Linq;
 
 namespace Mix.Services.Ecommerce.Lib.Models.Paypal
@@ -26,7 +25,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
     {
         public PaypalRequestPurchaseUnit()
         {
-            
+
         }
         public PaypalRequestPurchaseUnit(OrderViewModel order)
         {
@@ -62,7 +61,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
     {
         public ResponsePurchaseUnit()
         {
-            
+
         }
         public string reference_id { get; set; }
         public PaypalShipping shipping { get; set; }
@@ -79,7 +78,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
     {
         public SellerReceivableBreakdown()
         {
-            
+
         }
         public PaypalAmount gross_amount { get; set; }
         public PaypalAmount paypal_fee { get; set; }
@@ -101,7 +100,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
     {
         public PaypalLink()
         {
-            
+
         }
         public string rel { get; set; }
         public string method { get; set; }
@@ -112,7 +111,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
     {
         public PurchaseItem()
         {
-            
+
         }
         public PurchaseItem(OrderItemViewModel item)
         {
@@ -132,7 +131,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
     {
         public PaypalAmount()
         {
-            
+
         }
         public PaypalAmount(OrderViewModel order)
         {
@@ -149,7 +148,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
     {
         public Payee()
         {
-            
+
         }
         public string merchant_id { get; set; }
         public string email_address { get; set; }
@@ -159,7 +158,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
     {
         public Breakdown()
         {
-            
+
         }
         public Breakdown(OrderViewModel order)
         {
@@ -184,7 +183,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
         }
         public UnitAmount()
         {
-            
+
         }
         public UnitAmount(string currency, double? total)
         {
@@ -200,7 +199,7 @@ namespace Mix.Services.Ecommerce.Lib.Models.Paypal
     {
         public RedirecUrls()
         {
-            
+
         }
         public RedirecUrls(string returnUrl, string cancelUrl)
         {

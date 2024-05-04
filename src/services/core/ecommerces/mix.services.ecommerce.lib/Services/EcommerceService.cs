@@ -1,23 +1,23 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Mix.Constant.Constants;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
+using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Dtos;
+using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Enums;
+using Mix.Services.Ecommerce.Lib.Interfaces;
+using Mix.Services.Ecommerce.Lib.Models;
 using Mix.Services.Ecommerce.Lib.Providers;
 using Mix.Services.Ecommerce.Lib.ViewModels;
-using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Newtonsoft.Json.Linq;
 using System.Security.Claims;
-using Mix.Services.Ecommerce.Lib.Models;
-using Mix.Constant.Constants;
-using Microsoft.Extensions.Configuration;
-using Mix.Service.Services;
-using Mix.Services.Ecommerce.Lib.Interfaces;
-using Mix.Lib.Interfaces;
-using Mix.Heart.Services;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
@@ -117,7 +117,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                     await LogAction(orderId, OrderTrackingAction.PAID);
                     break;
                 case OrderStatus.SHIPPING:
-                    if (order.PaymentStatus != PaymentStatus.SUCCESS)
+                    if (order.PaymentStatus != PaymentStatus.Success)
                     {
                         throw new MixException(MixErrorStatus.Badrequest, "Cannot ship unpaid order");
                     }
@@ -336,7 +336,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 throw new MixException(MixErrorStatus.ServerError, $"Not Implement {order.PaymentGateway} payment");
             }
 
-            if (order.PaymentStatus != PaymentStatus.SUCCESS && order.PaymentStatus != PaymentStatus.FAILED)
+            if (order.PaymentStatus != PaymentStatus.Success && order.PaymentStatus != PaymentStatus.Failed)
             {
                 order.PaymentResponse = paymentResponse;
                 order.PaymentStatus = await paymentService.ProcessPaymentResponse(order, paymentResponse, cancellationToken);
@@ -344,7 +344,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             }
 
 
-            if (order.PaymentStatus == PaymentStatus.SUCCESS)
+            if (order.PaymentStatus == PaymentStatus.Success)
             {
                 order.OrderStatus = OrderStatus.PAID;
                 if (!string.IsNullOrEmpty(order.Email))

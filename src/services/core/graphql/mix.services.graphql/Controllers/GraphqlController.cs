@@ -4,10 +4,6 @@ using GraphQL.Transport;
 using GraphQL.Types;
 using GraphQL.Validation;
 using Microsoft.AspNetCore.Mvc;
-using Mix.Database.Entities.Cms;
-
-using Mix.Services.Graphql.Lib;
-using Mix.Services.Graphql.Lib.Models;
 
 namespace Mix.Services.Graphql.Controllers
 {

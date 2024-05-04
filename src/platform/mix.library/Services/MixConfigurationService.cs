@@ -12,9 +12,9 @@ namespace Mix.Lib.Services
         public List<MixConfigurationContentViewModel> Configs { get; set; }
 
         public MixConfigurationService(
-            IHttpContextAccessor httpContextAccessor, 
+            IHttpContextAccessor httpContextAccessor,
             DatabaseService databaseService, MixCacheService cacheService,
-            IMixTenantService mixTenantService) 
+            IMixTenantService mixTenantService)
             : base(httpContextAccessor, cacheService, mixTenantService)
         {
             _databaseService = databaseService;
@@ -80,7 +80,7 @@ namespace Mix.Lib.Services
                 await Reload();
             }
             var config = Configs.FirstOrDefault(m => m.Specificulture == culture && m.SystemName == name);
-            return config != null ? config.GetValue<T>(): defaultValue;
+            return config != null ? config.GetValue<T>() : defaultValue;
         }
     }
 }

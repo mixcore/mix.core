@@ -1,19 +1,16 @@
-﻿using Mix.Mq.Lib.Models;
+﻿using Microsoft.Extensions.ObjectPool;
+using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using RabbitMQ.Client;
-using Mix.Queue.Models.QueueSetting;
-using System;
-using System.Threading.Channels;
-using System.Text;
-using Microsoft.Extensions.ObjectPool;
-using Google.Api;
 using Newtonsoft.Json;
+using RabbitMQ.Client;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Mix.Queue.Engines.RabitMQ
 {
-    public class RabitMQPublisher<T> : IQueuePublisher<T> 
+    public class RabitMQPublisher<T> : IQueuePublisher<T>
         where T : MessageQueueModel
     {
         private DefaultObjectPool<IModel> _objectPool;

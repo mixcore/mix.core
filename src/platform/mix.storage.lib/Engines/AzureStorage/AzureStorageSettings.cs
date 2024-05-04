@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Mix.Storage.Lib.Engines.AzureStorage
+﻿namespace Mix.Storage.Lib.Engines.AzureStorage
 {
     public sealed class AzureStorageSettings
     {

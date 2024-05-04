@@ -1,18 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Heart.Extensions;
-using Mix.Heart.Helpers;
-using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using Mix.Mq.Lib.Models;
 using Mix.RepoDb.Interfaces;
-using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
-using Mix.Shared.Models;
 using Mix.SignalR.Interfaces;
 
 namespace Mixcore.Controllers
 {
-    [Route("api/v2/rest/mixcore/page-content")]
+    [Route("api/v2/rest/p4ps/page-content")]
     public sealed class PageContentApiController : MixQueryApiControllerBase<PageContentViewModel, MixCmsContext, MixPageContent, int>
     {
         private readonly IMixMetadataService _metadataService;

@@ -1,7 +1,6 @@
 ﻿using Mix.Heart.Helpers;
 using Mix.Lib.ViewModels.ReadOnly;
 using Mix.RepoDb.Interfaces;
-using Mix.RepoDb.Repositories;
 
 namespace Mixcore.Domain.ViewModels
 {

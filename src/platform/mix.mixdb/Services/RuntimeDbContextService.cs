@@ -14,10 +14,10 @@ using Microsoft.EntityFrameworkCore.SqlServer.Scaffolding.Internal;
 using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
-using Mix.Constant.Constants;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
+using Mix.Heart.Models;
 using Mix.Service.Services;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Diagnostics.Internal;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Scaffolding.Internal;
@@ -42,23 +42,22 @@ namespace Mix.Mixdb.Services
         {
             _httpContextAccessor = httpContextAccessor;
             _databaseService = databaseService;
-            LoadDbContextAssembly();
         }
 
-        public void Reload()
+        public void Reload(string cnnString)
         {
             _assemblyLoadContext.Unload();
-            LoadDbContextAssembly();
+            LoadDbContextAssembly(cnnString);
         }
 
         #region Create Dynamic Context
 
 
-        public void LoadDbContextAssembly()
+        public void LoadDbContextAssembly(string cnnString)
         {
-            if (!string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION)))
+            if (!string.IsNullOrEmpty(cnnString))
             {
-                var sourceFiles = CreateDynamicDbContext();
+                var sourceFiles = CreateDynamicDbContext(cnnString);
                 using var peStream = new MemoryStream();
                 var enableLazyLoading = false;
                 var result = GenerateCode(sourceFiles, enableLazyLoading).Emit(peStream);
@@ -80,13 +79,13 @@ namespace Mix.Mixdb.Services
             }
         }
 
-        public DbContext? GetMixDatabaseDbContext()
+        public DbContext? GetMixDatabaseDbContext(string cnnString)
         {
-            if (!string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION)))
+            if (!string.IsNullOrEmpty(cnnString))
             {
                 if (_assembly == null)
                 {
-                    LoadDbContextAssembly();
+                    LoadDbContextAssembly(cnnString);
                 }
                 if (_assembly != null)
                 {
@@ -102,9 +101,9 @@ namespace Mix.Mixdb.Services
             return default;
         }
 
-        public List<string> CreateDynamicDbContext()
+        public List<FileModel> CreateDynamicDbContext(string cnnString)
         {
-            var sourceFiles = new List<string>();
+            var sourceFiles = new List<FileModel>();
             using var _cmsContext = new MixCmsContext(_databaseService);
             var scaffolder = CreateScaffolder();
             var databaseNames = _cmsContext.MixDatabase.Select(m => m.SystemName.ToLower()).ToList();
@@ -126,11 +125,12 @@ namespace Mix.Mixdb.Services
                 ContextName = "DataContext",
                 ContextNamespace = "TypedDataContext.Context",
                 //ModelNamespace = "TypedDataContext.Models",
-                SuppressConnectionStringWarning = true
+                SuppressConnectionStringWarning = true,
+
             };
 
             var scaffoldedModelSources = scaffolder.ScaffoldModel(
-                _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION),
+                cnnString,
                 dbOpts,
                 modelOpts,
                 codeGenOpts);
@@ -142,13 +142,21 @@ namespace Mix.Mixdb.Services
                 {
                     ReplaceEntityNaming(item, ref contextFileCode);
                 }
-                sourceFiles.Add(item.Code);
+                sourceFiles.Add(new FileModel()
+                {
+                    Filename = item.Path,
+                    Content = item.Code
+                });
             }
             if (_databaseService.DatabaseProvider == MixDatabaseProvider.PostgreSQL)
             {
                 contextFileCode = $"using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;{contextFileCode}";
             }
-            sourceFiles.Add(contextFileCode);
+            sourceFiles.Add(new FileModel()
+            {
+                Filename = scaffoldedModelSources.ContextFile.Path,
+                Content = contextFileCode
+            });
             return sourceFiles;
         }
 
@@ -256,11 +264,11 @@ namespace Mix.Mixdb.Services
             return refs;
         }
 
-        public CSharpCompilation GenerateCode(List<string> sourceFiles, bool enableLazyLoading)
+        public CSharpCompilation GenerateCode(List<FileModel> sourceFiles, bool enableLazyLoading)
         {
             var options = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp11);
 
-            var parsedSyntaxTrees = sourceFiles.Select(f => SyntaxFactory.ParseSyntaxTree(f, options));
+            var parsedSyntaxTrees = sourceFiles.Select(f => SyntaxFactory.ParseSyntaxTree(f.Content, options));
 
             return CSharpCompilation.Create($"DataContext.dll",
                 parsedSyntaxTrees,

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Mix.Heart.Enums;
 
 namespace Mix.Shared.Dtos
 {
@@ -19,22 +20,35 @@ namespace Mix.Shared.Dtos
             OrderBy = req.OrderBy;
             Direction = req.Direction;
             Status = req.Status;
-
-            if (int.TryParse(request.Query[MixRequestQueryKeywords.ParentId], out int parentId))
-            {
-                ParentId = parentId;
-            }
-
-            if (Guid.TryParse(request.Query[MixRequestQueryKeywords.ParentId], out Guid guidParentId))
-            {
-                GuidParentId = guidParentId;
-            }
         }
 
         public List<SearchQueryField> Queries { get; set; } = new();
-        public int? ParentId { get; set; }
-        public MixDatabaseRelationshipType? RelationShip { get; set; } = MixDatabaseRelationshipType.OneToMany;
-        public Guid? GuidParentId { get; set; }
+        public string? ParentId { get; set; }
+        public object? ObjParentId => GetParentId();
+        public MixDatabaseRelationshipType? Relationship { get; set; } = MixDatabaseRelationshipType.OneToMany;
         public string ParentName { get; set; } = default;
+
+        private object? GetParentId()
+        {
+            try
+            {
+                if (Guid.TryParse(ParentId, out var guidId))
+                {
+                    return guidId;
+                }
+                else
+                {
+                    if (int.TryParse(ParentId, out var intId))
+                    {
+                        return intId;
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
+        }
     }
 }

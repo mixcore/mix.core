@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Account
 {
-    public partial class OAuthClient: EntityBase<Guid>
+    public partial class OAuthClient : EntityBase<Guid>
     {
         public string Name { get; set; }
         public ApplicationType ApplicationType { get; set; }

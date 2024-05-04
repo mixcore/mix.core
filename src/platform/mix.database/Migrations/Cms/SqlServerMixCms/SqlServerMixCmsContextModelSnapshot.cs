@@ -18,7 +18,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "7.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -678,11 +678,6 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
-
-                    b.Property<string>("NamingConvention")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");

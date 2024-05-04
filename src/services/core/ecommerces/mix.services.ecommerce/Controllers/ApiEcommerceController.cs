@@ -9,15 +9,11 @@ using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
-using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Dtos;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Ecommerce.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.Models;
 using Mix.Services.Ecommerce.Lib.ViewModels;
-using Mix.SignalR.Interfaces;
-using Mix.SignalR.Models;
-using MySqlX.XDevAPI.Common;
 using Newtonsoft.Json.Linq;
 using System.Web;
 

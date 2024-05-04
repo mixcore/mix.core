@@ -1,20 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.SignalR.Client;
-using Mix.Constant.Constants;
-using Mix.Service.Models;
-using Mix.Shared.Services;
+﻿using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Logging;
+using Mix.Heart.Extensions;
+using Mix.Heart.Helpers;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Enums;
-using Mix.SignalR.Models;
-using System;
-using System.Threading.Tasks;
-using Mix.Shared.Extensions;
-using System.Drawing.Printing;
-using Microsoft.Extensions.Hosting;
 using Mix.SignalR.Interfaces;
-using Mix.Heart.Helpers;
-using Mix.Heart.Extensions;
-using Microsoft.Extensions.Logging;
+using Mix.SignalR.Models;
 
 namespace Mix.Service.Services
 {
@@ -41,7 +32,7 @@ namespace Mix.Service.Services
             };
             return SendMessageAsync(msg);
         }
-        
+
         public Task SendGroupMessageAsync(string groupName, string title, string description, object data, MessageType messageType = MessageType.Info, bool exceptCaller = true)
         {
             var msg = new SignalRMessageModel(data)

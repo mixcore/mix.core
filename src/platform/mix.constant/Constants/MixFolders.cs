@@ -24,6 +24,6 @@
         public const string UploadsFolder = "uploads";
         public const string SiteContentAssetsFolder = "mixcontent/assets";
         public const string DefaultMixContentFolder = "wwwroot/default-mixcontent";
-        public const string MixCoreConfigurationFolder = "../../applications/mixcore/mixcontent/shared";
+        public const string MixCoreConfigurationFolder = "../../applications/p4ps/mixcontent/shared";
     }
 }

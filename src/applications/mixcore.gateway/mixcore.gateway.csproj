@@ -2,19 +2,21 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
+		<ServerGarbageCollection>false</ServerGarbageCollection>
+		<ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<InvariantGlobalization>true</InvariantGlobalization>
-		<RootNamespace>Mixcore.Gateway</RootNamespace>
+		<RootNamespace>mixcore.gateway</RootNamespace>
 		<UserSecretsId>bbdd7c53-6dfa-4f6f-ab46-5ecda7005ed0</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..</DockerfileContext>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Ocelot" Version="21.0.0" />
-		<PackageReference Include="Ocelot.Cache.CacheManager" Version="21.0.0" />
+		<PackageReference Include="Ocelot" Version="23.2.2" />
+		<PackageReference Include="Ocelot.Cache.CacheManager" Version="23.2.2" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
@@ -22,7 +24,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
-		<ProjectReference Include="..\mixcore.host.aspire\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
+		<ProjectReference Include="..\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

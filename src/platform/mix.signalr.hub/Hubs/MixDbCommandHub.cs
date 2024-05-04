@@ -1,15 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
-using Mix.Constant.Constants;
+﻿using Mix.Constant.Constants;
 using Mix.Heart.Helpers;
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
-using Mix.Service.Interfaces;
 using Mix.Service.Models;
-using Mix.Signalr.Hub.Models;
-using Mix.SignalR.Constants;
-using Mix.SignalR.Models;
 
 namespace Mix.SignalR.Hubs
 {
@@ -29,7 +23,7 @@ namespace Mix.SignalR.Hubs
             obj.ConnectionId = Context.ConnectionId;
             _queueService.PushMemoryQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueActions.Create, obj);
         }
-        
+
         public virtual void UpdateData(string message)
         {
             var obj = ReflectionHelper.ParseStringToObject<MixDbCommandModel>(message);

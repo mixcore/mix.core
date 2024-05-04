@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Mix.Constant.Enums;
 
 namespace Mix.Mq.Lib.Models
 {

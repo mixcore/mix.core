@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
-using Mix.Lib.Interfaces;
-using Mix.Lib.Services;
-using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
@@ -14,7 +11,7 @@ namespace Mixcore.Controllers
         protected readonly MixCmsContext CmsContext;
         private readonly MixCacheService _cacheService;
         private readonly DatabaseService _databaseService;
-        public AppController(            
+        public AppController(
             IHttpContextAccessor httpContextAccessor,
             IPSecurityConfigService ipSecurityConfigService,
             IMixCmsService mixCmsService,

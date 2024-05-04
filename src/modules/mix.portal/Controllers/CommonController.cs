@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Auth.Constants;
 using Mix.Heart.Helpers;
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
@@ -27,7 +26,7 @@ namespace Mix.Portal.Controllers
             TenantUserManager userManager,
             MixRepoDbRepository repoDbRepository,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
             _context = context;
