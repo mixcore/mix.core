@@ -11,7 +11,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["platform/core/mix-heart/nuget.config", "platform/core/mix-heart/"]
 COPY ["services/core/mix-message-queue/mix.mq.server/mix.mq.server.csproj", "services/core/mix-message-queue/mix.mq.server/"]
-COPY ["applications/p4ps.host.aspire.ServiceDefaults/p4ps.host.aspire.ServiceDefaults.csproj", "applications/p4ps.host.aspire.ServiceDefaults/"]
+COPY ["applications/mixcore.host.aspire.ServiceDefaults/mixcore.host.aspire.ServiceDefaults.csproj", "applications/mixcore.host.aspire.ServiceDefaults/"]
 COPY ["modules/mix.messenger/mix.messenger.csproj", "modules/mix.messenger/"]
 COPY ["platform/mix.signalr.hub/mix.signalr.hub.csproj", "platform/mix.signalr.hub/"]
 COPY ["platform/core/mix-heart/src/mix.heart/mix.heart.csproj", "platform/core/mix-heart/src/mix.heart/"]

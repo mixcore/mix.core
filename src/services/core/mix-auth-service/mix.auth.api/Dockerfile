@@ -11,7 +11,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["platform/core/mix-heart/nuget.config", "platform/core/mix-heart/"]
 COPY ["services/core/mix-auth-service/mix.auth.api/mix.auth.api.csproj", "services/core/mix-auth-service/mix.auth.api/"]
-COPY ["applications/p4ps.host.aspire.ServiceDefaults/p4ps.host.aspire.ServiceDefaults.csproj", "applications/p4ps.host.aspire.ServiceDefaults/"]
+COPY ["applications/mixcore.host.aspire.ServiceDefaults/mixcore.host.aspire.ServiceDefaults.csproj", "applications/mixcore.host.aspire.ServiceDefaults/"]
 COPY ["modules/mix.grpc/mix.grpc.csproj", "modules/mix.grpc/"]
 COPY ["platform/mix.library/mix.library.csproj", "platform/mix.library/"]
 COPY ["platform/core/mix.mixdb.event/mix.mixdb.event.csproj", "platform/core/mix.mixdb.event/"]

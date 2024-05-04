@@ -8,7 +8,7 @@ using Mix.SignalR.Interfaces;
 
 namespace Mixcore.Controllers
 {
-    [Route("api/v2/rest/p4ps/module-data")]
+    [Route("api/v2/rest/mixcore/module-data")]
     public sealed class ModuleDataController : MixRestHandlerApiControllerBase<ModuleDataViewModel, MixCmsContext, MixModuleData, int>
     {
         public ModuleDataController(IHttpContextAccessor httpContextAccessor,

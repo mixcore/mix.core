@@ -13,7 +13,7 @@ using Mix.SignalR.Interfaces;
 namespace Mixcore.Controllers
 {
     [EnableCors(MixCorsPolicies.PublicApis)]
-    [Route("api/v2/rest/p4ps/post-content")]
+    [Route("api/v2/rest/mixcore/post-content")]
     public sealed class PostContentApiController : MixQueryApiControllerBase<PostContentViewModel, MixCmsContext, MixPostContent, int>
     {
         private readonly IMixDbDataService _mixDbDataService;

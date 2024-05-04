@@ -12,9 +12,9 @@ using Mix.Service.Interfaces;
 using Mix.Service.Services;
 using System.Reflection;
 
-if (Directory.Exists($"../{MixFolders.MixCoreConfigurationFolder}"))
+if (Directory.Exists($"../../{MixFolders.MixCoreConfigurationFolder}"))
 {
-    MixFileHelper.CopyFolder($"../{MixFolders.MixCoreConfigurationFolder}", MixFolders.MixContentSharedFolder);
+    MixFileHelper.CopyFolder($"../../{MixFolders.MixCoreConfigurationFolder}", MixFolders.MixContentSharedFolder);
 }
 
 

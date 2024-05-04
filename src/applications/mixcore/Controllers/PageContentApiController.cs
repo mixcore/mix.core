@@ -7,7 +7,7 @@ using Mix.SignalR.Interfaces;
 
 namespace Mixcore.Controllers
 {
-    [Route("api/v2/rest/p4ps/page-content")]
+    [Route("api/v2/rest/mixcore/page-content")]
     public sealed class PageContentApiController : MixQueryApiControllerBase<PageContentViewModel, MixCmsContext, MixPageContent, int>
     {
         private readonly IMixMetadataService _metadataService;

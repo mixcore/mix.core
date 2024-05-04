@@ -9,7 +9,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 COPY ["src/platform/core/mix-heart/nuget.config", "src/platform/core/mix-heart/"]
 COPY ["src/services/core/mix-auth-service/mix.auth.api/mix.auth.api.csproj", "src/services/core/mix-auth-service/mix.auth.api/"]
-COPY ["src/applications/p4ps.host.aspire.ServiceDefaults/p4ps.host.aspire.ServiceDefaults.csproj", "applications/p4ps.host.aspire.ServiceDefaults/"]
+COPY ["src/applications/mixcore.host.aspire.ServiceDefaults/mixcore.host.aspire.ServiceDefaults.csproj", "applications/mixcore.host.aspire.ServiceDefaults/"]
 COPY ["src/modules/mix.grpc/mix.grpc.csproj", "src/modules/mix.grpc/"]
 COPY ["src/platform/mix.library/mix.library.csproj", "src/platform/mix.library/"]
 COPY ["src/platform/core/mix.mixdb.event/mix.mixdb.event.csproj", "src/platform/core/mix.mixdb.event/"]

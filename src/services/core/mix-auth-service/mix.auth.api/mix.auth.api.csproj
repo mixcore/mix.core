@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\applications\p4ps.host.aspire.ServiceDefaults\p4ps.host.aspire.ServiceDefaults.csproj" />
+		<ProjectReference Include="..\..\..\..\applications\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\..\..\..\modules\mix.grpc\mix.grpc.csproj" />
 		<ProjectReference Include="..\..\..\..\platform\mix.identity\mix.identity.csproj" />
 		<ProjectReference Include="..\..\..\..\platform\mix.library\mix.library.csproj" />

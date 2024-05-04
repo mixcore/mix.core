@@ -9,7 +9,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 COPY ["src/platform/core/mix-heart/nuget.config", "src/platform/core/mix-heart/"]
 COPY ["src/services/core/mix-message-queue/mix.mq.server/mix.mq.server.csproj", "src/services/core/mix-message-queue/mix.mq.server/"]
-COPY ["src/applications/p4ps.host.aspire.ServiceDefaults/p4ps.host.aspire.ServiceDefaults.csproj", "applications/p4ps.host.aspire.ServiceDefaults/"]
+COPY ["src/applications/mixcore.host.aspire.ServiceDefaults/mixcore.host.aspire.ServiceDefaults.csproj", "applications/mixcore.host.aspire.ServiceDefaults/"]
 COPY ["src/modules/mix.messenger/mix.messenger.csproj", "src/modules/mix.messenger/"]
 COPY ["src/platform/mix.signalr.hub/mix.signalr.hub.csproj", "src/platform/mix.signalr.hub/"]
 COPY ["src/platform/core/mix-heart/src/mix.heart/mix.heart.csproj", "src/platform/core/mix-heart/src/mix.heart/"]

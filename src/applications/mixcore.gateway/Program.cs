@@ -12,10 +12,10 @@ using System.Reflection;
 
 
 bool isInit = true;
-if (Directory.Exists("../p4ps/mixcontent/shared"))
+if (Directory.Exists("../mixcore/mixcontent/shared"))
 {
     isInit = false;
-    MixFileHelper.CopyFolder("../p4ps/mixcontent/shared", MixFolders.MixContentSharedFolder);
+    MixFileHelper.CopyFolder("../mixcore/mixcontent/shared", MixFolders.MixContentSharedFolder);
 }
 
 var builder = MixCmsHelper.CreateWebApplicationBuilder(args);
