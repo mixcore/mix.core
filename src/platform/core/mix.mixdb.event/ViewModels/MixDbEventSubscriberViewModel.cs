@@ -3,11 +3,6 @@ using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Mixdb.Event.ViewModels
 {

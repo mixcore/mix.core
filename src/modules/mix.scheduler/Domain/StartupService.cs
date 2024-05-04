@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Mix.Lib.Interfaces;
 using Mix.Shared.Interfaces;
 
 namespace Mix.Scheduler.Domain

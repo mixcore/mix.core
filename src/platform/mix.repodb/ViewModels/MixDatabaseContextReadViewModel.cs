@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Mix.Constant.Enums;
+﻿using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Enums;
 using Mix.Heart.UnitOfWork;
 using Mix.RepoDb.Base;
-using System.ComponentModel.DataAnnotations;
 
 namespace Mix.RepoDb.ViewModels
 {

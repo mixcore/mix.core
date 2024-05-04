@@ -1,10 +1,6 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Mix.Database.Entities.Account
+﻿namespace Mix.Database.Entities.Account
 {
-    public class OAuthToken: EntityBase<Guid>
+    public class OAuthToken : EntityBase<Guid>
     {
         public string Token { get; set; }
         public string ClientId { get; set; }

@@ -2,10 +2,10 @@
 {
     public enum PaymentStatus
     {
-        SENT,
-        PENDING,
-        SUCCESS,
-        FAILED,
-        INVALIDRESPONSE
+        Sent,
+        Pending,
+        Success,
+        Failed,
+        InvalidResponse
     }
 }

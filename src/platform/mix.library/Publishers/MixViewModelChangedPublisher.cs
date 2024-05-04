@@ -3,8 +3,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
-using Mix.Queue.Engines.MixQueue;
-using Mix.RepoDb.Publishers;
 
 namespace Mix.Lib.Publishers
 {

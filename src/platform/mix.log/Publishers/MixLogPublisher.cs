@@ -4,7 +4,6 @@ using Microsoft.Extensions.ObjectPool;
 using Mix.Constant.Constants;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
-using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Shared.Services;
 

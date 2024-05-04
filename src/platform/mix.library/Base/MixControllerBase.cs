@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Interfaces;
 using Mix.Shared.Models.Configurations;
-using RepoDb;
 using System.Globalization;
 
 namespace Mix.Lib.Base
@@ -105,7 +104,7 @@ namespace Mix.Lib.Base
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             ValidateRequest();
-           
+
             if (!string.IsNullOrEmpty(Culture))
             {
                 ViewData["Culture"] = Culture;

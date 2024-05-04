@@ -1,9 +1,7 @@
 using Mix.Database.Entities.Account;
-using System.Configuration;
-using System.Reflection;
-using Mix.Log.Lib;
-using Microsoft.Azure.Amqp.Framing;
 using Mix.Lib.Middlewares;
+using Mix.Log.Lib;
+using System.Reflection;
 
 var builder = MixCmsHelper.CreateWebApplicationBuilder(args);
 if (builder.Environment.IsDevelopment())

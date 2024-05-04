@@ -80,7 +80,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     {
                         context.Database.Migrate();
                     }
-                    context.Dispose();  
+                    context.Dispose();
                 }
             }
             services.TryAddScoped<PaypalService>();

@@ -3,7 +3,6 @@ using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
-using Mix.Heart.Extensions;
 using Mix.Heart.Models;
 using Mix.Heart.Repository;
 using Mix.Heart.Services;
@@ -14,8 +13,6 @@ using Mix.Lib.Models.Common;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Dtos;
-using RepoDb;
-using System.Linq.Expressions;
 
 namespace Mix.Services.Databases.Lib.Abstracts
 {

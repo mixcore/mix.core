@@ -4,8 +4,6 @@ using Mix.Identity.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Identity.Services
 {
@@ -17,21 +15,22 @@ namespace Mix.Identity.Services
         public OAuthClientService(IServiceProvider serviceProvider)
         {
             this._serviceProvider = serviceProvider;
-            LoadClients();
-        }
 
-        public List<OAuthClient> LoadClients(bool isReload = false)
-        {
             using (var scope = _serviceProvider.CreateScope())
             {
-                var _accContext = scope.ServiceProvider.GetService<MixCmsAccountContext>();
-                if (isReload || Clients == null)
-                {
-                    Clients = _accContext.OAuthClient.ToList();
-                }
-                _accContext.Dispose();
-                return Clients;
+                var accContext = scope.ServiceProvider.GetService<MixCmsAccountContext>();
+                LoadClients(accContext);
             }
+        }
+
+        public List<OAuthClient> LoadClients(MixCmsAccountContext accContext, bool isReload = false)
+        {
+            if (isReload || Clients == null)
+            {
+                Clients = accContext.OAuthClient.ToList();
+                accContext.Dispose();
+            }
+            return Clients;
         }
     }
 }

@@ -1,12 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Mix.Heart.Enums;
-using Mix.Heart.Helpers;
-using Mix.Shared.Services;
-using Mix.SignalR.Enums;
-using Mix.SignalR.Interfaces;
-using Mix.SignalR.Models;
-using Newtonsoft.Json.Linq;
-using Quartz;
+﻿using Mix.Heart.Enums;
 
 namespace Mix.Service.Services
 {

@@ -21,7 +21,7 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
                 .IsRequired(false)
                 .HasConversion(new EnumToStringConverter<OrderItemType>())
                 .HasColumnType($"{Config.String}{Config.SmallLength}")
-                .HasCharSet(Config.CharSet);    
+                .HasCharSet(Config.CharSet);
             builder.Property(e => e.Currency).IsRequired(false);
             builder.Property(e => e.Title).IsRequired(false);
             builder.Property(e => e.Description).IsRequired(false);

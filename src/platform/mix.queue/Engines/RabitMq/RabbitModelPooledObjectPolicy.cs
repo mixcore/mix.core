@@ -29,12 +29,12 @@ namespace Mix.Queue.Engines.RabitMQ
                 factory.Port = _options.Port.Value;
             }
 
-            if (!string.IsNullOrEmpty(_options.UserName) && !string.IsNullOrEmpty(_options.UserName))
+            if (!string.IsNullOrEmpty(_options.UserName) && !string.IsNullOrEmpty(_options.Password))
             {
                 factory.UserName = _options.UserName;
                 factory.Password = _options.Password;
             }
-            
+
             if (!string.IsNullOrEmpty(_options.VHost))
             {
                 factory.VirtualHost = _options.VHost;

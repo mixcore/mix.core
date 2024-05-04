@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Mix.Services.Ecommerce.Lib.Models.Paypal
+﻿namespace Mix.Services.Ecommerce.Lib.Models.Paypal
 {
     public sealed class PayPalAccessToken
     {

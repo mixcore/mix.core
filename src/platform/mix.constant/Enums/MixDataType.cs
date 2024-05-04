@@ -26,13 +26,13 @@
         Upload,
 
         Color,
-        
+
         Reference,
         Custom,
         Icon,
         VideoYoutube,
         TuiEditor,
-        
+
         QRCode,
         BarCode,
         Tag,

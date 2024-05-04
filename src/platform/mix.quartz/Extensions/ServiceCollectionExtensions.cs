@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Quartz.Interfaces;
 using Mix.Quartz.Services;
 using Mix.Shared;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

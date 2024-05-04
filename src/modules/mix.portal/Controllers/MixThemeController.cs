@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Mix.Auth.Constants;
 using Mix.Heart.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
@@ -41,7 +40,7 @@ namespace Mix.Portal.Controllers
             MixConfigurationService configService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
 

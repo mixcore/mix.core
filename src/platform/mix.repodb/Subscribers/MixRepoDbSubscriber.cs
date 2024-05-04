@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Mix.Constant.Constants;
@@ -8,14 +7,12 @@ using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
-using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.ViewModels;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
-using System.Threading;
 
 namespace Mix.RepoDb.Subscribers
 {

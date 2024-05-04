@@ -7,9 +7,7 @@ using Mix.Lib.Interfaces;
 using Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
-using Mix.Queue.Engines.MixQueue;
 using Mix.RepoDb.Interfaces;
-using Org.BouncyCastle.Asn1.X509.Qualified;
 
 namespace Mix.Lib.Subscribers
 {
@@ -49,8 +47,9 @@ namespace Mix.Lib.Subscribers
                     break;
                 case var m when m == typeof(MixDatabaseColumnViewModel).FullName:
                     var mixDbService = GetRequiredService<IMixDbService>();
-                    if (mixDbService != null) {
-                        await MixDatabaseColumnViewModelHandler.MessageQueueHandler(data,mixDbService);
+                    if (mixDbService != null)
+                    {
+                        await MixDatabaseColumnViewModelHandler.MessageQueueHandler(data, mixDbService);
                     }
                     break;
                 default:

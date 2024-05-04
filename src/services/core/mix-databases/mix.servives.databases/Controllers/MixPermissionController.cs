@@ -1,20 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Auth.Constants;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
+using Mix.Identity.Dtos;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
-using Mix.Lib.Services;
-using Mix.Queue.Interfaces;
-using Mix.Service.Services;
-using Mix.Services.Databases.Lib.Dtos;
-using Mix.Mixdb.ViewModels;
-using Mix.Services.Databases.Lib.Interfaces;
-using Mix.Heart.Services;
-using Mix.Database.Entities.Cms;
-using Mix.Database.Entities.MixDb;
-using Mix.SignalR.Interfaces;
 using Mix.Lib.Interfaces;
-using Mix.Auth.Constants;
+using Mix.Lib.Services;
+using Mix.Mixdb.ViewModels;
 using Mix.Mq.Lib.Models;
+using Mix.Queue.Interfaces;
+using Mix.Services.Databases.Lib.Dtos;
+using Mix.Services.Databases.Lib.Interfaces;
+using Mix.SignalR.Interfaces;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -59,6 +57,7 @@ namespace Mix.Services.Databases.Controllers
             return Ok();
         }
 
+        [MixAuthorize]
         [HttpGet("get-my-permissions")]
         public async Task<ActionResult<List<MixPermissionViewModel>>> GetMyPermissions()
         {
@@ -71,7 +70,15 @@ namespace Mix.Services.Databases.Controllers
             return BadRequest();
         }
 
-
+        [MixAuthorize(roles: $"{MixRoles.Owner},{MixRoles.Administrators}")]
+        [Route("grant-permission")]
+        [HttpPost]
+        public async Task<ActionResult> GrantPermission([FromBody] GrantPermissionsDto dto)
+        {
+            dto.RequestedBy = MixIdentityService.GetClaim(User, MixClaims.Username);
+            await _permissionService.GrantPermissions(dto);
+            return Ok();
+        }
         #endregion
 
         #region Overrides

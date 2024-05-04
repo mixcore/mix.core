@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ServerGarbageCollection>false</ServerGarbageCollection>
+		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<InvariantGlobalization>true</InvariantGlobalization>
+		<UserSecretsId>e7c022bb-c2da-4d62-b3ed-5a0574c52280</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>..\..\..</DockerfileContext>
+		<RootNamespace>Mix.Auth.Api</RootNamespace>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\applications\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
+		<ProjectReference Include="..\..\..\..\modules\mix.grpc\mix.grpc.csproj" />
+		<ProjectReference Include="..\..\..\..\platform\mix.identity\mix.identity.csproj" />
+		<ProjectReference Include="..\..\..\..\platform\mix.library\mix.library.csproj" />
+		<ProjectReference Include="..\..\mix-databases\mix.services.databases.lib\mix.services.databases.lib.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Using Include="System" />
+		<Using Include="System.Threading.Tasks" />
+		<Using Include="Mix.Lib.Base" />
+		<Using Include="Mix.Database.Entities.Cms" />
+		<Using Include="Mix.Heart.ViewModel" />
+		<Using Include="Mix.Heart.Enums" />
+		<Using Include="Mix.Heart.Exceptions" />
+		<Using Include="Mix.Heart.UnitOfWork" />
+		<Using Include="Mix.Heart.Services" />
+		<Using Include="Mix.Heart.Repository" />
+		<Using Include="Mix.Heart.Helpers" />
+		<Using Include="Mix.Lib.Attributes" />
+		<Using Include="Mix.Lib.Helpers" />
+		<Using Include="Mix.Lib.ViewModels" />
+		<Using Include="Mix.Auth.Constants" />
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Shared.Dtos" />
+		<Using Include="Mix.Service.Services" />
+		<Using Include="Mix.Auth.Models" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Grpc.AspNetCore" Version="2.62.0" />
+		<Protobuf Include="Domain\Protos\mixmq.proto" GrpcServices="Client" />
+	</ItemGroup>
+</Project>

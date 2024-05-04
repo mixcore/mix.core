@@ -23,7 +23,7 @@ namespace Mix.Lib.Services
 
         public async Task<string> GetEdmTemplate(string filename)
         {
-            if (_uow == null )
+            if (_uow == null)
             {
                 return string.Empty;
             }
@@ -64,7 +64,7 @@ namespace Mix.Lib.Services
             };
             _queueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.SendMail, msg);
         }
-        
+
         public virtual async Task SendMailWithTemplate(
             string subject, string template, JObject data,
             string to,

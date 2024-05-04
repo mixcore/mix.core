@@ -1,7 +1,5 @@
-﻿using DocumentFormat.OpenXml.Office.CustomUI;
-using Mix.Heart.UnitOfWork;
+﻿using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
-using Mix.Lib.Attributes;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Payments.Lib.Constants;
@@ -79,7 +77,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
                     ParentId = parentEntity.OrderDetailId,
                     ChildId = parentEntity.Id,
                     ChildDatabaseName = EcommerceConstants.DataTableNameOrderItem,
-                    CreatedDateTime = DateTime.Now,
+                    CreatedDateTime = DateTime.UtcNow,
                     CreatedBy = CreatedBy,
                     MixTenantId = MixTenantId
                 };

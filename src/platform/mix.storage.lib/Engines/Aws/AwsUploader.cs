@@ -1,11 +1,10 @@
-﻿using System.Net;
-using Amazon;
+﻿using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Mix.Shared.Helpers;
 using Mix.Storage.Lib.Engines.Base;
+using System.Net;
 
 namespace Mix.Storage.Lib.Engines.Aws
 {

@@ -5,10 +5,8 @@ using Mix.Constant.Constants;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Entities.MixDb;
-using Mix.Database.Services;
 using Mix.Heart.Exceptions;
 using Mix.Heart.UnitOfWork;
-using Mix.Shared.Extensions;
 using Mix.Shared.Services;
 using System.Linq.Dynamic.Core;
 using System.Text.RegularExpressions;
@@ -99,7 +97,7 @@ namespace Mix.Service.Services
 
         public async Task<bool> CheckEndpointPermissionAsync(string[] userRoles, PathString path, string method)
         {
-            if(RoleEndpoints == null)
+            if (RoleEndpoints == null)
             {
                 await Reload();
             }

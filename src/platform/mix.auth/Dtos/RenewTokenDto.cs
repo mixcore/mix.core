@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Mix.Auth.Dtos
+﻿namespace Mix.Auth.Dtos
 {
     public class RenewTokenDto
     {

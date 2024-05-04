@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Mix.Heart.Extensions;
 
 namespace Mix.Lib.Conventions
 {

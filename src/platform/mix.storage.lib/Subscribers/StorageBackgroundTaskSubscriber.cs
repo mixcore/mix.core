@@ -2,16 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
-using Mix.Communicator.Models;
-using Mix.Communicator.Services;
-using Mix.Lib.Subscribers;
 using Mix.Log.Lib.Interfaces;
-using Mix.Mixdb.Event.Services;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
-using Mix.Queue.Engines.MixQueue;
-using Mix.Service.Commands;
-using Mix.Service.Interfaces;
 using Mix.Service.Services;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Interfaces;

@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-
-using Mix.Services.Graphql.Lib.Entities;
 using Mix.Services.Graphql.Lib.Interfaces;
 
 namespace Mix.Services.Graphql.Lib.Models

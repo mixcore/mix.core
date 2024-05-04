@@ -7,7 +7,6 @@ using Mix.Mq.Lib.Models;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
-using NuGet.Protocol;
 
 namespace Mix.Lib.Services
 {

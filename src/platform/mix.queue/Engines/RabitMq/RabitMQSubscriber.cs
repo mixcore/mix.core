@@ -1,16 +1,11 @@
-﻿using Google.Cloud.PubSub.V1;
-using Microsoft.Extensions.ObjectPool;
+﻿using Microsoft.Extensions.ObjectPool;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models.QueueSetting;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Mix.Queue.Engines.RabitMQ

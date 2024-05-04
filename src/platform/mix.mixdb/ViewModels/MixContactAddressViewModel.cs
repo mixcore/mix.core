@@ -1,5 +1,4 @@
-﻿using Mix.Database.Entities.MixDb;
-using Mix.Heart.UnitOfWork;
+﻿using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 
 namespace Mix.Mixdb.ViewModels

@@ -4,12 +4,11 @@ using Mix.Constant.Constants;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Services;
 using Mix.Lib.Helpers;
+using Mix.Lib.Services;
 using Mix.Shared.Services;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using System.Reflection;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
 
 
 bool isInit = true;
@@ -36,6 +35,7 @@ builder.Services.AddOutputCache();
 builder.Services.AddControllers();
 builder.Services.AddMixServices(Assembly.GetExecutingAssembly(), builder.Configuration);
 builder.Services.AddMixAuthorize<MixCmsContext>(builder.Configuration);
+builder.Services.AddScoped<MixIdentityService>();
 builder.Services.TryAddSingleton<MixEndpointService>();
 builder.Services.AddOcelot(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

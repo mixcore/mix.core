@@ -2,7 +2,7 @@
 
 namespace Mix.Database.Entities.AuditLog
 {
-    public class AuditLog: EntityBase<Guid>
+    public class AuditLog : EntityBase<Guid>
     {
         public bool Success { get; set; }
         public int StatusCode { get; set; }

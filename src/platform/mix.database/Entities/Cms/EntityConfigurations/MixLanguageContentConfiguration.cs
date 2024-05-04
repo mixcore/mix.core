@@ -20,7 +20,7 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
                 .HasColumnType($"{Config.NString}{Config.MaxLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
-            
+
             builder.Property(e => e.Category)
                 .IsRequired(false)
                 .HasColumnType($"{Config.NString}{Config.MediumLength}")

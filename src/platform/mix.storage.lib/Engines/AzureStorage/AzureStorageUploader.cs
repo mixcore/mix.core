@@ -1,12 +1,8 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Configuration;
-using Mix.Shared.Helpers;
 using Mix.Storage.Lib.Engines.Base;
-using Mix.Storage.Lib.Engines.CloudFlare;
-using Org.BouncyCastle.Ocsp;
 
 namespace Mix.Storage.Lib.Engines.AzureStorage
 {
@@ -80,7 +76,7 @@ namespace Mix.Storage.Lib.Engines.AzureStorage
         {
             string ext = filename.Split('.')[1].ToLower();
             string folder = $"{CurrentTenant.SystemName}/{MixFolders.UploadsFolder}/{ext}";
-           
+
             if (!string.IsNullOrEmpty(createdBy))
             {
                 folder = $"{folder}/{createdBy}";

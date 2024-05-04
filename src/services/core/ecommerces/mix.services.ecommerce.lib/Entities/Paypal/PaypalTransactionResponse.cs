@@ -1,5 +1,4 @@
-﻿using CommandLine;
-using Mix.Heart.Entities;
+﻿using Mix.Heart.Entities;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Ecommerce.Lib.Models.Paypal;
 using Newtonsoft.Json.Linq;
@@ -18,7 +17,7 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Paypal
         public int MixTentantId { get; set; }
         public PaypalTransactionResponse()
         {
-            
+
         }
         public PaypalTransactionResponse(PaypalOrderCapturedResponse response)
         {

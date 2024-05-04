@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Mix.Auth.Common;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Interfaces;
-using Mix.Auth.Models.OAuthResponses;
-using System.Threading.Tasks;
 using System.Linq;
-using Mix.Auth.Common;
+using System.Threading.Tasks;
 
 namespace Mix.Identity.Services
 {

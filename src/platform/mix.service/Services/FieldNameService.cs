@@ -1,11 +1,4 @@
-﻿using Microsoft.Azure.Amqp;
-using Mix.Constant.Enums;
-using Mix.Heart.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Mix.Constant.Enums;
 
 namespace Mix.Service.Services
 {

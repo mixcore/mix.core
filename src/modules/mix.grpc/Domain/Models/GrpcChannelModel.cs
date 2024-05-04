@@ -1,9 +1,7 @@
-﻿using Grpc.Core;
-using Grpc.Net.Client;
+﻿using Grpc.Net.Client;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Mix.Grpc.Domain.Models
 {

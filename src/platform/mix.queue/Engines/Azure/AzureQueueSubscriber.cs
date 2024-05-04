@@ -1,7 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
 using Newtonsoft.Json;
 using System;

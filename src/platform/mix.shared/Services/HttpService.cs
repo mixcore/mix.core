@@ -5,7 +5,6 @@ using Mix.Shared.Models;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
@@ -182,8 +181,8 @@ namespace Mix.Shared.Services
                     }
                 case "application/x-www-form-urlencoded":
                     var formData = content.GetType()
-                        .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                        .ToDictionary(prop => prop.Name, prop => (string)prop.GetValue(content, null));
+                       .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                       .ToDictionary(prop => prop.Name, prop => (string)prop.GetValue(content, null));
                     return new FormUrlEncodedContent(formData);
                 default:
                     return new StringContent(

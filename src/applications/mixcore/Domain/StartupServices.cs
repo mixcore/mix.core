@@ -1,9 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
-using Mix.Lib.Publishers;
+﻿using Mix.Lib.Publishers;
 using Mix.Lib.Subscribers;
-using Mix.Log.Lib.Publishers;
 using Mix.Log.Lib.Subscribers;
-using Mix.Quartz.Interfaces;
 using Mix.Quartz.Services;
 using Mix.RepoDb.Publishers;
 using Mix.RepoDb.Subscribers;
@@ -30,7 +27,7 @@ namespace Mixcore.Domain
             services.AddHostedService<MixDbCommandPublisher>();
             services.AddHostedService<MixDbCommandSubscriber>();
 
-            services.AddMixQuartzServices(configuration);
+            services.AddHostedService<MixQuartzHostedService>();
             services.AddHostedService<StorageBackgroundTaskSubscriber>();
 
             if (!globalConfigs!.IsInit)

@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Azure.Amqp.Framing;
-using Microsoft.Build.Framework;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Middlewares;
 using Mix.Lib.Services;
@@ -38,10 +34,10 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var globalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings)
                                             .Get<GlobalSettingsModel>();
-            
+
             var authConfig = configuration.GetSection(MixAppSettingsSection.Authentication)
                                             .Get<MixAuthenticationConfigurations>();
-            
+
             var redisCnn = configuration.GetSection("Redis").GetValue<string>("ConnectionString");
             services.Configure<HostOptions>(options =>
             {
@@ -75,7 +71,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .SetApplicationName(authConfig.Issuer);
             }
 
-            
+
             services.AddMixCommonServices(configuration);
             services.TryAddScoped<MixConfigurationService>();
             services.TryAddScoped<IMixCmsService, MixCmsService>();
@@ -121,9 +117,9 @@ namespace Microsoft.Extensions.DependencyInjection
             // Clone Settings from shared folder
             var globalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
             var authConfig = configuration.GetSection(MixAppSettingsSection.Authentication)
-                                            .Get<MixAuthenticationConfigurations>(); 
+                                            .Get<MixAuthenticationConfigurations>();
             services.AddMvc().AddSessionStateTempDataProvider();
-          
+
 
             services.AddMixCommonServices(configuration);
             services.TryAddScoped<MixConfigurationService>();

@@ -1,8 +1,6 @@
 ﻿using Mix.Heart.Helpers;
 using Mix.RepoDb.Interfaces;
-using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
-using MySqlX.XDevAPI.Common;
 
 namespace Mixcore.Domain.ViewModels
 {

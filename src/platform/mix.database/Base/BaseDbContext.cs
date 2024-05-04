@@ -14,7 +14,7 @@ namespace Mix.Database.Base
 
         public BaseDbContext()
         {
-            
+
         }
         public BaseDbContext(DatabaseService databaseService, string connectionStringName)
         {

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Auth.Constants;
 using Mix.Heart.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
@@ -21,7 +20,7 @@ namespace Mix.Storage.Controllers
             IMemoryQueueService<MessageQueueModel> queueService,
             MixStorageService storageService,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
         }

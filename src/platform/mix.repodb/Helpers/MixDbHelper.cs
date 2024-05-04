@@ -6,7 +6,6 @@ using Mix.Heart.Helpers;
 using Mix.RepoDb.ViewModels;
 using Mix.Service.Services;
 using Mix.Shared.Services;
-using MySqlX.XDevAPI.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -14,7 +13,7 @@ namespace Mix.RepoDb.Helpers
 {
     public class MixDbHelper
     {
-        public static Task<JObject> ParseDtoToEntityAsync(JObject dto, List<RepoDbMixDatabaseColumnViewModel> columns, FieldNameService fieldNameService, int? tenantId = null, string? username = null)
+        public static Task<JObject> ParseDtoToEntityAsync(JObject dto, MixDatabaseType mixdbType, List<RepoDbMixDatabaseColumnViewModel> columns, FieldNameService fieldNameService, int? tenantId = null, string? username = null)
         {
             try
             {
@@ -25,7 +24,7 @@ namespace Mix.RepoDb.Helpers
                     .ToList();
                 foreach (var pr in dto.Properties())
                 {
-                    var colName = fieldNameService.NamingConvention == MixDatabaseNamingConvention.TitleCase? pr.Name.ToTitleCase() : pr.Name;
+                    var colName = fieldNameService.NamingConvention == MixDatabaseNamingConvention.TitleCase ? pr.Name.ToTitleCase() : pr.Name;
                     var col = columns.FirstOrDefault(c => c.SystemName.Equals(colName, StringComparison.InvariantCultureIgnoreCase));
 
                     if (encryptedColumnNames.Contains(colName))
@@ -50,24 +49,31 @@ namespace Mix.RepoDb.Helpers
 
                 if (!result.ContainsKey(fieldNameService.Id))
                 {
-                    result.Add(new JProperty(fieldNameService.Id, string.Empty));
-                    if (!result.ContainsKey(fieldNameService.CreatedBy))
+                    if (mixdbType == MixDatabaseType.GuidService)
                     {
-                        result.Add(new JProperty(fieldNameService.CreatedBy, username));
+                        result.Add(new JProperty(fieldNameService.Id, Guid.NewGuid()));
                     }
-                    if (!result.ContainsKey(fieldNameService.CreatedDateTime))
+                    else
                     {
-                        result.Add(new JProperty(fieldNameService.CreatedDateTime, DateTime.UtcNow));
-                    }
-                    if (!result.ContainsKey(fieldNameService.CreatedBy))
-                    {
-                        result.Add(new JProperty(fieldNameService.CreatedBy, username));
+                        result.Add(new JProperty(fieldNameService.Id, string.Empty));
                     }
                 }
                 else
                 {
                     result[fieldNameService.ModifiedBy] = username;
                     result[fieldNameService.LastModified] = DateTime.UtcNow;
+                }
+                if (!result.ContainsKey(fieldNameService.CreatedBy))
+                {
+                    result.Add(new JProperty(fieldNameService.CreatedBy, username));
+                }
+                if (!result.ContainsKey(fieldNameService.CreatedDateTime))
+                {
+                    result.Add(new JProperty(fieldNameService.CreatedDateTime, DateTime.UtcNow));
+                }
+                if (!result.ContainsKey(fieldNameService.CreatedBy))
+                {
+                    result.Add(new JProperty(fieldNameService.CreatedBy, username));
                 }
 
                 if (!result.ContainsKey(fieldNameService.Priority))

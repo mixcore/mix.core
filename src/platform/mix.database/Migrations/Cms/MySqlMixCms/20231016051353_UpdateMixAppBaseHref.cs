@@ -15,7 +15,7 @@ namespace Mix.Database.Migrations.Cms.MySqlMixCms
                 table: "MixApplication",
                 newName: "DeployUrl");
         }
-         
+
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {

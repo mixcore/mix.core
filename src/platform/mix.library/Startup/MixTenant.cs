@@ -6,8 +6,6 @@ using Mix.Lib.Interfaces;
 using Mix.Lib.Middlewares;
 using Mix.Lib.Services;
 using Mix.Shared.Models.Configurations;
-using RepoDb;
-using RepoDb.Interfaces;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

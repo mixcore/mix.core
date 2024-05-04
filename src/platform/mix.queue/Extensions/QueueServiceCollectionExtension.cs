@@ -1,15 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.ObjectPool;
 using Mix.Queue.Engines.RabitMQ;
 using Mix.Queue.Models.QueueSetting;
 using RabbitMQ.Client;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Queue.Extensions
 {
@@ -48,14 +43,14 @@ namespace Mix.Queue.Extensions
 
             return builder.Services;
         }
-         public static IServiceCollection AddMixMQ(this IHostApplicationBuilder builder)
+        public static IServiceCollection AddMixMQ(this IHostApplicationBuilder builder)
         {
             var config = builder.Configuration.GetSection("MessageQueueSetting:Mix");
             builder.Services.Configure<MixQueueSetting>(config);
 
             return builder.Services;
         }
-        
+
         public static IServiceCollection AddAzureServiceBus(this IHostApplicationBuilder builder)
         {
             var config = builder.Configuration.GetSection("MessageQueueSetting:AzureServiceBus");
@@ -63,7 +58,7 @@ namespace Mix.Queue.Extensions
 
             return builder.Services;
         }
-        
+
         public static IServiceCollection AddRabbit(this IHostApplicationBuilder builder)
         {
             var rabbitConfig = builder.Configuration.GetSection("MessageQueueSetting:RabitMqQueueSetting");

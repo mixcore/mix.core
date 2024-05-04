@@ -1,8 +1,4 @@
-﻿using DocumentFormat.OpenXml.Vml;
-using DocumentFormat.OpenXml.Wordprocessing;
-using Google.Protobuf.WellKnownTypes;
-using Humanizer;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Database.Base;
@@ -18,7 +14,7 @@ namespace Mix.Lib.Services
     public class MixThemeImportService : IMixThemeImportService
     {
         private MixRepoDbRepository _repository { get; set; }
-        private MixCacheService _cacheService{ get; set; }
+        private MixCacheService _cacheService { get; set; }
         private readonly CancellationTokenSource _cts;
         private readonly DatabaseService _databaseService;
         private readonly IDatabaseConstants _databaseConstant;
@@ -107,22 +103,15 @@ namespace Mix.Lib.Services
 
         public async Task<SiteDataViewModel> LoadSchema(string folder)
         {
-            try
+            using (var serviceScope = _serviceProvider.CreateScope())
             {
-                using (var serviceScope = _serviceProvider.CreateScope())
-                {
-                    _uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
-                    _context = _uow.DbContext;
-                    var strSchema = MixFileHelper.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, folder);
-                    var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
-                    await ValidateSiteData(siteStructures);
-                    serviceScope.Dispose();
-                    return siteStructures;
-                }
-            }
-            catch(Exception ex)
-            {
-                throw new MixException(MixErrorStatus.ServerError, ex);
+                _uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
+                _context = _uow.DbContext;
+                var strSchema = MixFileHelper.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, folder);
+                var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
+                await ValidateSiteData(siteStructures);
+                serviceScope.Dispose();
+                return siteStructures;
             }
         }
 

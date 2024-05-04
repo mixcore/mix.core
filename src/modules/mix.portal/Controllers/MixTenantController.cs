@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Mix.Auth.Constants;
 using Mix.Database.Entities.Account;
 using Mix.Heart.Helpers;
 using Mix.Identity.Enums;

@@ -5,7 +5,6 @@ using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Mix.RepoDb.Dtos;
 using Mix.Shared.Models;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Mix.RepoDb.ViewModels
@@ -29,7 +28,7 @@ namespace Mix.RepoDb.ViewModels
 
         #region Constructors
 
-        public RepoDbMixDatabaseColumnViewModel(AlterColumnDto dto )
+        public RepoDbMixDatabaseColumnViewModel(AlterColumnDto dto)
         {
             ReflectionHelper.Map(dto, this);
         }

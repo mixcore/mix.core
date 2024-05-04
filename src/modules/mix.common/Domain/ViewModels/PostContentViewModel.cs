@@ -1,7 +1,4 @@
 ﻿using Mix.RepoDb.Interfaces;
-using Mix.RepoDb.Repositories;
-using RepoDb;
-using RepoDb.Enumerations;
 
 namespace Mix.Common.Domain.ViewModels
 {

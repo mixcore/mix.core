@@ -1,10 +1,6 @@
-﻿using Mix.Constant.Enums;
-using Mix.Database.Entities.Cms;
-using Mix.Heart.Models;
+﻿using Mix.Database.Entities.Cms;
 using Mix.RepoDb.Dtos;
 using Mix.RepoDb.ViewModels;
-using Mix.Shared.Dtos;
-using Newtonsoft.Json.Linq;
 
 namespace Mix.RepoDb.Interfaces
 {

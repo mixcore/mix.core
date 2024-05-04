@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Mix.Shared.Dtos
+﻿namespace Mix.Shared.Dtos
 {
     public class FilterContentRequestDto : SearchRequestDto
     {

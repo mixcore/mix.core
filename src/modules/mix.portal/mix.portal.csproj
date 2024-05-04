@@ -51,7 +51,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\applications\mixcore.host.aspire\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
+		<ProjectReference Include="..\..\applications\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\..\platform\mix.communicator\mix.communicator.csproj" />
 		<ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
 		<ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
@@ -63,7 +63,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Grpc.AspNetCore" Version="2.59.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.62.0" />
 	</ItemGroup>
 
 	<ItemGroup>

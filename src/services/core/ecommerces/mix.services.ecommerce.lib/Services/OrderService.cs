@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Services;
-using Mix.Services.Ecommerce.Lib.Dtos;
-using Mix.Services.Ecommerce.Lib.Enums;
-using Mix.Services.Ecommerce.Lib.ViewModels;
-using Mix.Services.Ecommerce.Lib.Entities.Mix;
-using System.Security.Claims;
-using Mix.Lib.Models.Common;
-using Mix.Heart.Models;
 using Mix.Heart.Extensions;
-using Mix.Service.Services;
-using Mix.Services.Ecommerce.Lib.Interfaces;
+using Mix.Heart.Models;
 using Mix.Heart.Services;
+using Mix.Heart.UnitOfWork;
 using Mix.Lib.Interfaces;
+using Mix.Lib.Models.Common;
+using Mix.Lib.Services;
+using Mix.Service.Services;
+using Mix.Services.Ecommerce.Lib.Dtos;
+using Mix.Services.Ecommerce.Lib.Entities.Mix;
+using Mix.Services.Ecommerce.Lib.Enums;
+using Mix.Services.Ecommerce.Lib.Interfaces;
+using Mix.Services.Ecommerce.Lib.ViewModels;
+using System.Security.Claims;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
@@ -80,7 +80,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             var user = await _userManager.GetUserAsync(principal) ?? throw new MixException(MixErrorStatus.Badrequest, "User not found");
             var order = await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.Id == id && m.UserId == user!.Id, cancellationToken) ?? throw new MixException(MixErrorStatus.Badrequest, "Invalid Order");
-            if (order.PaymentStatus == PaymentStatus.SUCCESS)
+            if (order.PaymentStatus == PaymentStatus.Success)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Cannot cancel paid order");
             }

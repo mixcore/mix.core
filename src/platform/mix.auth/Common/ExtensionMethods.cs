@@ -7,8 +7,6 @@
  */
 
 using System.ComponentModel;
-using System;
-using System.Linq;
 
 namespace Mix.Auth.Common
 {

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Mix.Heart.Exceptions;
 using Mix.Mq.Lib.Models;
-using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Shared.Services;
@@ -132,7 +131,8 @@ namespace Mix.Queue.Engines
                                         await publisher.SendMessages(inQueueItems);
                                         publishing = false;
                                     }
-                                    catch (Exception ex) {
+                                    catch (Exception ex)
+                                    {
                                         _logger.LogError(ex, $"{_logger.GetType().FullName}: Cannot Send message to queue");
                                         await Task.Delay(1000, cancellationToken);
                                     }

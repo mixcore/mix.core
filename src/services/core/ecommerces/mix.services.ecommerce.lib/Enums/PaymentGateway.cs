@@ -2,6 +2,7 @@
 {
     public enum PaymentGateway
     {
+        Payoo,
         Onepay,
         Paypal,
         Momo

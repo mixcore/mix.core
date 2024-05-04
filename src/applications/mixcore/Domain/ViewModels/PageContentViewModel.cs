@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Helpers;
 using Mix.RepoDb.Interfaces;
-using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Models;
 
@@ -53,8 +52,8 @@ namespace Mixcore.Domain.ViewModels
 
         #region Public Method
 
-        public async Task LoadDataAsync(IMixDbDataService mixDbDataService, 
-                            IMixMetadataService metadataService, 
+        public async Task LoadDataAsync(IMixDbDataService mixDbDataService,
+                            IMixMetadataService metadataService,
                             PagingRequestModel pagingModel, MixCacheService cacheService)
         {
             await LoadAdditionalDataAsync(mixDbDataService);

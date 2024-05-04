@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Mix.Auth.Models.OAuthResponses;
 using System.Threading.Tasks;
 
 namespace Mix.Identity.Interfaces

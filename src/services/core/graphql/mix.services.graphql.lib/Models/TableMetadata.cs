@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Mix.Services.Graphql.Lib.Models
+﻿namespace Mix.Services.Graphql.Lib.Models
 {
     public class TableMetadata
     {

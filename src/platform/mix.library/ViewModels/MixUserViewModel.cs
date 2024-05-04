@@ -4,9 +4,6 @@ using Mix.Database.Entities.Account;
 using Mix.Identity.Models.ManageViewModels;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
-using Mix.RepoDb.Services;
-using RepoDb;
-using System.Text.Json.Serialization;
 
 namespace Mix.Lib.ViewModels
 {
@@ -63,7 +60,7 @@ namespace Mix.Lib.ViewModels
                 try
                 {
                     UserData = await mixDbService.GetSingleByGuidParent(MixDatabaseNames.SYSTEM_USER_DATA, MixContentType.User, Id, true);
-                    
+
                     var roles = from ur in accContext.AspNetUserRoles
                                 join r in accContext.MixRoles
                                     on ur.RoleId equals r.Id

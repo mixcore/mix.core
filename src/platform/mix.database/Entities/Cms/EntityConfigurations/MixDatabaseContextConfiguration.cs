@@ -19,7 +19,7 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
                 .IsRequired()
                 .HasColumnType($"{Config.String}{Config.SmallLength}")
                 .HasCharSet(Config.CharSet);
-            
+
             builder.Property(e => e.ConnectionString)
                 .IsRequired()
                 .HasColumnType($"{Config.String}{Config.MediumLength}")

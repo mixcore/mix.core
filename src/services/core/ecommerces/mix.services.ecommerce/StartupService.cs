@@ -17,7 +17,7 @@ namespace Mix.Services.Ecommerce
             {
                 services.AddMixEcommerce(configuration);
                 services.TryAddScoped<IMixMetadataService, MixMetadataService>();
-                
+
             }
         }
 

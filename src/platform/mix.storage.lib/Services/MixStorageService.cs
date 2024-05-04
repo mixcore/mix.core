@@ -1,7 +1,5 @@
-﻿using Amazon.S3;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Mix.Heart.Models;
 using Mix.Mq.Lib.Models;
 using Mix.Storage.Lib.Engines.Aws;
 using Mix.Storage.Lib.Engines.AzureStorage;
@@ -10,8 +8,6 @@ using Mix.Storage.Lib.Engines.CloudFlare;
 using Mix.Storage.Lib.Engines.Mix;
 using Mix.Storage.Lib.Helpers;
 using Mix.Storage.Lib.Models;
-using MySqlX.XDevAPI.Common;
-using System.IO;
 
 namespace Mix.Storage.Lib.Services
 {
@@ -23,9 +19,9 @@ namespace Mix.Storage.Lib.Services
         private readonly HttpService _httpService;
         public StorageSettingsModel Settings { get; set; } = new();
         public MixStorageService(
-            IHttpContextAccessor httpContext, 
-            UnitOfWorkInfo<MixCmsContext> cmsUow, 
-            IConfiguration configuration, 
+            IHttpContextAccessor httpContext,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
+            IConfiguration configuration,
             HttpService httpService, IMemoryQueueService<MessageQueueModel> queueService)
         {
             _configuration = configuration;
