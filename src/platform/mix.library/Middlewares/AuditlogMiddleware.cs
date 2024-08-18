@@ -14,25 +14,22 @@ namespace Mix.Lib.Middlewares
     public class AuditlogMiddleware
     {
         private readonly RequestDelegate _next;
-        private IAuditLogService _auditlogService;
-        private AuditLogDataModel _auditlogData;
-        private IConfiguration _configuration;
-        private GlobalSettingsModel _globalConfig;
-        private bool _isLog { get; set; }
+        private readonly IAuditLogService _auditlogService;
+        private readonly IConfiguration _configuration;
+        private readonly GlobalSettingsModel _globalConfig;
         public AuditlogMiddleware(RequestDelegate next, IConfiguration configuration, IAuditLogService auditlogService)
         {
             _configuration = configuration;
             _globalConfig = _configuration.Get<GlobalSettingsModel>();
             _next = next;
-            _auditlogData = new();
             _auditlogService = auditlogService;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, AuditLogDataModel auditLogData)
         {
             var logConfigurations = _configuration.GetSection(MixAppSettingsSection.Log).Get<LogConfigurations>();
-            _isLog = CheckAuditLogPath(context.Request.Path);
-            if (!_isLog)
+            var isLog = CheckAuditLogPath(context.Request.Path);
+            if (!isLog)
             {
                 await _next(context);
             }
@@ -40,8 +37,7 @@ namespace Mix.Lib.Middlewares
             else
             {
                 //Copy a pointer to the original response body stream
-                await LogRequest(context);
-
+                await LogRequest(context, auditLogData);
 
                 //Copy a pointer to the original response body stream
                 var originalBodyStream = context.Response.Body;
@@ -50,7 +46,7 @@ namespace Mix.Lib.Middlewares
                 {
                     if (logConfigurations.EnableAuditLog)
                     {
-                        _auditlogService.QueueRequest(_auditlogData);
+                        _auditlogService.QueueRequest(auditLogData);
                     }
                     await _next(context);
                 }
@@ -66,46 +62,48 @@ namespace Mix.Lib.Middlewares
                         await _next(context);
 
                         //Format the response from the server
-                        await LogResponse(context);
+                        await LogResponse(context, auditLogData);
 
                         //Copy the contents of the new memory stream (which contains the response) to the original stream, which is then returned to the client.
                         await responseBody.CopyToAsync(originalBodyStream);
 
-                        _auditlogService.QueueRequest(_auditlogData);
+                        _auditlogService.QueueRequest(auditLogData);
                         responseBody.Dispose();
                     }
                 }
             }
 
-            _auditlogData.StatusCode = context.Response.StatusCode;
-            if (logConfigurations.IsLogStream && _isLog)
+            auditLogData.StatusCode = context.Response.StatusCode;
+            if (logConfigurations.IsLogStream && isLog)
             {
-                await _auditlogService.LogStream(_auditlogData.Endpoint, _auditlogData.Exception ?? _auditlogData.Body, isSuccess: _auditlogData.StatusCode < 300);
+                await _auditlogService.LogStream(auditLogData.Endpoint, auditLogData.Exception ?? auditLogData.Body, isSuccess: auditLogData.StatusCode < 300);
             }
         }
+
         private bool CheckAuditLogPath(string path)
         {
             return !_globalConfig.IsInit && (path.IndexOf("/api") >= 0 && path.IndexOf("audit-log") < 0 && path.IndexOf("queue-log") < 0);
         }
 
-        private async Task LogRequest(HttpContext context)
+        private async Task LogRequest(HttpContext context, AuditLogDataModel auditLogData)
         {
             var idService = context.RequestServices.GetService(typeof(MixIdentityService)) as MixIdentityService;
             var request = await FormatRequest(context.Request);
-            _auditlogData.CreatedBy = idService.GetClaim(context.User, MixClaims.Username);
-            _auditlogData.RequestIp = context.Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
-            _auditlogData.Endpoint = context.Request.Path;
-            _auditlogData.Method = context.Request.Method;
-            _auditlogData.QueryString = context.Request.QueryString.ToString();
-            _auditlogData.Body = request.IsJsonString() ? JObject.Parse(request) : new JObject(new JProperty("data", request));
+            auditLogData.CreatedBy = idService.GetClaim(context.User, MixClaims.Username);
+            auditLogData.RequestIp = context.Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+            auditLogData.Endpoint = context.Request.Path;
+            auditLogData.Method = context.Request.Method;
+            auditLogData.QueryString = context.Request.QueryString.ToString();
+            auditLogData.Body = request.IsJsonString() ? JObject.Parse(request) : new JObject(new JProperty("data", request));
         }
-        private async Task LogResponse(HttpContext context)
+
+        private async Task LogResponse(HttpContext context, AuditLogDataModel auditLogData)
         {
             if (context.Response.Body.CanSeek)
             {
                 var response = await FormatResponse(context.Response);
-                _auditlogData.StatusCode = context.Response.StatusCode;
-                _auditlogData.Response = response.IsJsonString() ? JObject.Parse(response) : new JObject(new JProperty("data", response));
+                auditLogData.StatusCode = context.Response.StatusCode;
+                auditLogData.Response = response.IsJsonString() ? JObject.Parse(response) : new JObject(new JProperty("data", response));
             }
         }
 

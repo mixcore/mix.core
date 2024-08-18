@@ -27,7 +27,7 @@ namespace Mix.Communicator.Services
             {
 
                 IsBodyHtml = true,
-                From = new MailAddress(msg.From ?? Settings.From, Settings.FromName)
+                From = new MailAddress(msg.From ?? Settings.From, msg.FromName ?? Settings.FromName)
             };
             foreach (var receipient in msg.To.Split(','))
             {

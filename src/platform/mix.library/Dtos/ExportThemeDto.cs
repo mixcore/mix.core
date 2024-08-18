@@ -35,6 +35,7 @@
         public List<int> ModuleIds { get; set; }
         public List<int> ModuleContentIds { get; set; }
 
+        public List<int> MixDatabaseContextIds { get; set; }
         public List<int> MixDatabaseIds { get; set; }
     }
 }

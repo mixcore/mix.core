@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -24,6 +24,8 @@ using Mix.Auth.Models.OAuthRequests;
 using Mix.Identity.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.RepoDb.Interfaces;
+using Mix.Service.Commands;
+using MySqlX.XDevAPI.Common;
 
 namespace mix.auth.service.Controllers
 {
@@ -125,7 +127,7 @@ namespace mix.auth.service.Controllers
         {
             await _idService.RegisterAsync(model, CurrentTenant.Id, _cmsUow);
             var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-            var result = _idService.GetAuthData(user, true, CurrentTenant.Id);
+            var result = await _idService.GetAuthData(user, true, CurrentTenant.Id);
             if (result != null && user != null)
             {
                 if (_authConfigService.AppSettings.RequireConfirmedEmail)
@@ -142,7 +144,6 @@ namespace mix.auth.service.Controllers
                     await _edmService.SendMailWithEdmTemplate("Welcome", "Welcome", ReflectionHelper.ParseObject(user),
                         user.Email);
                 }
-
                 return Ok(result);
             }
             else
@@ -357,6 +358,11 @@ namespace mix.auth.service.Controllers
                         new QueryField("parentId", user.Id),
                         new QueryField("parentType", MixContentType.User)
                     });
+                    QueueService.PushMemoryQueue(
+                    CurrentTenant.Id,
+                    MixQueueTopics.MixBackgroundTasks,
+                    MixQueueActions.MixDbEvent,
+                    new MixDbEventCommand(user.UserName, MixDbCommandQueueAction.Delete.ToString(), MixDatabaseNames.SYSTEM_USER_DATA, ReflectionHelper.ParseObject(user)));
                     return Ok();
                 }
             }

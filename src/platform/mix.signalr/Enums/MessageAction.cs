@@ -4,7 +4,7 @@
     {
         MyConnection,
         MemberList,
-        NewMember,
+        MemberOnline,
         NewMessage,
         NewQueueMessage,
         MemberOffline

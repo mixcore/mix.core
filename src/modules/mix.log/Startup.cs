@@ -19,7 +19,6 @@ namespace Mix.Log
         {
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
             services.AddMixCors();
-            services.AddMixLog(Configuration);
             services.AddMixAuthorize<MixCmsAccountContext>(Configuration);
         }
 

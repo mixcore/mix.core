@@ -48,7 +48,7 @@ namespace Mix.Lib.Filters
                     };
                     context.ExceptionHandled = true;
                 }
-                context.ExceptionHandled = true;
+                //context.ExceptionHandled = true;
             }
             
         }

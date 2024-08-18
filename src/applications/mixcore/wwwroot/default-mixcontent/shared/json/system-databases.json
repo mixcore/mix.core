@@ -2372,8 +2372,8 @@
       "isDeleted": false
     },
     {
-      "systemName": "title",
-      "displayName": "Title",
+      "systemName": "DisplayName",
+      "displayName": "Display Name",
       "mixDatabaseName": "sysPermission",
       "dataType": "Text",
       "configurations": {
@@ -2399,10 +2399,10 @@
       "isDeleted": false
     },
     {
-      "systemName": "icon",
-      "displayName": "Icon",
+      "systemName": "Group",
+      "displayName": "Group",
       "mixDatabaseName": "sysPermission",
-      "dataType": "Icon",
+      "dataType": "Text",
       "configurations": {
         "IsRequire": false,
         "IsEncrypt": false,
@@ -2426,8 +2426,8 @@
       "isDeleted": false
     },
     {
-      "systemName": "type",
-      "displayName": "Type",
+      "systemName": "Key",
+      "displayName": "Key",
       "mixDatabaseName": "sysPermission",
       "dataType": "Text",
       "configurations": {

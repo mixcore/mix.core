@@ -8,8 +8,8 @@ namespace Mix.SignalR.Hubs
 {
     public class HighFrequencyHub : BaseSignalRHub
     {
-        public HighFrequencyHub(IAuditLogService auditLogService, IMixTenantService mixTenantService)
-            : base(auditLogService, mixTenantService)
+        public HighFrequencyHub(IMixTenantService mixTenantService)
+            : base(mixTenantService)
         {
         }
         public async Task UploadStream(IAsyncEnumerable<string> stream, string room)

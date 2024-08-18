@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
@@ -15,6 +15,7 @@ using Mix.SignalR.Interfaces;
 using Mix.Lib.Interfaces;
 using Mix.Auth.Constants;
 using Mix.Mq.Lib.Models;
+using Mix.Identity.Dtos;
 
 namespace Mix.Services.Databases.Controllers
 {

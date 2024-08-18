@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Mix.Constant.Constants;
@@ -78,52 +79,52 @@ namespace Mix.Log.Lib.Subscribers
             {
                 return;
             }
-
-            switch (model.Action)
+            try
             {
-                case MixQueueActions.AuditLog:
-                    var auditLogCmd = model.ParseData<LogAuditLogCommand>();
-                    if (auditLogCmd != null)
-                    {
-                        await _auditLogService.SaveRequestAsync(auditLogCmd.Request);
-                    }
-                    break;
 
-                case MixQueueActions.EnqueueLog:
-                    var queueMessage = model.ParseData<MessageQueueModel>();
+                switch (model.Action)
+                {
+                    case MixQueueActions.AuditLog:
+                        var auditLogCmd = model.ParseData<LogAuditLogCommand>();
+                        if (auditLogCmd != null)
+                        {
+                            await _auditLogService.SaveRequestAsync(auditLogCmd.Request);
+                        }
+                        break;
 
-                    if (queueMessage != null)
-                    {
-                        await _queueMessageLogService.EnqueueMessageAsync(queueMessage);
-                    }
-                    break;
-                case MixQueueActions.AckLog:
-                    var ackQueueMessage = model.ParseData<MessageQueueModel>();
+                    case MixQueueActions.EnqueueLog:
+                        var queueMessage = model.ParseData<MessageQueueModel>();
 
-                    if (ackQueueMessage != null)
-                    {
-                        ackQueueMessage.Sender = model.Sender;
-                        await _queueMessageLogService.AckQueueMessage(ackQueueMessage);
-                    }
-                    break;
+                        if (queueMessage != null)
+                        {
+                            await _queueMessageLogService.EnqueueMessageAsync(queueMessage);
+                        }
+                        break;
+                    case MixQueueActions.AckLog:
+                        var ackQueueMessage = model.ParseData<MessageQueueModel>();
 
-                case MixQueueActions.ExceptionLog:
-                    var ex = model.ParseData<Exception>();
-                    await MixLogService.LogExceptionAsync(ex);
-                    break;
+                        if (ackQueueMessage != null)
+                        {
+                            ackQueueMessage.Sender = model.Sender;
+                            await _queueMessageLogService.AckQueueMessage(ackQueueMessage);
+                        }
+                        break;
 
-                case MixQueueActions.QueueFailed:
-                    var queueEx = model.ParseData<MessageQueueModel>();
-                    if (queueEx != null)
-                    {
-                        queueEx.Sender = model.Sender;
-                        await _queueMessageLogService.FailedQueueMessage(queueEx);
-                    }
-                    break;
+                    case MixQueueActions.ExceptionLog:
+                        var ex = model.ParseData<Exception>();
+                        await MixLogService.LogExceptionAsync(ex);
+                        break;
 
-                case MixQueueActions.DeadLetter:
-                    var deadLetterMsg = model.ParseData<MessageQueueModel>();
+                    case MixQueueActions.QueueFailed:
+                        var queueEx = model.ParseData<MessageQueueModel>();
+                        if (queueEx != null)
+                        {
+                            queueEx.Sender = model.Sender;
+                            await _queueMessageLogService.FailedQueueMessage(queueEx);
+                        }
+                        break;
 
+<<<<<<< HEAD
                     if (deadLetterMsg != null)
                     {
                         deadLetterMsg.Sender = model.Sender;
@@ -131,6 +132,24 @@ namespace Mix.Log.Lib.Subscribers
                         await _queueMessageLogService.DeadLetterMessageAsync(deadLetterMsg);
                     }
                     break;
+=======
+                    case MixQueueActions.DeadLetter:
+                        var deadLetterMsg = model.ParseData<MessageQueueModel>();
+
+                        if (deadLetterMsg != null)
+                        {
+                            deadLetterMsg.Sender = model.Sender;
+
+                            await _queueMessageLogService.DeadLetterMessageAsync(deadLetterMsg);
+                        }
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                await MixLogService.LogExceptionAsync(ex);
+                await SendMessage(model.Action, false, ex);
+>>>>>>> 24564b775 (update latest code)
             }
         }
 

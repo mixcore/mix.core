@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Lib.Dtos;
 using Mix.Lib.Interfaces;
 using Mix.RepoDb.Repositories;
+using Mix.Shared.Models;
 using System.Linq.Expressions;
 
 namespace Mix.Lib.Services
@@ -222,7 +223,23 @@ namespace Mix.Lib.Services
         {
             foreach (var database in _siteData.MixDatabases)
             {
-                _repository.InitTableName(database.SystemName);
+                if (database.MixDatabaseContextId.HasValue)
+                {
+                    var dbContext = _siteData.MixDatabaseContexts.First(m => m.Id == database.MixDatabaseContextId.Value);
+                    if (dbContext == null)
+                    {
+                        return;
+                    }
+                    var cnn = dbContext.ConnectionString.IsBase64()
+                        ? AesEncryptionHelper.DecryptString(dbContext.ConnectionString, GlobalConfigService.Instance.AppSettings.ApiEncryptKey)
+                        : dbContext.ConnectionString;
+                    _repository.Init(database.SystemName, dbContext.DatabaseProvider, cnn);
+                }
+                else
+                {
+                    _repository.InitTableName(database.SystemName);
+
+                }
                 var data = await _repository.GetAllAsync();
                 if (data != null)
                 {
@@ -342,12 +359,16 @@ namespace Mix.Lib.Services
 
         private async Task ExportDatabases()
         {
-            _siteData.MixDatabaseColumns = await _context.MixDatabaseColumn
-                .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.MixDatabaseId))
+            _siteData.MixDatabaseContexts = await _context.MixDatabaseContext
+                .Where(m => _dto.Content.MixDatabaseContextIds.Any(p => p == m.Id))
                 .AsNoTracking()
                 .ToListAsync();
             _siteData.MixDatabases = await _context.MixDatabase
                 .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.Id))
+                .AsNoTracking()
+                .ToListAsync();
+            _siteData.MixDatabaseColumns = await _context.MixDatabaseColumn
+                .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.MixDatabaseId))
                 .AsNoTracking()
                 .ToListAsync();
             _siteData.MixDatabaseRelationships = await _context.MixDatabaseRelationship

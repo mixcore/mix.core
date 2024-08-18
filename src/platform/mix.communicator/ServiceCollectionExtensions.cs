@@ -8,6 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMixCommunicators(this IServiceCollection services)
         {
             services.TryAddSingleton<FirebaseService>();
+            services.TryAddSingleton<FirestoreService>();
             services.TryAddScoped<EmailService>();
             return services;
         }

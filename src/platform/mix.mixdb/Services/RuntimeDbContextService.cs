@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+using Castle.Components.DictionaryAdapter.Xml;
+using Microsoft.AspNetCore.Http;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.EntityFrameworkCore;
@@ -126,7 +127,8 @@ namespace Mix.Mixdb.Services
                 ContextName = "DataContext",
                 ContextNamespace = "TypedDataContext.Context",
                 //ModelNamespace = "TypedDataContext.Models",
-                SuppressConnectionStringWarning = true
+                SuppressConnectionStringWarning = true,
+                
             };
 
             var scaffoldedModelSources = scaffolder.ScaffoldModel(

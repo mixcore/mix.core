@@ -203,7 +203,7 @@ namespace Mix.Queue.Engines
             {
                 Action = MixQueueActions.DeadLetter,
                 TopicId = MixQueueTopics.MixLog,
-                Data = ReflectionHelper.ParseObject(message).ToString(),
+                Data = ReflectionHelper.ParseObject(message).ToString(Newtonsoft.Json.Formatting.None),
                 Success = false
             });
             return Task.CompletedTask;
@@ -217,8 +217,8 @@ namespace Mix.Queue.Engines
                 TopicId = MixQueueTopics.MixLog,
                 Id = data.Id,
                 Sender = _subscriber.SubscriptionId,
-                Data = ReflectionHelper.ParseObject(data).ToString(),
-                Exception = ex,
+                Data = ReflectionHelper.ParseObject(data).ToString(Newtonsoft.Json.Formatting.None),
+                //Exception = ex,
                 Success = false
             });
             return Task.CompletedTask;

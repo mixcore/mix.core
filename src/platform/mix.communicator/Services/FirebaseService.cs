@@ -36,30 +36,61 @@ namespace Mix.Communicator.Services
             return decodedToken;
         }
 
-        public async Task<string> SendToDevice(
+        public async Task<string> SendNotificationToDevice(
             string registrationToken,
-            Notification notification,
-            Dictionary<string, string> messages)
+            Notification? notification = default)
         {
-            // This registration token comes from the client FCM SDKs.
-            //var registrationToken = "YOUR_REGISTRATION_TOKEN";
-
-            // See documentation on defining a message payload.
-            var message = new Message()
+            try
             {
-                Data = messages,
-                Notification = notification,
-                Token = registrationToken,
-            };
+                
+                // This registration token comes from the client FCM SDKs.
+                var message = new Message()
+                {
+                    Notification = notification,
+                    Token = registrationToken,
+                };
 
-            // Send a message to the device corresponding to the provided
-            // registration token.
-            string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
+                // Send a message to the device corresponding to the provided
+                // registration token.
+                string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
 
-            // Response is a message ID string.
-            Console.WriteLine("Successfully sent message: " + response);
+                // Response is a message ID string.
+                Console.WriteLine("Successfully sent message: " + response);
 
-            return response;
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        
+        public async Task<string> SendWebPushToDevice(
+            List<string> registrationTokens, WebpushConfig config)
+        {
+            try
+            {
+                
+                // This registration token comes from the client FCM SDKs.
+                var message = new MulticastMessage()
+                {
+                    Tokens = registrationTokens,
+                    Webpush = config
+                };
+
+                // Send a message to the device corresponding to the provided
+                // registration token.
+                var responses = await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
+
+                // Response is a message ID string.
+                Console.WriteLine("Successfully sent message: " + responses);
+
+                return string.Join(",", responses.Responses.Select(r => r.MessageId));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<string> SendToMultipleDevices(
@@ -79,7 +110,7 @@ namespace Mix.Communicator.Services
                 };
                 var responses = await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
                 // See the BatchResponse reference documentation
-                // for the contents of response.
+                // for the contents of responses.
                 return string.Join(",", responses.Responses.Select(r => r.MessageId));
             }
             catch (Exception ex)
@@ -197,7 +228,7 @@ namespace Mix.Communicator.Services
 
             var response = await FirebaseMessaging.DefaultInstance.SendAllAsync(messages);
             // See the BatchResponse reference documentation
-            // for the contents of response.
+            // for the contents of responses.
             Console.WriteLine($"{response.SuccessCount} messages were sent successfully");
         }
     }

@@ -1,4 +1,4 @@
-/* Sun Feb 04 2024 20:54:58 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
+/* Sat Sep 09 2023 14:08:55 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
   max-width: 100%; }
 
 fb-login {
@@ -33,6 +33,9 @@ mix-module-data-table .preview-container {
   max-height: 4em;
   overflow: hidden; }
 
+qr-code .qr-output canvas {
+  max-width: 100%; }
+
 #dlg-preview-popup .modal-body img {
   display: block;
   margin: 0 auto;
@@ -41,9 +44,6 @@ mix-module-data-table .preview-container {
 
 #dlg-preview-popup pre {
   overflow: visible; }
-
-qr-code .qr-output canvas {
-  max-width: 100%; }
 
 /* PROPORTIONALLY resize the canvas to the intended viewing size */
 /* canvas{width:300px; height:380px;} */
@@ -127,10 +127,6 @@ div[dnd-list] .dnd-item.selected {
   background-color: #dff0d8;
   color: #3c763d; }
 
-.table-data td.preview {
-  max-width: 120px;
-  overflow: hidden; }
-
 .mouse {
   z-index: 9999999;
   width: 70px;
@@ -192,13 +188,14 @@ mix-database-nav-values mix-column-preview .rowx {
   max-height: 110px;
   overflow: hidden; }
 
-.attr-set-value-item:last-child {
-  border-bottom: 0 !important; }
-
 @media (min-width: 992px) {
   #modal-content-filter .modal-lg,
   #modal-content-filter .modal-xl {
     max-width: 80vw; } }
+
+.table-data td.preview {
+  max-width: 120px;
+  overflow: hidden; }
 
 .content {
   width: 100%;

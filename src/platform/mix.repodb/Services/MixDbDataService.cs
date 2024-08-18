@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
@@ -27,6 +27,7 @@ using Mix.Lib.Interfaces;
 using Mix.Heart.Exceptions;
 using Mix.RepoDb.Helpers;
 using Mix.RepoDb.Dtos;
+using System.Linq.Expressions;
 
 namespace Mix.RepoDb.Services
 {
@@ -569,7 +570,7 @@ namespace Mix.RepoDb.Services
 
             if (_mixDb.MixDatabaseContextId.HasValue)
             {
-                _repository.Init(tableName, _mixDb.MixDatabaseContext.DatabaseProvider, _mixDb.MixDatabaseContext.ConnectionString);
+                _repository.Init(tableName, _mixDb.MixDatabaseContext.DatabaseProvider, _mixDb.MixDatabaseContext.DecryptedConnectionString);
             }
             else
             {
@@ -610,10 +611,10 @@ namespace Mix.RepoDb.Services
             if (!result.ContainsKey(_fieldNameService.Id))
             {
                 result.Add(new JProperty(_fieldNameService.Id, string.Empty));
-                if (!result.ContainsKey(_fieldNameService.CreatedDateTime))
-                {
-                    result.Add(new JProperty(_fieldNameService.CreatedDateTime, DateTime.UtcNow));
-                }
+            }
+            if (!result.ContainsKey(_fieldNameService.CreatedDateTime))
+            {
+                result.Add(new JProperty(_fieldNameService.CreatedDateTime, DateTime.UtcNow));
             }
             else
             {

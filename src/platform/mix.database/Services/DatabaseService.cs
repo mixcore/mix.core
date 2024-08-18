@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.MixDb;
@@ -16,7 +16,7 @@ namespace Mix.Database.Services
 {
     public class DatabaseService : ConfigurationServiceBase<DatabaseConfigurations>
     {
-        public MixDatabaseProvider DatabaseProvider => AppSettings.DatabaseProvider;
+        public MixDatabaseProvider DatabaseProvider =>  AppSettings.DatabaseProvider;
         protected IHttpContextAccessor HttpContextAccessor;
         protected IConfiguration Configuration;
         public DatabaseService(IHttpContextAccessor httpContextAccessor, IConfiguration configuration) : base(MixAppConfigFilePaths.Database, true)
@@ -118,6 +118,29 @@ namespace Mix.Database.Services
                 MixDatabaseProvider.MySQL => new MySqlAccountContext(this),
                 MixDatabaseProvider.SQLITE => new SqliteAccountContext(this),
                 MixDatabaseProvider.PostgreSQL => new PostgresSQLAccountContext(this),
+                _ => null,
+            };
+        }
+        
+        public AuditLogDbContext GetAuditLogDbContext()
+        {
+            return DatabaseProvider switch
+            {
+                MixDatabaseProvider.SQLSERVER => new SqlServerAuditLogDbContext(this),
+                MixDatabaseProvider.MySQL => new MySqlAuditLogDbContext(this),
+                MixDatabaseProvider.SQLITE => new SqlITEAuditLogDbContext(this),
+                MixDatabaseProvider.PostgreSQL => new PostgresAuditLogDbContext(this),
+                _ => null,
+            };
+        }
+          public QueueLogDbContext GetQueueLogDbContext()
+        {
+            return DatabaseProvider switch
+            {
+                MixDatabaseProvider.SQLSERVER => new SqlServerQueueLogDbContext(this),
+                MixDatabaseProvider.MySQL => new MySqlQueueLogDbContext(this),
+                MixDatabaseProvider.SQLITE => new SqlITEQueueLogDbContext(this),
+                MixDatabaseProvider.PostgreSQL => new PostgresQueueLogDbContext(this),
                 _ => null,
             };
         }

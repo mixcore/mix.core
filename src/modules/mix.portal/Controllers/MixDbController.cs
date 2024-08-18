@@ -1,4 +1,4 @@
-﻿using Amazon.SQS.Model.Internal.MarshallTransformations;
+using Amazon.SQS.Model.Internal.MarshallTransformations;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
@@ -91,7 +91,7 @@ namespace Mix.Portal.Controllers
             _fieldNameService = new FieldNameService(_mixDb.NamingConvention);
             if (_mixDb.MixDatabaseContextId.HasValue)
             {
-                _repository.Init(_tableName, _mixDb.MixDatabaseContext.DatabaseProvider, _mixDb.MixDatabaseContext.ConnectionString);
+                _repository.Init(_tableName, _mixDb.MixDatabaseContext.DatabaseProvider, _mixDb.MixDatabaseContext.DecryptedConnectionString);
             }
             else
             {
@@ -457,15 +457,17 @@ namespace Mix.Portal.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<object>> Delete(int id)
         {
-            var data = await _repository.DeleteAsync(id, _fieldNameService);
-            var childAssociationsQueries = GetAssociationQueries(parentDatabaseName: _tableName, parentId: id);
-            var parentAssociationsQueries = GetAssociationQueries(childDatabaseName: _tableName, childId: id);
-            _repository.InitTableName(AssociationTableName);
+            var objId = GetId(id);
+            var result = await _mixDbDataService.GetById(_tableName, objId, false);
+            var data = await _repository.DeleteAsync(objId, _fieldNameService);
+            var childAssociationsQueries = GetAssociationQueries(parentDatabaseName: _tableName, parentId: objId);
+            var parentAssociationsQueries = GetAssociationQueries(childDatabaseName: _tableName, childId: objId);
+            _repository.InitTableName(GetRelationshipDbName());
             await _repository.DeleteAsync(childAssociationsQueries);
             await _repository.DeleteAsync(parentAssociationsQueries);
             string username = _idService.GetClaim(User, MixClaims.Username);
             QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixBackgroundTasks, MixQueueActions.MixDbEvent,
-                new MixDbEventCommand(username, MixDbCommandQueueActions.Delete, _tableName, new(new JProperty("data", id))));
+                new MixDbEventCommand(username, MixDbCommandQueueAction.Delete.ToString(), _tableName, new(new JProperty("data", result))));
             return data > 0 ? Ok() : NotFound();
         }
 

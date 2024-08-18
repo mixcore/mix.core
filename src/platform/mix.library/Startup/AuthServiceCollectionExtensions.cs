@@ -1,4 +1,4 @@
-﻿// Licensed to the mixcore Foundation under one or more agreements.
+// Licensed to the mixcore Foundation under one or more agreements.
 // The mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -17,6 +17,8 @@ using Mix.Identity.Interfaces;
 using Mix.Identity.Services;
 using Mix.Lib.Services;
 using Mix.Shared.Models.Configurations;
+using Mix.Shared.Services;
+using RabbitMQ.Client;
 using System.Reflection;
 using System.Text;
 namespace Microsoft.Extensions.DependencyInjection
@@ -27,7 +29,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMixAuthorize<TDbContext>(this IServiceCollection services, IConfiguration configuration)
             where TDbContext : DbContext
         {
-            AuthConfigService authConfigService = services.GetService<AuthConfigService>();
+            services.TryAddScoped<AuthConfigService>();
+
             var _globalConfig = configuration.Get<GlobalSettingsModel>()!;
             if (_globalConfig.IsInit)
             {
@@ -35,11 +38,20 @@ namespace Microsoft.Extensions.DependencyInjection
                 authConfigService.SaveSettings();
             }
 
+            services.AddMixIdentityServices();
+            return services;
+        }
+        
+        public static IServiceCollection AddMixIdentityConfigurations<TDbContext>(this IServiceCollection services, IConfiguration configuration)
+            where TDbContext : DbContext
+        {
+            services.TryAddScoped<AuthConfigService>();
+            var authConfigService = services.GetService<AuthConfigService>();
             var authConfigurations = authConfigService.AppSettings;
             PasswordOptions pOpt = new()
             {
                 RequireDigit = false,
-                RequiredLength = 6,
+                RequiredLength = 4,
                 RequireLowercase = false,
                 RequireNonAlphanumeric = false,
                 RequireUppercase = false
@@ -117,6 +129,7 @@ namespace Microsoft.Extensions.DependencyInjection
             //});
             // Firebase service must be singleton (only one firebase default instance)
             services.TryAddSingleton<FirebaseService>();
+            services.TryAddSingleton<FirestoreService>();
             services.TryAddScoped<MixDbDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<MixDbDbContext>>();
             services.AddSingleton<IOAuthClientService, OAuthClientService>();

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -13,8 +13,9 @@
 		<Using Include="Mix.Shared.Dtos" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="FirebaseAdmin" Version="2.4.0" />
-		<PackageReference Include="Google.Api.Gax.Rest" Version="4.4.0" />
+		<PackageReference Include="FirebaseAdmin" Version="3.0.0" />
+		<PackageReference Include="Google.Api.Gax.Rest" Version="4.8.0" />
+		<PackageReference Include="Google.Cloud.Firestore" Version="3.8.0" />
 	</ItemGroup>
 
 	<ItemGroup>

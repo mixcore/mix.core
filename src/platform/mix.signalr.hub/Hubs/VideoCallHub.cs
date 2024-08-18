@@ -21,8 +21,8 @@ namespace Mix.Signalr.Hub.Hubs
         private static readonly List<UserCall> UserCalls = new();
         private static readonly List<CallOffer> CallOffers = new();
 
-        public VideoCallHub(IAuditLogService auditLogService, IMixTenantService mixTenantService)
-            : base(auditLogService, mixTenantService)
+        public VideoCallHub(IMixTenantService mixTenantService)
+            : base(mixTenantService)
         {
         }
 

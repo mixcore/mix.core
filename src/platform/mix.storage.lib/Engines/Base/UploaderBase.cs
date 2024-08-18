@@ -8,7 +8,7 @@ namespace Mix.Storage.Lib.Engines.Base
 {
     public abstract class UploaderBase : IMixUploader
     {
-        protected ISession Session;
+        protected ISession? Session;
         protected readonly IConfiguration Configuration;
         protected UnitOfWorkInfo CmsUow;
         private MixTenantSystemModel _currentTenant;
@@ -16,7 +16,10 @@ namespace Mix.Storage.Lib.Engines.Base
         {
             get
             {
-                _currentTenant ??= Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
+                _currentTenant ??= Session?.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant) ?? new MixTenantSystemModel()
+                {
+                    Id = 1
+                };
                 return _currentTenant;
             }
         }
@@ -25,7 +28,7 @@ namespace Mix.Storage.Lib.Engines.Base
         {
             CmsUow = cmsUow;
             Configuration = configuration;
-            Session = httpContextAccessor?.HttpContext?.Session ?? throw new MixException(MixErrorStatus.Badrequest, "Session not found."); ;
+            Session = httpContextAccessor?.HttpContext?.Session;
         }
 
         public async Task CreateMedia(string fullname, int tenantId, string? createdBy, CancellationToken cancellationToken = default)

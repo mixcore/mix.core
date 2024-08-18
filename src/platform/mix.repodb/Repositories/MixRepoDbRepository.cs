@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -25,6 +25,7 @@ using Npgsql;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
+using RepoDb.StatementBuilders;
 using System.Data;
 using System.Reflection.Metadata;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -132,10 +133,14 @@ namespace Mix.RepoDb.Repositories
                 new OrderField(pagingRequest.SortBy ?? "Id", pagingRequest.SortDirection == SortDirection.Asc ? Order.Ascending: Order.Descending)
             };
             BeginTransaction();
+            BaseStatementBuilder? builder = this.DatabaseProvider == MixDatabaseProvider.PostgreSQL ? new OptimizedPostgresSqlStatementBuilder() : null;
             var count = (int)_connection.Count(_tableName, queryFields, transaction: _dbTransaction);
             int pageSize = pagingRequest.PageSize ?? 100;
             var data = await _connection.BatchQueryAsync(_tableName, pagingRequest.PageIndex,
-                pageSize, orderFields, queryFields, selectFields, null, commandTimeout: _settings.CommandTimeout, transaction: _dbTransaction);
+                pageSize, orderFields, queryFields, selectFields, null, 
+                commandTimeout: _settings.CommandTimeout, 
+                transaction: _dbTransaction, 
+                statementBuilder: builder);
             return new PagingResponseModel<dynamic>()
             {
                 Items = data.ToList(),
@@ -383,6 +388,7 @@ namespace Mix.RepoDb.Repositories
                         dicObjs.Add(dicObj);
                     }
                 }
+
                 var fields = dicObjs[0].Keys.Select(m => new Field(m)).ToList();
 
                 BeginTransaction();
@@ -426,7 +432,47 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<object?> UpdateAsync(int id, JObject entity, RepoDbMixDatabaseViewModel mixDb)
+        public async Task<int?> UpdateManyAsync(List<JObject> entities, RepoDbMixDatabaseViewModel mixDb)
+        {
+            try
+            {
+                if (entities.Count == 0)
+                {
+                    return default;
+                }
+
+                List<Dictionary<string, object>> dicObjs = new();
+
+                foreach (var entity in entities)
+                {
+                    var dicObj = ParseDictionary(entity, mixDb);
+                    if (dicObj != null)
+                    {
+                        dicObjs.Add(dicObj);
+                    }
+                }
+
+                var fields = dicObjs[0].Keys.Select(m => new Field(m)).ToList();
+
+                BeginTransaction();
+                var result = await _connection.UpdateAllAsync(
+                        mixDb.SystemName,
+                        entities: dicObjs,
+                        fields: fields,
+                        commandTimeout: _settings.CommandTimeout,
+                        transaction: _dbTransaction,
+                        trace: _trace);
+                CompleteTransaction();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                RollbackTransaction();
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
+        }
+
+        public async Task<object?> UpdateAsync(object id, JObject entity, RepoDbMixDatabaseViewModel mixDb)
         {
             try
             {

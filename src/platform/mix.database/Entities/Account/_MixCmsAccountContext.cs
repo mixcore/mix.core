@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using Mix.Database.Services;
 
 using MySqlConnector;
+using System.Security;
 
 namespace Mix.Database.Entities.Account
 {

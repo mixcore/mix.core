@@ -1,4 +1,4 @@
-﻿using Mix.Constant.Enums;
+using Mix.Constant.Enums;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Extensions;
@@ -25,7 +25,7 @@ namespace Mix.RepoDb.Helpers
                     .ToList();
                 foreach (var pr in dto.Properties())
                 {
-                    var colName = fieldNameService.NamingConvention == MixDatabaseNamingConvention.TitleCase? pr.Name.ToTitleCase() : pr.Name;
+                    var colName = fieldNameService.NamingConvention == MixDatabaseNamingConvention.TitleCase ? pr.Name.ToTitleCase() : pr.Name.ToHyphenCase('_', true);
                     var col = columns.FirstOrDefault(c => c.SystemName.Equals(colName, StringComparison.InvariantCultureIgnoreCase));
 
                     if (encryptedColumnNames.Contains(colName))
@@ -89,6 +89,10 @@ namespace Mix.RepoDb.Helpers
                     result.Add(new JProperty(fieldNameService.IsDeleted, false));
                 }
                 return Task.FromResult(result);
+            }
+            catch (MixException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
@@ -203,38 +207,49 @@ namespace Mix.RepoDb.Helpers
 
         public static object? ParseObjectValue(MixDataType? dataType, JToken value)
         {
-            if (value != null)
+            try
             {
-                string strValue = value.ToString();
-                if (string.IsNullOrEmpty(strValue))
+                if (value != null)
                 {
-                    return default;
-                }
-                switch (dataType)
-                {
-                    case MixDataType.Date:
-                    case MixDataType.DateTime:
-                        return DateTime.Parse(strValue).ToUniversalTime();
-                    case MixDataType.Boolean:
-                        return bool.Parse(strValue);
-                    case MixDataType.Array:
-                    case MixDataType.ArrayMedia:
-                        return JArray.FromObject(value).ToString(Formatting.None);
-                    case MixDataType.Json:
-                    case MixDataType.ArrayRadio:
-                        return JObject.FromObject(value).ToString(Formatting.None);
-                    case MixDataType.Integer:
-                    case MixDataType.Reference:
-                        return int.Parse(strValue);
-                    case MixDataType.Double:
-                        return double.Parse(strValue);
-                    case MixDataType.Guid:
-                        Guid.TryParse(value.ToString(), out var guildResult);
-                        return guildResult;
-                    default:
-                        return value.ToString();
+                    string strValue = value.ToString();
+                    if (string.IsNullOrEmpty(strValue))
+                    {
+                        return default;
+                    }
+                    switch (dataType)
+                    {
+                        case MixDataType.Date:
+                        case MixDataType.DateTime:
+                            return DateTime.Parse(strValue).ToUniversalTime();
+                        case MixDataType.Boolean:
+                            return bool.Parse(strValue);
+                        case MixDataType.Array:
+                        case MixDataType.ArrayMedia:
+                            return value.Type != JTokenType.String 
+                                ? JArray.FromObject(value).ToString(Formatting.None)
+                                : value.Value<string>();
+                        case MixDataType.Json:
+                        case MixDataType.ArrayRadio:
+                            return value.Type != JTokenType.String 
+                                    ? JObject.FromObject(value).ToString(Formatting.None)
+                                    : value.Value<string>(); ;
+                        case MixDataType.Integer:
+                        case MixDataType.Reference:
+                            return int.Parse(strValue);
+                        case MixDataType.Double:
+                            return double.Parse(strValue);
+                        case MixDataType.Guid:
+                            Guid.TryParse(value.ToString(), out var guildResult);
+                            return guildResult;
+                        default:
+                            return value.ToString();
 
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
             }
             return null;
         }

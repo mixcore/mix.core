@@ -1,4 +1,5 @@
-﻿using Mix.Auth.Enums;
+using Mix.Auth.Enums;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace Mix.Auth.Models
         public string UserName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        public JObject? Data { get; set; }
         public MixExternalLoginProviders Provider { get; set; }
 
         public string ExternalAccessToken { get; set; }

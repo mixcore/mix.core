@@ -4,6 +4,10 @@ using System.Reflection;
 using Mix.Log.Lib;
 using Microsoft.Azure.Amqp.Framing;
 using Mix.Lib.Middlewares;
+using Mix.Log.Lib.Publishers;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Log.Lib.Interfaces;
+using Mix.Log.Lib.Services;
 
 var builder = MixCmsHelper.CreateWebApplicationBuilder(args);
 if (builder.Environment.IsDevelopment())
@@ -18,7 +22,8 @@ if (!Directory.Exists(MixFolders.MixContentSharedFolder))
 
 builder.Services.AddMixServices(Assembly.GetExecutingAssembly(), builder.Configuration);
 builder.Services.AddMixCors();
-builder.Services.AddMixLog(builder.Configuration);
+builder.AddMixLogPublisher();
+
 // Must app Auth config after Add mixservice to init App config 
 builder.Services.AddMixAuthorize<MixCmsAccountContext>(builder.Configuration);
 

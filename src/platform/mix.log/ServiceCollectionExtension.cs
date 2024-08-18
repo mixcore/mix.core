@@ -1,8 +1,9 @@
-﻿using Google.Api;
+using Google.Api;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.AuditLog;
 using Mix.Database.Entities.Queue;
@@ -32,7 +33,13 @@ namespace Mix.Log.Lib
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMixLog(this IServiceCollection services, IConfiguration configuration)
+        // Only need to add these services to the main service 
+        // which is use for subscribe and store log messages
+        // For other application:
+        //      builder.Services.AddHostedService<MixLogPublisher>();
+        //      app.UseMiddleware<AuditlogMiddleware>();
+        // For Ex: store log message to db, just need to add these services to main application only
+        public static IServiceCollection AddMixLogSubscriber(this IServiceCollection services, IConfiguration configuration)
         {
             var globalConfigs = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
 
@@ -46,16 +53,25 @@ namespace Mix.Log.Lib
 
 
             services.AddDbContext<AuditLogDbContext>();
-            services.AddDbContext<MixQueueDbContext>();
-            services.TryAddScoped<AuditLogDataModel>();
+            services.AddDbContext<QueueLogDbContext>();
+            
             services.TryAddSingleton<IAuditLogService, AuditLogService>();
             if (!globalConfigs!.IsInit)
             {
-                services.AddHostedService<MixLogPublisher>();
                 services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
                 services.TryAddSingleton<IMixQueueLog, MixQueueLogService>();
+                services.AddHostedService<MixLogSubscriber>();
             }
             return services;
+        }
+
+        public static IHostApplicationBuilder AddMixLogPublisher(this IHostApplicationBuilder builder)
+        {
+            builder.Services.TryAddSingleton<IAuditLogService, AuditLogService>();
+            builder.Services.TryAddScoped<AuditLogDataModel>();
+            builder.Services.AddHostedService<MixLogPublisher>();
+
+            return builder;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Amqp.Framing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -25,13 +25,16 @@ using Mix.Service.Interfaces;
 using Mix.Service.Services;
 using Mix.Shared.Dtos;
 using Mix.Shared.Models;
+using Mix.Shared.Services;
 using MySqlX.XDevAPI.Common;
 using Newtonsoft.Json.Linq;
+using Npgsql;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
 using System.Dynamic;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using ZstdSharp.Unsafe;
 
 namespace Mix.RepoDb.Services
@@ -141,7 +144,18 @@ namespace Mix.RepoDb.Services
         {
             if (database.MixDatabaseContextId.HasValue)
             {
-                await SwitchDbContext(database.MixDatabaseContext);
+                if (database.MixDatabaseContextId.HasValue)
+                {
+                    await SwitchDbContext(database.MixDatabaseContext);
+                }
+
+                if (database is { Columns.Count: > 0 })
+                {
+                    await Migrate(database, database.MixDatabaseContext.DatabaseProvider, _repository);
+                    _repository.CompleteTransaction();
+                    return true;
+                }
+                return false;
             }
 
             if (database is { Columns.Count: > 0 })
@@ -194,7 +208,7 @@ namespace Mix.RepoDb.Services
                         insertQuery += string.Join(',', queries);
                         if (database.MixDatabaseContextId.HasValue)
                         {
-                            _repository.Init(database.SystemName, database.MixDatabaseContext.DatabaseProvider, database.MixDatabaseContext.ConnectionString);
+                            _repository.Init(database.SystemName, database.MixDatabaseContext.DatabaseProvider, database.MixDatabaseContext.DecryptedConnectionString);
                         }
                         else
                         {
@@ -264,6 +278,7 @@ namespace Mix.RepoDb.Services
 
             try
             {
+                var cnn = AesEncryptionHelper.DecryptString(dbContext.ConnectionString, GlobalConfigService.Instance.AesKey);
                 var strMixDbs = MixFileHelper.GetFile(
                         "init-new-dbcontext-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
                 var obj = JObject.Parse(strMixDbs.Content);
@@ -277,7 +292,7 @@ namespace Mix.RepoDb.Services
                         string newDbName = dbContext.NamingConvention == MixDatabaseNamingConvention.SnakeCase
                             ? $"{dbContext.SystemName}_{database.DisplayName.ToColumnName(false)}"
                             : $"{dbContext.SystemName.ToTitleCase()}{database.DisplayName.ToColumnName(true)}";
-                        _repository.Init(newDbName, dbContext.DatabaseProvider, dbContext.ConnectionString);
+                        _repository.Init(newDbName, dbContext.DatabaseProvider, cnn);
                         var currentDb = await RepoDbMixDatabaseViewModel.GetRepository(_cmsUow, CacheService)
                                             .GetSingleAsync(m => m.SystemName == newDbName);
                         if (currentDb == null)
@@ -285,6 +300,7 @@ namespace Mix.RepoDb.Services
 
                             currentDb = new(database, _cmsUow);
                             currentDb.Id = 0;
+                            currentDb.NamingConvention = dbContext.NamingConvention;
                             currentDb.SystemName = newDbName;
                             currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
                             currentDb.MixDatabaseContextId = dbContext.Id;
@@ -298,7 +314,7 @@ namespace Mix.RepoDb.Services
                                 {
                                     string newColName = dbContext.NamingConvention == MixDatabaseNamingConvention.SnakeCase
                                     ? col.DisplayName.ToColumnName(false)
-                                    : col.DisplayName.ToColumnName(false);
+                                    : col.DisplayName.ToColumnName(true);
                                     col.Id = 0;
                                     col.SystemName = newColName;
                                     col.MixDatabaseName = newDbName;
@@ -311,7 +327,7 @@ namespace Mix.RepoDb.Services
                         }
                         if (currentDb is { Columns.Count: > 0 })
                         {
-                            await Migrate(currentDb, _databaseService.DatabaseProvider, _repository);
+                            await Migrate(currentDb, dbContext.DatabaseProvider, _repository);
 
                         }
                     }
@@ -484,8 +500,8 @@ namespace Mix.RepoDb.Services
                 MixDatabaseProvider.SQLITE => new SqliteDatabaseConstants(),
                 _ => throw new NotImplementedException()
             };
-            _repository = new MixRepoDbRepository(_cache, dbContext.DatabaseProvider, dbContext.ConnectionString, _cmsUow);
-
+            _repository = new MixRepoDbRepository(_cache, dbContext.DatabaseProvider, dbContext.DecryptedConnectionString, _cmsUow);
+            return Task.CompletedTask;
         }
 
         // Only run after init CMS success
@@ -552,7 +568,7 @@ namespace Mix.RepoDb.Services
             cancellationToken.ThrowIfCancellationRequested();
             if (database.MixDatabaseContextId.HasValue)
             {
-                _repository.Init(database.SystemName, database.MixDatabaseContext.DatabaseProvider, database.MixDatabaseContext.ConnectionString);
+                _repository.Init(database.SystemName, database.MixDatabaseContext.DatabaseProvider, database.MixDatabaseContext.DecryptedConnectionString);
             }
             else
             {
@@ -568,7 +584,14 @@ namespace Mix.RepoDb.Services
             var fieldNameService = new FieldNameService(database.NamingConvention);
             var colsSql = new List<string>();
             var tableName = database.SystemName;
-
+            _databaseConstant = databaseProvider switch
+            {
+                MixDatabaseProvider.SQLSERVER => new SqlServerDatabaseConstants(),
+                MixDatabaseProvider.MySQL => new MySqlDatabaseConstants(),
+                MixDatabaseProvider.PostgreSQL => new PostgresDatabaseConstants(),
+                MixDatabaseProvider.SQLITE => new SqliteDatabaseConstants(),
+                _ => throw new NotImplementedException()
+            };
             foreach (var col in database.Columns)
             {
                 colsSql.Add(GenerateColumnSql(col));

@@ -1,4 +1,6 @@
-﻿namespace Mix.Lib.ViewModels
+﻿using System.Text.Json.Serialization;
+
+namespace Mix.Lib.ViewModels
 {
     public sealed class MixDatabaseContextViewModel
         : TenantDataViewModelBase<MixCmsContext, MixDatabaseContext, int, MixDatabaseContextViewModel>
@@ -11,6 +13,9 @@
         public string SystemName { get; set; }
 
         public List<MixDatabaseViewModel> Databases { get; set; } = new();
+
+        [JsonIgnore]
+        public string DecryptedConnectionString { get; set; }
         #endregion
 
         #region Constructors
@@ -34,8 +39,24 @@
         #region Overrides
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            var dbRepo = MixDatabaseViewModel.GetRepository(UowInfo, CacheService);
-            Databases = await dbRepo.GetListAsync(m => m.MixDatabaseContextId == Id, cancellationToken);
+            Databases = await MixDatabaseViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixDatabaseContextId == Id, cancellationToken);
+            if (ConnectionString.IsBase64())
+            {
+                DecryptedConnectionString ??= AesEncryptionHelper.DecryptString(ConnectionString, GlobalConfigService.Instance.AppSettings.ApiEncryptKey);
+            }
+            else
+            {
+                DecryptedConnectionString = ConnectionString;
+            }
+        }
+
+        public override Task<MixDatabaseContext> ParseEntity(CancellationToken cancellationToken = default)
+        {
+            if (!string.IsNullOrEmpty(DecryptedConnectionString))
+            {
+                ConnectionString = AesEncryptionHelper.EncryptString(DecryptedConnectionString, GlobalConfigService.Instance.AppSettings.ApiEncryptKey);
+            }
+            return base.ParseEntity(cancellationToken);
         }
 
         protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)

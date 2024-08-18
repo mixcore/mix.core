@@ -5,8 +5,8 @@ namespace Mix.SignalR.Hubs
 {
     public class MixThemeHub : BaseSignalRHub
     {
-        public MixThemeHub(IAuditLogService auditLogService, IMixTenantService mixTenantService)
-            : base(auditLogService, mixTenantService)
+        public MixThemeHub(IMixTenantService mixTenantService)
+            : base(mixTenantService)
         {
         }
     }

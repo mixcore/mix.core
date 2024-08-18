@@ -56,11 +56,8 @@ namespace Mix.Storage.Lib.Subscribers
                 switch (model.Action)
                 {
                     case MixQueueActions.ScaleImage:
-                        using (ServiceScope = ServicesProvider.CreateScope())
-                        {
-                            MixStorageService srv = GetRequiredService<MixStorageService>();
-                            await srv.ScaleImage(model.Data);
-                        }
+                        MixStorageService srv = GetRequiredService<MixStorageService>();
+                        await srv.ScaleImage(model.Data);
                         break;
                 }
             }

@@ -39,7 +39,10 @@ builder.Services.AddMixAuthorize<MixCmsContext>(builder.Configuration);
 builder.Services.TryAddSingleton<MixEndpointService>();
 builder.Services.AddOcelot(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+if (!builder.Environment.IsDevelopment())
+{
+    builder.Services.AddEndpointsApiExplorer();
+}
 if (isInit)
 {
     builder.Services.AddCors(options =>

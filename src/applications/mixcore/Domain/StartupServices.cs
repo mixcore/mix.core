@@ -1,7 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Lib.Middlewares;
 using Mix.Lib.Publishers;
 using Mix.Lib.Subscribers;
+using Mix.Log.Lib.Interfaces;
+using Mix.Log.Lib.Models;
 using Mix.Log.Lib.Publishers;
+using Mix.Log.Lib.Services;
 using Mix.Log.Lib.Subscribers;
 using Mix.Quartz.Interfaces;
 using Mix.Quartz.Services;
@@ -35,7 +39,9 @@ namespace Mixcore.Domain
 
             if (!globalConfigs!.IsInit)
             {
-                services.AddHostedService<MixLogSubscriber>();
+                services.TryAddSingleton<IAuditLogService, AuditLogService>();
+                services.TryAddScoped<AuditLogDataModel>();
+                services.AddHostedService<MixLogPublisher>();
             }
 
             services.AddMixRateLimiter(configuration);
@@ -43,6 +49,11 @@ namespace Mixcore.Domain
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
         {
+            var globalConfigs = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
+            if (!globalConfigs!.IsInit)
+            {
+                app.UseMiddleware<AuditlogMiddleware>();
+            }
             app.UseMixRateLimiter();
         }
 

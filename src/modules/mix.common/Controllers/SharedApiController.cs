@@ -75,7 +75,7 @@ namespace Mix.Common.Controllers
             string msg = encryptMessage.ObjectData != null
                     ? encryptMessage.ObjectData.ToString(Formatting.None)
                     : encryptMessage.StringData;
-            var result = AesEncryptionHelper.EncryptString(msg, key);
+            var result = AesEncryptionHelper.EncryptString(msg, key, encryptMessage.GetEncoding());
             return Ok(result);
         }
 
@@ -84,7 +84,7 @@ namespace Mix.Common.Controllers
         public ActionResult<string> DecryptMessage(CryptoMessageDto encryptMessage)
         {
             string key = encryptMessage.Key ?? GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
-            string msg = AesEncryptionHelper.DecryptString(encryptMessage.StringData, key);
+            string msg = AesEncryptionHelper.DecryptString(encryptMessage.StringData, key, encryptMessage.GetEncoding());
             return Ok(msg);
         }
 

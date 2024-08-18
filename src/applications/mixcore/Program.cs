@@ -4,11 +4,19 @@ using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Mix.Log.Lib;
-using Microsoft.Extensions.FileProviders;
-using Mix.Lib.Middlewares;
-using Mix.Shared.Services;
 using Mix.Shared.Models.Configurations;
 using Mix.Queue.Extensions;
+using Mix.Lib.Services;
+using Mix.Lib.Publishers;
+using Mix.Lib.Subscribers;
+using Mix.Quartz.Services;
+using Mix.RepoDb.Publishers;
+using Mix.RepoDb.Subscribers;
+using Mix.Storage.Lib.Subscribers;
+using Mix.Log.Lib.Interfaces;
+using Mix.Log.Lib.Services;
+using Mix.Log.Lib.Models;
+using Mix.Log.Lib.Publishers;
 var builder = MixCmsHelper.CreateWebApplicationBuilder(args);
 
 if (builder.Environment.IsDevelopment())
@@ -32,11 +40,12 @@ builder.Services.AddMixServices(Assembly.GetExecutingAssembly(), builder.Configu
 builder.Services.ApplyMigrations(globalConfig);
 builder.Services.AddMixCors();
 builder.Services.AddScoped<MixNavigationService>();
-builder.Services.AddMixLog(builder.Configuration);
+builder.Services.AddMixLogSubscriber(builder.Configuration);
 builder.Services.AddMixAuthorize<MixCmsAccountContext>(builder.Configuration);
 
 builder.Services.TryAddScoped<MixcorePostService>();
 
+AddPortalServices(builder.Services, builder.Configuration);
 var app = builder.Build();
 
 Configure(app, builder.Environment, builder.Configuration);
@@ -53,8 +62,6 @@ void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfiguration 
     }
     app.UseHttpsRedirection();
     app.UseMixTenant();
-
-    app.UseMiddleware<AuditlogMiddleware>();
 
     app.UseRouting();
 
@@ -80,5 +87,32 @@ void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfiguration 
     //    app.UseHttpsRedirection();
     //}
 
+
+}
+
+void AddPortalServices(IServiceCollection services, IConfiguration configuration)
+{
+    var globalConfigs = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
+    services.AddMixRoutes();
+
+    services.AddHostedService<MixRepoDbPublisher>();
+    services.AddHostedService<MixRepoDbSubscriber>();
+    services.AddHostedService<MixViewModelChangedPublisher>();
+    services.AddHostedService<MixViewModelChangedSubscriber>();
+
+    services.AddHostedService<MixBackgroundTaskPublisher>();
+    services.AddHostedService<MixBackgroundTaskSubscriber>();
+    services.AddHostedService<MixDbCommandPublisher>();
+    services.AddHostedService<MixDbCommandSubscriber>();
+
+    services.AddHostedService<MixQuartzHostedService>();
+    services.AddHostedService<StorageBackgroundTaskSubscriber>();
+
+    if (!globalConfigs!.IsInit)
+    {
+        services.TryAddSingleton<IAuditLogService, AuditLogService>();
+        services.TryAddScoped<AuditLogDataModel>();
+        services.AddHostedService<MixLogPublisher>();
+    }
 
 }

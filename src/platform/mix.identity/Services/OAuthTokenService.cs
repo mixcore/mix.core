@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Database.Entities.Account;
@@ -15,6 +15,7 @@ using Mix.Auth.Models;
 using Mix.Identity.Interfaces;
 using Mix.Auth.Common;
 using Mix.Auth.Enums;
+using Mix.Shared.Services;
 
 namespace Mix.Identity.Services
 {
@@ -24,18 +25,20 @@ namespace Mix.Identity.Services
         private readonly IOAuthClientService _clientService;
         private readonly IOAuthCodeStoreService _codeStoreService;
         private readonly OAuthServerOptions _options;
-        private readonly MixCmsAccountContext _context;
+        private readonly AuthConfigService _authConfigService;
         private readonly MixAuthenticationConfigurations _authConfigs;
 
         public OAuthTokenService(IOAuthCodeStoreService codeStoreService,
             IOptions<OAuthServerOptions> options,
             IConfiguration configuration,
-            IOAuthClientService clientService)
+            IOAuthClientService clientService,
+            AuthConfigService authConfigService)
         {
             _clientService = clientService;
             _codeStoreService = codeStoreService;
             _options = options.Value;
-            _authConfigs = configuration.GetSection(MixAppSettingsSection.Authentication).Get<MixAuthenticationConfigurations>();
+            _authConfigService = authConfigService;
+            _authConfigs = _authConfigService.AppSettings;
         }
         public AuthorizeResponse AuthorizeRequest(IHttpContextAccessor httpContextAccessor, OAuthRequest authorizationRequest)
         {

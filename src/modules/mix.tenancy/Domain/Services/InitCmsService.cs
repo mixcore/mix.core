@@ -94,11 +94,10 @@ namespace Mix.Tenancy.Domain.Services
                     await _userManager.AddToRoleAsync(user, MixRoleEnums.SuperAdmin.ToString());
                     await _userManager.AddToRoleAsync(user, MixRoleEnums.Owner.ToString());
                     await _userManager.AddToTenant(user, 1);
-                    var rsaKeys = RSAEncryptionHelper.GenerateKeys();
                     var aesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
                     await _cmsUow.CompleteAsync();
                     var token = await _identityService.GenerateAccessTokenAsync(
-                        user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
+                        user, true);
                     if (token != null)
                     {
                         GlobalConfigService.Instance.AppSettings.ApiEncryptKey = aesKey;

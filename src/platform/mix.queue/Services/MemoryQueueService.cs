@@ -110,7 +110,7 @@ namespace Mix.Queue.Services
                     {
                         TopicId = MixQueueTopics.MixLog,
                         Action = MixQueueActions.EnqueueLog,
-                        Data = ReflectionHelper.ParseObject(model).ToString(),
+                        Data = ReflectionHelper.ParseObject(model).ToString(Newtonsoft.Json.Formatting.None),
                         TenantId = 1,
                         CreatedDate = DateTime.UtcNow
                     });

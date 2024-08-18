@@ -38,7 +38,8 @@ namespace Mix.Lib.Services
             string subject, string templateName, JObject data,
             string to,
             string cc = null,
-            string from = null)
+            string from = null,
+            string fromName = null)
         {
             var template = await GetEdmTemplate(templateName);
             if (string.IsNullOrEmpty(template))
@@ -59,6 +60,7 @@ namespace Mix.Lib.Services
                 Subject = subject,
                 Message = template,
                 From = from,
+                FromName = fromName,
                 CC = cc,
                 To = to
             };
@@ -69,7 +71,8 @@ namespace Mix.Lib.Services
             string subject, string template, JObject data,
             string to,
             string cc = null,
-            string from = null)
+            string from = null,
+            string fromName = null)
         {
             foreach (var prop in data.Properties().ToList())
             {
@@ -84,6 +87,7 @@ namespace Mix.Lib.Services
                 Subject = subject,
                 Message = template,
                 From = from,
+                FromName = fromName,
                 CC = cc,
                 To = to
             };

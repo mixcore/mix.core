@@ -32,9 +32,20 @@ namespace Mix.Lib.Services
                 else
                 {
                     uow = new(new MixCmsContext(_databaseService));
-                    Configs = await MixConfigurationContentViewModel.GetRepository(uow, CacheService).GetAllAsync(
-                        m => m.MixTenantId == CurrentTenant.Id);
-                    uow.Dispose();
+                    try
+                    {
+                        Configs = await MixConfigurationContentViewModel
+                            .GetRepository(uow, CacheService)
+                            .GetAllAsync(p => true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"MixConfigurationService getting config error {ex.Message}");
+                    }
+                    finally
+                    {
+                        uow.Dispose();
+                    }
                 }
             }
         }

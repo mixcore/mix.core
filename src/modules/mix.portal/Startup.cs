@@ -20,7 +20,6 @@ namespace Mix.Portal
 
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
             services.AddMixCors();
-            services.AddMixLog(Configuration);
             // Must app Auth config after Add mixservice to init App config 
             services.AddMixAuthorize<MixCmsAccountContext>(Configuration);
         }

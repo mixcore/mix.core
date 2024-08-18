@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Account;
 using Mix.Database.EntityConfigurations;
 using Mix.Database.Services;
 using Newtonsoft.Json.Linq;
-
+using Mix.Database.EntityConfigurations.Base;
+using Microsoft.Extensions.DependencyModel.Resolution;
 namespace Mix.Database.Entities.AuditLog.EntityConfigurations
 {
     internal class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>

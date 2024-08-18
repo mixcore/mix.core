@@ -118,7 +118,7 @@ namespace Mix.Queue.Engines.MixQueue
                         TopicId = MixQueueTopics.MixLog,
                         Action = MixQueueActions.AckLog,
                         Sender = _subscriptionId,
-                        Data = ReflectionHelper.ParseObject(model).ToString(),
+                        Data = ReflectionHelper.ParseObject(model).ToString(Newtonsoft.Json.Formatting.None),
                         TenantId = 1,
                         CreatedDate = DateTime.UtcNow
                     });

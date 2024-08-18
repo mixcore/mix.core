@@ -7,6 +7,7 @@ using Mix.Database.Entities.Account;
 using Mix.Heart.Exceptions;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
+using Quartz.Listener;
 using System.Security.Claims;
 
 namespace Mixcore.Controllers
@@ -92,7 +93,7 @@ namespace Mixcore.Controllers
                 var token = await _idService.GetAuthData(user, true, CurrentTenant.Id);
                 return View(new ExternalLoginResultModel()
                 {
-                    Token = token.ToString(Formatting.None),
+                    Token = JObject.FromObject(token).ToString(Formatting.None),
                     ReturnUrl = returnUrl
                 });
             }
@@ -116,7 +117,7 @@ namespace Mixcore.Controllers
                     var token = await _idService.GetAuthData(user, true, CurrentTenant.Id);
                     return View(new ExternalLoginResultModel()
                     {
-                        Token = token.ToString(Formatting.None),
+                        Token = JObject.FromObject(token).ToString(Formatting.None),
                         ReturnUrl = returnUrl
                     });
                 }
@@ -139,7 +140,7 @@ namespace Mixcore.Controllers
                             var token = await _idService.GetAuthData(user, true, CurrentTenant.Id);
                             return View(new ExternalLoginResultModel()
                             {
-                                Token = token.ToString(Formatting.None),
+                                Token = JObject.FromObject(token).ToString(Formatting.None),
                                 ReturnUrl = returnUrl
                             });
                         }
