@@ -73,7 +73,7 @@ namespace Mix.Portal.Controllers
         }
 
         [HttpPost("load-theme")]
-        public async Task<ActionResult<SiteDataViewModel>> LoadThemeAsync([FromForm] IFormFile theme)
+        public async Task<ActionResult<SiteDataViewModel>> LoadThemeAsync(IFormFile theme)
         {
             _importService.ExtractTheme(theme);
             var siteData = await _importService.LoadSchema();

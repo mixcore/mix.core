@@ -22,7 +22,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
-		<ProjectReference Include="..\mixcore.host.aspire\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
+		<ProjectReference Include="..\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

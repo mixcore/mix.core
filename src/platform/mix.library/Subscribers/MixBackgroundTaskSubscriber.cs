@@ -59,12 +59,12 @@ namespace Mix.Lib.Subscribers
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(GetType().Name, ex);
+                        Logger.LogError(GetType().Name, ex);
                     }
                 }
             });
         }
-        public override async Task Handler(MessageQueueModel model)
+        public override async Task Handler(MessageQueueModel model, CancellationToken cancellationToken)
         {
             if (!allowActions.Contains(model.Action))
             {

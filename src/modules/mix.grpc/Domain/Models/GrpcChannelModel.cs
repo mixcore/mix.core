@@ -47,7 +47,7 @@ namespace Mix.Grpc.Domain.Models
             // CallCredentials can't be used with ChannelCredentials.Insecure on non-TLS channels.
             var channel = GrpcChannel.ForAddress(address, new GrpcChannelOptions
             {
-                //Credentials = ChannelCredentials.Create(new SslCredentials(), credentials),
+                //Credentials = ChannelCredentials.POST(new SslCredentials(), credentials),
                 HttpHandler = handler
             });
             return channel;

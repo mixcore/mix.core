@@ -1,4 +1,4 @@
-// Licensed to the mixcore Foundation under one or more agreements.
+﻿// Licensed to the mixcore Foundation under one or more agreements.
 // The mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -32,16 +32,18 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<AuthConfigService>();
 
             var _globalConfig = configuration.Get<GlobalSettingsModel>()!;
+            var authConfigService = services.GetService<AuthConfigService>();
             if (_globalConfig.IsInit)
             {
                 authConfigService.AppSettings.SecretKey = Guid.NewGuid().ToString("N");
                 authConfigService.SaveSettings();
             }
+            services.AddMixIdentityConfigurations<TDbContext>(configuration);
 
             services.AddMixIdentityServices();
             return services;
         }
-        
+
         public static IServiceCollection AddMixIdentityConfigurations<TDbContext>(this IServiceCollection services, IConfiguration configuration)
             where TDbContext : DbContext
         {
@@ -128,17 +130,21 @@ namespace Microsoft.Extensions.DependencyInjection
             //    options.SlidingExpiration = true;
             //});
             // Firebase service must be singleton (only one firebase default instance)
+
+            services.TryAddSingleton<IOAuthClientService, OAuthClientService>();
+            services.TryAddSingleton<IOAuthCodeStoreService, OAuthCodeStoreService>();
+            services.TryAddScoped<IOAuthTokenService, OAuthTokenService>();
+            services.TryAddScoped<IOAuthTokenRevocationService, OAuthTokenRevocationService>();
+            return services;
+        }
+
+        public static IServiceCollection AddMixIdentityServices(this IServiceCollection services)
+        {
             services.TryAddSingleton<FirebaseService>();
             services.TryAddSingleton<FirestoreService>();
             services.TryAddScoped<MixDbDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<MixDbDbContext>>();
-            services.AddSingleton<IOAuthClientService, OAuthClientService>();
-            services.AddSingleton<IOAuthCodeStoreService, OAuthCodeStoreService>();
-            services.AddScoped<IOAuthTokenService, OAuthTokenService>();
-            services.AddScoped<IOAuthTokenRevocationService, OAuthTokenRevocationService>();
-            services.AddScoped<MixIdentityService>();
-
-           
+            services.TryAddScoped<MixIdentityService>();
             return services;
         }
 

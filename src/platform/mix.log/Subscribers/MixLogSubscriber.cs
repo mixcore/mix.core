@@ -3,23 +3,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Mix.Constant.Constants;
-using Mix.Constant.Enums;
-using Mix.Database.Entities.Queue;
-using Mix.Heart.Enums;
-using Mix.Heart.Extensions;
-using Mix.Heart.Helpers;
 using Mix.Log.Lib.Commands;
 using Mix.Log.Lib.Interfaces;
-using Mix.Log.Lib.Models;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
-using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Service.Services;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
-using Newtonsoft.Json.Linq;
 
 namespace Mix.Log.Lib.Subscribers
 {
@@ -56,7 +48,7 @@ namespace Mix.Log.Lib.Subscribers
         public override Task StartAsync(CancellationToken cancellationToken = default)
         {
             base.StartAsync(cancellationToken);
-            
+
             return Task.Run(async () =>
             {
                 while (_portalHub.Connection == null || _portalHub.Connection.State != Microsoft.AspNetCore.SignalR.Client.HubConnectionState.Connected)
@@ -66,14 +58,14 @@ namespace Mix.Log.Lib.Subscribers
                         await Task.Delay(5000);
                         await _portalHub.StartConnection();
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
-                        _logger.LogError(GetType().Name, ex);
+                        Logger.LogError(GetType().Name, ex);
                     }
                 }
             });
         }
-        public override async Task Handler(MessageQueueModel model)
+        public override async Task Handler(MessageQueueModel model, CancellationToken cancellationToken)
         {
             if (!allowActions.Contains(model.Action))
             {
@@ -124,15 +116,6 @@ namespace Mix.Log.Lib.Subscribers
                         }
                         break;
 
-<<<<<<< HEAD
-                    if (deadLetterMsg != null)
-                    {
-                        deadLetterMsg.Sender = model.Sender;
-                        
-                        await _queueMessageLogService.DeadLetterMessageAsync(deadLetterMsg);
-                    }
-                    break;
-=======
                     case MixQueueActions.DeadLetter:
                         var deadLetterMsg = model.ParseData<MessageQueueModel>();
 
@@ -149,7 +132,6 @@ namespace Mix.Log.Lib.Subscribers
             {
                 await MixLogService.LogExceptionAsync(ex);
                 await SendMessage(model.Action, false, ex);
->>>>>>> 24564b775 (update latest code)
             }
         }
 

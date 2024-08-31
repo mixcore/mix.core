@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Mix.Database.Entities.Queue;
-using Mix.Mq.Lib.Models;
-using Mix.Service.Models;
-using Newtonsoft.Json.Linq;
+﻿using Mix.Mq.Lib.Models;
 
 namespace Mix.Log.Lib.Interfaces
 {

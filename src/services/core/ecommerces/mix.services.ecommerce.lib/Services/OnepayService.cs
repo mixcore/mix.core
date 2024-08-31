@@ -95,7 +95,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             // remove trailing & from string
             if (sb.Length > 0)
                 sb.Remove(sb.Length - 1, 1);
-            // Create secureHash on string
+            // POST secureHash on string
             string hexHash = "";
             using (HMACSHA256 hasher = new(convertedHash))
             {
@@ -155,22 +155,22 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
                 var response = responseObj.ToObject<OnepayTransactionResponse>() ?? throw new MixException(MixErrorStatus.Badrequest, "Cannot convert response.");
 
-                var paymentStatus = PaymentStatus.SUCCESS;
+                var paymentStatus = PaymentStatus.Success;
                 if (!response.vpc_TxnResponseCode.Equals("0") && !string.IsNullOrEmpty(response.vpc_Message))
                 {
                     if (!string.IsNullOrEmpty(response.vpc_SecureHash))
                     {
                         if (!Settings.SecureHashKey.Equals(response.vpc_SecureHash))
                         {
-                            paymentStatus = PaymentStatus.INVALIDRESPONSE;
+                            paymentStatus = PaymentStatus.InvalidResponse;
                         }
                     }
-                    paymentStatus = PaymentStatus.PENDING;
+                    paymentStatus = PaymentStatus.Pending;
                 }
 
                 if (string.IsNullOrEmpty(response.vpc_SecureHash))
                 {
-                    paymentStatus = PaymentStatus.INVALIDRESPONSE;
+                    paymentStatus = PaymentStatus.InvalidResponse;
                 }
                 Dictionary<string, string> parameters = ReflectionHelper.ConverObjectToDictinary(response);
                 var secureHashKey = CreateSHA256Signature(parameters);

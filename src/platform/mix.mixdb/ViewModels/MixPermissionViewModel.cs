@@ -6,10 +6,10 @@ namespace Mix.Mixdb.ViewModels
     public class MixPermissionViewModel : ViewModelBase<MixDbDbContext, MixPermission, int, MixPermissionViewModel>
     {
         #region Properties
-        public string Title { get; set; }
-        public string Type { get; set; }
-        public string Icon { get; set; }
         public int MixTenantId { get; set; }
+        public string DisplayName { get; set; }
+        public string Group { get; set; }
+        public string Key { get; set; }
         public Metadata? Metadata { get; set; }
         public List<MixPermissionEndpointViewModel> Endpoints { get; set; }
         #endregion

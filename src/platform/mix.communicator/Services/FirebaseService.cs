@@ -98,7 +98,7 @@ namespace Mix.Communicator.Services
             Notification notification,
             Dictionary<string, string> data)
         {
-            // Create a list containing up to 500 registration tokens.
+            // POST a list containing up to 500 registration tokens.
             // These registration tokens come from the client FCM SDKs.
             try
             {
@@ -203,7 +203,7 @@ namespace Mix.Communicator.Services
 
         public async Task SendBatchMessages(string registrationToken)
         {
-            // Create a list containing up to 500 messages.
+            // POST a list containing up to 500 messages.
             var messages = new List<Message>()
 {
                 new Message()

@@ -75,7 +75,7 @@ namespace Mix.Lib.Services
             // Zip to [theme_name].zip ( wwwroot for web path)
             string filePath = MixFileHelper.ZipFolder(_tempPath, _outputPath, _fileName);
 
-            // Delete temp folder
+            // DELETE temp folder
             MixFileHelper.DeleteFolder($"{_outputPath}/{MixThemePackageConstants.AssetFolder}");
             MixFileHelper.DeleteFolder($"{_outputPath}/{MixThemePackageConstants.UploadFolder}");
             MixFileHelper.DeleteFolder($"{_outputPath}/{MixThemePackageConstants.SchemaFolder}");

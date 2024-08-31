@@ -1,8 +1,10 @@
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Mix.Database.Entities.Account;
+using Mix.Database.Entities.AuditLog;
 using Mix.Database.Entities.MixDb;
 using Mix.Database.Entities.Quartz;
+using Mix.Database.Entities.QueueLog;
 using Mix.Heart.Constants;
 using Mix.Heart.Entities.Cache;
 using Mix.Heart.Services;
@@ -38,6 +40,10 @@ namespace Mix.Database.Services
             {
                 case MixConstants.CONST_CMS_CONNECTION:
                     return AppSettings.ConnectionStrings?.MixCmsConnection;
+                case MixConstants.CONST_AUDIT_LOG_CONNECTION:
+                    return AppSettings.ConnectionStrings?.MixAuditLogConnection;
+                case MixConstants.CONST_QUEUE_LOG_CONNECTION:
+                    return AppSettings.ConnectionStrings?.MixQueueLogConnection;
                 case MixConstants.CONST_ACCOUNT_CONNECTION:
                     return AppSettings.ConnectionStrings?.MixAccountConnection;
                 case MixConstants.CONST_MIXDB_CONNECTION:
@@ -179,12 +185,16 @@ namespace Mix.Database.Services
                 SetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION, connectionString.Replace(".sqlite", "") + "-quartz.sqlite");
                 SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, connectionString.Replace(".sqlite", "") + "-account.sqlite");
                 SetConnectionString(MixConstants.CONST_MIXDB_CONNECTION, connectionString.Replace(".sqlite", "") + "-mixdb.sqlite");
+                SetConnectionString(MixConstants.CONST_AUDIT_LOG_CONNECTION, connectionString.Replace(".sqlite", "") + "-audit-log.sqlite");
+                SetConnectionString(MixConstants.CONST_QUEUE_LOG_CONNECTION, connectionString.Replace(".sqlite", "") + "-queue-log.sqlite");
             }
             else
             {
                 SetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION, connectionString);
                 SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, connectionString);
                 SetConnectionString(MixConstants.CONST_MIXDB_CONNECTION, connectionString);
+                SetConnectionString(MixConstants.CONST_AUDIT_LOG_CONNECTION, connectionString);
+                SetConnectionString(MixConstants.CONST_QUEUE_LOG_CONNECTION, connectionString);
             }
 
             AppSettings.DatabaseProvider = databaseProvider;
@@ -216,6 +226,12 @@ namespace Mix.Database.Services
             using var mixdbCtx = GetMixDbDbContext();
             if (mixdbCtx.Database.GetPendingMigrations().Count() > 0)
                 mixdbCtx.Database.Migrate();
+            using var auditlogCtx = GetAuditLogDbContext();
+            if (auditlogCtx.Database.GetPendingMigrations().Count() > 0)
+                auditlogCtx.Database.Migrate();
+            using var queuelogCtx = GetQueueLogDbContext();
+            if (queuelogCtx.Database.GetPendingMigrations().Count() > 0)
+                queuelogCtx.Database.Migrate();
         }
 
         public async Task InitQuartzContextAsync()

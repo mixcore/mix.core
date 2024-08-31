@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -41,7 +41,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Migrations\MixQueueDb\" />
+		<Folder Include="Entities\Queue\EntityConfigurations\" />
 		<Folder Include="Migrations\Quartz\" />
 	</ItemGroup>
 

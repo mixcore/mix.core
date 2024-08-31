@@ -176,7 +176,7 @@ namespace Mix.Lib.Services
             {
                 throw;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new MixException(MixErrorStatus.ServerError, ex);
             }
@@ -291,13 +291,18 @@ namespace Mix.Lib.Services
                         u.Add(additionalData.Properties());
                     }
 
-                    await MixDbDataService.CreateData(MixDatabaseNames.SYSTEM_USER_DATA, u);
+                    var id = await MixDbDataService.CreateData(MixDatabaseNames.SYSTEM_USER_DATA, u);
 
                     QueueService.PushMemoryQueue(
                     CurrentTenant.Id,
                     MixQueueTopics.MixBackgroundTasks,
                     MixQueueActions.MixDbEvent,
-                    new MixDbEventCommand(user.UserName, MixDbCommandQueueAction.Create.ToString(), MixDatabaseNames.SYSTEM_USER_DATA, u));
+                    new MixDbEventCommand(user.UserName, MixDbCommandQueueAction.POST.ToString(), MixDatabaseNames.SYSTEM_USER_DATA, new Shared.Models.MixDbAuditLogModel()
+                    {
+                        Id = id,
+                        MixDbName = MixDatabaseNames.SYSTEM_USER_DATA,
+                        After = u
+                    }));
                 }
                 return u;
             }
@@ -402,7 +407,7 @@ namespace Mix.Lib.Services
                     // register new account
                     else
                     {
-                        string userName = model.UserName ?? model.Email ?? model.PhoneNumber;
+                        string userName = model.UserName ?? model.Email?.Split('@')[0] ?? model.PhoneNumber;
 
                         if (!string.IsNullOrEmpty(userName))
                         {
@@ -564,7 +569,7 @@ namespace Mix.Lib.Services
             return parsedToken;
         }
 
-        public async Task<string> GenerateTokenAsync(
+        public virtual async Task<string> GenerateTokenAsync(
             MixUser user,
             JObject info,
             DateTime expires,

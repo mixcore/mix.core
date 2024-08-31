@@ -69,7 +69,7 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        // Delete
+        // DELETE
 
         public int Delete(int id)
         {
@@ -107,7 +107,7 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        // Update
+        // PUT
 
         public int Update(TEntity entity,
             IDbTransaction? transaction = null)
@@ -147,7 +147,7 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        // Delete
+        // DELETE
 
         public async Task<int> DeleteAsync(int id)
         {
@@ -183,7 +183,7 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        // Update
+        // PUT
 
         public async Task<int> UpdateAsync(TEntity entity)
         {

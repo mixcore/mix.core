@@ -1,4 +1,4 @@
-using Google.Api;
+﻿using Google.Api;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Auth.Constants;
@@ -108,7 +108,7 @@ namespace Mix.SignalR.Hubs
             }
             catch (Exception ex)
             {
-                throw new MixException(Heart.Enums.MixErrorStatus.ServerError, ex);
+                throw new MixException(MixErrorStatus.ServerError, ex);
             }
 
         }
@@ -136,7 +136,7 @@ namespace Mix.SignalR.Hubs
 
         protected virtual async Task NotifyNewUser(string roomName)
         {
-            var users = Rooms[roomName] ?? new();
+            var users = Rooms[roomName] ?? [];
             if (!users.Any(u => u != null && u.ConnectionId == Context.ConnectionId))
             {
                 var user = GetCurrentUser();
@@ -154,10 +154,10 @@ namespace Mix.SignalR.Hubs
         {
             foreach (var room in Rooms)
             {
-                var user = room.Value.FirstOrDefault(m => m.ConnectionId == Context.ConnectionId);
+                var user = room.Value?.FirstOrDefault(m => m.ConnectionId == Context.ConnectionId);
                 if (user != null)
                 {
-                    room.Value.TryTake(out user);
+                    room.Value?.TryTake(out user);
                     await SendGroupMessage(new(user) { Action = MessageAction.MemberOffline }, room.Key);
                 }
             }

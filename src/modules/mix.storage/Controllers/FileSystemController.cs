@@ -78,7 +78,7 @@ namespace Mix.Storage.Controllers
         /// <returns></returns>
         [Route("upload-file")]
         [HttpPost]
-        public IActionResult Upload([FromForm] string folder, [FromForm] IFormFile file)
+        public IActionResult Upload([FromForm] string folder, IFormFile file)
         {
             if (ModelState.IsValid)
             {
@@ -109,7 +109,7 @@ namespace Mix.Storage.Controllers
         /// <returns></returns>
         [Route("extract-file")]
         [HttpPost]
-        public IActionResult Extract([FromForm] string folder, [FromForm] IFormFile file)
+        public IActionResult Extract([FromForm] string folder, IFormFile file)
         {
             if (file.FileName.EndsWith(MixFileExtensions.Zip))
             {

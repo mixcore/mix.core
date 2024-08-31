@@ -1,4 +1,4 @@
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -24,6 +24,7 @@ using Newtonsoft.Json.Linq;
 using Npgsql;
 using RepoDb;
 using RepoDb.Enumerations;
+using RepoDb.Extensions;
 using RepoDb.Interfaces;
 using RepoDb.StatementBuilders;
 using System.Data;
@@ -48,7 +49,7 @@ namespace Mix.RepoDb.Repositories
         private bool _isRoot = true;
         #endregion
 
-        public MixRepoDbRepository(ICache cache, DatabaseService databaseService, UnitOfWorkInfo<MixCmsContext> cmsUow)
+        public MixRepoDbRepository(ICache cache, DatabaseService databaseService)
         {
             Cache = cache;
             _settings = new AppSetting()
@@ -110,7 +111,7 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<PagingResponseModel<dynamic>> GetPagingAsync(IEnumerable<SearchQueryField> searchQueryFields, PagingRequestModel pagingRequest, string? selectFieldNames = null)
+        public async Task<PagingResponseModel<dynamic>> GetPagingAsync(IEnumerable<SearchQueryField> searchQueryFields, PagingRequestModel pagingRequest, bool iLike, MixConjunction conjunction, string? selectFieldNames = null)
         {
             List<Field>? fields = null;
             if (!string.IsNullOrEmpty(selectFieldNames))
@@ -123,24 +124,25 @@ namespace Mix.RepoDb.Repositories
                 }
             }
             List<QueryField> queries = ParseSearchQuery(searchQueryFields);
-            return await GetPagingAsync(queries, pagingRequest, fields);
+            return await GetPagingAsync(queries, pagingRequest, iLike, conjunction, fields);
 
         }
-        public async Task<PagingResponseModel<dynamic>> GetPagingAsync(IEnumerable<QueryField> queryFields, PagingRequestModel pagingRequest, IEnumerable<Field>? selectFields = null)
+        public async Task<PagingResponseModel<dynamic>> GetPagingAsync(IEnumerable<QueryField> queryFields, PagingRequestModel pagingRequest, bool iLike, MixConjunction conjunction, IEnumerable<Field>? selectFields = null)
         {
             List<OrderField> orderFields = new()
             {
-                new OrderField(pagingRequest.SortBy ?? "Id", pagingRequest.SortDirection == SortDirection.Asc ? Order.Ascending: Order.Descending)
+                new OrderField(pagingRequest.SortBy, pagingRequest.SortDirection == SortDirection.Asc ? Order.Ascending: Order.Descending)
             };
             BeginTransaction();
-            BaseStatementBuilder? builder = this.DatabaseProvider == MixDatabaseProvider.PostgreSQL ? new OptimizedPostgresSqlStatementBuilder() : null;
-            var count = (int)_connection.Count(_tableName, queryFields, transaction: _dbTransaction);
+            var builder = iLike && this.DatabaseProvider == MixDatabaseProvider.PostgreSQL ? new OptimizedPostgresSqlStatementBuilder() : _connection.GetStatementBuilder();
             int pageSize = pagingRequest.PageSize ?? 100;
-            var data = await _connection.BatchQueryAsync(_tableName, pagingRequest.PageIndex,
-                pageSize, orderFields, queryFields, selectFields, null, 
-                commandTimeout: _settings.CommandTimeout, 
-                transaction: _dbTransaction, 
-                statementBuilder: builder);
+
+            var countCommandText = builder.CreateCount(_tableName, new QueryGroup(queryFields, conjunction == MixConjunction.Or ? Conjunction.Or : Conjunction.And));
+            var count = (long)await _connection.ExecuteScalarAsync(countCommandText, queryFields, transaction: _dbTransaction);
+
+            var commandText = builder.CreateBatchQuery(_tableName, selectFields, pagingRequest.PageIndex, pageSize, orderFields, new QueryGroup(queryFields, conjunction == MixConjunction.Or ? Conjunction.Or : Conjunction.And));
+            var data = await _connection.ExecuteQueryAsync(commandText, queryFields, transaction: _dbTransaction);
+
             return new PagingResponseModel<dynamic>()
             {
                 Items = data.ToList(),
@@ -344,7 +346,7 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<long> InsertAsync(JObject obj, RepoDbMixDatabaseViewModel mixDb)
+        public async Task<object> InsertAsync(JObject obj, RepoDbMixDatabaseViewModel mixDb)
         {
             try
             {
@@ -352,13 +354,14 @@ namespace Mix.RepoDb.Repositories
                 Dictionary<string, object> dicObj = ParseDictionary(obj, mixDb);
 
                 var fields = dicObj!.Keys.Select(m => new Field(m)).ToList();
-                var result = await _connection.InsertAsync<long>(
-                        _tableName,
+                var result = await _connection.InsertAsync(
+                        mixDb.SystemName,
                         entity: dicObj,
                         fields: fields,
                         commandTimeout: _settings.CommandTimeout,
                         transaction: _dbTransaction,
                         trace: _trace);
+                CompleteTransaction();
                 return result;
             }
             catch (Exception ex)
@@ -393,7 +396,7 @@ namespace Mix.RepoDb.Repositories
 
                 BeginTransaction();
                 var result = await _connection.InsertAllAsync(
-                        _tableName,
+                        mixDb.SystemName,
                         entities: dicObjs,
                         fields: fields,
                         commandTimeout: _settings.CommandTimeout,
@@ -496,11 +499,11 @@ namespace Mix.RepoDb.Repositories
             {
                 RollbackTransaction();
                 await MixLogService.LogExceptionAsync(ex);
-                return default;
+                throw ex;
             }
         }
 
-        public async Task<int> DeleteAsync(int id, FieldNameService fieldNameService)
+        public async Task<int> DeleteAsync(object id, FieldNameService fieldNameService)
         {
             try
             {
@@ -689,6 +692,7 @@ namespace Mix.RepoDb.Repositories
             if ((_isRoot || DatabaseProvider == MixDatabaseProvider.SQLITE) && _dbTransaction?.Connection != null)
             {
                 _dbTransaction.Commit();
+                _dbTransaction = null;
             }
         }
 
@@ -721,18 +725,23 @@ namespace Mix.RepoDb.Repositories
                     }
                 }
                 _connection.Close();
+                _connection.Dispose();
             }
         }
 
         private Dictionary<string, object> ParseDictionary(JObject obj, RepoDbMixDatabaseViewModel mixDb)
         {
             var dicObj = obj.ToObject<Dictionary<string, object>>();
-
+            var fieldNameService = new FieldNameService(mixDb.NamingConvention);
             // npgsql cannot auto parse from string to Guid
             var guidCols = mixDb.Columns.Where(c => c.DataType == MixDataType.Guid).ToList();
+            if (dicObj != null && mixDb.Type == MixDatabaseType.GuidService && dicObj[fieldNameService.Id] != null)
+            {
+                dicObj[fieldNameService.Id] = Guid.Parse(dicObj[fieldNameService.Id].ToString()!);
+            }
             foreach (var item in guidCols)
             {
-                var colTitle = item.SystemName.ToTitleCase();
+                var colTitle = item.SystemName;
                 if (dicObj.ContainsKey(colTitle) && dicObj[colTitle] != null)
                 {
                     dicObj[colTitle] = Guid.Parse(dicObj[colTitle].ToString()!);

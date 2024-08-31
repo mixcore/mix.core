@@ -31,9 +31,10 @@ var app = builder.Build();
 
 app.UseMixCors();
 app.UseMixTenant();
-app.UseMiddleware<AuditlogMiddleware>();
 app.UseRouting();
 app.UseMixAuth();
+// auditlog middleware must go after auth
+app.UseMiddleware<AuditlogMiddleware>();
 app.UseMixCors();
 app.UseRouting();
 app.UseMixApps(Assembly.GetExecutingAssembly(), builder.Configuration, builder.Environment.ContentRootPath, builder.Environment.IsDevelopment());

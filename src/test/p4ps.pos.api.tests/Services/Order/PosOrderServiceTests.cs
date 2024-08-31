@@ -1,4 +1,4 @@
-﻿namespace p4ps.pos.api.tests.Services.Order
+﻿namespace mixcore.pos.api.tests.Services.Order
 {
     public class PosOrderServiceTests
     {

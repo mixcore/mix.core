@@ -43,7 +43,7 @@ namespace Mix.Storage.Lib.Subscribers
             PortalHub = portalHub;
         }
 
-        public override async Task Handler(MessageQueueModel model)
+        public override async Task Handler(MessageQueueModel model, CancellationToken cancellationToken)
         {
             if (!allowActions.Contains(model.Action))
             {

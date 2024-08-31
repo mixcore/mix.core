@@ -4,9 +4,7 @@ using Mix.Auth.Constants;
 using Mix.Lib.Services;
 using Mix.Log.Lib.Interfaces;
 using Mix.Log.Lib.Models;
-using Mix.Service.Interfaces;
 using Mix.Shared.Models.Configurations;
-using System.Configuration;
 using System.Text;
 
 namespace Mix.Lib.Middlewares
@@ -52,7 +50,7 @@ namespace Mix.Lib.Middlewares
                 }
                 else
                 {
-                    //Create a new memory stream...
+                    //POST a new memory stream...
                     using (var responseBody = new MemoryStream())
                     {
                         //...and use that for the temporary response body
@@ -112,14 +110,10 @@ namespace Mix.Lib.Middlewares
             //We need to read the response stream from the beginning...
             response.Body.Seek(0, SeekOrigin.Begin);
 
-            //...and copy it into a string
-            string text = await new StreamReader(response.Body).ReadToEndAsync();
-
-            //We need to reset the reader for the response so that the client can read it.
-            response.Body.Seek(0, SeekOrigin.Begin);
-
-            //Return the string for the response, including the status code (e.g. 200, 404, 401, etc.)
-            return text;
+            var requestReader = new StreamReader(response.Body);
+            var bodyAsText = await requestReader.ReadToEndAsync();
+            response.Body.Position = 0;
+            return bodyAsText;
         }
 
         private async Task<string> FormatRequest(HttpRequest request)
@@ -129,17 +123,9 @@ namespace Mix.Lib.Middlewares
                 //This line allows us to set the reader for the request back at the beginning of its stream.
                 request.EnableBuffering();
 
-                //We now need to read the request stream.  First, we create a new byte[] with the same length as the request stream...
-                var buffer = new byte[Convert.ToInt32(request.ContentLength)];
-
-                //...Then we copy the entire request stream into the new buffer.
-                await request.Body.ReadAsync(buffer, 0, buffer.Length);
-
-                //We convert the byte[] into a string using UTF8 encoding...
-                var bodyAsText = Encoding.UTF8.GetString(buffer);
-
-                //..and finally, assign the read body back to the request body, which is allowed because of EnableRewind()
-                request.Body.Seek(0, SeekOrigin.Begin);
+                var requestReader = new StreamReader(request.Body);
+                var bodyAsText = await requestReader.ReadToEndAsync();
+                request.Body.Position = 0;
                 return bodyAsText;
             }
             return string.Empty;

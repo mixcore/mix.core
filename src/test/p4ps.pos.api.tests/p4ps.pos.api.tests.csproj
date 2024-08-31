@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\services\p4ps-pos-service\p4ps.pos.lib\p4ps.pos.lib.csproj" />
+    <ProjectReference Include="..\..\services\mixcore-pos-service\mixcore.pos.lib\mixcore.pos.lib.csproj" />
   </ItemGroup>
 
   <ItemGroup>

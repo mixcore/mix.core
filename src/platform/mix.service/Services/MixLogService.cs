@@ -33,7 +33,7 @@ namespace Mix.Service.Services
             //        {
             //            content = s.ReadToEnd();
             //        }
-            //        File.Delete(filePath);
+            //        File.DELETE(filePath);
             //    }
 
             //    JArray arrExceptions = JArray.Parse(content);

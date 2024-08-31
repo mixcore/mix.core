@@ -62,7 +62,7 @@ namespace Mix.SignalR.Hubs
                     MixTenantId = 1,
                     RequestedBy = GetCurrentUser().Username
                 };
-                _queueService.PushMemoryQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueAction.Create.ToString(), obj);
+                _queueService.PushMemoryQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueAction.POST.ToString(), obj);
             }
         }
         
@@ -79,7 +79,7 @@ namespace Mix.SignalR.Hubs
                     MixTenantId = 1,
                     RequestedBy = GetCurrentUser().Username
                 };
-                _queueService.PushMemoryQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueAction.Delete.ToString(), obj);
+                _queueService.PushMemoryQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueAction.DELETE.ToString(), obj);
             }
         }
 
@@ -95,7 +95,7 @@ namespace Mix.SignalR.Hubs
                     MixTenantId = 1,
                     RequestedBy = GetCurrentUser().Username
                 };
-                _queueService.PushMemoryQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueAction.Update.ToString(), obj);
+                _queueService.PushMemoryQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueAction.PUT.ToString(), obj);
             }
         }
         #endregion

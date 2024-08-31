@@ -4,6 +4,7 @@
     {
         Equal,
         Like,
+        ILike,
         NotEqual,
         Contain,
         NotContain,

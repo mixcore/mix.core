@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Database.Entities.Account;
@@ -166,16 +166,16 @@ namespace Mix.Identity.Services
         }
 
 
-        public TokenResponse GenerateToken(OAuthTokenRequest tokenRequest)
+        public OAuthTokenResponse GenerateToken(OAuthTokenRequest tokenRequest)
         {
 
-            var result = new TokenResponse();
+            var result = new OAuthTokenResponse();
             var serchBySecret = SearchForClientBySecret(tokenRequest.grant_type);
 
             var checkClientResult = VerifyClientById(tokenRequest.client_id, serchBySecret, tokenRequest.client_secret, tokenRequest.grant_type);
             if (!checkClientResult.IsSuccess)
             {
-                return new TokenResponse { Error = checkClientResult.Error, ErrorDescription = checkClientResult.ErrorDescription };
+                return new OAuthTokenResponse { Error = checkClientResult.Error, ErrorDescription = checkClientResult.ErrorDescription };
             }
 
             // Check first if the authorization_grant is client_credentials...
@@ -193,6 +193,7 @@ namespace Mix.Identity.Services
 
                 var clientCredentialAccessTokenResult = GenerateJWTToken(scopes, OAuthConstants.TokenTypes.JWTAcceseccToken, checkClientResult.Client);
                 result.access_token = clientCredentialAccessTokenResult.AccessToken;
+                result.expired_at = clientCredentialAccessTokenResult.ExpirationDate;
                 result.id_token = null; // I have to use data shaping here to remove this property or I can customize the return data in the json result, but for now null is ok.
                 result.code = tokenRequest.code;
                 return result;
@@ -202,13 +203,13 @@ namespace Mix.Identity.Services
             // check code from the Concurrent Dictionary
             var clientCodeChecker = _codeStoreService.GetClientDataByCode(tokenRequest.code);
             if (clientCodeChecker == null)
-                return new TokenResponse { Error = ErrorTypeEnum.InvalidGrant.GetEnumDescription() };
+                return new OAuthTokenResponse { Error = ErrorTypeEnum.InvalidGrant.GetEnumDescription() };
 
 
             // check if the current client who is one made this authentication request
 
             if (tokenRequest.client_id != clientCodeChecker.ClientId)
-                return new TokenResponse { Error = ErrorTypeEnum.InvalidGrant.GetEnumDescription() };
+                return new OAuthTokenResponse { Error = ErrorTypeEnum.InvalidGrant.GetEnumDescription() };
 
             // TODO: 
             // also I have to check the rediret uri 
@@ -220,7 +221,7 @@ namespace Mix.Identity.Services
                     clientCodeChecker.CodeChallenge, clientCodeChecker.CodeChallengeMethod);
 
                 if (!pkceResult)
-                    return new TokenResponse { Error = ErrorTypeEnum.InvalidGrant.GetEnumDescription() };
+                    return new OAuthTokenResponse { Error = ErrorTypeEnum.InvalidGrant.GetEnumDescription() };
             }
 
 
@@ -229,14 +230,14 @@ namespace Mix.Identity.Services
             {
                 if (!clientCodeChecker.Subject.Identity!.IsAuthenticated)
                     // I have to inform the caller to redirect the user to the login page
-                    return new TokenResponse { Error = ErrorTypeEnum.InvalidGrant.GetEnumDescription() };
+                    return new OAuthTokenResponse { Error = ErrorTypeEnum.InvalidGrant.GetEnumDescription() };
 
                 var currentUserName = clientCodeChecker.Subject.Identity.Name;
 
                 var userId = clientCodeChecker.Subject.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
                 if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(currentUserName))
-                    return new TokenResponse { Error = ErrorTypeEnum.InvalidGrant.GetEnumDescription() };
+                    return new OAuthTokenResponse { Error = ErrorTypeEnum.InvalidGrant.GetEnumDescription() };
 
                 // Generate Identity Token
                 int iat = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;

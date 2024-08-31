@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IEndpointRouteBuilder UseMixSignalRApp(this IEndpointRouteBuilder endpoints)
         {
             endpoints.MapHub<PortalHub>(HubEndpoints.PortalHub);
-            endpoints.MapHub<MixDbCommandHub>(HubEndpoints.MixDbCommandHub);
+            endpoints.MapHub<MixDbHub>(HubEndpoints.MixDbHub);
             endpoints.MapHub<LogStreamHub>(HubEndpoints.LogStreamHub);
             endpoints.MapHub<EditFileHub>(HubEndpoints.EditFileHub);
             endpoints.MapHub<MixThemeHub>(HubEndpoints.MixThemeHub);

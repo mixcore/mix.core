@@ -15,7 +15,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\platform\mix.auth\mix.auth.csproj" />
-		<ProjectReference Include="..\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
 		<ProjectReference Include="..\..\modules\mix.grpc\mix.grpc.csproj" />
 		<ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
@@ -26,6 +25,7 @@
 		<ProjectReference Include="..\..\services\core\ecommerces\mix.services.ecommerce\mix.services.ecommerce.csproj" />
 		<ProjectReference Include="..\..\services\core\graphql\mix.services.graphql\mix.services.graphql.csproj" />
 		<ProjectReference Include="..\..\services\core\mix-databases\mix.servives.databases\mix.services.databases.csproj" />
+		<ProjectReference Include="..\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Using Include="System" />

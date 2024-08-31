@@ -1,13 +1,8 @@
-﻿using Azure.Core;
-using Google.Api;
-using Google.Apis.Logging;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
-using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Services;
@@ -16,9 +11,8 @@ using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Engines.RabitMQ;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
-using Mix.Queue.Services;
-using Mix.Shared.Helpers;
 using Mix.Shared.Services;
+using RabbitMQ.Client;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,8 +30,8 @@ namespace Mix.Queue.Engines
         protected MixCacheService CacheService;
         protected readonly IServiceProvider ServicesProvider;
         protected IServiceScope ServiceScope { get; set; }
-        protected ILogger<SubscriberBase> _logger { get; set; }
-        private readonly IPooledObjectPolicy<RabbitMQ.Client.IModel> _rabbitMqObjectPolicy;
+        protected ILogger<SubscriberBase> Logger { get; set; }
+        private readonly IPooledObjectPolicy<IModel> _rabbitMqObjectPolicy;
 
         protected SubscriberBase(
             string topicId,
@@ -47,7 +41,7 @@ namespace Mix.Queue.Engines
             IConfiguration configuration,
             IMemoryQueueService<MessageQueueModel> queueService,
             ILogger<SubscriberBase> logger,
-            IPooledObjectPolicy<RabbitMQ.Client.IModel> rabbitMqObjectPolicy)
+            IPooledObjectPolicy<IModel> rabbitMqObjectPolicy)
         {
             _timeout = timeout;
             _configuration = configuration;
@@ -55,7 +49,7 @@ namespace Mix.Queue.Engines
             _moduleName = moduleName;
             _memQueueService = queueService;
             ServicesProvider = servicesProvider;
-            _logger = logger;
+            Logger = logger;
             _rabbitMqObjectPolicy = rabbitMqObjectPolicy;
         }
         protected async override Task ExecuteAsync(CancellationToken cancellationToken)
@@ -73,14 +67,14 @@ namespace Mix.Queue.Engines
             Console.Error.WriteLine($"{_subscriber.SubscriptionId} stopped at {DateTime.UtcNow}");
             if (_subscriber is MixQueueSubscriber<MessageQueueModel>)
             {
-                await (_subscriber as MixQueueSubscriber<MessageQueueModel>).Disconnect();
+                await (_subscriber as MixQueueSubscriber<MessageQueueModel>).Disconnect(cancellationToken);
             }
         }
 
         #region Privates
         private async Task StartProcessQueue(CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"StartProcessQueue: {_subscriber.SubscriptionId} started at {DateTime.UtcNow.AddHours(7)}");
+            Logger.LogInformation($"StartProcessQueue: {_subscriber.SubscriptionId} started at {DateTime.UtcNow.AddHours(7)}");
             while (!cancellationToken.IsCancellationRequested)
             {
                 try
@@ -88,13 +82,7 @@ namespace Mix.Queue.Engines
 
                     if (_subscriber != null)
                     {
-                        
                         await _subscriber.ProcessQueue(cancellationToken);
-                    }
-                    await Task.Delay(1000, cancellationToken);
-                    if (_subscriber is MixQueueSubscriber<MessageQueueModel>)
-                    {
-                        await (_subscriber as MixQueueSubscriber<MessageQueueModel>).Disconnect();
                     }
                 }
                 catch (Exception ex)
@@ -104,14 +92,19 @@ namespace Mix.Queue.Engines
                         await (_subscriber as MixQueueSubscriber<MessageQueueModel>).Disconnect();
                     }
 
-                    _logger.LogError($"StartProcessQueue: {_subscriber.SubscriptionId} is broken at {DateTime.UtcNow.AddHours(7)}, Trying to reconnect from client: {ex.Message}", ex);
+                    Logger.LogError($"StartProcessQueue: {_subscriber.SubscriptionId} is broken at {DateTime.UtcNow.AddHours(7)}, Trying to reconnect from client: {ex.Message}", ex);
 
                     await Task.Delay(2000, cancellationToken);
-                    _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{_moduleName}");
+                    _subscriber = CreateSubscriber(_topicId, _subscriber.SubscriptionId);
                     await StartProcessQueue(cancellationToken);
                 }
             }
-            _logger.LogInformation($"StartProcessQueue: {_subscriber.SubscriptionId} stopped at {DateTime.UtcNow.AddHours(7)}");
+            await Task.Delay(1000, cancellationToken);
+            if (_subscriber is MixQueueSubscriber<MessageQueueModel>)
+            {
+                await (_subscriber as MixQueueSubscriber<MessageQueueModel>).Disconnect();
+            }
+            Logger.LogInformation($"StartProcessQueue: {_subscriber.SubscriptionId} stopped at {DateTime.UtcNow.AddHours(7)}");
         }
 
         private IQueueSubscriber CreateSubscriber(string topicId, string subscriptionId)
@@ -142,7 +135,7 @@ namespace Mix.Queue.Engines
                         return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
                             provider, googleSetting, topicId, subscriptionId, MessageHandler, _memQueueService, mixEndpointService);
                     case MixQueueProvider.RABBITMQ:
-                        return QueueEngineFactory.CreateRabbitMQSubscriber<MessageQueueModel>(_rabbitMqObjectPolicy, topicId,subscriptionId, MessageHandler);
+                        return QueueEngineFactory.CreateRabbitMQSubscriber<MessageQueueModel>(_rabbitMqObjectPolicy, topicId, subscriptionId, MessageHandler);
                     case MixQueueProvider.MIX:
                         if (string.IsNullOrEmpty(mixEndpointService.MixMq))
                         {
@@ -170,30 +163,27 @@ namespace Mix.Queue.Engines
             return ServiceScope.ServiceProvider.GetRequiredService<T?>();
         }
 
-        public async Task MessageHandler(MessageQueueModel data)
+        public virtual async Task MessageHandler(MessageQueueModel data)
         {
             try
             {
-                if (_topicId != data.TopicId)
+                using var timeoutCancellationSource = new CancellationTokenSource(TimeSpan.FromSeconds(_timeout));
                 {
-                    return;
+                    if (_topicId != data.TopicId)
+                    {
+                        return;
+                    }
+                    await Handler(data, timeoutCancellationSource.Token);
                 }
-
-                if (Handler(data).Wait(TimeSpan.FromSeconds(_timeout)))
-                {
-                    return;
-                }
-                else
-                    await HandleDeadLetter(data);
+            }
+            catch (OperationCanceledException ex)
+            {
+                await HandleDeadLetter(data);
+                await HandleException(data, ex);
             }
             catch (Exception ex)
             {
                 await HandleException(data, ex);
-            }
-            finally
-            {
-                ServiceScope?.Dispose();
-                ServiceScope = null;
             }
         }
 
@@ -224,7 +214,7 @@ namespace Mix.Queue.Engines
             return Task.CompletedTask;
         }
 
-        public abstract Task Handler(MessageQueueModel model);
+        public abstract Task Handler(MessageQueueModel model, CancellationToken cancellationToken);
         #endregion
     }
 }

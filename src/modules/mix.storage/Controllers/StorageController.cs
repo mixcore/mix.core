@@ -33,7 +33,7 @@ namespace Mix.Storage.Controllers
 
         [Route("upload-file")]
         [HttpPost]
-        public async Task<ActionResult> Upload([FromForm] string? folder, [FromForm] IFormFile file)
+        public async Task<ActionResult> Upload([FromForm] string? folder, IFormFile file)
         {
             if (ModelState.IsValid)
             {

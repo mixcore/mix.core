@@ -76,7 +76,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
         {
             try
             {
-                if (orderDetail.PaymentStatus == PaymentStatus.SUCCESS || orderDetail.PaymentStatus == PaymentStatus.FAILED)
+                if (orderDetail.PaymentStatus == PaymentStatus.Success || orderDetail.PaymentStatus == PaymentStatus.Failed)
                 {
                     return orderDetail.PaymentStatus;
                 }
@@ -84,7 +84,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 string? token = response.Value<string>("token");
                 string? payerId = response.Value<string>("PayerID");
                 var result = await CaptureOrderResult(token);
-                if (string.IsNullOrEmpty(result?.id) && orderDetail.PaymentStatus == PaymentStatus.SENT)
+                if (string.IsNullOrEmpty(result?.id) && orderDetail.PaymentStatus == PaymentStatus.Sent)
                 {
                     result = await GetOrderResult(token);
                 }
@@ -95,7 +95,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 }
 
                 var reference = result.purchase_units[0].reference_id;
-                var status = !string.IsNullOrEmpty(reference) ? PaymentStatus.SUCCESS : PaymentStatus.FAILED;
+                var status = !string.IsNullOrEmpty(reference) ? PaymentStatus.Success : PaymentStatus.Failed;
                 await SaveResponse(result, status, cancellationToken);
                 return status;
 

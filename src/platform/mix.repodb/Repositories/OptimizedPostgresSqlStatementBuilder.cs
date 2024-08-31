@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Mix.RepoDb.Repositories
 {
@@ -22,6 +23,7 @@ namespace Mix.RepoDb.Repositories
     /// </summary>
     internal sealed class OptimizedPostgresSqlStatementBuilder : BaseStatementBuilder
     {
+        Regex regex = new("(\"\\w+\")\\s(LIKE)");
         /// <summary>
         /// Creates a new instance of <see cref="OptimizedPostgresSqlStatementBuilder"/> object.
         /// </summary>
@@ -48,6 +50,16 @@ namespace Mix.RepoDb.Repositories
             : base(dbSetting, convertFieldResolver, averageableClientTypeResolver)
         {
         }
+
+
+        #region Create Count
+
+        public override string CreateCount(string tableName, QueryGroup where = null, string hints = null)
+        {
+            string query = base.CreateCount(tableName, where, hints);
+            return ReplaceLikeFilter(query, where);
+        }
+        #endregion
 
         #region Create Batch Query
         //
@@ -78,7 +90,7 @@ namespace Mix.RepoDb.Repositories
         //
         // Returns:
         //     A sql statement for batch query operation.
-       
+
         public override string CreateBatchQuery(string tableName, IEnumerable<Field> fields, int page, int rowsPerBatch, IEnumerable<OrderField> orderBy = null, QueryGroup where = null, string hints = null)
         {
             GuardTableName(tableName);
@@ -114,10 +126,20 @@ namespace Mix.RepoDb.Repositories
                 .End();
 
             // Return the query
-            string query = queryBuilder.GetString();
-            Regex regex = new("(\"\\w+\")\\s(LIKE)");
+            return ReplaceLikeFilter(queryBuilder.GetString(), where);
+        }
 
-            return regex.Replace(query, "public.unaccent($1) ILIKE");
+        private string ReplaceLikeFilter(string query, QueryGroup where = null)
+        {
+            query = regex.Replace(query, "unaccent($1) ILIKE");
+            if (where != null)
+            {
+                foreach (var item in where.QueryFields)
+                {
+                    query = query.Replace($"@{item.GetName()}", $"unaccent('{item.GetValue()}')");
+                }
+            }
+            return query;
         }
 
 

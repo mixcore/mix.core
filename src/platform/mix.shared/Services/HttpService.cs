@@ -194,8 +194,8 @@ namespace Mix.Shared.Services
                     }
                 case "application/x-www-form-urlencoded":
                     var formData = content.GetType()
-                        .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                        .ToDictionary(prop => prop.Name, prop => (string)prop.GetValue(content, null));
+                       .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                       .ToDictionary(prop => prop.Name, prop => (string)prop.GetValue(content, null));
                     return new FormUrlEncodedContent(formData);
                 default:
                     return new StringContent(

@@ -22,6 +22,7 @@ namespace Mix.Portal
             services.AddMixCors();
             // Must app Auth config after Add mixservice to init App config 
             services.AddMixAuthorize<MixCmsAccountContext>(Configuration);
+            services.AddScoped<MixIdentityService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -29,9 +30,10 @@ namespace Mix.Portal
         {
             app.UseMixCors();
             app.UseMixTenant();
-            app.UseMiddleware<AuditlogMiddleware>();
             app.UseRouting();
             app.UseMixAuth();
+            // auditlog middleware must go after auth
+            app.UseMiddleware<AuditlogMiddleware>();
             app.UseMixCors();
             app.UseRouting();
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.ContentRootPath, env.IsDevelopment());

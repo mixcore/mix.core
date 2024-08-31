@@ -1,4 +1,4 @@
-using Mix.Auth.Enums;
+﻿using Mix.Auth.Enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

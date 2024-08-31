@@ -1,4 +1,4 @@
-using Mix.Identity.ViewModels;
+﻿using Mix.Identity.ViewModels;
 using Mix.Storage.Lib.Models;
 using Org.BouncyCastle.Utilities;
 using SixLabors.ImageSharp;

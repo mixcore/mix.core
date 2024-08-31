@@ -160,7 +160,7 @@ namespace Mix.Tenancy.Controllers
         [HttpPost]
         [Route("extract-theme")]
         [DisableRequestSizeLimit]
-        public ActionResult<bool> ExtractThemeAsync([FromForm] IFormFile theme = null)
+        public ActionResult<bool> ExtractThemeAsync(IFormFile theme = null)
         {
             _importService.ExtractTheme(theme);
             GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.SelectTheme;

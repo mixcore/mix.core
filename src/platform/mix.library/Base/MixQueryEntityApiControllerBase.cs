@@ -33,7 +33,7 @@ namespace Mix.Lib.Base
             TDbContext context,
             IMemoryQueueService<MessageQueueModel> queueService, MixCacheDbContext cacheDbContext,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, 
+            : base(httpContextAccessor,
                   configuration, cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
             Context = context;
@@ -66,27 +66,18 @@ namespace Mix.Lib.Base
         [HttpGet]
         public virtual async Task<ActionResult<PagingResponseModel<TEntity>>> Get([FromQuery] SearchRequestDto req)
         {
+            var result = await GetHandler(req);
+            return Ok(result);
+        }
+
+        protected virtual async Task<PagingResponseModel<TEntity>> GetHandler(SearchRequestDto req)
+        {
             var searchRequest = BuildSearchRequest(req);
             if (!string.IsNullOrEmpty(req.Columns))
             {
                 Repository.SetSelectedMembers(req.Columns.Replace(" ", string.Empty).Split(','));
             }
-            var result = await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
-            if (!string.IsNullOrEmpty(req.Columns))
-            {
-                List<object> objects = new();
-                foreach (var item in result.Items)
-                {
-                    objects.Add(ReflectionHelper.GetMembers(item, Repository.SelectedMembers));
-                }
-                return Ok(new PagingResponseModel<object>()
-                {
-                    Items = objects,
-                    PagingData = result.PagingData
-                });
-            }
-
-            return result;
+            return await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
         }
 
         [HttpGet("{id}")]

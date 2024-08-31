@@ -77,7 +77,7 @@ namespace Mix.Signalr.Hub.Hubs
             // They are here, so tell them someone wants to talk
             await Clients.Client(targetConnectionId).SendAsync("incomingCall", JObject.FromObject(callingUser).ToString(Newtonsoft.Json.Formatting.None));
 
-            // Create an offer
+            // POST an offer
             CallOffers.Add(new CallOffer
             {
                 Caller = callingUser,
@@ -131,7 +131,7 @@ namespace Mix.Signalr.Hub.Hubs
             // Remove all the other offers for the call initiator, in case they have multiple calls out
             CallOffers.RemoveAll(c => c.Caller.ConnectionId == targetUser.ConnectionId);
 
-            // Create a new call to match these folks up
+            // POST a new call to match these folks up
             UserCalls.Add(new UserCall
             {
                 Users = new List<User> { callingUser, targetUser }
@@ -140,7 +140,7 @@ namespace Mix.Signalr.Hub.Hubs
             // Tell the original caller that the call was accepted
             await Clients.Client(targetConnectionId).SendAsync("callAccepted", JObject.FromObject(callingUser).ToString(Newtonsoft.Json.Formatting.None));
 
-            // Update the user list, since thes two are now in a call
+            // PUT the user list, since thes two are now in a call
             await SendUserListUpdateAsync();
         }
 

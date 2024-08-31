@@ -92,7 +92,10 @@ namespace Mix.Service.Services
             var props = GetType().GetProperties();
             foreach (var item in props)
             {
-                result.Append(item.GetValue(this)?.ToString());
+                if (item.PropertyType == typeof(string) && item.GetValue(this) != null)
+                {
+                    result.Add(item!.GetValue(this)!.ToString());
+                }
             }
             return result;
         }

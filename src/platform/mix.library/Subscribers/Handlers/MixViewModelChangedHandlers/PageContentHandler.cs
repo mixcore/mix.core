@@ -13,8 +13,8 @@ namespace Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers
                     break;
                 case "Post":
                 case "Put":
-                case "Patch":
-                case "Delete":
+                case "PATCH":
+                case "DELETE":
                     return DeleteCacheAsync(template, cacheService);
                 default:
                     break;

@@ -48,7 +48,7 @@ namespace Mix.Lib.Attributes
                 if (!IsInRoles())
                 {
                     //_logger.LogError("Not in role");
-                    if (!ValidEnpointPermission(context))
+                    if (!ValidEndpointPermission(context))
                     {
                         //_logger.LogError("forbidden");
                         context.Result = new ForbidResult();
@@ -66,7 +66,7 @@ namespace Mix.Lib.Attributes
 
         #region Privates
 
-        private bool ValidEnpointPermission(AuthorizationFilterContext context)
+        private bool ValidEndpointPermission(AuthorizationFilterContext context)
         {
             return _permissionService.CheckEndpointPermissionAsync(UserRoles, context.HttpContext.Request.Path, context.HttpContext.Request.Method).Result;
         }

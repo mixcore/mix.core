@@ -80,7 +80,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             var user = await _userManager.GetUserAsync(principal) ?? throw new MixException(MixErrorStatus.Badrequest, "User not found");
             var order = await OrderViewModel.GetRepository(_uow, CacheService).GetSingleAsync(m => m.Id == id && m.UserId == user!.Id, cancellationToken) ?? throw new MixException(MixErrorStatus.Badrequest, "Invalid Order");
-            if (order.PaymentStatus == PaymentStatus.SUCCESS)
+            if (order.PaymentStatus == PaymentStatus.Success)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Cannot cancel paid order");
             }

@@ -77,7 +77,6 @@ namespace Mix.Queue.Services
                 queue.Enqueue(model);
                 EnqueueLog(model);
             }
-
         }
 
         public void PushMemoryQueue(int tenantId, string topicId, string action, object data)
