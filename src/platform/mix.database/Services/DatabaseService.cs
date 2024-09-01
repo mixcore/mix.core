@@ -58,6 +58,7 @@ namespace Mix.Database.Services
 
         public void SetConnectionString(string name, string value)
         {
+            RawSettings["ConnectionStrings"][name] = value;
             switch (name)
             {
                 case MixConstants.CONST_QUARTZ_CONNECTION:
@@ -71,6 +72,13 @@ namespace Mix.Database.Services
                     break;
                 case MixConstants.CONST_MIXDB_CONNECTION:
                     AppSettings.ConnectionStrings.MixDbConnection = value;
+                    break;
+                case MixConstants.CONST_AUDIT_LOG_CONNECTION:
+                    AppSettings.ConnectionStrings.MixAuditLogConnection = value;
+                    break;
+                case MixConstants.CONST_QUEUE_LOG_CONNECTION:
+                    AppSettings.ConnectionStrings.MixQueueLogConnection = value;
+                    RawSettings["MixQuartzConnection"] = value;
                     break;
                 default:
                     break;

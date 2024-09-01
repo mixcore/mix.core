@@ -1,6 +1,7 @@
 ﻿using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Shared.Interfaces;
+using Mix.Shared.Models.Configurations;
 using Mix.Tenancy.Domain.Interfaces;
 using Mix.Tenancy.Domain.Services;
 
@@ -22,15 +23,6 @@ namespace Mix.Tenancy.Domain
             services.AddScoped<IMixThemeExportService, MixThemeExportService>();
             services.AddScoped<IMixThemeImportService, MixThemeImportService>();
 
-
-            if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)
-            {
-                if (string.IsNullOrEmpty(GlobalConfigService.Instance.AppSettings.ApiEncryptKey))
-                {
-                    GlobalConfigService.Instance.AppSettings.ApiEncryptKey = AesEncryptionHelper.GenerateCombinedKeys();
-                    GlobalConfigService.Instance.SaveSettings();
-                }
-            }
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

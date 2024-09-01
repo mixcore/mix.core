@@ -53,20 +53,12 @@ namespace Mix.Lib.Middlewares
                     //POST a new memory stream...
                     using (var responseBody = new MemoryStream())
                     {
-                        //...and use that for the temporary response body
-                        context.Response.Body = responseBody;
-
                         //Continue down the Middleware pipeline, eventually returning to this class
                         await _next(context);
 
                         //Format the response from the server
                         await LogResponse(context, auditLogData);
-
-                        //Copy the contents of the new memory stream (which contains the response) to the original stream, which is then returned to the client.
-                        await responseBody.CopyToAsync(originalBodyStream);
-
                         _auditlogService.QueueRequest(auditLogData);
-                        responseBody.Dispose();
                     }
                 }
             }

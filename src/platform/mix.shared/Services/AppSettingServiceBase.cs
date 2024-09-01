@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Mix.Shared.Services
@@ -23,26 +24,34 @@ namespace Mix.Shared.Services
             _configuration = configuration;
             _sectionName = section;
             _isEncrypt = isEncrypt;
-            _aesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
+            _aesKey = GlobalConfigService.Instance.AesKey;
             FilePath = filePath;
             LoadAppSettings();
         }
 
-        public bool SaveSettings()
+        public void SetConfig<TValue>(string name, TValue value)
         {
-            var settings = MixFileHelper.GetFile(FilePath, MixFileExtensions.Json, string.Empty, true, "{}");
+            RawSettings[name] = value != null ? JToken.FromObject(value) : null;
+            AppSettings = RawSettings.ToObject<T>();
+        }
+
+        public virtual bool SaveSettings()
+        {
+            var settings = MixFileHelper.GetFileByFullName($"{FilePath}{MixFileExtensions.Json}", true, "{}");
             if (settings != null)
             {
-
-                if (_isEncrypt && settings.Content.IsJsonString())
+                settings.Content = string.IsNullOrEmpty(_sectionName)
+                                    ? RawSettings.ToString(Formatting.None)
+                                    : ReflectionHelper.ParseObject(
+                                        new JObject(
+                                            new JProperty(_sectionName, RawSettings)))
+                                    .ToString(Formatting.None);
+                if (_isEncrypt)
                 {
                     settings.Content = AesEncryptionHelper.EncryptString(settings.Content, _aesKey);
                 }
-                else
-                {
-                    settings.Content = new JObject(new JProperty(_sectionName, JObject.FromObject(AppSettings))).ToString(Newtonsoft.Json.Formatting.None);
-                }
-                return MixFileHelper.SaveFile(settings);
+                var result = MixFileHelper.SaveFile(settings);
+                return result;
             }
             else
             {
@@ -56,22 +65,24 @@ namespace Mix.Shared.Services
             {
                 var settings = MixFileHelper.GetFileByFullName($"{FilePath}{MixFileExtensions.Json}", true, "{}");
                 string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
-                if (_isEncrypt)
+                bool isContentEncrypted = !content.IsJsonString();
+
+
+                if (isContentEncrypted)
                 {
-                    if (!content.IsJsonString())
-                    {
-                        content = AesEncryptionHelper.DecryptString(content, _aesKey);
-                    }
-                    else
-                    {
-                        // Encrypt and save to setting file if not encrypted
-                        settings.Content = AesEncryptionHelper.EncryptString(content, _aesKey);
-                        MixFileHelper.SaveFile(settings);
-                    }
+                    content = AesEncryptionHelper.DecryptString(content, _aesKey);
                 }
-                RawSettings = JObject.Parse(content);
-                AppSettings = string.IsNullOrEmpty(_sectionName) ? RawSettings.ToObject<T>()
-               : RawSettings[_sectionName].ToObject<T>();
+
+                var rawSettings = JObject.Parse(content);
+                RawSettings = !string.IsNullOrEmpty(_sectionName)
+                    ? rawSettings[_sectionName] as JObject
+                    : rawSettings;
+                AppSettings = RawSettings.ToObject<T>();
+
+                if (_isEncrypt && !isContentEncrypted)
+                {
+                    SaveSettings();
+                }
             }
             catch (Exception ex)
             {

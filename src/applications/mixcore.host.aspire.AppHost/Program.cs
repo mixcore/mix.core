@@ -1,8 +1,6 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var mixMq = builder.AddProject<Projects.mix_mq_server>("mix-mq-server");
-
-builder.AddProject<Projects.mixcore>("mixcore").WithReference(mixMq);
-builder.AddProject<Projects.mixcore_gateway>("mixcore-gateway").WithReference(mixMq);
+var mixcore  = builder.AddProject<Projects.mixcore>("mixcore");
+builder.AddProject<Projects.mixcore_gateway>("mixcore-gateway").WithReference(mixcore);
 
 builder.Build().Run();

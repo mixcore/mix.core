@@ -165,7 +165,8 @@ namespace Mix.RepoDb.Services
 
                 if (database is { Columns.Count: > 0 })
                 {
-                    await Migrate(database, database.MixDatabaseContext.DatabaseProvider, _repository);
+                    var dbProverder = database.MixDatabaseContext?.DatabaseProvider ?? _databaseService.DatabaseProvider;
+                    await Migrate(database, dbProverder, _repository);
                     _repository.CompleteTransaction();
                     return true;
                 }

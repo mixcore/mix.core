@@ -14,6 +14,7 @@ namespace Mix.Shared.Models.Configurations
         public string ApiEncryptKey { get; set; }
         public string AesKey { get; set; }
         public string DefaultDomain { get; set; }
+        public string DefaultCulture { get; set; }
         public bool EnableOcelot { get; set; }
         public InitStep InitStatus { get; set; }
     }

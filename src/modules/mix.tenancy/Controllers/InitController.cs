@@ -16,6 +16,7 @@ using Mix.Database.Services;
 using Mix.Auth.Models;
 using Mix.Auth.Constants;
 using Mix.Mq.Lib.Models;
+using Mix.Shared.Models.Configurations;
 
 namespace Mix.Tenancy.Controllers
 {
@@ -144,7 +145,7 @@ namespace Mix.Tenancy.Controllers
             };
 
             await _importService.DownloadThemeAsync(theme, progress, _httpService);
-            GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.SelectTheme;
+            GlobalConfigService.Instance.SetConfig(nameof(GlobalSettingsModel.InitStatus), InitStep.SelectTheme);
             GlobalConfigService.Instance.SaveSettings();
             return Ok();
         }
@@ -163,7 +164,7 @@ namespace Mix.Tenancy.Controllers
         public ActionResult<bool> ExtractThemeAsync(IFormFile theme = null)
         {
             _importService.ExtractTheme(theme);
-            GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.SelectTheme;
+            GlobalConfigService.Instance.SetConfig(nameof(GlobalSettingsModel.InitStatus), InitStep.SelectTheme);
             GlobalConfigService.Instance.SaveSettings();
             return Ok();
         }
@@ -178,6 +179,7 @@ namespace Mix.Tenancy.Controllers
         public async Task<ActionResult<SiteDataViewModel>> LoadThemeAsync()
         {
             var data = await _importService.LoadSchema();
+            data.Specificulture = GlobalConfigService.Instance.AppSettings.DefaultCulture;
             return Ok(data);
         }
 
@@ -211,8 +213,8 @@ namespace Mix.Tenancy.Controllers
 
             await _configService.Reload(_uow);
 
-            GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitTheme;
-            GlobalConfigService.Instance.AppSettings.IsInit = false;
+            GlobalConfigService.Instance.SetConfig(nameof(GlobalSettingsModel.InitStatus), InitStep.InitTheme);
+            GlobalConfigService.Instance.SetConfig(nameof(GlobalSettingsModel.IsInit), false);
             GlobalConfigService.Instance.SaveSettings();
             return Ok(result);
         }

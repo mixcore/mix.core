@@ -35,7 +35,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var authConfigService = services.GetService<AuthConfigService>();
             if (_globalConfig.IsInit)
             {
-                authConfigService.AppSettings.SecretKey = Guid.NewGuid().ToString("N");
+                authConfigService.SetConfig(nameof(MixAuthenticationConfigurations.SecretKey), Guid.NewGuid().ToString("N"));
                 authConfigService.SaveSettings();
             }
             services.AddMixIdentityConfigurations<TDbContext>(configuration);

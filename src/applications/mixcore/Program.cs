@@ -126,7 +126,6 @@ internal class Program
                 services.AddHostedService<MixLogPublisher>();
             }
 
-            services.AddMixRateLimiter(configuration);
         }
     }
 }

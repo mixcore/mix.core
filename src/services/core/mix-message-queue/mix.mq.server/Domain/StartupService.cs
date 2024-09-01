@@ -13,7 +13,8 @@ namespace Mix.Mq.Server.Domain
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.TryAddSingleton<MixMqSubscriptionService>();
+            services.TryAddSingleton<GrpcStreamingService>();
+            services.AddHostedService<MixMqSubscriptionService>();
             services.TryAddSingleton<MixQueueMessages<MessageQueueModel>>();
             services.AddGrpc();
             services.AddCors(o => o.AddPolicy("AllowAllGrpc", builder =>
