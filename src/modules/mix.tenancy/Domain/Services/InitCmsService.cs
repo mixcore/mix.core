@@ -7,6 +7,7 @@ using Mix.Identity.Enums;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Shared.Helpers;
+using Mix.Shared.Models.Configurations;
 using Mix.Tenancy.Domain.Dtos;
 using Mix.Tenancy.Domain.Interfaces;
 using Mix.Tenancy.Domain.ViewModels.Init;
@@ -54,7 +55,7 @@ namespace Mix.Tenancy.Domain.Services
             InitTenantViewModel vm = new(_context, model);
             await vm.SaveAsync();
             await _mixTenantService.Reload();
-            GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitTenant;
+            GlobalConfigService.Instance.SetConfig(nameof(GlobalSettingsModel.InitStatus), InitStep.InitTenant);
             GlobalConfigService.Instance.SaveSettings();
         }
 
@@ -94,15 +95,14 @@ namespace Mix.Tenancy.Domain.Services
                     await _userManager.AddToRoleAsync(user, MixRoleEnums.SuperAdmin.ToString());
                     await _userManager.AddToRoleAsync(user, MixRoleEnums.Owner.ToString());
                     await _userManager.AddToTenant(user, 1);
-                    var rsaKeys = RSAEncryptionHelper.GenerateKeys();
                     var aesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
                     await _cmsUow.CompleteAsync();
                     var token = await _identityService.GenerateAccessTokenAsync(
-                        user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
+                        user, true);
                     if (token != null)
                     {
-                        GlobalConfigService.Instance.AppSettings.ApiEncryptKey = aesKey;
-                        GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitAccount;
+                        GlobalConfigService.Instance.SetConfig(nameof(GlobalSettingsModel.ApiEncryptKey), aesKey);
+                        GlobalConfigService.Instance.SetConfig(nameof(GlobalSettingsModel.InitStatus), InitStep.InitAccount);
                         GlobalConfigService.Instance.SaveSettings();
                     }
                     return token;

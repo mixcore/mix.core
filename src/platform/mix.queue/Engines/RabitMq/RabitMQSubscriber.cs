@@ -1,9 +1,11 @@
 ﻿using Google.Cloud.PubSub.V1;
 using Microsoft.Extensions.ObjectPool;
+using Mix.Heart.Extensions;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
@@ -55,10 +57,22 @@ namespace Mix.Queue.Engines.RabitMQ
             _consumer.Received += (ch, ea) =>
             {
                 // received message  
-                string body = System.Text.Encoding.UTF8.GetString(ea.Body.ToArray());
-                var msg = JsonConvert.DeserializeObject<T>(body);
-                _messageHandler(msg);
-                _channel.BasicAck(ea.DeliveryTag, false);
+                try
+                {
+                    string body = System.Text.Encoding.UTF8.GetString(ea.Body.ToArray());
+                    if (body.IsJsonString())
+                    {
+                        var msg = JObject.Parse(body).ToObject<T>();
+                        _messageHandler(msg);
+                        _channel.BasicAck(ea.DeliveryTag, false);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Cannot process message {subscriptionId}");
+                    Console.Error.WriteLine(ex);
+                    _channel.BasicNack(ea.DeliveryTag, false, false);
+                }
             };
             _channel.BasicConsume(queueResult.QueueName, false, _consumer);
         }

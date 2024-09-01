@@ -8,7 +8,7 @@ namespace Mix.Service.Services
         public MemoryCache Cache { get; } = new MemoryCache(
             new MemoryCacheOptions
             {
-                ExpirationScanFrequency = TimeSpan.FromSeconds(3)
+                ExpirationScanFrequency = TimeSpan.FromSeconds(20)
             }
         );
 

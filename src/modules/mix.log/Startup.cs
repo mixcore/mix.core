@@ -19,7 +19,6 @@ namespace Mix.Log
         {
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
             services.AddMixCors();
-            services.AddMixLog(Configuration);
             services.AddMixAuthorize<MixCmsAccountContext>(Configuration);
         }
 
@@ -28,9 +27,10 @@ namespace Mix.Log
         {
             app.UseMixCors();
             app.UseMixTenant();
-            app.UseMiddleware<AuditlogMiddleware>();
             app.UseRouting();
             app.UseMixAuth();
+            // auditlog middleware must go after auth
+            app.UseMiddleware<AuditlogMiddleware>();
             app.UseMixCors();
             app.UseRouting();
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.ContentRootPath, env.IsDevelopment());

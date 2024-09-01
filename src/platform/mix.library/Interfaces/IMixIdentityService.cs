@@ -14,15 +14,15 @@ namespace Mix.Lib.Interfaces
         public List<RoleViewModel> Roles { get; set; }
         public bool CheckEndpointPermission(ClaimsPrincipal user, PathString path, string method);
         public Claim CreateClaim(string type, string value);
-        public Task<JObject> ExternalLogin(RegisterExternalBindingModel model, CancellationToken cancellationToken = default);
-        public Task<TokenResponseModel> GenerateAccessTokenAsync(MixUser user, bool isRemember, string aesKey, string rsaPublicKey, CancellationToken cancellationToken = default);
-        public Task<string> GenerateTokenAsync(MixUser user, JObject info, DateTime expires, string refreshToken, string aesKey, string rsaPublicKey, MixAuthenticationConfigurations appConfigs);
-        public Task<JObject> GetAuthData(MixUser user, bool rememberMe, int tenantId, CancellationToken cancellationToken = default);
+        public Task<TokenResponseModel> ExternalLogin(RegisterExternalBindingModel model, CancellationToken cancellationToken = default);
+        public Task<TokenResponseModel> GenerateAccessTokenAsync(MixUser user, bool isRemember, JObject additionalData = default, CancellationToken cancellationToken = default);
+        public Task<string> GenerateTokenAsync(MixUser user, JObject info, DateTime expires, string refreshToken, MixAuthenticationConfigurations appConfigs);
+        public Task<TokenResponseModel> GetAuthData(MixUser user, bool rememberMe, int tenantId, JObject additionalData = default, CancellationToken cancellationToken = default);
         public string GetClaim(ClaimsPrincipal User, string claimType);
-        public Task<JObject> GetTokenAsync(GetTokenModel model, CancellationToken cancellationToken = default);
-        public Task<JObject> LoginAsync(LoginRequestModel model, CancellationToken cancellationToken = default);
-        public Task<MixUser> RegisterAsync(RegisterRequestModel model, int tenantId, UnitOfWorkInfo _cmsUOW, CancellationToken cancellationToken = default);
-        public Task<JObject> RenewTokenAsync(RenewTokenDto refreshTokenDto, CancellationToken cancellationToken = default);
+        public Task<TokenResponseModel> GetTokenAsync(GetTokenModel model, CancellationToken cancellationToken = default);
+        public Task<TokenResponseModel> LoginAsync(LoginRequestModel model, CancellationToken cancellationToken = default);
+        public Task<MixUser> RegisterAsync(RegisterRequestModel model, int tenantId, UnitOfWorkInfo _cmsUOW, JObject additionalData = default, CancellationToken cancellationToken = default);
+        public Task<TokenResponseModel> RenewTokenAsync(RenewTokenDto refreshTokenDto, CancellationToken cancellationToken = default);
         public Task<ParsedExternalAccessToken> VerifyExternalAccessTokenAsync(MixExternalLoginProviders provider, string accessToken, MixAuthenticationConfigurations appConfigs);
     }
 }

@@ -16,10 +16,11 @@ namespace Mix.Database.Base
         {
             
         }
-        public BaseDbContext(DatabaseService databaseService, string connectionStringName)
+        public BaseDbContext(DatabaseService databaseService, string connectionStringName, MixDatabaseProvider? databaseProvider = null)
         {
             _databaseService = databaseService;
             _connectionStringName = connectionStringName;
+            _databaseProvider = databaseProvider ?? _databaseService.DatabaseProvider;
             _dbContextType = GetType();
         }
         public BaseDbContext(string connectionString, MixDatabaseProvider databaseProvider)

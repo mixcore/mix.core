@@ -5,8 +5,8 @@ namespace Mix.SignalR.Hubs
 {
     public class PortalHub : BaseSignalRHub
     {
-        public PortalHub(IAuditLogService auditLogService, IMixTenantService mixTenantService)
-            : base(auditLogService, mixTenantService)
+        public PortalHub(IMixTenantService mixTenantService)
+            : base(mixTenantService)
         {
         }
     }

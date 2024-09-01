@@ -4,6 +4,7 @@ using Mix.Heart.Helpers;
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.RepoDb.Interfaces;
+using Mix.Shared.Services;
 using Mix.SignalR.Interfaces;
 
 namespace Mix.Portal.Controllers
@@ -27,6 +28,11 @@ namespace Mix.Portal.Controllers
         #region Overrides
         protected override async Task<int> CreateHandlerAsync(MixDatabaseContextViewModel data, CancellationToken cancellationToken = default)
         {
+            if (data != null && !string.IsNullOrEmpty(data.DecryptedConnectionString))
+            {
+                data.ConnectionString = AesEncryptionHelper.EncryptString(data.DecryptedConnectionString, GlobalConfigService.Instance.AesKey);
+            }
+
             var result = await base.CreateHandlerAsync(data, cancellationToken);
             if (result > 0)
             {

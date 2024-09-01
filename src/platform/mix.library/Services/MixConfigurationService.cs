@@ -12,9 +12,9 @@ namespace Mix.Lib.Services
         public List<MixConfigurationContentViewModel> Configs { get; set; }
 
         public MixConfigurationService(
-            IHttpContextAccessor httpContextAccessor, 
+            IHttpContextAccessor httpContextAccessor,
             DatabaseService databaseService, MixCacheService cacheService,
-            IMixTenantService mixTenantService) 
+            IMixTenantService mixTenantService)
             : base(httpContextAccessor, cacheService, mixTenantService)
         {
             _databaseService = databaseService;
@@ -32,9 +32,20 @@ namespace Mix.Lib.Services
                 else
                 {
                     uow = new(new MixCmsContext(_databaseService));
-                    Configs = await MixConfigurationContentViewModel.GetRepository(uow, CacheService).GetAllAsync(
-                        m => m.MixTenantId == CurrentTenant.Id);
-                    uow.Dispose();
+                    try
+                    {
+                        Configs = await MixConfigurationContentViewModel
+                            .GetRepository(uow, CacheService)
+                            .GetAllAsync(p => true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"MixConfigurationService getting config error {ex.Message}");
+                    }
+                    finally
+                    {
+                        uow.Dispose();
+                    }
                 }
             }
         }
@@ -80,7 +91,7 @@ namespace Mix.Lib.Services
                 await Reload();
             }
             var config = Configs.FirstOrDefault(m => m.Specificulture == culture && m.SystemName == name);
-            return config != null ? config.GetValue<T>(): defaultValue;
+            return config != null ? config.GetValue<T>() : defaultValue;
         }
     }
 }

@@ -9,6 +9,17 @@ using OpenTelemetry;
 using System.Configuration;
 using System.Reflection;
 using Mix.Queue.Extensions;
+using Mix.Database.Entities.Account;
+using Mix.Service.Interfaces;
+using Mix.Service.Services;
+using Mix.Database.Entities.Cms;
+using Mix.Database.Services;
+using Mix.Lib.Interfaces;
+using Mix.Queue.Interfaces;
+using Mix.Queue.Services;
+using Mix.Shared.Services;
+using Mix.SignalR.Interfaces;
+using Mix.Lib.Services;
 
 if (Directory.Exists($"../{MixFolders.MixCoreConfigurationFolder}"))
 {
@@ -48,7 +59,14 @@ builder.Services.AddCors(o => o.AddPolicy("AllowAllGrpc", builder =>
            .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
 }));
 
-builder.Services.AddMixLog(builder.Configuration);
+builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.TryAddSingleton<MixEndpointService>();
+builder.Services.TryAddSingleton<DatabaseService>();
+builder.Services.TryAddSingleton<IMemoryQueueService<MessageQueueModel>, MemoryQueueService>();
+builder.Services.TryAddSingleton<ILogStreamHubClientService, LogStreamHubClientService>();
+builder.Services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
+builder.Services.TryAddSingleton<IMixTenantService, MixTenantService>();
+
 builder.Services.AddMixSignalR(builder.Configuration);
 builder.Services.AddMixCommunicators();
 builder.Services.AddSwaggerGen();

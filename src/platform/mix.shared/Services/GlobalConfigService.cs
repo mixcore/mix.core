@@ -1,4 +1,5 @@
-﻿using Mix.Shared.Models.Configurations;
+﻿using Mix.Heart.Helpers;
+using Mix.Shared.Models.Configurations;
 
 namespace Mix.Shared.Services
 {
@@ -43,7 +44,7 @@ namespace Mix.Shared.Services
         public new string AesKey
         {
             get => Instance.AppSettings.ApiEncryptKey;
-            set => Instance.AppSettings.ApiEncryptKey = value;
+            set => Instance.GetConfig(nameof(GlobalSettingsModel.ApiEncryptKey), value);
         }
         public int ResponseCache => AppSettings.ResponseCache;
         public bool IsInit => AppSettings.IsInit;

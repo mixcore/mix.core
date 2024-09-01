@@ -15,16 +15,15 @@
 		<Using Include="Mix.Shared.Dtos" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.17.0" />
+		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.18.1" />
 		<PackageReference Include="Azure.ResourceManager.ServiceBus" Version="1.1.0-beta.3" />
-		<PackageReference Include="Google.Api.Gax" Version="4.4.0" />
-		<PackageReference Include="Google.Cloud.PubSub.V1" Version="3.8.0" />
-		<PackageReference Include="Google.Protobuf" Version="3.25.1" />
-		<PackageReference Include="Grpc.AspNetCore" Version="2.59.0" />
-		<PackageReference Include="Grpc.Net.Client" Version="2.59.0" />
-		<PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
-		<PackageReference Include="Grpc.Net.Client.Web" Version="2.60.0-pre1" />
-		<PackageReference Include="Grpc.Tools" Version="2.60.0-pre1" PrivateAssets="All">
+		<PackageReference Include="Google.Api.Gax" Version="4.8.0" />
+		<PackageReference Include="Google.Cloud.PubSub.V1" Version="3.16.0" />
+		<PackageReference Include="Google.Protobuf" Version="3.27.3" />
+		<PackageReference Include="Grpc.Net.Client" Version="2.65.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.65.0" />
+		<PackageReference Include="Grpc.Net.Client.Web" Version="2.65.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.65.0">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

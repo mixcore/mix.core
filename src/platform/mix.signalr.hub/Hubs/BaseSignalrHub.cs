@@ -11,24 +11,23 @@ using Mix.Signalr.Hub.Models;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
+using System.Collections.Concurrent;
 using System.Security.Claims;
 
 namespace Mix.SignalR.Hubs
 {
     public abstract class BaseSignalRHub : Hub
     {
-        protected IAuditLogService AuditLogService;
         protected IMixTenantService MixTenantService;
         protected HubUserModel? CurrentUser;
         protected int? TenantId;
 
-        protected BaseSignalRHub(IAuditLogService auditLogService, IMixTenantService mixTenantService)
+        protected BaseSignalRHub(IMixTenantService mixTenantService)
         {
-            AuditLogService = auditLogService;
             MixTenantService = mixTenantService;
         }
 
-        public static Dictionary<string, List<HubUserModel>> Rooms = new Dictionary<string, List<HubUserModel>>();
+        public static ConcurrentDictionary<string, ConcurrentBag<HubUserModel>> Rooms = new ConcurrentDictionary<string, ConcurrentBag<HubUserModel>>();
         public virtual async Task Join(string host)
         {
             if (MixTenantService.AllTenants == null)
@@ -109,21 +108,35 @@ namespace Mix.SignalR.Hubs
             }
             catch (Exception ex)
             {
-                throw new MixException(Heart.Enums.MixErrorStatus.ServerError, ex);
+                throw new MixException(MixErrorStatus.ServerError, ex);
             }
 
         }
 
         #region Private
-        protected async Task AddUserToRoom(string roomName)
+        protected virtual async Task AddUserToRoom(string roomName)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
-            if (!Rooms.ContainsKey(roomName))
-            {
-                Rooms.Add(roomName, new List<HubUserModel>());
-            }
+            Rooms.TryAdd(roomName, new ConcurrentBag<HubUserModel>());
+            await NotifyNewUser(roomName);
+        }
 
-            var users = Rooms[roomName] ?? new();
+        protected HubUserModel GetCurrentUser()
+        {
+            var userContext = Context.User;
+            return new()
+            {
+                TenantId = TenantId,
+                ConnectionId = Context.ConnectionId,
+                Username = userContext?.Identity?.Name ?? "Anonymous",
+                Avatar = userContext?.Claims.FirstOrDefault(m => m.Type == MixClaims.Avatar)?.Value ?? MixConstants.CONST_DEFAULT_EXTENSIONS_FILE_PATH,
+                Role = userContext?.Claims.FirstOrDefault(m => m.Type == MixClaims.Role)?.Value,
+            };
+        }
+
+        protected virtual async Task NotifyNewUser(string roomName)
+        {
+            var users = Rooms[roomName] ?? [];
             if (!users.Any(u => u != null && u.ConnectionId == Context.ConnectionId))
             {
                 var user = GetCurrentUser();
@@ -134,20 +147,20 @@ namespace Mix.SignalR.Hubs
                 }
                 await SendMessageToCaller(new(user) { Action = MessageAction.MyConnection });
                 await SendMessageToCaller(new(users) { Action = MessageAction.MemberList });
-                await SendGroupMessage(new(user) { Action = MessageAction.NewMember }, roomName);
+                await SendGroupMessage(new(user) { Action = MessageAction.MemberOnline }, roomName, true);
             }
         }
-
-
-        protected HubUserModel GetCurrentUser()
+        protected virtual async Task RemoveUserFromGroups()
         {
-            return new()
+            foreach (var room in Rooms)
             {
-                TenantId = TenantId,
-                ConnectionId = Context.ConnectionId,
-                Username = Context.User?.Identity?.Name ?? "Annonymous",
-                Avatar = Context.User?.Claims.FirstOrDefault(m => m.Type == MixClaims.Avatar)?.Value ?? MixConstants.CONST_DEFAULT_EXTENSIONS_FILE_PATH,
-            };
+                var user = room.Value?.FirstOrDefault(m => m.ConnectionId == Context.ConnectionId);
+                if (user != null)
+                {
+                    room.Value?.TryTake(out user);
+                    await SendGroupMessage(new(user) { Action = MessageAction.MemberOffline }, room.Key);
+                }
+            }
         }
         #endregion
 
@@ -155,26 +168,12 @@ namespace Mix.SignalR.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            var user = GetCurrentUser();
-            if (user != null)
-            {
-                CurrentUser = user;
-                await SendMessageToCaller(new(user) { Action = MessageAction.MyConnection });
-            }
             await base.OnConnectedAsync().ConfigureAwait(false);
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            foreach (var room in Rooms)
-            {
-                var user = room.Value.FirstOrDefault(m => m.ConnectionId == Context.ConnectionId);
-                if (user != null)
-                {
-                    room.Value.Remove(user);
-                    await SendGroupMessage(new(user) { Action = MessageAction.MemberOffline }, room.Key);
-                }
-            }
+            await RemoveUserFromGroups();
             await base.OnDisconnectedAsync(exception).ConfigureAwait(false);
         }
         #endregion

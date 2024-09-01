@@ -14,7 +14,7 @@ namespace Mixcore.Domain.Services
 
         public Task<MixNavigation> GetNavigationAsync(string name, string culture, IUrlHelper Url)
         {
-            // TODO: Update get nav
+            // TODO: PUT get nav
             return default;
         }
     }

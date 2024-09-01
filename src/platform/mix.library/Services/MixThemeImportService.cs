@@ -5,20 +5,24 @@ using Humanizer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Mix.Auth.Constants;
 using Mix.Database.Base;
 using Mix.Database.Entities.MixDb;
 using Mix.Database.Services;
 using Mix.Lib.Interfaces;
+using Mix.RepoDb.Helpers;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.RepoDb.ViewModels;
+using Mix.Signalr.Hub.Models;
 
 namespace Mix.Lib.Services
 {
     public class MixThemeImportService : IMixThemeImportService
     {
         private MixRepoDbRepository _repository { get; set; }
-        private MixCacheService _cacheService{ get; set; }
+        private FieldNameService _fieldNameService { get; set; }
+        private MixCacheService _cacheService { get; set; }
         private readonly CancellationTokenSource _cts;
         private readonly DatabaseService _databaseService;
         private readonly IDatabaseConstants _databaseConstant;
@@ -107,22 +111,15 @@ namespace Mix.Lib.Services
 
         public async Task<SiteDataViewModel> LoadSchema(string folder)
         {
-            try
+            using (var serviceScope = _serviceProvider.CreateScope())
             {
-                using (var serviceScope = _serviceProvider.CreateScope())
-                {
-                    _uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
-                    _context = _uow.DbContext;
-                    var strSchema = MixFileHelper.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, folder);
-                    var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
-                    await ValidateSiteData(siteStructures);
-                    serviceScope.Dispose();
-                    return siteStructures;
-                }
-            }
-            catch(Exception ex)
-            {
-                throw new MixException(MixErrorStatus.ServerError, ex);
+                _uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
+                _context = _uow.DbContext;
+                var strSchema = MixFileHelper.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, folder);
+                var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
+                await ValidateSiteData(siteStructures);
+                serviceScope.Dispose();
+                return siteStructures;
             }
         }
 
@@ -286,7 +283,7 @@ namespace Mix.Lib.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            await ImportDatabaseContextsAsync(uow.DbContext);
+            //await ImportDatabaseContextsAsync(uow.DbContext);
             await ImportDatabasesAsync(uow.DbContext);
             await ImportDatabaseRelationshipsAsync(uow.DbContext);
             await MigrateMixDatabaseAsync(uow, cacheService, mixDbService);
@@ -457,6 +454,8 @@ namespace Mix.Lib.Services
         #endregion Import Module
 
         #region Import Database Data
+
+        // TODO: should not import db context, it must be predefined before import database
         private async Task ImportDatabaseContextsAsync(MixCmsContext context)
         {
 
@@ -464,21 +463,24 @@ namespace Mix.Lib.Services
             {
                 try
                 {
-                    var oldId = item.Id;
-
-                    while (context.MixDatabaseContext.Any(m => m.SystemName == item.SystemName))
+                    if (!context.MixDatabaseContext.Any(m => m.SystemName == item.SystemName))
                     {
-                        item.SystemName = $"{item.SystemName}_1";
+                        var oldId = item.Id;
+
+                        while (context.MixDatabaseContext.Any(m => m.SystemName == item.SystemName))
+                        {
+                            item.SystemName = $"{item.SystemName}_1";
+                        }
+                        item.MixTenantId = CurrentTenant.Id;
+                        item.Id = 0;
+                        item.CreatedBy = _siteData.CreatedBy;
+                        item.CreatedDateTime = DateTime.UtcNow;
+                        item.DatabaseProvider = _databaseService.DatabaseProvider;
+                        item.ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+                        context.Entry(item).State = EntityState.Added;
+                        await context.SaveChangesAsync(_cts.Token);
+                        _dicMixDatabaseContextIds.Add(oldId, item.Id);
                     }
-                    item.MixTenantId = CurrentTenant.Id;
-                    item.Id = 0;
-                    item.CreatedBy = _siteData.CreatedBy;
-                    item.CreatedDateTime = DateTime.UtcNow;
-                    item.DatabaseProvider = _databaseService.DatabaseProvider;
-                    item.ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-                    context.Entry(item).State = EntityState.Added;
-                    await context.SaveChangesAsync(_cts.Token);
-                    _dicMixDatabaseContextIds.Add(oldId, item.Id);
                 }
                 catch (MixException)
                 {
@@ -499,12 +501,23 @@ namespace Mix.Lib.Services
             {
                 try
                 {
+                    var oldDbContext = _siteData.MixDatabaseContexts.Find(m => m.Id == item.MixDatabaseContextId);
                     var oldId = item.Id;
                     var oldName = item.SystemName;
+                    var currentDbContext = oldDbContext != null ? context.MixDatabaseContext.SingleOrDefault(m => m.SystemName == oldDbContext.SystemName) : default;
                     var currentDb = context.MixDatabase.SingleOrDefault(m => m.SystemName == item.SystemName);
+
+
+                    // Skip install database if there is no predefined db context
+                    if (item.MixDatabaseContextId.HasValue && currentDbContext is null)
+                    {
+                        continue;
+                    }
+
                     if (currentDb == null)
                     {
                         item.Id = 0;
+                        item.MixDatabaseContextId = currentDbContext?.Id;
                         item.CreatedBy = _siteData.CreatedBy;
                         item.CreatedDateTime = DateTime.UtcNow;
                         context.Entry(item).State = EntityState.Added;
@@ -598,123 +611,67 @@ namespace Mix.Lib.Services
 
         public async Task ImportMixDbDataAsync()
         {
-            foreach (var database in _siteData.MixDbModels)
+            var groupData = _siteData.MixDbModels.GroupBy(m => m.DatabaseName).ToList();
+            foreach (var mixGroupData in groupData)
             {
-                // Not import user data from other site
-                if (database.DatabaseName == MixDatabaseNames.SYSTEM_USER_DATA)
+                var oldDbContext = _siteData.MixDatabaseContexts.Find(m => m.Id == _siteData.MixDatabases.First(m => m.SystemName == mixGroupData.Key).MixDatabaseContextId);
+                var dbContext = oldDbContext != null ? _context.MixDatabaseContext.SingleOrDefault(m => m.SystemName == oldDbContext.SystemName) : default;
+                if (dbContext == null)
                 {
-                    continue;
+                    return;
+                }
+                var mixDb = await RepoDbMixDatabaseViewModel.GetRepository(_uow, _cacheService).GetSingleAsync(m => m.SystemName == mixGroupData.Key);
+                if (mixDb.MixDatabaseContextId.HasValue)
+                {
+
+                    var cnn = dbContext.ConnectionString.IsBase64()
+                        ? AesEncryptionHelper.DecryptString(dbContext.ConnectionString, GlobalConfigService.Instance.AppSettings.ApiEncryptKey)
+                        : dbContext.ConnectionString;
+                    _repository.Init(mixDb.SystemName, dbContext.DatabaseProvider, cnn);
+                    _fieldNameService = new FieldNameService(dbContext.NamingConvention);
+                }
+                else
+                {
+                    _repository.InitTableName(mixDb.SystemName);
+                    _fieldNameService = new FieldNameService(MixDatabaseNamingConvention.TitleCase);
+
                 }
 
-                try
+                foreach (var mixData in mixGroupData)
                 {
-                    var mixDb = _siteData.MixDatabases.FirstOrDefault(m => m.SystemName == database.DatabaseName);
-                    if (mixDb != null && database.Data != null && database.Data.Count > 0)
-                    {
-                        var sql = GetInsertQuery(database, mixDb);
-                        await _repository.ExecuteCommand(sql);
-                    }
-                }
-                catch (MixException)
-                {
-                    throw;
-                }
-                catch (Exception ex)
-                {
-                    throw new MixException(MixErrorStatus.Badrequest, nameof(ImportMixDbDataAsync), database.DatabaseName, ex.Message);
-                }
-            }
-        }
-
-        private string GetInsertQuery(MixDbModel database, MixDatabase mixDb)
-        {
-            List<string> columns = new List<string> { "Id", "CreatedDateTime", "LastModified", "MixTenantId", "CreatedBy", "ModifiedBy", "Priority", "Status", "IsDeleted" };
-            columns.AddRange(_siteData.MixDatabaseColumns.Where(c => c.MixDatabaseName == database.DatabaseName).Select(c => c.SystemName.ToTitleCase()).ToList());
-            List<string> sqlList = new();
-            var dbColumns = _siteData.MixDatabaseColumns.Where(m => m.MixDatabaseName == database.DatabaseName).ToList();
-            foreach (var jToken in database.Data)
-            {
-                var item = (JObject)jToken;
-                List<string> values = new();
-                item["MixTenantId"] = CurrentTenant.Id;
-
-                if (mixDb.Type == MixDatabaseType.AdditionalData)
-                {
-                    string parentType = item.Value<string>("ParentType");
-                    if (parentType == "Post" && _dicPostContentIds.TryGetValue(item.Value<int>("ParentId"), out int postId))
-                    {
-                        item["ParentId"] = postId;
-                    }
-                    else if (parentType == "Page" && _dicPageIds.TryGetValue(item.Value<int>("ParentId"), out int pageId))
-                    {
-                        item["ParentId"] = pageId;
-                    }
-                    else
+                    // Not import user data from other site
+                    if (mixData.DatabaseName == MixDatabaseNames.SYSTEM_USER_DATA)
                     {
                         continue;
                     }
+
+                    try
+                    {
+
+                        
+                        if (mixDb != null && mixData.Data != null && mixData.Data.Count > 0)
+                        {
+                            List<JObject> lstDto = new();
+                            foreach (var jToken in mixData.Data)
+                            {
+                                lstDto.Add(await MixDbHelper.ParseDtoToEntityAsync((JObject)jToken, mixDb.Type, mixDb.Columns, _fieldNameService, username: _siteData.CreatedBy));
+                            }
+                            await _repository.InsertManyAsync(lstDto, mixDb);
+                            _repository.CompleteTransaction();
+                        }
+                    }
+                    catch (MixException)
+                    {
+                        throw;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new MixException(MixErrorStatus.Badrequest, nameof(ImportMixDbDataAsync), mixData.DatabaseName, ex.Message);
+                    }
                 }
-
-                foreach (var col in columns)
-                {
-                    var colType = dbColumns.FirstOrDefault(c => c.SystemName.Equals(col, StringComparison.OrdinalIgnoreCase))?.DataType;
-                    var defaultValue = dbColumns.FirstOrDefault(c => c.SystemName.Equals(col, StringComparison.OrdinalIgnoreCase))?.DefaultValue;
-                    string objValue = GetColumnValue(col, colType, item, defaultValue, mixDb.Type);
-                    values.Add(objValue);
-                }
-
-
-
-                sqlList.Add($"Insert into {_databaseConstant.BacktickOpen}{database.DatabaseName}{_databaseConstant.BacktickClose} " +
-                    $"({string.Join(',', columns.Select(c => $"{_databaseConstant.BacktickOpen}{c}{_databaseConstant.BacktickClose}"))}) " +
-                    $"Values ({string.Join(',', values)})");
             }
-            return string.Join(';', sqlList);
+
         }
-
-        private string GetColumnValue(string col, MixDataType? colDataType, JObject item, string defaultValue, MixDatabaseType mixDbType)
-        {
-            switch (col)
-            {
-                case "CreatedDateTime":
-                case "LastModified":
-                    colDataType = MixDataType.Date;
-                    break;
-                case "IsDeleted":
-                    colDataType = MixDataType.Boolean;
-                    break;
-                case "Id":
-                case "MixTenantId":
-                case "Priority":
-                    colDataType = MixDataType.Integer;
-                    break;
-            }
-
-            var strValue = item.Value<string>(col);
-
-            if (strValue != null && strValue.Contains("'"))
-            {
-                strValue = strValue.Replace("'", "\\'");
-            }
-            if (string.IsNullOrEmpty(defaultValue))
-            {
-                defaultValue = "NULL";
-            }
-            return colDataType switch
-            {
-                MixDataType.Boolean => string.IsNullOrEmpty(strValue) ? defaultValue : strValue,
-                MixDataType.Integer => string.IsNullOrEmpty(strValue) ? defaultValue : strValue,
-                MixDataType.Reference => string.IsNullOrEmpty(strValue) ? defaultValue : strValue,
-                MixDataType.Date => item.Value<DateTime?>(col) != null
-                                    ? $"'{item.Value<DateTime?>(col)?.ToString("yyyy-MM-dd HH-mm-ss")}'"
-                                    : defaultValue,
-                MixDataType.DateTime => item.Value<DateTime?>(col) != null
-                                    ? $"'{item.Value<DateTime?>(col)?.ToString("yyyy-MM-dd HH-mm-ss")}'"
-                                    : defaultValue,
-                _ => string.IsNullOrEmpty(strValue) ? defaultValue : $"'{strValue}'"
-            };
-        }
-
         #endregion Import Module
 
         #endregion

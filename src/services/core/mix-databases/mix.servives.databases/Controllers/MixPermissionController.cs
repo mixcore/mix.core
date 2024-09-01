@@ -15,6 +15,7 @@ using Mix.SignalR.Interfaces;
 using Mix.Lib.Interfaces;
 using Mix.Auth.Constants;
 using Mix.Mq.Lib.Models;
+using Mix.Identity.Dtos;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -59,6 +60,7 @@ namespace Mix.Services.Databases.Controllers
             return Ok();
         }
 
+        [MixAuthorize]
         [HttpGet("get-my-permissions")]
         public async Task<ActionResult<List<MixPermissionViewModel>>> GetMyPermissions()
         {
@@ -71,7 +73,15 @@ namespace Mix.Services.Databases.Controllers
             return BadRequest();
         }
 
-
+        [MixAuthorize(roles: $"{MixRoles.Owner},{MixRoles.Administrators}")]
+        [Route("grant-permission")]
+        [HttpPost]
+        public async Task<ActionResult> GrantPermission([FromBody] GrantPermissionsDto dto)
+        {
+            dto.RequestedBy = MixIdentityService.GetClaim(User, MixClaims.Username);
+            await _permissionService.GrantPermissions(dto);
+            return Ok();
+        }
         #endregion
 
         #region Overrides

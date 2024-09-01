@@ -75,7 +75,7 @@ namespace Mix.Mixdb.Event.Services
                 }
                 catch (Exception ex)
                 {
-
+                    MixLogService.LogExceptionAsync(ex);
                 }
             }
         }
@@ -85,7 +85,11 @@ namespace Mix.Mixdb.Event.Services
             using (var serviceScope = ServicesProvider.CreateScope())
             {
                 var _cacheService = serviceScope.ServiceProvider.GetRequiredService<MixCacheService>();
-                await _cacheService.RemoveCacheAsync(model.Data.Value<string>("Id"), $"{MixFolders.MixDbCacheFolder}/{model.MixDbName}");
+                if (model.Data != null)
+                {
+                    var id = model.Data.Id;
+                    await _cacheService.RemoveCacheAsync(id, $"{MixFolders.MixDbCacheFolder}/{model.MixDbName}");
+                }
                 if (model.MixDbName == MixDatabaseNames.SYSTEM_PERMISSION || model.MixDbName == MixDatabaseNames.SYSTEM_PERMISSION_ENDPOINT)
                 {
                     await _mixPermissionService.Reload();
@@ -103,10 +107,10 @@ namespace Mix.Mixdb.Event.Services
                     {
                         foreach (var sub in subs)
                         {
-                            if (sub.Callback != null)
+                            if (sub.Callback != null && model.Data != null)
                             {
                                 var requestModel = sub.Callback.ToObject<HttpRequestModel>();
-                                requestModel!.Body = ParseBody(requestModel.Body, model.Data);
+                                requestModel!.Body = ParseBody(requestModel.Body, model.Data.After);
                                 var result = await _httpService.SendHttpRequestModel(requestModel);
                                 await SendMessage(model, requestModel!.Body, result);
                             }

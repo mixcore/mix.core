@@ -29,28 +29,28 @@ namespace Mix.Lib.Subscribers
             _mixTenantService = mixTenantService;
         }
 
-        public override async Task Handler(MessageQueueModel data)
+        public override async Task Handler(MessageQueueModel model, CancellationToken cancellationToken)
         {
             CacheService ??= GetRequiredService<MixCacheService>();
-            await UpdateCacheHandler(data);
-            switch (data.DataTypeFullName)
+            await UpdateCacheHandler(model);
+            switch (model.DataTypeFullName)
             {
                 case var m when m == typeof(MixTemplateViewModel).FullName:
-                    await TemplateHandler.MessageQueueHandler(data);
+                    await TemplateHandler.MessageQueueHandler(model);
                     break;
                 case var m when m == typeof(MixPageContentViewModel).FullName:
-                    await PageContentHandler.MessageQueueHandler(data, CacheService);
+                    await PageContentHandler.MessageQueueHandler(model, CacheService);
                     break;
                 case var m when m == typeof(MixTenantSystemViewModel).FullName:
-                    await MixTenantSystemViewModelHandler.MessageQueueHandler(data, _mixTenantService);
+                    await MixTenantSystemViewModelHandler.MessageQueueHandler(model, _mixTenantService);
                     break;
                 case var m when m == typeof(MixTenantSystemViewModel).FullName:
-                    await MixDomainViewModelHandler.MessageQueueHandler(data, _mixTenantService);
+                    await MixDomainViewModelHandler.MessageQueueHandler(model, _mixTenantService);
                     break;
                 case var m when m == typeof(MixDatabaseColumnViewModel).FullName:
                     var mixDbService = GetRequiredService<IMixDbService>();
                     if (mixDbService != null) {
-                        await MixDatabaseColumnViewModelHandler.MessageQueueHandler(data,mixDbService);
+                        await MixDatabaseColumnViewModelHandler.MessageQueueHandler(model,mixDbService);
                     }
                     break;
                 default:
@@ -71,10 +71,10 @@ namespace Mix.Lib.Subscribers
                         var cacheService = serviceScope.ServiceProvider.GetRequiredService<MixCacheService>();
                         switch (data.Action)
                         {
-                            case "Patch":
+                            case "PATCH":
                             case "Post":
                             case "Put":
-                            case "Delete":
+                            case "DELETE":
                                 var modifiedEntities = vm.Value<JArray>("modifiedEntities")?.ToObject<List<ModifiedEntityModel>>();
                                 await cacheService.RemoveCachesAsync(modifiedEntities);
                                 break;

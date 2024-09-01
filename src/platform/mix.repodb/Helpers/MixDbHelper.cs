@@ -14,7 +14,24 @@ namespace Mix.RepoDb.Helpers
 {
     public class MixDbHelper
     {
-        public static Task<JObject> ParseDtoToEntityAsync(JObject dto, List<RepoDbMixDatabaseColumnViewModel> columns, FieldNameService fieldNameService, int? tenantId = null, string? username = null)
+        public static Task<JObject> ParseDynamicToEntityAsync(dynamic dto, MixDatabaseType mixdbType, List<RepoDbMixDatabaseColumnViewModel> columns, FieldNameService fieldNameService, int? tenantId = null, string? username = null)
+        {
+            try
+            {
+                JObject result = JObject.FromObject(dto);
+                return ParseDtoToEntityAsync(result, mixdbType, columns, fieldNameService, tenantId, username);
+            }
+            catch (MixException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
+        }
+
+        public static Task<JObject> ParseDtoToEntityAsync(JObject dto, MixDatabaseType mixdbType, List<RepoDbMixDatabaseColumnViewModel> columns, FieldNameService fieldNameService, int? tenantId = null, string? username = null)
         {
             try
             {
@@ -25,7 +42,7 @@ namespace Mix.RepoDb.Helpers
                     .ToList();
                 foreach (var pr in dto.Properties())
                 {
-                    var colName = fieldNameService.NamingConvention == MixDatabaseNamingConvention.TitleCase? pr.Name.ToTitleCase() : pr.Name;
+                    var colName = fieldNameService.NamingConvention == MixDatabaseNamingConvention.TitleCase ? pr.Name.ToTitleCase() : pr.Name.ToHyphenCase('_', true);
                     var col = columns.FirstOrDefault(c => c.SystemName.Equals(colName, StringComparison.InvariantCultureIgnoreCase));
 
                     if (encryptedColumnNames.Contains(colName))
@@ -39,7 +56,7 @@ namespace Mix.RepoDb.Helpers
                     {
                         if (col != null)
                         {
-                            result.Add(new JProperty(colName, ParseObjectValue(col.DataType, pr.Value)));
+                            result.Add(new JProperty(colName, ParseObjectValueToDbType(col.DataType, pr.Value)));
                         }
                         else
                         {
@@ -50,24 +67,31 @@ namespace Mix.RepoDb.Helpers
 
                 if (!result.ContainsKey(fieldNameService.Id))
                 {
-                    result.Add(new JProperty(fieldNameService.Id, string.Empty));
-                    if (!result.ContainsKey(fieldNameService.CreatedBy))
+                    if (mixdbType == MixDatabaseType.GuidService)
                     {
-                        result.Add(new JProperty(fieldNameService.CreatedBy, username));
+                        result.Add(new JProperty(fieldNameService.Id, Guid.NewGuid()));
                     }
-                    if (!result.ContainsKey(fieldNameService.CreatedDateTime))
+                    else
                     {
-                        result.Add(new JProperty(fieldNameService.CreatedDateTime, DateTime.UtcNow));
-                    }
-                    if (!result.ContainsKey(fieldNameService.CreatedBy))
-                    {
-                        result.Add(new JProperty(fieldNameService.CreatedBy, username));
+                        result.Add(new JProperty(fieldNameService.Id, string.Empty));
                     }
                 }
                 else
                 {
                     result[fieldNameService.ModifiedBy] = username;
                     result[fieldNameService.LastModified] = DateTime.UtcNow;
+                }
+                if (!result.ContainsKey(fieldNameService.CreatedBy))
+                {
+                    result.Add(new JProperty(fieldNameService.CreatedBy, username));
+                }
+                if (!result.ContainsKey(fieldNameService.CreatedDateTime))
+                {
+                    result.Add(new JProperty(fieldNameService.CreatedDateTime, DateTime.UtcNow));
+                }
+                if (!result.ContainsKey(fieldNameService.CreatedBy))
+                {
+                    result.Add(new JProperty(fieldNameService.CreatedBy, username));
                 }
 
                 if (!result.ContainsKey(fieldNameService.Priority))
@@ -89,6 +113,10 @@ namespace Mix.RepoDb.Helpers
                     result.Add(new JProperty(fieldNameService.IsDeleted, false));
                 }
                 return Task.FromResult(result);
+            }
+            catch (MixException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
@@ -201,40 +229,94 @@ namespace Mix.RepoDb.Helpers
             }
         }
 
-        public static object? ParseObjectValue(MixDataType? dataType, JToken value)
+        public static object? ParseObjectValueToDbType(MixDataType? dataType, JToken value)
         {
-            if (value != null)
+            try
             {
-                string strValue = value.ToString();
-                if (string.IsNullOrEmpty(strValue))
+                if (value != null)
                 {
-                    return default;
-                }
-                switch (dataType)
-                {
-                    case MixDataType.Date:
-                    case MixDataType.DateTime:
-                        return DateTime.Parse(strValue).ToUniversalTime();
-                    case MixDataType.Boolean:
-                        return bool.Parse(strValue);
-                    case MixDataType.Array:
-                    case MixDataType.ArrayMedia:
-                        return JArray.FromObject(value).ToString(Formatting.None);
-                    case MixDataType.Json:
-                    case MixDataType.ArrayRadio:
-                        return JObject.FromObject(value).ToString(Formatting.None);
-                    case MixDataType.Integer:
-                    case MixDataType.Reference:
-                        return int.Parse(strValue);
-                    case MixDataType.Double:
-                        return double.Parse(strValue);
-                    case MixDataType.Guid:
-                        Guid.TryParse(value.ToString(), out var guildResult);
-                        return guildResult;
-                    default:
-                        return value.ToString();
+                    string strValue = value.ToString();
+                    if (string.IsNullOrEmpty(strValue))
+                    {
+                        return default;
+                    }
+                    switch (dataType)
+                    {
+                        case MixDataType.Date:
+                        case MixDataType.DateTime:
+                            DateTime.TryParse(strValue, out var dateValue);
+                            if (dateValue.Kind != DateTimeKind.Utc)
+                            {
+                                return dateValue.ToUniversalTime();
+                            }
+                            return dateValue;
 
+                        case MixDataType.Boolean:
+                            return bool.Parse(strValue);
+                        case MixDataType.Array:
+                        case MixDataType.ArrayMedia:
+                            return value.Type != JTokenType.String
+                                ? JArray.FromObject(value).ToString(Formatting.None)
+                                : value.Value<string>();
+                        case MixDataType.Json:
+                        case MixDataType.ArrayRadio:
+                            return value.Type != JTokenType.String
+                                    ? JObject.FromObject(value).ToString(Formatting.None)
+                                    : value.Value<string>(); ;
+                        case MixDataType.Integer:
+                        case MixDataType.Reference:
+                            return int.Parse(strValue);
+                        case MixDataType.Double:
+                            return double.Parse(strValue);
+                        case MixDataType.Guid:
+                            Guid.TryParse(value.ToString(), out var guildResult);
+                            return guildResult;
+                        default:
+                            return value.ToString();
+
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
+            return null;
+        }
+        public static object? ParseObjectValue(MixDataType? dataType, string strValue)
+        {
+            try
+            {
+                if (strValue != null)
+                {
+                    switch (dataType)
+                    {
+                        case MixDataType.Date:
+                        case MixDataType.DateTime:
+                            return DateTime.Parse(strValue).ToUniversalTime();
+                        case MixDataType.Boolean:
+                            return bool.Parse(strValue);
+                        case MixDataType.Integer:
+                        case MixDataType.Reference:
+                            return int.Parse(strValue);
+                        case MixDataType.Double:
+                            return double.Parse(strValue);
+                        case MixDataType.Guid:
+                            Guid.TryParse(strValue, out var guildResult);
+                            return guildResult;
+                        case MixDataType.Array:
+                        case MixDataType.ArrayMedia:
+                        case MixDataType.Json:
+                        case MixDataType.ArrayRadio:
+                        default:
+                            return strValue;
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
             }
             return null;
         }

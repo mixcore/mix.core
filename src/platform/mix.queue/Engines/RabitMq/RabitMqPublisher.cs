@@ -13,11 +13,12 @@ using Newtonsoft.Json;
 
 namespace Mix.Queue.Engines.RabitMQ
 {
-    public class RabitMQPublisher<T> : IQueuePublisher<T> 
+    public class RabitMQPublisher<T> : IQueuePublisher<T>
         where T : MessageQueueModel
     {
         private DefaultObjectPool<IModel> _objectPool;
-        private string _topicId;
+        private readonly string _topicId;
+
         public RabitMQPublisher(IPooledObjectPolicy<IModel> objectPolicy, string topicId)
         {
             _topicId = topicId;
@@ -39,10 +40,12 @@ namespace Mix.Queue.Engines.RabitMQ
                 var properties = channel.CreateBasicProperties();
                 properties.Persistent = true;
 
-                channel.BasicPublish(exchange: _topicId,
-                     routingKey: $"{_topicId}",
-                     basicProperties: properties,
-                     body: sendBytes);
+                channel.BasicPublish(
+                    exchange: _topicId,
+                    routingKey: $"{_topicId}",
+                    basicProperties: properties,
+                    body: sendBytes);
+
                 return Task.CompletedTask;
             }
             catch
@@ -57,7 +60,7 @@ namespace Mix.Queue.Engines.RabitMQ
 
         public Task SendMessages(IList<T> messages)
         {
-            List<Task> tasks = new List<Task>();
+            List<Task> tasks = [];
             foreach (var item in messages)
             {
                 tasks.Add(SendMessage(item));

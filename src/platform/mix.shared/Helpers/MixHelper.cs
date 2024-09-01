@@ -12,7 +12,7 @@ namespace Mix.Shared.Helpers
         {
             if (srcPath.ToLower() != desPath.ToLower() && Directory.Exists(srcPath))
             {
-                //Now Create all of the directories
+                //Now POST all of the directories
                 foreach (string dirPath in Directory.GetDirectories(srcPath, "*", SearchOption.AllDirectories))
                 {
                     Directory.CreateDirectory(dirPath.Replace(srcPath, desPath));

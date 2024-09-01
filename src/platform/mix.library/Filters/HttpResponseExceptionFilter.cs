@@ -15,42 +15,51 @@ namespace Mix.Lib.Filters
             if (context.Exception != null)
             {
 
-                var auditlogData = context.HttpContext.RequestServices.GetService(typeof(AuditLogDataModel)) as AuditLogDataModel;
-                auditlogData.Exception = ReflectionHelper.ParseObject(context.Exception);
+                var auditLogData = context.HttpContext.RequestServices.GetService(typeof(AuditLogDataModel)) as AuditLogDataModel;
+                auditLogData.Exception = ReflectionHelper.ParseObject(context.Exception);
 
                 if (context.Exception is MixException exception)
                 {
+                    var result = new ExceptionResponseResult(exception.GetType().Name, exception.Errors, exception.Message, exception.StackTrace);
                     context.Result = exception.Status switch
                     {
-                        MixErrorStatus.UnAuthorized => new UnauthorizedObjectResult(exception.Errors)
+                        MixErrorStatus.UnAuthorized => new UnauthorizedObjectResult(result)
                         {
                             StatusCode = (int)exception.Status,
                         },
                         MixErrorStatus.Forbidden => new ForbidResult()
                         {
                         },
-                        MixErrorStatus.Badrequest => new BadRequestObjectResult(exception.Errors)
+                        MixErrorStatus.Badrequest => new BadRequestObjectResult(result)
                         {
                             StatusCode = (int)exception.Status,
                         },
-                        MixErrorStatus.ServerError => new ObjectResult(exception.Errors)
+                        MixErrorStatus.ServerError => new ObjectResult(result)
                         {
                             StatusCode = (int)exception.Status,
                         },
-                        MixErrorStatus.NotFound => new NotFoundObjectResult(exception.Errors)
+                        MixErrorStatus.NotFound => new NotFoundObjectResult(result)
                         {
                             StatusCode = (int)exception.Status,
                         },
-                        _ => new ObjectResult(exception.Value)
+                        _ => new ObjectResult(result)
                         {
                             StatusCode = (int)exception.Status,
                         },
                     };
                     context.ExceptionHandled = true;
                 }
-                context.ExceptionHandled = true;
+                //context.ExceptionHandled = true;
             }
-            
+
         }
+    }
+
+    public class ExceptionResponseResult(string code, string[] errors, string message, string stackTrace)
+    {
+        public string Code { get; set; } = code;
+        public string Message { get; set; } = message; // TODO: must be ignored in production
+        public string[] Errors { get; set; } = errors;
+        public string StackTrace { get; set; } = stackTrace; // TODO: must be ignored in production
     }
 }

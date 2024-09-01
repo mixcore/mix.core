@@ -37,7 +37,7 @@ namespace Mix.RepoDb.Subscribers
             PortalHub = portalHub;
         }
 
-        public override async Task Handler(MessageQueueModel model)
+        public override async Task Handler(MessageQueueModel model, CancellationToken cancellationToken)
         {
             try
             {

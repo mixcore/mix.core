@@ -26,7 +26,7 @@ namespace Mix.Scheduler.Domain.Jobs
                 Success = true,
                 TopicId = objData.Value<string>("topic"),
                 Action = objData.Value<string>("action"),
-                Data = objData.Value<JObject>("data").ToString()
+                Data = objData.Value<JObject>("data").ToString(Newtonsoft.Json.Formatting.None)
             };
 
             QueueService.PushMemoryQueue(msg);

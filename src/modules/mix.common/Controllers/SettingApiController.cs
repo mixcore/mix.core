@@ -6,7 +6,7 @@ using Mix.Lib.Services;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Service.Models;
-using MySqlX.XDevAPI.Common;
+using Mix.Shared.Services;
 
 namespace Mix.Common.Controllers
 {
@@ -25,7 +25,7 @@ namespace Mix.Common.Controllers
             MixIdentityService mixIdentityService,
             IMemoryQueueService<MessageQueueModel> queueService,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
         }
@@ -80,7 +80,9 @@ namespace Mix.Common.Controllers
                 string filePath = GetSettingFilePath(settingType);
                 if (!string.IsNullOrEmpty(filePath))
                 {
-                    _settingService = new(filePath);
+                    var aesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
+                    _settingService = new(filePath, aesKey: aesKey);
+
                     return Ok(_settingService.AppSettings);
                 }
                 return NotFound();

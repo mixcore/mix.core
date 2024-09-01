@@ -16,12 +16,12 @@ namespace Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers
             switch (data.Action)
             {
                 case "Get":
-                case "Patch":
+                case "PATCH":
                     break;
                 case "Post":
                 case "Put":
                     break;
-                case "Delete":
+                case "DELETE":
                     return mixTenantService.Reload();
                 default:
                     break;

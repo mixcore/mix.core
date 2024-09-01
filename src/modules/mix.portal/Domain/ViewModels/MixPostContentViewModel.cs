@@ -159,7 +159,7 @@ namespace Mix.Portal.Domain.ViewModels
 
             if (isChanged)
             {
-                await cacheService.SetAsync($"{Id}/{GetType().FullName}", this, typeof(MixPostContent).FullName, "full");
+                await cacheService.SetAsync($"{Id}/{GetType().Name}", this, $"{typeof(MixPostContent).Assembly.GetName().Name}_{typeof(MixPostContent).Name}", "full");
             }
 
         }

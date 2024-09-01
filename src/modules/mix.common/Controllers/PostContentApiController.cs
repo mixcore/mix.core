@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MessagePack.Resolvers;
+using Microsoft.AspNetCore.Mvc;
 using Mix.Common.Domain.ViewModels;
 using Mix.Heart.Extensions;
 using Mix.Heart.Models;
@@ -69,7 +70,7 @@ namespace Mix.Common.Controllers
             if (result.AdditionalData == null)
             {
                 await result.LoadAdditionalDataAsync(_mixDbDataService);
-                await CacheService.SetAsync($"{id}/{typeof(PostContentViewModel).FullName}", result, typeof(MixPostContent).FullName, "full");
+                await CacheService.SetAsync($"{id}/{typeof(PostContentViewModel).Name}", result, $"{typeof(MixPostContent).Assembly.GetName().Name}_{typeof(MixPostContent).Name}", "full");
             }
             return result;
         }

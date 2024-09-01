@@ -13,6 +13,7 @@ namespace Mix.Shared.Dtos
         public int PageIndex { get; set; }
         public int? PageSize { get; set; }
         public string OrderBy { get; set; } = default;
+        public MixConjunction Conjunction { get; set; } = MixConjunction.And;
         public SortDirection Direction { get; set; }
         public MixContentStatus? Status { get; set; }
         public MixCompareOperator? SearchMethod { get; set; } = MixCompareOperator.Equal;

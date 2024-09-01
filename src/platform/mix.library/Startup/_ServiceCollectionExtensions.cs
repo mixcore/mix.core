@@ -39,9 +39,6 @@ namespace Microsoft.Extensions.DependencyInjection
             var globalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings)
                                             .Get<GlobalSettingsModel>();
             
-            var authConfig = configuration.GetSection(MixAppSettingsSection.Authentication)
-                                            .Get<MixAuthenticationConfigurations>();
-            
             var redisCnn = configuration.GetSection("Redis").GetValue<string>("ConnectionString");
             services.Configure<HostOptions>(options =>
             {
@@ -57,7 +54,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 var redis = ConnectionMultiplexer.Connect(configuration.GetSection("Redis").GetValue<string>("ConnectionString"));
                 services.AddDataProtection()
-                    .SetApplicationName(authConfig.Issuer)
+                    .SetApplicationName(Assembly.GetExecutingAssembly().FullName)
                     .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
 
                 var sp = services.BuildServiceProvider();
@@ -72,7 +69,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 services.AddDataProtection()
                 .UnprotectKeysWithAnyCertificate()
-                .SetApplicationName(authConfig.Issuer);
+                .SetApplicationName(Assembly.GetExecutingAssembly().FullName);
             }
 
             
@@ -93,7 +90,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddMixTenant(configuration);
             services.AddGeneratedPublisher();
-
 
             services.AddMixModuleServices(configuration);
 
@@ -120,11 +116,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             // Clone Settings from shared folder
             var globalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
-            var authConfig = configuration.GetSection(MixAppSettingsSection.Authentication)
-                                            .Get<MixAuthenticationConfigurations>(); 
             services.AddMvc().AddSessionStateTempDataProvider();
           
-
             services.AddMixCommonServices(configuration);
             services.TryAddScoped<MixConfigurationService>();
             services.TryAddScoped<IMixCmsService, MixCmsService>();
@@ -148,8 +141,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddGeneratedRestApi(MixAssemblies);
             services.AddMixSwaggerServices(executingAssembly);
             services.AddSSL();
-
-
 
             services.Configure<GzipCompressionProviderOptions>(
                 options => options.Level = System.IO.Compression.CompressionLevel.Fastest);

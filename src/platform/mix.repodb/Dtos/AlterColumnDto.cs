@@ -6,6 +6,7 @@ namespace Mix.RepoDb.Dtos
 {
     public class AlterColumnDto
     {
+        public bool IsDrop { get; set; }
         public string SystemName { get; set; }
         public string DisplayName { get; set; }
         public string MixDatabaseName { get; set; }

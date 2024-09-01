@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
-    <PackageReference Include="AWSSDK.S3" Version="3.7.302" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.21.2" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.400.5" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
     <ProjectReference Include="..\mix.library\mix.library.csproj" />
   </ItemGroup>
 	<ItemGroup>

@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using Mix.Database.Services;
 
 using MySqlConnector;
+using System.Security;
 
 namespace Mix.Database.Entities.Account
 {
@@ -22,7 +23,8 @@ namespace Mix.Database.Entities.Account
         public virtual DbSet<MixRole> MixRoles { get; set; }
         public virtual DbSet<OAuthClient> OAuthClient { get; set; }
         public virtual DbSet<OAuthToken> OAuthToken { get; set; }
-
+        public DbSet<Permission> Permission { get; set; }
+        public DbSet<SysMixDatabaseAssociation> SysMixDatabaseAssociation { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MixCmsAccountContext" /> class.

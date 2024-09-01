@@ -79,7 +79,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
                     ParentId = parentEntity.OrderDetailId,
                     ChildId = parentEntity.Id,
                     ChildDatabaseName = EcommerceConstants.DataTableNameOrderItem,
-                    CreatedDateTime = DateTime.Now,
+                    CreatedDateTime = DateTime.UtcNow,
                     CreatedBy = CreatedBy,
                     MixTenantId = MixTenantId
                 };

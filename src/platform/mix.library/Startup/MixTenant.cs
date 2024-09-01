@@ -15,16 +15,17 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddMixTenant(this IServiceCollection services, IConfiguration configuration)
         {
-            var authConfig = configuration.GetSection(MixAppSettingsSection.Authentication).Get<MixAuthenticationConfigurations>();
+            services.TryAddScoped<AuthConfigService>();
+            var authConfigService = services.GetService<AuthConfigService>();
             services.AddMixCache(configuration);
             services.AddSession(
                 options =>
                 {
-                    options.IdleTimeout = TimeSpan.FromMinutes(authConfig.AccessTokenExpiration);
+                    options.IdleTimeout = TimeSpan.FromMinutes(authConfigService.AppSettings.AccessTokenExpiration);
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     options.Cookie.SameSite = SameSiteMode.Strict;
                     options.Cookie.HttpOnly = true;
-                    options.Cookie.Name = authConfig.Issuer;
+                    options.Cookie.Name = authConfigService.AppSettings.Issuer;
                 }
             );
 

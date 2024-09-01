@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Mix.Auth.Constants;
 using Mix.Heart.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.Portal.Domain.Interfaces;
 using Mix.Shared.Helpers;
+using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
@@ -73,7 +73,7 @@ namespace Mix.Portal.Controllers
         }
 
         [HttpPost("load-theme")]
-        public async Task<ActionResult<SiteDataViewModel>> LoadThemeAsync([FromForm] IFormFile theme)
+        public async Task<ActionResult<SiteDataViewModel>> LoadThemeAsync(IFormFile theme)
         {
             _importService.ExtractTheme(theme);
             var siteData = await _importService.LoadSchema();
@@ -110,7 +110,7 @@ namespace Mix.Portal.Controllers
             };
 
             await _importService.DownloadThemeAsync(theme, progress, _httpService);
-            GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.SelectTheme;
+            GlobalConfigService.Instance.SetConfig(nameof(GlobalSettingsModel.InitStatus), InitStep.SelectTheme);
             GlobalConfigService.Instance.SaveSettings();
             return Ok();
         }

@@ -1,7 +1,9 @@
 ﻿using Mix.Identity.ViewModels;
 using Mix.Storage.Lib.Models;
 using Org.BouncyCastle.Utilities;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;

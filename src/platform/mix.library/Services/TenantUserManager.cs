@@ -120,7 +120,7 @@ namespace Mix.Lib.Services
             var roles = from ur in Context.AspNetUserRoles
                         join r in Context.MixRoles
                         on ur.RoleId equals r.Id
-                        where ur.UserId == user.Id && ur.MixTenantId == CurrentTenant.Id
+                        where ur.UserId == user.Id
                         select r;
             return await roles.ToListAsync();
         }

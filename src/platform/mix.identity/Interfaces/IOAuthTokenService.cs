@@ -10,6 +10,6 @@ namespace Mix.Identity.Interfaces
     {
         AuthorizeResponse AuthorizeRequest(IHttpContextAccessor httpContextAccessor, OAuthRequest authorizationRequest);
         TokenResult GenerateJWTToken(IEnumerable<string> scopes, string tokenType, OAuthClient client);
-        TokenResponse GenerateToken(OAuthTokenRequest tokenRequest);
+        OAuthTokenResponse GenerateToken(OAuthTokenRequest tokenRequest);
     }
 }

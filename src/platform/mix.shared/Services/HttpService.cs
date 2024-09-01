@@ -149,6 +149,18 @@ namespace Mix.Shared.Services
                 client => client.PostAsync(requestUrl, content, cancellationToken), bearerToken, requestHeaders);
         }
 
+        public async Task PostAsync<T>(string requestUrl, T body,
+                string bearerToken = null,
+                List<KeyValuePair<string, string>> requestHeaders = null,
+                string contentType = "application/json",
+                CancellationToken cancellationToken = default
+            )
+        {
+            var content = CreateHttpContent(body, contentType);
+            await SendRequestAsync(
+                client => client.PostAsync(requestUrl, content, cancellationToken), bearerToken, requestHeaders);
+        }
+
         public Task<T> PutAsync<T, T1>(string requestUrl, T1 body,
                 string bearerToken = null,
                 List<KeyValuePair<string, string>> requestHeaders = null,
@@ -182,8 +194,8 @@ namespace Mix.Shared.Services
                     }
                 case "application/x-www-form-urlencoded":
                     var formData = content.GetType()
-                        .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                        .ToDictionary(prop => prop.Name, prop => (string)prop.GetValue(content, null));
+                       .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                       .ToDictionary(prop => prop.Name, prop => (string)prop.GetValue(content, null));
                     return new FormUrlEncodedContent(formData);
                 default:
                     return new StringContent(
@@ -192,6 +204,7 @@ namespace Mix.Shared.Services
 
 
         }
+
         private async Task<T> SendRequestAsync<T>(
                 Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn,
                 string token = null,
@@ -203,6 +216,10 @@ namespace Mix.Shared.Services
             {
                 var obj = JObject.Parse(data);
                 return obj.ToObject<T>();
+            }
+            else if (data.IsJArrayString())
+            {
+                return JArray.Parse(data).ToObject<T>();
             }
             else
             {

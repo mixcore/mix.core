@@ -1,4 +1,6 @@
-﻿using Mix.Mixdb.ViewModels;
+﻿using Mix.Database.Entities.Account;
+using Mix.Identity.Dtos;
+using Mix.Mixdb.ViewModels;
 using Mix.Services.Databases.Lib.Dtos;
 
 namespace Mix.Services.Databases.Lib.Interfaces
@@ -8,5 +10,7 @@ namespace Mix.Services.Databases.Lib.Interfaces
         public Task<List<MixPermissionViewModel>> GetPermissionAsync(Guid userId);
 
         public Task AddUserPermission(CreateUserPermissionDto dto);
+        Task<List<Permission>> GetPermissionByRoleId(Guid roleId);
+        Task GrantPermissions(GrantPermissionsDto dto);
     }
 }

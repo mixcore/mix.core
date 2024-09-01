@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Lib.Middlewares;
 using Mix.Lib.Publishers;
 using Mix.Lib.Subscribers;
+using Mix.Log.Lib.Interfaces;
+using Mix.Log.Lib.Models;
 using Mix.Log.Lib.Publishers;
+using Mix.Log.Lib.Services;
 using Mix.Log.Lib.Subscribers;
-using Mix.Quartz.Interfaces;
 using Mix.Quartz.Services;
 using Mix.RepoDb.Publishers;
 using Mix.RepoDb.Subscribers;
@@ -30,12 +33,14 @@ namespace Mixcore.Domain
             services.AddHostedService<MixDbCommandPublisher>();
             services.AddHostedService<MixDbCommandSubscriber>();
 
-            services.AddMixQuartzServices(configuration);
+            services.AddHostedService<MixQuartzHostedService>();
             services.AddHostedService<StorageBackgroundTaskSubscriber>();
 
             if (!globalConfigs!.IsInit)
             {
-                services.AddHostedService<MixLogSubscriber>();
+                services.TryAddSingleton<IAuditLogService, AuditLogService>();
+                services.TryAddScoped<AuditLogDataModel>();
+                services.AddHostedService<MixLogPublisher>();
             }
 
             services.AddMixRateLimiter(configuration);
@@ -43,6 +48,8 @@ namespace Mixcore.Domain
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
         {
+            // auditlog middleware must go after auth
+            app.UseMiddleware<AuditlogMiddleware>();
             app.UseMixRateLimiter();
         }
 

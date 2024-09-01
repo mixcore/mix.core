@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 using Mix.Auth.Constants;
 using Mix.Constant.Constants;
-using Mix.Database.Entities.Queue;
+using Mix.Database.Entities.QueueLog;
+using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
-using Mix.Heart.Models;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
@@ -17,7 +16,6 @@ using Mix.Log.Lib.Models;
 using Mix.Log.Lib.ViewModels;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
-using Mix.Service.Services;
 using Mix.Shared.Dtos;
 using Mix.SignalR.Interfaces;
 
@@ -26,18 +24,20 @@ namespace Mix.Log.Controllers
     [Route("api/v2/rest/mix-log/queue-log")]
     [ApiController]
     [MixAuthorize(MixRoles.Owner)]
-    public class MixQueueLogController : MixQueryApiControllerBase<MixQueueMessageLogViewModel, MixQueueDbContext, MixQueueMessageLog, Guid>
+    public class MixQueueLogController : MixQueryApiControllerBase<MixQueueMessageLogViewModel, QueueLogDbContext, QueueLog, Guid>
     {
+        private readonly DatabaseService _databaseService;
         public MixQueueLogController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixQueueDbContext> uow,
+            UnitOfWorkInfo<QueueLogDbContext> uow,
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
-            IMixTenantService mixTenantService)
+            IMixTenantService mixTenantService,
+            DatabaseService databaseService)
             : base(
                 httpContextAccessor,
                 configuration,
@@ -49,6 +49,7 @@ namespace Mix.Log.Controllers
                 portalHub,
                 mixTenantService)
         {
+            _databaseService = databaseService;
         }
 
         #region Routes
@@ -99,7 +100,7 @@ namespace Mix.Log.Controllers
 
         #region Overrides
 
-        private async Task<SearchLogResult<MixQueueMessageLogViewModel>> SearchByDate(SearchQueryModel<MixQueueMessageLog, Guid> searchRequest, DateTime searchDate, CancellationToken cancellationToken)
+        private async Task<SearchLogResult<MixQueueMessageLogViewModel>> SearchByDate(SearchQueryModel<QueueLog, Guid> searchRequest, DateTime searchDate, CancellationToken cancellationToken)
         {
             try
             {
@@ -114,7 +115,7 @@ namespace Mix.Log.Controllers
                     };
                 }
 
-                using (var context = new MixQueueDbContext(searchDate))
+                using (var context = _databaseService.GetQueueLogDbContext())
                 {
                     using (var MixQueueMessageLogUow = new UnitOfWorkInfo(context))
                     {

@@ -15,13 +15,13 @@ namespace Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers
             switch (data.Action)
             {
                 case "Get":
-                case "Patch":
+                case "PATCH":
                     break;
                 case "Post":
                 case "Put":
                     SaveTemplate(template);
                     break;
-                case "Delete":
+                case "DELETE":
                     DeleteTemplate(template);
                     break;
                 default:

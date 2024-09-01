@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Mix.Shared.Models.Configurations;
 using System.Text.RegularExpressions;
 namespace Mix.Lib.Helpers
 {
@@ -80,7 +81,7 @@ namespace Mix.Lib.Helpers
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/azure.json",true, true)
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/queue.json",true, true)
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/mix_heart.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/authentication.json",true, true)
+                       //.AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/authentication.json",true, true)
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/google_credential.json",true, true)
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/google_firebase.json",true, true)
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/smtp.json",true, true)
@@ -89,6 +90,13 @@ namespace Mix.Lib.Helpers
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/log.json",true, true)
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/rate_limit.json",true, true)
                        .AddEnvironmentVariables();
+
+            if (GlobalConfigService.Instance.InitStatus == InitStep.Blank
+                    && string.IsNullOrEmpty(GlobalConfigService.Instance.AppSettings.ApiEncryptKey))
+            {
+                    GlobalConfigService.Instance.SetConfig(nameof(GlobalSettingsModel.ApiEncryptKey), AesEncryptionHelper.GenerateCombinedKeys());
+                    GlobalConfigService.Instance.SaveSettings();
+            }
             return builder;
         }
         public static IHostBuilder CreateHostBuilder<TStartup>(string[] args) where TStartup : class
@@ -114,7 +122,7 @@ namespace Mix.Lib.Helpers
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/storage.json",true, true)
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/queue.json",true, true)
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/mix_heart.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/authentication.json",true, true)
+                       //.AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/authentication.json",true, true)
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/google_credential.json",true, true)
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/google_firebase.json",true, true)
                        .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/smtp.json",true, true)

@@ -25,7 +25,7 @@ namespace Mix.SignalR
                     if (!string.IsNullOrEmpty(accessToken) &&
                         (path.StartsWithSegments("/hub")))
                     {
-                        // Read the token out of the query string
+                        // GET the token out of the query string
                         context.Token = accessToken;
                     }
                     return Task.CompletedTask;

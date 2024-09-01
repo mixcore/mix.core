@@ -16,6 +16,7 @@ using Mix.Heart.Models;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Interfaces;
+using Mix.Mixdb.Services;
 using Mix.RepoDb.Dtos;
 using Mix.RepoDb.Entities;
 using Mix.RepoDb.Interfaces;
@@ -25,13 +26,16 @@ using Mix.Service.Interfaces;
 using Mix.Service.Services;
 using Mix.Shared.Dtos;
 using Mix.Shared.Models;
+using Mix.Shared.Services;
 using MySqlX.XDevAPI.Common;
 using Newtonsoft.Json.Linq;
+using Npgsql;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
 using System.Dynamic;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using ZstdSharp.Unsafe;
 
 namespace Mix.RepoDb.Services
@@ -45,6 +49,7 @@ namespace Mix.RepoDb.Services
         private MixRepoDbRepository _repository;
         private MixRepoDbRepository _backupRepository;
         private IMixMemoryCacheService _memoryCache;
+        private RuntimeDbContextService _runtimeDbContextService;
 
 
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
@@ -67,7 +72,7 @@ namespace Mix.RepoDb.Services
             _cmsUow = uow;
             _databaseService = databaseService;
             _repository = repository;
-            _backupRepository = new MixRepoDbRepository(cache, databaseService, uow);
+            _backupRepository = new MixRepoDbRepository(cache, databaseService);
             _databaseProvider = _databaseService.DatabaseProvider;
             _databaseConstant = _databaseProvider switch
             {
@@ -78,6 +83,7 @@ namespace Mix.RepoDb.Services
                 _ => throw new NotImplementedException()
             };
             _memoryCache = memoryCache;
+            _runtimeDbContextService = new RuntimeDbContextService(httpContextAccessor, databaseService);
         }
 
         #region Methods
@@ -121,37 +127,58 @@ namespace Mix.RepoDb.Services
 
         public async Task<bool> AlterColumn(AlterColumnDto colDto)
         {
-            var database = await GetMixDatabase(colDto.MixDatabaseName);
-            if (database == null)
+            try
             {
-                throw new MixException(MixErrorStatus.Badrequest, $"Invalid table {colDto.MixDatabaseName}");
+
+                var database = await GetMixDatabase(colDto.MixDatabaseName);
+                if (database == null)
+                {
+                    throw new MixException(MixErrorStatus.Badrequest, $"Invalid table {colDto.MixDatabaseName}");
+                }
+                var col = new RepoDbMixDatabaseColumnViewModel(colDto);
+                if (database.MixDatabaseContextId.HasValue)
+                {
+                    await SwitchDbContext(database.MixDatabaseContext);
+                }
+
+                var alterCommandText = colDto.IsDrop
+                    ? $"{GenerateDropColumnSql(col)} {GenerateAddColumnSql(col)}"
+                    : GenerateAlterColumnSql(col);
+                var result = await _repository.ExecuteCommand(alterCommandText);
+                _repository.CompleteTransaction();
+                return result >= 0;
             }
-            var col = new RepoDbMixDatabaseColumnViewModel(colDto);
-            if (database.MixDatabaseContextId.HasValue)
+            catch (Exception ex)
             {
-                await SwitchDbContext(database.MixDatabaseContext);
+                throw new MixException(MixErrorStatus.ServerError, ex);
             }
-            var dropCommandText = GenerateAlterColumnSql(col);
-            var result = await _repository.ExecuteCommand(dropCommandText);
-            _repository.CompleteTransaction();
-            return result >= 0;
         }
 
         public async Task<bool> MigrateDatabase(RepoDbMixDatabaseViewModel database)
         {
-            if (database.MixDatabaseContextId.HasValue)
+            try
             {
-                await SwitchDbContext(database.MixDatabaseContext);
-            }
+                if (database.MixDatabaseContextId.HasValue)
+                {
+                    await SwitchDbContext(database.MixDatabaseContext);
+                }
 
-            if (database is { Columns.Count: > 0 })
-            {
-                await Migrate(database, _databaseProvider, _repository);
-                _repository.CompleteTransaction();
-                return true;
+                if (database is { Columns.Count: > 0 })
+                {
+                    var dbProverder = database.MixDatabaseContext?.DatabaseProvider ?? _databaseService.DatabaseProvider;
+                    await Migrate(database, dbProverder, _repository);
+                    _repository.CompleteTransaction();
+                    return true;
+                }
+                return false;
             }
-            return false;
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
         }
+
+
         public async Task<bool> BackupDatabase(RepoDbMixDatabaseViewModel database, CancellationToken cancellationToken = default)
         {
             if (database != null)
@@ -194,7 +221,7 @@ namespace Mix.RepoDb.Services
                         insertQuery += string.Join(',', queries);
                         if (database.MixDatabaseContextId.HasValue)
                         {
-                            _repository.Init(database.SystemName, database.MixDatabaseContext.DatabaseProvider, database.MixDatabaseContext.ConnectionString);
+                            _repository.Init(database.SystemName, database.MixDatabaseContext.DatabaseProvider, database.MixDatabaseContext.DecryptedConnectionString);
                         }
                         else
                         {
@@ -264,6 +291,7 @@ namespace Mix.RepoDb.Services
 
             try
             {
+                var cnn = AesEncryptionHelper.DecryptString(dbContext.ConnectionString, GlobalConfigService.Instance.AesKey);
                 var strMixDbs = MixFileHelper.GetFile(
                         "init-new-dbcontext-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
                 var obj = JObject.Parse(strMixDbs.Content);
@@ -277,7 +305,7 @@ namespace Mix.RepoDb.Services
                         string newDbName = dbContext.NamingConvention == MixDatabaseNamingConvention.SnakeCase
                             ? $"{dbContext.SystemName}_{database.DisplayName.ToColumnName(false)}"
                             : $"{dbContext.SystemName.ToTitleCase()}{database.DisplayName.ToColumnName(true)}";
-                        _repository.Init(newDbName, dbContext.DatabaseProvider, dbContext.ConnectionString);
+                        _repository.Init(newDbName, dbContext.DatabaseProvider, cnn);
                         var currentDb = await RepoDbMixDatabaseViewModel.GetRepository(_cmsUow, CacheService)
                                             .GetSingleAsync(m => m.SystemName == newDbName);
                         if (currentDb == null)
@@ -285,6 +313,7 @@ namespace Mix.RepoDb.Services
 
                             currentDb = new(database, _cmsUow);
                             currentDb.Id = 0;
+                            currentDb.NamingConvention = dbContext.NamingConvention;
                             currentDb.SystemName = newDbName;
                             currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
                             currentDb.MixDatabaseContextId = dbContext.Id;
@@ -298,7 +327,7 @@ namespace Mix.RepoDb.Services
                                 {
                                     string newColName = dbContext.NamingConvention == MixDatabaseNamingConvention.SnakeCase
                                     ? col.DisplayName.ToColumnName(false)
-                                    : col.DisplayName.ToColumnName(false);
+                                    : col.DisplayName.ToColumnName(true);
                                     col.Id = 0;
                                     col.SystemName = newColName;
                                     col.MixDatabaseName = newDbName;
@@ -311,7 +340,7 @@ namespace Mix.RepoDb.Services
                         }
                         if (currentDb is { Columns.Count: > 0 })
                         {
-                            await Migrate(currentDb, _databaseService.DatabaseProvider, _repository);
+                            await Migrate(currentDb, dbContext.DatabaseProvider, _repository);
 
                         }
                     }
@@ -357,9 +386,10 @@ namespace Mix.RepoDb.Services
         private async Task<List<QueryField>> BuildSearchQueryAsync(string tableName, SearchMixDbRequestDto request, FieldNameService fieldNameService)
         {
             var queries = BuildSearchPredicate(request, fieldNameService);
-            if (request.ParentId.HasValue)
+            if (request.ObjParentId != null)
             {
                 var database = await GetMixDatabase(tableName);
+                var parentDb = await GetMixDatabase(request.ParentName);
                 if (database is null)
                 {
                     return queries;
@@ -371,10 +401,23 @@ namespace Mix.RepoDb.Services
                 }
                 else
                 {
-                    var allowsIds = _cmsUow.DbContext.MixDatabaseAssociation
-                            .Where(m => m.ParentDatabaseName == request.ParentName && m.ParentId == request.ParentId.Value && m.ChildDatabaseName == tableName)
-                            .Select(m => m.ChildId).ToList();
-                    queries.Add(new(fieldNameService.Id, Operation.In, allowsIds));
+                    Expression<Func<MixDatabaseAssociation, bool>> predicate = m => m.ParentDatabaseName == request.ParentName
+                                                                                        && m.ChildDatabaseName == tableName;
+                    predicate = predicate.AndAlsoIf(parentDb.Type == MixDatabaseType.GuidService,
+                                            m => m.GuidParentId == (Guid)request.ObjParentId);
+                    predicate = predicate.AndAlsoIf(parentDb.Type != MixDatabaseType.GuidService,
+                                            m => m.ParentId == (int)request.ObjParentId);
+
+                    var childIdsQuery = _cmsUow.DbContext.MixDatabaseAssociation
+                            .Where(predicate);
+                    if (database.Type == MixDatabaseType.GuidService)
+                    {
+                        queries.Add(new(fieldNameService.Id, Operation.In, childIdsQuery.Select(m => m.GuidChildId).ToList()));
+                    }
+                    else
+                    {
+                        queries.Add(new(fieldNameService.Id, Operation.In, childIdsQuery.Select(m => m.ChildId).ToList()));
+                    }
                 }
             }
 
@@ -469,7 +512,7 @@ namespace Mix.RepoDb.Services
 
 
         #endregion
-        private async Task SwitchDbContext(MixDatabaseContextReadViewModel dbContext)
+        private Task SwitchDbContext(MixDatabaseContextReadViewModel dbContext)
         {
             if (dbContext == null)
             {
@@ -484,8 +527,8 @@ namespace Mix.RepoDb.Services
                 MixDatabaseProvider.SQLITE => new SqliteDatabaseConstants(),
                 _ => throw new NotImplementedException()
             };
-            _repository = new MixRepoDbRepository(_cache, dbContext.DatabaseProvider, dbContext.ConnectionString, _cmsUow);
-
+            _repository = new MixRepoDbRepository(_cache, dbContext.DatabaseProvider, dbContext.DecryptedConnectionString, _cmsUow);
+            return Task.CompletedTask;
         }
 
         // Only run after init CMS success
@@ -552,7 +595,7 @@ namespace Mix.RepoDb.Services
             cancellationToken.ThrowIfCancellationRequested();
             if (database.MixDatabaseContextId.HasValue)
             {
-                _repository.Init(database.SystemName, database.MixDatabaseContext.DatabaseProvider, database.MixDatabaseContext.ConnectionString);
+                _repository.Init(database.SystemName, database.MixDatabaseContext.DatabaseProvider, database.MixDatabaseContext.DecryptedConnectionString);
             }
             else
             {
@@ -568,13 +611,20 @@ namespace Mix.RepoDb.Services
             var fieldNameService = new FieldNameService(database.NamingConvention);
             var colsSql = new List<string>();
             var tableName = database.SystemName;
-
+            _databaseConstant = databaseProvider switch
+            {
+                MixDatabaseProvider.SQLSERVER => new SqlServerDatabaseConstants(),
+                MixDatabaseProvider.MySQL => new MySqlDatabaseConstants(),
+                MixDatabaseProvider.PostgreSQL => new PostgresDatabaseConstants(),
+                MixDatabaseProvider.SQLITE => new SqliteDatabaseConstants(),
+                _ => throw new NotImplementedException()
+            };
             foreach (var col in database.Columns)
             {
                 colsSql.Add(GenerateColumnSql(col));
             }
 
-            var commandText = GetMigrateTableSql(tableName, databaseProvider, colsSql, fieldNameService);
+            var commandText = GetMigrateTableSql(tableName, databaseProvider, database.Type, colsSql, fieldNameService);
             if (!string.IsNullOrEmpty(commandText))
             {
                 await repo.ExecuteCommand($"DROP TABLE IF EXISTS {_databaseConstant.BacktickOpen}{tableName}{_databaseConstant.BacktickClose};");
@@ -585,10 +635,10 @@ namespace Mix.RepoDb.Services
             return false;
         }
 
-        private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, List<string> colsSql, FieldNameService fieldNameService)
+        private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, MixDatabaseType dbType, List<string> colsSql, FieldNameService fieldNameService)
         {
             return $"CREATE TABLE {_databaseConstant.BacktickOpen}{tableName}{_databaseConstant.BacktickClose} " +
-                $"({_databaseConstant.BacktickOpen}{fieldNameService.Id}{_databaseConstant.BacktickClose} {GetAutoIncreaseIdSyntax(databaseProvider)}, " +
+                $"({_databaseConstant.BacktickOpen}{fieldNameService.Id}{_databaseConstant.BacktickClose} {GetIdSyntax(databaseProvider, dbType)}, " +
                 $"{_databaseConstant.BacktickOpen}{fieldNameService.CreatedDateTime}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.DateTime)}, " +
                 $"{_databaseConstant.BacktickOpen}{fieldNameService.LastModified}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.DateTime)} NULL, " +
                 $"{_databaseConstant.BacktickOpen}{fieldNameService.TenantId}{_databaseConstant.BacktickClose} {GetColumnType(MixDataType.Integer)} NULL, " +
@@ -600,8 +650,13 @@ namespace Mix.RepoDb.Services
                 $" {string.Join(",", colsSql.ToArray())})";
         }
 
-        private string GetAutoIncreaseIdSyntax(MixDatabaseProvider databaseProvider)
+        private string GetIdSyntax(MixDatabaseProvider databaseProvider, MixDatabaseType dbType)
         {
+            if (dbType == MixDatabaseType.GuidService)
+            {
+                return $"{_databaseConstant.BacktickOpen}{_databaseConstant.Guid}{_databaseConstant.BacktickClose} PRIMARY KEY";
+            }
+
             return databaseProvider switch
             {
                 MixDatabaseProvider.SQLSERVER => $"{GetColumnType(MixDataType.Integer)} IDENTITY(1,1) PRIMARY KEY",

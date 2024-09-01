@@ -27,8 +27,8 @@ namespace Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers
                     await mixDbService.AddColumn(repoCol);
                     break;
                 case "Put":
-                case "Patch":
-                case "Delete":
+                case "PATCH":
+                case "DELETE":
                 default:
                     break;
             }

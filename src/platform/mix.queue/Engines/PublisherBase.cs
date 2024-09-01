@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Mix.Heart.Exceptions;
 using Mix.Mq.Lib.Models;
-using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Shared.Services;
@@ -19,15 +18,17 @@ namespace Mix.Queue.Engines
 {
     public abstract class PublisherBase : BackgroundService
     {
-        protected readonly IMemoryQueueService<MessageQueueModel> _queueService;
-        protected List<IQueuePublisher<MessageQueueModel>> _publishers;
-        protected readonly IConfiguration _configuration;
-        protected readonly MixEndpointService _mixEndpointService;
+        protected MixQueueProvider Provider;
         protected const int MaxConsumeLength = 100;
         protected readonly string _topicId;
-        protected MixQueueProvider _provider;
-        protected ILogger<PublisherBase> _logger;
-        protected readonly IPooledObjectPolicy<IModel> _rabbitMqObjectPolicy;
+        protected List<IQueuePublisher<MessageQueueModel>> Publishers;
+
+        protected readonly IMemoryQueueService<MessageQueueModel> QueueService;
+        protected readonly IConfiguration Configuration;
+        protected readonly MixEndpointService MixEndpointService;
+        protected readonly ILogger<PublisherBase> ILogger;
+        protected readonly IPooledObjectPolicy<IModel> RabbitMqObjectPolicy;
+
         protected PublisherBase(
             string topicId,
             IMemoryQueueService<MessageQueueModel> queueService,
@@ -36,12 +37,12 @@ namespace Mix.Queue.Engines
             ILogger<PublisherBase> logger,
             IPooledObjectPolicy<IModel> rabbitMqObjectPolicy)
         {
-            _queueService = queueService;
-            _configuration = configuration;
             _topicId = topicId;
-            _mixEndpointService = mixEndpointService;
-            _logger = logger;
-            _rabbitMqObjectPolicy = rabbitMqObjectPolicy;
+            ILogger = logger;
+            QueueService = queueService;
+            Configuration = configuration;
+            MixEndpointService = mixEndpointService;
+            RabbitMqObjectPolicy = rabbitMqObjectPolicy;
         }
 
         protected List<IQueuePublisher<MessageQueueModel>> CreatePublisher(
@@ -50,49 +51,49 @@ namespace Mix.Queue.Engines
             try
             {
                 var queuePublishers = new List<IQueuePublisher<MessageQueueModel>>();
-                var providerSetting = _configuration["MessageQueueSetting:Provider"];
+                var providerSetting = Configuration["MessageQueueSetting:Provider"];
                 if (string.IsNullOrEmpty(providerSetting))
                 {
                     return default;
                 }
 
-                _provider = Enum.Parse<MixQueueProvider>(providerSetting);
+                Provider = Enum.Parse<MixQueueProvider>(providerSetting);
 
-                switch (_provider)
+                switch (Provider)
                 {
                     case MixQueueProvider.AZURE:
-                        var azureSettingPath = _configuration.GetSection("MessageQueueSetting:AzureServiceBus");
+                        var azureSettingPath = Configuration.GetSection("MessageQueueSetting:AzureServiceBus");
                         var azureSetting = new AzureQueueSetting();
                         azureSettingPath.Bind(azureSetting);
 
                         queuePublishers.Add(
                             QueueEngineFactory.CreatePublisher<MessageQueueModel>(
-                                _provider, azureSetting, topicId, _mixEndpointService));
+                                Provider, azureSetting, topicId, MixEndpointService));
                         break;
                     case MixQueueProvider.GOOGLE:
-                        var googleSettingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
+                        var googleSettingPath = Configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
                         var googleSetting = new GoogleQueueSetting();
                         googleSettingPath.Bind(googleSetting);
                         googleSetting.CredentialFile = googleSetting.CredentialFile;
 
                         queuePublishers.Add(
                             QueueEngineFactory.CreatePublisher<MessageQueueModel>(
-                                _provider, googleSetting, topicId, _mixEndpointService));
+                                Provider, googleSetting, topicId, MixEndpointService));
                         break;
 
                     case MixQueueProvider.RABBITMQ:
                         queuePublishers.Add(
-                            QueueEngineFactory.CreateRabbitMqPublisher<MessageQueueModel>(_rabbitMqObjectPolicy, topicId));
+                            QueueEngineFactory.CreateRabbitMqPublisher<MessageQueueModel>(RabbitMqObjectPolicy, topicId));
                         break;
 
                     case MixQueueProvider.MIX:
-                        if (_mixEndpointService.MixMq != null)
+                        if (MixEndpointService.MixMq != null)
                         {
-                            var mixSettingPath = _configuration.GetSection("MessageQueueSetting:Mix");
+                            var mixSettingPath = Configuration.GetSection("MessageQueueSetting:Mix");
                             var mixSetting = new MixQueueSetting();
                             mixSettingPath.Bind(mixSetting);
                             queuePublishers.Add(
-                               QueueEngineFactory.CreatePublisher<MessageQueueModel>(_provider, mixSetting, topicId, _mixEndpointService));
+                               QueueEngineFactory.CreatePublisher<MessageQueueModel>(Provider, mixSetting, topicId, MixEndpointService));
                         }
                         break;
                 }
@@ -105,50 +106,42 @@ namespace Mix.Queue.Engines
             }
         }
 
-        protected virtual Task StartMixQueueEngine(CancellationToken cancellationToken = default)
+        protected virtual async Task StartMixQueueEngine(CancellationToken cancellationToken = default)
         {
-            return Task.Run(async () =>
+            while (!cancellationToken.IsCancellationRequested)
             {
-                bool isProcessing = false;
-                while (!cancellationToken.IsCancellationRequested)
+                // Get messages from IQueueService 
+                var inQueueItems = QueueService.ConsumeMemoryQueue(MaxConsumeLength, _topicId);
+                if (inQueueItems.Any() && Publishers != null)
                 {
-                    if (!isProcessing)
+                    foreach (var publisher in Publishers)
                     {
-                        isProcessing = true;
-                        // Get messages from IQueueService 
-                        var inQueueItems = _queueService.ConsumeMemoryQueue(MaxConsumeLength, _topicId);
-
-                        if (inQueueItems.Any() && _publishers != null)
+                        // Publish messages to current Message Queue Provider
+                        // If cannot send msg, try to wait 1s then retry
+                        bool publishing = true;
+                        while (publishing)
                         {
-                            foreach (var publisher in _publishers)
+                            try
                             {
-                                // Publish messages to current Message Queue Provider
-                                // If cannot send msg, try to wait 1s then retry
-                                bool publishing = true;
-                                while (publishing)
-                                {
-                                    try
-                                    {
-                                        await publisher.SendMessages(inQueueItems);
-                                        publishing = false;
-                                    }
-                                    catch (Exception ex) {
-                                        _logger.LogError(ex, $"{_logger.GetType().FullName}: Cannot Send message to queue");
-                                        await Task.Delay(1000, cancellationToken);
-                                    }
-                                }
+                                await publisher.SendMessages(inQueueItems);
+                                publishing = false;
+                            }
+                            catch (Exception ex)
+                            {
+                                ILogger.LogError(ex, "{FullName}: Cannot Send message to queue", ILogger.GetType().FullName);
+                                await Task.Delay(1000, cancellationToken);
                             }
                         }
-                        isProcessing = false;
                     }
-                    await Task.Delay(1000, cancellationToken);
                 }
-            }, cancellationToken);
+
+                await Task.Delay(50, cancellationToken);
+            }
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _publishers = CreatePublisher(_topicId);
+            Publishers = CreatePublisher(_topicId);
             return StartMixQueueEngine(stoppingToken);
         }
     }

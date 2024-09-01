@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Auth.Constants;
+using Mix.Database.Services;
 using Mix.Lib.Interfaces;
+using Mix.Mixdb.Services;
 using Mix.Mq.Lib.Models;
 using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.ViewModels;
@@ -15,6 +17,7 @@ namespace Mix.Portal.Controllers
     public class MixDatabaseController
         : MixRestfulApiControllerBase<MixDatabaseViewModel, MixCmsContext, MixDatabase, int>
     {
+        private readonly DatabaseService _databaseService;
         private readonly IMixDbService _mixDbService;
         private readonly IMixMemoryCacheService _memoryCache;
         public MixDatabaseController(
@@ -28,12 +31,14 @@ namespace Mix.Portal.Controllers
             IMixDbService mixDbService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService,
-            IMixMemoryCacheService memoryCache)
+            IMixMemoryCacheService memoryCache,
+            DatabaseService databaseService)
             : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
             _mixDbService = mixDbService;
             _memoryCache = memoryCache;
+            _databaseService = databaseService;
         }
 
         #region Routes
@@ -62,6 +67,24 @@ namespace Mix.Portal.Controllers
             throw new MixException(MixErrorStatus.NotFound, id);
         }
 
+        //[MixAuthorize(MixRoles.Owner)]
+        [HttpGet("export-entity/{dbContextName}")]
+        public async Task<ActionResult> ExportEntity(string dbContextName)
+        {
+            MixDatabaseContextViewModel dbContext = await MixDatabaseContextViewModel
+                       .GetRepository(Uow, CacheService).GetSingleAsync(m => m.SystemName == dbContextName);
+            if (dbContext == null)
+            {
+                return BadRequest(dbContextName);
+            }
+            var runtimeDbContextService = new RuntimeDbContextService(HttpContextAccessor, _databaseService);
+            string cnn = dbContext != null
+                ? dbContext.DecryptedConnectionString
+                : _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
+            var sourceFiles = runtimeDbContextService.CreateDynamicDbContext(cnn);
+            return Ok(sourceFiles);
+        }
+        
         [MixAuthorize(MixRoles.Owner)]
         [HttpGet("migrate/{name}")]
         public async Task<ActionResult> Migrate(string name)
@@ -141,7 +164,7 @@ namespace Mix.Portal.Controllers
         {
             //if (data.Type == MixDatabaseType.System)
             //{
-            //    throw new MixException($"Cannot Delete System Database: {data.SystemName}");
+            //    throw new MixException($"Cannot DELETE System Database: {data.SystemName}");
             //}
             return base.DeleteHandler(data, cancellationToken);
         }

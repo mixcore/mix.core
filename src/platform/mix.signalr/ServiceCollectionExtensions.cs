@@ -13,13 +13,19 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMixSignalR(this IServiceCollection services, IConfiguration configuration)
         {
             string azureConnectionString = configuration.GetSection("Azure")["SignalRConnectionString"];
-            services.AddSignalR()
-                   .AddJsonProtocol(options =>
-                   {
-                       options.PayloadSerializerOptions.Converters
-                          .Add(new JsonStringEnumConverter());
-                   })
-                   .AddAzureSignalRIf(azureConnectionString);
+
+            services
+                .AddSignalR(options =>
+                {
+                    options.EnableDetailedErrors = true;
+                    options.MaximumReceiveMessageSize = 15360;
+                })
+                .AddJsonProtocol(options =>
+                {
+                    options.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                })
+                .AddAzureSignalRIf(azureConnectionString);
+
             services.TryAddEnumerable(
                 ServiceDescriptor.Singleton<IPostConfigureOptions<JwtBearerOptions>,
                 ConfigureJwtBearerOptions>());
