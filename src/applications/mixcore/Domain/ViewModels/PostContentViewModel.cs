@@ -1,5 +1,5 @@
 ﻿using Mix.Heart.Helpers;
-using Mix.RepoDb.Interfaces;
+using Mix.Mixdb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Services.Databases.Lib.Models;
@@ -58,14 +58,15 @@ namespace Mixcore.Domain.ViewModels
         public async Task LoadAdditionalDataAsync(
                 IMixDbDataService mixDbDataService,
                 IMixMetadataService metadataService,
-                MixCacheService cacheService)
+                MixCacheService cacheService, 
+                CancellationToken cancellationToken)
         {
             bool isChanged = false;
             if (AdditionalData == null && !string.IsNullOrEmpty(MixDatabaseName))
             {
                 isChanged = true;
                 var relationships = Context.MixDatabaseRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName).ToList();
-                var obj = await mixDbDataService.GetSingleByParent(MixDatabaseName, MixContentType.Post, Id, true);
+                var obj = await mixDbDataService.GetSingleByParentAsync(MixDatabaseName, MixContentType.Post, Id, string.Empty, cancellationToken);
                 if (obj != null)
                 {
                     AdditionalData = ReflectionHelper.ParseObject(obj);

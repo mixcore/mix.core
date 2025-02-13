@@ -1,6 +1,0 @@
-@mix.mq.server_HostAddress = http://localhost:5062
-
-GET {{mix.mq.server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

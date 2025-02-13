@@ -1,5 +1,5 @@
 ﻿using Mix.Database.Base.Cms;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
@@ -13,9 +13,27 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
         {
             base.Configure(builder);
 
+            builder.Property(e => e.MixPostContentId)
+              .HasColumnName("mix_post_content_id")
+              .HasColumnType(Config.Integer);
+
+            builder.Property(e => e.MixDbId)
+              .HasColumnName("mix_db_id")
+              .HasColumnType(Config.Integer);
+
             builder.Property(e => e.ClassName)
+                .HasColumnName("class_name")
                 .HasColumnType($"{Config.String}{Config.SmallLength}")
                 .HasCharSet(Config.CharSet);
+
+            builder.Property(e => e.MixDatabaseName)
+                .HasColumnName("mix_database_name")
+                .HasColumnType($"{Config.String}{Config.SmallLength}")
+                .HasCharSet(Config.CharSet);
+
+            builder.HasOne(e => e.MixPost)
+                .WithMany(e => e.MixPostContents)
+                .HasForeignKey(m => m.ParentId);
         }
     }
 }

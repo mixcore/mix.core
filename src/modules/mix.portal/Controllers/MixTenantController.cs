@@ -59,11 +59,6 @@ namespace Mix.Portal.Controllers
 
         private async Task ReloadTenantConfiguration(MixTenantViewModel data)
         {
-            var tenantConfigService = new TenantConfigService(data.SystemName);
-            tenantConfigService.AppSettings.DefaultCulture = data.Culture.Specificulture;
-            tenantConfigService.AppSettings.Domain = data.PrimaryDomain.TrimEnd('/');
-            tenantConfigService.AppSettings.ApiEncryptKey = AesEncryptionHelper.GenerateCombinedKeys();
-            tenantConfigService.SaveSettings();
             await _mixTenantService.Reload();
         }
 
@@ -89,7 +84,7 @@ namespace Mix.Portal.Controllers
         private async Task DeleteTenantAccount(int tenantId, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            foreach (var item in _accContext.AspNetUserRoles.Where(m => m.MixTenantId == tenantId))
+            foreach (var item in _accContext.AspNetUserRoles.Where(m => m.TenantId == tenantId))
             {
                 _accContext.Entry(item).State = EntityState.Deleted;
             }

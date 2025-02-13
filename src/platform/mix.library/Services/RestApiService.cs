@@ -1,21 +1,20 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Mix.Auth.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Models.Common;
 using Mix.Mq.Lib.Models;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
-using NuGet.Protocol;
+using Newtonsoft.Json;
 
 namespace Mix.Lib.Services
 {
     public class RestApiService<TView, TDbContext, TEntity, TPrimaryKey> : TenantServiceBase, IRestApiService<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
-        where TEntity : EntityBase<TPrimaryKey>
-        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        where TEntity : class, IEntity<TPrimaryKey>
+        where TView : SimpleViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         protected readonly MixIdentityService MixIdentityService;
         protected readonly IMemoryQueueService<MessageQueueModel> QueueService;
@@ -39,20 +38,23 @@ namespace Mix.Lib.Services
             Uow = uow;
             QueueService = queueService;
             Context = (TDbContext)uow.ActiveDbContext;
-            Repository ??= ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(Uow, cacheService);
+            Repository ??= SimpleViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(Uow, cacheService);
             Repository.CacheService = cacheService;
             PortalHub = portalHub;
         }
 
         #region Command Handlers
 
-        public virtual async Task<TPrimaryKey> CreateHandlerAsync(TView data, CancellationToken cancellationToken = default)
+        public virtual async Task<TPrimaryKey> CreateHandlerAsync(
+            TView data, 
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (data == null)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Null Object");
             }
+
             if (ReflectionHelper.HasProperty(typeof(TView), MixRequestQueryKeywords.TenantId))
             {
                 ReflectionHelper.SetPropertyValue(data, new EntityPropertyModel()
@@ -61,10 +63,8 @@ namespace Mix.Lib.Services
                     PropertyValue = CurrentTenant?.Id
                 });
             }
+
             data.SetUowInfo(Uow, CacheService);
-            data.CreatedDateTime = DateTime.UtcNow;
-            data.CreatedBy = MixIdentityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username);
-            data.ModifiedBy = data.CreatedBy;
             var id = await data.SaveAsync(cancellationToken);
             await PortalHub.SendMessageAsync(new SignalRMessageModel()
             {
@@ -74,11 +74,15 @@ namespace Mix.Lib.Services
                 Data = ReflectionHelper.ParseObject(data).ToString(),
                 Type = MessageType.Success,
             });
+
             QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), data);
             return id;
         }
 
-        public virtual async Task UpdateHandler(TPrimaryKey id, TView data, CancellationToken cancellationToken = default)
+        public virtual async Task UpdateHandler(
+            TPrimaryKey id, 
+            TView data, 
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var currentId = ReflectionHelper.GetPropertyValue(data, "Id").ToString();
@@ -117,8 +121,11 @@ namespace Mix.Lib.Services
             QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Delete.ToString(), data);
         }
 
-
-        public virtual async Task PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties, CancellationToken cancellationToken = default)
+        public virtual async Task PatchHandler(
+            TPrimaryKey id, 
+            TView data, 
+            IEnumerable<EntityPropertyModel> properties, 
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             data.SetUowInfo(Uow, CacheService);
@@ -140,55 +147,55 @@ namespace Mix.Lib.Services
         #endregion
 
         #region Query Handlers
-        public virtual async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req, SearchQueryModel<TEntity, TPrimaryKey> searchRequest, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                return await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                throw new MixException(MixErrorStatus.ServerError, ex);
-            }
-        }
-
-        public virtual PagingResponseModel<TView> ParseSearchResult(SearchRequestDto req, PagingResponseModel<TView> result, CancellationToken cancellationToken = default)
+        public virtual async Task<PagingResponseModel<TView>> SearchHandler(
+            SearchRequestDto request,
+            SearchQueryModel<TEntity, TPrimaryKey> searchQuery,
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (!string.IsNullOrEmpty(req.Columns))
+            return await Repository.GetPagingAsync(searchQuery.Predicate, searchQuery.PagingData, cancellationToken);
+        }
+
+        public virtual PagingResponseModel<TView> ParseSearchResult(
+            SearchRequestDto request,
+            PagingResponseModel<TView> result,
+            JsonSerializer serializer = null)
+        {
+            if (!string.IsNullOrEmpty(request.Columns))
             {
-                Repository.SetSelectedMembers(req.Columns.Split(',', StringSplitOptions.TrimEntries));
+                Repository.SetSelectedMembers(request.Columns.Split(',', StringSplitOptions.TrimEntries));
             }
 
-            if (!string.IsNullOrEmpty(req.Columns))
+            if (string.IsNullOrEmpty(request.Columns) && serializer is null)
             {
-                List<TView> objects = new List<TView>();
-                foreach (var item in result.Items)
-                {
-                    objects.Add(ReflectionHelper.GetMembers(item, Repository.SelectedMembers).ToObject<TView>());
-                }
-                return new PagingResponseModel<TView>()
-                {
-                    Items = objects,
-                    PagingData = result.PagingData
-                };
+                return result;
             }
-            return result;
+
+            List<TView> objects = [];
+            foreach (var item in result.Items)
+            {
+                objects.Add(ReflectionHelper.GetMembers(item, Repository.SelectedMembers).ToObject<TView>());
+            }
+
+            return new PagingResponseModel<TView>()
+            {
+                Items = objects,
+                PagingData = result.PagingData
+            };
         }
 
         #endregion
 
         #region Helpers
 
-        public virtual SearchQueryModel<TEntity, TPrimaryKey> BuildSearchRequest(SearchRequestDto req)
+        public virtual SearchQueryModel<TEntity, TPrimaryKey> BuildSearchRequest(SearchRequestDto request)
         {
-            if (!req.PageSize.HasValue)
+            if (!request.PageSize.HasValue)
             {
-                req.PageSize = CurrentTenant.Configurations.MaxPageSize;
+                request.PageSize = CurrentTenant.Configurations.MaxPageSize;
             }
 
-            return new SearchQueryModel<TEntity, TPrimaryKey>(HttpContextAccessor.HttpContext!.Request, req, CurrentTenant.Id);
+            return new SearchQueryModel<TEntity, TPrimaryKey>(HttpContextAccessor.HttpContext!.Request, request, CurrentTenant.Id);
         }
 
         public virtual async Task<TView> GetById(TPrimaryKey id)

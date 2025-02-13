@@ -15,6 +15,7 @@ namespace Mix.Storage.Lib.Engines.Mix
     {
         protected readonly IMemoryQueueService<MessageQueueModel> _queueService;
         public StorageSettingsModel Settings { get; set; } = new();
+        public string? _httpScheme;
         public MixUploader(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -24,6 +25,7 @@ namespace Mix.Storage.Lib.Engines.Mix
         {
             Configuration.Bind("StorageSetting", Settings);
             _queueService = queueService;
+            _httpScheme = configuration.GetValue<string>("HttpScheme");
         }
 
         public override Task<string?> UploadStream(FileModel file, string? createdBy, CancellationToken cancellationToken = default)
@@ -54,41 +56,12 @@ namespace Mix.Storage.Lib.Engines.Mix
 
                 if (saveResult)
                 {
-                    result = $"{CurrentTenant.Configurations.Domain}/{fileModel.FileFolder}/{fileModel.Filename}{fileModel.Extension}";
+                    result = $"{_httpScheme}://{CurrentTenant.Configurations.Domain}/{fileModel.FileFolder.Replace(MixFolders.WebRootPath, string.Empty)}/{fileModel.Filename}{fileModel.Extension}";
                 }
                 return Task.FromResult(result);
             }
         }
 
-        public FileModel GetFileModel(string fileName, Stream fileStream, string? folder, string? createdBy)
-        {
-            var name = fileName.Substring(0, fileName.LastIndexOf('.')).Replace(" ", string.Empty).ToLower();
-            var ext = fileName.Substring(fileName.LastIndexOf('.')).ToLower();
-            folder = GetUploadFolder(ext, folder, createdBy);
-
-            if (ImageHelper.IsImageResizeable(ext))
-            {
-                return new FileModel($"{name}{ext}", fileStream, $"{folder}/{DateTime.Now.Ticks}");
-            }
-            else
-            {
-                return new FileModel(fileName, fileStream, folder);
-            }
-        }
-
-        private string GetUploadFolder(string ext, string? fileFolder, string? createdBy)
-        {
-            string folder = $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{MixFolders.UploadsFolder}/{ext.TrimStart('.')}";
-            if (!string.IsNullOrEmpty(createdBy))
-            {
-                folder = $"{folder}/{createdBy}";
-            }
-            else
-            {
-                folder = $"{folder}/guest";
-            }
-
-            return $"{folder}/{DateTime.Now:yyyy-MM}".Replace(" ", string.Empty);
-        }
+       
     }
 }

@@ -33,7 +33,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         public JObject? ShippingAddress { get; set; }
         public OrderAddress Address { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
 
         public List<OrderItemViewModel> OrderItems { get; set; } = new();
         public List<OrderItemViewModel> Vouchers { get; set; } = new();
@@ -70,8 +70,8 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            OrderItems = await OrderItemViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderDetailId == Id, cancellationToken);
-            OrderTrackings = await OrderTrackingViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderDetailId == Id, cancellationToken);
+            OrderItems = await OrderItemViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.TenantId == TenantId && m.OrderDetailId == Id, cancellationToken);
+            OrderTrackings = await OrderTrackingViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.TenantId == TenantId && m.OrderDetailId == Id, cancellationToken);
             Address = ShippingAddress != null
                         ? ShippingAddress.ToObject<OrderAddress>()!
                         : new();
@@ -102,7 +102,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             {
                 item.SetUowInfo(UowInfo, CacheService);
                 item.OrderDetailId = parentEntity.Id;
-                item.MixTenantId = MixTenantId;
+                item.TenantId = TenantId;
                 await item.SaveAsync(cancellationToken);
                 ModifiedEntities.AddRange(item.ModifiedEntities);
             }

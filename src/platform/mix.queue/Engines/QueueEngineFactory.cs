@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.ObjectPool;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines.Azure;
 using Mix.Queue.Engines.GooglePubSub;
 using Mix.Queue.Engines.MixQueue;
-using Mix.Queue.Engines.RabitMQ;
+using Mix.Queue.Engines.RabbitMQ;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Shared.Services;
@@ -42,7 +43,7 @@ namespace Mix.Queue.Engines
         public static IQueuePublisher<T> CreateRabbitMqPublisher<T>(IPooledObjectPolicy<IModel> objectPolicy, string topicId)
              where T : MessageQueueModel
         {
-            return new RabitMQPublisher<T>(objectPolicy, topicId);
+            return new RabbitMQPublisher<T>(objectPolicy, topicId);
         }
         #endregion
 
@@ -76,7 +77,7 @@ namespace Mix.Queue.Engines
         public static IQueueSubscriber CreateRabbitMQSubscriber<T>(IPooledObjectPolicy<IModel> objectPolicy, string topicId, string subscriptionId, Func<T, Task> handler)
             where T : MessageQueueModel
         {
-            return new RabitMQSubscriber<T>(objectPolicy, topicId, subscriptionId, handler);
+            return new RabbitMQSubscriber<T>(objectPolicy, topicId, subscriptionId, handler);
         }
         #endregion
 

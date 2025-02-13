@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<RootNamespace>Mix.Identity</RootNamespace>
 		<AssemblyName>mix.identity</AssemblyName>
 	</PropertyGroup>
@@ -21,15 +21,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="8.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="8.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="9.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="9.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="9.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Identity.Web" Version="3.0.1" />
+		<PackageReference Include="Microsoft.Identity.Web" Version="3.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>

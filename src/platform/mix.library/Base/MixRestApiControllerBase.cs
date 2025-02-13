@@ -4,8 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
+using Mix.Mixdb.Helpers;
 using Mix.Mq.Lib.Models;
 using Mix.SignalR.Interfaces;
+using Newtonsoft.Json;
 
 namespace Mix.Lib.Base
 {
@@ -13,8 +15,8 @@ namespace Mix.Lib.Base
         : MixTenantApiControllerBase
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
-        where TEntity : EntityBase<TPrimaryKey>
-        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        where TEntity : class, IEntity<TPrimaryKey>
+        where TView : SimpleViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         protected Repository<TDbContext, TEntity, TPrimaryKey, TView> Repository;
         protected readonly TDbContext Context;
@@ -30,14 +32,17 @@ namespace Mix.Lib.Base
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
             Context = (TDbContext)uow.ActiveDbContext;
             Uow = uow;
-            Repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(Uow, CacheService);
-            RestApiService = new(httpContextAccessor, mixIdentityService, uow, queueService, CacheService, portalHub, mixTenantService);
-            RestApiService.Repository = Repository;
+            Repository = SimpleViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(Uow, CacheService);
+            RestApiService = new(httpContextAccessor, mixIdentityService, uow, queueService, CacheService, portalHub, mixTenantService)
+            {
+                Repository = Repository
+            };
+
             Repository.CacheService = CacheService;
         }
 
@@ -61,47 +66,30 @@ namespace Mix.Lib.Base
             return RestApiService.DeleteHandler(data, cancellationToken);
         }
 
-
         protected virtual async Task PatchHandler(JObject obj, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            try
+
+            var id = obj.Value<TPrimaryKey>("id");
+            List<EntityPropertyModel> properties = ParseObjectToProperties(obj);
+            var data = await Repository.GetSingleAsync(id, cancellationToken);
+            if (data == null)
             {
-                var id = obj.Value<TPrimaryKey>("id");
-                List<EntityPropertyModel> properties = ParseObjectToProperties(obj);
-                var data = await Repository.GetSingleAsync(id);
-                if (data == null)
-                {
-                    throw new MixException(MixErrorStatus.NotFound);
-                }
-                await RestApiService.PatchHandler(id, data, properties, cancellationToken);
+                throw new MixException(MixErrorStatus.NotFound);
             }
-            catch (Exception ex)
-            {
-                if (ex is not MixException)
-                {
-                    throw new MixException(MixErrorStatus.ServerError, ex);
-                }
-            }
+
+            await RestApiService.PatchHandler(id, data, properties, cancellationToken);
         }
 
-        protected virtual async Task PatchManyHandler(IEnumerable<JObject> lstObj,
+        protected virtual async Task PatchManyHandler(
+            IEnumerable<JObject> lstObj,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            try
+
+            foreach (var obj in lstObj)
             {
-                foreach (var obj in lstObj)
-                {
-                    await PatchHandler(obj);
-                }
-            }
-            catch (Exception ex)
-            {
-                if (ex is not MixException)
-                {
-                    throw new MixException(MixErrorStatus.ServerError, ex);
-                }
+                await PatchHandler(obj, cancellationToken);
             }
         }
 
@@ -115,10 +103,11 @@ namespace Mix.Lib.Base
                     properties.Add(new()
                     {
                         PropertyName = prop.Name,
-                        PropertyValue = prop.Value.ToString()
+                        PropertyValue = MixDbHelper.GetJPropertyValue(prop)
                     });
                 }
             }
+
             return properties;
         }
 
@@ -132,31 +121,43 @@ namespace Mix.Lib.Base
             await cacheService.RemoveCacheAsync(id, typeof(TEntity).FullName);
         }
 
-
         #endregion
 
         #region Query Handlers
-        protected virtual Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req, CancellationToken cancellationToken = default)
+
+        protected virtual Task<PagingResponseModel<TView>> SearchHandler(
+            SearchRequestDto request,
+            CancellationToken cancellationToken = default)
         {
-            var searchRequest = BuildSearchRequest(req);
-            return RestApiService.SearchHandler(req, searchRequest, cancellationToken);
+            var searchRequest = BuildSearchRequest(request);
+            return RestApiService.SearchHandler(request, searchRequest, cancellationToken);
         }
 
-        protected virtual PagingResponseModel<TView> ParseSearchResult(SearchRequestDto req, PagingResponseModel<TView> result)
+        protected virtual PagingResponseModel<TView> ParseSearchResult(
+            SearchRequestDto request,
+            PagingResponseModel<TView> result)
         {
-            return RestApiService.ParseSearchResult(req, result);
+            return ParseSearchResult(request, result, null);
+        }
+
+        protected virtual PagingResponseModel<TView> ParseSearchResult(
+            SearchRequestDto request,
+            PagingResponseModel<TView> result,
+            JsonSerializer serializer = null)
+        {
+            return RestApiService.ParseSearchResult(request, result, serializer);
         }
 
         #endregion
 
         #region Helpers
 
-        protected virtual SearchQueryModel<TEntity, TPrimaryKey> BuildSearchRequest(SearchRequestDto req)
+        protected virtual SearchQueryModel<TEntity, TPrimaryKey> BuildSearchRequest(SearchRequestDto request)
         {
-            return RestApiService.BuildSearchRequest(req);
+            return RestApiService.BuildSearchRequest(request);
         }
 
-        protected virtual Task<TView> GetById(TPrimaryKey id)
+        protected virtual Task<TView> GetById(TPrimaryKey id, CancellationToken cancellationToken = default)
         {
             return RestApiService.GetById(id);
         }

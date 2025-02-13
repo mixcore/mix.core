@@ -10,7 +10,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
     {
         #region Properties
 
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public int PostId { get; set; }
         public string? Sku { get; set; }
         public string Currency { get; set; }

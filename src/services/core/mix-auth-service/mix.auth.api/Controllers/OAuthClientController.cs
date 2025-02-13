@@ -25,18 +25,18 @@ namespace mix.auth.service.Controllers
         protected override async Task<Guid> CreateHandlerAsync(OAuthClientViewModel data, CancellationToken cancellationToken = default)
         {
             var result = await base.CreateHandlerAsync(data, cancellationToken);
-            _oauthClientService.LoadClients(Uow.DbContext, true);
+            _oauthClientService.AddClients(data);
             return result;
         }
         protected override async Task UpdateHandler(Guid id, OAuthClientViewModel data, CancellationToken cancellationToken = default)
         {
             await base.UpdateHandler(id, data, cancellationToken);
-            _oauthClientService.LoadClients(Uow.DbContext, true);
+            _oauthClientService.LoadClients(true);
         }
         protected override async Task DeleteHandler(OAuthClientViewModel data, CancellationToken cancellationToken = default)
         {
             await base.DeleteHandler(data, cancellationToken);
-            _oauthClientService.LoadClients(Uow.DbContext, true);
+            _oauthClientService.LoadClients(true);
         }
     }
 }

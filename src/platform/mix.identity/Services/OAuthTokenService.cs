@@ -15,7 +15,9 @@ using Mix.Auth.Models;
 using Mix.Identity.Interfaces;
 using Mix.Auth.Common;
 using Mix.Auth.Enums;
-using Mix.Shared.Services;
+using Mix.Auth.Constants;
+using Microsoft.Identity.Web;
+using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Identity.Services
 {
@@ -87,7 +89,7 @@ namespace Mix.Identity.Services
             if (!clientScopes.Any())
             {
                 response.Error = ErrorTypeEnum.InValidScope.GetEnumDescription();
-                response.ErrorDescription = "scopes are invalids";
+                response.ErrorDescription = "scope are invalids";
                 return response;
             }
 
@@ -127,7 +129,10 @@ namespace Mix.Identity.Services
 
         private CheckOAuthClientResult VerifyClientById(Guid clientId, bool checkWithSecret = false, string clientSecret = null, string grantType = null)
         {
-            CheckOAuthClientResult result = new CheckOAuthClientResult() { IsSuccess = false };
+            CheckOAuthClientResult result = new()
+            {
+                IsSuccess = false
+            };
 
             if (clientId != default)
             {
@@ -144,8 +149,8 @@ namespace Mix.Identity.Services
                             return result;
                         }
                     }
-                    // check if client is enabled or not
 
+                    // check if client is enabled or not
                     if (client.IsActive)
                     {
                         result.IsSuccess = true;
@@ -168,14 +173,17 @@ namespace Mix.Identity.Services
 
         public OAuthTokenResponse GenerateToken(OAuthTokenRequest tokenRequest)
         {
-
             var result = new OAuthTokenResponse();
             var serchBySecret = SearchForClientBySecret(tokenRequest.grant_type);
 
             var checkClientResult = VerifyClientById(tokenRequest.client_id, serchBySecret, tokenRequest.client_secret, tokenRequest.grant_type);
             if (!checkClientResult.IsSuccess)
             {
-                return new OAuthTokenResponse { Error = checkClientResult.Error, ErrorDescription = checkClientResult.ErrorDescription };
+                return new OAuthTokenResponse
+                {
+                    Error = checkClientResult.Error,
+                    ErrorDescription = checkClientResult.ErrorDescription
+                };
             }
 
             // Check first if the authorization_grant is client_credentials...
@@ -213,8 +221,6 @@ namespace Mix.Identity.Services
 
             // TODO: 
             // also I have to check the rediret uri 
-
-
             if (checkClientResult.Client.UsePkce)
             {
                 var pkceResult = CodeVerifierIsSendByTheClientThatReceivedTheCode(tokenRequest.code_verifier,
@@ -241,19 +247,19 @@ namespace Mix.Identity.Services
 
                 // Generate Identity Token
                 int iat = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-                string[] amrs = new string[] { "pwd" };
+                string[] amrs = ["pwd"];
 
                 var claims = new List<Claim>()
                     {
-                        new Claim("sub", userId),
-                        new Claim("given_name", currentUserName),
-                        new Claim("iat", iat.ToString(), ClaimValueTypes.Integer), // time stamp
-                        new Claim("nonce", clientCodeChecker.Nonce)
+                        new("sub", userId),
+                        new("given_name", currentUserName),
+                        new("iat", iat.ToString(), ClaimValueTypes.Integer), // time stamp
+                        new("nonce", clientCodeChecker.Nonce)
                     };
                 foreach (var amr in amrs)
                     claims.Add(new Claim("amr", amr));// authentication
 
-                JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+                JwtSecurityTokenHandler handler = new();
 
                 var token = new JwtSecurityToken(
                                     _options.IDPUri,
@@ -320,31 +326,28 @@ namespace Mix.Identity.Services
 
             if (tokenType == OAuthConstants.TokenTypes.JWTAcceseccToken)
             {
+                var expireAt = DateTime.UtcNow.AddMinutes(_authConfigs.AccessTokenExpiration);
+                var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_authConfigs.SecretKey)), SecurityAlgorithms.HmacSha256);
+
                 var claims_at = new List<Claim>
                 {
-                    new Claim("scope", string.Join(' ', scopes))
+                    new(ClaimConstants.Scope, string.Join(' ', scopes)),
+                    new(MixClaims.ExpireAt, expireAt.ToString("yyyy-MM-ddTHH:mm:ss.FFFZ"), ClaimValueTypes.String)
                 };
 
-                JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-                var token1 = new JwtSecurityToken(
+                var handler = new JwtSecurityTokenHandler();
+                var token = new JwtSecurityToken(
                     _options.IDPUri,
                     client.ClientUri,
                     claims_at,
-                    expires: DateTime.UtcNow.AddMinutes(_authConfigs.AccessTokenExpiration),
-                    signingCredentials: new SigningCredentials(
-                                            new SymmetricSecurityKey(
-                                                    Encoding.ASCII.GetBytes(_authConfigs.SecretKey)),
-                                                    SecurityAlgorithms.HmacSha256));
+                    expires: expireAt,
+                    signingCredentials: signingCredentials);
 
-                string access_token = handler.WriteToken(token1);
+                string access_token = handler.WriteToken(token);
 
                 result.AccessToken = access_token;
                 result.TokenType = tokenType;
-                result.ExpirationDate = token1.ValidTo;
-            }
-            else
-            {
-
+                result.ExpirationDate = token.ValidTo;
             }
 
             return result;

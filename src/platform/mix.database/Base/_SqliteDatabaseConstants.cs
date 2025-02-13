@@ -14,6 +14,8 @@
 
         string IDatabaseConstants.DateTime => "datetime";
 
+        string IDatabaseConstants.Date => "datetime";
+
         string IDatabaseConstants.Guid => "uniqueidentifier";
 
         string IDatabaseConstants.Integer => "integer";
@@ -24,9 +26,13 @@
 
         string IDatabaseConstants.NString => "varchar";
 
-        string IDatabaseConstants.Text => "ntext";
+        string IDatabaseConstants.Text => "text";
 
-        string IDatabaseConstants.GenerateUUID => "(newid())";
+        string IDatabaseConstants.GenerateUUID => "newid()";
+
+        string IDatabaseConstants.Time => "time";
+
+        string IDatabaseConstants.Now => "(DATETIME('now'))";
 
         string IDatabaseConstants.Boolean => "INTEGER";
 

@@ -92,8 +92,8 @@ namespace Mix.Services.Databases.Lib.Services
         }
         public async Task<List<MixPermissionViewModel>> GetPermissionAsync(Guid userId)
         {
-            var permissions = _permissionDbContext.UserPermission.Where(m => m.MixTenantId == CurrentTenant.Id && m.UserId == userId);
-            Expression<Func<MixPermission, bool>> predicate = m => m.MixTenantId == CurrentTenant.Id && permissions.Any(p => p.PermissionId == m.Id);
+            var permissions = _permissionDbContext.UserPermission.Where(m => m.TenantId == CurrentTenant.Id && m.UserId == userId);
+            Expression<Func<MixPermission, bool>> predicate = m => m.TenantId == CurrentTenant.Id && permissions.Any(p => p.PermissionId == m.Id);
             var result = await MixPermissionViewModel.GetRepository(_accUow, CacheService).GetAllAsync(predicate);
             return result;
         }
@@ -107,8 +107,8 @@ namespace Mix.Services.Databases.Lib.Services
 
             MixUserPermissionViewModel userPermission = new(_accUow)
             {
-                MixTenantId = CurrentTenant.Id,
-                CreatedBy = _identityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username)
+                TenantId = CurrentTenant.Id,
+                CreatedBy = _identityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.UserName)
             };
             ReflectionHelper.Map(dto, userPermission);
             await userPermission.SaveAsync();

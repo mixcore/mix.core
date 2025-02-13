@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
-using Mix.Database.Services;
-
+using Mix.Database.Services.MixGlobalSettings;
 using MySqlConnector;
 
 namespace Mix.Database.Entities.Cms
@@ -18,23 +17,6 @@ namespace Mix.Database.Entities.Cms
         public MixCmsContext(DatabaseService databaseService) : base(databaseService, MixConstants.CONST_CMS_CONNECTION)
         {
         }
-
-        public override void Dispose()
-        {
-            switch (_databaseProvider)
-            {
-                case MixDatabaseProvider.SQLSERVER:
-                    SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
-                    break;
-
-                case MixDatabaseProvider.MySQL:
-                    MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
-                    break;
-            }
-            base.Dispose();
-            GC.SuppressFinalize(this);
-        }
-
 
         public virtual DbSet<MixTenant> MixTenant { get; set; }
         public virtual DbSet<MixDomain> MixDomain { get; set; }

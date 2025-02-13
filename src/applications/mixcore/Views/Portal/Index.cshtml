@@ -2,7 +2,7 @@
 @{
     Layout = null;
     var menus = MixFileHelper.GetFile("portal-menus", ".json", MixFolders.JsonDataFolder);
-    var logo = configService.GetConfig("Favicon", ViewData["Culture"]?.ToString(), "/mix-app/css/portal/img/mixcore-logo-green.svg");
+    var logo = configService.GetConfig("Favicon", ViewData["Culture"]?.ToString(), 1, "/mix-app/css/portal/img/mixcore-logo-green.svg");
 }
 <!doctype html>
 <html lang="en">

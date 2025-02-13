@@ -16,7 +16,7 @@ namespace Mix.Auth.Models.OAuthResponses
         public bool Active { get; set; }
 
         /// <summary>
-        /// Associated scopes with this token,
+        /// Associated scope with this token,
         /// Return as space-sperated list
         /// </summary>
         public string? Scope { get; set; }

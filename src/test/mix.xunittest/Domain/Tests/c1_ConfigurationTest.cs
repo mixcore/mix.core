@@ -17,7 +17,7 @@ namespace Mix.Xunittest.Domain.Tests
             {
                 DisplayName = "unit test",
                 SystemName = "unit_test",
-                MixTenantId = 1
+                TenantId = 1
             };
             data.InitDefaultValues();
             return data;

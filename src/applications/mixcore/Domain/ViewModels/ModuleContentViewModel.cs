@@ -1,5 +1,5 @@
 ﻿using Mix.Heart.Helpers;
-using Mix.RepoDb.Interfaces;
+using Mix.Mixdb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
 using MySqlX.XDevAPI.Common;
@@ -61,17 +61,17 @@ namespace Mixcore.Domain.ViewModels
                 : default;
         }
 
-        private async Task LoadAdditionalDataAsync(IMixDbDataService mixDbDataService)
+        private async Task LoadAdditionalDataAsync(IMixDbDataService mixDbDataService, CancellationToken cancellationToken = default)
         {
             if (!string.IsNullOrEmpty(MixDatabaseName))
             {
-                var obj = await mixDbDataService.GetSingleByParent(MixDatabaseName, MixContentType.Page, Id);
+                var obj = await mixDbDataService.GetSingleByParentAsync(MixDatabaseName, MixContentType.Page, Id, string.Empty, cancellationToken);
                 AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
             }
         }
 
         public async Task LoadData(PagingModel pagingModel, IMixDbDataService mixDbDataService, IMixMetadataService metadataService,
-            MixCacheService cacheService)
+            MixCacheService cacheService, CancellationToken cancellationToken = default)
         {
             await LoadAdditionalDataAsync(mixDbDataService);
             var getData = await ModuleDataViewModel.GetRepository(UowInfo, CacheService).GetPagingAsync(
@@ -90,7 +90,7 @@ namespace Mixcore.Domain.ViewModels
                 pagingModel);
             foreach (var item in Posts.Items)
             {
-                await item.Post.LoadAdditionalDataAsync(mixDbDataService, metadataService, cacheService);
+                await item.Post.LoadAdditionalDataAsync(mixDbDataService, metadataService, cacheService, cancellationToken);
             }
         }
         #endregion

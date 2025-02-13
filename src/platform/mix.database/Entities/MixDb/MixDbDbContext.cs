@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Mix.Constant.Constants;
 using Mix.Database.Base;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.MixDb
 {
@@ -23,7 +23,6 @@ namespace Mix.Database.Entities.MixDb
         public DbSet<MixPermissionEndpoint> PermissionEndpoint { get; set; }
         public DbSet<MixUserPermission> UserPermission { get; set; }
         public DbSet<MixUserData> MixUserData { get; set; }
-        public DbSet<MixContactAddress> MixContactAddress { get; set; }
         public DbSet<MixNavigation> MixNavigation { get; set; }
         public DbSet<MixMenuItem> MixMenuItem { get; set; }
     }

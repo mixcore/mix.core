@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.Extensions;
 using Mix.Shared.Models.Configurations;
 using System.Data.Common;
 
@@ -9,7 +11,7 @@ namespace Mix.Lib.Middlewares
 {
     public class UnitOfWorkMiddleware(RequestDelegate next, IConfiguration configuration)
     {
-        private static readonly List<Type> UowInfos = new();
+        private static readonly List<Type> UowInfos = [];
         private readonly GlobalSettingsModel _globalConfig = configuration.Get<GlobalSettingsModel>();
 
         public static void AddUnitOfWork<T>() where T : IUnitOfWorkInfo
@@ -24,7 +26,7 @@ namespace Mix.Lib.Middlewares
             //Dictionary<string, DbConnection> dicConnections = new();
             //await ShareTransaction(context, dicConnections, dicTransactions);
 
-            if (GlobalConfigService.Instance.InitStatus == InitStep.Blank || MixCmsHelper.CheckStaticFileRequest(context.Request.Path))
+            if (configuration.GetValue<InitStep>("InitStatus") == InitStep.Blank || MixCmsHelper.CheckStaticFileRequest(context.Request.Path))
             {
                 await next.Invoke(context);
             }
@@ -40,11 +42,13 @@ namespace Mix.Lib.Middlewares
             }
         }
 
-        private async Task ShareTransaction(HttpContext context,
+        private async Task ShareTransaction(
+            IConfiguration configuration,
+            HttpContext context,
             Dictionary<string, DbConnection> dicConnections,
             Dictionary<string, IDbContextTransaction> dicTransactions)
         {
-            if (_globalConfig.IsInit)
+            if (configuration.IsInit())
             {
                 return;
             }
@@ -77,21 +81,21 @@ namespace Mix.Lib.Middlewares
             }
         }
 
-        private static async Task CompleteUow(IUnitOfWorkInfo cmsUow, int statusCode)
+        private static async Task CompleteUow(IUnitOfWorkInfo uow, int statusCode)
         {
-            if (cmsUow.ActiveTransaction != null)
+            if (uow.ActiveTransaction != null)
             {
                 if (Enum.IsDefined(typeof(MixErrorStatus), statusCode))
                 {
-                    await cmsUow.RollbackAsync();
+                    await uow.RollbackAsync();
                 }
                 else
                 {
-                    await cmsUow.CompleteAsync();
+                    await uow.CompleteAsync();
                 }
             }
 
-            cmsUow.Dispose();
+            uow.Dispose();
         }
     }
 }

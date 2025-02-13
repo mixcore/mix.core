@@ -2,7 +2,7 @@
 using Mix.Constant.Constants;
 using Mix.Database.Base;
 using Mix.Database.Entities.Cms;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Enums;
 
 namespace Mix.Services.Ecommerce.Lib.Entities.Mix

@@ -32,7 +32,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
         {
         }
 
-        public InitTenantViewModel(MixCmsContext context, InitCmsDto model) : base(context)
+        public InitTenantViewModel(UnitOfWorkInfo unitOfWorkInfo, InitCmsDto model) : base(unitOfWorkInfo)
         {
             PrimaryDomain = model.PrimaryDomain;
             DisplayName = model.SiteName;
@@ -76,11 +76,11 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
         protected override async Task<MixTenant> SaveHandlerAsync(CancellationToken cancellationToken = default)
         {
             var entity = await base.SaveHandlerAsync(cancellationToken);
-            var tenantConfigService = new TenantConfigService(SystemName);
-            tenantConfigService.AppSettings.DefaultCulture = Culture.Specificulture;
-            tenantConfigService.AppSettings.Domain = PrimaryDomain.TrimEnd('/');
-            tenantConfigService.AppSettings.ApiEncryptKey = AesEncryptionHelper.GenerateCombinedKeys();
-            tenantConfigService.SaveSettings();
+            //var tenantConfigService = new TenantConfigService(SystemName);
+            //tenantConfigService.AppSettingsModel.DefaultCulture = Culture.Specificulture;
+            //tenantConfigService.AppSettingsModel.Domain = PrimaryDomain.TrimEnd('/');
+            //tenantConfigService.AppSettingsModel.ApiEncryptKey = AesEncryptionHelper.GenerateCombinedKeys();
+            //tenantConfigService.SaveSettings();
             return entity;
         }
 
@@ -99,7 +99,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
 
         private async Task SaveCultureAsync(MixTenant parent, CancellationToken cancellationToken = default)
         {
-            Culture.MixTenantId = parent.Id;
+            Culture.TenantId = parent.Id;
             Culture.SetUowInfo(UowInfo, CacheService);
             await Culture.SaveAsync(cancellationToken);
             ModifiedEntities.AddRange(Culture.ModifiedEntities);
@@ -107,7 +107,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
 
         private async Task SaveDomainAsync(MixTenant parent)
         {
-            Domain.MixTenantId = parent.Id;
+            Domain.TenantId = parent.Id;
             Domain.SetUowInfo(UowInfo, CacheService);
             await Domain.SaveAsync();
             ModifiedEntities.AddRange(Domain.ModifiedEntities);

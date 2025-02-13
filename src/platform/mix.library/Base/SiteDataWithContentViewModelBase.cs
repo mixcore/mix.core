@@ -37,7 +37,7 @@ namespace Mix.Lib.Base
 
         public virtual string Image { get; set; }
 
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
 
         public List<TContent> Contents { get; set; }
 

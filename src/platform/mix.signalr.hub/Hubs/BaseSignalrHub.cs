@@ -6,6 +6,7 @@ using Mix.Constant.Constants;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
+using Mix.Identity.Interfaces;
 using Mix.Lib.Interfaces;
 using Mix.Signalr.Hub.Models;
 using Mix.SignalR.Constants;
@@ -52,7 +53,11 @@ namespace Mix.SignalR.Hubs
         {
             await AddUserToRoom(roomName);
         }
-
+        public async Task LeaveRoom(string roomName)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
+            await SendGroupMessage(new SignalRMessageModel(GetCurrentUser()) { Action = MessageAction.MemberOffline }, roomName);
+        }
         public virtual async Task SendMessage(SignalRMessageModel message)
         {
             message.From ??= GetCurrentUser();
@@ -114,6 +119,7 @@ namespace Mix.SignalR.Hubs
         }
 
         #region Private
+
         protected virtual async Task AddUserToRoom(string roomName)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
@@ -128,7 +134,7 @@ namespace Mix.SignalR.Hubs
             {
                 TenantId = TenantId,
                 ConnectionId = Context.ConnectionId,
-                Username = userContext?.Identity?.Name ?? "Anonymous",
+                UserName = userContext?.Identity?.Name ?? "Anonymous",
                 Avatar = userContext?.Claims.FirstOrDefault(m => m.Type == MixClaims.Avatar)?.Value ?? MixConstants.CONST_DEFAULT_EXTENSIONS_FILE_PATH,
                 Role = userContext?.Claims.FirstOrDefault(m => m.Type == MixClaims.Role)?.Value,
             };

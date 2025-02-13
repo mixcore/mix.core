@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Auth.Constants;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Helpers;
 using Mix.Lib.Interfaces;
+using Mix.Mixdb.Interfaces;
+using Mix.Mixdb.Services;
 using Mix.Mq.Lib.Models;
 using Mix.RepoDb.Repositories;
 using RepoDb;
@@ -14,25 +17,26 @@ namespace Mix.Portal.Controllers
     public class CommonController : MixTenantApiControllerBase
     {
         protected readonly TenantUserManager UserManager;
-        private readonly MixRepoDbRepository _repoDbRepository;
+        private readonly IMixDbDataService _mixDbDataSrv;
         private readonly MixCmsContext _context;
         public CommonController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
+            DatabaseService databaseService,
             MixCmsContext context,
             MixCacheService cacheService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             IMemoryQueueService<MessageQueueModel> queueService,
             TenantUserManager userManager,
-            MixRepoDbRepository repoDbRepository,
-            IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            IMixTenantService mixTenantService,
+            MixDbDataServiceFactory mixDbDataFactory)
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
             _context = context;
             UserManager = userManager;
-            _repoDbRepository = repoDbRepository;
+            _mixDbDataSrv = mixDbDataFactory.GetDataService(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION))!;
         }
 
         [HttpGet]
@@ -62,23 +66,18 @@ namespace Mix.Portal.Controllers
                 JArray arrMenus = new();
                 if (!roles.Contains(MixRoles.SuperAdmin))
                 {
-                    _repoDbRepository.InitTableName(MixDatabaseNames.PORTAL_MENU);
-
-                    var menus = await _repoDbRepository.GetListByAsync(
-                            new List<SearchQueryField>()
-                            {
-                                new SearchQueryField("Role", roles, MixCompareOperator.InRange)
-                            }
-                        );
-                    foreach (var item in menus)
-                    {
-                        var obj = ReflectionHelper.ParseObject(item);
-                        if (!obj.ContainsKey("subMenus"))
+                    var menus = await _mixDbDataSrv.GetListByAsync(
+                        new Shared.Models.SearchMixDbRequestModel()
                         {
-                            await LoadNestedData(obj);
+
+                            TableName = MixDatabaseNames.PORTAL_MENU,
+                            Queries = new List<MixQueryField>()
+                            {
+                                new MixQueryField("Role", roles, MixCompareOperator.InRange)
+                            },
                         }
-                        arrMenus.Add(obj);
-                    }
+                    );
+
                     return arrMenus;
                 }
                 return arrMenus;
@@ -89,42 +88,6 @@ namespace Mix.Portal.Controllers
             }
         }
 
-        private async Task LoadNestedData(JObject data)
-        {
 
-            _repoDbRepository.InitTableName(nameof(MixDatabaseAssociation));
-            List<QueryField> queries = GetAssociatoinQueries(MixDatabaseNames.PORTAL_MENU, MixDatabaseNames.PORTAL_MENU, data.Value<int>("id"));
-            var associations = await _repoDbRepository.GetListByAsync(queries);
-            if (associations.Count > 0)
-            {
-                _repoDbRepository.InitTableName(MixDatabaseNames.PORTAL_MENU);
-                var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>("ChildId")).ToList();
-                List<QueryField> query = new() { new("Id", Operation.In, nestedIds) };
-                var nestedData = await _repoDbRepository.GetListByAsync(query);
-                data.Add(new JProperty("subMenus", ReflectionHelper.ParseArray(nestedData)));
-            }
-        }
-
-        private List<QueryField> GetAssociatoinQueries(string parentDatabaseName = null, string childDatabaseName = null, int? parentId = null, int? childId = null)
-        {
-            var queries = new List<QueryField>();
-            if (!string.IsNullOrEmpty(parentDatabaseName))
-            {
-                queries.Add(new QueryField("ParentDatabaseName", parentDatabaseName));
-            }
-            if (!string.IsNullOrEmpty(childDatabaseName))
-            {
-                queries.Add(new QueryField("ChildDatabaseName", childDatabaseName));
-            }
-            if (parentId.HasValue)
-            {
-                queries.Add(new QueryField("ParentId", parentId));
-            }
-            if (childId.HasValue)
-            {
-                queries.Add(new QueryField("ChildId", childId));
-            }
-            return queries;
-        }
     }
 }

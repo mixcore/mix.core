@@ -28,7 +28,7 @@ namespace Mix.SignalR.Hubs
         private readonly IMixMemoryCacheService _memoryCache;
         private readonly MixCmsContext _ctx;
         private readonly IMemoryQueueService<MessageQueueModel> _queueService;
-        public MixDbHub(IMixTenantService mixTenantService, IMemoryQueueService<MessageQueueModel> queueService, IMixMemoryCacheService memoryCache, MixCmsContext ctx) 
+        public MixDbHub(IMixTenantService mixTenantService, IMemoryQueueService<MessageQueueModel> queueService, IMixMemoryCacheService memoryCache, MixCmsContext ctx)
             : base(mixTenantService)
         {
             _queueService = queueService;
@@ -37,12 +37,12 @@ namespace Mix.SignalR.Hubs
         }
 
         #region Methods
-        
+
         public async void JoinRooms(string[] roomNames)
         {
             foreach (var tableName in roomNames)
             {
-                if (await CheckUserPermission(tableName, "GET"))
+                if (await CheckUserPermission(tableName, MixDbCommandQueueAction.GET))
                 {
                     await AddUserToRoom($"mixdb-{tableName}");
                 }
@@ -52,56 +52,56 @@ namespace Mix.SignalR.Hubs
         public virtual async Task CreateDataAsync(string tableName, JObject data)
         {
 
-            if (await CheckUserPermission(tableName, "POST"))
+            if (await CheckUserPermission(tableName, MixDbCommandQueueAction.POST))
             {
                 var obj = new MixDbCommandModel()
                 {
                     MixDbName = tableName,
                     Body = data,
                     ConnectionId = Context.ConnectionId,
-                    MixTenantId = 1,
-                    RequestedBy = GetCurrentUser().Username
+                    TenantId = 1,
+                    RequestedBy = GetCurrentUser().UserName
                 };
-                _queueService.PushMemoryQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueAction.POST.ToString(), obj);
+                _queueService.PushMemoryQueue(obj.TenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueAction.POST.ToString(), obj);
             }
         }
-        
+
         public virtual async Task DeleteDataAsync(string tableName, JObject data)
         {
 
-            if (await CheckUserPermission(tableName, "DELETE"))
+            if (await CheckUserPermission(tableName, MixDbCommandQueueAction.DELETE))
             {
                 var obj = new MixDbCommandModel()
                 {
                     MixDbName = tableName,
                     Body = data,
                     ConnectionId = Context.ConnectionId,
-                    MixTenantId = 1,
-                    RequestedBy = GetCurrentUser().Username
+                    TenantId = 1,
+                    RequestedBy = GetCurrentUser().UserName
                 };
-                _queueService.PushMemoryQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueAction.DELETE.ToString(), obj);
+                _queueService.PushMemoryQueue(obj.TenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueAction.DELETE.ToString(), obj);
             }
         }
 
         public virtual async Task UpdateData(string tableName, JObject data)
         {
-            if (await CheckUserPermission(tableName, "PUT"))
+            if (await CheckUserPermission(tableName, MixDbCommandQueueAction.PUT))
             {
                 var obj = new MixDbCommandModel()
                 {
                     MixDbName = tableName,
                     Body = data,
                     ConnectionId = Context.ConnectionId,
-                    MixTenantId = 1,
-                    RequestedBy = GetCurrentUser().Username
+                    TenantId = 1,
+                    RequestedBy = GetCurrentUser().UserName
                 };
-                _queueService.PushMemoryQueue(obj.MixTenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueAction.PUT.ToString(), obj);
+                _queueService.PushMemoryQueue(obj.TenantId, MixQueueTopics.MixDbCommand, MixDbCommandQueueAction.PUT.ToString(), obj);
             }
         }
         #endregion
         #region Private
 
-        private async Task<bool> CheckUserPermission(string tableName, string action)
+        private async Task<bool> CheckUserPermission(string tableName, MixDbCommandQueueAction action)
         {
             try
             {
@@ -122,7 +122,7 @@ namespace Mix.SignalR.Hubs
                     await SendErrorMessageToCaller($"Unauthorized");
                     return false;
                 }
-                
+
                 if (!IsInRoles(action, tbl))
                 {
                     await SendErrorMessageToCaller($"You don't have permission to access {tableName}");
@@ -139,7 +139,7 @@ namespace Mix.SignalR.Hubs
 
         }
 
-        private bool IsInRoles(string method, MixDatabase database)
+        private bool IsInRoles(MixDbCommandQueueAction method, MixDatabase database)
         {
 
             var userRoles = GetClaim(Context.User!, MixClaims.Role).Split(',', StringSplitOptions.RemoveEmptyEntries)
@@ -152,12 +152,12 @@ namespace Mix.SignalR.Hubs
 
             switch (method)
             {
-                case "GET": return CheckUserInRoles(database.ReadPermissions, userRoles);
-                case "POST":
+                case MixDbCommandQueueAction.GET: return CheckUserInRoles(database.ReadPermissions, userRoles);
+                case MixDbCommandQueueAction.POST:
                     return CheckUserInRoles(database.CreatePermissions, userRoles);
-                case "PATCH":
-                case "PUT": return CheckUserInRoles(database.UpdatePermissions, userRoles);
-                case "DELETE": return CheckUserInRoles(database.DeletePermissions, userRoles);
+                case MixDbCommandQueueAction.PATCH:
+                case MixDbCommandQueueAction.PUT: return CheckUserInRoles(database.UpdatePermissions, userRoles);
+                case MixDbCommandQueueAction.DELETE: return CheckUserInRoles(database.DeletePermissions, userRoles);
                 default:
                     return false;
             }
@@ -177,19 +177,19 @@ namespace Mix.SignalR.Hubs
             return string.Join(',', User.Claims.Where(c => c.Type == claimType).Select(m => m.Value));
         }
 
-        private bool CheckByPassAuthenticate(string method, MixDatabase database)
+        private bool CheckByPassAuthenticate(MixDbCommandQueueAction method, MixDatabase database)
         {
             return method switch
             {
-                "GET" => database.ReadPermissions == null
+                MixDbCommandQueueAction.GET => database.ReadPermissions == null
                         || database.ReadPermissions.Count == 0,
-                "POST" => database.CreatePermissions == null
+                MixDbCommandQueueAction.POST => database.CreatePermissions == null
                         || database.CreatePermissions.Count == 0,
-                "PUT" => database.UpdatePermissions == null
+                MixDbCommandQueueAction.PUT => database.UpdatePermissions == null
                         || database.UpdatePermissions.Count == 0,
-                "PATCH" => database.UpdatePermissions == null
+                MixDbCommandQueueAction.PATCH => database.UpdatePermissions == null
                         || database.UpdatePermissions.Count == 0,
-                "DELETE" => database.DeletePermissions == null
+                MixDbCommandQueueAction.DELETE => database.DeletePermissions == null
                         || database.DeletePermissions.Count == 0,
                 _ => false
             };

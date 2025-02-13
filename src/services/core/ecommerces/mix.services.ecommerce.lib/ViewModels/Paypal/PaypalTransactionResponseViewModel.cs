@@ -17,13 +17,13 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels.Paypal
         public JArray PurchaseUnits { get; set; }
         public JArray Links { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
-        public int MixTentantId { get; set; }
+        public int TentantId { get; set; }
         public string Intent { get; set; }
         public string State { get; set; }
         public string Cart { get; set; }
         public JArray Transactions { get; set; }
         public DateTime CreatedTime { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
 
         #endregion
 

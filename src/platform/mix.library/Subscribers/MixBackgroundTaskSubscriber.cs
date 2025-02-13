@@ -37,8 +37,8 @@ namespace Mix.Lib.Subscribers
             MixDbEventService mixDbEventService,
             IMemoryQueueService<MessageQueueModel> queueService,
             ILogger<MixBackgroundTaskSubscriber> logger,
-            IPooledObjectPolicy<RabbitMQ.Client.IModel> rabbitMqObjectPolicy = null)
-            : base(TopicId, nameof(MixBackgroundTaskSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMqObjectPolicy)
+            IPooledObjectPolicy<RabbitMQ.Client.IModel>? rabbitMQObjectPolicy = null)
+            : base(TopicId, nameof(MixBackgroundTaskSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMQObjectPolicy)
         {
             PortalHub = portalHub;
             MixDbEventService = mixDbEventService;

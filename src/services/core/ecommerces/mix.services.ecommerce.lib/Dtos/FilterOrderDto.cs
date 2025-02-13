@@ -8,7 +8,7 @@ namespace Mix.Services.Ecommerce.Lib.Dtos
     {
         public FilterOrderDto()
         {
-            OrderBy = "LastModified";
+            SortBy = "LastModified";
             Direction = SortDirection.Desc;
         }
 
@@ -21,9 +21,9 @@ namespace Mix.Services.Ecommerce.Lib.Dtos
             PageIndex = req.PageIndex;
             PageSize = req.PageSize;
             Status = req.Status;
-            if (string.IsNullOrEmpty(req.OrderBy))
+            if (string.IsNullOrEmpty(req.SortBy))
             {
-                OrderBy = "LastModified";
+                SortBy = "LastModified";
                 Direction = SortDirection.Desc;
             }
         }

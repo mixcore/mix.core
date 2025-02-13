@@ -1,11 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Mix.RepoDb</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="RepoDb" Version="1.13.1" />
@@ -17,9 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\mix.database\mix.database.csproj" />
-    <ProjectReference Include="..\mix.mixdb\mix.mixdb.csproj" />
-    <ProjectReference Include="..\mix.queue\mix.queue.csproj" />
+    <ProjectReference Include="..\mix.scylladb\mix.scylladb.csproj" />
     <ProjectReference Include="..\mix.service\mix.service.csproj" />
     <ProjectReference Include="..\mix.signalr\mix.signalr.csproj" />
   </ItemGroup>

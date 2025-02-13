@@ -16,8 +16,8 @@ namespace Mix.Lib.Base
         : MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
-        where TEntity : EntityBase<TPrimaryKey>
-        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        where TEntity : class, IEntity<TPrimaryKey>
+        where TView : SimpleViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         private UnitOfWorkInfo<MixCmsAccountContext> uow;
         private IMemoryQueueService<MessageQueueModel> queueService;
@@ -31,7 +31,7 @@ namespace Mix.Lib.Base
             UnitOfWorkInfo<TDbContext> uow, IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
         }
@@ -93,7 +93,9 @@ namespace Mix.Lib.Base
         public virtual async Task<IActionResult> Patch([FromBody] JObject obj)
         {
             await PatchHandler(obj);
-            return Ok();
+            var id = obj.Value<TPrimaryKey>("id");
+            var data = await Repository.GetSingleAsync(id);
+            return Ok(data);
         }
 
 
@@ -116,39 +118,6 @@ namespace Mix.Lib.Base
                 throw new MixException(MixErrorStatus.Badrequest, "Null Object");
             }
             await SaveManyHandler(data);
-            return Ok();
-        }
-
-
-        [HttpPut("update-priority/{id}")]
-        public virtual async Task<ActionResult> UpdatePriority(UpdatePriorityDto<TPrimaryKey> dto)
-        {
-            var data = await Repository.GetSingleAsync(dto.Id);
-            if (data == null)
-            {
-                return NotFound();
-            }
-
-            var min = Math.Min(data.Priority, dto.Priority);
-            var max = Math.Max(data.Priority, dto.Priority);
-            var query = await Repository.GetListAsync(m => !m.Id.Equals(dto.Id) && m.Priority >= min & m.Priority <= max);
-            int start = min;
-            if (dto.Priority == min)
-            {
-                data.Priority = dto.Priority;
-                start++;
-            }
-            foreach (var item in query.OrderBy(m => m.Priority))
-            {
-                item.Priority = start;
-                await item.SaveAsync();
-                start++;
-            }
-            if (dto.Priority == max)
-            {
-                data.Priority = start;
-            }
-            await data.SaveAsync();
             return Ok();
         }
 

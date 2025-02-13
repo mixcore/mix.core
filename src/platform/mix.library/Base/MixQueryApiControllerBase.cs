@@ -14,8 +14,8 @@ namespace Mix.Lib.Base
         : MixRestHandlerApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
-        where TEntity : EntityBase<TPrimaryKey>
-        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        where TEntity : class, IEntity<TPrimaryKey>
+        where TView : SimpleViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         public MixQueryApiControllerBase(
             IHttpContextAccessor httpContextAccessor,
@@ -26,7 +26,7 @@ namespace Mix.Lib.Base
             UnitOfWorkInfo<TDbContext> uow, IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
         }
@@ -38,10 +38,17 @@ namespace Mix.Lib.Base
         #region Routes
 
         [HttpGet]
-        public virtual async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchRequestDto req)
+        public virtual async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchRequestDto request)
         {
-            var result = await SearchHandler(req);
-            return Ok(ParseSearchResult(req, result));
+            var result = await SearchHandler(request);
+            return Ok(ParseSearchResult(request, result));
+        }
+        
+        [HttpPost("filter")]
+        public virtual async Task<ActionResult<PagingResponseModel<TView>>> Filter([FromBody] SearchRequestDto request)
+        {
+            var result = await SearchHandler(request);
+            return Ok(ParseSearchResult(request, result));
         }
 
 

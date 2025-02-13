@@ -16,14 +16,14 @@ namespace Mix.Shared.Dtos
             ToDate = req.ToDate;
             PageIndex = req.PageIndex;
             PageSize = req.PageSize;
-            OrderBy = req.OrderBy;
+            SortBy = req.SortBy;
             Direction = req.Direction;
             Status = req.Status;
         }
         public string MixDatabaseName { get; set; }
         public string MetadataAnd { get; set; }
         public string MetadataOr { get; set; }
-        public List<SearchQueryField> Queries { get; set; } = new();
-        public List<SearchQueryField> MetadataQueries { get; set; } = new();
+        public List<MixQueryField> Queries { get; set; } = new();
+        public List<MixQueryField> MetadataQueries { get; set; } = new();
     }
 }

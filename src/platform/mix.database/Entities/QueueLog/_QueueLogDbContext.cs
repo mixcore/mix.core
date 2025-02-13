@@ -1,7 +1,7 @@
 ﻿using Mix.Database.Entities.QueueLog.EntityConfigurations;
 using Mix.Database.Entities.QueueLog;
-using Mix.Database.Services;
 using Mix.Heart.Services;
+using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.QueueLog
 {

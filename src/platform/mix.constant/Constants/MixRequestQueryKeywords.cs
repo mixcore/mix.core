@@ -26,7 +26,7 @@
         public const string ModuleContentId = "moduleContentId";
         public const string LeftId = "leftId";
         public const string RightId = "rightId";
-        public const string TenantId = "MixTenantId";
+        public const string TenantId = "TenantId";
         public const string Tenant = "MixTenant";
         public const string TenantName = "MixTenantName";
     }

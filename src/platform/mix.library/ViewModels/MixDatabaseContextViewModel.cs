@@ -1,4 +1,6 @@
 ﻿using System.Text.Json.Serialization;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.ViewModels.ReadOnly;
 
 namespace Mix.Lib.ViewModels
 {
@@ -12,9 +14,8 @@ namespace Mix.Lib.ViewModels
         public string Schema { get; set; }
         public string SystemName { get; set; }
 
-        public List<MixDatabaseViewModel> Databases { get; set; } = new();
+        public List<MixDatabaseReadViewModel> Databases { get; set; }
 
-        [JsonIgnore]
         public string DecryptedConnectionString { get; set; }
         #endregion
 
@@ -22,7 +23,7 @@ namespace Mix.Lib.ViewModels
 
         public MixDatabaseContextViewModel()
         {
-
+            CacheExpiration = TimeSpan.FromMicroseconds(1);
         }
 
         public MixDatabaseContextViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
@@ -39,30 +40,25 @@ namespace Mix.Lib.ViewModels
         #region Overrides
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Databases = await MixDatabaseViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixDatabaseContextId == Id, cancellationToken);
-            if (ConnectionString.IsBase64())
-            {
-                DecryptedConnectionString ??= AesEncryptionHelper.DecryptString(ConnectionString, GlobalConfigService.Instance.AppSettings.ApiEncryptKey);
-            }
-            else
-            {
-                DecryptedConnectionString = ConnectionString;
-            }
+            Databases = await MixDatabaseReadViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixDatabaseContextId == Id, cancellationToken);
         }
 
         public override Task<MixDatabaseContext> ParseEntity(CancellationToken cancellationToken = default)
         {
-            if (!string.IsNullOrEmpty(DecryptedConnectionString))
-            {
-                ConnectionString = AesEncryptionHelper.EncryptString(DecryptedConnectionString, GlobalConfigService.Instance.AppSettings.ApiEncryptKey);
-            }
             return base.ParseEntity(cancellationToken);
         }
 
         protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
-            var databases = Context.MixDatabase.Where(m => m.MixDatabaseContextId == Id);
-
+            var databases = Context.MixDatabase.Where(m => m.MixDatabaseContextId == Id).ToList();
+            foreach (var db in databases)
+            {
+                var cols = Context.MixDatabaseColumn.Where(m => m.MixDatabaseId == db.Id).ToList();
+                Context.MixDatabaseColumn.RemoveRange(cols);
+                
+                var rels = Context.MixDatabaseRelationship.Where(m => m.SourceDatabaseName == db.SystemName || m.DestinateDatabaseName == db.SystemName).ToList();
+                Context.MixDatabaseRelationship.RemoveRange(rels);
+            }
             Context.MixDatabase.RemoveRange(databases);
 
             await Context.SaveChangesAsync(cancellationToken);

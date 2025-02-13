@@ -1,4 +1,4 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
 option csharp_namespace = "Mix.Mq";
 import "google/protobuf/empty.proto";
@@ -20,7 +20,7 @@ message SubscribeRequest {
 }
 
 message PublishMessageRequest {
-	string topicId = 1;
+    string topicId = 1;
   string message = 2;
 }
 

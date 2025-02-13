@@ -9,7 +9,7 @@ namespace Mix.Mq.Server.Domain.Services
 {
     public class GrpcStreamingService
     {
-        public ConcurrentDictionary<SubscribeRequest, IServerStreamWriter<SubscribeReply>> MessageSubscriptions { get; set; }
+        public ConcurrentDictionary<MixSubscribeRequest, IServerStreamWriter<MixSubscribeReply>> MessageSubscriptions { get; set; }
         public ConcurrentQueue<Task> Tasks;
         private readonly MixQueueMessages<MessageQueueModel> _queue;
         private CancellationToken _cancellationToken;
@@ -32,7 +32,7 @@ namespace Mix.Mq.Server.Domain.Services
         }
 
 
-        public Task AddSubscription(SubscribeRequest request, IServerStreamWriter<SubscribeReply> responseStream)
+        public Task AddSubscription(MixSubscribeRequest request, IServerStreamWriter<MixSubscribeReply> responseStream)
         {
             MessageSubscriptions.TryRemove(request, out _);
             if (MessageSubscriptions.TryAdd(request, responseStream))
@@ -41,7 +41,7 @@ namespace Mix.Mq.Server.Domain.Services
             }
             return Task.CompletedTask;
         }
-        public Task RemoveSubscription(SubscribeRequest request)
+        public Task RemoveSubscription(MixSubscribeRequest request)
         {
             var _topic = _queue.GetTopic(request.TopicId);
             _topic.RemoveSubscription(request.SubsctiptionId);
@@ -49,7 +49,7 @@ namespace Mix.Mq.Server.Domain.Services
             return Task.CompletedTask;
         }
 
-        private async Task CreateSubscription(SubscribeRequest request, IServerStreamWriter<SubscribeReply> responseStream)
+        private async Task CreateSubscription(MixSubscribeRequest request, IServerStreamWriter<MixSubscribeReply> responseStream)
         {
             var _topic = _queue.GetTopic(request.TopicId);
             Initialize(_topic, request.SubsctiptionId);
@@ -61,7 +61,7 @@ namespace Mix.Mq.Server.Domain.Services
                 {
                     await SendPendingMessages(request, responseStream);
 
-                    var result = new SubscribeReply
+                    var result = new MixSubscribeReply
                     {
                         Messages = { }
                     };
@@ -95,7 +95,7 @@ namespace Mix.Mq.Server.Domain.Services
             _logger.LogInformation($"{request.SubsctiptionId} stopped at {DateTime.UtcNow.AddHours(7)}");
         }
 
-        private async Task SendPendingMessages(SubscribeRequest request, IServerStreamWriter<SubscribeReply> responseStream)
+        private async Task SendPendingMessages(MixSubscribeRequest request, IServerStreamWriter<MixSubscribeReply> responseStream)
         {
             PendingMessages.TryGetValue(request.SubsctiptionId, out var messages);
             if (messages != null && messages.Count > 0)
@@ -103,7 +103,7 @@ namespace Mix.Mq.Server.Domain.Services
                 try
                 {
 
-                    var result = new SubscribeReply
+                    var result = new MixSubscribeReply
                     {
                         Messages = { }
                     };

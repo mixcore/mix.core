@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Extensions;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
-using Mix.RepoDb.Interfaces;
+using Mix.Mixdb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
-using Mix.Shared.Services;
+using Mix.Shared.Models.Configurations;
 using Mixcore.Domain.Bases;
 using System.Linq.Expressions;
 
@@ -20,7 +21,6 @@ namespace Mixcore.Controllers
         TranslatorService translator,
         DatabaseService databaseService,
         UnitOfWorkInfo<MixCmsContext> uow,
-        MixRepoDbRepository repoDbRepository,
         IMixMetadataService metadataService,
         MixCacheService cacheService,
         IMixTenantService tenantService,
@@ -28,14 +28,13 @@ namespace Mixcore.Controllers
          IMixDbDataService mixDbDataService) : MvcBaseController(httpContextAccessor, ipSecurityConfigService, mixCmsService, translator, databaseService, uow, cacheService, tenantService, configuration)
     {
         private readonly IMixMetadataService _metadataService = metadataService;
-        private readonly MixRepoDbRepository _repoDbRepository = repoDbRepository;
         private readonly IMixDbDataService _mixDbDataService = mixDbDataService;
         protected override void ValidateRequest()
         {
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (GlobalConfig.IsInit)
+            if (Configuration.IsInit())
             {
                 IsValid = false;
                 if (string.IsNullOrEmpty(DatabaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -44,7 +43,7 @@ namespace Mixcore.Controllers
                 }
                 else
                 {
-                    var status = GlobalConfig.InitStatus;
+                    var status = Configuration.GetGlobalConfiguration<string>(nameof(AppSettingsModel.InitStatus));
                     RedirectUrl = $"/init/step{status}";
                 }
             }
@@ -72,7 +71,7 @@ namespace Mixcore.Controllers
             try
             {
                 var pageRepo = PageContentViewModel.GetRepository(Uow, CacheService);
-                Expression<Func<MixPageContent, bool>> predicate = p => p.MixTenantId == CurrentTenant.Id
+                Expression<Func<MixPageContent, bool>> predicate = p => p.TenantId == CurrentTenant.Id
                         && p.Specificulture == Culture;
                 predicate = predicate.AndAlsoIf(string.IsNullOrEmpty(seoName), m => m.Type == MixPageType.Home);
                 predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(seoName), m => m.SeoName == seoName);
@@ -82,7 +81,10 @@ namespace Mixcore.Controllers
                 {
                     await page.LoadDataAsync(_mixDbDataService, _metadataService, new(Request)
                     {
-                        SortBy = MixQueryColumnName.Priority
+                        SortByColumns = new List<Mix.Heart.Model.MixSortByColumn>()
+                        {
+                            new Mix.Heart.Model.MixSortByColumn(MixQueryColumnName.Priority, SortDirection.Asc)
+                        }
                     }, CacheService);
 
                     ViewData["Tenant"] = CurrentTenant;
@@ -100,16 +102,16 @@ namespace Mixcore.Controllers
 
                 return page;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new MixException(MixErrorStatus.Badrequest, ex);
+                throw;
             }
         }
         private async Task<IActionResult> LoadAlias(string seoName = null)
         {
             try
             {
-                var alias = await MixUrlAliasViewModel.GetRepository(Uow, CacheService).GetSingleAsync(m => m.MixTenantId == CurrentTenant.Id && m.Alias == seoName);
+                var alias = await MixUrlAliasViewModel.GetRepository(Uow, CacheService).GetSingleAsync(m => m.TenantId == CurrentTenant.Id && m.Alias == seoName);
                 if (alias != null)
                 {
                     switch (alias.Type)
@@ -122,7 +124,10 @@ namespace Mixcore.Controllers
                             {
                                 await page.LoadDataAsync(_mixDbDataService, _metadataService, new(Request)
                                 {
-                                    SortBy = MixQueryColumnName.Priority
+                                    SortByColumns = new List<Mix.Heart.Model.MixSortByColumn>()
+                                    {
+                                        new Mix.Heart.Model.MixSortByColumn(MixQueryColumnName.Priority, SortDirection.Asc)
+                                    }
                                 }, CacheService);
                                 ViewData["Tenant"] = CurrentTenant;
                                 ViewData["Title"] = page.SeoTitle;

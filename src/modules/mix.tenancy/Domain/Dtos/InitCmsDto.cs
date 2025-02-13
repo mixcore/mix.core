@@ -23,7 +23,7 @@ namespace Mix.Tenancy.Domain.Dtos
                         return $"Server={DatabaseServer};port={DatabasePort};Database={DatabaseName}" +
                       $";User={DatabaseUser};Password={DatabasePassword};";
                     case MixDatabaseProvider.PostgreSQL:
-                        return $"Host={DatabaseServer};Port={DatabasePort};Database={DatabaseName};Username={DatabaseUser};Password={DatabasePassword}";
+                        return $"Host={DatabaseServer};Port={DatabasePort};Database={DatabaseName};UserName={DatabaseUser};Password={DatabasePassword}";
                     case MixDatabaseProvider.SQLITE:
                         return SqliteDbConnectionString;
 

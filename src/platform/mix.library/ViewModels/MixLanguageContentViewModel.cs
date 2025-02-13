@@ -33,7 +33,7 @@
                 SystemName = SystemName,
                 DisplayName = DisplayName,
                 Description = Description,
-                MixTenantId = MixTenantId
+                TenantId = TenantId
             };
             return await parent.SaveAsync(cancellationToken);
         }

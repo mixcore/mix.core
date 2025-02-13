@@ -6,7 +6,7 @@
         public const string IsMaintenance = "IsMaintenance";
         public const string InitStatus = "InitStatus";
         public const string SiteName = "SiteName";
-        public const string ConnectionString = "ConnectionString";
+        public const string ConnectionString = "ConnectionStrings";
         public const string OrderBy = "OrderBy";
         public const string DefaultBlankTemplateFolder = "DefaultTemplateFolder";
         public const string DefaultTemplateFolder = "DefaultTemplateFolder";

@@ -5,11 +5,9 @@ using Microsoft.Extensions.ObjectPool;
 using Mix.Heart.Model;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers;
+using Mix.Mixdb.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
-using Mix.Queue.Engines.MixQueue;
-using Mix.RepoDb.Interfaces;
-using Org.BouncyCastle.Asn1.X509.Qualified;
 
 namespace Mix.Lib.Subscribers
 {
@@ -23,8 +21,8 @@ namespace Mix.Lib.Subscribers
             IMixTenantService mixTenantService,
             IMemoryQueueService<MessageQueueModel> queueService,
             ILogger<MixViewModelChangedSubscriber> logger,
-            IPooledObjectPolicy<RabbitMQ.Client.IModel> rabbitMqObjectPolicy = null)
-            : base(TopicId, nameof(MixDbCommandSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMqObjectPolicy)
+            IPooledObjectPolicy<RabbitMQ.Client.IModel>? rabbitMQObjectPolicy = null)
+            : base(TopicId, nameof(MixDbCommandSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMQObjectPolicy)
         {
             _mixTenantService = mixTenantService;
         }
@@ -48,7 +46,7 @@ namespace Mix.Lib.Subscribers
                     await MixDomainViewModelHandler.MessageQueueHandler(model, _mixTenantService);
                     break;
                 case var m when m == typeof(MixDatabaseColumnViewModel).FullName:
-                    var mixDbService = GetRequiredService<IMixDbService>();
+                    var mixDbService = GetRequiredService<IMixdbStructure>();
                     if (mixDbService != null) {
                         await MixDatabaseColumnViewModelHandler.MessageQueueHandler(model,mixDbService);
                     }

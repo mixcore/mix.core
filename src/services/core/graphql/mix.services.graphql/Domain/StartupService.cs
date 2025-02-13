@@ -5,9 +5,9 @@ namespace Mix.Services.Graphql.Domain
 {
     public class StartupService : IStartupService
     {
-        public void AddServices(IServiceCollection services, IConfiguration configuration)
+        public void AddServices(IHostApplicationBuilder builder)
         {
-            services.AddMixGraphQL();
+            builder.Services.AddMixGraphQL();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

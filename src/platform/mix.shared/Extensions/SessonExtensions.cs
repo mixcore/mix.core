@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Mix.Heart.Extensions;
+using Newtonsoft.Json;
+using System.Text;
 using System.Text.Json;
 
 namespace Mix.Shared.Extensions
@@ -8,13 +11,13 @@ namespace Mix.Shared.Extensions
     {
         public static void Put<T>(this ISession session, string key, T value) where T : class
         {
-            session.SetString(key, JsonSerializer.Serialize(value));
+            session.Set(key, JsonConvert.SerializeObject(value).ToByteArray());
         }
 
         public static T Get<T>(this ISession session, string key) where T : class
         {
-            string s = session.GetString(key);
-            return s == null ? null : JsonSerializer.Deserialize<T>(s);
+            var s = session.Get(key);
+            return s == null ? null : JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(s));
         }
     }
 }

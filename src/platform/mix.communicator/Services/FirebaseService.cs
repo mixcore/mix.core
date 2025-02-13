@@ -3,29 +3,25 @@ using FirebaseAdmin.Auth;
 using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Configuration;
-using Mix.Communicator.Models;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
+using Mix.Shared.Models.Configurations;
+using Newtonsoft.Json;
 
 namespace Mix.Communicator.Services
 {
     // Ref: https://firebase.google.com/docs/cloud-messaging/send-message
     public class FirebaseService
     {
-        private readonly FirebaseSettingModel _settings = new FirebaseSettingModel();
+        private readonly GoogleSettingModel _settings = new GoogleSettingModel();
         public FirebaseService(IConfiguration configuration)
         {
-            configuration.GetSection(MixAppSettingsSection.GoogleFirebase).Bind(_settings);
-            if (!string.IsNullOrEmpty(_settings.ProjectId) && !string.IsNullOrEmpty(_settings.Filename))
+            configuration.GetSection(MixAppSettingsSection.Google).Bind(_settings);
+            if (!string.IsNullOrEmpty(_settings.ProjectId) && _settings.Firebase.Credential != null)
             {
-
-                var googleCredential = _settings.Filename;
-
-                var credential = GoogleCredential.FromFile(googleCredential);
-
                 FirebaseApp.Create(new AppOptions()
                 {
-                    Credential = credential
+                    Credential = GoogleCredential.FromJson(JsonConvert.SerializeObject(_settings.Firebase.Credential))
                 });
             }
         }
@@ -42,7 +38,7 @@ namespace Mix.Communicator.Services
         {
             try
             {
-                
+
                 // This registration token comes from the client FCM SDKs.
                 var message = new Message()
                 {
@@ -64,13 +60,13 @@ namespace Mix.Communicator.Services
                 throw;
             }
         }
-        
+
         public async Task<string> SendWebPushToDevice(
             List<string> registrationTokens, WebpushConfig config)
         {
             try
             {
-                
+
                 // This registration token comes from the client FCM SDKs.
                 var message = new MulticastMessage()
                 {
@@ -80,11 +76,16 @@ namespace Mix.Communicator.Services
 
                 // Send a message to the device corresponding to the provided
                 // registration token.
-                var responses = await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
+                var responses = await FirebaseMessaging.DefaultInstance.SendEachForMulticastAsync(message);
 
                 // Response is a message ID string.
-                Console.WriteLine("Successfully sent message: " + responses);
-
+                Console.WriteLine("Successfully sent message: " + responses.SuccessCount);
+                Console.WriteLine("Failed sent message: " + responses.FailureCount);
+                var failed = responses.Responses.Where(m => !m.IsSuccess).ToList();
+                foreach (var item in failed)
+                {
+                    Console.WriteLine($"{item.MessageId}: {item.Exception}");
+                }
                 return string.Join(",", responses.Responses.Select(r => r.MessageId));
             }
             catch (Exception)
@@ -108,7 +109,7 @@ namespace Mix.Communicator.Services
                     Data = data,
                     Notification = notification
                 };
-                var responses = await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
+                var responses = await FirebaseMessaging.DefaultInstance.SendEachForMulticastAsync(message);
                 // See the BatchResponse reference documentation
                 // for the contents of responses.
                 return string.Join(",", responses.Responses.Select(r => r.MessageId));
@@ -138,7 +139,7 @@ namespace Mix.Communicator.Services
                 },
             };
 
-            var response = await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
+            var response = await FirebaseMessaging.DefaultInstance.SendEachForMulticastAsync(message);
             if (response.FailureCount > 0)
             {
                 var failedTokens = new List<string>();

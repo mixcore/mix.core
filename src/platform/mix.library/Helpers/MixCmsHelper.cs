@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Mix.Shared.Models.Configurations;
+using Mix.Database.Services;
 using System.Text.RegularExpressions;
 namespace Mix.Lib.Helpers
 {
@@ -62,53 +62,15 @@ namespace Mix.Lib.Helpers
 
         public static WebApplicationBuilder CreateWebApplicationBuilder(string[] args)
         {
-            var mixContentFolder = new DirectoryInfo($"{Environment.CurrentDirectory}/{MixFolders.MixContentSharedFolder}");
-
-            // Clone Settings from shared folder
-            if (!mixContentFolder.Exists)
-            {
-                MixHelper.CopyFolder($"{Environment.CurrentDirectory}/{MixFolders.DefaultMixContentFolder}", $"{Environment.CurrentDirectory}/{MixFolders.MixContentFolder}");
-                Console.WriteLine("Clone Settings from shared folder completed.");
-            }
             var builder = WebApplication.CreateBuilder(args);
             builder.WebHost.UseContentRoot(Directory.GetCurrentDirectory());
-
             builder.Configuration
                        .AddJsonFile("appsettings.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/global.json", true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/ocelot.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/storage.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/azure.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/queue.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/mix_heart.json",true, true)
-                       //.AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/authentication.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/google_credential.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/google_firebase.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/smtp.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/payments.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/redis.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/log.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/rate_limit.json",true, true)
                        .AddEnvironmentVariables();
-
-            if (GlobalConfigService.Instance.InitStatus == InitStep.Blank
-                    && string.IsNullOrEmpty(GlobalConfigService.Instance.AppSettings.ApiEncryptKey))
-            {
-                    GlobalConfigService.Instance.SetConfig(nameof(GlobalSettingsModel.ApiEncryptKey), AesEncryptionHelper.GenerateCombinedKeys());
-                    GlobalConfigService.Instance.SaveSettings();
-            }
             return builder;
         }
         public static IHostBuilder CreateHostBuilder<TStartup>(string[] args) where TStartup : class
         {
-            var mixContentFolder = new DirectoryInfo(MixFolders.MixContentFolder);
-
-            // Clone Settings from shared folder
-            if (!mixContentFolder.Exists)
-            {
-                MixHelper.CopyFolder(MixFolders.DefaultMixContentFolder, MixFolders.MixContentFolder);
-                Console.WriteLine("Clone Settings from shared folder completed.");
-            }
             return Host.CreateDefaultBuilder(args)
             .UseContentRoot(Directory.GetCurrentDirectory())
                .ConfigureAppConfiguration((hostingContext, config) =>
@@ -116,20 +78,6 @@ namespace Mix.Lib.Helpers
                    config
                        .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
                        .AddJsonFile("appsettings.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/global.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/azure.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/ocelot.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/storage.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/queue.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/mix_heart.json",true, true)
-                       //.AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/authentication.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/google_credential.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/google_firebase.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/smtp.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/payments.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/redis.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/log.json",true, true)
-                       .AddJsonFile($"{Environment.CurrentDirectory}/{MixAppConfigFilePaths.Shared}/appconfigs/rate_limit.json",true, true)
                        .AddEnvironmentVariables();
                })
                 .ConfigureWebHostDefaults(webBuilder =>

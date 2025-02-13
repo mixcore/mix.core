@@ -14,9 +14,12 @@
 
         string IDatabaseConstants.DateTime => "timestamp with time zone";
 
+        string IDatabaseConstants.Date => "date";
+
         string IDatabaseConstants.Guid => "uuid";
 
         string IDatabaseConstants.Integer => "int";
+
         string IDatabaseConstants.Long => "BigInt";
 
         string IDatabaseConstants.String => "varchar";
@@ -27,10 +30,14 @@
 
         string IDatabaseConstants.GenerateUUID => "gen_random_uuid()";
 
+        string IDatabaseConstants.Now => "now()";
+
         string IDatabaseConstants.Boolean => "boolean";
 
         string IDatabaseConstants.BacktickOpen => "\"";
 
         string IDatabaseConstants.BacktickClose => "\"";
+
+        string IDatabaseConstants.Time => "time";
     }
 }

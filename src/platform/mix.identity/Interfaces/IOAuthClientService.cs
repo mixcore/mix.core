@@ -1,4 +1,5 @@
 ﻿using Mix.Database.Entities.Account;
+using Mix.Identity.ViewModels;
 using System.Collections.Generic;
 
 namespace Mix.Identity.Interfaces
@@ -7,6 +8,8 @@ namespace Mix.Identity.Interfaces
     {
         List<OAuthClient> Clients { get; set; }
 
-        List<OAuthClient> LoadClients(MixCmsAccountContext accContext, bool isReload = false);
+        List<OAuthClient> LoadClients(bool isReload = false);
+
+        List<OAuthClient> AddClients(OAuthClientViewModel data);
     }
 }

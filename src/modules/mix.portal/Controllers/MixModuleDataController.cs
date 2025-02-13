@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Lib.Interfaces;
+using Mix.Mixdb.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.RepoDb.Interfaces;
 using Mix.SignalR.Interfaces;
@@ -19,7 +20,7 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IMemoryQueueService<MessageQueueModel> queueService,
-            IMixDbService mixDbService,
+            IMixdbStructure mixDbService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration, 

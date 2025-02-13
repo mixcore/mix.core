@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Mix.Constant.Constants;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.UnitOfWork;
+using Mix.Lib.Extensions;
 using Mix.Lib.Middlewares;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Entities.Onepay;
@@ -10,22 +13,22 @@ using Mix.Services.Ecommerce.Lib.Entities.Paypal;
 using Mix.Services.Ecommerce.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.Models;
 using Mix.Services.Ecommerce.Lib.Services;
-using Mix.Shared.Services;
+using Mix.Shared.Models.Configurations;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceProviderExtensions
     {
-        public static void AddMixEcommerce(this IServiceCollection services, Configuration.IConfiguration configuration)
+        public static void AddMixEcommerce(this IHostApplicationBuilder builder)
         {
-            var paymentSettings = configuration.GetSection(MixAppSettingsSection.Payments).Get<PaymentConfigurationModel>();
+            var paymentSettings = builder.Configuration.GetSection(MixAppSettingsSection.Payments).Get<PaymentConfigurationModel>();
             if (paymentSettings != null && paymentSettings.IsActive)
             {
-                services.AddMixOnepay();
-                services.AddMixPaypal();
-                services.AddEcommerceDb();
-                services.TryAddScoped<IOrderService, OrderService>();
-                services.TryAddScoped<IEcommerceService, EcommerceService>();
+                builder.AddMixOnepay();
+                builder.AddMixPaypal();
+                builder.Services.AddEcommerceDb();
+                builder.Services.TryAddScoped<IOrderService, OrderService>();
+                builder.Services.TryAddScoped<IEcommerceService, EcommerceService>();
             }
         }
         public static void AddEcommerceDb(this IServiceCollection services)
@@ -33,9 +36,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<EcommerceDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<EcommerceDbContext>>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<EcommerceDbContext>>();
-            //if (!GlobalConfigService.Instance.IsInit)
+            //if (!EnvironmentService.IsInit)
             //{
-            //    using (var context = services.GetService<EcommerceDbContext>())
+            //    using (var context = builder.GetService<EcommerceDbContext>())
             //    {
             //        var pendingMigrations = context.Database.GetPendingMigrations();
             //        if (pendingMigrations.Any())
@@ -45,15 +48,15 @@ namespace Microsoft.Extensions.DependencyInjection
             //    }
             //}
         }
-        public static void AddMixOnepay(this IServiceCollection services)
+        public static void AddMixOnepay(this IHostApplicationBuilder builder)
         {
-            services.TryAddScoped<OnepayDbContext>();
-            services.TryAddScoped<UnitOfWorkInfo<OnepayDbContext>>();
+            builder.Services.TryAddScoped<OnepayDbContext>();
+            builder.Services.TryAddScoped<UnitOfWorkInfo<OnepayDbContext>>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<OnepayDbContext>>();
 
-            if (!GlobalConfigService.Instance.IsInit)
+            if (!builder.Configuration.IsInit())
             {
-                using (var context = services.GetService<OnepayDbContext>())
+                using (var context = builder.Services.GetService<OnepayDbContext>())
                 {
                     var pendingMigrations = context.Database.GetPendingMigrations();
                     if (pendingMigrations.Any())
@@ -63,17 +66,17 @@ namespace Microsoft.Extensions.DependencyInjection
                     context.Dispose();
                 }
             }
-            services.TryAddScoped<OnepayService>();
+            builder.Services.TryAddScoped<OnepayService>();
         }
-        public static void AddMixPaypal(this IServiceCollection services)
+        public static void AddMixPaypal(this IHostApplicationBuilder builder)
         {
-            services.TryAddScoped<PaypalDbContext>();
-            services.TryAddScoped<UnitOfWorkInfo<PaypalDbContext>>();
+            builder.Services.TryAddScoped<PaypalDbContext>();
+            builder.Services.TryAddScoped<UnitOfWorkInfo<PaypalDbContext>>();
 
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<PaypalDbContext>>();
-            if (!GlobalConfigService.Instance.IsInit)
+            if (!builder.Configuration.IsInit())
             {
-                using (var context = services.GetService<PaypalDbContext>())
+                using (var context = builder.Services.GetService<PaypalDbContext>())
                 {
                     var pendingMigrations = context.Database.GetPendingMigrations();
                     if (pendingMigrations.Any())
@@ -83,7 +86,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     context.Dispose();  
                 }
             }
-            services.TryAddScoped<PaypalService>();
+            builder.Services.TryAddScoped<PaypalService>();
         }
     }
 }

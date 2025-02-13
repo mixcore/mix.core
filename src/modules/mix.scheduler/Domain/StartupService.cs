@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Mix.Lib.Interfaces;
 using Mix.Shared.Interfaces;
 
@@ -9,9 +10,9 @@ namespace Mix.Scheduler.Domain
 {
     public class StartupService : IStartupService
     {
-        public void AddServices(IServiceCollection services, IConfiguration configuration)
+        public void AddServices(IHostApplicationBuilder builder)
         {
-            services.AddMixQuartzServices(configuration);
+            builder.AddMixQuartzServices();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

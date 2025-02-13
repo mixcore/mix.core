@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Middlewares;
 using Mix.Lib.Services;
@@ -15,7 +16,6 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddMixTenant(this IServiceCollection services, IConfiguration configuration)
         {
-            services.TryAddScoped<AuthConfigService>();
             var authConfigService = services.GetService<AuthConfigService>();
             services.AddMixCache(configuration);
             services.AddSession(

@@ -11,6 +11,7 @@ namespace Mix.Database.Entities.Cms
         public string SimpleDataColumns { get; set; }
 
         public virtual MixModule MixModule { get; set; }
+        public virtual ICollection<MixModuleData> MixModuleDatas { get; set; }
         public virtual ICollection<MixModulePostAssociation> MixPostContents { get; set; }
     }
 }

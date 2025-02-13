@@ -31,7 +31,7 @@ namespace Mix.Lib.Base
         #endregion
 
         #region Properties
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public string Icon { get; set; }
         public bool IsPublic { get; set; } = true;
         public string Specificulture { get; set; }
@@ -60,7 +60,7 @@ namespace Mix.Lib.Base
 
         #region Methods
 
-        public async Task LoadContributorsAsync(MixContentType contentType, MixIdentityService identityService)
+        public async Task LoadContributorsAsync(MixContentType contentType, MixIdentityService identityService, CancellationToken cancellationToken)
         {
             Expression<Func<MixContributor, bool>> expression = m => m.ContentType == contentType;
             expression = expression.AndAlsoIf(Guid.TryParse(Id.ToString(), out var guidId), m => m.GuidContentId == guidId);
@@ -68,7 +68,7 @@ namespace Mix.Lib.Base
             Contributors = await MixContributorViewModel.GetRepository(UowInfo, CacheService).GetAllAsync(expression);
             foreach (var item in Contributors)
             {
-                await item.LoadUserDataAsync(identityService);
+                await item.LoadUserDataAsync(identityService, cancellationToken);
             }
         }
 

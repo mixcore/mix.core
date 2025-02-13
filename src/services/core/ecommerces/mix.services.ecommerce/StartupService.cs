@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Constant.Constants;
+using Mix.Lib.Extensions;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Services.Databases.Lib.Services;
 using Mix.Shared.Interfaces;
@@ -9,14 +10,14 @@ namespace Mix.Services.Ecommerce
 {
     public class StartupService : IStartupService
     {
-        public void AddServices(IServiceCollection services, IConfiguration configuration)
+        public void AddServices(IHostApplicationBuilder builder)
         {
-            var globalSettings = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>();
+            var globalSettings = builder.Configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>();
 
-            if (!globalSettings!.IsInit)
+            if (!builder.Configuration.IsInit())
             {
-                services.AddMixEcommerce(configuration);
-                services.TryAddScoped<IMixMetadataService, MixMetadataService>();
+                builder.AddMixEcommerce();
+                builder.Services.TryAddScoped<IMixMetadataService, MixMetadataService>();
                 
             }
         }

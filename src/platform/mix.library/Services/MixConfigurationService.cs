@@ -1,56 +1,69 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FirebaseAdmin.Auth.Multitenancy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Mix.Database.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Lib.Interfaces;
 
 namespace Mix.Lib.Services
 {
-    public sealed class MixConfigurationService : TenantServiceBase, IMixConfigurationService
+    public sealed class MixConfigurationService : IMixConfigurationService
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly DatabaseService _databaseService;
 
         public List<MixConfigurationContentViewModel> Configs { get; set; }
+        public IConfiguration Configuration { get; }
 
         public MixConfigurationService(
             IHttpContextAccessor httpContextAccessor,
-            DatabaseService databaseService, MixCacheService cacheService,
+            IConfiguration configuration,
+            DatabaseService databaseService,
+            IServiceProvider serviceProvider,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, cacheService, mixTenantService)
         {
+            _serviceProvider = serviceProvider;
+            Configuration = configuration;
             _databaseService = databaseService;
         }
 
-        public async Task Reload(UnitOfWorkInfo<MixCmsContext> uow = null)
+        public async Task Reload(int tenantId, UnitOfWorkInfo<MixCmsContext> uow = null)
         {
-            if (GlobalConfigService.Instance.InitStatus != InitStep.Blank)
+            if (Configuration.GetValue<InitStep>("InitStatus") != InitStep.Blank)
             {
-                if (uow != null)
+                using (var scope = _serviceProvider.CreateScope())
                 {
-                    Configs = await MixConfigurationContentViewModel.GetRepository(uow, CacheService).GetAllAsync(
-                        m => m.MixTenantId == CurrentTenant.Id);
-                }
-                else
-                {
-                    uow = new(new MixCmsContext(_databaseService));
-                    try
+                    var cacheService = scope.ServiceProvider.GetService<MixCacheService>();
+                    if (uow != null)
                     {
-                        Configs = await MixConfigurationContentViewModel
-                            .GetRepository(uow, CacheService)
-                            .GetAllAsync(p => true);
+                        uow = scope.ServiceProvider.GetService<UnitOfWorkInfo<MixCmsContext>>();
+                        Configs = await MixConfigurationContentViewModel.GetRepository(uow, cacheService).GetAllAsync(
+                            m => m.TenantId == tenantId);
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Console.WriteLine($"MixConfigurationService getting config error {ex.Message}");
-                    }
-                    finally
-                    {
-                        uow.Dispose();
+                        uow = new(new MixCmsContext(_databaseService));
+                        try
+                        {
+                            Configs = await MixConfigurationContentViewModel
+                                .GetRepository(uow, cacheService)
+                                .GetAllAsync(p => true);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"MixConfigurationService getting config error {ex.Message}");
+                        }
+                        finally
+                        {
+                            uow.Dispose();
+                        }
                     }
                 }
             }
         }
 
-        public async Task Set(string name, string content, string culture, int cultureId, UnitOfWorkInfo<MixCmsContext> uow)
+        public async Task Set(string name, string content, string culture, int cultureId, UnitOfWorkInfo<MixCmsContext> uow, int tenantId)
         {
             var currentConfig = await uow.DbContext.MixConfigurationContent.FirstOrDefaultAsync(c => c.SystemName == name && c.MixCultureId == cultureId);
             if (currentConfig != null)
@@ -67,28 +80,28 @@ namespace Mix.Lib.Services
                     Content = content,
                     Specificulture = culture,
                     MixCultureId = cultureId,
-                    MixTenantId = CurrentTenant.Id
+                    TenantId = tenantId
                 };
                 await config.SaveAsync();
             }
         }
 
 
-        public async Task<string> GetConfig(string name, string culture, string defaultValue = default)
+        public async Task<string> GetConfig(string name, string culture, int tenantId, string defaultValue = default)
         {
             if (Configs == null)
             {
-                await Reload();
+                await Reload(tenantId);
             }
             var config = Configs.FirstOrDefault(m => m.Specificulture == culture && m.SystemName == name);
             return config != null ? config.Content : defaultValue;
         }
 
-        public async Task<T> GetConfig<T>(string name, string culture, T defaultValue = default)
+        public async Task<T> GetConfig<T>(string name, string culture, int tenantId, T defaultValue = default)
         {
             if (Configs == null)
             {
-                await Reload();
+                await Reload(tenantId);
             }
             var config = Configs.FirstOrDefault(m => m.Specificulture == culture && m.SystemName == name);
             return config != null ? config.GetValue<T>() : defaultValue;

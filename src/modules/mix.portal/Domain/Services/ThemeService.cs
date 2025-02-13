@@ -15,7 +15,7 @@ namespace Mix.Portal.Domain.Services
 
         public Task<MixTheme> GetActiveTheme()
         {
-            return _cmsUow.DbContext.MixTheme.FirstOrDefaultAsync(m => m.MixTenantId == CurrentTenant.Id);
+            return _cmsUow.DbContext.MixTheme.FirstOrDefaultAsync(m => m.TenantId == CurrentTenant.Id);
         }
     }
 }

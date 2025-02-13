@@ -41,10 +41,13 @@ namespace Mix.Lib.ViewModels
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Domains = await MixDomainViewModel.GetRepository(UowInfo, CacheService).GetAllAsync(m => m.MixTenantId == Id, cancellationToken);
-            Cultures = await Context.MixCulture.Where(m => m.MixTenantId == Id).ToListAsync(cancellationToken: cancellationToken);
-            var srv = new TenantConfigService(SystemName);
-            Configurations = srv.AppSettings;
+            Domains = await MixDomainViewModel.GetRepository(UowInfo, CacheService).GetAllAsync(m => m.TenantId == Id, cancellationToken);
+            Cultures = await Context.MixCulture.Where(m => m.TenantId == Id).ToListAsync(cancellationToken: cancellationToken);
+            Configurations = new TenantConfigurationModel()
+            {
+                Domain = Domains?.FirstOrDefault()?.Host,
+                DefaultCulture = Cultures.First().Specificulture
+            };
         }
 
 

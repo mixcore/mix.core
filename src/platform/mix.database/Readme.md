@@ -1,12 +1,15 @@
 ## 6.Add migration
-** Move to mix.database folder
-** dotnet ef --startup-project ../../applications/Mixcore migrations add Init --context PostgresqlmixcmsContext --output-dir Migrations/Cms/PostgresqlMixCms
+* Set DatabaseService encrypt => false
+* Decrypt database.json, authentication.json
+* Move to mix.database folder
+*  ``` dotnet ef --startup-project ../src/applications/mixcore --project ../src/platform/mix.database migrations add Init --context SqliteMixCmsContext --output-dir Migrations/Cms/Sqlite --verbose```
+* ```dotnet ef database update --startup-project ../src/applications/mixcore --project ../src/platform/mix.database migrations --context PostgresSqlAccountContext --verbose```
 
 ### Remove mixcontent folder
 ### Update DatabaseService -> GetConnectionstring
 ### Update DatabaseService.DatabaseProvider
 # Sample Connection String:
-- Sqlite: "Data Source=MixContent\\mix-cms.sqlite"
+- Sqlite: "Data Source=wwwroot\\mixcontent\\settings.sqlite"
 ```
 DatabaseProvider = MixDatabaseProvider.SQLITE;
 return "Data Source=MixContent\\mix-cms.sqlite";

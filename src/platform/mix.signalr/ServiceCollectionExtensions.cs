@@ -1,20 +1,20 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Castle.Core.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Mix.SignalR;
 using System.Text.Json.Serialization;
-
+using Microsoft.AspNetCore.SignalR.StackExchangeRedis;
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMixSignalR(this IServiceCollection services, IConfiguration configuration)
+        public static IHostApplicationBuilder AddMixSignalR(this IHostApplicationBuilder builder, string? azureConnectionString, string? redisConnection)
         {
-            string azureConnectionString = configuration.GetSection("Azure")["SignalRConnectionString"];
-
-            services
+            builder.Services
                 .AddSignalR(options =>
                 {
                     options.EnableDetailedErrors = true;
@@ -24,20 +24,24 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     options.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 })
-                .AddAzureSignalRIf(azureConnectionString);
+                .AddBackplaneIf(azureConnectionString, redisConnection);
 
-            services.TryAddEnumerable(
+            builder.Services.TryAddEnumerable(
                 ServiceDescriptor.Singleton<IPostConfigureOptions<JwtBearerOptions>,
                 ConfigureJwtBearerOptions>());
 
-            return services;
+            return builder;
         }
 
-        private static void AddAzureSignalRIf(this ISignalRServerBuilder builder, string connectionString)
+        private static void AddBackplaneIf(this ISignalRServerBuilder builder, string connectionString, string redisConnection)
         {
             if (!string.IsNullOrEmpty(connectionString))
             {
                 builder.AddAzureSignalR(connectionString);
+            }
+            if (!string.IsNullOrEmpty(redisConnection))
+            {
+                builder.AddStackExchangeRedis(redisConnection);
             }
         }
     }

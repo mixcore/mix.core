@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Mix.Constant.Constants;
 using Mix.Heart.Services;
 using Mix.Lib.Interfaces;
@@ -13,10 +14,10 @@ namespace Mix.Service.Services
         protected readonly MixCacheService CacheService;
         private readonly MixDitributedCache _cache;
 
-        protected TenantServiceBase(MixDitributedCache cache)
+        protected TenantServiceBase(IConfiguration configuration, MixDitributedCache cache)
         {
             _cache = cache;
-            CacheService = new MixCacheService(cache);
+            CacheService = new MixCacheService(configuration, cache);
         }
 
         protected TenantServiceBase(IHttpContextAccessor httpContextAccessor, MixCacheService cacheService, IMixTenantService mixTenantService)

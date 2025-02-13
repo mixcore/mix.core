@@ -11,7 +11,7 @@ namespace Mix.Mixdb.ViewModels
         public string? Svg { get; set; }
         public string? Path { get; set; }
         public string? Role { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public int? PortalMenuId { get; set; }
 
         public List<MixPortalMenuViewModel> SubMenus { get; set; }

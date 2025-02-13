@@ -2,15 +2,9 @@
 {
     public interface IGlobalConfigurations
     {
-        bool AllowAnyOrigin { get; set; }
-        string ApiEncryptKey { get; set; }
         string DefaultDomain { get; set; }
-        bool EnableAuditLog { get; set; }
+        int? DefaultPageSize { get; set; }
         bool EnableOcelot { get; set; }
-        InitStep InitStatus { get; set; }
-        bool IsHttps { get; set; }
-        bool IsInit { get; set; }
-        bool IsLogStream { get; set; }
         bool IsUpdateSystemDatabases { get; set; }
         int ResponseCache { get; set; }
     }

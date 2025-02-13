@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.EntityConfigurations.Base;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.MixDb.EntityConfigurations
 {
@@ -13,8 +13,12 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         {
             builder.ToTable(MixDbDatabaseNames.MetadataContentAssociation);
             base.Configure(builder);
+
+            builder.Property(e => e.TenantId)
+                .HasColumnName("tenant_id");
             builder.Property(e => e.ContentType)
                .IsRequired(false)
+               .HasColumnName("content_type")
                .HasConversion(new EnumToStringConverter<MixContentType>())
                .HasColumnType($"{Config.String}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);

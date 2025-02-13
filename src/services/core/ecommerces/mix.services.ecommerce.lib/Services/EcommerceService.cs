@@ -61,7 +61,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             return await OrderViewModel
                 .GetRepository(EcommerceUow, CacheService)
                 .GetSingleAsync(
-                    m => m.MixTenantId == CurrentTenant.Id
+                    m => m.TenantId == CurrentTenant.Id
                          && m.OrderStatus == OrderStatus.NEW
                          && m.UserId == userId,
                     cancellationToken);
@@ -84,7 +84,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                     Title = $"{user.UserName} Cart",
                     Email = user.Email,
                     OrderStatus = OrderStatus.NEW,
-                    MixTenantId = CurrentTenant.Id,
+                    TenantId = CurrentTenant.Id,
                     CreatedBy = user.UserName,
                     LastModified = DateTime.UtcNow
                 };
@@ -154,7 +154,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             else
             {
                 var product = await WarehouseViewModel.GetRepository(EcommerceUow, CacheService).GetSingleAsync(
-                    m => m.MixTenantId == CurrentTenant.Id && m.Sku == item.Sku,
+                    m => m.TenantId == CurrentTenant.Id && m.Sku == item.Sku,
                     cancellationToken);
 
                 if (product == null || !product.Price.HasValue)
@@ -166,7 +166,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 {
                     OrderDetailId = cart.Id,
                     IsActive = true,
-                    MixTenantId = CurrentTenant.Id,
+                    TenantId = CurrentTenant.Id,
                     Price = product.Price.Value,
                     Sku = item.Sku,
                     ProductId = item.ProductId
@@ -254,7 +254,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             }
             checkoutCart.ExternalId ??= Guid.NewGuid();
             checkoutCart.PaymentGateway = gateway;
-            checkoutCart.MixTenantId = CurrentTenant.Id;
+            checkoutCart.TenantId = CurrentTenant.Id;
             checkoutCart.Email ??= user!.Email;
             await FilterCheckoutCartAsync(checkoutCart, myCart);
 
@@ -287,7 +287,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 checkoutCart.ExternalId ??= Guid.NewGuid();
-                checkoutCart.MixTenantId = CurrentTenant.Id;
+                checkoutCart.TenantId = CurrentTenant.Id;
                 checkoutCart.PaymentGateway = gateway;
                 await FilterGuestCheckoutCartAsync(checkoutCart);
 
@@ -368,7 +368,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 OrderDetailId = orderId,
                 Action = action,
                 Note = note,
-                MixTenantId = CurrentTenant.Id
+                TenantId = CurrentTenant.Id
             };
             await log.SaveAsync();
         }

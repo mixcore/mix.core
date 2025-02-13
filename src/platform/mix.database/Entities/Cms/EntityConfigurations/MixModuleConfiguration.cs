@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Base.Cms;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
@@ -17,6 +17,7 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
 
             builder.Property(e => e.Type)
                .IsRequired()
+               .HasColumnName("type")
                .HasConversion(new EnumToStringConverter<MixModuleType>())
                .HasColumnType($"{Config.NString}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);

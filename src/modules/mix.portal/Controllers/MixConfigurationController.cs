@@ -25,7 +25,7 @@ namespace Mix.Portal.Controllers
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _cmsUow = uow;
@@ -37,19 +37,19 @@ namespace Mix.Portal.Controllers
         protected override async Task<int> CreateHandlerAsync(MixConfigurationContentViewModel data, CancellationToken cancellationToken = default)
         {
             var result = await base.CreateHandlerAsync(data, cancellationToken);
-            await _configService.Reload(_cmsUow);
+            await _configService.Reload(CurrentTenant.Id, _cmsUow);
             return result;
         }
         protected override async Task UpdateHandler(int id, MixConfigurationContentViewModel data, CancellationToken cancellationToken = default)
         {
             await base.UpdateHandler(id, data, cancellationToken);
-            await _configService.Reload(_cmsUow);
+            await _configService.Reload(CurrentTenant.Id, _cmsUow);
         }
 
         protected override async Task DeleteHandler(MixConfigurationContentViewModel data, CancellationToken cancellationToken = default)
         {
             await base.DeleteHandler(data, cancellationToken);
-            await _configService.Reload(_cmsUow);
+            await _configService.Reload(CurrentTenant.Id, _cmsUow);
         }
         #endregion
     }

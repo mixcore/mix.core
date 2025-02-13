@@ -12,7 +12,7 @@ namespace Mix.Mixdb.ViewModels
         public string Name { get; set; }
         public string Link { get; set; }
         public string Image { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
 
         public List<MixMenuItemViewModel> MenuItems { get; set; }
         #endregion
@@ -41,11 +41,11 @@ namespace Mix.Mixdb.ViewModels
         {
             var menuIds = Context.MixDatabaseAssociation.Where(
                             m =>
-                            m.MixTenantId == MixTenantId && !m.IsDeleted
+                            m.TenantId == TenantId && !m.IsDeleted
                             && m.ParentDatabaseName == MixDbDatabaseNames.Navigation
                                 && m.ChildDatabaseName == MixDbDatabaseNames.MenuItem
                                 && m.ParentId == Id).Select(m => m.ChildId);
-            MenuItems = await MixMenuItemViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixTenantId == MixTenantId
+            MenuItems = await MixMenuItemViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.TenantId == TenantId
                                                 && !m.IsDeleted && menuIds.Contains(m.Id));
         }
 

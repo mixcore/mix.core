@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Heart.Enums;
+using Mix.Heart.Model;
 
 namespace Mix.Shared.Dtos
 {
-    public class SearchMixDbRequestDto : SearchRequestDto
+    public class SearchMixDbRequestDto
     {
         public SearchMixDbRequestDto()
         {
@@ -11,22 +12,35 @@ namespace Mix.Shared.Dtos
         }
         public SearchMixDbRequestDto(SearchRequestDto req, HttpRequest request)
         {
-            Culture = req.Culture;
-            Keyword = req.Keyword;
-            FromDate = req.FromDate;
-            ToDate = req.ToDate;
             PageIndex = req.PageIndex;
             PageSize = req.PageSize;
-            OrderBy = req.OrderBy;
+            SortBy = req.SortBy ?? req.OrderBy;
             Direction = req.Direction;
             Status = req.Status;
         }
-
-        public List<SearchQueryField> Queries { get; set; } = new();
+        public MixContentStatus? Status { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+        public object? After { get; set; }
+        public object? Before { get; set; }
+        public int PageIndex { get; set; }
+        public int? PageSize { get; set; }
+        public string? PagingState { get; set; }
+        public string? SortBy { get; set; }
+        public SortDirection Direction { get; set; }
+        public string? MixDatabaseName { get; set; }
+        public MixConjunction Conjunction { get; set; } = MixConjunction.And;
+        public string? SelectColumns { get; set; }
         public string? ParentId { get; set; }
         public object? ObjParentId => GetParentId();
         public MixDatabaseRelationshipType? Relationship { get; set; } = MixDatabaseRelationshipType.OneToMany;
-        public string ParentName { get; set; } = default;
+        public string? ParentName { get; set; }
+        public List<MixQueryField>? Queries { get; set; }
+        public List<MixSortByColumn>? SortByColumns { get; set; }
+
+        public List<SearchMixDbRequestDto> RelatedDataRequests { get; set; }
+
+        #region Helpers
 
         private object? GetParentId()
         {
@@ -50,5 +64,6 @@ namespace Mix.Shared.Dtos
                 throw new MixException(MixErrorStatus.Badrequest, ex);
             }
         }
+        #endregion
     }
 }

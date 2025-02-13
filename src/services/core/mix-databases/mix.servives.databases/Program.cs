@@ -11,10 +11,6 @@ public class Program
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
         var builder = MixCmsHelper.CreateHostBuilder<Startup>(args);
-        builder.ConfigureAppConfiguration((hostingContext, config) =>
-        {
-            config.AddJsonFile("mixcontent/shared/appconfigs/kiotviet.json", true, true);
-        });
         return builder;
     }
 }

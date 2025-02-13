@@ -17,7 +17,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
         public virtual string SystemName { get; set; }
         public virtual string Description { get; set; }
 
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)
         {

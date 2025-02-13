@@ -4,6 +4,7 @@
     {
         public const string CONST_AUDIT_LOG_CONNECTION = "MixAuditLogConnection";
         public const string CONST_QUEUE_LOG_CONNECTION = "MixQueueLogConnection";
+        public const string CONST_SETTINGS_CONNECTION = "SettingsConnection";
         public const string CONST_CMS_CONNECTION = "MixCmsConnection";
         public const string CONST_QUARTZ_CONNECTION = "MixQuartzConnection";
         public const string CONST_ACCOUNT_CONNECTION = "MixAccountConnection";
@@ -36,7 +37,37 @@
         //public const string CONST_MIXDB_PREFIX = "mixdb_";
         public const string CONST_RSA_PUBLIC_KEY = "PublicKey";
         public const string CONST_RSA_PRIVATE_KEY = "PrivateKey";
+        public const string CONST_PREFIX_ASSEMBLY = "mix";
 
+        public static class EnvironmentKeys
+        {
+            public const string SERVICE_NAME = "SERVICE_NAME";
+            public const string API_ENCRYPT_KEY = "API_ENCRYPT_KEY";
+            public const string DEFAULT_CULTURE = "DEFAULT_CULTURE";
+            public const string ASPNETCORE_ENVIRONMENT = "ASPNETCORE_ENVIRONMENT";
+            public const string SETTINGS_CONNECTION_STRING = "SETTINGS_CONNECTION_STRING";
+            public const string DATABASE_PROVIDER = "DATABASE_PROVIDER";
+            public const string IS_HTTPS = "IS_HTTPS";
+            public const string IS_INIT = "IS_INIT";
+            public const string INIT_STATUS = "INIT_STATUS";
+            public const string ALLOW_ANY_ORGIN = "ALLOW_ANY_ORGIN";
+            public const string REPONSE_CACHE_IN_SECOND = "REPONSE_CACHE_IN_SECOND";
+        }
+
+        public static class GlobalSettingNames
+        {
+            public const string Endpoint = "endpoint";
+            public const string Portal = "portal";
+            public const string Authentication = "authentication";
+            public const string Smtp = "smtp";
+            public const string Database = "database";
+            public const string Heart = "mix_heart";
+            public const string Ip = "ip";
+            public const string Translator = "translator";
+            public const string Google = "goole";
+            public const string FirebaseCredential = "firebase_credential";
+            public const string GcsCredential = "gcs_credential";
+        }
 
         public static class TemplateFolder
         {

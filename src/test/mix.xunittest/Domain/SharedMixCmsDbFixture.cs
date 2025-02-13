@@ -15,16 +15,16 @@
             dbContext.MixCulture.Add(new MixCulture()
             {
                 Specificulture = "en-us",
-                MixTenantId = 1,
+                TenantId = 1,
             });
             dbContext.MixConfiguration.Add(new MixConfiguration()
             {
-                MixTenantId = 1,
+                TenantId = 1,
                 Id = 1,
             });
             dbContext.MixPost.Add(new MixPost()
             {
-                MixTenantId = 1,
+                TenantId = 1,
                 Id = 1,
             });
             dbContext.SaveChanges();

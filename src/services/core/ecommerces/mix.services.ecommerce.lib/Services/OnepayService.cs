@@ -60,7 +60,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
                 await SaveRequest(request, OrderStatus.WAITING_FOR_PAYMENT, cancellationToken);
 
-                Dictionary<string, string> parameters = ReflectionHelper.ConverObjectToDictinary(request);
+                Dictionary<string, string> parameters = ReflectionHelper.ConvertObjectToDictionary(request);
                 parameters["vpc_SecureHash"] = CreateSHA256Signature(parameters);
                 string query = string.Join("&",
                                 parameters
@@ -137,7 +137,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             try
             {
                 string url = $"{Settings.Endpoint.TrimEnd('/')}/onecomm-pay/Vpcdps.op";
-                Dictionary<string, string> parameters = ReflectionHelper.ConverObjectToDictinary(request);
+                Dictionary<string, string> parameters = ReflectionHelper.ConvertObjectToDictionary(request);
                 var response = await _httpService.GetAsync<OnepayQueryResponse>(url, parameters);
                 return response;
             }
@@ -172,7 +172,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 {
                     paymentStatus = PaymentStatus.InvalidResponse;
                 }
-                Dictionary<string, string> parameters = ReflectionHelper.ConverObjectToDictinary(response);
+                Dictionary<string, string> parameters = ReflectionHelper.ConvertObjectToDictionary(response);
                 var secureHashKey = CreateSHA256Signature(parameters);
                 //if (!secureHashKey.Equals(response.vpc_SecureHash, StringComparison.OrdinalIgnoreCase))
                 //{

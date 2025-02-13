@@ -13,7 +13,7 @@ namespace Mix.Service.Models
 {
     public class MixDbCommandModel
     {
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public string MixDbName { get; set; }
         public string ConnectionId { get; set; }
         public JObject Body { get; set; }

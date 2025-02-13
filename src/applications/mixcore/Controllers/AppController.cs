@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Shared.Models.Configurations;
-using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
 {
@@ -37,7 +37,7 @@ namespace Mixcore.Controllers
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (GlobalConfig.IsInit)
+            if (Configuration.IsInit())
             {
                 IsValid = false;
                 if (string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -46,7 +46,7 @@ namespace Mixcore.Controllers
                 }
                 else
                 {
-                    var status = GlobalConfig.InitStatus;
+                    var status = Configuration.GetGlobalConfiguration<string>(nameof(AppSettingsModel.InitStatus));
                     RedirectUrl = $"/init/step{status}";
                 }
             }
@@ -73,7 +73,7 @@ namespace Mixcore.Controllers
         {
             // Home App
             var pageRepo = ApplicationViewModel.GetRepository(Uow, _cacheService);
-            var page = await pageRepo.GetSingleAsync(m => m.BaseHref == baseHref && m.MixTenantId == CurrentTenant.Id);
+            var page = await pageRepo.GetSingleAsync(m => m.BaseHref == baseHref && m.TenantId == CurrentTenant.Id);
             if (page == null)
                 return NotFound();
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Constant.Constants;
 using Mix.Database.Base;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Enums;
 
 namespace Mix.Services.Ecommerce.Lib.Entities.Paypal

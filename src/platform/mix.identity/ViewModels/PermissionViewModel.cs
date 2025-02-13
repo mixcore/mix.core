@@ -21,7 +21,7 @@ namespace Mix.Identity.ViewModels
 
         #region Properties
 
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public string Title { get; set; }
         public string Name { get; set; }
         public string Icon { get; set; }

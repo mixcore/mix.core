@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Lib.Services;
 
 namespace Mix.Lib.Base
@@ -20,13 +22,16 @@ namespace Mix.Lib.Base
         protected readonly EntityRepository<MixCmsContext, MixCulture, int> CultureRepository;
         protected MixTenantSystemModel CurrentTenant => Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
 
+        public IConfiguration Configuration { get; }
+
         protected MixAuthorizedApiControllerBase(
             ILogger<MixTenantApiControllerBase> logger,
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             MixCmsContext context,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            IConfiguration configuration)
         {
             Uow = new UnitOfWorkInfo(context);
             Logger = logger;
@@ -34,13 +39,14 @@ namespace Mix.Lib.Base
             CultureRepository = cultureRepository;
             MixIdentityService = mixIdentityService;
             HttpContextAccessor = httpContextAccessor;
+            Configuration = configuration;
             Session = httpContextAccessor.HttpContext?.Session;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
-            if (!GlobalConfigService.Instance.AppSettings.IsInit)
+            if (!Configuration.GetValue<bool>("IsInit"))
             {
                 Lang = RouteData.Values["lang"] != null
                     ? RouteData.Values["lang"].ToString()

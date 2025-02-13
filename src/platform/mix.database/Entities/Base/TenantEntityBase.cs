@@ -6,7 +6,7 @@
         public string DisplayName { get; set; }
         public virtual string Description { get; set; }
 
-        public int MixTenantId { get; set; }
-        public MixTenant MixTenant { get; set; }
+        public int TenantId { get; set; }
+        public MixTenant Tenant { get; set; }
     }
 }

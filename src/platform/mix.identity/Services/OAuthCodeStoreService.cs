@@ -60,7 +60,7 @@ namespace Mix.Identity.Services
 
             if (oldValue != null)
             {
-                // check the requested scopes with the one that are stored in the Client Store 
+                // check the requested scope with the one that are stored in the Client Store 
                 var client = _clientService.Clients.Where(x => x.Id == oldValue.ClientId).FirstOrDefault();
 
                 if (client != null)

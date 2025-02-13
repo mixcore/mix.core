@@ -11,13 +11,13 @@ namespace Mix.Mq.Server.Domain
 {
     public class StartupService : IStartupService
     {
-        public void AddServices(IServiceCollection services, IConfiguration configuration)
+        public void AddServices(IHostApplicationBuilder builder)
         {
-            services.TryAddSingleton<GrpcStreamingService>();
-            services.AddHostedService<MixMqSubscriptionService>();
-            services.TryAddSingleton<MixQueueMessages<MessageQueueModel>>();
-            services.AddGrpc();
-            services.AddCors(o => o.AddPolicy("AllowAllGrpc", builder =>
+            builder.Services.TryAddSingleton<GrpcStreamingService>();
+            builder.Services.AddHostedService<MixMqSubscriptionService>();
+            builder.Services.TryAddSingleton<MixQueueMessages<MessageQueueModel>>();
+            builder.Services.AddGrpc();
+            builder.Services.AddCors(o => o.AddPolicy("AllowAllGrpc", builder =>
             {
                 builder.WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
             }));

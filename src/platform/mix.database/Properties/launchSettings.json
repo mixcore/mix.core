@@ -1,0 +1,13 @@
+{
+    "profiles": {
+        "Development": {
+            "commandName": "Project",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DATABASE_PROVIDER": "SQLITE",
+                "SERVICE_NAME": "portal",
+                "ASPNETCORE_URLS": "https://localhost:5010;http://localhost:5011"
+            }
+        }
+    }
+}

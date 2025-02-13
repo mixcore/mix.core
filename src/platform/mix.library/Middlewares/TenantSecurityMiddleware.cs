@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 
@@ -15,12 +17,13 @@ namespace Mix.Lib.Middlewares
 
         public async Task InvokeAsync(
             HttpContext context,
+            IConfiguration configuration,
             IMixTenantService mixTenantService,
             MixConfigurationService configService,
             MixPermissionService permissionService,
             MixEndpointService mixEndpointService)
         {
-            if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)
+            if (configuration.GetValue<InitStep>("InitStatus") == InitStep.Blank)
             {
                 await _next.Invoke(context);
             }
@@ -48,7 +51,7 @@ namespace Mix.Lib.Middlewares
 
                     if (configService.Configs == null)
                     {
-                        await configService.Reload();
+                        await configService.Reload(currentTenant.Id);
                     }
 
                     //if (permissionService.RoleEndpoints == null)

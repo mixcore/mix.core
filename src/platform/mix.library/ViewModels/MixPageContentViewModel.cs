@@ -49,7 +49,7 @@ namespace Mix.Lib.ViewModels
             {
                 DisplayName = Title,
                 Description = Excerpt,
-                MixTenantId = MixTenantId
+                TenantId = TenantId
             };
             return await parent.SaveAsync(cancellationToken);
         }
@@ -85,7 +85,7 @@ namespace Mix.Lib.ViewModels
                 foreach (var item in UrlAliases)
                 {
                     item.SetUowInfo(UowInfo, CacheService);
-                    item.MixTenantId = MixTenantId;
+                    item.TenantId = TenantId;
                     item.SourceContentId = Id;
                     item.Type = MixUrlAliasType.Page;
                     await item.SaveAsync(cancellationToken);

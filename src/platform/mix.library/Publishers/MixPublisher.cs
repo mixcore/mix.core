@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Mixdb.Publishers;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
-using Mix.Queue.Engines.MixQueue;
-using Mix.RepoDb.Publishers;
 using RabbitMQ.Client;
 
 namespace Mix.Lib.Publishers
@@ -19,8 +19,8 @@ namespace Mix.Lib.Publishers
             IConfiguration configuration, IWebHostEnvironment environment,
             MixEndpointService mixEndpointService,
             ILogger<MixRepoDbPublisher> logger,
-            IPooledObjectPolicy<IModel> rabbitMqObjectPolicy = null)
-            : base(topicId, queueService, configuration, mixEndpointService, logger, rabbitMqObjectPolicy)
+            IPooledObjectPolicy<RabbitMQ.Client.IModel>? rabbitMQObjectPolicy = null)
+            : base(topicId, queueService, configuration, mixEndpointService, logger, rabbitMQObjectPolicy)
         {
         }
     }

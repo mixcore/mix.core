@@ -41,7 +41,7 @@ namespace Mix.Services.Databases.Lib.Abstracts
         {
             using var postRepo = new Repository<MixCmsContext, MixPostContent, int, TView>(Uow);
             var relatedIds = from links in Uow.DbContext.MixPostPostAssociation
-                             where links.ParentId == postId && links.MixTenantId == CurrentTenant.Id
+                             where links.ParentId == postId && links.TenantId == CurrentTenant.Id
                              select links.ChildId;
             var result = await postRepo.GetListAsync(m => relatedIds.Contains(m.Id), cancellationToken);
             return result;
@@ -69,7 +69,7 @@ namespace Mix.Services.Databases.Lib.Abstracts
             }
         }
 
-        public IQueryable<int>? ParseMetadataQueriesPredicate(List<SearchQueryField> MetadataQueries)
+        public IQueryable<int>? ParseMetadataQueriesPredicate(List<MixQueryField> MetadataQueries)
         {
             IQueryable<int>? allowedIdQuery = MetadataService.GetQueryableContentIdByMetadataSeoContent(
                                                 MetadataQueries, MixContentType.Post);

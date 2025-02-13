@@ -1,9 +1,7 @@
-﻿using DocumentFormat.OpenXml.Vml.Spreadsheet;
+﻿using Microsoft.DotNet.Scaffolding.Shared;
 using Microsoft.EntityFrameworkCore;
 using Mix.Lib.ViewModels.ReadOnly;
-using Mix.Service.Services;
 using System.ComponentModel.DataAnnotations;
-using System.Threading;
 
 namespace Mix.Lib.ViewModels
 {
@@ -66,6 +64,43 @@ namespace Mix.Lib.ViewModels
                 MixDatabaseContext = await MixDatabaseContextReadViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(m => m.Id == MixDatabaseContextId.Value);
                 NamingConvention = MixDatabaseContext.NamingConvention;
             }
+        }
+
+        public override Task<MixDatabase> ParseEntity(CancellationToken cancellationToken = default)
+        {
+            if (Id == default)
+            {
+                var fieldNameSrv = new FieldNameService(NamingConvention);
+                if (!Columns.Any(m => string.Equals(m.SystemName, fieldNameSrv.Id, StringComparison.OrdinalIgnoreCase)))
+                {
+                    Columns.Insert(0, new MixDatabaseColumnViewModel()
+                    {
+                        DisplayName = "Id",
+                        SystemName = fieldNameSrv.Id,
+                        DataType = Type == MixDatabaseType.GuidService ? MixDataType.Guid : MixDataType.Integer,
+                        ColumnConfigurations = new Shared.Models.ColumnConfigurations()
+                        {
+                            IsUnique = true,
+                            IsRequire = true
+                        }
+                    });
+                }
+                if (!Columns.Any(m => string.Equals(m.SystemName, fieldNameSrv.CreatedBy, StringComparison.OrdinalIgnoreCase)))
+                {
+                    Columns.Insert(0, new MixDatabaseColumnViewModel()
+                    {
+                        DisplayName = "Created By",
+                        SystemName = fieldNameSrv.CreatedBy,
+                        DataType = MixDataType.String,
+                        ColumnConfigurations = new Shared.Models.ColumnConfigurations()
+                        {
+                            IsUnique = true,
+                            IsRequire = true
+                        }
+                    });
+                }
+            }
+            return base.ParseEntity(cancellationToken);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity, CancellationToken cancellationToken = default)

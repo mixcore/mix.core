@@ -26,7 +26,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public int Quantity { get; set; }
         public double Total { get; set; }
         public int OrderDetailId { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
 
         public bool IsActive { get; set; }
 
@@ -81,7 +81,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
                     ChildDatabaseName = EcommerceConstants.DataTableNameOrderItem,
                     CreatedDateTime = DateTime.UtcNow,
                     CreatedBy = CreatedBy,
-                    MixTenantId = MixTenantId
+                    TenantId = TenantId
                 };
                 await association.SaveAsync(cancellationToken);
                 ModifiedEntities.AddRange(association.ModifiedEntities);

@@ -3,7 +3,7 @@
     public sealed class SiteDataViewModel
     {
         public bool IsValid { get; set; }
-        public List<string> InvalidDatabaseNames { get; set; } = new();
+        public List<ExistingDatabase> ExistingDatabases { get; set; } = new();
         public List<string> Errors { get; set; } = new();
 
         public string CreatedBy { get; set; }
@@ -26,6 +26,7 @@
 
         public List<MixDatabaseContext> MixDatabaseContexts { get; set; } = new();
         public List<MixDatabase> MixDatabases { get; set; } = new();
+        public List<int> ExportMixDatabaseDataIds { get; set; } = new();
         public List<MixDatabaseRelationship> MixDatabaseRelationships { get; set; } = new();
 
         public List<MixTemplate> Templates { get; set; } = new();
@@ -68,9 +69,32 @@
         }
     }
 
+    public sealed class ExistingDatabase
+    {
+        public bool IsActive { get; set; }
+        public string Name { get; set; }
+        public int Id { get; set; }
+        public List<DifferentColumns> DifferentColumns { get; set; }
+    }
+
+    public sealed class DifferentColumns
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string SystemName { get; set; }
+        public DifferentType Kind { get; set; }
+    }
+
     public sealed class MixDbModel
     {
         public string DatabaseName { get; set; }
         public JArray Data { get; set; }
+    }
+
+    public enum DifferentType
+    {
+        New,
+        Changed,
+        Deleted
     }
 }

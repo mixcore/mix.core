@@ -1,4 +1,5 @@
-﻿namespace Mix.Lib.ViewModels
+﻿
+namespace Mix.Lib.ViewModels
 {
     public sealed class MixPagePostAssociationViewModel
         : AssociationViewModelBase<MixCmsContext, MixPagePostAssociation, int, MixPagePostAssociationViewModel>
@@ -27,6 +28,10 @@
         #endregion
 
         #region Overrides
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
+        {
+            await LoadPost();
+        }
         #endregion
 
         #region Expands

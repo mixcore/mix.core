@@ -7,10 +7,10 @@ namespace Mix.Portal.Domain
 {
     public class StartupService : IStartupService
     {
-        public void AddServices(IServiceCollection services, IConfiguration configuration)
+        public void AddServices(IHostApplicationBuilder builder)
         {
-            services.AddScoped<ICloneCultureService, CloneCultureService>();
-            services.AddScoped<PortalPostService>();
+            builder.Services.AddScoped<ICloneCultureService, CloneCultureService>();
+            builder.Services.AddScoped<PortalPostService>();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

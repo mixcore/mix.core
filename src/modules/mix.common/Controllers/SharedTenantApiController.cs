@@ -2,12 +2,13 @@
 using Mix.Common.Domain.Helpers;
 using Mix.Common.Domain.ViewModels;
 using Mix.Common.Models;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Shared.Models.Configurations;
-using Mix.Shared.Services;
 
 namespace Mix.Common.Controllers
 {
@@ -21,6 +22,7 @@ namespace Mix.Common.Controllers
         private readonly ViewQueryRepository<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel> _langRepo;
         private readonly MixAuthenticationConfigurations _authConfigurations;
         private readonly MixEndpointService _endpointService;
+        private readonly PortalConfigService _portalConfigSrv;
         public SharedTenantApiController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -31,7 +33,8 @@ namespace Mix.Common.Controllers
             MixCmsContext context,
             IMemoryQueueService<MessageQueueModel> queueService,
             IMixTenantService mixTenantService,
-            MixEndpointService endpointService)
+            MixEndpointService endpointService,
+            PortalConfigService portalConfigSrv)
             : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
@@ -41,6 +44,7 @@ namespace Mix.Common.Controllers
             _configRepo = MixConfigurationContentViewModel.GetRepository(Uow, CacheService);
             _langRepo = MixLanguageContentViewModel.GetRepository(Uow, CacheService);
             _endpointService = endpointService;
+            _portalConfigSrv = portalConfigSrv;
         }
 
         #region Routes
@@ -49,7 +53,9 @@ namespace Mix.Common.Controllers
         [Route("get-global-settings")]
         public ActionResult<Models.GlobalSettings> GetSharedSettings()
         {
-            var settings = CommonHelper.GetAppSettings(_authConfigurations, CurrentTenant);
+            var settings = CommonHelper.GetAppSettings(
+                Configuration.AesKey(),
+                _portalConfigSrv, _authConfigurations, CurrentTenant);
             return Ok(settings);
         }
 
@@ -91,10 +97,12 @@ namespace Mix.Common.Controllers
         {
             return new AllSettingModel()
             {
-                GlobalSettings = CommonHelper.GetAppSettings(_authConfigurations, CurrentTenant),
+                GlobalSettings = CommonHelper.GetAppSettings(
+                    Configuration.AesKey(),
+                    _portalConfigSrv, _authConfigurations, CurrentTenant),
                 MixConfigurations = await _configRepo.GetListAsync(m => m.Specificulture == lang, cancellationToken),
                 Translator = _langRepo.GetListQuery(m => m.Specificulture == lang).ToList(),
-                Endpoints = _endpointService.AppSettings
+                Endpoints = _endpointService.RawSettings
             };
         }
     }

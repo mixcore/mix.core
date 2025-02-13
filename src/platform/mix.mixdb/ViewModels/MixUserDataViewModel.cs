@@ -14,16 +14,14 @@ namespace Mix.Mixdb.ViewModels
         public MixDatabaseParentType ParentType { get; set; }
         public string? Email { get; set; }
         public DateTime? DateOfBirth { get; set; }
-        public string? Username { get; set; }
+        public string? UserName { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Fullname { get; set; }
         public string? Avatar { get; set; }
         public string? Gender { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
 
         public JArray Endpoints { get; set; } = new();
-        public List<MixContactAddressViewModel>? Addresses { get; set; } = new();
-
         #endregion
         #region Contructors
         public MixUserDataViewModel()
@@ -44,35 +42,9 @@ namespace Mix.Mixdb.ViewModels
         #endregion
         #region Overrides
 
-        public override async Task ExpandView(CancellationToken cancellationToken = default)
-        {
-            Addresses = await MixContactAddressViewModel.GetRepository(UowInfo, CacheService)
-                        .GetListAsync(m => m.SysUserDataId == Id && m.MixTenantId == MixTenantId);
-        }
-
-        protected override async Task SaveEntityRelationshipAsync(MixUserData parentEntity, CancellationToken cancellationToken = default)
-        {
-            await SaveAddresses(parentEntity, cancellationToken);
-        }
-
-
         #endregion
 
         #region Methods
-
-        private async Task SaveAddresses(MixUserData parentEntity, CancellationToken cancellationToken)
-        {
-            if (Addresses != null)
-            {
-                foreach (var item in Addresses)
-                {
-                    item.SetUowInfo(UowInfo, CacheService);
-                    item.SysUserDataId = parentEntity.Id;
-                    await item.SaveAsync(cancellationToken);
-                    ModifiedEntities.AddRange(item.ModifiedEntities);
-                }
-            }
-        }
 
 
         #endregion

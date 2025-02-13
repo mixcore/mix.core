@@ -1,22 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Entities.MixDb;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
-using Mix.RepoDb.Interfaces;
+using Mix.Mixdb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
-using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
 {
     [Route("{controller}")]
     public class PostController : MixControllerBase
     {
-        protected UnitOfWorkInfo Uow;
+        protected UnitOfWorkInfo<MixCmsContext> Uow;
         protected readonly MixCmsContext CmsContext;
         private readonly DatabaseService _databaseService;
         private readonly MixCacheService _cacheService;
-        private readonly MixRepoDbRepository _repoDbRepository;
+        private readonly RepoDbRepository _repoDbRepository;
         private readonly IMixMetadataService _metadataService;
         private readonly IMixDbDataService _mixDbDataService;
         public PostController(
@@ -25,7 +25,6 @@ namespace Mixcore.Controllers
             IMixCmsService mixCmsService,
             DatabaseService databaseService,
             MixCmsContext cmsContext,
-            MixRepoDbRepository repoDbRepository,
             IMixMetadataService metadataService,
             UnitOfWorkInfo<MixDbDbContext> dbUow,
             MixCacheService cacheService,
@@ -38,11 +37,10 @@ namespace Mixcore.Controllers
             Uow = new(CmsContext);
             _databaseService = databaseService;
             CmsContext = cmsContext;
-            _repoDbRepository = repoDbRepository;
             _metadataService = metadataService;
-            _repoDbRepository.SetDbConnection(dbUow);
             _cacheService = cacheService;
             _mixDbDataService = mixDbDataService;
+            _mixDbDataService.SetDbConnection(Uow);
         }
 
         protected override void ValidateRequest()
@@ -50,7 +48,7 @@ namespace Mixcore.Controllers
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (GlobalConfigService.Instance.AppSettings.IsInit)
+            if (Configuration.IsInit())
             {
                 IsValid = false;
                 if (string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -59,8 +57,7 @@ namespace Mixcore.Controllers
                 }
                 else
                 {
-                    var status = GlobalConfigService.Instance.AppSettings.InitStatus;
-                    RedirectUrl = $"/init/step{status}";
+                    RedirectUrl = $"/init/step{Configuration.InitStep()}";
                 }
             }
         }
@@ -83,16 +80,16 @@ namespace Mixcore.Controllers
         #endregion Routes
 
         #region Helper
-        protected async Task<IActionResult> Post(int postId, string seoName = null)
+        protected async Task<IActionResult> Post(int postId, string seoName = null, CancellationToken cancellationToken = default)
         {
             // Home Post
             var postRepo = PostContentViewModel.GetRepository(Uow, _cacheService);
-            var post = await postRepo.GetSingleAsync(m => m.Id == postId && m.MixTenantId == CurrentTenant.Id);
+            var post = await postRepo.GetSingleAsync(m => m.Id == postId && m.TenantId == CurrentTenant.Id);
             if (post == null)
             {
                 return NotFound();
             }
-            await post.LoadAdditionalDataAsync(_mixDbDataService, _metadataService, _cacheService);
+            await post.LoadAdditionalDataAsync(_mixDbDataService, _metadataService, _cacheService, cancellationToken);
             
             ViewData["Title"] = post.SeoTitle;
             ViewData["Description"] = post.SeoDescription;

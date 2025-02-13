@@ -50,9 +50,9 @@ namespace Mix.Portal.Controllers
 
         #region Overrides
 
-        protected override async Task<MixTemplateViewModel> GetById(int id)
+        protected override async Task<MixTemplateViewModel> GetById(int id, CancellationToken cancellationToken = default)
         {
-            var result = await base.GetById(id);
+            var result = await base.GetById(id, cancellationToken);
             result.FileFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{result.MixThemeName}/{result.FolderType}";
             return result;
         }

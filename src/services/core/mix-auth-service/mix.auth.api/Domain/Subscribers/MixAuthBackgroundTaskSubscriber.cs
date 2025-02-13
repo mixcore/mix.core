@@ -25,8 +25,8 @@ namespace Mix.Auth.Api.Domain.Subscribers
             IPortalHubClientService portalHub,
             IMemoryQueueService<MessageQueueModel> queueService,
             ILogger<MixAuthBackgroundTaskSubscriber> logger,
-            IPooledObjectPolicy<RabbitMQ.Client.IModel> rabbitMqObjectPolicy = null)
-            : base(topicId, nameof(MixAuthBackgroundTaskSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMqObjectPolicy)
+            IPooledObjectPolicy<RabbitMQ.Client.IModel>? rabbitMQObjectPolicy = null)
+            : base(topicId, nameof(MixAuthBackgroundTaskSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMQObjectPolicy)
         {
             PortalHub = portalHub;
         }

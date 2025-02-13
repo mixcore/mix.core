@@ -6,7 +6,8 @@ using Microsoft.Extensions.Hosting;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.AuditLog;
 using Mix.Database.Entities.QueueLog;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Log.Lib.Interfaces;
 using Mix.Log.Lib.Models;
@@ -18,7 +19,6 @@ using Mix.Queue.Interfaces;
 using Mix.Queue.Services;
 using Mix.Service.Services;
 using Mix.Shared.Models.Configurations;
-using Mix.Shared.Services;
 using Mix.SignalR.Interfaces;
 
 namespace Mix.Log.Lib
@@ -36,7 +36,6 @@ namespace Mix.Log.Lib
             var globalConfigs = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.TryAddSingleton<MixEndpointService>();
             services.TryAddSingleton<DatabaseService>();
             services.TryAddSingleton<IMemoryQueueService<MessageQueueModel>, MemoryQueueService>();
             services.TryAddSingleton<ILogStreamHubClientService, LogStreamHubClientService>();
@@ -48,7 +47,7 @@ namespace Mix.Log.Lib
             services.AddDbContext<QueueLogDbContext>();
             
             services.TryAddSingleton<IAuditLogService, AuditLogService>();
-            if (!globalConfigs!.IsInit)
+            if (!configuration.IsInit())
             {
                 services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
                 services.TryAddSingleton<IMixQueueLog, MixQueueLogService>();

@@ -1,4 +1,4 @@
-﻿using Mix.Database.Services;
+﻿using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Account.EntityConfigurations
 {
@@ -11,6 +11,8 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
 
         public override void Configure(EntityTypeBuilder<MixUserTenant> builder)
         {
+            builder.ToTable("mix_user_tenant");
+
             builder.HasKey(e => new { e.MixUserId, e.TenantId });
 
             builder.HasIndex(e => e.MixUserId);
@@ -18,8 +20,13 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
             builder.HasIndex(e => e.TenantId);
 
 
+            builder.Property(e => e.TenantId)
+                 .HasColumnName("tenant_id")
+                 .HasColumnType(Config.Integer);
+            
             builder.Property(e => e.MixUserId)
-                 .HasDefaultValueSql(Config.GenerateUUID);
+                 .HasColumnName("mix_user_id")
+                 .HasColumnType(Config.Guid);
         }
     }
 }

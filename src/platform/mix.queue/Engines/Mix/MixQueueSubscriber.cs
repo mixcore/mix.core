@@ -1,12 +1,12 @@
 ﻿using Grpc.Core;
 using Microsoft.Extensions.Hosting;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Helpers;
 using Mix.Mq;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
-using Mix.Shared.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Threading;
@@ -20,7 +20,6 @@ namespace Mix.Queue.Engines.MixQueue
         public string SubscriptionId { get; set; }
         public bool IsProcessing { get; private set; }
         private readonly string _subscriptionId;
-        private MixTopicModel<T> _topic;
         private readonly MixQueueSetting _queueSetting;
         private readonly Func<T, Task> _messageHandler;
         private readonly IMemoryQueueService<MessageQueueModel> _memQueues;
@@ -28,7 +27,6 @@ namespace Mix.Queue.Engines.MixQueue
         private GrpcChannelModel<MixMq.MixMqClient> _mixMqSubscriber;
         private SubscribeRequest _subscribeRequest;
         private AsyncServerStreamingCall<SubscribeReply> _call;
-        private CancellationToken _startCancellationToken;
         public MixQueueSubscriber(
             IQueueSetting queueSetting,
             string topicId,

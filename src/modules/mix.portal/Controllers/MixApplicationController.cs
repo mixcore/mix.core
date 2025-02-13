@@ -40,7 +40,7 @@ namespace Mix.Portal.Controllers
         [Route("install")]
         public ActionResult Install([FromBody] MixApplicationViewModel app, CancellationToken cancellationToken = default)
         {
-            if (_cmsContext.MixApplication.Any(m => m.MixTenantId == CurrentTenant.Id && m.BaseHref == app.BaseHref && m.Id != app.Id))
+            if (_cmsContext.MixApplication.Any(m => m.TenantId == CurrentTenant.Id && m.BaseHref == app.BaseHref && m.Id != app.Id))
             {
                 return BadRequest($"BaseHref: \"{app.BaseHref}\" existed");
             }

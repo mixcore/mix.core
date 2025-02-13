@@ -1,12 +1,12 @@
 ﻿using Mix.Database.Entities.QueueLog.EntityConfigurations;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Services;
 
 namespace Mix.Database.Entities.QueueLog
 {
-    public class SqlITEQueueLogDbContext : QueueLogDbContext
+    public class SqliteQueueLogDbContext : QueueLogDbContext
     {
-        public SqlITEQueueLogDbContext(DatabaseService databaseService) : base(databaseService)
+        public SqliteQueueLogDbContext(DatabaseService databaseService) : base(databaseService)
         {
         }
     }

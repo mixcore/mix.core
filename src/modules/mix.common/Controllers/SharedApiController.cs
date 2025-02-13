@@ -7,7 +7,9 @@ using Mix.Common.Domain.Dtos;
 using Mix.Common.Domain.Models;
 using Mix.Common.Domain.ViewModels;
 using Mix.Database.Entities.MixDb;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Exceptions;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Mixdb.ViewModels;
@@ -15,7 +17,6 @@ using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Shared.Models.Configurations;
-using Mix.Shared.Services;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Hubs;
 using Mix.SignalR.Interfaces;
@@ -31,6 +32,7 @@ namespace Mix.Common.Controllers
     {
         private readonly IPortalHubClientService _portalHub;
         private readonly MixCacheService _cacheService;
+        private readonly GlobalSettingsService _globalSettingSrv;
         private readonly ApplicationLifetime _applicationLifetime;
         private readonly UnitOfWorkInfo<MixCmsContext> _uow;
         private readonly IMixCmsService _mixCmsService;
@@ -50,7 +52,8 @@ namespace Mix.Common.Controllers
             IHttpContextAccessor httpContextAccessor,
             IMixTenantService mixTenantService,
             IMixCmsService mixCmsService,
-            IPortalHubClientService portalHub)
+            IPortalHubClientService portalHub,
+            GlobalSettingsService globalSettingSrv)
             : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, queueService, mixTenantService)
         {
@@ -62,6 +65,7 @@ namespace Mix.Common.Controllers
             _applicationLifetime = applicationLifetime;
             _mixCmsService = mixCmsService;
             _portalHub = portalHub;
+            _globalSettingSrv = globalSettingSrv;
         }
 
         #region Routes
@@ -70,12 +74,11 @@ namespace Mix.Common.Controllers
         [Route("encrypt-message")]
         public ActionResult<string> EncryptMessage(CryptoMessageDto encryptMessage)
         {
-            string key = encryptMessage.Key
-                        ?? GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
             string msg = encryptMessage.ObjectData != null
                     ? encryptMessage.ObjectData.ToString(Formatting.None)
                     : encryptMessage.StringData;
-            var result = AesEncryptionHelper.EncryptString(msg, key, encryptMessage.GetEncoding());
+            var result = AesEncryptionHelper.EncryptString(msg, Configuration.AesKey()
+                , encryptMessage.GetEncoding());
             return Ok(result);
         }
 
@@ -83,8 +86,9 @@ namespace Mix.Common.Controllers
         [Route("decrypt-message")]
         public ActionResult<string> DecryptMessage(CryptoMessageDto encryptMessage)
         {
-            string key = encryptMessage.Key ?? GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
-            string msg = AesEncryptionHelper.DecryptString(encryptMessage.StringData, key, encryptMessage.GetEncoding());
+            string msg = AesEncryptionHelper.DecryptString(
+                encryptMessage.StringData, 
+                Configuration.AesKey(), encryptMessage.GetEncoding());
             return Ok(msg);
         }
 
@@ -196,16 +200,16 @@ namespace Mix.Common.Controllers
         [Route("global-settings")]
         public ActionResult GetGlobalSettings()
         {
-            return Ok(GlobalConfigService.Instance.AppSettings);
+            return Ok(_globalSettingSrv.RawSettings);
         }
 
         [HttpPost]
         [Route("global-settings")]
-        public ActionResult GetSettings([FromBody] GlobalSettingsModel settings)
+        public ActionResult GetSettings([FromBody] JObject settings)
         {
-            GlobalConfigService.Instance.AppSettings = settings;
-            GlobalConfigService.Instance.SaveSettings();
-            return Ok(GlobalConfigService.Instance.AppSettings);
+            _globalSettingSrv.RawSettings = settings;
+            _globalSettingSrv.SaveSettings();
+            return Ok(_globalSettingSrv.RawSettings);
         }
 
         [HttpGet]

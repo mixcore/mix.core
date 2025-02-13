@@ -2,5 +2,6 @@
 {
     public class MixModulePostAssociation : AssociationBase<int>
     {
+        public int? MixModuleContentId { get; set; }
     }
 }

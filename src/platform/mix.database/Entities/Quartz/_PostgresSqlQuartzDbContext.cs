@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Mix.Database.EntityConfigurations.POSTGRES.Quartz;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 
 
 namespace Mix.Database.Entities.Quartz

@@ -9,7 +9,7 @@ namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/culture")]
     [ApiController]
-    [MixAuthorize(MixRoles.Owner)]
+    [MixAuthorize]
     public class MixCultureController
         : MixRestfulApiControllerBase<MixCultureViewModel, MixCmsContext, MixCulture, int>
     {
@@ -25,7 +25,7 @@ namespace Mix.Portal.Controllers
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _cloneCultureService = cloneCultureService;

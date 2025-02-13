@@ -29,7 +29,7 @@
         public const string Redis = "mixcontent/shared/appconfigs/redis";
         public const string Log = "mixcontent/shared/appconfigs/log";
         public const string RateLimit = "mixcontent/shared/appconfigs/rate_limit";
-        public const string GoogleFirebase = "mixcontent/shared/appconfigs/google_firebase";
+        public const string Google = "mixcontent/shared/appconfigs/google";
         public const string GoogleCredential = "mixcontent/shared/appconfigs/google_credential";
     }
 }

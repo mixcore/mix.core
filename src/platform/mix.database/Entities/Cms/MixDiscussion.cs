@@ -2,7 +2,7 @@
 {
     public class MixDiscussion : EntityBase<int>
     {
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public int? ParentId { get; set; }
         public Guid UserId { get; set; }
         public string Content { get; set; }

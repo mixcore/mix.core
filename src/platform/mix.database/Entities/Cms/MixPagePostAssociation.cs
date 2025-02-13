@@ -2,5 +2,6 @@
 {
     public class MixPagePostAssociation : AssociationBase<int>
     {
+        public int MixPageContentId { get; set; }
     }
 }

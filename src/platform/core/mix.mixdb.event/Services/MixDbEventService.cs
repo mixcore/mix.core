@@ -1,19 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.Amqp.Framing;
-using Microsoft.CodeAnalysis.Elfie.Serialization;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Constant.Constants;
 using Mix.Database.Constants;
 using Mix.Database.Entities.MixDb;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Extensions;
 using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-
+using Mix.Lib.Extensions;
 using Mix.Mixdb.Event.ViewModels;
-using Mix.Queue.Models;
-using Mix.RepoDb.Services;
 using Mix.Service.Commands;
 using Mix.Service.Services;
 using Mix.Shared.Models;
@@ -23,18 +17,13 @@ using Mix.SignalR.Enums;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace Mix.Mixdb.Event.Services
 {
     public class MixDbEventService
     {
         protected readonly IServiceProvider ServicesProvider;
+        private readonly IConfiguration _configuration;
         private readonly IPortalHubClientService PortalHub;
         private DatabaseService _databaseService;
         private MixPermissionService _mixPermissionService;
@@ -48,6 +37,7 @@ namespace Mix.Mixdb.Event.Services
             IConfiguration configuration)
         {
             ServicesProvider = servicesProvider;
+            _configuration = configuration;
             PortalHub = portalHub;
             _databaseService = databaseService;
             _globalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
@@ -58,7 +48,7 @@ namespace Mix.Mixdb.Event.Services
 
         public void LoadEvents(IServiceScope? serviceScope = null)
         {
-            if (!_globalConfig.IsInit)
+            if (!_configuration.IsInit())
             {
                 try
                 {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
-using Mix.RepoDb.Interfaces;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Mixdb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Services;
@@ -14,11 +15,13 @@ namespace Mixcore.Controllers
         protected readonly MixCmsContext CmsContext;
         private readonly DatabaseService _databaseService;
         private readonly MixCacheService _cacheService;
+        private readonly AppSettingsService _appSettingsService;
+        private readonly GlobalSettingsService _globalConfigService;
         private readonly IMixMetadataService _metadataService;
         private readonly IMixDbDataService _mixDbDataService;
 
         public PageController(IHttpContextAccessor httpContextAccessor, IPSecurityConfigService ipSecurityConfigService, IMixCmsService mixCmsService, DatabaseService databaseService, MixCmsContext cmsContext, IMixMetadataService metadataService, MixCacheService cacheService, IMixTenantService tenantService,
-             IConfiguration configuration, IMixDbDataService mixDbDataService) :
+             IConfiguration configuration, IMixDbDataService mixDbDataService, GlobalSettingsService globalConfigService, AppSettingsService appSettingsService) :
             base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
         {
             CmsContext = cmsContext;
@@ -28,6 +31,8 @@ namespace Mixcore.Controllers
             _metadataService = metadataService;
             _cacheService = cacheService;
             _mixDbDataService = mixDbDataService;
+            _globalConfigService = globalConfigService;
+            _appSettingsService = appSettingsService;
         }
 
         protected override void ValidateRequest()
@@ -35,7 +40,7 @@ namespace Mixcore.Controllers
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (GlobalConfigService.Instance.AppSettings.IsInit)
+            if (_appSettingsService.AppSettings.IsInit)
             {
                 IsValid = false;
                 if (string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -44,7 +49,7 @@ namespace Mixcore.Controllers
                 }
                 else
                 {
-                    var status = GlobalConfigService.Instance.AppSettings.InitStatus;
+                    var status = _appSettingsService.AppSettings.InitStatus;
                     RedirectUrl = $"/init/step{status}";
                 }
             }
@@ -71,14 +76,11 @@ namespace Mixcore.Controllers
         {
             // Home Page
             var pageRepo = PageContentViewModel.GetRepository(Uow, _cacheService);
-            var page = await pageRepo.GetSingleAsync(m => m.Id == pageId && m.MixTenantId == CurrentTenant.Id);
+            var page = await pageRepo.GetSingleAsync(m => m.Id == pageId && m.TenantId == CurrentTenant.Id);
             if (page == null)
                 return NotFound();
 
-            await page.LoadDataAsync(_mixDbDataService, _metadataService, new(Request)
-            {
-                SortBy = MixQueryColumnName.Priority
-            }, _cacheService);
+            await page.LoadDataAsync(_mixDbDataService, _metadataService, new(Request), _cacheService);
 
 
             ViewData["Title"] = page.SeoTitle;

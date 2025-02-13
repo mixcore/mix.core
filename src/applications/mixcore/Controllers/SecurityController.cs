@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Mix.Auth.Enums;
 using Mix.Auth.Models;
 using Mix.Database.Entities.Account;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Exceptions;
 using Mix.Lib.Services;
-using Mix.Shared.Services;
 using Quartz.Listener;
 using System.Security.Claims;
 

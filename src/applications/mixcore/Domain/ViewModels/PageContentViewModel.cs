@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Helpers;
-using Mix.RepoDb.Interfaces;
+using Mix.Mixdb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Models;
@@ -77,11 +77,11 @@ namespace Mixcore.Domain.ViewModels
         #endregion
 
         #region Private Methods
-        private async Task LoadAdditionalDataAsync(IMixDbDataService mixDbDataService)
+        private async Task LoadAdditionalDataAsync(IMixDbDataService mixDbDataService, CancellationToken cancellationToken = default)
         {
             if (!string.IsNullOrEmpty(MixDatabaseName))
             {
-                var obj = await mixDbDataService.GetSingleByParent(MixDatabaseName, MixContentType.Page, Id, true);
+                var obj = await mixDbDataService.GetSingleByParentAsync(MixDatabaseName, MixContentType.Page, Id, string.Empty, cancellationToken);
                 AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
             }
         }

@@ -41,7 +41,7 @@
 
         public override async Task Validate(CancellationToken cancellationToken)
         {
-            if (Context.MixApplication.Any(m => m.DeployUrl == DeployUrl && m.MixTenantId == MixTenantId && m.Id != Id))
+            if (Context.MixApplication.Any(m => m.DeployUrl == DeployUrl && m.TenantId == TenantId && m.Id != Id))
             {
                 IsValid = false;
                 Errors.Add(new("BaseRoute existed"));

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "Mix.Mq";
+option csharp_namespace = "Mix.Mq.Server";
 import "google/protobuf/empty.proto";
 
 package mixmq;
@@ -8,23 +8,23 @@ package mixmq;
 // The greeting service definition.
 service MixMq {
   // Sends a greeting
-  rpc Subscribe (SubscribeRequest) returns (stream SubscribeReply);
-  rpc Disconnect (SubscribeRequest) returns (google.protobuf.Empty);
-  rpc Publish (PublishMessageRequest) returns (google.protobuf.Empty);
+  rpc Subscribe (MixSubscribeRequest) returns (stream MixSubscribeReply);
+  rpc Disconnect (MixSubscribeRequest) returns (google.protobuf.Empty);
+  rpc Publish (MixPublishMessageRequest) returns (google.protobuf.Empty);
 }
 
 // The request message containing the user's name.
-message SubscribeRequest {
+message MixSubscribeRequest {
   string topicId = 1;
   string subsctiptionId = 2;
 }
 
-message PublishMessageRequest {
+message MixPublishMessageRequest {
 	string topicId = 1;
   string message = 2;
 }
 
 // The response message containing the greetings.
-message SubscribeReply {
+message MixSubscribeReply {
   repeated string messages = 1;
 }

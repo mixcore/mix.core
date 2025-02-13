@@ -1,4 +1,4 @@
-﻿using Mix.RepoDb.Interfaces;
+﻿using Mix.Mixdb.Interfaces;
 using Mix.RepoDb.Repositories;
 using RepoDb;
 using RepoDb.Enumerations;
@@ -51,11 +51,11 @@ namespace Mix.Common.Domain.ViewModels
                 : default;
         }
 
-        public async Task LoadAdditionalDataAsync(IMixDbDataService mixDbDataService)
+        public async Task LoadAdditionalDataAsync(IMixDbDataService mixDbDataService, CancellationToken cancellationToken = default)
         {
             if (AdditionalData == null)
             {
-                var obj = await mixDbDataService.GetSingleByParent(MixDatabaseName, MixContentType.Post, Id, true);
+                var obj = await mixDbDataService.GetSingleByParentAsync(MixDatabaseName, MixContentType.Post, Id, string.Empty, cancellationToken);
                 AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
             }
         }

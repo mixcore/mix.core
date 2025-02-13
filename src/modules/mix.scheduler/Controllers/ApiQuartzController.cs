@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Auth.Constants;
 using Mix.Heart.Helpers;
+using Mix.Lib.Attributes;
 using Mix.Quartz.Interfaces;
 using Mix.Quartz.Jobs;
 using Mix.Quartz.Models;
@@ -12,6 +14,7 @@ namespace Mix.Scheduler.Controllers
 {
     [Route("/api/v2/scheduler")]
     [ApiController]
+    [MixAuthorize(roles: MixRoles.Owner)]
     public class ApiQuartzController : ControllerBase
     {
         private readonly IQuartzService _service;

@@ -1,4 +1,4 @@
-﻿using Mix.Database.Services;
+﻿using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Base.Cms
 {
@@ -17,14 +17,10 @@ namespace Mix.Database.Base.Cms
             base.Configure(builder);
 
             builder.Property(e => e.MixDatabaseName)
+                .HasColumnName("mix_database_name")
                 .HasColumnType($"{Config.NString}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
-
-            //builder.Property(e => e.ExtraData)
-            //.HasConversion(
-            //    v => v.ToString(Newtonsoft.Json.Formatting.None),
-            //    v => JObject.Parse(v ?? "{}"));
         }
 
     }

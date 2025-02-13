@@ -94,7 +94,7 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.PaypalDb
                     b.Property<string>("Links")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("MixTentantId")
+                    b.Property<int>("TentantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
