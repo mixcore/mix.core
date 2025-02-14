@@ -368,7 +368,7 @@ namespace Mix.Mixdb.Services
         {
             if (string.Equals(col.SystemName, "id", StringComparison.OrdinalIgnoreCase))
             {
-                return $"{_databaseConstant.BacktickOpen}{fieldNameService.Id}{_databaseConstant.BacktickClose} {GetIdSyntax(databaseProvider, dbType)}";
+                return $"{_databaseConstant.BacktickOpen}id{_databaseConstant.BacktickClose} {GetIdSyntax(databaseProvider, dbType)}";
             }
             string colType = GetColumnType(col.DataType, col.ColumnConfigurations.MaxLength);
             string nullable = col.ColumnConfigurations.IsRequire ? "NOT NUll" : "NULL";

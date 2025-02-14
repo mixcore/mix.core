@@ -200,45 +200,22 @@ namespace Mix.Service.Services
         public FieldNameService(MixDatabaseNamingConvention namingConvention) : base(namingConvention)
         {
             NamingConvention = namingConvention;
-            switch (namingConvention)
-            {
-                case MixDatabaseNamingConvention.TitleCase:
-                    Id = "Id";
-                    ParentId = "ParentId";
-                    GuidParentId = "GuidParentId";
-                    ParentType = "ParentType";
-                    ParentDatabaseName = "ParentDatabaseName";
-                    ChildId = "ChildId";
-                    GuidChildId = "GuidChildId";
-                    ChildDatabaseName = "ChildDatabaseName";
-                    CreatedDateTime = "CreatedDateTime";
-                    LastModified = "LastModified";
-                    TenantId = "TenantId";
-                    CreatedBy = "CreatedBy";
-                    ModifiedBy = "ModifiedBy";
-                    Priority = "Priority";
-                    Status = "Status";
-                    IsDeleted = "IsDeleted";
-                    break;
-                case MixDatabaseNamingConvention.SnakeCase:
-                    Id = "id";
-                    ParentId = "parent_id";
-                    GuidParentId = "guid_parent_id";
-                    ParentType = "parent_type";
-                    ParentDatabaseName = "parent_database_name";
-                    ChildId = "child_id";
-                    GuidChildId = "guid_child_id";
-                    ChildDatabaseName = "child_database_name";
-                    CreatedDateTime = "created_date_time";
-                    LastModified = "last_modified";
-                    TenantId = "tenant_id";
-                    CreatedBy = "created_by";
-                    ModifiedBy = "modified_by";
-                    Priority = "priority";
-                    Status = "status";
-                    IsDeleted = "is_deleted";
-                    break;
-            }
+            Id = "id";
+            ParentId = "parent_id";
+            GuidParentId = "guid_parent_id";
+            ParentType = "parent_type";
+            ParentDatabaseName = "parent_database_name";
+            ChildId = "child_id";
+            GuidChildId = "guid_child_id";
+            ChildDatabaseName = "child_database_name";
+            CreatedDateTime = "created_date_time";
+            LastModified = "last_modified";
+            TenantId = "tenant_id";
+            CreatedBy = "created_by";
+            ModifiedBy = "modified_by";
+            Priority = "priority";
+            Status = "status";
+            IsDeleted = "is_deleted";
         }
 
         public string GetParentId(string parentName)
