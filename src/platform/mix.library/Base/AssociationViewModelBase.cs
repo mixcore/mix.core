@@ -31,7 +31,7 @@ namespace Mix.Lib.Base
 
         public TPrimaryKey ParentId { get; set; }
         public TPrimaryKey ChildId { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
 
         #endregion
 
@@ -40,7 +40,7 @@ namespace Mix.Lib.Base
         public override async Task Validate(CancellationToken cancellationToken)
         {
 
-            if (Repository.Table.Any(m => !m.Id.Equals(Id) && m.MixTenantId == MixTenantId && m.ParentId.Equals(ParentId) && m.ChildId.Equals(ChildId)))
+            if (Repository.Table.Any(m => !m.Id.Equals(Id) && m.TenantId == TenantId && m.ParentId.Equals(ParentId) && m.ChildId.Equals(ChildId)))
             {
                 IsValid = false;
                 Errors.Add(new ValidationResult("Entity Existed"));

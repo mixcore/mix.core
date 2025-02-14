@@ -6,7 +6,7 @@ namespace Mix.Lib.ViewModels
         : ViewModelBase<MixCmsContext, MixContributor, int, MixContributorViewModel>
     {
         #region Properties
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public Guid UserId { get; set; }
         public bool IsOwner { get; set; }
         public int? IntContentId { get; set; }
@@ -40,9 +40,9 @@ namespace Mix.Lib.ViewModels
 
         #region Expands
 
-        public async Task LoadUserDataAsync(MixIdentityService identityService)
+        public async Task LoadUserDataAsync(MixIdentityService identityService, CancellationToken cancellationToken)
         {
-            var userData = await identityService.GetUserAsync(UserId);
+            var userData = await identityService.GetUserAsync(UserId, cancellationToken);
             if (userData != null)
             {
                 UserName = userData.UserName;

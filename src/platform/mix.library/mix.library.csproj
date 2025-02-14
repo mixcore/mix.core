@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<RootNamespace>Mix.Lib</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -81,13 +81,15 @@
 	<ItemGroup>
 		<PackageReference Include="ClosedXML" Version="0.104.0-preview2" />
 		<PackageReference Include="CommandLineParser" Version="2.9.1" />
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.8" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="9.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.7.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.7.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.7.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.8.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.8.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.8.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -95,6 +97,7 @@
 		<ProjectReference Include="..\mix.communicator\mix.communicator.csproj" />
 		<ProjectReference Include="..\mix.mixdb\mix.mixdb.csproj" />
 		<ProjectReference Include="..\mix.repodb\mix.repodb.csproj" />
+		<ProjectReference Include="..\mix.scylladb\mix.scylladb.csproj" />
 		<ProjectReference Include="..\mix.service\mix.service.csproj" />
 		<ProjectReference Include="..\mix.shared\mix.shared.csproj" />
 		<ProjectReference Include="..\mix.signalr.hub\mix.signalr.hub.csproj" />

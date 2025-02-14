@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
-using Mix.Database.Services;
 using Mix.Heart.Models;
 using Mix.Identity.Domain.Models;
 using Mix.Identity.Models;
@@ -23,9 +22,12 @@ using Mix.Auth.Dtos;
 using Mix.Auth.Models.OAuthRequests;
 using Mix.Identity.Interfaces;
 using Mix.Mq.Lib.Models;
-using Mix.RepoDb.Interfaces;
 using Mix.Service.Commands;
 using MySqlX.XDevAPI.Common;
+using Mix.Mixdb.Interfaces;
+using Mix.Mixdb.Services;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.Extensions;
 
 namespace mix.auth.service.Controllers
 {
@@ -40,7 +42,7 @@ namespace mix.auth.service.Controllers
         private readonly IMixEdmService _edmService;
         private readonly IMixDbDataService _mixDbDataService;
         private readonly EntityRepository<MixCmsAccountContext, MixUser, Guid> _repository;
-        private readonly MixRepoDbRepository _repoDbRepository;
+        private readonly RepoDbRepository _repoDbRepository;
         private readonly UnitOfWorkInfo _accountUow;
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private readonly MixCmsAccountContext _accContext;
@@ -55,7 +57,6 @@ namespace mix.auth.service.Controllers
             EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
             MixCmsAccountContext accContext,
             MixCmsContext cmsContext,
-            MixRepoDbRepository repoDbRepository,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService mixService,
@@ -66,7 +67,9 @@ namespace mix.auth.service.Controllers
             IMixEdmService edmService,
             IMixTenantService mixTenantService,
             IOAuthTokenService authResultService,
-            IMixDbDataService mixDbDataService)
+            IMixDbDataService mixDbDataService,
+            MixDbDataServiceFactory mixDbDataFactory,
+            DatabaseService databaseService)
             : base(httpContextAccessor, configuration, mixService,
                 translator, mixIdentityService, queueService, mixTenantService)
         {
@@ -81,11 +84,10 @@ namespace mix.auth.service.Controllers
             _accContext = accContext;
 
 
-            _repoDbRepository = repoDbRepository;
             _authConfigService = authConfigService;
             _edmService = edmService;
             _oauthTokenService = authResultService;
-            _mixDbDataService = mixDbDataService;
+            _mixDbDataService = mixDbDataFactory.GetDataService(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION))!;
         }
 
         #region Overrides
@@ -208,7 +210,7 @@ namespace mix.auth.service.Controllers
         public async Task<ActionResult> Logout()
         {
             await _signInManager.SignOutAsync().ConfigureAwait(false);
-            await _refreshTokenRepo.DeleteAsync(r => r.Username == User.Identity.Name);
+            await _refreshTokenRepo.DeleteAsync(r => r.UserName == User.Identity.Name);
             return Ok();
         }
 
@@ -217,7 +219,7 @@ namespace mix.auth.service.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> GetToken([FromBody] LoginDto requestDto)
         {
-            string key = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
+            string key = Configuration.AesKey();
             string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, key);
             var model = JsonConvert.DeserializeObject<GetTokenModel>(decryptMsg);
             var loginResult = await _idService.GetTokenAsync(model);
@@ -234,8 +236,7 @@ namespace mix.auth.service.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Login([FromBody] LoginDto requestDto)
         {
-            string key = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
-            string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, key);
+            string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, Configuration.AesKey());
             var model = JsonConvert.DeserializeObject<LoginRequestModel>(decryptMsg);
             var loginResult = await _idService.LoginAsync(model);
             return Ok(loginResult);
@@ -246,8 +247,7 @@ namespace mix.auth.service.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLogin([FromBody] LoginDto requestDto)
         {
-            string key = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
-            string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, key);
+            string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, Configuration.AesKey());
             var model = JsonConvert.DeserializeObject<RegisterExternalBindingModel>(decryptMsg);
             var loginResult = await _idService.ExternalLogin(model);
             return Ok(loginResult);
@@ -289,7 +289,7 @@ namespace mix.auth.service.Controllers
         [MixAuthorize]
         [HttpGet]
         [Route("my-profile")]
-        public async Task<ActionResult<MixUserViewModel>> MyProfile([FromServices] DatabaseService databaseService)
+        public async Task<ActionResult<MixUserViewModel>> MyProfile([FromServices] DatabaseService databaseService, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -302,7 +302,10 @@ namespace mix.auth.service.Controllers
                 }
 
                 var result = new MixUserViewModel(user, _cmsUow);
-                await result.LoadUserDataAsync(CurrentTenant.Id, _mixDbDataService, _accContext, CacheService);
+                if (!Configuration.IsInit())
+                {
+                    await result.LoadUserDataAsync(CurrentTenant.Id, _mixDbDataService, _accContext, CacheService, cancellationToken);
+                }
                 return Ok(result);
             }
             catch (MixException)
@@ -318,13 +321,16 @@ namespace mix.auth.service.Controllers
         [HttpGet]
         [MixAuthorize(roles: MixRoles.Owner)]
         [Route("details/{id}")]
-        public async Task<ActionResult> Details([FromServices] DatabaseService databaseService, string id)
+        public async Task<ActionResult> Details([FromServices] DatabaseService databaseService, string id, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
                 var result = new MixUserViewModel(user, _cmsUow);
-                await result.LoadUserDataAsync(CurrentTenant.Id, _mixDbDataService, _accContext, CacheService);
+                if (!Configuration.IsInit())
+                {
+                    await result.LoadUserDataAsync(CurrentTenant.Id, _mixDbDataService, _accContext, CacheService, cancellationToken);
+                }
                 return Ok(result);
             }
 
@@ -352,11 +358,10 @@ namespace mix.auth.service.Controllers
                 var idResult = await _userManager.DeleteAsync(user);
                 if (idResult.Succeeded)
                 {
-                    _repoDbRepository.InitTableName(MixDatabaseNames.SYSTEM_USER_DATA);
-                    await _repoDbRepository.DeleteAsync(new List<QueryField>()
+                    await _mixDbDataService.DeleteManyAsync(MixDatabaseNames.SYSTEM_USER_DATA, new List<MixQueryField>()
                     {
-                        new QueryField("parentId", user.Id),
-                        new QueryField("parentType", MixContentType.User)
+                        new MixQueryField("parentId", user.Id),
+                        new MixQueryField("parentType", MixContentType.User)
                     });
                     QueueService.PushMemoryQueue(
                     CurrentTenant.Id,
@@ -420,7 +425,7 @@ namespace mix.auth.service.Controllers
         [MixAuthorize(roles: MixRoles.Owner)]
         [HttpGet("list")]
         public virtual async Task<ActionResult<PagingResponseModel<MixUserViewModel>>> Get(
-            [FromQuery] SearchRequestDto request)
+            [FromQuery] SearchRequestDto request, CancellationToken cancellationToken = default)
         {
             Expression<Func<MixUser, bool>> predicate = model =>
                 (string.IsNullOrWhiteSpace(request.Keyword)
@@ -445,7 +450,10 @@ namespace mix.auth.service.Controllers
             foreach (var user in data.Items)
             {
                 var result = new MixUserViewModel(user, _cmsUow);
-                await result.LoadUserDataAsync(CurrentTenant.Id, _mixDbDataService, _accContext, CacheService);
+                if (!Configuration.IsInit())
+                {
+                    await result.LoadUserDataAsync(CurrentTenant.Id, _mixDbDataService, _accContext, CacheService, cancellationToken);
+                }
                 items.Add(result);
             }
 
@@ -491,7 +499,7 @@ namespace mix.auth.service.Controllers
                 if (Guid.TryParse(_idService.GetClaim(User, MixClaims.RefreshToken), out var refreshTokenId))
                 {
                     await _refreshTokenRepo.DeleteManyAsync(m =>
-                        m.Username == user.UserName && m.Id != refreshTokenId);
+                        m.UserName == user.UserName && m.Id != refreshTokenId);
                 }
             }
 

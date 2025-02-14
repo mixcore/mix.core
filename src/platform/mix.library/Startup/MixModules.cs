@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Mix.Lib.Conventions;
 using Mix.Lib.Filters;
 using Mix.Service.Interfaces;
+using Mix.Shared.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Reflection;
@@ -13,11 +15,11 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static partial class ServiceCollectionExtensions
     {
-        private static IServiceCollection AddMixModuleServices(this IServiceCollection services, IConfiguration configuration)
+        public static IHostApplicationBuilder AddIStartupServices(this IHostApplicationBuilder builder, string prefix)
         {
-            services.AddControllers(options =>
+            builder.Services.AddControllers(options =>
             {
-                options.Filters.Add(new HttpResponseExceptionFilter());
+                options.Filters.Add(new HttpResponseExceptionFilter(builder.Environment.IsProduction()));
                 options.Conventions.Add(new ControllerDocumentationConvention());
             })
             .AddJsonOptions(opts =>
@@ -32,29 +34,29 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             });
 
-            foreach (var assembly in MixAssemblies)
+            foreach (var assembly in RefAssemblies(prefix))
             {
                 var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
                 foreach (var startup in startupServices)
                 {
                     ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
                     var instance = classConstructor.Invoke(Array.Empty<Type>());
-                    startup.GetMethod("AddServices").Invoke(instance, new object[] { services, configuration });
+                    startup.GetMethod(nameof(IStartupService.AddServices)).Invoke(instance, new object[] { builder });
                 }
             }
-            return services;
+            return builder;
         }
 
-        private static IApplicationBuilder UseMixModuleApps(this IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
+        public static IApplicationBuilder UseIStartupApps(this IApplicationBuilder app, string prefix, IConfiguration configuration, bool isDevelop)
         {
-            foreach (var assembly in MixAssemblies)
+            foreach (var assembly in RefAssemblies(prefix))
             {
                 var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
                 foreach (var startup in startupServices)
                 {
                     ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
                     var instance = classConstructor.Invoke(Array.Empty<Type>());
-                    startup.GetMethod("UseApps").Invoke(instance, new object[] { app, configuration, isDevelop });
+                    startup.GetMethod(nameof(IStartupService.UseApps)).Invoke(instance, new object[] { app, configuration, isDevelop });
                 }
             }
 

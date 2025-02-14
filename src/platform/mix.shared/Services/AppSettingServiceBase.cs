@@ -24,15 +24,26 @@ namespace Mix.Shared.Services
             _configuration = configuration;
             _sectionName = section;
             _isEncrypt = isEncrypt;
-            _aesKey = GlobalConfigService.Instance.AesKey;
             FilePath = filePath;
             LoadAppSettings();
         }
 
-        public void SetConfig<TValue>(string name, TValue value)
+        public virtual void SetConfig<TValue>(string name, TValue value, bool isSave = false)
         {
-            RawSettings[name] = value != null ? JToken.FromObject(value) : null;
-            AppSettings = RawSettings.ToObject<T>();
+            if (string.IsNullOrEmpty(_sectionName))
+            {
+                RawSettings[name] = value != null ? JToken.FromObject(value) : null;
+                AppSettings = RawSettings.ToObject<T>();
+            }
+            else
+            {
+                RawSettings[_sectionName][name] = value != null ? JToken.FromObject(value) : null;
+                AppSettings = RawSettings[_sectionName].ToObject<T>();
+            }
+            if (isSave)
+            {
+                SaveSettings();
+            }
         }
 
         public virtual bool SaveSettings()
@@ -40,12 +51,7 @@ namespace Mix.Shared.Services
             var settings = MixFileHelper.GetFileByFullName($"{FilePath}{MixFileExtensions.Json}", true, "{}");
             if (settings != null)
             {
-                settings.Content = string.IsNullOrEmpty(_sectionName)
-                                    ? RawSettings.ToString(Formatting.None)
-                                    : ReflectionHelper.ParseObject(
-                                        new JObject(
-                                            new JProperty(_sectionName, RawSettings)))
-                                    .ToString(Formatting.None);
+                settings.Content = RawSettings.ToString(Formatting.None);
                 if (_isEncrypt)
                 {
                     settings.Content = AesEncryptionHelper.EncryptString(settings.Content, _aesKey);
@@ -73,11 +79,15 @@ namespace Mix.Shared.Services
                     content = AesEncryptionHelper.DecryptString(content, _aesKey);
                 }
 
-                var rawSettings = JObject.Parse(content);
-                RawSettings = !string.IsNullOrEmpty(_sectionName)
-                    ? rawSettings[_sectionName] as JObject
-                    : rawSettings;
-                AppSettings = RawSettings.ToObject<T>();
+                RawSettings = JObject.Parse(content);
+                if (string.IsNullOrEmpty(_sectionName))
+                {
+                    AppSettings = RawSettings.ToObject<T>();
+                }
+                else
+                {
+                    AppSettings = RawSettings[_sectionName].ToObject<T>();
+                }
 
                 if (_isEncrypt && !isContentEncrypted)
                 {

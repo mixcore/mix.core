@@ -1,5 +1,5 @@
 ﻿using Mix.Database.EntityConfigurations.Base;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Account.EntityConfigurations
 {
@@ -14,6 +14,15 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
         {
             builder.ToTable(MixDatabaseNames.SYSTEM_PERMISSION);
             base.Configure(builder);
+            builder.Property(e => e.TenantId)
+                .HasColumnName("tenant_id");
+            builder.Property(e => e.DisplayName)
+                .HasColumnName("display_name");
+            builder.Property(e => e.Group)
+                .HasColumnName("group");
+            builder.Property(e => e.Key)
+                .HasColumnName("key");
+
         }
     }
 }

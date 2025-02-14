@@ -4,7 +4,7 @@ namespace Mix.Services.Ecommerce.Lib.Entities
 {
     public class Warehouse : EntityBase<int>
     {
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public int PostId { get; set; }
         public string? Sku { get; set; }
         public string Currency { get; set; }

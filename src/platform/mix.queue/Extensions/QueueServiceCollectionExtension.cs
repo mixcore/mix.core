@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.ObjectPool;
-using Mix.Queue.Engines.RabitMQ;
+using Mix.Queue.Engines.RabbitMQ;
 using Mix.Queue.Models.QueueSetting;
 using RabbitMQ.Client;
 using System;

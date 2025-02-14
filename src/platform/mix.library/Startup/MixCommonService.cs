@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Mix.Communicator.Services;
 using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Publishers;
 using Mix.Lib.Services;
@@ -14,27 +16,17 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static partial class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMixCommonServices(this IServiceCollection services, IConfiguration configuration)
+        public static IHostApplicationBuilder AddMixCommonServices(this IHostApplicationBuilder builder)
         {
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.TryAddSingleton<HttpService>();
-            services.TryAddSingleton<DatabaseService>();
-            services.TryAddSingleton<ILogStreamHubClientService, LogStreamHubClientService>();
-            services.TryAddSingleton<MixEndpointService>();
-
-
-            services.TryAddScoped<MixHeartConfigService>();
-            services.TryAddScoped<AuthConfigService>();
-            services.TryAddScoped<SmtpConfigService>();
-            services.TryAddScoped<IPSecurityConfigService>();
+            builder.Services.TryAddSingleton<AppSettingsService>();
+            builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.TryAddSingleton<HttpService>();
+            builder.Services.TryAddSingleton<ILogStreamHubClientService, LogStreamHubClientService>();
             
-            services.TryAddSingleton<MixPermissionService>();
-            services.TryAddScoped<TranslatorService>();
+            builder.Services.TryAddScoped<EmailService>();
+            builder.Services.TryAddScoped<IMixEdmService, MixEdmService>();
             
-            services.TryAddScoped<EmailService>();
-            services.TryAddScoped<IMixEdmService, MixEdmService>();
-            
-            return services;
+            return builder;
         }
     }
 }

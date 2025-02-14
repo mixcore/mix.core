@@ -5,6 +5,7 @@
         AZURE_STORAGE_BLOB,
         CLOUDFLARE,
         MIX,
-        AWS
+        AWS,
+        GCS
     }
 }

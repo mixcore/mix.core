@@ -12,7 +12,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public OrderTrackingAction? Action { get; set; }
         public string? Note { get; set; }
         public int OrderDetailId { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
 
         #endregion
 

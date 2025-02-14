@@ -12,7 +12,7 @@ namespace Mix.Mixdb.ViewModels
         public int MetadataId { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
 
         public MixMetadataViewModel Metadata { get; set; }
         #endregion
@@ -46,7 +46,7 @@ namespace Mix.Mixdb.ViewModels
             }
 
             if (Context.MixMetadataContentAssociation.Any(
-                m => m.MixTenantId == MixTenantId
+                m => m.TenantId == TenantId
                     && m.Id != Id
                     && m.MetadataId == MetadataId
                     && m.ContentType == ContentType

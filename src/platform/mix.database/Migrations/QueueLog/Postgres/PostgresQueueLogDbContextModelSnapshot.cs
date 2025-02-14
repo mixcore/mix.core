@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.PostgresQueueLogDb
+namespace Mix.Database.Migrations.QueueLog.Postgres
 {
     [DbContext(typeof(PostgresQueueLogDbContext))]
     partial class PostgresQueueLogDbContextModelSnapshot : ModelSnapshot
@@ -17,7 +17,7 @@ namespace Mix.Database.Migrations.PostgresQueueLogDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -27,73 +27,93 @@ namespace Mix.Database.Migrations.PostgresQueueLogDb
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
+                        .HasColumnName("id")
                         .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("Action")
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("action");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("created_by");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_date_time");
 
                     b.Property<string>("DataTypeFullName")
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("data_type_full_name");
 
                     b.Property<string>("Exception")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("exception");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("modified_by");
 
                     b.Property<string>("Note")
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("note");
 
                     b.Property<string>("ObjectData")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("object_data");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("priority");
 
                     b.Property<Guid?>("QueueMessageId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("queue_message_id");
 
                     b.Property<string>("State")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
+                        .HasColumnName("state")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
+                        .HasColumnName("status")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("StringData")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("string_data");
 
                     b.Property<string>("SubscriptionId")
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("subscription_id");
 
                     b.Property<string>("Subscriptions")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("subscriptions");
 
                     b.Property<int>("TenantId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("tenant_id");
 
                     b.Property<string>("TopicId")
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("topic_id");
 
                     b.HasKey("Id")
-                        .HasName("PK_QueueLog");
+                        .HasName("pk_queue_log");
 
-                    b.ToTable("QueueLog");
+                    b.ToTable("queue_log", (string)null);
                 });
 #pragma warning restore 612, 618
         }

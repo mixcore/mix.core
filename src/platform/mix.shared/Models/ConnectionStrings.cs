@@ -2,6 +2,7 @@
 {
     public class ConnectionStrings
     {
+        public string SettingsConnection { get; set; }
         public string MixAccountConnection { get; set; }
         public string MixAuditLogConnection { get; set; }
         public string MixQueueLogConnection { get; set; }

@@ -41,7 +41,7 @@ namespace Mix.Services.Databases.Lib.Services
 
         public async Task<List<PostMetadata>> GetMetadataAsync(string[]? includes = null, string[]? excepts = null)
         {
-            Expression<Func<MixMetadata, bool>> predicate = m => m.MixTenantId == CurrentTenant.Id;
+            Expression<Func<MixMetadata, bool>> predicate = m => m.TenantId == CurrentTenant.Id;
             predicate = predicate.AndAlsoIf(includes != null, m => includes!.Contains(m.Type));
             predicate = predicate.AndAlsoIf(excepts != null, m => !excepts!.Contains(m.Type));
             var data = await MixMetadataViewModel.GetRepository(_uow, CacheService).GetAllAsync(predicate);
@@ -67,7 +67,7 @@ namespace Mix.Services.Databases.Lib.Services
         //        // TODO: Share dbcontext transaction
         //        var allowIds = await query.ToListAsync();
         //        var repo = new Repository<MixCmsContext, MixPostContent, int, TView>(_cmsUow);
-        //        return await repo.GetPagingAsync(m => m.MixTenantId == CurrentTenant.Id
+        //        return await repo.GetPagingAsync(m => m.TenantId == CurrentTenant.Id
         //                        && allowIds.Any(n => n == m.Id),
         //                        searchRequest.PagingData);
         //    }
@@ -92,8 +92,8 @@ namespace Mix.Services.Databases.Lib.Services
 
             MixMetadataViewModel metadata = new(_uow)
             {
-                MixTenantId = CurrentTenant.Id,
-                CreatedBy = _identityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username)
+                TenantId = CurrentTenant.Id,
+                CreatedBy = _identityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.UserName)
             };
             ReflectionHelper.Map(dto, metadata);
             await metadata.SaveAsync(cancellationToken);
@@ -106,8 +106,8 @@ namespace Mix.Services.Databases.Lib.Services
 
             MixMetadataContentAsscociationViewModel association = new(_uow)
             {
-                MixTenantId = CurrentTenant.Id,
-                CreatedBy = _identityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username)
+                TenantId = CurrentTenant.Id,
+                CreatedBy = _identityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.UserName)
             };
             ReflectionHelper.Map(dto, association);
             await association.SaveAsync(cancellationToken);
@@ -123,7 +123,7 @@ namespace Mix.Services.Databases.Lib.Services
             {
                 return await MixMetadataContentAsscociationViewModel.GetRepository(_uow, CacheService)
                             .GetPagingAsync(
-                                m => m.MixTenantId == CurrentTenant.Id
+                                m => m.TenantId == CurrentTenant.Id
                                         && query.Any(n => n == m.Id),
                                         pagingData);
             }
@@ -141,7 +141,7 @@ namespace Mix.Services.Databases.Lib.Services
 
         #region IQueryables
 
-        public IQueryable<int>? GetQueryableContentIdByMetadataSeoContent(List<SearchQueryField> metadataSeoContents, MixContentType contentType)
+        public IQueryable<int>? GetQueryableContentIdByMetadataSeoContent(List<MixQueryField> metadataSeoContents, MixContentType contentType)
         {
             //Expression<Func<MixMetadata, bool>>? predicate = m => isMandatory;
             if (metadataSeoContents.Count == 0)
@@ -151,8 +151,8 @@ namespace Mix.Services.Databases.Lib.Services
 
             IQueryable<int>? andQueryIds = null;
             IQueryable<int>? orQueryIds = null;
-            List<SearchQueryField> andQueries = metadataSeoContents.Where(m => m.IsRequired).ToList();
-            List<SearchQueryField> orQueries = metadataSeoContents.Where(m => !m.IsRequired).ToList();
+            List<MixQueryField> andQueries = metadataSeoContents.Where(m => m.IsRequired).ToList();
+            List<MixQueryField> orQueries = metadataSeoContents.Where(m => !m.IsRequired).ToList();
             foreach (var item in andQueries)
             {
                 if (item.Value is null)
@@ -183,7 +183,7 @@ namespace Mix.Services.Databases.Lib.Services
                 var allowedContentIds = from metadata in allowMetadata
                                         join association in _uow.DbContext.MixMetadataContentAssociation
                                         on metadata.Id equals association.MetadataId
-                                        where association.MixTenantId == CurrentTenant.Id && association.ContentType == contentType
+                                        where association.TenantId == CurrentTenant.Id && association.ContentType == contentType
                                         select association.ContentId;
 
                 if (andQueryIds == null)
@@ -224,7 +224,7 @@ namespace Mix.Services.Databases.Lib.Services
                 var allowedContentIds = from metadata in allowMetadata
                                         join association in _uow.DbContext.MixMetadataContentAssociation
                                         on metadata.Id equals association.MetadataId
-                                        where association.MixTenantId == CurrentTenant.Id && association.ContentType == contentType
+                                        where association.TenantId == CurrentTenant.Id && association.ContentType == contentType
                                         select association.ContentId;
                 if (orQueryIds == null)
                 {
@@ -246,7 +246,7 @@ namespace Mix.Services.Databases.Lib.Services
             var query = from metadata in _uow.DbContext.MixMetadata
                         join association in _uow.DbContext.MixMetadataContentAssociation
                         on metadata.Id equals association.MetadataId
-                        where metadata.MixTenantId == CurrentTenant.Id
+                        where metadata.TenantId == CurrentTenant.Id
                             && (string.IsNullOrEmpty(metadataType) || metadata.Type == metadataType)
                             && association.ContentId == contentId
                             && (!contentType.HasValue || association.ContentType == contentType)

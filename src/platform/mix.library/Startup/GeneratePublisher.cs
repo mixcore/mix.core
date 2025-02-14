@@ -6,7 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         private static IServiceCollection AddGeneratedPublisher(this IServiceCollection services)
         {
-            List<Type> candidates = GetCandidatesByAttributeType(MixAssemblies, typeof(GeneratePublisherAttribute));
+            List<Type> candidates = GetCandidatesByAttributeType(RefAssemblies(), typeof(GeneratePublisherAttribute));
             var publisher = typeof(MixPublisher<>);
             var method = typeof(ServiceCollectionHostedServiceExtensions).GetMethods()
                 .Where(m => m.Name == "AddHostedService" && m.IsGenericMethod && m.GetParameters().Count() == 1);

@@ -2,7 +2,7 @@
 // The Mixcore Foundation licenses this file to you under the MIT.
 // See the LICENSE file in the project root for more information.
 
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Account
 {

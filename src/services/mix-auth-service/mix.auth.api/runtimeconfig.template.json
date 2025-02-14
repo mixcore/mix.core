@@ -1,8 +1,0 @@
-{
-    "configProperties":{
-        "System.GC.Concurrent": true,
-        "System.GC.HeapCount": 8,
-        "System.GC.NoAffinitize": true,
-        "System.Threading.Thread.EnableAutoreleasePool": true
-    }
-}

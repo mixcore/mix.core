@@ -4,7 +4,7 @@ namespace Mix.Database.Entities.Cms
 {
     public class MixTemplate : EntityBase<int>
     {
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public string Content { get; set; }
         public string Extension { get; set; }
         public string FileFolder { get; set; }

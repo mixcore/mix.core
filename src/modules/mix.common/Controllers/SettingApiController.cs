@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Auth.Constants;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Exceptions;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Service.Models;
-using Mix.Shared.Services;
 
 namespace Mix.Common.Controllers
 {
@@ -38,12 +39,7 @@ namespace Mix.Common.Controllers
         {
             try
             {
-                TenantConfigService service = new(CurrentTenant.SystemName);
-                if (service != null)
-                {
-                    return Ok(service.AppSettings);
-                }
-                return NotFound();
+                return Ok(CurrentTenant.Configurations);
             }
             catch (Exception ex)
             {
@@ -51,25 +47,6 @@ namespace Mix.Common.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("save-tenant-settings")]
-        public ActionResult<JObject> SaveTenantSettings(TenantConfigurationModel appSettings)
-        {
-            try
-            {
-                TenantConfigService service = new(CurrentTenant.SystemName)
-                {
-                    AppSettings = appSettings
-                };
-
-                service.SaveSettings();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                throw new MixException(MixErrorStatus.NotFound, ex);
-            }
-        }
 
         [HttpGet]
         [Route("{settingType}")]
@@ -80,10 +57,9 @@ namespace Mix.Common.Controllers
                 string filePath = GetSettingFilePath(settingType);
                 if (!string.IsNullOrEmpty(filePath))
                 {
-                    var aesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
-                    _settingService = new(filePath, aesKey: aesKey);
+                    _settingService = new(filePath, aesKey: Configuration.AesKey());
 
-                    return Ok(_settingService.AppSettings);
+                    return Ok(_settingService.RawSettings);
                 }
                 return NotFound();
             }
@@ -102,8 +78,8 @@ namespace Mix.Common.Controllers
                 string filePath = GetSettingFilePath(settingType);
                 if (!string.IsNullOrEmpty(filePath))
                 {
-                    _settingService = new(filePath);
-                    _settingService.AppSettings = appSettings;
+                    _settingService = new(filePath, aesKey: Configuration.AesKey());
+                    _settingService.RawSettings = appSettings;
                     _settingService.SaveSettings();
                     return Ok(_settingService.AppSettings);
                 }
@@ -142,7 +118,7 @@ namespace Mix.Common.Controllers
                 MixAppConfigEnums.Redis => MixAppConfigFilePaths.Redis,
                 MixAppConfigEnums.Log => MixAppConfigFilePaths.Log,
                 MixAppConfigEnums.RateLimit => MixAppConfigFilePaths.RateLimit,
-                MixAppConfigEnums.GoogleFirebase => MixAppConfigFilePaths.GoogleFirebase,
+                MixAppConfigEnums.Google => MixAppConfigFilePaths.Google,
                 MixAppConfigEnums.GoogleCredential => MixAppConfigFilePaths.GoogleCredential,
                 _ => string.Empty
             };

@@ -4,7 +4,7 @@ namespace Mix.Database.Entities.Account
 {
     public class SysMixDatabaseAssociation : EntityBase<int>
     {
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public string ParentDatabaseName { get; set; }
         public string ChildDatabaseName { get; set; }
         public Guid? GuidParentId { get; set; }

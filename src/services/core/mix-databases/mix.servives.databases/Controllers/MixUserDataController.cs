@@ -77,48 +77,6 @@ namespace Mix.Services.Databases.Controllers
             await base.UpdateHandler(profile.Id, profile, cancellationToken);
             return Ok();
         }
-
-        [MixAuthorize]
-        [HttpPost("add-address")]
-        public async Task<ActionResult<MixUserDataViewModel>> AddUserAddress([FromBody] CreateUserAddressDto dto, CancellationToken cancellationToken = default)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user is null)
-            {
-                return BadRequest();
-            }
-
-            var result = await _userDataService.CreateUserAddress(dto, user, cancellationToken);
-            return Ok(result);
-        }
-
-        [MixAuthorize]
-        [HttpPut("update-address")]
-        public async Task<ActionResult<MixUserDataViewModel>> UpdateUserAddress([FromBody] MixContactAddressViewModel address, CancellationToken cancellationToken = default)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user is null)
-            {
-                return BadRequest();
-            }
-
-            await _userDataService.UpdateUserAddress(address, user, cancellationToken);
-            return Ok();
-        }
-
-        [MixAuthorize]
-        [HttpDelete("delete-address/{addressId}")]
-        public async Task<ActionResult> DeleteUserAddress(int addressId, CancellationToken cancellationToken = default)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user is null)
-            {
-                return BadRequest();
-            }
-
-            await _userDataService.DeleteUserAddress(addressId, user, cancellationToken);
-            return Ok();
-        }
         #endregion
 
         #region Overrides

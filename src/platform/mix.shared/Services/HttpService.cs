@@ -2,48 +2,53 @@ using Microsoft.AspNetCore.Http;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Shared.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Reflection;
 using System.Text;
-using System.Text.Json;
 
 namespace Mix.Shared.Services
 {
     public class HttpService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly JsonSerializerOptions _sharedJsonSerializerOptions;
+        private readonly JsonSerializer _serializer;
+
         public HttpService(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
-            _sharedJsonSerializerOptions = new JsonSerializerOptions
+            _serializer = new JsonSerializer()
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
-
         }
 
         public async Task<JObject> SendHttpRequestModel(
-           HttpRequestModel request, CancellationToken cancellationToken = default)
+           HttpRequestModel request,
+           CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             string method = request.Method?.ToUpper();
             switch (method)
             {
                 case "GET":
-                    return await GetAsync<JObject>(request.RequestUrl);
+                    return await GetAsync<JObject>(request.RequestUrl, cancellationToken: cancellationToken);
                 case "POST":
-                    return await PostAsync<JObject, JObject>(request.RequestUrl, request.Body);
+                    return await PostAsync<JObject, JObject>(request.RequestUrl, request.Body, cancellationToken: cancellationToken);
             }
             return default;
         }
 
         public async Task<string> DownloadAsync(
-            string downloadUrl, string folder, string fileName, string extension,
-            IProgress<int> progress, CancellationToken cancellationToken)
+            string downloadUrl,
+            string folder,
+            string fileName,
+            string extension,
+            IProgress<int> progress,
+            CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             using (var client = _httpClientFactory.CreateClient())
@@ -53,8 +58,8 @@ namespace Mix.Shared.Services
                 //string folder = $"{MixFolders.WebRootPath}/{downloadPath}";
                 string fullPath = $"{folder}/{fileName}{extension}";
                 MixFileHelper.CreateFolderIfNotExist(folder);
-                using (Stream contentStream = await response.Content.ReadAsStreamAsync(cancellationToken),
-                    fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
+                using (var contentStream = await response.Content.ReadAsStreamAsync(cancellationToken))
+                using (var fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
                 {
                     var totalRead = 0L;
                     var totalReads = 0L;
@@ -64,14 +69,14 @@ namespace Mix.Shared.Services
                     var canReportProgress = total != -1 && progress != null;
                     do
                     {
-                        var read = await contentStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken);
+                        var read = await contentStream.ReadAsync(buffer, cancellationToken);
                         if (read == 0)
                         {
                             isMoreToRead = false;
                         }
                         else
                         {
-                            await fileStream.WriteAsync(buffer, 0, read, cancellationToken);
+                            await fileStream.WriteAsync(buffer.AsMemory(0, read), cancellationToken);
 
                             totalRead += read;
                             totalReads += 1;
@@ -102,6 +107,7 @@ namespace Mix.Shared.Services
             var requestUrlWithQueryParams = !string.IsNullOrEmpty(urlQueryParamsPart)
                 ? (!requestUrl.Contains('?') ? $"{requestUrl}?{urlQueryParamsPart}" : $"{requestUrl}&{urlQueryParamsPart}")
                 : requestUrl;
+
             return SendRequestAsync<T>(client => client.GetAsync(requestUrlWithQueryParams, cancellationToken), bearerToken, requestHeaders);
         }
 
@@ -137,16 +143,16 @@ namespace Mix.Shared.Services
             return SendRequestAsync(client => client.DeleteAsync(requestUrlWithQueryParams, cancellationToken), bearerToken, requestHeaders);
         }
 
-        public Task<T> PostAsync<T, T1>(string requestUrl, T1 body,
-                string bearerToken = null,
-                List<KeyValuePair<string, string>> requestHeaders = null,
-                string contentType = "application/json",
-                CancellationToken cancellationToken = default
-            )
+        public Task<T> PostAsync<T, T1>(
+            string requestUrl,
+            T1 body,
+            string bearerToken = null,
+            List<KeyValuePair<string, string>> requestHeaders = null,
+            string contentType = "application/json",
+            CancellationToken cancellationToken = default)
         {
             var content = CreateHttpContent(body, contentType);
-            return SendRequestAsync<T>(
-                client => client.PostAsync(requestUrl, content, cancellationToken), bearerToken, requestHeaders);
+            return SendRequestAsync<T>(client => client.PostAsync(requestUrl, content, cancellationToken), bearerToken, requestHeaders);
         }
 
         public async Task PostAsync<T>(string requestUrl, T body,
@@ -161,17 +167,19 @@ namespace Mix.Shared.Services
                 client => client.PostAsync(requestUrl, content, cancellationToken), bearerToken, requestHeaders);
         }
 
-        public Task<T> PutAsync<T, T1>(string requestUrl, T1 body,
-                string bearerToken = null,
-                List<KeyValuePair<string, string>> requestHeaders = null,
-                string contentType = "application/json",
-                CancellationToken cancellationToken = default
-            )
+        public Task<T> PutAsync<T, T1>(
+            string requestUrl,
+            T1 body,
+            string bearerToken = null,
+            List<KeyValuePair<string, string>> requestHeaders = null,
+            string contentType = "application/json",
+            CancellationToken cancellationToken = default)
         {
             var content = CreateHttpContent(body, contentType);
             return SendRequestAsync<T>(
                 client => client.PutAsync(requestUrl, content, cancellationToken), bearerToken, requestHeaders);
         }
+
         #region Privates
 
         private HttpContent CreateHttpContent<T>(T content, string contentType)
@@ -198,17 +206,17 @@ namespace Mix.Shared.Services
                        .ToDictionary(prop => prop.Name, prop => (string)prop.GetValue(content, null));
                     return new FormUrlEncodedContent(formData);
                 default:
-                    return new StringContent(
-                            JObject.FromObject(content).ToString(Newtonsoft.Json.Formatting.None), Encoding.UTF8, contentType);
+                    var contentAsString = JObject.FromObject(content).ToString(Formatting.None);
+                    return new StringContent(contentAsString, Encoding.UTF8, contentType);
             }
 
 
         }
 
         private async Task<T> SendRequestAsync<T>(
-                Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn,
-                string token = null,
-                List<KeyValuePair<string, string>> requestHeaders = null)
+            Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn,
+            string token = null,
+            List<KeyValuePair<string, string>> requestHeaders = null)
 
         {
             var data = await GetResponseStringAsync(sendRequestFn, token, requestHeaders);
@@ -228,9 +236,9 @@ namespace Mix.Shared.Services
         }
 
         private async Task<string> GetResponseStringAsync(
-                Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn,
-                string token = null,
-                List<KeyValuePair<string, string>> requestHeaders = null)
+            Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn,
+            string token = null,
+            List<KeyValuePair<string, string>> requestHeaders = null)
         {
             using (var client = _httpClientFactory.CreateClient())
             {
@@ -253,9 +261,9 @@ namespace Mix.Shared.Services
         }
 
         private Task SendRequestAsync(
-                Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn,
-                string token = null,
-                List<KeyValuePair<string, string>> requestHeaders = null) =>
+            Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn,
+            string token = null,
+            List<KeyValuePair<string, string>> requestHeaders = null) =>
             Task.Run(async () =>
             {
                 using (var client = _httpClientFactory.CreateClient())

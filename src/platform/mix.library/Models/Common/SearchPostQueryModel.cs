@@ -11,7 +11,7 @@ namespace Mix.Lib.Models.Common
             int? tenantId = default,
             Expression<Func<MixPostContent, bool>> andPredicate = null,
             Expression<Func<MixPostContent, bool>> orPredicate = null)
-            : base(httpRequest, request, tenantId, andPredicate, orPredicate)
+            : base(httpRequest, request, tenantId, andPredicate)
         {
             ApplyMetadataFilter(httpRequest);
         }
@@ -38,6 +38,6 @@ namespace Mix.Lib.Models.Common
                 }
             }
         }
-        public List<SearchQueryField> MetadataQueries { get; set; } = new();
+        public List<MixQueryField> MetadataQueries { get; set; } = new();
     }
 }

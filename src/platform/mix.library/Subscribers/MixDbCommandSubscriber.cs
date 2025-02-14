@@ -6,16 +6,17 @@ using Mix.Communicator.Models;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.MixDb;
 using Mix.Mixdb.Event.Services;
+using Mix.Mixdb.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
-using Mix.RepoDb.Interfaces;
 using Mix.Service.Commands;
 using Mix.Service.Interfaces;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Hubs;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
+using NuGet.Protocol;
 
 namespace Mix.Lib.Subscribers
 {
@@ -29,8 +30,8 @@ namespace Mix.Lib.Subscribers
             IConfiguration configuration,
             IMemoryQueueService<MessageQueueModel> queueService,
             ILogger<MixDbCommandSubscriber> logger,
-            IPooledObjectPolicy<RabbitMQ.Client.IModel> rabbitMqObjectPolicy = null)
-            : base(TopicId, nameof(MixDbCommandSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMqObjectPolicy)
+            IPooledObjectPolicy<RabbitMQ.Client.IModel>? rabbitMQObjectPolicy = null)
+            : base(TopicId, nameof(MixDbCommandSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMQObjectPolicy)
         {
             _allowActions = [.. Enum.GetNames(typeof(MixDbCommandQueueAction))];
         }
@@ -44,8 +45,8 @@ namespace Mix.Lib.Subscribers
 
             IMixDbDataService mixDbDataService = GetRequiredService<IMixDbDataService>();
             IMixDbCommandHubClientService mixDbCommandHub = GetRequiredService<IMixDbCommandHubClientService>();
-            UnitOfWorkInfo<MixDbDbContext> uow = GetRequiredService<UnitOfWorkInfo<MixDbDbContext>>();
-            mixDbDataService.SetUOW(uow);
+            UnitOfWorkInfo<MixCmsContext> uow = GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
+            mixDbDataService.SetDbConnection(uow);
             Enum.TryParse(model.Action, out MixDbCommandQueueAction action);
             switch (action)
             {
@@ -53,7 +54,7 @@ namespace Mix.Lib.Subscribers
                     var cmd = model.ParseData<MixDbCommandModel>();
                     if (cmd != null)
                     {
-                        var id = await mixDbDataService.CreateData(cmd.MixDbName, cmd.Body);
+                        var id = await mixDbDataService.CreateAsync(cmd.MixDbName, cmd.Body, cancellationToken: cancellationToken);
                         if (!string.IsNullOrEmpty(cmd.ConnectionId))
                         {
                             await mixDbCommandHub.SendPrivateMessageAsync(
@@ -65,7 +66,7 @@ namespace Mix.Lib.Subscribers
                     var updCmd = model.ParseData<MixDbCommandModel>();
                     if (updCmd != null)
                     {
-                        var id = await mixDbDataService.UpdateData(updCmd.MixDbName, updCmd.Body);
+                        var id = await mixDbDataService.UpdateAsync(updCmd.MixDbName, updCmd.Body.GetJObjectProperty<int>("id"), updCmd.Body, cancellationToken: cancellationToken);
                         if (!string.IsNullOrEmpty(updCmd.ConnectionId))
                         {
                             await mixDbCommandHub.SendPrivateMessageAsync(

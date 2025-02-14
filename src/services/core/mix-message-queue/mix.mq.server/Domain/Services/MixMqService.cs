@@ -9,10 +9,11 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
+using static Mix.Mq.Server.MixMq;
 
 namespace Mix.Mq.Server.Domain.Services;
 
-public class MixMqService : MixMq.MixMqBase
+public class MixMqService : MixMqBase
 {
     private readonly ILogger<MixMqService> _logger;
     private readonly MixQueueMessages<MessageQueueModel> _queue;
@@ -24,7 +25,7 @@ public class MixMqService : MixMq.MixMqBase
         _subscriptionService = subscriptionService;
     }
 
-    public override Task Subscribe(SubscribeRequest request, IServerStreamWriter<SubscribeReply> responseStream, ServerCallContext context)
+    public override Task Subscribe(MixSubscribeRequest request, IServerStreamWriter<MixSubscribeReply> responseStream, ServerCallContext context)
     {
         try
         {
@@ -38,14 +39,14 @@ public class MixMqService : MixMq.MixMqBase
         }
     }
 
-    public override async Task<Empty> Disconnect(SubscribeRequest request, ServerCallContext context)
+    public override async Task<Empty> Disconnect(MixSubscribeRequest request, ServerCallContext context)
     {
         await _subscriptionService.RemoveSubscription(request);
         _logger.LogInformation($"{request.SubsctiptionId} disconnected at {DateTime.UtcNow.AddHours(7)}");
         return new();
     }
 
-    public override Task<Empty> Publish(PublishMessageRequest request, ServerCallContext context)
+    public override Task<Empty> Publish(MixPublishMessageRequest request, ServerCallContext context)
     {
         if (!request.Message.IsJsonString())
         {

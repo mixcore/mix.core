@@ -4,6 +4,6 @@
     {
         public new Guid UserId { get; set; }
         public new Guid RoleId { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
     }
 }

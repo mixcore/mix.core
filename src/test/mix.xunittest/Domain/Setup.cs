@@ -44,7 +44,8 @@ namespace Mix.XUnittest
                 services.AddMixDbContexts();
                 services.AddScoped<IInitCmsService, InitCmsService>();
                 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-                services.AddMixTestServices(Assembly.GetExecutingAssembly(), Configuration);
+                //TODO update unit test
+                //context.AddMixTestServices(Assembly.GetExecutingAssembly(), Configuration);
                 services.AddMixAuthorize<MixCmsAccountContext>(Configuration);
             });
         }

@@ -1,7 +1,9 @@
 ﻿using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
 using Microsoft.Extensions.Configuration;
-using Mix.Communicator.Models;
+using Mix.Shared.Models.Configurations;
+using MySqlX.XDevAPI;
+using Newtonsoft.Json;
 
 namespace Mix.Communicator.Services
 {
@@ -9,23 +11,18 @@ namespace Mix.Communicator.Services
     public class FirestoreService
     {
         private readonly FirestoreDb _db;
-        private readonly FirebaseSettingModel _settings = new FirebaseSettingModel();
+        private readonly GoogleSettingModel _settings = new GoogleSettingModel();
         public FirestoreService(IConfiguration configuration)
         {
-            configuration.GetSection(MixAppSettingsSection.GoogleFirebase).Bind(_settings);
-            if (!string.IsNullOrEmpty(_settings.ProjectId) && !string.IsNullOrEmpty(_settings.Filename))
+            _settings = new GoogleSettingModel();
+            configuration.GetSection(MixAppSettingsSection.Google).Bind(_settings);
+            var credential = GoogleCredential.FromJson(JsonConvert.SerializeObject(_settings.Firebase.Credential));
+            var builder = new FirestoreDbBuilder
             {
-
-                var googleCredential = _settings.Filename;
-
-                var credential = GoogleCredential.FromFile(googleCredential);
-                var builder = new FirestoreDbBuilder
-                {
-                    ProjectId = _settings.ProjectId,
-                    Credential = credential,
-                };
-                _db = builder.Build();
-            }
+                ProjectId = _settings.ProjectId,
+                Credential = credential,
+            };
+            _db = builder.Build();
         }
 
         public async Task<DocumentReference> GetDocumentAsync(string collectionPath, string documentId)

@@ -10,7 +10,7 @@ namespace Mix.Mixdb.ViewModels
         public string? Type { get; set; }
         public string Content { get; set; }
         public string SeoContent { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         #endregion
 
         #region Constructors
@@ -35,7 +35,7 @@ namespace Mix.Mixdb.ViewModels
 
         public override Task Validate(CancellationToken cancellationToken)
         {
-            if (Context.MixMetadata.Any(m => m.MixTenantId == MixTenantId && m.Id != Id && m.Type == Type && m.Content == Content))
+            if (Context.MixMetadata.Any(m => m.TenantId == TenantId && m.Id != Id && m.Type == Type && m.Content == Content))
             {
                 IsValid = false;
                 Errors.Add(new($"Metadata '{Type} - {Content}' existed"));

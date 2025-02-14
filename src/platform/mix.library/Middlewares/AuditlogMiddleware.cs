@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Mix.Auth.Constants;
+using Mix.Lib.Extensions;
 using Mix.Lib.Services;
 using Mix.Log.Lib.Interfaces;
 using Mix.Log.Lib.Models;
@@ -72,14 +73,14 @@ namespace Mix.Lib.Middlewares
 
         private bool CheckAuditLogPath(string path)
         {
-            return !_globalConfig.IsInit && (path.IndexOf("/api") >= 0 && path.IndexOf("audit-log") < 0 && path.IndexOf("queue-log") < 0);
+            return !_configuration.IsInit() && (path.IndexOf("/api") >= 0 && path.IndexOf("audit-log") < 0 && path.IndexOf("queue-log") < 0);
         }
 
         private async Task LogRequest(HttpContext context, AuditLogDataModel auditLogData)
         {
             var idService = context.RequestServices.GetService(typeof(MixIdentityService)) as MixIdentityService;
             var request = await FormatRequest(context.Request);
-            auditLogData.CreatedBy = idService.GetClaim(context.User, MixClaims.Username);
+            auditLogData.CreatedBy = idService.GetClaim(context.User, MixClaims.UserName);
             auditLogData.RequestIp = context.Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
             auditLogData.Endpoint = context.Request.Path;
             auditLogData.Method = context.Request.Method;

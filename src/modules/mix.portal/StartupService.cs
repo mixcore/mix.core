@@ -8,14 +8,14 @@ namespace Mix.Portal
 {
     public sealed class StartupService : IStartupService
     {
-        public void AddServices(IServiceCollection services, IConfiguration configuration)
+        public void AddServices(IHostApplicationBuilder builder)
         {
-            services.TryAddScoped<IMixApplicationService, MixApplicationService>();
-            services.TryAddScoped<PortalPostService>();
-            services.AddScoped<IMixThemeExportService, MixThemeExportService>();
-            services.AddScoped<IMixThemeImportService, MixThemeImportService>();
-            services.TryAddScoped<ICloneCultureService, CloneCultureService>();
-            services.TryAddScoped<IThemeService, ThemeService>();
+            builder.Services.TryAddScoped<IMixApplicationService, MixApplicationService>();
+            builder.Services.TryAddScoped<PortalPostService>();
+            builder.Services.AddScoped<IMixThemeExportService, MixThemeExportService>();
+            builder.Services.AddScoped<IMixThemeImportService, MixThemeImportService>();
+            builder.Services.TryAddScoped<ICloneCultureService, CloneCultureService>();
+            builder.Services.TryAddScoped<IThemeService, ThemeService>();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

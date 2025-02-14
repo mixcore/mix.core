@@ -49,7 +49,7 @@ namespace Mix.Lib.ViewModels
                 foreach (var item in UrlAliases)
                 {
                     item.SetUowInfo(UowInfo, CacheService);
-                    item.MixTenantId = MixTenantId;
+                    item.TenantId = TenantId;
                     item.SourceContentId = parentEntity.Id;
                     item.Type = MixUrlAliasType.Post;
                     await item.SaveAsync(cancellationToken);
@@ -64,7 +64,7 @@ namespace Mix.Lib.ViewModels
             {
                 DisplayName = Title,
                 Description = Excerpt,
-                MixTenantId = MixTenantId
+                TenantId = TenantId
             };
 
             parent.SetUowInfo(UowInfo, CacheService);
@@ -95,7 +95,7 @@ namespace Mix.Lib.ViewModels
             Contributors = await MixContributorViewModel.GetRepository(UowInfo, CacheService).GetAllAsync(m => m.ContentType == MixContentType.Post && m.IntContentId == Id, cancellationToken);
             foreach (var item in Contributors)
             {
-                await item.LoadUserDataAsync(identityService);
+                await item.LoadUserDataAsync(identityService, cancellationToken);
             }
         }
 

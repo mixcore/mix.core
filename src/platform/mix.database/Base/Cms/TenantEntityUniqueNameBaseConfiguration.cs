@@ -1,4 +1,5 @@
-﻿using Mix.Database.Services;
+﻿using Mix.Database.Services.MixGlobalSettings;
+using Mix.Heart.Extensions;
 
 namespace Mix.Database.Base.Cms
 {
@@ -17,6 +18,7 @@ namespace Mix.Database.Base.Cms
 
             builder.Property(e => e.SystemName)
                .IsRequired()
+               .HasColumnName("system_name")
                .HasColumnType($"{Config.NString}{Config.MediumLength}")
                .HasCharSet(Config.CharSet)
                .UseCollation(Config.DatabaseCollation);

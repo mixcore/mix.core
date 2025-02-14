@@ -19,7 +19,7 @@
         Smtp,
         Endpoint,
         Payments,
-        GoogleFirebase,
+        Google,
         GoogleCredential
     }
 }

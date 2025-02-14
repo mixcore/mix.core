@@ -2,20 +2,23 @@
 {
     public class ImportThemeDto
     {
+        public int ThemeId { get; set; }
         public bool IsIncludeAssets { get; set; } = true;
 
         public bool IsIncludeTemplates { get; set; } = true;
 
-        public List<MixPost> Posts { get; set; } = new();
+        public List<int> PostIds { get; set; } = new();
 
-        public List<MixPage> Pages { get; set; } = new();
+        public List<int> PageIds { get; set; } = new();
 
-        public List<MixModule> Modules { get; set; }
+        public List<int> ModuleIds { get; set; }
 
-        public List<MixDatabase> MixDatabases { get; set; }
+        public List<int> MixDatabaseIds { get; set; }
 
-        public List<MixConfiguration> Configurations { get; set; } = new();
+        public List<int> MixDatabaseDataIds { get; set; }
 
-        public List<MixLanguage> Languages { get; set; } = new();
+        public List<int> ConfigurationIds { get; set; } = new();
+
+        public List<int> LanguageIds { get; set; } = new();
     }
 }

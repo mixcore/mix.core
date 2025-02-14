@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Mix.Lib.Interfaces;
 using Mix.Shared.Interfaces;
 
@@ -9,10 +10,12 @@ namespace Mix.Messenger.Domain
 {
     public class StartupService : IStartupService
     {
-        public void AddServices(IServiceCollection services, IConfiguration configuration)
+        public void AddServices(IHostApplicationBuilder builder)
         {
-            services.AddMixSignalR(configuration);
-            services.AddMixCommunicators();
+            string azureConnectionString = builder.Configuration.GetSection("Azure")["SignalRConnectionString"];
+            string redisConnectionString = builder.Configuration.GetSection("Redis")["ConnectionStrings"];
+            builder.AddMixSignalR(azureConnectionString, redisConnectionString);
+            builder.Services.AddMixCommunicators();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

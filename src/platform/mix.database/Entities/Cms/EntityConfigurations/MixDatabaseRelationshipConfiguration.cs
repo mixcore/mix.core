@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.EntityConfigurations.Base;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
@@ -15,18 +15,29 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
         {
             base.Configure(builder);
 
+            builder.Property(e => e.ParentId)
+               .IsRequired()
+               .HasColumnName("parent_id");
+            
+            builder.Property(e => e.ChildId)
+               .IsRequired()
+               .HasColumnName("child_id");
+
             builder.Property(e => e.SourceDatabaseName)
                .IsRequired()
+               .HasColumnName("source_database_name")
                .HasColumnType($"{Config.String}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
 
             builder.Property(e => e.DisplayName)
                .IsRequired()
+               .HasColumnName("display_name")
                .HasColumnType($"{Config.String}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
 
             builder.Property(e => e.DestinateDatabaseName)
                .IsRequired()
+               .HasColumnName("destinate_database_name")
                .HasColumnType($"{Config.String}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
 
@@ -42,6 +53,7 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
 
             builder.Property(e => e.Type)
                .IsRequired()
+               .HasColumnName("type")
                .HasConversion(new EnumToStringConverter<MixDatabaseRelationshipType>())
                .HasColumnType($"{Config.NString}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);

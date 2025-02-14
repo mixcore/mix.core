@@ -10,6 +10,6 @@ namespace Mix.Database.Entities.MixDb
         public int MetadataId { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
     }
 }

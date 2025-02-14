@@ -7,6 +7,6 @@
         public string Method { get; set; }
         public string Description { get; set; }
         public int SysPermissionId { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
     }
 }

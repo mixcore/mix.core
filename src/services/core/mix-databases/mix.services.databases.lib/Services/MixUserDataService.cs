@@ -50,7 +50,7 @@ namespace Mix.Services.Databases.Lib.Services
 
             MixUserDataViewModel data = new(_uow)
             {
-                MixTenantId = CurrentTenant.Id,
+                TenantId = CurrentTenant.Id,
                 CreatedBy = _userManager.GetUserName(HttpContextAccessor.HttpContext!.User),
                 ParentId = userId,
                 ParentType = MixDatabaseParentType.User
@@ -58,59 +58,6 @@ namespace Mix.Services.Databases.Lib.Services
             await data.SaveAsync(cancellationToken);
             return data;
         }
-
-        public async Task DeleteUserAddress(int addressId, MixUser user, CancellationToken cancellationToken = default)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            var userData = await GetUserDataAsync(user.Id, cancellationToken);
-            if (userData is null || userData.Addresses is null)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, "User Data not existed");
-            }
-
-            var address = userData.Addresses.SingleOrDefault(a => a.Id == addressId);
-            if (address is null)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, "Address not existed");
-            }
-
-            await address.DeleteAsync(cancellationToken);
-        }
-
-
-        public async Task<MixUserDataViewModel> CreateUserAddress(CreateUserAddressDto dto, MixUser user, CancellationToken cancellationToken = default)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            var userData = await GetUserDataAsync(user.Id, cancellationToken);
-            if (userData is null)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, "User Data not existed");
-            }
-
-            MixContactAddressViewModel address = new(_uow)
-            {
-                MixTenantId = CurrentTenant.Id,
-                SysUserDataId = userData.Id,
-                CreatedBy = user.UserName
-            };
-            ReflectionHelper.Map(dto, address);
-            await address.SaveAsync(cancellationToken);
-            return userData;
-        }
-
-        public async Task UpdateUserAddress(MixContactAddressViewModel address, MixUser user, CancellationToken cancellationToken)
-        {
-            var userData = await GetUserDataAsync(user.Id, cancellationToken);
-            if (address.SysUserDataId != userData.Id)
-            {
-                throw new MixException(MixErrorStatus.Badrequest);
-            }
-            address.SetUowInfo(_uow, CacheService);
-            await address.SaveAsync(cancellationToken);
-        }
-
         public async Task UpdateProfile(MixUserDataViewModel profile, CancellationToken cancellationToken = default)
         {
             await profile.SaveAsync(cancellationToken);

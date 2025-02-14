@@ -8,16 +8,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.MixDb;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Identity.Extensions;
 using Mix.Identity.Interfaces;
 using Mix.Identity.Services;
+using Mix.Lib.Extensions;
 using Mix.Lib.Services;
 using Mix.Shared.Models.Configurations;
-using Mix.Shared.Services;
 using RabbitMQ.Client;
 using System.Reflection;
 using System.Text;
@@ -29,11 +31,9 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMixAuthorize<TDbContext>(this IServiceCollection services, IConfiguration configuration)
             where TDbContext : DbContext
         {
-            services.TryAddScoped<AuthConfigService>();
-
             var _globalConfig = configuration.Get<GlobalSettingsModel>()!;
             var authConfigService = services.GetService<AuthConfigService>();
-            if (_globalConfig.IsInit)
+            if (configuration.IsInit())
             {
                 authConfigService.SetConfig(nameof(MixAuthenticationConfigurations.SecretKey), Guid.NewGuid().ToString("N"));
                 authConfigService.SaveSettings();
@@ -47,7 +47,6 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMixIdentityConfigurations<TDbContext>(this IServiceCollection services, IConfiguration configuration)
             where TDbContext : DbContext
         {
-            services.TryAddScoped<AuthConfigService>();
             var authConfigService = services.GetService<AuthConfigService>();
             var authConfigurations = authConfigService.AppSettings;
             PasswordOptions pOpt = new()
@@ -130,7 +129,7 @@ namespace Microsoft.Extensions.DependencyInjection
             //    options.SlidingExpiration = true;
             //});
             // Firebase service must be singleton (only one firebase default instance)
-
+            services.AddRequiredScopeAuthorization();
             services.TryAddSingleton<IOAuthClientService, OAuthClientService>();
             services.TryAddSingleton<IOAuthCodeStoreService, OAuthCodeStoreService>();
             services.TryAddScoped<IOAuthTokenService, OAuthTokenService>();

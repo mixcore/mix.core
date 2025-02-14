@@ -23,6 +23,6 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix
         public JObject? ShippingAddress { get; set; }
         public JObject? PaymentRequest { get; set; }
         public JObject? PaymentResponse { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
     }
 }

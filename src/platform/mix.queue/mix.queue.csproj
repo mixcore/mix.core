@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<RootNamespace>Mix.Queue</RootNamespace>
+        <Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -17,26 +18,25 @@
 	<ItemGroup>
 		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.18.1" />
 		<PackageReference Include="Azure.ResourceManager.ServiceBus" Version="1.1.0-beta.3" />
-		<PackageReference Include="Google.Api.Gax" Version="4.8.0" />
-		<PackageReference Include="Google.Cloud.PubSub.V1" Version="3.16.0" />
-		<PackageReference Include="Google.Protobuf" Version="3.27.3" />
-		<PackageReference Include="Grpc.Net.Client" Version="2.65.0" />
-		<PackageReference Include="Grpc.AspNetCore" Version="2.65.0" />
-		<PackageReference Include="Grpc.Net.Client.Web" Version="2.65.0" />
-		<PackageReference Include="Grpc.Tools" Version="2.65.0">
+		<PackageReference Include="Google.Api.Gax" Version="4.9.0" />
+		<PackageReference Include="Google.Cloud.PubSub.V1" Version="3.18.0" />
+		<PackageReference Include="Google.Protobuf" Version="3.28.2" />
+		<PackageReference Include="Grpc.Net.Client" Version="2.66.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.66.0" />
+		<PackageReference Include="Grpc.Net.Client.Web" Version="2.66.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.66.0">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
 		<PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
 	</ItemGroup>
-
+    <ItemGroup>
+        <Protobuf Include="Protos\mixmq.proto" GrpcServices="Client" />
+    </ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\mix.database\mix.database.csproj" />
 		<ProjectReference Include="..\mix.shared\mix.shared.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Protobuf Include="Protos\mixmq.proto" GrpcServices="Client" />
 	</ItemGroup>
 
 </Project>

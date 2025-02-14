@@ -1,5 +1,5 @@
 ﻿using Mix.Database.Base.Cms;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
@@ -15,6 +15,7 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
             base.Configure(builder);
             builder.Property(e => e.Host)
                 .IsRequired()
+                .HasColumnName("host")
                 .HasColumnType($"{Config.String}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);

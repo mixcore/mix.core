@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Constant.Constants;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Mixdb.Services;
 using Mix.Services.Graphql.Lib.Entities;
 using Mix.Services.Graphql.Lib.Interfaces;

@@ -1,12 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
+using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Heart.Helpers;
+using Mix.Lib.Extensions;
 using Mix.Shared.Models.Configurations;
-using Mix.Shared.Services;
 using Mixcore.Domain.Constants;
 
 namespace Mixcore.Controllers
 {
     public class InitController : MixControllerBase
     {
+        private readonly AppSettingsService _appSettingsService;
         private readonly MixEndpointService _mixEndpointService;
         private readonly GlobalSettingsModel _globalConfig;
         public InitController(
@@ -15,11 +19,12 @@ namespace Mixcore.Controllers
             IPSecurityConfigService ipSecurityConfigService,
             MixEndpointService mixEndpointService,
             IMixTenantService tenantService,
-             IConfiguration configuration)
+             IConfiguration configuration,
+             AppSettingsService appSettingsService)
             : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
         {
             _mixEndpointService = mixEndpointService;
-            _globalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
+            _appSettingsService = appSettingsService;
         }
 
         [HttpGet]
@@ -27,39 +32,43 @@ namespace Mixcore.Controllers
         [Route("init/{page}")]
         public IActionResult Index(string page)
         {
-            if (!_globalConfig.IsInit)
+            if (!Configuration.IsInit())
             {
                 return Redirect("/");
             }
             else
             {
+                if (string.IsNullOrEmpty(Configuration.AesKey()))
+                {
+                    var newKey = AesEncryptionHelper.GenerateCombinedKeys();
+                    _appSettingsService.SetConfig("AesKey", newKey);
+                    Configuration["AesKey"] = newKey;
+                    _appSettingsService.SaveSettings();
+                }
                 page ??= "";
-                var initStatus = _globalConfig.InitStatus;
-
-                switch (initStatus)
+                switch (Configuration.InitStep())
                 {
                     case InitStep.Blank:
+                    case InitStep.InitTenant:
                         InitEndpoints();
                         if (!string.IsNullOrEmpty(page.ToLower()))
                         {
                             return Redirect(InitRoutePath.Default);
                         }
                         break;
-
-                    case InitStep.InitTenant:
+                    case InitStep.InitAccount:
                         if (page.ToLower() != "step2")
                         {
                             return Redirect(InitRoutePath.Step2);
                         }
                         break;
-
-                    case InitStep.InitAccount:
+                    case InitStep.SelectTheme:
                         if (page.ToLower() != "step3")
                         {
                             return Redirect(InitRoutePath.Step3);
                         }
                         break;
-                    case InitStep.SelectTheme:
+                    case InitStep.InitTheme:
                         if (page.ToLower() != "step4")
                         {
                             return Redirect(InitRoutePath.Step4);

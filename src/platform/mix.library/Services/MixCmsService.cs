@@ -32,7 +32,7 @@ namespace Mix.Lib.Services
         {
             return $"{domain}/" +
                 $"{MixFolders.SiteContentAssetsFolder}/" +
-                $"{_configService.GetConfig<string>(MixConfigurationNames.ThemeFolder, culture)}";
+                $"{_configService.GetConfig<string>(MixConfigurationNames.ThemeFolder, culture, CurrentTenant.Id)}";
         }
 
         public MixTenantSystemModel GetCurrentTenant()
@@ -73,7 +73,7 @@ namespace Mix.Lib.Services
         protected virtual async Task ParseNavigationsAsync(XElement root, CancellationToken cancellation = default)
         {
             var navs = await MixNavigationViewModel.GetRepository(_mixdbUow, CacheService).GetListAsync(
-                m => m.MixTenantId == CurrentTenant.Id);
+                m => m.TenantId == CurrentTenant.Id);
 
             foreach (var nav in navs)
             {
@@ -83,7 +83,7 @@ namespace Mix.Lib.Services
 
         protected virtual async Task ParsePostsDocAsync(XElement root, CancellationToken cancellation = default)
         {
-            var posts = await MixPostViewModel.GetRepository(_cmsUow, CacheService).GetListAsync(m => m.MixTenantId == CurrentTenant.Id, cancellation);
+            var posts = await MixPostViewModel.GetRepository(_cmsUow, CacheService).GetListAsync(m => m.TenantId == CurrentTenant.Id, cancellation);
             foreach (var post in posts)
             {
                 ParsePostDoc(root, post);

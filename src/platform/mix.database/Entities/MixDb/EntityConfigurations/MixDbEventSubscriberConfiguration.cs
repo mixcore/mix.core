@@ -1,5 +1,5 @@
 ﻿using Mix.Database.EntityConfigurations.Base;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Newtonsoft.Json.Linq;
 
 namespace Mix.Database.Entities.MixDb.EntityConfigurations

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using Mix.Queue.Models.QueueSetting;
 using RabbitMQ.Client;
 
-namespace Mix.Queue.Engines.RabitMQ
+namespace Mix.Queue.Engines.RabbitMQ
 {
     public class RabbitModelPooledObjectPolicy : IPooledObjectPolicy<IModel>
     {

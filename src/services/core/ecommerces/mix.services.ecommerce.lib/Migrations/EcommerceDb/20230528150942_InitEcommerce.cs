@@ -43,7 +43,7 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.EcommerceDb
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PaymentResponse = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    MixTenantId = table.Column<int>(type: "int", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -86,7 +86,7 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.EcommerceDb
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Total = table.Column<double>(type: "double", nullable: false),
                     OrderDetailId = table.Column<int>(type: "int", nullable: false),
-                    MixTenantId = table.Column<int>(type: "int", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -115,7 +115,7 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.EcommerceDb
                     Note = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     OrderDetailId = table.Column<int>(type: "int", nullable: false),
-                    MixTenantId = table.Column<int>(type: "int", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -139,7 +139,7 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.EcommerceDb
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    MixTenantId = table.Column<int>(type: "int", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
                     ProductDetailsId = table.Column<int>(type: "int", nullable: false),
                     Sku = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),

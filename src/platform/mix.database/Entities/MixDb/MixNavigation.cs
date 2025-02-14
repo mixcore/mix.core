@@ -7,6 +7,6 @@
         public string Name { get; set; }
         public string Link { get; set; }
         public string Image { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
     }
 }

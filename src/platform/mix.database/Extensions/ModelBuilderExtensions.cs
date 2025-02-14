@@ -1,4 +1,4 @@
-﻿using Mix.Database.Services;
+﻿using Mix.Database.Services.MixGlobalSettings;
 using System.Linq;
 using System.Reflection;
 

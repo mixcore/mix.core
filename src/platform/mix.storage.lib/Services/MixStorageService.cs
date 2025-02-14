@@ -1,17 +1,14 @@
-﻿using Amazon.S3;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Mix.Heart.Models;
 using Mix.Mq.Lib.Models;
 using Mix.Storage.Lib.Engines.Aws;
+using Mix.Storage.Lib.Engines.Gcs;
 using Mix.Storage.Lib.Engines.AzureStorage;
 using Mix.Storage.Lib.Engines.Base;
 using Mix.Storage.Lib.Engines.CloudFlare;
 using Mix.Storage.Lib.Engines.Mix;
 using Mix.Storage.Lib.Helpers;
 using Mix.Storage.Lib.Models;
-using MySqlX.XDevAPI.Common;
-using System.IO;
 
 namespace Mix.Storage.Lib.Services
 {
@@ -43,6 +40,7 @@ namespace Mix.Storage.Lib.Services
                 MixStorageProvider.CLOUDFLARE => new CloudFlareUploader(httpContext, _configuration, cmsUow,
                     _httpService),
                 MixStorageProvider.AWS => new AwsUploader(httpContext, _configuration, cmsUow),
+                MixStorageProvider.GCS => new GcsUploader(httpContext, _configuration, cmsUow),
                 MixStorageProvider.AZURE_STORAGE_BLOB => new AzureStorageUploader(httpContext, _configuration, cmsUow),
                 MixStorageProvider.MIX => new MixUploader(httpContext, _configuration, cmsUow, _queueService),
                 _ => new MixUploader(httpContext, _configuration, cmsUow, _queueService)

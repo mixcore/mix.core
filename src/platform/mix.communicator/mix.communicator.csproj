@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<RootNamespace>Mix.Communicator</RootNamespace>
@@ -13,9 +13,9 @@
 		<Using Include="Mix.Shared.Dtos" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="FirebaseAdmin" Version="3.0.0" />
-		<PackageReference Include="Google.Api.Gax.Rest" Version="4.8.0" />
-		<PackageReference Include="Google.Cloud.Firestore" Version="3.8.0" />
+		<PackageReference Include="FirebaseAdmin" Version="3.0.1" />
+		<PackageReference Include="Google.Api.Gax.Rest" Version="4.9.0" />
+		<PackageReference Include="Google.Cloud.Firestore" Version="3.9.0" />
 	</ItemGroup>
 
 	<ItemGroup>

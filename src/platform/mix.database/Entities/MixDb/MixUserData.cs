@@ -7,7 +7,7 @@
         public string Avatar { get; set; }
         public string PhoneNumber { get; set; }
         public string Fullname { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public string Email { get; set; }
         public DateTime? DateOfBirth { get; set; }
     }

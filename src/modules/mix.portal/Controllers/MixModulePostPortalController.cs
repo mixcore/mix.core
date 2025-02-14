@@ -33,7 +33,7 @@ namespace Mix.Portal.Controllers
         protected override Task<int> CreateHandlerAsync(MixModulePostAssociationViewModel data, CancellationToken cancellationToken = default)
         {
             if (_cmsUow.DbContext.MixModulePostAssociation.Any(
-                m => m.MixTenantId == CurrentTenant.Id
+                m => m.TenantId == CurrentTenant.Id
                 && m.ParentId == data.ParentId
                 && m.ChildId == data.ChildId))
             {

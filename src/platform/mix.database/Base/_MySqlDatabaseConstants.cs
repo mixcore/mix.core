@@ -11,13 +11,16 @@
 
         string IDatabaseConstants.MediumLength => "(250)";
 
-        string IDatabaseConstants.MaxLength => "(4000)";
+        string IDatabaseConstants.MaxLength => "(2000)";
 
         string IDatabaseConstants.DateTime => "datetime";
+
+        string IDatabaseConstants.Date => "datetime";
 
         string IDatabaseConstants.Guid => "varchar(255)";
 
         string IDatabaseConstants.Integer => "int";
+
         string IDatabaseConstants.Long => "BigInt";
 
         string IDatabaseConstants.String => "varchar";
@@ -28,10 +31,14 @@
 
         string IDatabaseConstants.GenerateUUID => "(uuid())";
 
-        string IDatabaseConstants.Boolean => "boolean";
+        string IDatabaseConstants.Now => "CURRENT_TIMESTAMP";
+
+        string IDatabaseConstants.Boolean => "tinyint";
 
         string IDatabaseConstants.BacktickOpen => "`";
 
         string IDatabaseConstants.BacktickClose => "`";
+
+        string IDatabaseConstants.Time => "time";
     }
 }

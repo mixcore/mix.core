@@ -6,7 +6,7 @@ namespace Mix.Lib.ViewModels
         : ViewModelBase<MixCmsContext, MixTemplate, int, MixTemplateViewModel>
     {
         #region Properties
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public string Content { get; set; }
         public string Extension { get; set; }
         public string FileFolder { get; set; }

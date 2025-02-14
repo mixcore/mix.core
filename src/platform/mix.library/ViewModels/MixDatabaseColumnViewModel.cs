@@ -17,7 +17,7 @@ namespace Mix.Lib.ViewModels
         public int MixDatabaseId { get; set; }
         [Newtonsoft.Json.JsonIgnore]
         public JObject Configurations { get; set; }
-        public ColumnConfigurations ColumnConfigurations { get; set; }
+        public ColumnConfigurations ColumnConfigurations { get; set; } = new();
         #endregion
 
         #region Constructors

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using Mix.Database.Extensions;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Base
 {
@@ -45,7 +45,13 @@ namespace Mix.Database.Base
 
                     case MixDatabaseProvider.MySQL:
                         optionsBuilder.UseMySql(cnn, ServerVersion.AutoDetect(cnn),
-                            b => b.UseMicrosoftJson(MySqlCommonJsonChangeTrackingOptions.FullHierarchyOptimizedFast));
+                            b =>
+                            {
+                                b.UseMicrosoftJson(MySqlCommonJsonChangeTrackingOptions.FullHierarchyOptimizedFast);
+                                b.EnablePrimitiveCollectionsSupport(true);
+                                b.TranslateParameterizedCollectionsToConstants();
+                            });
+                                
                         break;
 
                     case MixDatabaseProvider.SQLITE:

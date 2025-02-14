@@ -4,10 +4,10 @@
     {
         public List<MixConfigurationContentViewModel> Configs { get; }
 
-        public Task Reload(UnitOfWorkInfo<MixCmsContext> uow = null);
+        public Task Reload(int tenantId, UnitOfWorkInfo<MixCmsContext> uow = null);
 
-        public Task Set(string name, string content, string culture, int cultureId, UnitOfWorkInfo<MixCmsContext> uow);
+        public Task Set(string name, string content, string culture, int cultureId, UnitOfWorkInfo<MixCmsContext> uow, int tenantId);
 
-        public Task<T> GetConfig<T>(string name, string culture, T defaultValue = default);
+        public Task<T> GetConfig<T>(string name, string culture, int tenantId, T defaultValue = default);
     }
 }

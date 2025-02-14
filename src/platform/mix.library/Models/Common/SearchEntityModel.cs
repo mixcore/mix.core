@@ -47,14 +47,7 @@ namespace Mix.Lib.Models.Common
             ToDate = request.ToDate;
             Status = request.Status;
             Keyword = request.Keyword;
-            PagingData = new PagingRequestModel()
-            {
-                Page = request.PageIndex + 1,
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
-                SortDirection = request.Direction,
-                SortBy = request.OrderBy
-            };
+            PagingData = new PagingRequestModel(request);
 
             BuildPredicate();
         }

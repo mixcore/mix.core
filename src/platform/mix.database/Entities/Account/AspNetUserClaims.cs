@@ -6,5 +6,6 @@ namespace Mix.Database.Entities.Account
     {
         [NotMapped]
         public virtual MixUser MixUser { get; set; }
+        public Guid MixUserId { get; set; }
     }
 }

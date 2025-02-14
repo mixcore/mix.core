@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.QueueLog;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;

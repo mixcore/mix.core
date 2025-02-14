@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Constants;
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
@@ -25,6 +27,7 @@ namespace Mix.Portal.Controllers
         private readonly IMixThemeExportService _exportService;
         private readonly IMixThemeImportService _importService;
         private readonly MixConfigurationService _configService;
+        private readonly AppSettingsService _appSettingsService;
 
         public MixThemeController(
             IHttpContextAccessor httpContextAccessor,
@@ -40,8 +43,9 @@ namespace Mix.Portal.Controllers
             IHubContext<MixThemeHub> hubContext,
             MixConfigurationService configService,
             IPortalHubClientService portalHub,
-            IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            IMixTenantService mixTenantService,
+            AppSettingsService appSettingsService)
+            : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
 
@@ -50,6 +54,7 @@ namespace Mix.Portal.Controllers
             _httpService = httpService;
             HubContext = hubContext;
             _configService = configService;
+            _appSettingsService = appSettingsService;
         }
 
         #region Routes
@@ -60,15 +65,15 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult<MixThemeViewModel>> Save(MixThemeViewModel data)
         {
             data.SetUowInfo(Uow, CacheService);
-            data.CreatedBy = MixIdentityService.GetClaim(User, MixClaims.Username);
+            data.CreatedBy = MixIdentityService.GetClaim(User, MixClaims.UserName);
             await data.SaveAsync();
             return Ok(data);
         }
 
         [HttpPost("export")]
-        public async Task<ActionResult<SiteDataViewModel>> ExportThemeAsync([FromBody] ExportThemeDto dto)
+        public async Task<ActionResult<SiteDataViewModel>> ExportThemeAsync([FromBody] ExportThemeDto dto, CancellationToken cancellationToken = default)
         {
-            var siteData = await _exportService.ExportTheme(dto);
+            var siteData = await _exportService.ExportTheme(dto, cancellationToken);
             return Ok(siteData);
         }
 
@@ -81,13 +86,24 @@ namespace Mix.Portal.Controllers
         }
 
         [HttpPost("import-theme")]
-        public async Task<ActionResult<SiteDataViewModel>> ImportThemeAsync([FromBody] SiteDataViewModel siteData)
+        public async Task<ActionResult<SiteDataViewModel>> ImportThemeAsync([FromBody] ImportThemeDto dto, CancellationToken cancellationToken = default)
         {
             if (ModelState.IsValid)
             {
-                siteData.CreatedBy = MixIdentityService.GetClaim(User, MixClaims.Username);
+                var siteData = await _importService.LoadSchema();
+                siteData.ThemeId = dto.ThemeId;
+                siteData.MixDatabases = siteData.MixDatabases.Where(m => dto.MixDatabaseIds.Contains(m.Id)).ToList();
+                siteData.MixDatabaseColumns = siteData.MixDatabaseColumns.Where(m => dto.MixDatabaseIds.Contains(m.MixDatabaseId)).ToList();
+                siteData.MixDatabaseRelationships = siteData.MixDatabaseRelationships.Where(
+                    m => siteData.MixDatabases.Any(n => n.SystemName == m.SourceDatabaseName)
+                            && siteData.MixDatabases.Any(n => n.SystemName == m.DestinateDatabaseName)).ToList();
+
+                var exportDataDbNames = siteData.MixDatabases.Where(m => dto.MixDatabaseDataIds.Contains(m.Id));
+                siteData.MixDbModels = siteData.MixDbModels.Where(m => exportDataDbNames.Any(n => n.SystemName == m.DatabaseName)).ToList();
+
+                siteData.CreatedBy = MixIdentityService.GetClaim(User, MixClaims.UserName);
                 siteData.Specificulture ??= CurrentTenant.Configurations.DefaultCulture;
-                var result = await _importService.ImportSelectedItemsAsync(siteData);
+                var result = await _importService.ImportSelectedItemsAsync(siteData, siteData.CreatedBy, cancellationToken);
                 return Ok(result);
             }
             return BadRequest(ModelState);
@@ -110,8 +126,7 @@ namespace Mix.Portal.Controllers
             };
 
             await _importService.DownloadThemeAsync(theme, progress, _httpService);
-            GlobalConfigService.Instance.SetConfig(nameof(GlobalSettingsModel.InitStatus), InitStep.SelectTheme);
-            GlobalConfigService.Instance.SaveSettings();
+            _appSettingsService.SetConfig(nameof(AppSettingsModel.InitStatus), InitStep.SelectTheme);
             return Ok();
         }
 
@@ -153,7 +168,7 @@ namespace Mix.Portal.Controllers
                     FolderType = MixTemplateFolderType.Pages,
                     Extension = MixFileExtensions.CsHtml,
                     Content = "@{Layout = null;}" + indexFile.Content.Replace("@", "@@"),
-                    MixTenantId = CurrentTenant.Id,
+                    TenantId = CurrentTenant.Id,
                     Scripts = string.Empty,
                     Styles = string.Empty
                 };
@@ -185,7 +200,7 @@ namespace Mix.Portal.Controllers
         protected override PagingResponseModel<MixThemeViewModel> ParseSearchResult(SearchRequestDto req, PagingResponseModel<MixThemeViewModel> result)
         {
             var data = base.ParseSearchResult(req, result);
-            var activeId = _configService.GetConfig<int?>(MixConfigurationNames.ActiveThemeId, Culture.Specificulture).GetAwaiter().GetResult();
+            var activeId = _configService.GetConfig<int?>(MixConfigurationNames.ActiveThemeId, Culture.Specificulture, CurrentTenant.Id).GetAwaiter().GetResult();
             if (activeId.HasValue)
             {
                 foreach (var item in data.Items)
@@ -216,7 +231,7 @@ namespace Mix.Portal.Controllers
                     new JProperty("id", Request.HttpContext.Connection.Id.ToString()),
                     new JProperty("address", address),
                     new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
-                    new JProperty("user", MixIdentityService.GetClaim(User, MixClaims.Username)),
+                    new JProperty("user", MixIdentityService.GetClaim(User, MixClaims.UserName)),
                     new JProperty("request_url", Request.Path.Value),
                     new JProperty("action", action),
                     new JProperty("status", status),

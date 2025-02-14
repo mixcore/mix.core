@@ -36,8 +36,8 @@ namespace Mix.Portal.Domain.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                _destCulture = _cmsUow.DbContext.MixCulture.FirstOrDefault(m => m.Specificulture == destCulture && m.MixTenantId == CurrentTenant.Id);
-                _srcCulture = _cmsUow.DbContext.MixCulture.FirstOrDefault(m => m.Specificulture == srcCulture && m.MixTenantId == CurrentTenant.Id);
+                _destCulture = _cmsUow.DbContext.MixCulture.FirstOrDefault(m => m.Specificulture == destCulture && m.TenantId == CurrentTenant.Id);
+                _srcCulture = _cmsUow.DbContext.MixCulture.FirstOrDefault(m => m.Specificulture == srcCulture && m.TenantId == CurrentTenant.Id);
 
                 if (_destCulture == null || srcCulture == null)
                 {
@@ -65,7 +65,7 @@ namespace Mix.Portal.Domain.Services
         private async Task CloneIntegerData<T>(Dictionary<int, int> dictionaryIds)
             where T : MultilingualContentBase<int>
         {
-            var contents = _cmsUow.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == CurrentTenant.Id)
+            var contents = _cmsUow.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.TenantId == CurrentTenant.Id)
                  .AsNoTracking()
                  .ToList();
             if (contents.Any())
@@ -87,7 +87,7 @@ namespace Mix.Portal.Domain.Services
 
         private async Task CloneModuleData()
         {
-            var contents = _cmsUow.DbContext.MixModuleData.Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == CurrentTenant.Id)
+            var contents = _cmsUow.DbContext.MixModuleData.Where(m => m.MixCultureId == _srcCulture.Id && m.TenantId == CurrentTenant.Id)
                  .AsNoTracking()
                  .ToList();
             if (contents.Any())
@@ -110,7 +110,7 @@ namespace Mix.Portal.Domain.Services
         private async Task CloneGuidData<T>(Dictionary<Guid, Guid> dictionaryIds)
             where T : MultilingualContentBase<Guid>
         {
-            var contents = _cmsUow.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == CurrentTenant.Id)
+            var contents = _cmsUow.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.TenantId == CurrentTenant.Id)
                  .AsNoTracking()
                  .ToList();
             if (contents.Any())
@@ -132,7 +132,7 @@ namespace Mix.Portal.Domain.Services
         private async Task CloneDataValues<T>(Dictionary<Guid, Guid> dictionaryIds)
             where T : MultilingualContentBase<Guid>
         {
-            var contents = _cmsUow.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == CurrentTenant.Id)
+            var contents = _cmsUow.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.TenantId == CurrentTenant.Id)
                  .AsNoTracking()
                  .ToList();
             if (contents.Any())
@@ -160,7 +160,7 @@ namespace Mix.Portal.Domain.Services
                    Dictionary<int, int> rightDic)
                    where T : AssociationBase<int>
         {
-            var data = _cmsUow.DbContext.Set<T>().Where(m => m.MixTenantId == CurrentTenant.Id && leftDic.Keys.Contains(m.ParentId))
+            var data = _cmsUow.DbContext.Set<T>().Where(m => m.TenantId == CurrentTenant.Id && leftDic.Keys.Contains(m.ParentId))
                 .AsNoTracking()
                 .ToList();
             if (data.Count > 0)

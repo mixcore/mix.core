@@ -5,7 +5,7 @@ using Mix.SignalR.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
-    [Route("api/v2/rest/mix-portal/mix-page-post")]
+    [Route("api/v2/rest/mix-portal/page-post")]
     [ApiController]
     public class MixPagePostController
         : MixAssociationApiControllerBase<MixPagePostAssociationViewModel, MixCmsContext, MixPagePostAssociation>
@@ -26,7 +26,7 @@ namespace Mix.Portal.Controllers
         protected override Task<int> CreateHandlerAsync(MixPagePostAssociationViewModel data, CancellationToken cancellationToken = default)
         {
             if (_cmsUow.DbContext.MixPagePostAssociation.Any(
-                m => m.MixTenantId == CurrentTenant.Id
+                m => m.TenantId == CurrentTenant.Id
                 && m.ParentId == data.ParentId
                 && m.ChildId == data.ChildId))
             {

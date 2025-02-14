@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Routing;
 using Mix.Heart.Helpers;
 using Mix.Lib.Services;
+using Mix.Mixdb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Interfaces;
+using NuGet.Protocol;
 using RepoDb;
 using RepoDb.Enumerations;
 
@@ -51,7 +53,7 @@ namespace Mix.Portal.Domain.ViewModels
             {
                 DisplayName = Title,
                 Description = Excerpt,
-                MixTenantId = MixTenantId
+                TenantId = TenantId
             };
 
             parent.SetUowInfo(UowInfo, CacheService);
@@ -70,7 +72,7 @@ namespace Mix.Portal.Domain.ViewModels
                 foreach (var item in UrlAliases)
                 {
                     item.SetUowInfo(UowInfo, CacheService);
-                    item.MixTenantId = MixTenantId;
+                    item.TenantId = TenantId;
                     item.SourceContentId = parentEntity.Id;
                     item.Type = MixUrlAliasType.Post;
                     await item.SaveAsync(cancellationToken);
@@ -103,7 +105,7 @@ namespace Mix.Portal.Domain.ViewModels
             Contributors = await MixContributorViewModel.GetRepository(UowInfo, CacheService).GetAllAsync(m => m.ContentType == MixContentType.Post && m.IntContentId == Id, cancellationToken);
             foreach (var item in Contributors)
             {
-                await item.LoadUserDataAsync(identityService);
+                await item.LoadUserDataAsync(identityService, cancellationToken);
             }
         }
 
@@ -115,17 +117,17 @@ namespace Mix.Portal.Domain.ViewModels
         }
 
         public async Task LoadAdditionalDataAsync(
-                MixRepoDbRepository mixRepoDbRepository,
-                MixCacheService cacheService)
+                IMixDbDataService mixDbDataSrv,
+                MixCacheService cacheService,
+                CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             bool isChanged = false;
             if (AdditionalData == null && !string.IsNullOrEmpty(MixDatabaseName))
             {
                 isChanged = true;
                 var relationships = Context.MixDatabaseRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName).ToList();
-                mixRepoDbRepository.InitTableName(MixDatabaseName);
-                var fieldNameService = new FieldNameService(MixDatabaseNamingConvention.TitleCase);
-                var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Post, Id, fieldNameService);
+                var obj = await mixDbDataSrv.GetSingleByParentAsync(MixDatabaseName, MixContentType.Post, Id, string.Empty, cancellationToken);
                 if (obj != null)
                 {
                     AdditionalData = ReflectionHelper.ParseObject(obj);
@@ -133,17 +135,20 @@ namespace Mix.Portal.Domain.ViewModels
                     foreach (var item in relationships)
                     {
 
-                        mixRepoDbRepository.InitTableName(item.DestinateDatabaseName);
                         var allowsIds = Context.MixDatabaseAssociation
                                 .Where(m => m.ParentDatabaseName == MixDatabaseName
-                                            && m.ParentId == AdditionalData.Value<int>("id")
+                                            && m.ParentId == AdditionalData.GetJObjectProperty<int>("id")
                                             && m.ChildDatabaseName == item.DestinateDatabaseName)
                                 .Select(m => m.ChildId).ToList();
-                        var queries = new List<QueryField>()
+                        var queries = new List<MixQueryField>()
                     {
-                        new QueryField("Id", Operation.In, allowsIds)
+                        new MixQueryField("Id", allowsIds, MixCompareOperator.InRange)
                     };
-                        var data = await mixRepoDbRepository.GetListByAsync(queries);
+                        var data = await mixDbDataSrv.GetListByAsync(new Shared.Models.SearchMixDbRequestModel()
+                        {
+                            TableName = item.DestinateDatabaseName,
+                            Queries = queries
+                        }, cancellationToken: cancellationToken);
                         var arr = new JArray();
                         if (data != null)
                         {

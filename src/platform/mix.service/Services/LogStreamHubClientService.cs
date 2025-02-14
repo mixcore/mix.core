@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Mix.Shared.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;

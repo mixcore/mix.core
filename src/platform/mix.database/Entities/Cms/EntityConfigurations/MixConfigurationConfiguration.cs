@@ -1,5 +1,5 @@
 ﻿using Mix.Database.Base.Cms;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {

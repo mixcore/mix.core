@@ -1,13 +1,17 @@
 ﻿using Mix.Common.Models;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Service.Models;
 using Mix.Shared.Models.Configurations;
-using Mix.Shared.Services;
 
 namespace Mix.Common.Domain.Helpers
 {
     public class CommonHelper
     {
-        internal static Common.Models.GlobalSettings GetAppSettings(MixAuthenticationConfigurations authConfigurations, MixTenantSystemModel currentTenant)
+        internal static GlobalSettings GetAppSettings(
+            string aesKey,
+            PortalConfigService portalConfigSrv, 
+            MixAuthenticationConfigurations authConfigurations, 
+            MixTenantSystemModel currentTenant)
         {
             //var cultures = _cultureService.Cultures;
             //var culture = _cultureService.LoadCulture(lang);
@@ -16,10 +20,10 @@ namespace Mix.Common.Domain.Helpers
             {
                 Domain = currentTenant?.Configurations.Domain,
                 DefaultCulture = currentTenant?.Configurations.DefaultCulture,
-                IsEncryptApi = currentTenant?.Configurations.IsEncryptApi ?? false,
+                IsEncryptApi = false,
                 LastUpdateConfiguration = currentTenant?.Configurations.LastUpdateConfiguration,
-                PortalThemeSettings = PortalConfigService.Instance.AppSettings,
-                ApiEncryptKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey,
+                PortalThemeSettings = portalConfigSrv.RawSettings,
+                ApiEncryptKey = aesKey,
                 //Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)),

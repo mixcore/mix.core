@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.AuditLog;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Enums;
 using Mix.Heart.Helpers;
 using Mix.Log.Lib.Commands;

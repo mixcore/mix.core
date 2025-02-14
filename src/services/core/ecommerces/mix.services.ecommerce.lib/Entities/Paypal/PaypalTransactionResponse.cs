@@ -15,7 +15,7 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Paypal
         public JArray PurchaseUnits { get; set; }
         public JArray Links { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
-        public int MixTentantId { get; set; }
+        public int TentantId { get; set; }
         public PaypalTransactionResponse()
         {
             

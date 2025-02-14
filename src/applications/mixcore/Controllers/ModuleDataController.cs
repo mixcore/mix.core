@@ -24,7 +24,10 @@ namespace Mixcore.Controllers
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
         }
-
+        protected override Task<int> CreateHandlerAsync(ModuleDataViewModel data, CancellationToken cancellationToken = default)
+        {
+            return base.CreateHandlerAsync(data, cancellationToken);
+        }
         [HttpGet("get-module-data")]
         public async Task<ActionResult<PagingResponseModel<ModuleDataViewModel>>> GetByModule([FromQuery] SearchModuleDataDto req, CancellationToken cancellationToken = default)
         {

@@ -1,4 +1,5 @@
-﻿using Mix.Database.Services;
+﻿using Mix.Database.Services.MixGlobalSettings;
+using Mix.Heart.Extensions;
 
 namespace Mix.Database.Base.Cms
 {
@@ -18,22 +19,26 @@ namespace Mix.Database.Base.Cms
 
             builder.Property(e => e.DisplayName)
                 .IsRequired()
+                .HasColumnName("display_name")
                 .HasColumnType($"{Config.NString}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.SystemName)
                 .IsRequired()
+                .HasColumnName("system_name")
                 .HasColumnType($"{Config.NString}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Description)
+                .HasColumnName("description")
                 .HasColumnType($"{Config.NString}{Config.MaxLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Content)
+                .HasColumnName("content")
                 .HasColumnType($"{Config.NString}{Config.MaxLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);

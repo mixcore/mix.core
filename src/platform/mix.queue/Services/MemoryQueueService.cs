@@ -20,13 +20,13 @@ namespace Mix.Queue.Services
         public bool Any(string topicId)
         {
             var queue = GetMemoryQueue(topicId);
-            return queue.Any();
+            return !queue.IsEmpty;
         }
 
         public IList<MessageQueueModel> ConsumeMemoryQueue(int length, string topicId)
         {
             var queue = GetMemoryQueue(topicId);
-            List<MessageQueueModel> result = new();
+            List<MessageQueueModel> result = [];
             if (queue.All(m => m.TopicId != topicId))
             {
                 return result;
@@ -35,7 +35,7 @@ namespace Mix.Queue.Services
             int i = 1;
 
             // Consume memory messages and push to MessageQueue Provider
-            while (i <= length && queue.Any())
+            while (i <= length && !queue.IsEmpty)
             {
                 queue.TryDequeue(out MessageQueueModel data);
                 if (data != null)
@@ -47,13 +47,14 @@ namespace Mix.Queue.Services
 
         public IList<MessageQueueModel> ConsumeAllMemoryQueue(int length)
         {
-            List<MessageQueueModel> result = new();
+            List<MessageQueueModel> result = [];
             foreach (var topic in _queues)
             {
                 result.AddRange(ConsumeMemoryQueue(length, topic.Key));
             }
             return result;
         }
+
         public ConcurrentQueue<MessageQueueModel> GetMemoryQueue(string topicId)
         {
             if (string.IsNullOrEmpty(topicId))
@@ -96,7 +97,6 @@ namespace Mix.Queue.Services
             msg.Package(data);
             PushMemoryQueue(msg);
         }
-
 
         private void EnqueueLog(MessageQueueModel model)
         {

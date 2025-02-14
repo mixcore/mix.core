@@ -16,7 +16,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels.Paypal
         public JObject RedirectUrls { get; set; }
         public JArray Transactions { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
 
         #endregion
 

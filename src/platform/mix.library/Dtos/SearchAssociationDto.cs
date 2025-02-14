@@ -16,7 +16,7 @@ namespace Mix.Lib.Dtos
             ToDate = req.ToDate;
             PageIndex = req.PageIndex;
             PageSize = req.PageSize;
-            OrderBy = req.OrderBy;
+            SortBy = req.SortBy;
             Direction = req.Direction;
             Status = req.Status;
 

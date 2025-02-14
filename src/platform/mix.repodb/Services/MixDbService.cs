@@ -256,7 +256,7 @@ namespace Mix.RepoDb.Services
 
                         RepoDbMixDatabaseViewModel currentDb = new(database, _cmsUow);
                         currentDb.Id = 0;
-                        currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
+                        currentDb.TenantId = CurrentTenant?.Id ?? 1;
                         currentDb.CreatedDateTime = DateTime.UtcNow;
                         currentDb.Columns = new();
 
@@ -315,7 +315,7 @@ namespace Mix.RepoDb.Services
                             currentDb.Id = 0;
                             currentDb.NamingConvention = dbContext.NamingConvention;
                             currentDb.SystemName = newDbName;
-                            currentDb.MixTenantId = CurrentTenant?.Id ?? 1;
+                            currentDb.TenantId = CurrentTenant?.Id ?? 1;
                             currentDb.MixDatabaseContextId = dbContext.Id;
                             currentDb.CreatedDateTime = DateTime.UtcNow;
                             currentDb.Columns = new();

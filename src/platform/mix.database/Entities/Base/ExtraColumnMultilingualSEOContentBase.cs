@@ -5,6 +5,5 @@
     {
         public string MixDatabaseName { get; set; }
         public int? MixDbId { get; set; }
-        //public JObject? ExtraData { get; set; }
     }
 }

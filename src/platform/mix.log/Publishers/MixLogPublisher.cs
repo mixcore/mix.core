@@ -2,11 +2,11 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Mix.Constant.Constants;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
-using Mix.Shared.Services;
 
 namespace Mix.Log.Lib.Publishers
 {
@@ -19,8 +19,8 @@ namespace Mix.Log.Lib.Publishers
             IConfiguration configuration,
             MixEndpointService mixEndpointService,
             ILogger<MixLogPublisher> logger,
-            IPooledObjectPolicy<RabbitMQ.Client.IModel>? rabbitMqObjectPolicy = null)
-            : base(TopicId, queueService, configuration, mixEndpointService, logger, rabbitMqObjectPolicy)
+            IPooledObjectPolicy<RabbitMQ.Client.IModel>? rabbitMQObjectPolicy = null)
+            : base(TopicId, queueService, configuration, mixEndpointService, logger, rabbitMQObjectPolicy)
         {
         }
     }

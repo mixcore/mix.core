@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Auth.Constants;
+using Microsoft.EntityFrameworkCore;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Helpers;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
+using Mix.Mixdb.Interfaces;
 using Mix.Mq.Lib.Models;
-using Mix.RepoDb.Interfaces;
 using Mix.Shared.Services;
 using Mix.SignalR.Interfaces;
+using MySqlX.XDevAPI.Common;
 
 namespace Mix.Portal.Controllers
 {
@@ -15,10 +18,11 @@ namespace Mix.Portal.Controllers
     public class MixDatabaseContextController
         : MixRestfulApiControllerBase<MixDatabaseContextViewModel, MixCmsContext, MixDatabaseContext, int>
     {
-        private readonly IMixDbService _mixDbService;
+        private readonly IMixdbStructure _mixDbService;
         public MixDatabaseContextController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> uow, IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
-            IMixTenantService mixTenantService, IMixDbService mixDbService)
+            IMixTenantService mixTenantService,
+            IMixdbStructure mixDbService)
             : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
@@ -30,7 +34,7 @@ namespace Mix.Portal.Controllers
         {
             if (data != null && !string.IsNullOrEmpty(data.DecryptedConnectionString))
             {
-                data.ConnectionString = AesEncryptionHelper.EncryptString(data.DecryptedConnectionString, GlobalConfigService.Instance.AesKey);
+                data.ConnectionString = data.DecryptedConnectionString.Encrypt(Configuration.AesKey());
             }
 
             var result = await base.CreateHandlerAsync(data, cancellationToken);
@@ -43,6 +47,16 @@ namespace Mix.Portal.Controllers
             return result;
         }
 
+        protected override async Task UpdateHandler(int id, MixDatabaseContextViewModel data, CancellationToken cancellationToken = default)
+        {
+            await base.UpdateHandler(id, data, cancellationToken);
+            if (data.DatabaseProvider == MixDatabaseProvider.PostgreSQL)
+            {
+                _mixDbService.InitDbStructureService(data.ConnectionString.Decrypt(Configuration.AesKey()), data.DatabaseProvider);
+                await _mixDbService.ExecuteCommand("CREATE EXTENSION IF NOT EXISTS \"unaccent\";", cancellationToken);
+            }
+
+        }
         #endregion
 
         #region Routes

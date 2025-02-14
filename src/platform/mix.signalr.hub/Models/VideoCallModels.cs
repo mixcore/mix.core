@@ -7,7 +7,7 @@
     }
     public class User
     {
-        public string Username;
+        public string UserName;
         public string ConnectionId;
         public bool InCall;
     }

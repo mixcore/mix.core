@@ -15,7 +15,7 @@ namespace Mix.Shared.Extensions
 
             string valueToPrint = string.Empty;
             if (JToken.DeepEquals(fromValue, toValue)) return diff;
-            else if (fromValue == null || toValue == null|| fromValue.Type != toValue.Type)
+            else if (fromValue == null || toValue == null || fromValue.Type != toValue.Type)
             {
                 diff["from"] = fromValue;
                 diff["to"] = toValue;

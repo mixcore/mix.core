@@ -14,6 +14,8 @@
 
         string IDatabaseConstants.DateTime => "datetime";
 
+        string IDatabaseConstants.Date => "datetime";
+
         string IDatabaseConstants.Guid => "uniqueidentifier";
 
         string IDatabaseConstants.Integer => "int";
@@ -28,10 +30,14 @@
 
         string IDatabaseConstants.GenerateUUID => "newid()";
 
+        string IDatabaseConstants.Now => "CURRENT_TIMESTAMP";
+
         string IDatabaseConstants.Boolean => "bit";
 
         string IDatabaseConstants.BacktickOpen => "[";
 
         string IDatabaseConstants.BacktickClose => "]";
+
+        string IDatabaseConstants.Time => "time";
     }
 }

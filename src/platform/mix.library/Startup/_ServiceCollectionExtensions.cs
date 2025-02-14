@@ -1,20 +1,19 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Azure.Amqp.Framing;
-using Microsoft.Build.Framework;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Middlewares;
 using Mix.Lib.Services;
 using Mix.Mixdb.Event.Services;
+using Mix.Mixdb.Extensions;
 using Mix.Service.Interfaces;
 using Mix.Shared;
 using Mix.Shared.Interfaces;
@@ -27,131 +26,150 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static partial class ServiceCollectionExtensions
     {
-        public static List<Assembly> MixAssemblies
+        public static List<Assembly> RefAssemblies(string prefix = MixConstants.CONST_PREFIX_ASSEMBLY)
         {
-            get => MixAssemblyFinder.GetAssembliesByPrefix("mix");
+            return MixAssemblyFinder.GetAssembliesByPrefix(prefix);
         }
 
         #region Services
 
-        public static IServiceCollection AddMixServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
+        public static IHostApplicationBuilder AddMixServices(this IHostApplicationBuilder builder, Assembly executingAssembly, string prefix = "mix")
         {
-            var globalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings)
-                                            .Get<GlobalSettingsModel>();
-            
-            var redisCnn = configuration.GetSection("Redis").GetValue<string>("ConnectionString");
-            services.Configure<HostOptions>(options =>
+            var globalConfig = builder
+                .Configuration
+                .GetSection(MixAppSettingsSection.GlobalSettings)
+                .Get<GlobalSettingsModel>();
+
+            var redisConnectionString = builder
+                .Configuration
+                .GetSection(MixAppSettingsSection.Redis)
+                .GetValue<string>(MixAppSettingsSection.ConnectionStrings);
+
+            builder.Services.Configure<HostOptions>(options =>
             {
                 options.ServicesStartConcurrently = true;
                 options.ServicesStopConcurrently = false;
             });
-            services.AddOptions<GlobalSettingsModel>()
-                 .Bind(configuration.GetSection(MixAppSettingsSection.GlobalSettings))
+
+            builder.Services.AddOptions<GlobalSettingsModel>()
+                 .Bind(builder.Configuration.GetSection(MixAppSettingsSection.GlobalSettings))
                  .ValidateDataAnnotations();
-            services.AddMvc().AddSessionStateTempDataProvider();
 
-            if (!string.IsNullOrEmpty(redisCnn))
+            builder.Services.AddMvc().AddSessionStateTempDataProvider();
+
+            if (!string.IsNullOrEmpty(redisConnectionString))
             {
-                var redis = ConnectionMultiplexer.Connect(configuration.GetSection("Redis").GetValue<string>("ConnectionString"));
-                services.AddDataProtection()
-                    .SetApplicationName(Assembly.GetExecutingAssembly().FullName)
-                    .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
+                bool isConnected = false;
+                while (!isConnected)
+                {
+                    try
+                    {
+                        var redis = ConnectionMultiplexer.Connect(redisConnectionString);
+                        builder.Services.AddDataProtection()
+                            .SetApplicationName(Assembly.GetExecutingAssembly().FullName)
+                            .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
 
-                var sp = services.BuildServiceProvider();
+                        var sp = builder.Services.BuildServiceProvider();
 
-                // perform a protect operation to force the system to put at least
-                // one key in the key ring
-                sp.GetDataProtector("Sample.KeyManager.v1").Protect("payload");
-                Console.WriteLine("Performed a protect operation.");
-                Thread.Sleep(2000);
+                        // perform a protect operation to force the system to put at least
+                        // one key in the key ring
+                        sp.GetDataProtector("Sample.KeyManager.v1").Protect("payload");
+                        Console.WriteLine("Performed a protect operation.");
+                        isConnected = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Cannot create redis client: {ex.Message}, using JSON cache instead");
+                        Thread.Sleep(2000);
+                    }
+                }
             }
             else
             {
-                services.AddDataProtection()
+                builder.Services.AddDataProtection()
                 .UnprotectKeysWithAnyCertificate()
                 .SetApplicationName(Assembly.GetExecutingAssembly().FullName);
             }
 
-            
-            services.AddMixCommonServices(configuration);
-            services.TryAddScoped<MixConfigurationService>();
-            services.TryAddScoped<IMixCmsService, MixCmsService>();
+            builder.AddMixCommonServices();
+            builder.Services.TryAddSingleton<MixConfigurationService>();
+            builder.Services.TryAddScoped<IMixCmsService, MixCmsService>();
+            builder.Services.AddUoWs();
+            builder.Services.AddMixDbContexts();
+            builder.Services.CustomValidationResponse();
+            builder.Services.AddHttpClient();
+            builder.Services.AddHttpLogging(opt => opt.CombineLogs = true);
 
-            services.AddMixDbContexts();
-            services.AddUoWs();
-            services.CustomValidationResponse();
-            services.AddHttpClient();
-            services.AddHttpLogging(opt => opt.CombineLogs = true);
-
-            services.AddQueues(executingAssembly, configuration);
+            builder.Services.AddQueues(executingAssembly, builder.Configuration);
 
             // Don't need to inject all entity repository by default
-            //services.AddEntityRepositories();
+            //builder.Services.AddEntityRepositories();
 
-            services.AddMixTenant(configuration);
-            services.AddGeneratedPublisher();
+            builder.Services.AddMixTenant(builder.Configuration);
+            builder.Services.AddGeneratedPublisher();
 
-            services.AddMixModuleServices(configuration);
+            builder.AddIStartupServices(prefix);
 
-            services.AddGeneratedRestApi(MixAssemblies);
-            services.AddMixSwaggerServices(executingAssembly);
-            services.AddSSL();
+            builder.Services.AddGeneratedRestApi(RefAssemblies("mix"));
+            builder.Services.AddMixSwaggerServices(executingAssembly);
+            builder.AddSSL();
 
-            services.Configure<GzipCompressionProviderOptions>(
+            builder.Services.Configure<GzipCompressionProviderOptions>(
                 options => options.Level = System.IO.Compression.CompressionLevel.Fastest);
-            services.AddResponseCompression(options => options.EnableForHttps = true);
-            services.AddMixResponseCaching();
-            services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
-            services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
-            services.TryAddSingleton<IMixDbCommandHubClientService, MixDbCommandHubClientService>();
-            services.TryAddSingleton<MixDbEventService>();
-            services.AddMixRepoDb(globalConfig);
+            builder.Services.AddResponseCompression(options => options.EnableForHttps = true);
+            builder.AddMixResponseCaching();
+            builder.Services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
+            builder.Services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
+            builder.Services.TryAddSingleton<IMixDbCommandHubClientService, MixDbCommandHubClientService>();
+            builder.Services.TryAddSingleton<MixDbEventService>();
+            builder.Services.AddMixRepoDb(globalConfig);
 
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCacheDbContext>>();
-            return services;
+
+            return builder;
         }
 
         // Clone Add MixService for unit test
-        public static IServiceCollection AddMixTestServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
+        public static IHostApplicationBuilder AddMixTestServices(this IHostApplicationBuilder builder, Assembly executingAssembly, string prefix = "mix")
         {
             // Clone Settings from shared folder
-            var globalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
-            services.AddMvc().AddSessionStateTempDataProvider();
-          
-            services.AddMixCommonServices(configuration);
-            services.TryAddScoped<MixConfigurationService>();
-            services.TryAddScoped<IMixCmsService, MixCmsService>();
+            var globalConfig = builder.Configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
+            builder.Services.AddMvc().AddSessionStateTempDataProvider();
 
-            services.AddMixDbContexts();
-            services.AddUoWs();
-            services.CustomValidationResponse();
-            services.AddHttpClient();
-            services.AddLogging();
+            builder.AddMixCommonServices();
+            builder.Services.TryAddSingleton<MixConfigurationService>();
+            builder.Services.TryAddScoped<IMixCmsService, MixCmsService>();
 
-            services.ApplyMigrations(globalConfig);
+            builder.Services.AddMixDbContexts();
+            builder.Services.AddUoWs();
+            builder.Services.CustomValidationResponse();
+            builder.Services.AddHttpClient();
+            builder.Services.AddLogging();
 
-            services.AddQueues(executingAssembly, configuration);
+            builder.Services.ApplyMigrations(builder.Configuration, globalConfig);
 
-            services.AddMixTenant(configuration);
-            services.AddGeneratedPublisher();
+            builder.Services.AddQueues(executingAssembly, builder.Configuration);
+
+            builder.Services.AddMixTenant(builder.Configuration);
+            builder.Services.AddGeneratedPublisher();
 
 
-            services.AddMixModuleServices(configuration);
+            builder.AddIStartupServices(prefix);
 
-            services.AddGeneratedRestApi(MixAssemblies);
-            services.AddMixSwaggerServices(executingAssembly);
-            services.AddSSL();
+            builder.Services.AddGeneratedRestApi(RefAssemblies("mix"));
+            builder.Services.AddMixSwaggerServices(executingAssembly);
+            builder.AddSSL();
 
-            services.Configure<GzipCompressionProviderOptions>(
+            builder.Services.Configure<GzipCompressionProviderOptions>(
                 options => options.Level = System.IO.Compression.CompressionLevel.Fastest);
-            services.AddResponseCaching();
+            builder.Services.AddResponseCaching();
 
-            services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
-            services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
-            services.AddMixRepoDb(globalConfig);
+            builder.Services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
+            builder.Services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
+            builder.Services.AddMixRepoDb(globalConfig);
 
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCacheDbContext>>();
-            return services;
+            return builder;
         }
 
         #endregion
@@ -162,25 +180,25 @@ namespace Microsoft.Extensions.DependencyInjection
             this IApplicationBuilder app,
             Assembly executingAssembly,
             IConfiguration configuration,
-            string contentRootPath,
-            bool isDevelop)
+            bool isDevelop,
+            string prefix = "mix")
         {
             app.UseHttpLogging();
             app.UseUoWs();
-            app.UseMixModuleApps(configuration, isDevelop);
+            app.UseIStartupApps(prefix, configuration, isDevelop);
             app.UseMixSwaggerApps(isDevelop, executingAssembly);
             app.ConfigureExceptionHandler();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
-                foreach (var assembly in MixAssemblies)
+                foreach (var assembly in RefAssemblies(prefix))
                 {
                     var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
                     foreach (var startup in startupServices)
                     {
-                        ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
-                        var instance = classConstructor.Invoke(Array.Empty<Type>());
-                        startup.GetMethod("UseEndpoints").Invoke(instance, new object[] { endpoints, configuration, isDevelop });
+                        ConstructorInfo classConstructor = startup.GetConstructor([]);
+                        var instance = classConstructor.Invoke([]);
+                        startup.GetMethod(nameof(IStartupService.UseEndpoints)).Invoke(instance, [endpoints, configuration, isDevelop]);
                     }
                 }
             });
@@ -199,28 +217,11 @@ namespace Microsoft.Extensions.DependencyInjection
             var provider = new FileExtensionContentTypeProvider();
             provider.Mappings[".vue"] = "application/text";
             provider.Mappings[".xml"] = "application/xml";
-
+            app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
                 ContentTypeProvider = provider
             });
-
-
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(contentRootPath, MixFolders.StaticFiles)),
-                RequestPath = "/mix-app"
-            });
-
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(contentRootPath, MixFolders.StaticFiles)),
-                RequestPath = $"/{MixFolders.StaticFiles}"
-            });
-            // Use staticfile for wwwroot
-            app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
@@ -234,25 +235,25 @@ namespace Microsoft.Extensions.DependencyInjection
         #region Services
 
 
-        private static IServiceCollection AddSSL(this IServiceCollection services)
+        private static IHostApplicationBuilder AddSSL(this IHostApplicationBuilder builder)
         {
-            if (GlobalConfigService.Instance.AppSettings.IsHttps)
+            if (builder.Configuration.GetGlobalConfiguration<bool>(
+                    nameof(AppSettingsModel.IsHttps)))
             {
-                services.AddHttpsRedirection(options =>
+                builder.Services.AddHttpsRedirection(options =>
                 {
                     options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
                     options.HttpsPort = 443;
                 });
             }
-            return services;
+            return builder;
         }
 
         #endregion
 
-
         private static List<Type> GetCandidatesByAttributeType(List<Assembly> assemblies, Type attributeType)
         {
-            List<Type> types = new();
+            List<Type> types = [];
             assemblies.ForEach(
                 a => types.AddRange(a.GetExportedTypes()
                         .Where(
@@ -272,10 +273,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 typeof(IStartupService).IsAssignableFrom(type);
         }
 
-
         private static List<Type> GetViewModelCandidates(List<Assembly> assemblies)
         {
-            List<Type> types = new();
+            List<Type> types = [];
             assemblies.ForEach(
                 a => types.AddRange(a.GetExportedTypes()
                         .Where(

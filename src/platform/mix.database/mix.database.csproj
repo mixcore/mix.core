@@ -1,25 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<RootNamespace>Mix.Database</RootNamespace>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<Compile Remove="Migrations\AuditLog\**" />
-		<EmbeddedResource Remove="Migrations\AuditLog\**" />
-		<None Remove="Migrations\AuditLog\**" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<Compile Remove="Entities\Account\_ApplicationDbContext.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="8.4.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.8" />
-		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="8.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="9.5.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="9.0.0" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="9.0.0-preview.2.efcore.9.0.0" />
 		
 	</ItemGroup>
 
@@ -42,7 +35,11 @@
 
 	<ItemGroup>
 		<Folder Include="Entities\Queue\EntityConfigurations\" />
-		<Folder Include="Migrations\Quartz\" />
+		<Folder Include="Migrations\Account\" />
+		<Folder Include="Migrations\AuditLog\" />
+		<Folder Include="Migrations\Cms\" />
+		<Folder Include="Migrations\QueueLog\" />
+		<Folder Include="Migrations\Settings\" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Middlewares;
 using Mix.Services.Databases.Lib.Interfaces;
@@ -13,15 +14,15 @@ namespace Mix.Services.Databases.Lib
 {
     public class StartupService : IStartupService
     {
-        public void AddServices(IServiceCollection services, IConfiguration configuration)
+        public void AddServices(IHostApplicationBuilder builder)
         {
-            services.TryAddScoped<MixDbDbContext>();
-            services.TryAddScoped<MySqlMixDbDbContext>();
-            services.TryAddScoped<SqliteMixDbDbContext>();
-            services.TryAddScoped<UnitOfWorkInfo<MixDbDbContext>>();
-            services.TryAddScoped<IMixPermissionService, MixUserPermissionService>();
-            services.TryAddScoped<IMixMetadataService, MixMetadataService>();
-            services.TryAddScoped<IMixUserDataService, MixUserDataService>();
+            builder.Services.TryAddScoped<MixDbDbContext>();
+            builder.Services.TryAddScoped<MySqlMixDbDbContext>();
+            builder.Services.TryAddScoped<SqliteMixDbDbContext>();
+            builder.Services.TryAddScoped<UnitOfWorkInfo<MixDbDbContext>>();
+            builder.Services.TryAddScoped<IMixPermissionService, MixUserPermissionService>();
+            builder.Services.TryAddScoped<IMixMetadataService, MixMetadataService>();
+            builder.Services.TryAddScoped<IMixUserDataService, MixUserDataService>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixDbDbContext>>();
         }
 

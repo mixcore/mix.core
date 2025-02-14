@@ -12,7 +12,5 @@ namespace Mix.Database.Entities.Account
         {
         }
 
-        public virtual ICollection<AspNetRoleClaims> AspNetRoleClaims { get; set; }
-        public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
     }
 }

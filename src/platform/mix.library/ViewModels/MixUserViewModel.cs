@@ -1,12 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Auth.Constants;
 using Mix.Database.Entities.Account;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Identity.Models.ManageViewModels;
-using Mix.RepoDb.Interfaces;
+using Mix.Mixdb.Interfaces;
 using Mix.RepoDb.Repositories;
-using Mix.RepoDb.Services;
-using RepoDb;
-using System.Text.Json.Serialization;
 
 namespace Mix.Lib.ViewModels
 {
@@ -17,7 +15,7 @@ namespace Mix.Lib.ViewModels
         public string Email { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public DateTime? LockoutEnd { get; set; }
-        public bool IsActived { get; set; }
+        public bool IsActive { get; set; }
         public System.DateTime? LastModified { get; set; }
         public string ModifiedBy { get; set; }
 
@@ -56,42 +54,41 @@ namespace Mix.Lib.ViewModels
         }
 
         public async Task LoadUserDataAsync(int tenantId, IMixDbDataService mixDbService,
-            MixCmsAccountContext accContext, MixCacheService cacheService)
+            MixCmsAccountContext accContext, MixCacheService cacheService, CancellationToken cancellationToken)
         {
-            if (!GlobalConfigService.Instance.IsInit)
+
+            try
             {
-                try
-                {
-                    UserData = await mixDbService.GetSingleByGuidParent(MixDatabaseNames.SYSTEM_USER_DATA, MixContentType.User, Id, true);
-                    
-                    var roles = from ur in accContext.AspNetUserRoles
-                                join r in accContext.MixRoles
-                                    on ur.RoleId equals r.Id
-                                where ur.UserId == Id && ur.MixTenantId == tenantId
-                                select ur;
-                    Roles = await roles.ToListAsync();
-                }
-                catch (Exception ex)
-                {
-                    await MixLogService.LogExceptionAsync(ex);
-                }
+                UserData = await mixDbService.GetSingleByParentAsync(MixDatabaseNames.SYSTEM_USER_DATA, MixContentType.User, Id, string.Empty, cancellationToken);
+
+                var roles = from ur in accContext.AspNetUserRoles
+                            join r in accContext.MixRoles
+                                on ur.RoleId equals r.Id
+                            where ur.UserId == Id && ur.TenantId == tenantId
+                            select ur;
+                Roles = await roles.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                await MixLogService.LogExceptionAsync(ex);
             }
         }
 
-        public async Task LoadUserPortalMenus(string[] roles, int tenantId, MixRepoDbRepository repoDbRepository)
+        public async Task LoadUserPortalMenus(string[] roles, int tenantId, RepoDbRepository repoDbRepository)
         {
             try
             {
                 if (!roles.Contains(MixRoles.SuperAdmin))
                 {
-                    repoDbRepository.InitTableName(MixDatabaseNames.PORTAL_MENU);
-                    var menus = await repoDbRepository.GetListByAsync(
-                        new List<SearchQueryField>()
-                        {
-                            new SearchQueryField("Role", roles, MixCompareOperator.InRange)
-                        }
-                    );
-                    PortalMenus = ReflectionHelper.ParseArray(menus);
+                    // TODO : update get portal menu by user
+                    //repoDbRepository.InitTableName(MixDatabaseNames.PORTAL_MENU);
+                    //var menus = await repoDbRepository.GetListByAsync(
+                    //    new List<MixQueryField>()
+                    //    {
+                    //        new MixQueryField("Role", roles, MixCompareOperator.InRange)
+                    //    }
+                    //);
+                    //PortalMenus = ReflectionHelper.ParseArray(menus);
                 }
             }
             catch (Exception ex)

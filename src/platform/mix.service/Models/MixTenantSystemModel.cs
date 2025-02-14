@@ -14,11 +14,11 @@ namespace Mix.Service.Models
 
         public string Description { get; set; }
 
-        public List<MixDomain> Domains { get; set; }
+        public List<MixDomain> Domains { get; set; } = new();
 
         public List<MixCulture> Cultures { get; set; } = new();
         public List<MixTheme> Themes { get; set; } = new();
 
-        public TenantConfigurationModel Configurations { get; set; }
+        public TenantConfigurationModel Configurations { get; set; } = new TenantConfigurationModel();
     }
 }

@@ -10,7 +10,7 @@ namespace Mix.Mixdb.ViewModels
         public Guid UserId { get; set; }
         public int PermissionId { get; set; }
         public string Description { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public MixPermissionViewModel Permission { get; set; }
         #endregion
         #region Contructors
@@ -35,7 +35,7 @@ namespace Mix.Mixdb.ViewModels
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             Permission = await MixPermissionViewModel.GetRepository(UowInfo, CacheService)
-                        .GetSingleAsync(m => m.Id == PermissionId && m.MixTenantId == MixTenantId);
+                        .GetSingleAsync(m => m.Id == PermissionId && m.TenantId == TenantId);
         }
 
         #endregion

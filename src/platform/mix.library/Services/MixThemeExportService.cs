@@ -1,10 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Lib.Dtos;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
+using Mix.Mixdb.Interfaces;
+using Mix.Mixdb.Services;
 using Mix.RepoDb.Repositories;
 using Mix.Shared.Models;
 using System.Linq.Expressions;
+using System.Threading;
 
 namespace Mix.Lib.Services
 {
@@ -12,8 +18,9 @@ namespace Mix.Lib.Services
     {
         private readonly Repository<MixCmsContext, MixTheme, int, MixThemeViewModel> _themeRepository;
         private readonly MixCacheService _cacheService;
+        private readonly IConfiguration _configuration;
         private readonly MixCmsContext _context;
-        private readonly MixRepoDbRepository _repository;
+        private readonly IMixDbDataService _mixDbDataSrv;
         private SiteDataViewModel _siteData;
         private ExportThemeDto _dto;
         private MixThemeViewModel _exportTheme;
@@ -34,19 +41,23 @@ namespace Mix.Lib.Services
             }
         }
         private MixTenantSystemModel _currentTenant;
-        public MixThemeExportService(IHttpContextAccessor httpContext, MixCmsContext context, MixRepoDbRepository repository, MixCacheService cacheService)
+        public MixThemeExportService(
+            IConfiguration configuration,
+            IHttpContextAccessor httpContext, MixCmsContext context, DatabaseService databaseService, MixDbDataServiceFactory mixDbDataFactory, MixCacheService cacheService)
         {
             _session = httpContext.HttpContext?.Session;
+            _configuration = configuration;
             _context = context;
             _cacheService = cacheService;
             _themeRepository = MixThemeViewModel.GetRepository(new UnitOfWorkInfo(_context), _cacheService);
-            _repository = repository;
+            _mixDbDataSrv = mixDbDataFactory.GetDataService(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION))!;
         }
 
         #region Export
 
-        public async Task<string> ExportTheme(ExportThemeDto request)
+        public async Task<string> ExportTheme(ExportThemeDto request, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             _dto = request;
             _siteData = new();
             _exportTheme = await _themeRepository.GetSingleAsync(
@@ -60,7 +71,7 @@ namespace Mix.Lib.Services
             _tempPath = $"{_webPath}/temp";
             _outputPath = _webPath;
 
-            await ExportSelectedItemsAsync();
+            await ExportSelectedItemsAsync(cancellationToken);
 
             ExportSchema(_siteData);
 
@@ -120,17 +131,18 @@ namespace Mix.Lib.Services
             MixFileHelper.SaveFile(schema);
         }
 
-        public async Task<SiteDataViewModel> ExportSelectedItemsAsync()
+        public async Task<SiteDataViewModel> ExportSelectedItemsAsync(CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             try
             {
                 if (_dto.IsExportAll)
                 {
-                    LoadAllSiteData();
+                    LoadAllSiteData(cancellationToken);
                 }
 
-                await ExportContents();
-                await ExportAssociations();
+                await ExportContents(cancellationToken);
+                await ExportAssociations(cancellationToken);
 
                 return _siteData;
             }
@@ -142,7 +154,7 @@ namespace Mix.Lib.Services
 
         #region Export Associations
 
-        private async Task ExportAssociations()
+        private async Task ExportAssociations(CancellationToken cancellationToken)
         {
             await ExportAdditionalData(_dto.Content.PostIds, MixDatabaseParentType.Post);
             await ExportPageDatas();
@@ -219,8 +231,13 @@ namespace Mix.Lib.Services
 
         #region Export Database Data
 
-        private async Task ExportMixDbAsync()
+        private async Task ExportMixDbAsync(CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (_siteData.ExportMixDatabaseDataIds == null || _siteData.ExportMixDatabaseDataIds.Count == 0)
+            {
+                return;
+            }
             foreach (var database in _siteData.MixDatabases)
             {
                 if (database.MixDatabaseContextId.HasValue)
@@ -230,17 +247,12 @@ namespace Mix.Lib.Services
                     {
                         return;
                     }
-                    var cnn = dbContext.ConnectionString.IsBase64()
-                        ? AesEncryptionHelper.DecryptString(dbContext.ConnectionString, GlobalConfigService.Instance.AppSettings.ApiEncryptKey)
-                        : dbContext.ConnectionString;
-                    _repository.Init(database.SystemName, dbContext.DatabaseProvider, cnn);
+                    _mixDbDataSrv.Init(dbContext.ConnectionString.Decrypt(_configuration.AesKey()));
                 }
-                else
+                var data = await _mixDbDataSrv.GetAllAsync(new SearchMixDbRequestModel()
                 {
-                    _repository.InitTableName(database.SystemName);
-
-                }
-                var data = await _repository.GetAllAsync();
+                    TableName = database.SystemName
+                }, cancellationToken: cancellationToken);
                 if (data != null)
                 {
                     _siteData.MixDbModels.Add(new()
@@ -292,14 +304,15 @@ namespace Mix.Lib.Services
 
         #region Export Contents
 
-        private async Task ExportContents()
+        private async Task ExportContents(CancellationToken cancellationToken)
         {
-            await ExportTemplates();
-            await ExportPages();
-            await ExportPosts();
-            await ExportModules();
-            await ExportDatabases();
-            await ExportMixDbAsync();
+            cancellationToken.ThrowIfCancellationRequested();
+            await ExportTemplates(cancellationToken);
+            await ExportPages(cancellationToken);
+            await ExportPosts(cancellationToken);
+            await ExportModules(cancellationToken);
+            await ExportDatabases(cancellationToken);
+            await ExportMixDbAsync(cancellationToken);
             if (_dto.IsIncludeConfigurations)
             {
                 await ExportConfigurationDataAsync();
@@ -307,7 +320,7 @@ namespace Mix.Lib.Services
             }
         }
 
-        private async Task ExportTemplates()
+        private async Task ExportTemplates(CancellationToken cancellationToken)
         {
             if (_dto.IsIncludeTemplates)
             {
@@ -323,7 +336,7 @@ namespace Mix.Lib.Services
             }
         }
 
-        private async Task ExportPages()
+        private async Task ExportPages(CancellationToken cancellationToken)
         {
             _siteData.Pages = await _context.MixPage
                 .Where(m => _dto.Content.PageIds.Any(p => p == m.Id))
@@ -334,7 +347,7 @@ namespace Mix.Lib.Services
                 .AsNoTracking()
                 .ToListAsync();
         }
-        private async Task ExportModules()
+        private async Task ExportModules(CancellationToken cancellationToken)
         {
             _siteData.Modules = await _context.MixModule
                 .Where(m => _dto.Content.ModuleIds.Any(p => p == m.Id))
@@ -345,7 +358,7 @@ namespace Mix.Lib.Services
                 .AsNoTracking()
                 .ToListAsync();
         }
-        private async Task ExportPosts()
+        private async Task ExportPosts(CancellationToken cancellationToken)
         {
             _siteData.Posts = await _context.MixPost
                 .Where(m => _dto.Content.PostIds.Any(p => p == m.Id))
@@ -357,7 +370,7 @@ namespace Mix.Lib.Services
                 .ToListAsync();
         }
 
-        private async Task ExportDatabases()
+        private async Task ExportDatabases(CancellationToken cancellationToken)
         {
             _siteData.MixDatabaseContexts = await _context.MixDatabaseContext
                 .Where(m => _dto.Content.MixDatabaseContextIds.Any(p => p == m.Id))
@@ -390,7 +403,7 @@ namespace Mix.Lib.Services
 
         #endregion
 
-        private void LoadAllSiteData()
+        private void LoadAllSiteData(CancellationToken cancellationToken)
         {
             _siteData.Posts = _context.MixPost.ToList();
             _siteData.Pages = _context.MixPage.ToList();

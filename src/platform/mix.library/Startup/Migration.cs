@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Mix.Database.Services;
-using Mix.RepoDb.Interfaces;
-using Mix.RepoDb.Services;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.Extensions;
 using Mix.Shared.Models.Configurations;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -10,9 +8,9 @@ namespace Microsoft.Extensions.DependencyInjection
     public static partial class ServiceCollectionExtensions
     {
 
-        public static void ApplyMigrations(this IServiceCollection services, GlobalSettingsModel options)
+        public static void ApplyMigrations(this IServiceCollection services, IConfiguration configuration, GlobalSettingsModel options)
         {
-            if (!options.IsInit)
+            if (!configuration.IsInit())
             {
                 var mixDatabaseService = services.GetService<DatabaseService>();
                 mixDatabaseService.UpdateMixCmsContext();

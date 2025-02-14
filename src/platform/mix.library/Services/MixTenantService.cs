@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Lib.Interfaces;
 
 namespace Mix.Lib.Services
@@ -7,12 +7,10 @@ namespace Mix.Lib.Services
     public sealed class MixTenantService : IMixTenantService
     {
         private readonly DatabaseService _databaseService;
-
         public List<MixTenantSystemModel> AllTenants { get; set; }
-
         public List<MixCulture> AllCultures { get; set; }
         public List<MixTheme> AllThemes { get; set; }
-
+        
         public MixTenantService(DatabaseService databaseService)
         {
             _databaseService = databaseService;
@@ -20,36 +18,37 @@ namespace Mix.Lib.Services
 
         public async Task Reload(CancellationToken cancellationToken = default)
         {
-            if (GlobalConfigService.Instance.InitStatus != InitStep.Blank)
+            using (var dbContext = _databaseService.GetDbContext())
             {
-                using (var dbContext = _databaseService.GetDbContext())
-                {
-                    var mixTenants = await dbContext.MixTenant.ToListAsync(cancellationToken);
+                var mixTenants = await dbContext.MixTenant.ToListAsync(cancellationToken);
 
-                    var tenantIds = mixTenants.Select(p => p.Id).ToList();
+                var tenantIds = mixTenants.Select(p => p.Id).ToList();
 
-                    var domains = await dbContext.MixDomain.Where(p => tenantIds.Contains(p.MixTenantId)).ToListAsync(cancellationToken);
-                    AllCultures = await dbContext.MixCulture.ToListAsync(cancellationToken);
-                    AllThemes = await dbContext.MixTheme.ToListAsync(cancellationToken);
+                var domains = await dbContext.MixDomain.ToListAsync(cancellationToken);
+                AllCultures = await dbContext.MixCulture.ToListAsync(cancellationToken);
+                AllThemes = await dbContext.MixTheme.ToListAsync(cancellationToken);
 
-                    var tenants = mixTenants
-                        .Select(p => new MixTenantSystemModel
+                var tenants = mixTenants
+                    .Select(p => new MixTenantSystemModel
+                    {
+                        Id = p.Id,
+                        SystemName = p.SystemName,
+                        Description = p.Description,
+                        PrimaryDomain = p.PrimaryDomain,
+                        DisplayName = p.DisplayName,
+                        Domains = domains.Where(d => d.TenantId == p.Id).ToList(),
+                        Cultures = AllCultures.Where(c => c.TenantId == p.Id).ToList(),
+                        Configurations = new TenantConfigurationModel()
                         {
-                            Id = p.Id,
-                            SystemName = p.SystemName,
-                            Description = p.Description,
-                            PrimaryDomain = p.PrimaryDomain,
-                            DisplayName = p.DisplayName,
-                            Configurations = new TenantConfigService(p.SystemName).AppSettings,
-                            Domains = domains.Where(d => d.MixTenantId == p.Id).ToList(),
-                            Cultures = AllCultures.Where(c => c.MixTenantId == p.Id).ToList(),
-                            Themes = AllThemes.Where(c => c.MixTenantId == p.Id).ToList(),
-                        })
-                        .ToList();
+                            Domain = domains?.FirstOrDefault()?.Host,
+                            DefaultCulture = AllCultures.First().Specificulture
+                        },
+                        Themes = AllThemes.Where(c => c.TenantId == p.Id).ToList(),
+                    })
+                    .ToList();
 
-                    AllTenants = tenants;
-                    dbContext.Dispose();
-                }
+                AllTenants = tenants;
+                dbContext.Dispose();
             }
         }
 

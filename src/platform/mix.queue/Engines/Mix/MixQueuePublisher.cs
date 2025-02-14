@@ -1,4 +1,5 @@
-﻿using Mix.Mq;
+﻿using Mix.Database.Services.MixGlobalSettings;
+using Mix.Mq;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;

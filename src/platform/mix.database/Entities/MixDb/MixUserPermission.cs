@@ -7,6 +7,6 @@ namespace Mix.Database.Entities.MixDb
         public Guid UserId { get; set; }
         public int PermissionId { get; set; }
         public string Description { get; set; }
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
     }
 }

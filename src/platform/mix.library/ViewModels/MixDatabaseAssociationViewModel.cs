@@ -6,7 +6,7 @@ namespace Mix.Lib.ViewModels
         : ViewModelBase<MixCmsContext, MixDatabaseAssociation, Guid, MixDatabaseAssociationViewModel>
     {
         #region Properties
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public string ParentDatabaseName { get; set; }
         public string ChildDatabaseName { get; set; }
         public Guid? GuidParentId { get; set; }

@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
+using Mix.Database.Services.MixGlobalSettings;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -7,57 +10,57 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         static string[] origins;
 
-        public static IServiceCollection AddMixCors(this IServiceCollection services)
+        public static IHostApplicationBuilder AddMixCors(this IHostApplicationBuilder builder)
         {
-            services.TryAddSingleton<MixEndpointService>();
-            var mixEndpointService = services.GetService<MixEndpointService>();
+            var mixEndpointService = builder.Services.GetService<MixEndpointService>();
             origins = mixEndpointService.Endpoints
             .Where(e => !string.IsNullOrEmpty(e))
             .Distinct()
             .ToArray();
-            services.AddCors(options =>
+            builder.Services.AddCors(options =>
             {
-                options.AddDefaultPolicy(builder =>
+                options.AddDefaultPolicy(p =>
                 {
-                    builder.SetIsOriginAllowedToAllowWildcardSubdomains();
-                    if (GlobalConfigService.Instance.AllowAnyOrigin)
+                    p.SetIsOriginAllowedToAllowWildcardSubdomains();
+                    if (builder.Configuration.GetValue<bool>("AllowAnyOrigin"))
                     {
-                        builder.AllowAnyOrigin();
+                        p.AllowAnyOrigin();
                     }
-                    else if (origins.Any())
+                    else
                     {
-                        builder.WithOrigins(origins);
-                        builder.AllowCredentials();
+                        p.WithOrigins(origins);
+                        p.AllowCredentials();
                     }
-                    builder.AllowAnyHeader();
-                    builder.AllowAnyMethod();
+                    p.AllowAnyHeader();
+                    p.AllowAnyMethod();
                 });
 
-                options.AddPolicy(name: MixCorsPolicies.PublicApis,
-                    builder =>
-                {
-                    builder.AllowAnyOrigin();
-                    builder.AllowAnyHeader();
-                    builder.AllowAnyMethod();
-                });
+                //options.AddPolicy(name: MixCorsPolicies.PublicApis,
+                //    p =>
+                //{
+                //    p.AllowAnyOrigin();
+                //    p.AllowAnyHeader();
+                //    p.AllowAnyMethod();
+                //});
             });
-            return services;
+            return builder;
         }
 
-        public static IApplicationBuilder UseMixCors(this IApplicationBuilder app)
+        public static IApplicationBuilder UseMixCors(this IApplicationBuilder app, IConfiguration configuration)
         {
             app.UseCors(builder =>
             {
                 builder.SetIsOriginAllowedToAllowWildcardSubdomains();
-                if (GlobalConfigService.Instance.AllowAnyOrigin)
+                if (configuration.GetValue<bool>("AllowAnyOrigin"))
                 {
                     builder.AllowAnyOrigin();
                 }
-                else if (origins.Any())
+                else
                 {
                     builder.WithOrigins(origins);
                     builder.AllowCredentials();
                 }
+
                 builder.AllowAnyMethod();
                 builder.AllowAnyHeader();
             });

@@ -1,12 +1,12 @@
 ﻿using Mix.Database.Entities.AuditLog.EntityConfigurations;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Services;
 
 namespace Mix.Database.Entities.AuditLog
 {
-    public class SqlITEAuditLogDbContext : AuditLogDbContext
+    public class SqliteAuditLogDbContext : AuditLogDbContext
     {
-        public SqlITEAuditLogDbContext(DatabaseService databaseService) : base(databaseService)
+        public SqliteAuditLogDbContext(DatabaseService databaseService) : base(databaseService)
         {
         }
     }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Database.EntityConfigurations.Base;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Services.Ecommerce.Lib.Constants;
 
 namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations

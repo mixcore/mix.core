@@ -1,4 +1,5 @@
 ﻿using GraphQL;
+using GraphQL.Federation.Types;
 using GraphQL.Types;
 using GraphQL.Utilities.Federation;
 using Mix.Heart.Helpers;

@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Auth.Constants;
 using Mix.Heart.Helpers;
 using Mix.Lib.Interfaces;
+using Mix.Mixdb.Dtos;
+using Mix.Mixdb.Interfaces;
+using Mix.Mixdb.ViewModels;
 using Mix.Mq.Lib.Models;
-using Mix.RepoDb.Dtos;
-using Mix.RepoDb.Interfaces;
-using Mix.RepoDb.ViewModels;
 using Mix.SignalR.Interfaces;
 using System.Linq.Expressions;
 
@@ -17,7 +16,7 @@ namespace Mix.Portal.Controllers
     public class MixDatabaseColumnPortalController
         : MixRestfulApiControllerBase<MixDatabaseColumnViewModel, MixCmsContext, MixDatabaseColumn, int>
     {
-        private readonly IMixDbService _mixDbService;
+        private readonly IMixdbStructure _mixDbStructure;
         public MixDatabaseColumnPortalController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -28,11 +27,11 @@ namespace Mix.Portal.Controllers
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService,
-            IMixDbService mixDbService)
+            IMixdbStructure mixDbService)
             : base(httpContextAccessor, configuration,
                   cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
-            _mixDbService = mixDbService;
+            _mixDbStructure = mixDbService;
         }
 
         [HttpGet("init/{mixDatabase}")]
@@ -46,12 +45,13 @@ namespace Mix.Portal.Controllers
 
         [MixAuthorize(MixRoles.Owner)]
         [HttpPost("alter-column")]
-        public async Task<ActionResult> AlterColumn([FromBody] AlterColumnDto colDto)
+        public async Task<ActionResult> AlterColumn([FromBody] AlterColumnDto colDto, CancellationToken cancellationToken = default)
         {
             if (ModelState.IsValid)
             {
-                var result = await _mixDbService.AlterColumn(colDto);
-                return result ? Ok() : BadRequest();
+                var repoCol = new MixdbDatabaseColumnViewModel(colDto);
+                await _mixDbStructure.AlterColumn(repoCol, colDto.IsDrop, cancellationToken);
+                return Ok();
             }
             return BadRequest();
         }
@@ -59,17 +59,18 @@ namespace Mix.Portal.Controllers
         protected override async Task<int> CreateHandlerAsync(MixDatabaseColumnViewModel data, CancellationToken cancellationToken = default)
         {
             var result = await base.CreateHandlerAsync(data, cancellationToken);
-            var repoCol = new RepoDbMixDatabaseColumnViewModel();
+            var repoCol = new MixdbDatabaseColumnViewModel();
             ReflectionHelper.Map(data, repoCol);
-            await _mixDbService.AddColumn(repoCol);
+            await _mixDbStructure.AddColumn(repoCol);
             return result;
         }
+
         protected override async Task DeleteHandler(MixDatabaseColumnViewModel data, CancellationToken cancellationToken = default)
         {
             await base.DeleteHandler(data, cancellationToken);
-            var repoCol = new RepoDbMixDatabaseColumnViewModel();
-            ReflectionHelper.Map(data, repoCol);
-            await _mixDbService.DropColumn(repoCol);
+            //var repoCol = new MixdbDatabaseColumnViewModel();
+            //ReflectionHelper.Map(data, repoCol);
+            //await _mixDbStructure.DropColumn(repoCol, cancellationToken);
         }
         protected override SearchQueryModel<MixDatabaseColumn, int> BuildSearchRequest(SearchRequestDto req)
         {

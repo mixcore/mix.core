@@ -9,7 +9,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         : ViewModelBase<EcommerceDbContext, MixDatabaseAssociation, Guid, MixEcommerceDatabaseAssociationViewModel>
     {
         #region Properties
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public string ParentDatabaseName { get; set; }
         public string ChildDatabaseName { get; set; }
         public Guid? GuidParentId { get; set; }

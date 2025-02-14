@@ -1,4 +1,4 @@
-﻿using Mix.Database.Services;
+﻿using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Account.EntityConfigurations
 {
@@ -11,26 +11,25 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
 
         public override void Configure(EntityTypeBuilder<MixRole> builder)
         {
-
-            // Error: column "normalizedname" does not exist
-            //builder.HasIndex(e => e.NormalizedName)
-            //        .HasDatabaseName("MixRoleNameIndex")
-            //        .HasFilter("(NormalizedName IS NOT NULL)");
-
+            builder.ToTable("mix_roles");
             builder.Property(e => e.Id)
+                .HasColumnName("id")
                 .HasDefaultValueSql(Config.GenerateUUID);
 
             builder.Property(e => e.ConcurrencyStamp)
+                .HasColumnName("concurrency_stamp")
             .HasColumnType($"{Config.String}{Config.MediumLength}")
             .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Name)
+                .HasColumnName("name")
                 .HasColumnType($"{Config.String}{Config.MediumLength}")
             .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.NormalizedName)
+                .HasColumnName("normalized_name")
                 .HasColumnType($"{Config.String}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);

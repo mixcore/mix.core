@@ -3,8 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.Data.SqlClient;
-using Mix.Database.Services;
-
+using Mix.Database.Services.MixGlobalSettings;
 using MySqlConnector;
 using System.Security;
 

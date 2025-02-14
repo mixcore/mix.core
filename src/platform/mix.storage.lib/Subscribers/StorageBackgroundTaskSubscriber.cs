@@ -36,8 +36,8 @@ namespace Mix.Storage.Lib.Subscribers
             IPortalHubClientService portalHub,
             IMemoryQueueService<MessageQueueModel> queueService,
             ILogger<StorageBackgroundTaskSubscriber> logger,
-            IPooledObjectPolicy<RabbitMQ.Client.IModel> rabbitMqObjectPolicy = null)
-            : base(TopicId, nameof(StorageBackgroundTaskSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMqObjectPolicy)
+            IPooledObjectPolicy<RabbitMQ.Client.IModel>? rabbitMQObjectPolicy = null)
+            : base(TopicId, nameof(StorageBackgroundTaskSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMQObjectPolicy)
         {
             AuditLogService = auditLogService;
             PortalHub = portalHub;

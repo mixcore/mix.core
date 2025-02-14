@@ -31,7 +31,7 @@ namespace Mix.Signalr.Hub.Hubs
             // Add the new user
             Users.Add(new User
             {
-                Username = username,
+                UserName = username,
                 ConnectionId = Context.ConnectionId
             });
 
@@ -70,7 +70,7 @@ namespace Mix.Signalr.Hub.Hubs
             // And that they aren't already in a call
             if (GetUserCall(targetUser.ConnectionId) != null)
             {
-                await Clients.Caller.SendAsync("callDeclined", targetConnectionId, string.Format("{0} is already in a call.", targetUser.Username));
+                await Clients.Caller.SendAsync("callDeclined", targetConnectionId, string.Format("{0} is already in a call.", targetUser.UserName));
                 return;
             }
 
@@ -107,7 +107,7 @@ namespace Mix.Signalr.Hub.Hubs
             // Send a decline message if the callee said no
             if (acceptCall == false)
             {
-                await Clients.Client(targetConnectionId).SendAsync("callDeclined", callingUser, string.Format("{0} did not accept your call.", callingUser.Username));
+                await Clients.Client(targetConnectionId).SendAsync("callDeclined", callingUser, string.Format("{0} did not accept your call.", callingUser.UserName));
                 return;
             }
 
@@ -116,7 +116,7 @@ namespace Mix.Signalr.Hub.Hubs
                                                   && c.Caller.ConnectionId == targetUser.ConnectionId);
             if (offerCount < 1)
             {
-                await Clients.Caller.SendAsync("callEnded", targetConnectionId, string.Format("{0} has already hung up.", targetUser.Username));
+                await Clients.Caller.SendAsync("callEnded", targetConnectionId, string.Format("{0} has already hung up.", targetUser.UserName));
                 return;
             }
 
@@ -124,7 +124,7 @@ namespace Mix.Signalr.Hub.Hubs
             if (GetUserCall(targetUser.ConnectionId) != null)
             {
                 // And that they aren't already in a call
-                await Clients.Caller.SendAsync("callDeclined", targetConnectionId, string.Format("{0} chose to accept someone elses call instead of yours :(", targetUser.Username));
+                await Clients.Caller.SendAsync("callDeclined", targetConnectionId, string.Format("{0} chose to accept someone elses call instead of yours :(", targetUser.UserName));
                 return;
             }
 
@@ -161,7 +161,7 @@ namespace Mix.Signalr.Hub.Hubs
                 foreach (var user in currentCall.Users.Where(u => u.ConnectionId != callingUser.ConnectionId))
                 {
                     await Clients.Client(user.ConnectionId).SendAsync("callEnded", callingUser.ConnectionId,
-                        string.Format("{0} has hung up.", callingUser.Username));
+                        string.Format("{0} has hung up.", callingUser.UserName));
                 }
 
                 // Remove the call from the list if there is only one (or none) person left.  This should

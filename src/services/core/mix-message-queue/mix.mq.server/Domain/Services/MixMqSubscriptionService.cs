@@ -10,7 +10,6 @@ namespace Mix.Mq.Server.Domain.Services
     public sealed class MixMqSubscriptionService : IHostedService
     {
         private readonly ILogger<MixMqService> _logger;
-        private CancellationToken _cancellationToken;
         private GrpcStreamingService _grpcStreamingService { get; set; }
         public MixMqSubscriptionService(ILogger<MixMqService> logger, GrpcStreamingService grpcStreamingService)
         {

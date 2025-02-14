@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Mix.Shared.Models.Configurations;
 using System.Configuration;
@@ -14,11 +15,11 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static partial class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMixRateLimiter(this IServiceCollection services, IConfiguration configuration)
+        public static IHostApplicationBuilder AddMixRateLimiter(this IHostApplicationBuilder builder)
         {
-            var myOptions = configuration.GetSection(MixRateLimitConfigurations.SectionName).Get<MixRateLimitConfigurations>()!;
+            var myOptions = builder.Configuration.GetSection(MixRateLimitConfigurations.SectionName).Get<MixRateLimitConfigurations>()!;
             var userPolicyName = "user";
-            services.AddRateLimiter(limiterOptions =>
+            builder.Services.AddRateLimiter(limiterOptions =>
             {
                 limiterOptions.OnRejected = (context, cancellationToken) =>
                 {
@@ -79,7 +80,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
             });
             
-            return services;
+            return builder;
         }
         static string GetUserEndPoint(HttpContext context) =>
    $"User {context.User.Identity?.Name ?? "Anonymous"} endpoint:{context.Request.Path}"

@@ -180,6 +180,16 @@ namespace Mix.Service.Services
 
                     return Task.CompletedTask;
                 };
+                
+                Connection.Reconnected += msg =>
+                {
+                    Console.WriteLine(Connection.State);
+
+                    // Notify users the connection was lost and the client is reconnecting.
+                    // Start queuing or dropping messages.
+
+                    return Task.CompletedTask;
+                };
 
             }
         }

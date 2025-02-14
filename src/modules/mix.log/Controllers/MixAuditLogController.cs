@@ -2,7 +2,7 @@
 using Mix.Auth.Constants;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.AuditLog;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Services;

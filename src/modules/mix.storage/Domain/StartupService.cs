@@ -6,9 +6,9 @@ namespace Mix.Storage.Domain
 {
     public class StartupService : IStartupService
     {
-        public void AddServices(IServiceCollection services, IConfiguration configuration)
+        public void AddServices(IHostApplicationBuilder builder)
         {
-            services.AddMixStorage();
+            builder.Services.AddMixStorage();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

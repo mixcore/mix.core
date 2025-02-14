@@ -59,12 +59,11 @@ namespace Mix.Portal.Domain.Services
             MixFileHelper.UnZipFile(filePath, deployUrl);
             _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Extract Package {filePath} Successfully");
 
-            await ImportSchema($"{deployUrl}/schema", cancellationToken);
+            await ImportSchema($"{deployUrl}/schema", app.CreatedBy, cancellationToken);
             app.TemplateId = await SaveTemplate(app.TemplateId, name, deployUrl, app.BaseHref);
             app.SetUowInfo(_cmsUow, CacheService);
             app.DeployUrl = deployUrl;
-            app.MixTenantId = CurrentTenant.Id;
-            app.CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext?.User, MixClaims.Username);
+            app.TenantId = CurrentTenant.Id;
             app.AppSettings["activePackage"] = filePath;
             app.AppSettings["packages"] = new JArray
             {
@@ -89,7 +88,7 @@ namespace Mix.Portal.Domain.Services
                 string package = await DownloadPackage(name, app.PackageFilePath, deployUrl);
                 MixFileHelper.UnZipFile(package, deployUrl);
                 
-                await ImportSchema($"{deployUrl}/schema", cancellationToken);
+                await ImportSchema($"{deployUrl}/schema",app.CreatedBy, cancellationToken);
                 await SaveTemplate(app.TemplateId, name, deployUrl, app.BaseHref);
                 
                 packages.Add(package);
@@ -127,7 +126,7 @@ namespace Mix.Portal.Domain.Services
 
                 _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Extract Package {dto.PackageFilePath} Successfully");
                 
-                await ImportSchema($"{deployUrl}/schema", cancellationToken);
+                await ImportSchema($"{deployUrl}/schema", app.CreatedBy, cancellationToken);
                 await SaveTemplate(app.TemplateId, name, deployUrl, app.BaseHref);
                 
                 app.AppSettings["activePackage"] = dto.PackageFilePath;
@@ -146,7 +145,7 @@ namespace Mix.Portal.Domain.Services
             }
         }
 
-        private async Task ImportSchema(string schemaFolder, CancellationToken cancellationToken)
+        private async Task ImportSchema(string schemaFolder, string requstedBy, CancellationToken cancellationToken)
         {
             if (Directory.Exists(schemaFolder))
             {
@@ -154,7 +153,7 @@ namespace Mix.Portal.Domain.Services
                 schema.ThemeId = CurrentTenant.Themes.FirstOrDefault().Id;
                 if (schema != null && schema.IsValid)
                 {
-                    await _importService.ImportSelectedItemsAsync(schema);
+                    await _importService.ImportSelectedItemsAsync(schema, requstedBy, cancellationToken);
                 }
             }
         }
@@ -230,12 +229,12 @@ namespace Mix.Portal.Domain.Services
                     FileFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{activeTheme.SystemName}/{MixTemplateFolderType.Pages}",
                     FolderType = MixTemplateFolderType.Pages,
                     Extension = MixFileExtensions.CsHtml,
-                    MixTenantId = CurrentTenant.Id,
+                    TenantId = CurrentTenant.Id,
                     Scripts = string.Empty,
                     Styles = string.Empty,
                 };
                 template.Content = indexFile.Content.Replace("@", "@@")
-                                                    .Replace("<body>", "<body><pre id=\"app-settings-container\" style=\"display:none\">@Model.AppSettings.ToString()</pre>");
+                                                    .Replace("<body>", "<body><pre id=\"app-settings-container\" style=\"display:none\">@Model.AppSettingsModel.ToString()</pre>");
                 await template.SaveAsync();
                 _queueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), template);
                 MixFileHelper.SaveFile(indexFile);
@@ -329,7 +328,7 @@ namespace Mix.Portal.Domain.Services
                     //new JProperty("id",  HttpContextAccessor.HttpContext?.Request.HttpContext.Connection.Id.ToString()),
                     new JProperty("address", address),
                     //new JProperty("ip_address",  HttpContextAccessor.HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString()),
-                    //new JProperty("user", _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext.User, MixClaims.Username)),
+                    //new JProperty("user", _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext.User, MixClaims.UserName)),
                     //new JProperty("request_url", HttpContextAccessor.HttpContext.Request.Path.Value),
                     new JProperty("action", action),
                     new JProperty("status", status),

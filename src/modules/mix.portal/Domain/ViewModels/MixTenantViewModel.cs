@@ -36,12 +36,12 @@
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Domains = await MixDomainViewModel.GetRepository(UowInfo, CacheService).GetAllAsync(m => m.MixTenantId == Id, cancellationToken);
+            Domains = await MixDomainViewModel.GetRepository(UowInfo, CacheService).GetAllAsync(m => m.TenantId == Id, cancellationToken);
         }
 
         public override async Task Validate(CancellationToken cancellationToken)
         {
-            IsValid = IsValid && !Context.MixDomain.Any(m => m.Host == PrimaryDomain && m.MixTenantId != Id);
+            IsValid = IsValid && !Context.MixDomain.Any(m => m.Host == PrimaryDomain && m.TenantId != Id);
             if (!IsValid)
             {
                 Errors.Add(new ValidationResult($"{PrimaryDomain} is used, please try another one"));
@@ -66,7 +66,7 @@
         private async Task SaveCultureAsync(MixTenant parent, CancellationToken cancellationToken = default)
         {
             Culture.SetCacheService(CacheService);
-            Culture.MixTenantId = parent.Id;
+            Culture.TenantId = parent.Id;
             Culture.SetUowInfo(UowInfo, CacheService);
             await Culture.SaveAsync(cancellationToken);
             ModifiedEntities.AddRange(Culture.ModifiedEntities);
@@ -76,7 +76,7 @@
         {
             foreach (var domain in Domains)
             {
-                domain.MixTenantId = parent.Id;
+                domain.TenantId = parent.Id;
                 domain.SetCacheService(CacheService);
                 domain.SetUowInfo(UowInfo, CacheService);
                 await domain.SaveAsync(cancellationToken);

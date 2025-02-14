@@ -3,12 +3,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Services;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines.MixQueue;
-using Mix.Queue.Engines.RabitMQ;
+using Mix.Queue.Engines.RabbitMQ;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Shared.Services;
@@ -21,17 +22,19 @@ namespace Mix.Queue.Engines
 {
     public abstract class SubscriberBase : BackgroundService
     {
-        protected IMemoryQueueService<MessageQueueModel> _memQueueService;
-        protected IQueueSubscriber _subscriber;
+        protected readonly IMemoryQueueService<MessageQueueModel> _memoryQueueService;
         protected readonly IConfiguration _configuration;
         protected readonly string _topicId;
         protected readonly string _moduleName;
         protected readonly int _timeout;
-        protected MixCacheService CacheService;
         protected readonly IServiceProvider ServicesProvider;
+        protected readonly ILogger<SubscriberBase> Logger;
+
+        protected MixCacheService CacheService;
+        protected IQueueSubscriber _subscriber;
         protected IServiceScope ServiceScope { get; set; }
-        protected ILogger<SubscriberBase> Logger { get; set; }
-        private readonly IPooledObjectPolicy<IModel> _rabbitMqObjectPolicy;
+
+        private readonly IPooledObjectPolicy<IModel>? _rabbitMQObjectPolicy;
 
         protected SubscriberBase(
             string topicId,
@@ -41,34 +44,36 @@ namespace Mix.Queue.Engines
             IConfiguration configuration,
             IMemoryQueueService<MessageQueueModel> queueService,
             ILogger<SubscriberBase> logger,
-            IPooledObjectPolicy<IModel> rabbitMqObjectPolicy)
+            IPooledObjectPolicy<IModel>? rabbitMQObjectPolicy = null)
         {
             _timeout = timeout;
             _configuration = configuration;
             _topicId = topicId;
-            _moduleName = moduleName;
-            _memQueueService = queueService;
-            ServicesProvider = servicesProvider;
+            _moduleName = moduleName.ToLower();
+            _memoryQueueService = queueService;
+            _rabbitMQObjectPolicy = rabbitMQObjectPolicy;
+
             Logger = logger;
-            _rabbitMqObjectPolicy = rabbitMqObjectPolicy;
+            ServicesProvider = servicesProvider;
         }
         protected async override Task ExecuteAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             _subscriber = CreateSubscriber(_topicId, $"{_topicId}.{_moduleName}");
-            if (_subscriber is not RabitMQSubscriber<MessageQueueModel>)
+            if (_subscriber is not RabbitMQSubscriber<MessageQueueModel>)
             {
                 await StartProcessQueue(cancellationToken);
             }
         }
 
-        public virtual async Task StopAsync(CancellationToken cancellationToken)
+        public override async Task StopAsync(CancellationToken cancellationToken)
         {
             Console.Error.WriteLine($"{_subscriber.SubscriptionId} stopped at {DateTime.UtcNow}");
             if (_subscriber is MixQueueSubscriber<MessageQueueModel>)
             {
                 await (_subscriber as MixQueueSubscriber<MessageQueueModel>).Disconnect(cancellationToken);
             }
+            await base.StopAsync(cancellationToken);
         }
 
         #region Privates
@@ -89,7 +94,7 @@ namespace Mix.Queue.Engines
                 {
                     if (_subscriber is MixQueueSubscriber<MessageQueueModel>)
                     {
-                        await (_subscriber as MixQueueSubscriber<MessageQueueModel>).Disconnect();
+                        await (_subscriber as MixQueueSubscriber<MessageQueueModel>).Disconnect(cancellationToken);
                     }
 
                     Logger.LogError($"StartProcessQueue: {_subscriber.SubscriptionId} is broken at {DateTime.UtcNow.AddHours(7)}, Trying to reconnect from client: {ex.Message}", ex);
@@ -126,16 +131,16 @@ namespace Mix.Queue.Engines
                         var azureSetting = new AzureQueueSetting();
                         azureSettingPath.Bind(azureSetting);
                         return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
-                            provider, azureSetting, topicId, subscriptionId, MessageHandler, _memQueueService, mixEndpointService);
+                            provider, azureSetting, topicId, subscriptionId, MessageHandler, _memoryQueueService, mixEndpointService);
                     case MixQueueProvider.GOOGLE:
                         var googleSettingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
                         var googleSetting = new GoogleQueueSetting();
                         googleSettingPath.Bind(googleSetting);
                         googleSetting.CredentialFile = googleSetting.CredentialFile;
                         return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
-                            provider, googleSetting, topicId, subscriptionId, MessageHandler, _memQueueService, mixEndpointService);
+                            provider, googleSetting, topicId, subscriptionId, MessageHandler, _memoryQueueService, mixEndpointService);
                     case MixQueueProvider.RABBITMQ:
-                        return QueueEngineFactory.CreateRabbitMQSubscriber<MessageQueueModel>(_rabbitMqObjectPolicy, topicId, subscriptionId, MessageHandler);
+                        return QueueEngineFactory.CreateRabbitMQSubscriber<MessageQueueModel>(_rabbitMQObjectPolicy, topicId, subscriptionId, MessageHandler);
                     case MixQueueProvider.MIX:
                         if (string.IsNullOrEmpty(mixEndpointService.MixMq))
                         {
@@ -146,7 +151,7 @@ namespace Mix.Queue.Engines
                         var mixSetting = new MixQueueSetting();
                         mixSettingPath.Bind(mixSetting);
                         return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
-                           provider, mixSetting, topicId, subscriptionId, MessageHandler, _memQueueService, mixEndpointService);
+                           provider, mixSetting, topicId, subscriptionId, MessageHandler, _memoryQueueService, mixEndpointService);
                 }
             }
             catch (Exception ex)
@@ -185,11 +190,16 @@ namespace Mix.Queue.Engines
             {
                 await HandleException(data, ex);
             }
+            finally
+            {
+                ServiceScope?.Dispose();
+                ServiceScope = null;
+            }
         }
 
         public virtual Task HandleDeadLetter(MessageQueueModel message)
         {
-            _memQueueService.PushMemoryQueue(new MessageQueueModel(1)
+            _memoryQueueService.PushMemoryQueue(new MessageQueueModel(1)
             {
                 Action = MixQueueActions.DeadLetter,
                 TopicId = MixQueueTopics.MixLog,
@@ -201,7 +211,7 @@ namespace Mix.Queue.Engines
 
         public virtual Task HandleException(MessageQueueModel data, Exception ex)
         {
-            _memQueueService.PushMemoryQueue(new MessageQueueModel(1)
+            _memoryQueueService.PushMemoryQueue(new MessageQueueModel(1)
             {
                 Action = MixQueueActions.QueueFailed,
                 TopicId = MixQueueTopics.MixLog,

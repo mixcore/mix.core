@@ -1,21 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc.Routing;
-using Mix.Shared.Services;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.Extensions;
 
 namespace Mixcore.Domain.Services
 {
     // Ref: https://www.strathweb.com/2019/08/dynamic-controller-routing-in-asp-net-core-3-0/
     public sealed class MixSEORouteTransformer : DynamicRouteValueTransformer
     {
+        private IConfiguration _configuration;
         private readonly IMixTenantService _tenantService;
-        public MixSEORouteTransformer(IMixTenantService tenantService)
+        public MixSEORouteTransformer(IMixTenantService tenantService, IConfiguration configuration)
         {
             _tenantService = tenantService;
+            _configuration = configuration;
         }
 
         public override ValueTask<RouteValueDictionary> TransformAsync(
             HttpContext httpContext, RouteValueDictionary values)
         {
-            if (GlobalConfigService.Instance.AppSettings.IsInit)
+            if (_configuration.IsInit())
             {
                 return ValueTask.FromResult(values);
             }

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "Mix.Mq";
+option csharp_namespace = "Mix.Auth.Service.Domain.Protos";
 import "google/protobuf/empty.proto";
 
 package mixmq;

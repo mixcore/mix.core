@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Mq.Lib.Models;
@@ -45,7 +46,7 @@ namespace Mix.Lib.Base
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (GlobalConfigService.Instance.AppSettings.InitStatus == InitStep.Blank)
+            if (Configuration.GetValue<InitStep>("InitStatus") == InitStep.Blank)
             {
                 return;
             }

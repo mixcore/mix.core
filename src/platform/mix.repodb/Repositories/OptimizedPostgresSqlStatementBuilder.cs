@@ -1,19 +1,13 @@
-﻿using Microsoft.Data.SqlClient;
-using Npgsql;
+﻿using Npgsql;
 using RepoDb;
+using RepoDb.Enumerations;
 using RepoDb.Exceptions;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
 using RepoDb.Resolvers;
 using RepoDb.StatementBuilders;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Mix.RepoDb.Repositories
 {
@@ -21,17 +15,22 @@ namespace Mix.RepoDb.Repositories
     /// <summary>
     /// A class used to build a SQL Statement for SQL Server. This is the default statement builder used by the library.
     /// </summary>
-    internal sealed class OptimizedPostgresSqlStatementBuilder : BaseStatementBuilder
+    public sealed class OptimizedPostgresSqlStatementBuilder : BaseStatementBuilder
     {
         Regex regex = new("(\"\\w+\")\\s(LIKE)");
+        Regex regexOrderByAsc = new("((ASC)|(asc))\\s");
+        Regex regexOrderByDesc = new("((DESC)|(desc))\\s");
+        bool _isUnAccend;
         /// <summary>
         /// Creates a new instance of <see cref="OptimizedPostgresSqlStatementBuilder"/> object.
         /// </summary>
-        public OptimizedPostgresSqlStatementBuilder()
+        public OptimizedPostgresSqlStatementBuilder(bool isAccend)
         : base(DbSettingMapper.Get<NpgsqlConnection>(),
             new PostgreSqlConvertFieldResolver(),
             new ClientTypeToAverageableClientTypeResolver())
-        { }
+        {
+            _isUnAccend = isAccend;
+        }
         //
         // Summary:
         //     Creates a new instance of RepoDb.StatementBuilders.PostgreSqlStatementBuilder
@@ -46,9 +45,10 @@ namespace Mix.RepoDb.Repositories
         //
         //   averageableClientTypeResolver:
         //     The resolver used to identity the type for average.
-        public OptimizedPostgresSqlStatementBuilder(IDbSetting dbSetting, IResolver<Field, IDbSetting, string> convertFieldResolver = null, IResolver<Type, Type> averageableClientTypeResolver = null)
+        public OptimizedPostgresSqlStatementBuilder(IDbSetting dbSetting, IResolver<Field, IDbSetting, string> convertFieldResolver = null, IResolver<Type, Type> averageableClientTypeResolver = null, bool isUnAccend = false)
             : base(dbSetting, convertFieldResolver, averageableClientTypeResolver)
         {
+            _isUnAccend = isUnAccend;
         }
 
 
@@ -57,7 +57,7 @@ namespace Mix.RepoDb.Repositories
         public override string CreateCount(string tableName, QueryGroup where = null, string hints = null)
         {
             string query = base.CreateCount(tableName, where, hints);
-            return ReplaceLikeFilter(query, where);
+            return ReplaceFilter(query, where);
         }
         #endregion
 
@@ -126,17 +126,20 @@ namespace Mix.RepoDb.Repositories
                 .End();
 
             // Return the query
-            return ReplaceLikeFilter(queryBuilder.GetString(), where);
+            return ReplaceFilter(queryBuilder.GetString(), where);
         }
 
-        private string ReplaceLikeFilter(string query, QueryGroup where = null)
+        private string ReplaceFilter(string query, QueryGroup where = null)
         {
-            query = regex.Replace(query, "unaccent($1) ILIKE");
-            if (where != null)
+             if (where != null && _isUnAccend)
             {
+                query = regex.Replace(query, "unaccent($1) ILIKE");
                 foreach (var item in where.QueryFields)
                 {
-                    query = query.Replace($"@{item.GetName()}", $"unaccent('{item.GetValue()}')");
+                    if (item.Operation == Operation.Like)
+                    {
+                        query = query.Replace($"@{item.GetName()}", $"unaccent('{item.GetValue()}')");
+                    }
                 }
             }
             return query;
@@ -418,6 +421,7 @@ namespace Mix.RepoDb.Repositories
             return new DbTypeToPostgreSqlStringNameResolver().Resolve(dbType.Value);
         }
         #endregion
+
 
     }
 }

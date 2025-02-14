@@ -1,72 +1,46 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.EntityConfigurations.Base
 {
-    public abstract class EntityBaseConfiguration<T, TPrimaryKey> : IEntityTypeConfiguration<T>
+    public abstract class EntityBaseConfiguration<T, TPrimaryKey>(DatabaseService databaseService) : SimpleEntityBaseConfiguration<T, TPrimaryKey>(databaseService)
         where TPrimaryKey : IComparable
         where T : EntityBase<TPrimaryKey>
     {
-        protected virtual IDatabaseConstants Config { get; set; }
-
-        protected readonly DatabaseService _databaseService;
-
-        protected EntityBaseConfiguration(DatabaseService databaseService)
+        public override void Configure(EntityTypeBuilder<T> builder)
         {
-            _databaseService = databaseService;
-            Config = GetConfig();
-        }
-
-        public virtual void Configure(EntityTypeBuilder<T> builder)
-        {
-            string key = $"PK_{typeof(T).Name}";
-            builder.HasKey(e => new { e.Id })
-                   .HasName(key);
-
-            builder.Property(e => e.Id)
-                .UseDefaultGUIDIf(typeof(TPrimaryKey) == typeof(Guid), Config.GenerateUUID)
-                .UseIncreaseValueIf(typeof(TPrimaryKey) == typeof(int));
-
+            base.Configure(builder);
 
             builder.Property(e => e.CreatedDateTime)
+                .HasColumnName("created_date_time")
                 .HasColumnType(Config.DateTime);
 
             builder.Property(e => e.LastModified)
+                .HasColumnName("last_modified")
                 .HasColumnType(Config.DateTime);
 
             builder.Property(e => e.CreatedBy)
+                .HasColumnName("created_by")
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
 
             builder.Property(e => e.ModifiedBy)
+                .HasColumnName("modified_by")
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
 
             builder.Property(e => e.Priority)
+                .HasColumnName("priority")
                 .HasColumnType(Config.Integer);
-
-            builder.Property(e => e.Priority)
-                .HasColumnType(Config.Integer);
+            
+            builder.Property(e => e.IsDeleted)
+                .HasColumnName("is_deleted")
+                .HasColumnType(Config.Boolean);
 
             builder.Property(e => e.Status)
                 .IsRequired()
+                .HasColumnName("status")
                 .HasConversion(new EnumToStringConverter<MixContentStatus>())
                 .HasColumnType($"{Config.String}{Config.SmallLength}")
                 .HasCharSet(Config.CharSet);
-        }
-
-        private IDatabaseConstants GetConfig()
-        {
-            switch (_databaseService.DatabaseProvider)
-            {
-                case MixDatabaseProvider.SQLSERVER:
-                    return new SqlServerDatabaseConstants();
-                case MixDatabaseProvider.MySQL:
-                    return new MySqlDatabaseConstants();
-                case MixDatabaseProvider.PostgreSQL:
-                    return new PostgresDatabaseConstants();
-                case MixDatabaseProvider.SQLITE:
-                    return new SqliteDatabaseConstants();
-                default: return null;
-            }
         }
     }
 }

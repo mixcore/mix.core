@@ -17,7 +17,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Cms;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Enums;
 using Mix.Heart.Models;
 using Mix.Service.Services;

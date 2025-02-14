@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Lib.Extensions;
 using Mix.Lib.Middlewares;
 using Mix.Lib.Publishers;
 using Mix.Lib.Subscribers;
@@ -6,10 +7,9 @@ using Mix.Log.Lib.Interfaces;
 using Mix.Log.Lib.Models;
 using Mix.Log.Lib.Publishers;
 using Mix.Log.Lib.Services;
-using Mix.Log.Lib.Subscribers;
+using Mix.Mixdb.Publishers;
+using Mix.Mixdb.Subscribers;
 using Mix.Quartz.Services;
-using Mix.RepoDb.Publishers;
-using Mix.RepoDb.Subscribers;
 using Mix.Shared.Interfaces;
 using Mix.Shared.Models.Configurations;
 using Mix.Storage.Lib.Subscribers;
@@ -18,32 +18,32 @@ namespace Mixcore.Domain
 {
     public class StartupServices : IStartupService
     {
-        public void AddServices(IServiceCollection services, IConfiguration configuration)
+        public void AddServices(IHostApplicationBuilder builder)
         {
-            var globalConfigs = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
-            services.AddMixRoutes();
+            var globalConfigs = builder.Configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
+            builder.Services.AddMixRoutes();
 
-            services.AddHostedService<MixRepoDbPublisher>();
-            services.AddHostedService<MixRepoDbSubscriber>();
-            services.AddHostedService<MixViewModelChangedPublisher>();
-            services.AddHostedService<MixViewModelChangedSubscriber>();
+            builder.Services.AddHostedService<MixRepoDbPublisher>();
+            builder.Services.AddHostedService<MixRepoDbSubscriber>();
+            builder.Services.AddHostedService<MixViewModelChangedPublisher>();
+            builder.Services.AddHostedService<MixViewModelChangedSubscriber>();
 
-            services.AddHostedService<MixBackgroundTaskPublisher>();
-            services.AddHostedService<MixBackgroundTaskSubscriber>();
-            services.AddHostedService<MixDbCommandPublisher>();
-            services.AddHostedService<MixDbCommandSubscriber>();
+            builder.Services.AddHostedService<MixBackgroundTaskPublisher>();
+            builder.Services.AddHostedService<MixBackgroundTaskSubscriber>();
+            builder.Services.AddHostedService<MixDbCommandPublisher>();
+            builder.Services.AddHostedService<MixDbCommandSubscriber>();
 
-            services.AddHostedService<MixQuartzHostedService>();
-            services.AddHostedService<StorageBackgroundTaskSubscriber>();
+            builder.Services.AddHostedService<MixQuartzHostedService>();
+            builder.Services.AddHostedService<StorageBackgroundTaskSubscriber>();
 
-            if (!globalConfigs!.IsInit)
+            if (!builder.Configuration.IsInit())
             {
-                services.TryAddSingleton<IAuditLogService, AuditLogService>();
-                services.TryAddScoped<AuditLogDataModel>();
-                services.AddHostedService<MixLogPublisher>();
+                builder.Services.TryAddSingleton<IAuditLogService, AuditLogService>();
+                builder.Services.TryAddScoped<AuditLogDataModel>();
+                builder.Services.AddHostedService<MixLogPublisher>();
             }
 
-            services.AddMixRateLimiter(configuration);
+            builder.AddMixRateLimiter();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

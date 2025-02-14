@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Database.Constants;
 using Mix.Database.EntityConfigurations.Base;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 
 
 namespace Mix.Services.Graphql.Lib.Entities.EntityConfigurations

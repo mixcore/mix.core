@@ -1,5 +1,6 @@
 ﻿using Mix.Database.Entities.Account;
 using Mix.Database.Entities.AuditLog;
+using Mix.Database.Entities.Settings;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -9,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddDbContext<MixCmsAccountContext>();
             services.AddDbContext<MixCmsContext>();
-            services.AddDbContext<MixCmsAccountContext>();
+            services.AddDbContext<GlobalSettingContext>();
             return services;
         }
     }

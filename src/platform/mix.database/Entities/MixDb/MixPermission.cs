@@ -2,7 +2,7 @@
 {
     public sealed class MixPermission : EntityBase<int>
     {
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public string DisplayName { get; set; }
         public string Group { get; set; }
         public string Key { get; set; }

@@ -1,6 +1,4 @@
-﻿using DocumentFormat.OpenXml.Drawing.Charts;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -10,18 +8,19 @@ using Mix.Auth.Enums;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.MixDb;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Identity.Domain.Models;
 using Mix.Identity.Enums;
 using Mix.Identity.ViewModels;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
+using Mix.Mixdb.Interfaces;
+using Mix.Mixdb.Services;
+using Mix.Mixdb.ViewModels;
 using Mix.Mq.Lib.Models;
-using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
 using Mix.Service.Commands;
 using Mix.Shared.Models.Configurations;
-using MySqlX.XDevAPI.Common;
-using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -31,7 +30,7 @@ namespace Mix.Lib.Services
 {
     public class MixIdentityService : IMixIdentityService
     {
-        protected const string TenantIdFieldName = "MixTenantId";
+        protected const string TenantIdFieldName = "TenantId";
         protected const string datetimeFormat = "yyyy-MM-ddTHH:mm:ss.FFFZ";
         protected readonly IMemoryQueueService<MessageQueueModel> QueueService;
         protected IConfiguration Configuration;
@@ -46,7 +45,7 @@ namespace Mix.Lib.Services
         protected readonly GlobalSettingsModel GlobalConfig;
         protected readonly FirebaseService FirebaseService;
         protected readonly IMixDbDataService MixDbDataService;
-        protected readonly MixRepoDbRepository RepoDbRepository;
+        protected readonly RepoDbRepository RepoDbRepository;
         protected readonly MixCmsContext CmsContext;
         private readonly MixCmsAccountContext _accContext;
         protected readonly Repository<MixCmsAccountContext, MixRole, Guid, RoleViewModel> RoleRepo;
@@ -61,7 +60,7 @@ namespace Mix.Lib.Services
             {
                 if (_currentTenant == null)
                 {
-                    _currentTenant = Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
+                    _currentTenant = Session?.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
                     _currentTenant ??= new MixTenantSystemModel()
                     {
                         Id = 1
@@ -79,12 +78,13 @@ namespace Mix.Lib.Services
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             UnitOfWorkInfo<MixCmsAccountContext> accountUow,
             MixCacheService cacheService,
-            FirebaseService firebaseService, MixRepoDbRepository repoDbRepository,
+            FirebaseService firebaseService,
             DatabaseService databaseService,
             MixCmsAccountContext accContext,
             UnitOfWorkInfo<MixDbDbContext> mixDbUow,
-            IMixDbDataService mixDbDataService, IConfiguration configuration,
-            IMemoryQueueService<MessageQueueModel> queueService)
+            IConfiguration configuration,
+            IMemoryQueueService<MessageQueueModel> queueService,
+            MixDbDataServiceFactory mixDbDataFactory)
         {
             Session = httpContextAccessor.HttpContext?.Session;
             Configuration = configuration;
@@ -99,11 +99,10 @@ namespace Mix.Lib.Services
             RoleRepo = RoleViewModel.GetRepository(AccountUow, CacheService);
             RefreshTokenRepo = RefreshTokenViewModel.GetRepository(AccountUow, CacheService);
             FirebaseService = firebaseService;
-            RepoDbRepository = repoDbRepository;
             DatabaseService = databaseService;
             _accContext = accContext;
             MixDbUow = mixDbUow;
-            MixDbDataService = mixDbDataService;
+            MixDbDataService = mixDbDataFactory.GetDataService(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION));
             GlobalConfig = Configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>();
             QueueService = queueService;
         }
@@ -114,14 +113,17 @@ namespace Mix.Lib.Services
             return user != null;
         }
 
-        public virtual async Task<MixUserViewModel> GetUserAsync(Guid userId)
+        public virtual async Task<MixUserViewModel> GetUserAsync(Guid userId, CancellationToken cancellationToken)
         {
             var user = await UserManager.FindByIdAsync(userId.ToString());
             if (user != null)
             {
                 var userInfo = new MixUserViewModel(user, CmsUow);
                 var roles = await UserManager.GetRolesAsync(user);
-                await userInfo.LoadUserDataAsync(CurrentTenant.Id, MixDbDataService, _accContext, CacheService);
+                if (!Configuration.IsInit())
+                {
+                    await userInfo.LoadUserDataAsync(CurrentTenant.Id, MixDbDataService, _accContext, CacheService, cancellationToken);
+                }
                 await userInfo.LoadUserPortalMenus(roles.ToArray(), CurrentTenant.Id, RepoDbRepository);
 
                 return userInfo;
@@ -269,19 +271,20 @@ namespace Mix.Lib.Services
         {
             try
             {
-                if (GlobalConfig.IsInit)
+                if (Configuration.IsInit())
                 {
                     return new JObject();
                 }
-                var u = await MixDbDataService.GetSingleByGuidParent(MixDatabaseNames.SYSTEM_USER_DATA, MixContentType.User, user.Id, true);
-                if (u == null && !GlobalConfig.IsInit)
+
+                var u = await MixDbDataService.GetSingleByParentAsync(MixDatabaseNames.SYSTEM_USER_DATA, MixContentType.User, user.Id, string.Empty, cancellationToken);
+                if (u == null && !Configuration.IsInit())
                 {
                     u = new JObject()
                     {
                         new JProperty("Id", null),
                         new JProperty("ParentId", user.Id),
                         new JProperty("ParentType", MixContentType.User.ToString()),
-                        new JProperty("Username", user.UserName),
+                        new JProperty("UserName", user.UserName),
                         new JProperty("Email", user.Email),
                         new JProperty("PhoneNumber", user.PhoneNumber),
 
@@ -291,7 +294,7 @@ namespace Mix.Lib.Services
                         u.Add(additionalData.Properties());
                     }
 
-                    var id = await MixDbDataService.CreateData(MixDatabaseNames.SYSTEM_USER_DATA, u);
+                    var id = await MixDbDataService.CreateAsync(MixDatabaseNames.SYSTEM_USER_DATA, u, user.UserName, cancellationToken);
 
                     QueueService.PushMemoryQueue(
                     CurrentTenant.Id,
@@ -344,7 +347,7 @@ namespace Mix.Lib.Services
                             Email = user.Email,
                             IssuedUtc = dtIssued,
                             ClientId = AuthConfigService.AppSettings.ClientId,
-                            Username = user.UserName,
+                            UserName = user.UserName,
                             ExpiresUtc = dtRefreshTokenExpired
                         }, AccountUow);
 
@@ -356,7 +359,7 @@ namespace Mix.Lib.Services
                 {
                     Info = userInfo,
                     EmailConfirmed = user.EmailConfirmed,
-                    IsActive = user.IsActived,
+                    IsActive = user.IsActive,
                     AccessToken = await GenerateTokenAsync(
                         user, new(), dtExpired, refreshToken.ToString(), AuthConfigService.AppSettings),
                     RefreshToken = refreshTokenId,
@@ -457,9 +460,9 @@ namespace Mix.Lib.Services
                 {
 
                     var principle = GetPrincipalFromExpiredToken(refreshTokenDto.AccessToken, AuthConfigService.AppSettings);
-                    if (principle != null && oldToken.Username == GetClaim(principle, MixClaims.Username))
+                    if (principle != null && oldToken.UserName == GetClaim(principle, MixClaims.UserName))
                     {
-                        var user = await UserManager.FindByNameAsync(oldToken.Username);
+                        var user = await UserManager.FindByNameAsync(oldToken.UserName);
                         await SignInManager.SignInAsync(user, true).ConfigureAwait(false);
 
                         var token = await GetAuthData(user, true, CurrentTenant.Id, default, cancellationToken);
@@ -589,7 +592,7 @@ namespace Mix.Lib.Services
             claims.AddRange(new[]
                 {
                     CreateClaim(MixClaims.Id, user.Id.ToString()),
-                    CreateClaim(MixClaims.Username, user.UserName),
+                    CreateClaim(MixClaims.UserName, user.UserName),
                     CreateClaim(MixClaims.TenantId, CurrentTenant.Id.ToString()),
                     CreateClaim(MixClaims.RefreshToken, refreshToken),
                     CreateClaim(MixClaims.Avatar, info?.Value<string>("avatar") ?? MixConstants.CONST_DEFAULT_AVATAR),

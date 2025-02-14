@@ -22,7 +22,7 @@ namespace Mix.Xunittest.Domain.Tests
                 DisplayName = "unit test",
                 Content = "test case 1",
                 DefaultContent = "",
-                MixTenantId = 1
+                TenantId = 1
             };
             data.InitDefaultValues();
             return data;

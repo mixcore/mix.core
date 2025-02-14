@@ -51,7 +51,7 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.EcommerceDb
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("MixTenantId")
+                    b.Property<int>("TenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
@@ -140,7 +140,7 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.EcommerceDb
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("MixTenantId")
+                    b.Property<int>("TenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
@@ -212,7 +212,7 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.EcommerceDb
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("MixTenantId")
+                    b.Property<int>("TenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
@@ -261,7 +261,7 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.EcommerceDb
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("MixTenantId")
+                    b.Property<int>("TenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")

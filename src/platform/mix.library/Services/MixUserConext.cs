@@ -23,7 +23,7 @@ namespace Mix.Lib.Services
         {
             get
             {
-                return GetClaimValue(MixClaims.Username);
+                return GetClaimValue(MixClaims.UserName);
             }
 
             private set { }

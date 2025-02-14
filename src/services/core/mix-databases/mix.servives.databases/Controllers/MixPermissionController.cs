@@ -78,7 +78,7 @@ namespace Mix.Services.Databases.Controllers
         [HttpPost]
         public async Task<ActionResult> GrantPermission([FromBody] GrantPermissionsDto dto)
         {
-            dto.RequestedBy = MixIdentityService.GetClaim(User, MixClaims.Username);
+            dto.RequestedBy = MixIdentityService.GetClaim(User, MixClaims.UserName);
             await _permissionService.GrantPermissions(dto);
             return Ok();
         }

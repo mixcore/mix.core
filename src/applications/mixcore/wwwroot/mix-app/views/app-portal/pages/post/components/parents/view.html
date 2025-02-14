@@ -1,1 +1,1 @@
-<div class="card"><div class="card-body"><tabs-h><pane-h header="Pages"><navs data="$ctrl.post.pages" prefix="'page'"></navs></pane-h><pane-h header="Modules"><navs data="$ctrl.post.modules" prefix="'module'"></navs></pane-h></tabs-h></div></div>
+<div class="card"><div class="card-body"><tabs-h><pane-h header="Pages" ng-if="$ctrl.pages.length > 0">{{ $ctrl.pages | json}}<navs data="$ctrl.pages" prefix="'page'"></navs></pane-h><pane-h header="Modules" ng-if="$ctrl.modules.length > 0"><navs data="$ctrl.modules" prefix="'module'"></navs></pane-h></tabs-h></div></div>

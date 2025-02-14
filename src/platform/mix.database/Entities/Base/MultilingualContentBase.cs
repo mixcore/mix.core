@@ -3,7 +3,7 @@
     public abstract class MultilingualContentBase<TPrimaryKey> : EntityBase<TPrimaryKey>
         where TPrimaryKey : IComparable
     {
-        public int MixTenantId { get; set; }
+        public int TenantId { get; set; }
         public string Specificulture { get; set; }
         public string Icon { get; set; }
         public bool IsPublic { get; set; }

@@ -1,4 +1,4 @@
-﻿using Mix.RepoDb.Interfaces;
+﻿using Mix.Mixdb.Interfaces;
 using Mix.Services.Databases.Lib.Interfaces;
 
 namespace Mixcore.Domain.ViewModels
@@ -36,10 +36,10 @@ namespace Mixcore.Domain.ViewModels
 
         public async Task LoadPost(IMixDbDataService mixDbDataService,
             IMixMetadataService metadataService,
-            MixCacheService cacheService)
+            MixCacheService cacheService, CancellationToken cancellationToken = default)
         {
             Post = await PostContentViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(ChildId);
-            await Post.LoadAdditionalDataAsync(mixDbDataService, metadataService, cacheService);
+            await Post.LoadAdditionalDataAsync(mixDbDataService, metadataService, cacheService, cancellationToken);
         }
         #endregion
     }

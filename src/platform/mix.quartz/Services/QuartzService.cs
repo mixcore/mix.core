@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Quartz.Constants;
@@ -11,7 +11,6 @@ using Newtonsoft.Json.Linq;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,9 +24,14 @@ namespace Mix.Quartz.Services
         private readonly DatabaseService _databaseService;
         public IScheduler Scheduler;
 
-        public QuartzService(IJobFactory jobFactory, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
+        public IConfiguration Configuration { get; }
+
+        public QuartzService(IJobFactory jobFactory, 
+            IHttpContextAccessor httpContextAccessor, 
+            IConfiguration configuration, DatabaseService databaseService)
         {
-            _databaseService = new DatabaseService(httpContextAccessor, configuration);
+            Configuration = configuration;
+            _databaseService = databaseService;
             LoadScheduler().GetAwaiter().GetResult();
             Scheduler.JobFactory = jobFactory;
         }
@@ -35,7 +39,7 @@ namespace Mix.Quartz.Services
         public async Task LoadScheduler()
         {
             var connectionString = _databaseService.GetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION);
-            if (string.IsNullOrEmpty(connectionString))
+            if (Configuration.GetValue<bool>("IsInit") || string.IsNullOrEmpty(connectionString))
             {
                 Scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             }

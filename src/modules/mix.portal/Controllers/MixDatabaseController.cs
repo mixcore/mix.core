@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Auth.Constants;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
+using Mix.Mixdb.Interfaces;
 using Mix.Mixdb.Services;
+using Mix.Mixdb.ViewModels;
 using Mix.Mq.Lib.Models;
 using Mix.RepoDb.Interfaces;
-using Mix.RepoDb.ViewModels;
 using Mix.Service.Interfaces;
 using Mix.SignalR.Interfaces;
 
@@ -18,7 +20,7 @@ namespace Mix.Portal.Controllers
         : MixRestfulApiControllerBase<MixDatabaseViewModel, MixCmsContext, MixDatabase, int>
     {
         private readonly DatabaseService _databaseService;
-        private readonly IMixDbService _mixDbService;
+        private readonly IMixdbStructure _mixDbService;
         private readonly IMixMemoryCacheService _memoryCache;
         public MixDatabaseController(
             IHttpContextAccessor httpContextAccessor,
@@ -28,7 +30,7 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IMemoryQueueService<MessageQueueModel> queueService,
-            IMixDbService mixDbService,
+            IMixdbStructure mixDbService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService,
             IMixMemoryCacheService memoryCache,
@@ -48,7 +50,13 @@ namespace Mix.Portal.Controllers
         {
             var result = await GetMixDatabase(name);
             if (result != null)
+            {
+                if (!result.MixDatabaseContextId.HasValue)
+                {
+                    result.DatabaseProvider = _databaseService.DatabaseProvider;
+                }
                 return Ok(result);
+            }
             return NotFound();
         }
 
@@ -79,22 +87,20 @@ namespace Mix.Portal.Controllers
             }
             var runtimeDbContextService = new RuntimeDbContextService(HttpContextAccessor, _databaseService);
             string cnn = dbContext != null
-                ? dbContext.DecryptedConnectionString
+                ? dbContext.ConnectionString.Decrypt(Configuration.AesKey())
                 : _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
             var sourceFiles = runtimeDbContextService.CreateDynamicDbContext(cnn);
             return Ok(sourceFiles);
         }
-        
+
         [MixAuthorize(MixRoles.Owner)]
         [HttpGet("migrate/{name}")]
         public async Task<ActionResult> Migrate(string name)
         {
-            //await _mixDbService.BackupDatabase(name);
-            RepoDbMixDatabaseViewModel database = await RepoDbMixDatabaseViewModel
-                       .GetRepository(Uow, CacheService).GetSingleAsync(m => m.SystemName == name);
-            var result = await _mixDbService.MigrateDatabase(database);
-            //await _mixDbService.RestoreFromLocal(name);
-            return result ? Ok() : BadRequest();
+            //await _mixDbStructure.BackupDatabase(name);
+            await _mixDbService.MigrateDatabase(name);
+            //await _mixDbStructure.RestoreFromLocal(name);
+            return Ok();
         }
 
         [MixAuthorize(MixRoles.Owner)]
@@ -171,15 +177,15 @@ namespace Mix.Portal.Controllers
         #endregion
 
         #region Privates
-        private async Task<RepoDbMixDatabaseViewModel> GetMixDatabase(string tableName)
+        private async Task<MixDbDatabaseViewModel> GetMixDatabase(string tableName)
         {
-            string name = $"{typeof(RepoDbMixDatabaseViewModel).FullName}_{tableName}";
+            string name = $"{typeof(MixDbDatabaseViewModel).FullName}_{tableName}";
             return await _memoryCache.TryGetValueAsync(
                 name,
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return RepoDbMixDatabaseViewModel.GetRepository(Uow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
+                    return MixDbDatabaseViewModel.GetRepository(Uow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
                 }
                 );
         }

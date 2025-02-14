@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Lib.Interfaces;
 using Mix.Shared.Models.Configurations;
 using RepoDb;
@@ -19,7 +20,6 @@ namespace Mix.Lib.Base
         protected bool IsValid = true;
         protected string RedirectUrl;
         protected readonly IPSecurityConfigService IpSecurityConfigService;
-        protected readonly GlobalSettingsModel GlobalConfig;
         protected readonly IMixCmsService MixCmsService;
         protected IMixTenantService TenantService;
         protected MixTenantSystemModel CurrentTenant => Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
@@ -52,7 +52,6 @@ namespace Mix.Lib.Base
             ViewData[MixRequestQueryKeywords.Tenant] = CurrentTenant;
             MixCmsService = mixCmsService;
             TenantService = tenantService;
-            GlobalConfig = configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>()!;
         }
 
         private void LoadCulture()
@@ -74,7 +73,7 @@ namespace Mix.Lib.Base
             }
             //if (!_globalConfigService.Instance.CheckValidCulture(Culture))
             //{
-            //    Culture = GlobalConfigService.Instance.AppSettings.DefaultCulture;
+            //    Culture = GlobalSettingsService.Instance.DefaultCulture;
             //}
             if (CurrentTenant != null)
             {
@@ -96,7 +95,7 @@ namespace Mix.Lib.Base
 
         public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (!GlobalConfig.IsInit)
+            if (!Configuration.GetValue<bool>("IsInit"))
             {
                 LoadCulture();
             }
@@ -143,7 +142,7 @@ namespace Mix.Lib.Base
             }
 
             // If mode Maintenance enabled in appsettings
-            if (!GlobalConfig.IsInit
+            if (!Configuration.GetValue<bool>("IsInit")
                 && CurrentTenant != null
                 && CurrentTenant.Configurations != null
                 && CurrentTenant.Configurations.IsMaintenance

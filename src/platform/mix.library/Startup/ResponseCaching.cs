@@ -1,34 +1,39 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.Extensions;
 using Mix.Lib.Policies;
+using Mix.Shared.Models.Configurations;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static partial class ServiceCollectionExtensions
     {
-        public static void AddMixResponseCaching(this IServiceCollection services)
+        public static void AddMixResponseCaching(this IHostApplicationBuilder builder)
         {
-            services.AddOutputCache(options =>
+            builder.Services.AddOutputCache(options =>
             {
                 options.AddBasePolicy(builder => builder.Cache());
                 options.AddPolicy("OutputCacheWithAuthPolicy", OutputCacheWithAuthPolicy.Instance);
             });
-            services.AddResponseCaching();
-            services.AddControllers(
+            builder.Services.AddResponseCaching();
+            builder.Services.AddControllers(
                 opt =>
                 {
+                    int responseCache = builder.Configuration.GetGlobalConfiguration<int>(nameof(GlobalSettingsModel.ResponseCache));
                     opt.CacheProfiles.Add("Default",
                         new CacheProfile()
                         {
-                            Duration = GlobalConfigService.Instance.ResponseCache > 0
-                                        ? GlobalConfigService.Instance.ResponseCache
+                            Duration = responseCache > 0
+                                        ? responseCache
                                         : 0,
                             VaryByHeader = "User-Agent",
-                            Location = GlobalConfigService.Instance.ResponseCache > 0
+                            Location = responseCache > 0
                                         ? ResponseCacheLocation.Any
                                         : ResponseCacheLocation.None,
-                            NoStore = GlobalConfigService.Instance.ResponseCache > 0
+                            NoStore = responseCache > 0
                                         ? false : true
                         });
                 });
@@ -40,15 +45,15 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseResponseCaching();
             //app.Use(async (context, next) =>
             //{
-            //    if (GlobalConfigService.Instance.ResponseCache > 0)
+            //    if (GlobalSettingsService.Instance.ResponseCache > 0)
             //    {
             //        context.Response.GetTypedHeaders().CacheControl =
             //            new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
             //            {
             //                Public = true,
             //                NoCache = false,
-            //                SharedMaxAge = TimeSpan.FromSeconds(GlobalConfigService.Instance.ResponseCache),
-            //                MaxAge = TimeSpan.FromSeconds(GlobalConfigService.Instance.ResponseCache),
+            //                SharedMaxAge = TimeSpan.FromSeconds(GlobalSettingsService.Instance.ResponseCache),
+            //                MaxAge = TimeSpan.FromSeconds(GlobalSettingsService.Instance.ResponseCache),
 
             //            };
             //    }

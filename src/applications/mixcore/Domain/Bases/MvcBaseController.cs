@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.Extensions;
 using Mix.Lib.Services;
-using Mix.Shared.Services;
 
 namespace Mixcore.Domain.Bases
 {
@@ -27,7 +27,7 @@ namespace Mixcore.Domain.Bases
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (GlobalConfig.IsInit)
+            if (Configuration.IsInit())
             {
                 IsValid = false;
                 if (string.IsNullOrEmpty(DatabaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -36,8 +36,7 @@ namespace Mixcore.Domain.Bases
                 }
                 else
                 {
-                    var status = GlobalConfig.InitStatus;
-                    RedirectUrl = $"/init/step{status}";
+                    RedirectUrl = $"/init/step{Configuration.InitStep()}";
                 }
             }
         }
