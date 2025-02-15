@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Mix.Auth.Constants;
 using Mix.Database.Entities.Account;
 using Mix.Lib.Dtos;
 using Mix.Lib.Interfaces;
@@ -54,6 +55,18 @@ namespace Mix.Lib.Base
         [HttpPost]
         public virtual async Task<ActionResult<TView>> Create([FromBody] TView data)
         {
+            ReflectionHelper.SetPropertyValue(data, new EntityPropertyModel()
+            {
+                PropertyName = "CreatedBy",
+                PropertyValue = MixIdentityService.GetClaim(User, MixClaims.UserName)
+            });
+            
+            ReflectionHelper.SetPropertyValue(data, new EntityPropertyModel()
+            {
+                PropertyName = "CreatedDateTime",
+                PropertyValue = DateTime.UtcNow
+            });
+            
             var id = await CreateHandlerAsync(data);
             var result = await GetById(id);
             return Ok(result);
@@ -64,6 +77,17 @@ namespace Mix.Lib.Base
         [HttpPut("{id}")]
         public virtual async Task<IActionResult> Update(TPrimaryKey id, [FromBody] TView data)
         {
+            ReflectionHelper.SetPropertyValue(data, new EntityPropertyModel()
+            {
+                PropertyName = "ModifiedBy",
+                PropertyValue = MixIdentityService.GetClaim(User, MixClaims.UserName)
+            });
+
+            ReflectionHelper.SetPropertyValue(data, new EntityPropertyModel()
+            {
+                PropertyName = "LastModified",
+                PropertyValue = DateTime.UtcNow
+            });
             await UpdateHandler(id, data);
             var result = await GetById(id);
             return Ok(result);
