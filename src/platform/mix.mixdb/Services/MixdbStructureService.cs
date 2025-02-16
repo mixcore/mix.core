@@ -167,7 +167,7 @@ namespace Mix.Mixdb.Services
             }
         }
 
-        public async Task MigrateSystemDatabases(CancellationToken cancellationToken = default)
+        public async Task MigrateSystemDatabases(string requestedBy, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -176,6 +176,24 @@ namespace Mix.Mixdb.Services
             var obj = JObject.Parse(strMixDbs.Content);
             var databases = obj.Value<JArray>("databases")?.ToObject<List<MixDatabase>>();
             var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
+            var masterDbContext = _cmsUow.DbContext.MixDatabaseContext.FirstOrDefault(
+                m => m.SystemName == "master");
+            if (masterDbContext is null)
+            {
+                masterDbContext = new MixDatabaseContext()
+                {
+                    SystemName = "master",
+                    ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION),
+                    DatabaseProvider = _databaseService.DatabaseProvider,
+                    AesKey = _configuration.AesKey(),
+                    CreatedBy = requestedBy,
+                    CreatedDateTime = DateTime.UtcNow,
+                    NamingConvention = MixDatabaseNamingConvention.SnakeCase,
+                    TenantId = CurrentTenant?.Id ?? 1,
+                    DisplayName = "Master"
+                };
+                await _cmsUow.DbContext.AddAsync(masterDbContext);
+            }
             if (databases != null)
             {
                 foreach (var database in databases)
@@ -184,6 +202,7 @@ namespace Mix.Mixdb.Services
                     {
                         MixDbDatabaseViewModel currentDb = new(database, _cmsUow);
                         currentDb.Id = 0;
+                        currentDb.MixDatabaseContextId = masterDbContext.Id;
                         currentDb.TenantId = CurrentTenant?.Id ?? 1;
                         currentDb.CreatedDateTime = DateTime.UtcNow;
                         currentDb.Columns = new();
