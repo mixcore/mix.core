@@ -167,7 +167,7 @@ namespace Mix.Mixdb.Services
             }
         }
 
-        public async Task MigrateSystemDatabases(string requestedBy, CancellationToken cancellationToken = default)
+        public async Task MigrateSystemDatabases(CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -186,7 +186,6 @@ namespace Mix.Mixdb.Services
                     ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION),
                     DatabaseProvider = _databaseService.DatabaseProvider,
                     AesKey = _configuration.AesKey(),
-                    CreatedBy = requestedBy,
                     CreatedDateTime = DateTime.UtcNow,
                     NamingConvention = MixDatabaseNamingConvention.SnakeCase,
                     TenantId = CurrentTenant?.Id ?? 1,
