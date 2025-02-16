@@ -51,6 +51,7 @@ namespace Mix.Lib.Base
         protected virtual async Task<TPrimaryKey> CreateHandlerAsync(TView data, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            
             return await RestApiService.CreateHandlerAsync(data, cancellationToken);
         }
 

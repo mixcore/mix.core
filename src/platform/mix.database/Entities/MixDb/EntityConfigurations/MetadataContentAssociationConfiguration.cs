@@ -14,6 +14,10 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
             builder.ToTable(MixDbDatabaseNames.MetadataContentAssociation);
             base.Configure(builder);
 
+            builder.Property(e => e.MetadataId)
+                .HasColumnName("metadata_id");
+            builder.Property(e => e.ContentId)
+                .HasColumnName("content_id");
             builder.Property(e => e.TenantId)
                 .HasColumnName("tenant_id");
             builder.Property(e => e.ContentType)

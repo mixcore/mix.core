@@ -11,6 +11,8 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         public override void Configure(EntityTypeBuilder<MixMetadata> builder)
         {
             builder.ToTable(MixDbDatabaseNames.Metadata);
+            builder.Property(e => e.TenantId)
+                .HasColumnName("tenant_id");
             base.Configure(builder);
         }
     }

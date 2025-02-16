@@ -34,7 +34,6 @@
         {
             Value = JsonConvert.SerializeObject(Data);
             SimpleDataColumns = JsonConvert.SerializeObject(Columns);
-            LastModified = DateTime.Now;
 
             return base.ParseEntity(cancellationToken);
         }
