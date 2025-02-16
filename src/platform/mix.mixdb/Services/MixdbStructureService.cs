@@ -183,8 +183,8 @@ namespace Mix.Mixdb.Services
                 masterDbContext = new MixDatabaseContext()
                 {
                     SystemName = "master",
-                    Schema = "master",
-                    ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION),
+                    Schema = "mix",
+                    ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION).Encrypt(_configuration.AesKey()),
                     DatabaseProvider = _databaseService.DatabaseProvider,
                     AesKey = _configuration.AesKey(),
                     CreatedDateTime = DateTime.UtcNow,
