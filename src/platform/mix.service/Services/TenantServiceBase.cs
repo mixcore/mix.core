@@ -12,12 +12,10 @@ namespace Mix.Service.Services
         protected IHttpContextAccessor HttpContextAccessor;
         protected IMixTenantService MixTenantService;
         protected readonly MixCacheService CacheService;
-        private readonly MixDitributedCache _cache;
 
-        protected TenantServiceBase(IConfiguration configuration, MixDitributedCache cache)
+        protected TenantServiceBase(IConfiguration configuration, MixCacheService cache)
         {
-            _cache = cache;
-            CacheService = new MixCacheService(configuration, cache);
+            CacheService = cache;
         }
 
         protected TenantServiceBase(IHttpContextAccessor httpContextAccessor, MixCacheService cacheService, IMixTenantService mixTenantService)

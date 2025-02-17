@@ -20,8 +20,6 @@ using Mix.RepoDb.Models;
 using Mix.RepoDb.Repositories;
 using Mix.Service.Interfaces;
 using Mix.Service.Services;
-using Mix.Shared.Services;
-using MySqlX.XDevAPI.Common;
 using Newtonsoft.Json.Linq;
 using RepoDb.Interfaces;
 using System.Dynamic;
