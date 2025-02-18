@@ -133,28 +133,6 @@
       "isDeleted": false
     },
     {
-      "systemName": "mix_permission",
-      "displayName": "Permission",
-      "description": null,
-      "type": "System",
-      "readPermissions": [],
-      "createPermissions": [],
-      "updatePermissions": [],
-      "deletePermissions": [],
-      "selfManaged": false,
-      "mixDatabaseColumns": null,
-      "sourceRelationships": null,
-      "destinateRelationships": null,
-      "id": 6,
-      "createdDateTime": "2023-05-05T03:11:24.3495043",
-      "lastModified": null,
-      "createdBy": "tinku",
-      "modifiedBy": null,
-      "priority": 0,
-      "status": "Published",
-      "isDeleted": false
-    },
-    {
       "systemName": "mix_permission_endpoint",
       "displayName": "Permission Endpoint",
       "description": null,
@@ -1622,7 +1600,7 @@
                 }
             },
             "IntegerId": null,
-            "defaultValue": null,
+            "defaultValue": "1",
             "mixDatabaseId": 1,
             "mixDatabase": null,
             "id": 5,
@@ -2585,7 +2563,7 @@
                 }
             },
             "IntegerId": null,
-            "defaultValue": null,
+            "defaultValue": "1",
             "mixDatabaseId": 1,
             "mixDatabase": null,
             "id": 5,
@@ -2806,34 +2784,6 @@
         {
             "systemName": "display_name",
             "displayName": "Display Name",
-            "mixDatabaseName": "mix_media",
-            "dataType": "String",
-            "configurations": {
-                "IsRequire": false,
-                "IsEncrypt": false,
-                "MaxLength": 2000,
-                "Upload": {
-                    "ArrayAccepts": [],
-                    "Accepts": "",
-                    "IsCrop": false
-                }
-            },
-            "IntegerId": null,
-            "defaultValue": null,
-            "mixDatabaseId": 5,
-            "mixDatabase": null,
-            "id": 28,
-            "createdDateTime": "2023-05-05T03:11:24.3424551",
-            "lastModified": null,
-            "createdBy": "tinku",
-            "modifiedBy": null,
-            "priority": 0,
-            "status": "Published",
-            "isDeleted": false
-        },
-        {
-            "systemName": "description",
-            "displayName": "Description",
             "mixDatabaseName": "mix_media",
             "dataType": "String",
             "configurations": {
@@ -3139,7 +3089,7 @@
         {
             "systemName": "id",
             "displayName": "Id",
-            "mixDatabaseName": "mix_permission",
+            "mixDatabaseName": "mix_permission_endpoint",
             "dataType": "Integer",
             "configurations": {
                 "IsUnique": false,
@@ -3168,7 +3118,7 @@
         {
             "systemName": "tenant_id",
             "displayName": "Tenant Id",
-            "mixDatabaseName": "mix_permission",
+            "mixDatabaseName": "mix_permission_endpoint",
             "dataType": "Integer",
             "configurations": {
                 "IsUnique": false,
@@ -3182,7 +3132,7 @@
                 }
             },
             "IntegerId": null,
-            "defaultValue": null,
+            "defaultValue": "1",
             "mixDatabaseId": 1,
             "mixDatabase": null,
             "id": 5,
@@ -3197,7 +3147,7 @@
         {
             "systemName": "priority",
             "displayName": "Priority",
-            "mixDatabaseName": "mix_permission",
+            "mixDatabaseName": "mix_permission_endpoint",
             "dataType": "Integer",
             "configurations": {
                 "IsUnique": false,
@@ -3226,7 +3176,7 @@
         {
             "systemName": "is_deleted",
             "displayName": "Is Deleted",
-            "mixDatabaseName": "mix_permission",
+            "mixDatabaseName": "mix_permission_endpoint",
             "dataType": "Boolean",
             "configurations": {
                 "IsUnique": false,
@@ -3255,7 +3205,7 @@
         {
             "systemName": "created_by",
             "displayName": "Created By",
-            "mixDatabaseName": "mix_permission",
+            "mixDatabaseName": "mix_permission_endpoint",
             "dataType": "Text",
             "configurations": {
                 "IsUnique": false,
@@ -3285,7 +3235,7 @@
         {
             "systemName": "modified_by",
             "displayName": "Modified By",
-            "mixDatabaseName": "mix_permission",
+            "mixDatabaseName": "mix_permission_endpoint",
             "dataType": "Text",
             "configurations": {
                 "IsUnique": false,
@@ -3315,7 +3265,7 @@
         {
             "systemName": "status",
             "displayName": "Status",
-            "mixDatabaseName": "mix_permission",
+            "mixDatabaseName": "mix_permission_endpoint",
             "dataType": "Text",
             "configurations": {
                 "IsUnique": false,
@@ -3345,7 +3295,7 @@
         {
             "systemName": "created_date_time",
             "displayName": "Created Date Time",
-            "mixDatabaseName": "mix_permission",
+            "mixDatabaseName": "mix_permission_endpoint",
             "dataType": "DateTime",
             "configurations": {
                 "IsUnique": false,
@@ -3374,7 +3324,7 @@
         {
             "systemName": "last_modified",
             "displayName": "Last Modified",
-            "mixDatabaseName": "mix_permission",
+            "mixDatabaseName": "mix_permission_endpoint",
             "dataType": "DateTime",
             "configurations": {
                 "IsUnique": false,
@@ -3397,87 +3347,6 @@
             "createdBy": "tinku",
             "modifiedBy": null,
             "priority": 0,
-            "status": "Published",
-            "isDeleted": false
-        },
-        {
-            "systemName": "display_name",
-            "displayName": "Display Name",
-            "mixDatabaseName": "mix_permission",
-            "dataType": "Text",
-            "configurations": {
-                "IsRequire": false,
-                "IsEncrypt": false,
-                "Upload": {
-                    "ArrayAccepts": [],
-                    "Accepts": "",
-                    "IsCrop": false
-                }
-            },
-            "IntegerId": null,
-            "defaultValue": null,
-            "mixDatabaseId": 6,
-            "mixDatabase": null,
-            "id": 31,
-            "createdDateTime": "2023-05-05T03:11:24.3520849",
-            "lastModified": null,
-            "createdBy": "tinku",
-            "modifiedBy": null,
-            "priority": 1,
-            "status": "Published",
-            "isDeleted": false
-        },
-        {
-            "systemName": "group",
-            "displayName": "Group",
-            "mixDatabaseName": "mix_permission",
-            "dataType": "Text",
-            "configurations": {
-                "IsRequire": false,
-                "IsEncrypt": false,
-                "Upload": {
-                    "ArrayAccepts": [],
-                    "Accepts": "",
-                    "IsCrop": false
-                }
-            },
-            "IntegerId": null,
-            "defaultValue": null,
-            "mixDatabaseId": 6,
-            "mixDatabase": null,
-            "id": 32,
-            "createdDateTime": "2023-05-05T03:11:24.3545975",
-            "lastModified": null,
-            "createdBy": "tinku",
-            "modifiedBy": null,
-            "priority": 3,
-            "status": "Published",
-            "isDeleted": false
-        },
-        {
-            "systemName": "key",
-            "displayName": "Key",
-            "mixDatabaseName": "mix_permission",
-            "dataType": "Text",
-            "configurations": {
-                "IsRequire": false,
-                "IsEncrypt": false,
-                "Upload": {
-                    "ArrayAccepts": [],
-                    "Accepts": "",
-                    "IsCrop": false
-                }
-            },
-            "IntegerId": null,
-            "defaultValue": null,
-            "mixDatabaseId": 6,
-            "mixDatabase": null,
-            "id": 33,
-            "createdDateTime": "2023-05-05T03:11:24.3572288",
-            "lastModified": null,
-            "createdBy": "tinku",
-            "modifiedBy": null,
-            "priority": 4,
             "status": "Published",
             "isDeleted": false
         },
@@ -3505,241 +3374,6 @@
             "createdBy": "tinku",
             "modifiedBy": null,
             "priority": 1,
-            "status": "Published",
-            "isDeleted": false
-        },
-        {
-            "systemName": "id",
-            "displayName": "Id",
-            "mixDatabaseName": "mix_permission_endpoint",
-            "dataType": "Integer",
-            "configurations": {
-                "IsUnique": false,
-                "IsRequire": false,
-                "IsEncrypt": false,
-                "IsSelect": false,
-                "Upload": {
-                    "ArrayAccepts": [],
-                    "Accepts": "",
-                    "IsCrop": false
-                }
-            },
-            "IntegerId": null,
-            "defaultValue": null,
-            "mixDatabaseId": 1,
-            "mixDatabase": null,
-            "id": 5,
-            "createdDateTime": "2023-05-05T03:11:24.2721044",
-            "lastModified": null,
-            "createdBy": "tinku",
-            "modifiedBy": null,
-            "priority": 0,
-            "status": "Published",
-            "isDeleted": false
-        },
-        {
-            "systemName": "priority",
-            "displayName": "Priority",
-            "mixDatabaseName": "mix_permission_endpoint",
-            "dataType": "Integer",
-            "configurations": {
-                "IsUnique": false,
-                "IsRequire": true,
-                "IsEncrypt": false,
-                "IsSelect": false,
-                "Upload": {
-                    "ArrayAccepts": [],
-                    "Accepts": "",
-                    "IsCrop": false
-                }
-            },
-            "IntegerId": null,
-            "defaultValue": "0",
-            "mixDatabaseId": 1,
-            "mixDatabase": null,
-            "id": 5,
-            "createdDateTime": "2023-05-05T03:11:24.2721044",
-            "lastModified": null,
-            "createdBy": "tinku",
-            "modifiedBy": null,
-            "priority": 0,
-            "status": "Published",
-            "isDeleted": false
-        },
-        {
-            "systemName": "is_deleted",
-            "displayName": "Is Deleted",
-            "mixDatabaseName": "mix_permission_endpoint",
-            "dataType": "Boolean",
-            "configurations": {
-                "IsUnique": false,
-                "IsRequire": true,
-                "IsEncrypt": false,
-                "IsSelect": false,
-                "Upload": {
-                    "ArrayAccepts": [],
-                    "Accepts": "",
-                    "IsCrop": false
-                }
-            },
-            "IntegerId": null,
-            "defaultValue": "0",
-            "mixDatabaseId": 1,
-            "mixDatabase": null,
-            "id": 5,
-            "createdDateTime": "2023-05-05T03:11:24.2721044",
-            "lastModified": null,
-            "createdBy": "tinku",
-            "modifiedBy": null,
-            "priority": 0,
-            "status": "Published",
-            "isDeleted": false
-        },
-        {
-            "systemName": "created_by",
-            "displayName": "Created By",
-            "mixDatabaseName": "mix_permission_endpoint",
-            "dataType": "Text",
-            "configurations": {
-                "IsUnique": false,
-                "IsRequire": false,
-                "IsEncrypt": false,
-                "IsSelect": false,
-                "MaxLength": 200,
-                "Upload": {
-                    "ArrayAccepts": [],
-                    "Accepts": "",
-                    "IsCrop": false
-                }
-            },
-            "IntegerId": null,
-            "defaultValue": null,
-            "mixDatabaseId": 1,
-            "mixDatabase": null,
-            "id": 5,
-            "createdDateTime": "2023-05-05T03:11:24.2721044",
-            "lastModified": null,
-            "createdBy": "tinku",
-            "modifiedBy": null,
-            "priority": 0,
-            "status": "Published",
-            "isDeleted": false
-        },
-        {
-            "systemName": "modified_by",
-            "displayName": "Modified By",
-            "mixDatabaseName": "mix_permission_endpoint",
-            "dataType": "Text",
-            "configurations": {
-                "IsUnique": false,
-                "IsRequire": false,
-                "IsEncrypt": false,
-                "IsSelect": false,
-                "MaxLength": 200,
-                "Upload": {
-                    "ArrayAccepts": [],
-                    "Accepts": "",
-                    "IsCrop": false
-                }
-            },
-            "IntegerId": null,
-            "defaultValue": null,
-            "mixDatabaseId": 1,
-            "mixDatabase": null,
-            "id": 5,
-            "createdDateTime": "2023-05-05T03:11:24.2721044",
-            "lastModified": null,
-            "createdBy": "tinku",
-            "modifiedBy": null,
-            "priority": 0,
-            "status": "Published",
-            "isDeleted": false
-        },
-        {
-            "systemName": "status",
-            "displayName": "Status",
-            "mixDatabaseName": "mix_permission_endpoint",
-            "dataType": "Text",
-            "configurations": {
-                "IsUnique": false,
-                "IsRequire": false,
-                "IsEncrypt": false,
-                "IsSelect": false,
-                "MaxLength": 50,
-                "Upload": {
-                    "ArrayAccepts": [],
-                    "Accepts": "",
-                    "IsCrop": false
-                }
-            },
-            "IntegerId": null,
-            "defaultValue": null,
-            "mixDatabaseId": 1,
-            "mixDatabase": null,
-            "id": 5,
-            "createdDateTime": "2023-05-05T03:11:24.2721044",
-            "lastModified": null,
-            "createdBy": "tinku",
-            "modifiedBy": null,
-            "priority": 0,
-            "status": "Published",
-            "isDeleted": false
-        },
-        {
-            "systemName": "created_date_time",
-            "displayName": "Created Date Time",
-            "mixDatabaseName": "mix_permission_endpoint",
-            "dataType": "DateTime",
-            "configurations": {
-                "IsUnique": false,
-                "IsRequire": false,
-                "IsEncrypt": false,
-                "IsSelect": false,
-                "Upload": {
-                    "ArrayAccepts": [],
-                    "Accepts": "",
-                    "IsCrop": false
-                }
-            },
-            "IntegerId": null,
-            "defaultValue": null,
-            "mixDatabaseId": 1,
-            "mixDatabase": null,
-            "id": 5,
-            "createdDateTime": "2023-05-05T03:11:24.2721044",
-            "lastModified": null,
-            "createdBy": "tinku",
-            "modifiedBy": null,
-            "priority": 0,
-            "status": "Published",
-            "isDeleted": false
-        },
-        {
-            "systemName": "last_modified",
-            "displayName": "Last Modified",
-            "mixDatabaseName": "mix_permission_endpoint",
-            "dataType": "DateTime",
-            "configurations": {
-                "IsUnique": false,
-                "IsRequire": false,
-                "IsEncrypt": false,
-                "IsSelect": false,
-                "Upload": {
-                    "ArrayAccepts": [],
-                    "Accepts": "",
-                    "IsCrop": false
-                }
-            },
-            "IntegerId": null,
-            "defaultValue": null,
-            "mixDatabaseId": 1,
-            "mixDatabase": null,
-            "id": 5,
-            "createdDateTime": "2023-05-05T03:11:24.2721044",
-            "lastModified": null,
-            "createdBy": "tinku",
-            "modifiedBy": null,
-            "priority": 0,
             "status": "Published",
             "isDeleted": false
         },
@@ -3852,8 +3486,8 @@
             "isDeleted": false
         },
         {
-            "systemName": "SysUserDataId",
-            "displayName": "SysUserDataId",
+            "systemName": "mix_user_data_id",
+            "displayName": "User Data Id",
             "mixDatabaseName": "mix_permission_endpoint",
             "dataType": "Integer",
             "configurations": {
@@ -3926,7 +3560,7 @@
                 }
             },
             "IntegerId": null,
-            "defaultValue": null,
+            "defaultValue": "1",
             "mixDatabaseId": 1,
             "mixDatabase": null,
             "id": 5,
@@ -4439,7 +4073,7 @@
                 }
             },
             "IntegerId": null,
-            "defaultValue": null,
+            "defaultValue": "1",
             "mixDatabaseId": 1,
             "mixDatabase": null,
             "id": 5,
@@ -5023,7 +4657,7 @@
                 }
             },
             "IntegerId": null,
-            "defaultValue": null,
+            "defaultValue": "1",
             "mixDatabaseId": 11,
             "mixDatabase": null,
             "id": 50,
@@ -5197,7 +4831,7 @@
                 }
             },
             "IntegerId": null,
-            "defaultValue": null,
+            "defaultValue": "1",
             "mixDatabaseId": 1,
             "mixDatabase": null,
             "id": 5,

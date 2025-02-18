@@ -20,6 +20,7 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
                .HasColumnName("key");
             builder.Property(e => e.TenantId)
                .HasColumnName("tenant_id");
+
         }
     }
 }
