@@ -1507,13 +1507,6 @@ namespace Mix.Database.Migrations.Cms.MySql
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("TargetUrl"), "utf8");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("title")
-                        .UseCollation("utf8_unicode_ci");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Title"), "utf8");
-
                     b.HasKey("Id")
                         .HasName("pk_mix_media");
 

@@ -1374,12 +1374,6 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("title")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
                     b.HasKey("Id")
                         .HasName("pk_mix_media");
 

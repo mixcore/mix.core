@@ -13,7 +13,7 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
             base.Configure(builder);
             builder.ToTable(MixDatabaseNames.SYSTEM_PERMISSION_ENDPOINT);
             builder.Property(p => p.Title)
-                .HasColumnName("title")
+                .HasColumnName("title");
             builder.Property(p => p.Description)
                .HasColumnName("description");
             builder.Property(p => p.Path)

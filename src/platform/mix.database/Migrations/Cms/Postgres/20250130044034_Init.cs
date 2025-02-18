@@ -416,7 +416,6 @@ namespace Mix.Database.Migrations.Cms.Postgres
                     file_properties = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
                     file_size = table.Column<long>(type: "bigint", nullable: false),
                     file_type = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     tags = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
                     source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     target_url = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),

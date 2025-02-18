@@ -415,7 +415,6 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                     file_properties = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "NOCASE"),
                     file_size = table.Column<long>(type: "INTEGER", nullable: false),
                     file_type = table.Column<string>(type: "varchar(50)", nullable: true, collation: "NOCASE"),
-                    title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     tags = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "NOCASE"),
                     source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     target_url = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),

@@ -1391,12 +1391,6 @@ namespace Mix.Database.Migrations.Cms.Postgres
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("title")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
                     b.HasKey("Id")
                         .HasName("pk_mix_media");
 

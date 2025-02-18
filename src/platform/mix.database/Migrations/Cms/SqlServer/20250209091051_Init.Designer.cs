@@ -1408,12 +1408,6 @@ namespace Mix.Database.Migrations.Cms.SqlServer
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(250)")
-                        .HasColumnName("title")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
                     b.HasKey("Id")
                         .HasName("pk_mix_media");
 

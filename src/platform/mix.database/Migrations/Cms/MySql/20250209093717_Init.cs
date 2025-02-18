@@ -535,8 +535,6 @@ namespace Mix.Database.Migrations.Cms.MySql
                     file_size = table.Column<long>(type: "bigint", nullable: false),
                     file_type = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
-                    title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
                     tags = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
