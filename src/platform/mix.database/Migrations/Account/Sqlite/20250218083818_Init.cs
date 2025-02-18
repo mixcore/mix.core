@@ -67,6 +67,29 @@ namespace Mix.Database.Migrations.Account.Sqlite
                 });
 
             migrationBuilder.CreateTable(
+                name: "mix_permission",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    tenant_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    display_name = table.Column<string>(type: "TEXT", nullable: true),
+                    group = table.Column<string>(type: "TEXT", nullable: true),
+                    key = table.Column<string>(type: "TEXT", nullable: true),
+                    created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
+                    last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    created_by = table.Column<string>(type: "varchar(250)", nullable: true),
+                    modified_by = table.Column<string>(type: "varchar(250)", nullable: true),
+                    priority = table.Column<int>(type: "integer", nullable: false),
+                    status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    is_deleted = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_mix_permission", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "mix_roles",
                 columns: table => new
                 {
@@ -178,29 +201,6 @@ namespace Mix.Database.Migrations.Account.Sqlite
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_o_auth_token", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "permission",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    tenant_id = table.Column<int>(type: "INTEGER", nullable: false),
-                    display_name = table.Column<string>(type: "TEXT", nullable: true),
-                    group = table.Column<string>(type: "TEXT", nullable: true),
-                    key = table.Column<string>(type: "TEXT", nullable: true),
-                    created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
-                    last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    created_by = table.Column<string>(type: "varchar(250)", nullable: true),
-                    modified_by = table.Column<string>(type: "varchar(250)", nullable: true),
-                    priority = table.Column<int>(type: "integer", nullable: false),
-                    status = table.Column<string>(type: "varchar(50)", nullable: false),
-                    is_deleted = table.Column<bool>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_permission", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -329,6 +329,9 @@ namespace Mix.Database.Migrations.Account.Sqlite
                 name: "asp_net_user_tokens");
 
             migrationBuilder.DropTable(
+                name: "mix_permission");
+
+            migrationBuilder.DropTable(
                 name: "mix_roles");
 
             migrationBuilder.DropTable(
@@ -339,9 +342,6 @@ namespace Mix.Database.Migrations.Account.Sqlite
 
             migrationBuilder.DropTable(
                 name: "o_auth_token");
-
-            migrationBuilder.DropTable(
-                name: "permission");
 
             migrationBuilder.DropTable(
                 name: "refresh_tokens");

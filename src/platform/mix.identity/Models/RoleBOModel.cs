@@ -14,6 +14,6 @@ namespace Mix.Identity.Models
         public string NormalizedName { get; set; }
         public string ConcurrencyStamp { get; set; }
 
-        public List<Permission> Permissions { get; set; }
+        public List<MixPermission> Permissions { get; set; }
     }
 }

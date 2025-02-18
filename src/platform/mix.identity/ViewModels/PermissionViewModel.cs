@@ -2,7 +2,7 @@
 
 namespace Mix.Identity.ViewModels
 {
-    public class PermissionViewModel : ViewModelBase<MixCmsAccountContext, Permission, int, PermissionViewModel>
+    public class PermissionViewModel : ViewModelBase<MixCmsAccountContext, MixPermission, int, PermissionViewModel>
     {
         #region Contructors
 
@@ -13,7 +13,7 @@ namespace Mix.Identity.ViewModels
         {
         }
 
-        public PermissionViewModel(Permission entity, UnitOfWorkInfo uowInfo) : base(entity, uowInfo)
+        public PermissionViewModel(MixPermission entity, UnitOfWorkInfo uowInfo) : base(entity, uowInfo)
         {
         }
 

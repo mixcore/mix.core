@@ -16,7 +16,7 @@ namespace Mix.Database.Migrations.Account.Sqlite
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoleClaims", b =>
                 {
@@ -175,6 +175,66 @@ namespace Mix.Database.Migrations.Account.Sqlite
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("asp_net_user_tokens", (string)null);
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Account.MixPermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_date_time");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("display_name");
+
+                    b.Property<string>("Group")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("group");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<string>("Key")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("key");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime")
+                        .HasColumnName("last_modified");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("modified_by");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer")
+                        .HasColumnName("priority");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("status")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("tenant_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_mix_permission");
+
+                    b.ToTable("mix_permission", (string)null);
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.MixRole", b =>
@@ -390,7 +450,7 @@ namespace Mix.Database.Migrations.Account.Sqlite
                         .HasColumnType("datetime")
                         .HasColumnName("created_date_time");
 
-                    b.PrimitiveCollection<string>("GrantTypes")
+                    b.Property<string>("GrantTypes")
                         .HasColumnType("text")
                         .HasColumnName("grant_types");
 
@@ -540,66 +600,6 @@ namespace Mix.Database.Migrations.Account.Sqlite
                     b.ToTable("o_auth_token", (string)null);
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Account.Permission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("id")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("created_by");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime")
-                        .HasColumnName("created_date_time");
-
-                    b.Property<string>("DisplayName")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("display_name");
-
-                    b.Property<string>("Group")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("group");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<string>("Key")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("key");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime")
-                        .HasColumnName("last_modified");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("tenant_id");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("modified_by");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("integer")
-                        .HasColumnName("priority");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.HasKey("Id")
-                        .HasName("pk_permission");
-
-                    b.ToTable("permission", (string)null);
-                });
-
             modelBuilder.Entity("Mix.Database.Entities.Account.RefreshTokens", b =>
                 {
                     b.Property<Guid>("Id")
@@ -680,10 +680,6 @@ namespace Mix.Database.Migrations.Account.Sqlite
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("tenant_id");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
@@ -707,6 +703,10 @@ namespace Mix.Database.Migrations.Account.Sqlite
                         .HasColumnType("varchar(50)")
                         .HasColumnName("status")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_sys_mix_database_association");

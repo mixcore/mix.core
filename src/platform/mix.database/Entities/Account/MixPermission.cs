@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Database.Entities.Account
 {
-    public class Permission : EntityBase<int>
+    public class MixPermission : EntityBase<int>
     {
         public int TenantId { get; set; }
         public string DisplayName { get; set; }

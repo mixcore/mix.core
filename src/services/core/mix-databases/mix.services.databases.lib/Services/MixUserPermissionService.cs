@@ -44,10 +44,10 @@ namespace Mix.Services.Databases.Lib.Services
                                             && m.ChildDatabaseName == MixDatabaseNames.SYSTEM_PERMISSION);
         }
 
-        public async Task<List<Permission>> GetPermissionByRoleId(Guid roleId)
+        public async Task<List<Database.Entities.Account.MixPermission>> GetPermissionByRoleId(Guid roleId)
         {
             var permissionIds = _permissionQuery.Where(m => m.GuidParentId == roleId).Select(m => m.ChildId);
-            return await _accUow.DbContext.Permission.Where(m => permissionIds.Contains(m.Id))
+            return await _accUow.DbContext.MixPermission.Where(m => permissionIds.Contains(m.Id))
                                     .ToListAsync();
         }
 
@@ -93,7 +93,7 @@ namespace Mix.Services.Databases.Lib.Services
         public async Task<List<MixPermissionViewModel>> GetPermissionAsync(Guid userId)
         {
             var permissions = _permissionDbContext.UserPermission.Where(m => m.TenantId == CurrentTenant.Id && m.UserId == userId);
-            Expression<Func<MixPermission, bool>> predicate = m => m.TenantId == CurrentTenant.Id && permissions.Any(p => p.PermissionId == m.Id);
+            Expression<Func<Database.Entities.MixDb.MixPermission, bool>> predicate = m => m.TenantId == CurrentTenant.Id && permissions.Any(p => p.PermissionId == m.Id);
             var result = await MixPermissionViewModel.GetRepository(_accUow, CacheService).GetAllAsync(predicate);
             return result;
         }

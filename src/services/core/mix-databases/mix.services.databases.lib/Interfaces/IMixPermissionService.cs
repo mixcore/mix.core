@@ -10,7 +10,7 @@ namespace Mix.Services.Databases.Lib.Interfaces
         public Task<List<MixPermissionViewModel>> GetPermissionAsync(Guid userId);
 
         public Task AddUserPermission(CreateUserPermissionDto dto);
-        Task<List<Permission>> GetPermissionByRoleId(Guid roleId);
+        Task<List<Database.Entities.Account.MixPermission>> GetPermissionByRoleId(Guid roleId);
         Task GrantPermissions(GrantPermissionsDto dto);
     }
 }

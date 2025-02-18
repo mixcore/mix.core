@@ -83,6 +83,36 @@ namespace Mix.Database.Migrations.Account.MySql
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "mix_permission",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    tenant_id = table.Column<int>(type: "int", nullable: false),
+                    display_name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    group = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    key = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
+                    last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    created_by = table.Column<string>(type: "varchar(250)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    modified_by = table.Column<string>(type: "varchar(250)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    priority = table.Column<int>(type: "int", nullable: false),
+                    status = table.Column<string>(type: "varchar(50)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8"),
+                    is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_mix_permission", x => x.id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "mix_roles",
                 columns: table => new
                 {
@@ -238,36 +268,6 @@ namespace Mix.Database.Migrations.Account.MySql
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "permission",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    tenant_id = table.Column<int>(type: "int", nullable: false),
-                    display_name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    group = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    key = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
-                    last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    created_by = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    modified_by = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    priority = table.Column<int>(type: "int", nullable: false),
-                    status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
-                    is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_permission", x => x.id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "refresh_tokens",
                 columns: table => new
                 {
@@ -408,6 +408,9 @@ namespace Mix.Database.Migrations.Account.MySql
                 name: "asp_net_user_tokens");
 
             migrationBuilder.DropTable(
+                name: "mix_permission");
+
+            migrationBuilder.DropTable(
                 name: "mix_roles");
 
             migrationBuilder.DropTable(
@@ -418,9 +421,6 @@ namespace Mix.Database.Migrations.Account.MySql
 
             migrationBuilder.DropTable(
                 name: "o_auth_token");
-
-            migrationBuilder.DropTable(
-                name: "permission");
 
             migrationBuilder.DropTable(
                 name: "refresh_tokens");

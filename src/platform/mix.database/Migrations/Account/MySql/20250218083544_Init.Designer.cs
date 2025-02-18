@@ -10,10 +10,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.Account.SqlServer
+namespace Mix.Database.Migrations.Account.MySql
 {
-    [DbContext(typeof(SqlServerAccountContext))]
-    [Migration("20250211044832_Init")]
+    [DbContext(typeof(MySqlAccountContext))]
+    [Migration("20250218083544_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -21,10 +21,10 @@ namespace Mix.Database.Migrations.Account.SqlServer
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoleClaims", b =>
                 {
@@ -35,20 +35,22 @@ namespace Mix.Database.Migrations.Account.SqlServer
                     b.Property<string>("ClaimType")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("claim_type")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClaimType"), "utf8");
 
                     b.Property<string>("ClaimValue")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("claim_value")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClaimValue"), "utf8");
 
                     b.Property<Guid>("RoleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("char(36)")
                         .HasColumnName("role_id")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.HasKey("Id");
 
@@ -62,31 +64,33 @@ namespace Mix.Database.Migrations.Account.SqlServer
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("claim_type")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClaimType"), "utf8");
 
                     b.Property<string>("ClaimValue")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("claim_value")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClaimValue"), "utf8");
 
                     b.Property<Guid>("MixUserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("char(36)")
                         .HasColumnName("mix_user_id")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("char(36)")
                         .HasColumnName("user_id")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.HasKey("Id");
 
@@ -102,26 +106,29 @@ namespace Mix.Database.Migrations.Account.SqlServer
                     b.Property<string>("LoginProvider")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("login_provider")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("LoginProvider"), "utf8");
 
                     b.Property<string>("ProviderKey")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("provider_key")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ProviderKey"), "utf8");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("provider_display_name")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ProviderDisplayName"), "utf8");
 
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("char(36)")
                         .HasColumnName("user_id")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.HasKey("LoginProvider", "ProviderKey")
                         .HasName("PK_AspNetUserLogins_1");
@@ -135,15 +142,15 @@ namespace Mix.Database.Migrations.Account.SqlServer
                 {
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("char(36)")
                         .HasColumnName("user_id")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<Guid>("RoleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("char(36)")
                         .HasColumnName("role_id")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int")
@@ -160,58 +167,127 @@ namespace Mix.Database.Migrations.Account.SqlServer
                 {
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("char(36)")
                         .HasColumnName("user_id")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("login_provider")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("LoginProvider"), "utf8");
 
                     b.Property<string>("Name")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("name")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Name"), "utf8");
 
                     b.Property<string>("Value")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("value")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Value"), "utf8");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("asp_net_user_tokens", (string)null);
                 });
 
+            modelBuilder.Entity("Mix.Database.Entities.Account.MixPermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_date_time");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("longtext")
+                        .HasColumnName("display_name");
+
+                    b.Property<string>("Group")
+                        .HasColumnType("longtext")
+                        .HasColumnName("group");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<string>("Key")
+                        .HasColumnType("longtext")
+                        .HasColumnName("key");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime")
+                        .HasColumnName("last_modified");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("modified_by");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int")
+                        .HasColumnName("priority");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_mix_permission");
+
+                    b.ToTable("mix_permission", (string)null);
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Account.MixRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("char(36)")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("concurrency_stamp")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ConcurrencyStamp"), "utf8");
 
                     b.Property<string>("Name")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("name")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Name"), "utf8");
 
                     b.Property<string>("NormalizedName")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("normalized_name")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("NormalizedName"), "utf8");
 
                     b.HasKey("Id");
 
@@ -222,9 +298,9 @@ namespace Mix.Database.Migrations.Account.SqlServer
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("char(36)")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int")
@@ -233,8 +309,9 @@ namespace Mix.Database.Migrations.Account.SqlServer
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("concurrency_stamp")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ConcurrencyStamp"), "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime")
@@ -243,23 +320,24 @@ namespace Mix.Database.Migrations.Account.SqlServer
                     b.Property<string>("Email")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("email")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Email"), "utf8");
+
+                    b.Property<sbyte>("EmailConfirmed")
+                        .HasColumnType("tinyint")
                         .HasColumnName("email_confirmed");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit")
+                    b.Property<sbyte>("IsActive")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_active");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit")
+                    b.Property<sbyte>("LockoutEnabled")
+                        .HasColumnType("tinyint")
                         .HasColumnName("lockout_enabled");
 
                     b.Property<DateTime?>("LockoutEnd")
@@ -269,58 +347,66 @@ namespace Mix.Database.Migrations.Account.SqlServer
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ModifiedBy"), "utf8");
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("normalized_email")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("NormalizedEmail"), "utf8");
 
                     b.Property<string>("NormalizedUserName")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("normalized_user_name")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("NormalizedUserName"), "utf8");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("password_hash")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("PasswordHash"), "utf8");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("phone_number")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("PhoneNumber"), "utf8");
+
+                    b.Property<sbyte>("PhoneNumberConfirmed")
+                        .HasColumnType("tinyint")
                         .HasColumnName("phone_number_confirmed");
 
                     b.Property<string>("RegisterType")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("register_type")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("RegisterType"), "utf8");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("security_stamp")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SecurityStamp"), "utf8");
+
+                    b.Property<sbyte>("TwoFactorEnabled")
+                        .HasColumnType("tinyint")
                         .HasColumnName("two_factor_enabled");
 
                     b.Property<string>("UserName")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("user_name")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UserName"), "utf8");
 
                     b.HasKey("Id");
 
@@ -337,8 +423,8 @@ namespace Mix.Database.Migrations.Account.SqlServer
 
             modelBuilder.Entity("Mix.Database.Entities.Account.MixUserTenant", b =>
                 {
-                    b.Property<Guid>("MixUserId")
-                        .HasColumnType("uniqueidentifier")
+                    b.Property<string>("MixUserId")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("mix_user_id");
 
                     b.Property<int>("TenantId")
@@ -358,39 +444,44 @@ namespace Mix.Database.Migrations.Account.SqlServer
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("char(36)")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("AllowedOrigins")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("allowed_origins")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("AllowedOrigins"), "utf8");
 
                     b.Property<string>("AllowedProtectedResources")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("allowed_protected_resources")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("AllowedProtectedResources"), "utf8");
 
                     b.Property<string>("AllowedScopes")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("allowed_scopes")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("AllowedScopes"), "utf8");
 
                     b.Property<string>("ApplicationType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("application_type")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("application_type");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ApplicationType"), "utf8");
 
                     b.Property<string>("ClientUri")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("client_uri")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClientUri"), "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -401,15 +492,15 @@ namespace Mix.Database.Migrations.Account.SqlServer
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("GrantTypes")
-                        .HasColumnType("ntext")
+                        .HasColumnType("longtext")
                         .HasColumnName("grant_types");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit")
+                    b.Property<sbyte>("IsActive")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_active");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit")
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
@@ -424,18 +515,20 @@ namespace Mix.Database.Migrations.Account.SqlServer
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("name")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Name"), "utf8");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("RedirectUris")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("redirect_uris")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("RedirectUris"), "utf8");
 
                     b.Property<int>("RefreshTokenLifeTime")
                         .HasColumnType("int")
@@ -445,17 +538,19 @@ namespace Mix.Database.Migrations.Account.SqlServer
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("secret")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Secret"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
 
-                    b.Property<bool>("UsePkce")
-                        .HasColumnType("bit")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<sbyte>("UsePkce")
+                        .HasColumnType("tinyint")
                         .HasColumnName("use_pkce");
 
                     b.HasKey("Id")
@@ -468,15 +563,16 @@ namespace Mix.Database.Migrations.Account.SqlServer
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("char(36)")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("ClientId")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("client_id")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClientId"), "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -487,15 +583,15 @@ namespace Mix.Database.Migrations.Account.SqlServer
                         .HasColumnName("created_date_time");
 
                     b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("creation_date");
 
                     b.Property<DateTime>("ExpirationDate")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("expiration_date");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit")
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
@@ -511,37 +607,38 @@ namespace Mix.Database.Migrations.Account.SqlServer
                         .HasColumnName("priority");
 
                     b.Property<string>("ReferenceId")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("longtext")
                         .HasColumnName("reference_id");
 
                     b.Property<bool>("Revoked")
-                        .HasColumnType("bit")
+                        .HasColumnType("tinyint(1)")
                         .HasColumnName("revoked");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<string>("SubjectId")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("longtext")
                         .HasColumnName("subject_id");
 
                     b.Property<string>("Token")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("longtext")
                         .HasColumnName("token");
 
                     b.Property<string>("TokenStatus")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("longtext")
                         .HasColumnName("token_status");
 
                     b.Property<string>("TokenType")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("longtext")
                         .HasColumnName("token_type");
 
                     b.Property<string>("TokenTypeHint")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("longtext")
                         .HasColumnName("token_type_hint");
 
                     b.HasKey("Id")
@@ -550,88 +647,28 @@ namespace Mix.Database.Migrations.Account.SqlServer
                     b.ToTable("o_auth_token", (string)null);
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Account.Permission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("created_by");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime")
-                        .HasColumnName("created_date_time");
-
-                    b.Property<string>("DisplayName")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("display_name");
-
-                    b.Property<string>("Group")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("group");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<string>("Key")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("key");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime")
-                        .HasColumnName("last_modified");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("int")
-                        .HasColumnName("tenant_id");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("modified_by");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int")
-                        .HasColumnName("priority");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.HasKey("Id")
-                        .HasName("pk_permission");
-
-                    b.ToTable("permission", (string)null);
-                });
-
             modelBuilder.Entity("Mix.Database.Entities.Account.RefreshTokens", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("char(36)")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("client_id")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClientId"), "utf8");
 
                     b.Property<string>("Email")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("email")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Email"), "utf8");
 
                     b.Property<DateTime>("ExpiresUtc")
                         .HasColumnType("datetime")
@@ -644,8 +681,9 @@ namespace Mix.Database.Migrations.Account.SqlServer
                     b.Property<string>("UserName")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("user_name")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UserName"), "utf8");
 
                     b.HasKey("Id");
 
@@ -660,12 +698,13 @@ namespace Mix.Database.Migrations.Account.SqlServer
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ChildDatabaseName")
-                        .HasColumnType("nvarchar(250)")
-                        .HasColumnName("child_database_name")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("child_database_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ChildDatabaseName"), "utf8");
 
                     b.Property<int>("ChildId")
                         .HasColumnType("int")
@@ -679,35 +718,32 @@ namespace Mix.Database.Migrations.Account.SqlServer
                         .HasColumnType("datetime")
                         .HasColumnName("created_date_time");
 
-                    b.Property<Guid?>("GuidChildId")
-                        .HasColumnType("uniqueidentifier")
+                    b.Property<string>("GuidChildId")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("guid_child_id");
 
-                    b.Property<Guid?>("GuidParentId")
-                        .HasColumnType("uniqueidentifier")
+                    b.Property<string>("GuidParentId")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("guid_parent_id");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit")
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("int")
-                        .HasColumnName("tenant_id");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<string>("ParentDatabaseName")
-                        .HasColumnType("nvarchar(250)")
+                        .HasColumnType("varchar(250)")
                         .HasColumnName("parent_database_name")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ParentDatabaseName"), "utf8");
 
                     b.Property<int>("ParentId")
                         .HasColumnType("int")
@@ -720,8 +756,13 @@ namespace Mix.Database.Migrations.Account.SqlServer
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_sys_mix_database_association");
