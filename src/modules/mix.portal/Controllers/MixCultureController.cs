@@ -19,14 +19,13 @@ namespace Mix.Portal.Controllers
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
-            TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> uow,
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration,
-                  cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
+                  cacheService, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _cloneCultureService = cloneCultureService;
         }

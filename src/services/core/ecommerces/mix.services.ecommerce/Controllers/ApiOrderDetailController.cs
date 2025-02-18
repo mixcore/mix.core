@@ -27,14 +27,13 @@ namespace Mix.Services.Ecommerce.Controllers
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
-            TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<EcommerceDbContext> uow,
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration, 
-                  cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
+                  cacheService, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             Repository.IsCache = false;
             _ecommerceService = ecommerceService;

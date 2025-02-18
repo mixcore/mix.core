@@ -61,11 +61,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 builder.Services.TryAddSingleton(m => new SmtpConfigService(builder.Configuration, settings.First(m => m.SystemName == "smtp")));
                 builder.Services.TryAddSingleton(m => new MixHeartConfigService(builder.Configuration, settings.First(m => m.SystemName == "mix_heart")));
                 builder.Services.TryAddSingleton(m => new IPSecurityConfigService(builder.Configuration, settings.First(m => m.SystemName == "ip")));
-                builder.Services.TryAddSingleton(
-                    m => new TranslatorService(
-                        builder.Configuration,
-                        settings.First(m => m.SystemName == "translator")));
-
+                
                 builder.Services.TryAddSingleton<MixPermissionService>();
                 return builder;
             }

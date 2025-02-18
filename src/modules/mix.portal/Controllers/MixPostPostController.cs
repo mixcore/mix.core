@@ -12,11 +12,11 @@ namespace Mix.Portal.Controllers
     {
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
 
-        public MixPostPostController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> cmsUow, IMemoryQueueService<MessageQueueModel> queueService,
+        public MixPostPostController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> cmsUow, IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService) 
             : base(httpContextAccessor, configuration, 
-                  cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
+                  cacheService, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
             _cmsUow = cmsUow;
         }

@@ -26,7 +26,6 @@ namespace Mix.Portal.Controllers
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
-            TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IMemoryQueueService<MessageQueueModel> queueService,
@@ -36,7 +35,7 @@ namespace Mix.Portal.Controllers
             IMixMemoryCacheService memoryCache,
             DatabaseService databaseService)
             : base(httpContextAccessor, configuration,
-                  cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
+                  cacheService, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
             _mixDbService = mixDbService;
             _memoryCache = memoryCache;

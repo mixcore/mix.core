@@ -60,7 +60,6 @@ namespace mix.auth.service.Controllers
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService mixService,
-            TranslatorService translator,
             MixIdentityService mixIdentityService,
             IMemoryQueueService<MessageQueueModel> queueService,
             AuthConfigService authConfigService,
@@ -71,7 +70,7 @@ namespace mix.auth.service.Controllers
             MixDbDataServiceFactory mixDbDataFactory,
             DatabaseService databaseService)
             : base(httpContextAccessor, configuration, mixService,
-                translator, mixIdentityService, queueService, mixTenantService)
+                mixIdentityService, queueService, mixTenantService)
         {
             _userManager = userManager;
             _signInManager = signInManager;

@@ -21,7 +21,6 @@ namespace Mixcore.Controllers
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
-            TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> uow,
             IMemoryQueueService<MessageQueueModel> queueService,
@@ -30,7 +29,7 @@ namespace Mixcore.Controllers
             IMixTenantService mixTenantService,
             IMixDbDataService mixDbDataService)
             : base(httpContextAccessor, configuration,
-                  cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
+                  cacheService, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _metadataService = metadataService;
             _mixDbDataService = mixDbDataService;

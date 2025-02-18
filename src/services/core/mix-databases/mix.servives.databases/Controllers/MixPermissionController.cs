@@ -29,14 +29,13 @@ namespace Mix.Services.Databases.Controllers
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
-            TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixDbDbContext> uow,
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration,
-                  cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
+                  cacheService, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _permissionService = permissionService;
             Repository.IsCache = false;

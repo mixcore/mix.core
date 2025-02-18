@@ -16,14 +16,13 @@ namespace Mix.Portal.Controllers
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
-            TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration, 
-                  cacheService, translator, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
+                  cacheService, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
             _cmsUow = cmsUow;
         }

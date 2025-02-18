@@ -7,12 +7,10 @@ using Mix.Heart.Services;
 
 namespace Mix.Database.Services.MixGlobalSettings
 {
-    public class MixHeartConfigService : GlobalSettingServiceBase
+    public class MixHeartConfigService : GlobalSettingServiceBase<MixHeartConfigurationModel>
     {
-        public MixHeartConfigurationModel AppSettings { get; set; }
         public MixHeartConfigService(IConfiguration configuration, MixGlobalSetting settings) : base(configuration, settings)
         {
-            AppSettings = RawSettings.ToObject<MixHeartConfigurationModel>();
         }
 
 

@@ -32,7 +32,6 @@ namespace Mix.Log.Controllers
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
-            TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<AuditLogDbContext> uow,
             IMemoryQueueService<MessageQueueModel> queueService,
@@ -40,7 +39,7 @@ namespace Mix.Log.Controllers
             IMixTenantService mixTenantService,
             DatabaseService databaseService)
             : base(httpContextAccessor, configuration,
-                  cacheService, translator, mixIdentityService, uow, queueService, portalHub, mixTenantService)
+                  cacheService, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _databaseService = databaseService;
         }

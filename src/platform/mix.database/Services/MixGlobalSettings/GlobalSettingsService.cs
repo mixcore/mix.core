@@ -6,13 +6,10 @@ using System.Linq;
 
 namespace Mix.Database.Services.MixGlobalSettings
 {
-    public class GlobalSettingsService : GlobalSettingServiceBase
+    public class GlobalSettingsService : GlobalSettingServiceBase<GlobalSettingsModel>
     {
-        public GlobalSettingsModel AppSettings { get; set; }
         public GlobalSettingsService(IConfiguration configuration, MixGlobalSetting settings) : base(configuration, settings)
         {
-            _sectionName = MixAppSettingsSection.GlobalSettings;
-            AppSettings = RawSettings[MixAppSettingsSection.GlobalSettings].ToObject<GlobalSettingsModel>();
         }
 
         #region Properties

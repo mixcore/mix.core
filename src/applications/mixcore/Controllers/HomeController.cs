@@ -18,14 +18,13 @@ namespace Mixcore.Controllers
         IHttpContextAccessor httpContextAccessor,
         IPSecurityConfigService ipSecurityConfigService,
         IMixCmsService mixCmsService,
-        TranslatorService translator,
         DatabaseService databaseService,
         UnitOfWorkInfo<MixCmsContext> uow,
         IMixMetadataService metadataService,
         MixCacheService cacheService,
         IMixTenantService tenantService,
          IConfiguration configuration,
-         IMixDbDataService mixDbDataService) : MvcBaseController(httpContextAccessor, ipSecurityConfigService, mixCmsService, translator, databaseService, uow, cacheService, tenantService, configuration)
+         IMixDbDataService mixDbDataService) : MvcBaseController(httpContextAccessor, ipSecurityConfigService, mixCmsService, databaseService, uow, cacheService, tenantService, configuration)
     {
         private readonly IMixMetadataService _metadataService = metadataService;
         private readonly IMixDbDataService _mixDbDataService = mixDbDataService;

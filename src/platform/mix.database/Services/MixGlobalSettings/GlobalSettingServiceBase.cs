@@ -10,10 +10,12 @@ using Mix.Lib.Extensions;
 
 namespace Mix.Database.Services.MixGlobalSettings
 {
-    public abstract class GlobalSettingServiceBase
+    public abstract class GlobalSettingServiceBase<TAppSetting>
+        where TAppSetting : class
     {
-        public AppSettingsService AppSettingsService;
+        public TAppSetting AppSettings { get; set; }
         public JObject RawSettings;
+        protected AppSettingsService AppSettingsService;
         protected string _sectionName;
         protected bool _isEncrypt;
         protected MixGlobalSetting _settings;
@@ -25,6 +27,7 @@ namespace Mix.Database.Services.MixGlobalSettings
         {
             _configuration = configuration;
             _aesKey = _configuration.AesKey();
+            _sectionName = settings.SectionName;
             AppSettingsService = new AppSettingsService(configuration);
             _settings = settings;
             LoadAppSettings();
@@ -39,6 +42,7 @@ namespace Mix.Database.Services.MixGlobalSettings
             if (string.IsNullOrEmpty(_sectionName))
             {
                 RawSettings[name] = value != null ? JToken.FromObject(value) : null;
+                _configuration.GetSection(_sectionName)[name] = value.ToString();
             }
             else
             {
@@ -67,9 +71,10 @@ namespace Mix.Database.Services.MixGlobalSettings
 
         protected virtual void LoadAppSettings()
         {
+            AppSettings = string.IsNullOrEmpty(_sectionName) ? _configuration.Get<TAppSetting>()
+                : _configuration.GetSection(_sectionName).Get<TAppSetting>();
             var content = _settings.IsEncrypt ? AesEncryptionHelper.DecryptString(_settings.Settings, _aesKey)
             : _settings.Settings;
-
             RawSettings = JObject.Parse(content);
         }
 

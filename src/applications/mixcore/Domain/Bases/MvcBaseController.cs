@@ -10,7 +10,6 @@ namespace Mixcore.Domain.Bases
         IHttpContextAccessor httpContextAccessor,
         IPSecurityConfigService ipSecurityConfigService,
         IMixCmsService mixCmsService,
-        TranslatorService translator,
         DatabaseService databaseService,
         UnitOfWorkInfo<MixCmsContext> uow,
         MixCacheService cacheService,
@@ -19,7 +18,6 @@ namespace Mixcore.Domain.Bases
     {
         protected UnitOfWorkInfo<MixCmsContext> Uow = uow;
         protected readonly MixCacheService CacheService = cacheService;
-        protected readonly TranslatorService Translator = translator;
         protected readonly DatabaseService DatabaseService = databaseService;
 
         protected override void ValidateRequest()

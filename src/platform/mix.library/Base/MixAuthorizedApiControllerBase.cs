@@ -18,7 +18,6 @@ namespace Mix.Lib.Base
         protected UnitOfWorkInfo Uow;
         protected readonly ILogger<MixTenantApiControllerBase> Logger;
         protected readonly MixIdentityService MixIdentityService;
-        protected readonly TranslatorService Translator;
         protected readonly EntityRepository<MixCmsContext, MixCulture, int> CultureRepository;
         protected MixTenantSystemModel CurrentTenant => Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
 
@@ -26,7 +25,6 @@ namespace Mix.Lib.Base
 
         protected MixAuthorizedApiControllerBase(
             ILogger<MixTenantApiControllerBase> logger,
-            TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             MixCmsContext context,
@@ -35,7 +33,6 @@ namespace Mix.Lib.Base
         {
             Uow = new UnitOfWorkInfo(context);
             Logger = logger;
-            Translator = translator;
             CultureRepository = cultureRepository;
             MixIdentityService = mixIdentityService;
             HttpContextAccessor = httpContextAccessor;

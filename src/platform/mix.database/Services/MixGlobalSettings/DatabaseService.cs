@@ -16,17 +16,14 @@ using System.Threading.Tasks;
 
 namespace Mix.Database.Services.MixGlobalSettings
 {
-    public class DatabaseService : GlobalSettingServiceBase
+    public class DatabaseService : GlobalSettingServiceBase<DatabaseConfigurations>
     {
-        public DatabaseConfigurations AppSettings { get; set; }
-
         public MixDatabaseProvider DatabaseProvider => AppSettings.DatabaseProvider;
         protected IHttpContextAccessor HttpContextAccessor;
 
         public DatabaseService(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixGlobalSetting settings)
             : base(configuration, settings)
         {
-            AppSettings = RawSettings.ToObject<DatabaseConfigurations>();
             HttpContextAccessor = httpContextAccessor;
         }
 

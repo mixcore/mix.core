@@ -42,7 +42,6 @@ namespace Mix.Common.Controllers
 
         public SharedApiController(
             IConfiguration configuration,
-            TranslatorService translator,
             IActionDescriptorCollectionProvider routeProvider,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> uow,
@@ -55,7 +54,7 @@ namespace Mix.Common.Controllers
             IPortalHubClientService portalHub,
             GlobalSettingsService globalSettingSrv)
             : base(httpContextAccessor, configuration,
-                  cacheService, translator, mixIdentityService, queueService, mixTenantService)
+                  cacheService, mixIdentityService, queueService, mixTenantService)
         {
             _uow = uow;
             _cacheService = cacheService;

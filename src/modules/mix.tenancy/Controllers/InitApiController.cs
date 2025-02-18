@@ -44,7 +44,6 @@ namespace Mix.Tenancy.Controllers
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
-            TranslatorService translator,
             IInitCmsService initCmsService,
             MixIdentityService mixIdentityService,
             IMemoryQueueService<MessageQueueModel> queueService,
@@ -60,7 +59,7 @@ namespace Mix.Tenancy.Controllers
             AppSettingsService appSettingsService = null,
             GlobalSettingsService globalSettingsService = null)
             : base(httpContextAccessor, configuration,
-                  cacheService, translator, mixIdentityService, queueService, mixTenantService)
+                  cacheService, mixIdentityService, queueService, mixTenantService)
         {
 
             _initCmsService = initCmsService;

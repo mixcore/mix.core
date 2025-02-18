@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Settings;
+using Newtonsoft.Json.Linq;
 using System.Linq;
 
 namespace Mix.Database.Services.MixGlobalSettings
 {
-    public sealed class MixEndpointService : GlobalSettingServiceBase
+    public sealed class MixEndpointService : GlobalSettingServiceBase<JObject>
     {
         public MixEndpointService(IConfiguration configuration, MixGlobalSetting settings) : base(configuration, settings)
         {
@@ -21,14 +22,14 @@ namespace Mix.Database.Services.MixGlobalSettings
         protected override void LoadAppSettings()
         {
             base.LoadAppSettings();
-            Endpoints = RawSettings.Properties().Select(m => m.Value.ToString()).ToArray();
+            Endpoints = AppSettings.Properties().Select(m => m.Value.ToString()).ToArray();
         }
 
         public string[] Endpoints;
 
         public string GetEndpoint(string name)
         {
-            return RawSettings?.Value<string>(name);
+            return AppSettings?.Value<string>(name);
         }
 
         public string DefaultDomain

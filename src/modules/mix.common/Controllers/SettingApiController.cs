@@ -22,12 +22,11 @@ namespace Mix.Common.Controllers
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
-            TranslatorService translator,
             MixIdentityService mixIdentityService,
             IMemoryQueueService<MessageQueueModel> queueService,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration,
-                  cacheService, translator, mixIdentityService, queueService, mixTenantService)
+                  cacheService, mixIdentityService, queueService, mixTenantService)
         {
         }
 

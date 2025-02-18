@@ -28,13 +28,12 @@ namespace Mix.Lib.Base
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
-            TranslatorService translator,
             MixIdentityService mixIdentityService,
             TDbContext context,
             IMemoryQueueService<MessageQueueModel> queueService, MixCacheDbContext cacheDbContext,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor,
-                  configuration, cacheService, translator, mixIdentityService, queueService, mixTenantService)
+                  configuration, cacheService, mixIdentityService, queueService, mixTenantService)
         {
             Context = context;
             Uow = new(Context);

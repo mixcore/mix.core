@@ -26,14 +26,13 @@ namespace Mix.Lib.Base
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
-            TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<TDbContext> uow,
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration,
-                  cacheService, translator, mixIdentityService, queueService, mixTenantService)
+                  cacheService, mixIdentityService, queueService, mixTenantService)
         {
             Context = (TDbContext)uow.ActiveDbContext;
             Uow = uow;

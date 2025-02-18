@@ -24,7 +24,6 @@ namespace mix.auth.service.Controllers
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
-            TranslatorService translator,
             MixIdentityService mixIdentityService,
             MixCacheDbContext cacheDbContext,
             MixCmsAccountContext context,
@@ -33,7 +32,7 @@ namespace mix.auth.service.Controllers
             TenantRoleManager roleManager,
             IMixPermissionService permissionService)
             : base(httpContextAccessor, configuration,
-                  cacheService, translator, mixIdentityService, cacheDbContext, context, queueService, mixTenantService)
+                  cacheService, mixIdentityService, cacheDbContext, context, queueService, mixTenantService)
         {
             _roleManager = roleManager;
             _permissionService = permissionService;

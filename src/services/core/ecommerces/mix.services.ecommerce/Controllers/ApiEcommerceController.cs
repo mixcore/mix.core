@@ -36,7 +36,6 @@ namespace Mix.Services.ecommerce.Controllers
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
-            TranslatorService translator,
             MixIdentityService mixIdentityService,
             IMemoryQueueService<MessageQueueModel> queueService,
             IEcommerceService ecommerceService,
@@ -44,7 +43,7 @@ namespace Mix.Services.ecommerce.Controllers
             IOrderService orderService,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration,
-                  cacheService, translator, mixIdentityService, queueService, mixTenantService)
+                  cacheService, mixIdentityService, queueService, mixTenantService)
         {
             _ecommerceService = ecommerceService;
             CmsUow = cmsUow;

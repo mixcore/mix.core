@@ -27,7 +27,6 @@ namespace Mix.Common.Controllers
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
-            TranslatorService translator,
             MixIdentityService mixIdentityService,
             AuthConfigService authConfigService,
             MixCmsContext context,
@@ -36,7 +35,7 @@ namespace Mix.Common.Controllers
             MixEndpointService endpointService,
             PortalConfigService portalConfigSrv)
             : base(httpContextAccessor, configuration,
-                  cacheService, translator, mixIdentityService, queueService, mixTenantService)
+                  cacheService, mixIdentityService, queueService, mixTenantService)
         {
             _authConfigurations = authConfigService.AppSettings;
             Context = context;
