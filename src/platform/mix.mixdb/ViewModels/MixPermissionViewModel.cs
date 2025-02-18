@@ -36,7 +36,7 @@ namespace Mix.Mixdb.ViewModels
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Endpoints = await MixPermissionEndpointViewModel.GetRepository(UowInfo, CacheService).GetAllAsync(m => m.SysPermissionId == Id && m.TenantId == TenantId, cancellationToken);
+            Endpoints = await MixPermissionEndpointViewModel.GetRepository(UowInfo, CacheService).GetAllAsync(m => m.MixPermissionId == Id && m.TenantId == TenantId, cancellationToken);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixPermission parentEntity, CancellationToken cancellationToken = default)
@@ -46,7 +46,7 @@ namespace Mix.Mixdb.ViewModels
                 foreach (var endpoint in Endpoints)
                 {
                     endpoint.SetUowInfo(UowInfo, CacheService);
-                    endpoint.SysPermissionId = parentEntity.Id;
+                    endpoint.MixPermissionId = parentEntity.Id;
                     endpoint.CreatedBy = ModifiedBy;
                     endpoint.ModifiedBy = ModifiedBy;
                     endpoint.TenantId = parentEntity.TenantId;

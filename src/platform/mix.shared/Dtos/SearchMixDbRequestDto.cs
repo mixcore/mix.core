@@ -38,7 +38,7 @@ namespace Mix.Shared.Dtos
         public List<MixQueryField>? Queries { get; set; }
         public List<MixSortByColumn>? SortByColumns { get; set; }
 
-        public List<SearchMixDbRequestDto> RelatedDataRequests { get; set; }
+        public List<SearchMixDbRequestDto>? RelatedDataRequests { get; set; }
 
         #region Helpers
 

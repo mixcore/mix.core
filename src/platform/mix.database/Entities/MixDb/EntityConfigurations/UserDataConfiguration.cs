@@ -15,10 +15,26 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
             base.Configure(builder);
 
             builder.Property(e => e.Avatar)
-                .IsRequired(false);
-
+                .IsRequired(false)
+                .HasColumnName("avatar");
+            builder.Property(e => e.PhoneNumber)
+                .IsRequired(false)
+                .HasColumnName("phone_number");
+            builder.Property(e => e.Fullname)
+                .IsRequired(false)
+                .HasColumnName("fullname");
+            builder.Property(e => e.DateOfBirth)
+                .IsRequired(false)
+                .HasColumnName("date_of_birth");
+            builder.Property(e => e.Email)
+                .IsRequired(false)
+                .HasColumnName("email");
+            builder.Property(e => e.ParentId)
+                .IsRequired()
+              .HasColumnName("parent_id");
             builder.Property(e => e.ParentType)
                .IsRequired()
+               .HasColumnName("parent_type")
                .HasConversion(new EnumToStringConverter<MixDatabaseParentType>())
                .HasColumnType($"{Config.String}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);

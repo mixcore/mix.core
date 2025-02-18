@@ -15,7 +15,6 @@ namespace Mix.Database.Entities.MixDb
         }
 
         public DbSet<MixDbEventSubscriber> MixDbEventSubscriber { get; set; }
-        public DbSet<MixDbMedia> MixMedia { get; set; }
         public DbSet<MixMetadata> MixMetadata { get; set; }
         public DbSet<MixMetadataContentAssociation> MixMetadataContentAssociation { get; set; }
         public DbSet<MixDatabaseAssociation> MixDatabaseAssociation { get; set; }

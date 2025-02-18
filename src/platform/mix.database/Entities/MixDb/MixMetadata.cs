@@ -8,5 +8,6 @@ namespace Mix.Database.Entities.MixDb
         public string Content { get; set; }
         public string SeoContent { get; set; }
         public int TenantId { get; set; }
+        public int? MixMetadataId { get; set; }
     }
 }

@@ -12,7 +12,16 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         {
             builder.ToTable(MixDatabaseNames.SYSTEM_USER_PERMISSION);
             base.Configure(builder);
+            builder.Property(p => p.UserId)
+                .HasColumnName("user_id")
+               .IsRequired(false);
+            builder.Property(p => p.TenantId)
+                .HasColumnName("tenant_id");
+            builder.Property(p => p.PermissionId)
+                .HasColumnName("permission_id")
+               .IsRequired(false);
             builder.Property(p => p.Description)
+                .HasColumnName("description")
                .IsRequired(false);
         }
     }

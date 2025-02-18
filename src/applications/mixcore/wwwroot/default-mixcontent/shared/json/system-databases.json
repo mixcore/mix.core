@@ -1606,6 +1606,35 @@
             "isDeleted": false
         },
         {
+            "systemName": "tenant_id",
+            "displayName": "Tenant Id",
+            "mixDatabaseName": "mix_navigation",
+            "dataType": "Integer",
+            "configurations": {
+                "IsUnique": false,
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "IsSelect": false,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 1,
+            "mixDatabase": null,
+            "id": 5,
+            "createdDateTime": "2023-05-05T03:11:24.2721044",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 0,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
             "systemName": "priority",
             "displayName": "Priority",
             "mixDatabaseName": "mix_navigation",
@@ -1815,14 +1844,15 @@
             "systemName": "title",
             "displayName": "Title",
             "mixDatabaseName": "mix_navigation",
-            "dataType": "Text",
+            "dataType": "String",
             "configurations": {
                 "IsRequire": false,
                 "IsEncrypt": false,
                 "Upload": {
                     "ArrayAccepts": [],
                     "Accepts": "",
-                    "IsCrop": false
+                    "IsCrop": false,
+                    "MaxLength": 2000
                 }
             },
             "IntegerId": null,
@@ -1842,14 +1872,99 @@
             "systemName": "name",
             "displayName": "Name",
             "mixDatabaseName": "mix_navigation",
-            "dataType": "Text",
+            "dataType": "String",
             "configurations": {
                 "IsRequire": false,
                 "IsEncrypt": false,
                 "Upload": {
                     "ArrayAccepts": [],
                     "Accepts": "",
-                    "IsCrop": false
+                    "IsCrop": false,
+                    "MaxLength": 2000
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 3,
+            "mixDatabase": null,
+            "id": 15,
+            "createdDateTime": "2023-05-05T03:11:24.3035806",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 2,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
+            "systemName": "type",
+            "displayName": "Type",
+            "mixDatabaseName": "mix_navigation",
+            "dataType": "String",
+            "configurations": {
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false,
+                    "MaxLength": 200
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 3,
+            "mixDatabase": null,
+            "id": 15,
+            "createdDateTime": "2023-05-05T03:11:24.3035806",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 2,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
+            "systemName": "link",
+            "displayName": "Link",
+            "mixDatabaseName": "mix_navigation",
+            "dataType": "String",
+            "configurations": {
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false,
+                    "MaxLength": 2000
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 3,
+            "mixDatabase": null,
+            "id": 15,
+            "createdDateTime": "2023-05-05T03:11:24.3035806",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 2,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
+            "systemName": "image",
+            "displayName": "Image",
+            "mixDatabaseName": "mix_navigation",
+            "dataType": "String",
+            "configurations": {
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false,
+                    "MaxLength": 2000
                 }
             },
             "IntegerId": null,
@@ -2454,6 +2569,35 @@
             "isDeleted": false
         },
         {
+            "systemName": "tenant_id",
+            "displayName": "Tenant Id",
+            "mixDatabaseName": "mix_media",
+            "dataType": "Integer",
+            "configurations": {
+                "IsUnique": false,
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "IsSelect": false,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 1,
+            "mixDatabase": null,
+            "id": 5,
+            "createdDateTime": "2023-05-05T03:11:24.2721044",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 0,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
             "systemName": "priority",
             "displayName": "Priority",
             "mixDatabaseName": "mix_media",
@@ -2660,8 +2804,287 @@
             "isDeleted": false
         },
         {
-            "systemName": "title",
-            "displayName": "Title",
+            "systemName": "display_name",
+            "displayName": "Display Name",
+            "mixDatabaseName": "mix_media",
+            "dataType": "String",
+            "configurations": {
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "MaxLength": 2000,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 5,
+            "mixDatabase": null,
+            "id": 28,
+            "createdDateTime": "2023-05-05T03:11:24.3424551",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 0,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
+            "systemName": "description",
+            "displayName": "Description",
+            "mixDatabaseName": "mix_media",
+            "dataType": "String",
+            "configurations": {
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "MaxLength": 2000,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 5,
+            "mixDatabase": null,
+            "id": 28,
+            "createdDateTime": "2023-05-05T03:11:24.3424551",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 0,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
+            "systemName": "description",
+            "displayName": "Description",
+            "mixDatabaseName": "mix_media",
+            "dataType": "String",
+            "configurations": {
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "MaxLength": 2000,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 5,
+            "mixDatabase": null,
+            "id": 28,
+            "createdDateTime": "2023-05-05T03:11:24.3424551",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 0,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
+            "systemName": "extension",
+            "displayName": "Extension",
+            "mixDatabaseName": "mix_media",
+            "dataType": "String",
+            "configurations": {
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "MaxLength": 20,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 5,
+            "mixDatabase": null,
+            "id": 28,
+            "createdDateTime": "2023-05-05T03:11:24.3424551",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 0,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
+            "systemName": "file_folder",
+            "displayName": "File Folder",
+            "mixDatabaseName": "mix_media",
+            "dataType": "String",
+            "configurations": {
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "MaxLength": 2000,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 5,
+            "mixDatabase": null,
+            "id": 28,
+            "createdDateTime": "2023-05-05T03:11:24.3424551",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 0,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
+            "systemName": "file_name",
+            "displayName": "File Name",
+            "mixDatabaseName": "mix_media",
+            "dataType": "String",
+            "configurations": {
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "MaxLength": 2000,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 5,
+            "mixDatabase": null,
+            "id": 28,
+            "createdDateTime": "2023-05-05T03:11:24.3424551",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 0,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
+            "systemName": "file_size",
+            "displayName": "File Size",
+            "mixDatabaseName": "mix_media",
+            "dataType": "Double",
+            "configurations": {
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 5,
+            "mixDatabase": null,
+            "id": 28,
+            "createdDateTime": "2023-05-05T03:11:24.3424551",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 0,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
+            "systemName": "file_type",
+            "displayName": "File Type",
+            "mixDatabaseName": "mix_media",
+            "dataType": "String",
+            "configurations": {
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "MaxLength": 200,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 5,
+            "mixDatabase": null,
+            "id": 28,
+            "createdDateTime": "2023-05-05T03:11:24.3424551",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 0,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
+            "systemName": "source",
+            "displayName": "Source",
+            "mixDatabaseName": "mix_media",
+            "dataType": "String",
+            "configurations": {
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "MaxLength": 2000,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 5,
+            "mixDatabase": null,
+            "id": 28,
+            "createdDateTime": "2023-05-05T03:11:24.3424551",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 0,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
+            "systemName": "target_url",
+            "displayName": "Target Url",
+            "mixDatabaseName": "mix_media",
+            "dataType": "String",
+            "configurations": {
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "MaxLength": 2000,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 5,
+            "mixDatabase": null,
+            "id": 28,
+            "createdDateTime": "2023-05-05T03:11:24.3424551",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 0,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
+            "systemName": "file_properties",
+            "displayName": "File Properties",
             "mixDatabaseName": "mix_media",
             "dataType": "Text",
             "configurations": {
@@ -2687,8 +3110,8 @@
             "isDeleted": false
         },
         {
-            "systemName": "type",
-            "displayName": "Type",
+            "systemName": "tags",
+            "displayName": "Tags",
             "mixDatabaseName": "mix_media",
             "dataType": "Text",
             "configurations": {
@@ -2704,23 +3127,25 @@
             "defaultValue": null,
             "mixDatabaseId": 5,
             "mixDatabase": null,
-            "id": 29,
-            "createdDateTime": "2023-05-05T03:11:24.3448989",
+            "id": 28,
+            "createdDateTime": "2023-05-05T03:11:24.3424551",
             "lastModified": null,
             "createdBy": "tinku",
             "modifiedBy": null,
-            "priority": 1,
+            "priority": 0,
             "status": "Published",
             "isDeleted": false
         },
         {
-            "systemName": "file",
-            "displayName": "File",
-            "mixDatabaseName": "mix_media",
-            "dataType": "Upload",
+            "systemName": "id",
+            "displayName": "Id",
+            "mixDatabaseName": "mix_permission",
+            "dataType": "Integer",
             "configurations": {
+                "IsUnique": false,
                 "IsRequire": false,
                 "IsEncrypt": false,
+                "IsSelect": false,
                 "Upload": {
                     "ArrayAccepts": [],
                     "Accepts": "",
@@ -2729,20 +3154,20 @@
             },
             "IntegerId": null,
             "defaultValue": null,
-            "mixDatabaseId": 5,
+            "mixDatabaseId": 1,
             "mixDatabase": null,
-            "id": 30,
-            "createdDateTime": "2023-05-05T03:11:24.3483028",
+            "id": 5,
+            "createdDateTime": "2023-05-05T03:11:24.2721044",
             "lastModified": null,
             "createdBy": "tinku",
             "modifiedBy": null,
-            "priority": 2,
+            "priority": 0,
             "status": "Published",
             "isDeleted": false
         },
         {
-            "systemName": "id",
-            "displayName": "Id",
+            "systemName": "tenant_id",
+            "displayName": "Tenant Id",
             "mixDatabaseName": "mix_permission",
             "dataType": "Integer",
             "configurations": {
@@ -3401,7 +3826,7 @@
         },
         {
             "systemName": "mix_permission_id",
-            "displayName": "SysPermissionId",
+            "displayName": "Permission Id",
             "mixDatabaseName": "mix_permission_endpoint",
             "dataType": "Integer",
             "configurations": {
@@ -3458,6 +3883,35 @@
         {
             "systemName": "id",
             "displayName": "Id",
+            "mixDatabaseName": "mix_user_permission",
+            "dataType": "Integer",
+            "configurations": {
+                "IsUnique": false,
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "IsSelect": false,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 1,
+            "mixDatabase": null,
+            "id": 5,
+            "createdDateTime": "2023-05-05T03:11:24.2721044",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 0,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
+            "systemName": "tenant_id",
+            "displayName": "Tenant Id",
             "mixDatabaseName": "mix_user_permission",
             "dataType": "Integer",
             "configurations": {
@@ -3691,7 +4145,7 @@
             "isDeleted": false
         },
         {
-            "systemName": "userId",
+            "systemName": "user_id",
             "displayName": "User Id",
             "mixDatabaseName": "mix_user_permission",
             "dataType": "Guid",
@@ -4289,7 +4743,7 @@
             "isDeleted": false
         },
         {
-            "systemName": "metadata_id",
+            "systemName": "mix_metadata_id",
             "displayName": "Metadata Id",
             "mixDatabaseName": "mix_metadata",
             "dataType": "Integer",
@@ -4700,6 +5154,35 @@
         {
             "systemName": "id",
             "displayName": "Id",
+            "mixDatabaseName": "mix_database_event_subscriber",
+            "dataType": "Integer",
+            "configurations": {
+                "IsUnique": false,
+                "IsRequire": false,
+                "IsEncrypt": false,
+                "IsSelect": false,
+                "Upload": {
+                    "ArrayAccepts": [],
+                    "Accepts": "",
+                    "IsCrop": false
+                }
+            },
+            "IntegerId": null,
+            "defaultValue": null,
+            "mixDatabaseId": 1,
+            "mixDatabase": null,
+            "id": 5,
+            "createdDateTime": "2023-05-05T03:11:24.2721044",
+            "lastModified": null,
+            "createdBy": "tinku",
+            "modifiedBy": null,
+            "priority": 0,
+            "status": "Published",
+            "isDeleted": false
+        },
+        {
+            "systemName": "tenant_id",
+            "displayName": "Tenant Id",
             "mixDatabaseName": "mix_database_event_subscriber",
             "dataType": "Integer",
             "configurations": {

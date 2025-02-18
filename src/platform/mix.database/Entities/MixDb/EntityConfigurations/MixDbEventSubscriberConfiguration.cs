@@ -13,12 +13,18 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         {
             builder.ToTable(MixDbDatabaseNames.MixDbEventSubscriber);
             builder.Property(e => e.Callback)
-             .HasConversion(
+                .HasColumnName("callback")
+                .HasConversion(
                  v => v.ToString(Newtonsoft.Json.Formatting.None),
                  v => !string.IsNullOrEmpty(v) ? JObject.Parse(v) : new())
-             .IsRequired(false)
-             .HasColumnType(Config.Text);
-
+                .IsRequired(false)
+                .HasColumnType(Config.Text);
+            builder.Property(e => e.MixDbName)
+               .HasColumnName("mixdb_name");
+            builder.Property(e => e.Action)
+               .HasColumnName("action");
+            builder.Property(e => e.TenantId)
+               .HasColumnName("tenant_id");
             base.Configure(builder);
         }
     }

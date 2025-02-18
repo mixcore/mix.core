@@ -14,14 +14,20 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
             base.Configure(builder);
 
             builder.Property(e => e.Title)
-                .IsRequired(false);
-            builder.Property(e => e.Svg).IsRequired(false);
+                .IsRequired(false)
+                .HasColumnName("title");
+            builder.Property(e => e.Svg)
+                .IsRequired(false)
+                .HasColumnName("svg");
             builder.Property(e => e.Icon)
-                .IsRequired(false);
+                .IsRequired(false)
+                .HasColumnName("icon");
             builder.Property(e => e.Path)
-                .IsRequired(false);
+                .IsRequired(false)
+                .HasColumnName("path");
             builder.Property(e => e.Role)
-                .IsRequired(false);
+                .IsRequired(false)
+                .HasColumnName("role");
         }
     }
 }
