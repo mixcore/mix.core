@@ -72,7 +72,7 @@ namespace Mix.Log.Lib.Services
                 Action = MessageAction.NewMessage,
                 Type = msgType,
                 Title = message,
-                From = new("Log Stream Service"),
+                From = new("LogSettings Stream Service"),
                 Data = obj?.ToString(Newtonsoft.Json.Formatting.None),
                 Message = ex == null ? message : ex!.Message
             };

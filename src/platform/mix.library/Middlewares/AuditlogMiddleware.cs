@@ -26,7 +26,7 @@ namespace Mix.Lib.Middlewares
 
         public async Task InvokeAsync(HttpContext context, AuditLogDataModel auditLogData)
         {
-            var logConfigurations = _configuration.GetSection(MixAppSettingsSection.Log).Get<LogConfigurations>();
+            var logConfigurations = _configuration.GetSection(MixAppSettingsSection.LogSettings).Get<LogConfigurations>();
             var isLog = CheckAuditLogPath(context.Request.Path);
             if (!isLog)
             {

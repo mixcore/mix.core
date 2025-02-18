@@ -23,7 +23,7 @@ namespace Mix.Storage.Lib.Engines.Mix
             IMemoryQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, cmsUow)
         {
-            Configuration.Bind("StorageSetting", Settings);
+            Configuration.Bind("StorageSettings", Settings);
             _queueService = queueService;
             _httpScheme = configuration.GetValue<string>("HttpScheme");
         }

@@ -27,8 +27,11 @@ namespace Mix.Service.Services
         public bool IsStarting = false;
         protected BaseHubClientService(string hub, string endpoint, ILogger logger)
         {
-            HubEndpoint = $"{endpoint.TrimEnd('/')}/{hub.TrimStart('/')}";
-            _logger = logger;
+            if (!string.IsNullOrEmpty(endpoint))
+            {
+                HubEndpoint = $"{endpoint.TrimEnd('/')}/{hub.TrimStart('/')}";
+                _logger = logger;
+            }
         }
 
         public Task SendMessageAsync(string title, string description, object data, MessageType messageType = MessageType.Info)
@@ -41,7 +44,7 @@ namespace Mix.Service.Services
             };
             return SendMessageAsync(msg);
         }
-        
+
         public Task SendGroupMessageAsync(string groupName, string title, string description, object data, MessageType messageType = MessageType.Info, bool exceptCaller = true)
         {
             var msg = new SignalRMessageModel(data)
@@ -180,7 +183,7 @@ namespace Mix.Service.Services
 
                     return Task.CompletedTask;
                 };
-                
+
                 Connection.Reconnected += msg =>
                 {
                     Console.WriteLine(Connection.State);

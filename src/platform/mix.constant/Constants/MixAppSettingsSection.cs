@@ -13,7 +13,7 @@
         public const string GoogleStorageCredential = "Google:Storage:Credential";
         public const string Payments = "Payments";
         public const string Azure = "Azure";
-        public const string Log = "Log";
+        public const string LogSettings = "LogSettings";
         public const string ConnectionStrings = "ConnectionStrings";
         public const string Redis = "Redis";
     }

@@ -41,7 +41,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 builder.Services.TryAddSingleton(
                     m => new MixEndpointService(
                         builder.Configuration,
-                        settings.First(m => m.SystemName == "endpoint")));
+                        settings.First(m => m.SystemName == "endpoints")));
                 builder.Services.TryAddSingleton(
                     m => new PortalConfigService(
                         builder.Configuration,

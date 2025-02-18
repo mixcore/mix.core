@@ -116,7 +116,7 @@ namespace Mix.Queue.Engines
         {
             try
             {
-                var providerSetting = _configuration["MessageQueueSetting:Provider"];
+                var providerSetting = _configuration["MessageQueueSettings:Provider"];
                 if (string.IsNullOrEmpty(providerSetting))
                 {
                     return default;
@@ -127,13 +127,13 @@ namespace Mix.Queue.Engines
                 switch (provider)
                 {
                     case MixQueueProvider.AZURE:
-                        var azureSettingPath = _configuration.GetSection("MessageQueueSetting:AzureServiceBus");
+                        var azureSettingPath = _configuration.GetSection("MessageQueueSettings:AzureServiceBus");
                         var azureSetting = new AzureQueueSetting();
                         azureSettingPath.Bind(azureSetting);
                         return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
                             provider, azureSetting, topicId, subscriptionId, MessageHandler, _memoryQueueService, mixEndpointService);
                     case MixQueueProvider.GOOGLE:
-                        var googleSettingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
+                        var googleSettingPath = _configuration.GetSection("MessageQueueSettings:GoogleQueueSetting");
                         var googleSetting = new GoogleQueueSetting();
                         googleSettingPath.Bind(googleSetting);
                         googleSetting.CredentialFile = googleSetting.CredentialFile;
@@ -147,7 +147,7 @@ namespace Mix.Queue.Engines
                             return default;
                         }
 
-                        var mixSettingPath = _configuration.GetSection("MessageQueueSetting:Mix");
+                        var mixSettingPath = _configuration.GetSection("MessageQueueSettings:Mix");
                         var mixSetting = new MixQueueSetting();
                         mixSettingPath.Bind(mixSetting);
                         return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(

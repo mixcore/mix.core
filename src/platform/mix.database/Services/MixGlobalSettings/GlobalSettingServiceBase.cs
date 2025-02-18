@@ -34,7 +34,9 @@ namespace Mix.Database.Services.MixGlobalSettings
         }
         public virtual T GetConfig<T>(string name, T defaultValue = default)
         {
-            var result = RawSettings[name];
+            var result = string.IsNullOrEmpty(_sectionName)
+                    ? RawSettings[name]
+                    : RawSettings[_sectionName][name];
             return result != null ? result.Value<T>() : defaultValue;
         }
         public virtual void SetConfig<TValue>(string name, TValue value, bool isSave = false)
@@ -42,11 +44,12 @@ namespace Mix.Database.Services.MixGlobalSettings
             if (string.IsNullOrEmpty(_sectionName))
             {
                 RawSettings[name] = value != null ? JToken.FromObject(value) : null;
-                _configuration.GetSection(_sectionName)[name] = value.ToString();
+                _configuration[name] = value.ToString();
             }
             else
             {
                 RawSettings[_sectionName][name] = value != null ? JToken.FromObject(value) : null;
+                _configuration.GetSection(_sectionName)[name] = value.ToString();
             }
             if (isSave)
             {
@@ -71,11 +74,12 @@ namespace Mix.Database.Services.MixGlobalSettings
 
         protected virtual void LoadAppSettings()
         {
-            AppSettings = string.IsNullOrEmpty(_sectionName) ? _configuration.Get<TAppSetting>()
-                : _configuration.GetSection(_sectionName).Get<TAppSetting>();
             var content = _settings.IsEncrypt ? AesEncryptionHelper.DecryptString(_settings.Settings, _aesKey)
             : _settings.Settings;
             RawSettings = JObject.Parse(content);
+            AppSettings = string.IsNullOrEmpty(_sectionName) 
+                            ? RawSettings.ToObject<TAppSetting>()
+                            :RawSettings[_sectionName].ToObject<TAppSetting>();
         }
 
         protected GlobalSettingContext GetSettingDbContext()

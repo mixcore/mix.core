@@ -17,7 +17,7 @@ namespace Mix.Queue.Extensions
     {
         public static IHostApplicationBuilder AddMixQueue(this IHostApplicationBuilder builder)
         {
-            var providerSetting = builder.Configuration["MessageQueueSetting:Provider"];
+            var providerSetting = builder.Configuration["MessageQueueSettings:Provider"];
             var _provider = Enum.Parse<MixQueueProvider>(providerSetting);
             switch (_provider)
             {
