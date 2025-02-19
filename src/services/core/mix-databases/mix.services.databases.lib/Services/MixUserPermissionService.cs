@@ -92,7 +92,7 @@ namespace Mix.Services.Databases.Lib.Services
         }
         public async Task<List<MixPermissionViewModel>> GetPermissionAsync(Guid userId)
         {
-            var permissions = _permissionDbContext.UserPermission.Where(m => m.TenantId == CurrentTenant.Id && m.UserId == userId);
+            var permissions = _permissionDbContext.MixUserPermission.Where(m => m.TenantId == CurrentTenant.Id && m.UserId == userId);
             Expression<Func<Database.Entities.MixDb.MixPermission, bool>> predicate = m => m.TenantId == CurrentTenant.Id && permissions.Any(p => p.PermissionId == m.Id);
             var result = await MixPermissionViewModel.GetRepository(_accUow, CacheService).GetAllAsync(predicate);
             return result;

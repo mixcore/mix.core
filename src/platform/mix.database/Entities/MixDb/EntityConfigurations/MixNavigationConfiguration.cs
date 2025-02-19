@@ -10,6 +10,7 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixNavigation> builder)
         {
+            base.Configure(builder);
             builder.ToTable(MixDbDatabaseNames.Navigation);
             builder.Property(e => e.Title)
             .HasColumnName("title");
@@ -23,7 +24,6 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
                .HasColumnName("type");
             builder.Property(e => e.Image)
                .HasColumnName("image");
-            base.Configure(builder);
         }
     }
 }

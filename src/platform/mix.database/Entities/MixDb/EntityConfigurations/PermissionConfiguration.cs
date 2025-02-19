@@ -10,8 +10,8 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixPermission> builder)
         {
-            builder.ToTable(MixDatabaseNames.SYSTEM_PERMISSION);
             base.Configure(builder);
+            builder.ToTable(MixDatabaseNames.SYSTEM_PERMISSION);
             builder.Property(e => e.DisplayName)
             .HasColumnName("display_name");
             builder.Property(e => e.Group)

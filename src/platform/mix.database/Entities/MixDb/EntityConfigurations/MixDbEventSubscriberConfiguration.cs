@@ -11,6 +11,7 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixDbEventSubscriber> builder)
         {
+            base.Configure(builder);
             builder.ToTable(MixDbDatabaseNames.MixDbEventSubscriber);
             builder.Property(e => e.Callback)
                 .HasColumnName("callback")
@@ -25,7 +26,6 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
                .HasColumnName("action");
             builder.Property(e => e.TenantId)
                .HasColumnName("tenant_id");
-            base.Configure(builder);
         }
     }
 }

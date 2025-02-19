@@ -10,6 +10,7 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixMenuItem> builder)
         {
+            base.Configure(builder);
             builder.ToTable(MixDbDatabaseNames.MenuItem);
             builder.Property(e => e.Title)
             .HasColumnName("title");
@@ -33,7 +34,6 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
                .HasColumnName("target_id");
             builder.Property(e => e.TenantId)
                .HasColumnName("tenant_id");
-            base.Configure(builder);
         }
     }
 }

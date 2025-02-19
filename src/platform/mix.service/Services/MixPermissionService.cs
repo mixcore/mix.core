@@ -60,8 +60,8 @@ namespace Mix.Service.Services
                                             .Select(m => m.ChildId)
                                             .ToList();
 
-                        // TODO: PermissionEndpoint cannot initial at first time
-                        var endpoints = await uow.DbContext.PermissionEndpoint.Where(
+                        // TODO: MixPermissionEndpoint cannot initial at first time
+                        var endpoints = await uow.DbContext.MixPermissionEndpoint.Where(
                                                 m => endpointIds.Contains(m.Id)
                                                     && !string.IsNullOrEmpty(m.Path)
                                                 )
