@@ -22,7 +22,7 @@ namespace Mix.Common.Domain.Helpers
                 DefaultCulture = currentTenant?.Configurations.DefaultCulture,
                 IsEncryptApi = false,
                 LastUpdateConfiguration = currentTenant?.Configurations.LastUpdateConfiguration,
-                PortalThemeSettings = portalConfigSrv.RawSettings,
+                PortalThemeSettings = portalConfigSrv.AppSettings,
                 ApiEncryptKey = aesKey,
                 //Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)),

@@ -101,7 +101,7 @@ namespace Mix.Common.Controllers
                     _portalConfigSrv, _authConfigurations, CurrentTenant),
                 MixConfigurations = await _configRepo.GetListAsync(m => m.Specificulture == lang, cancellationToken),
                 Translator = _langRepo.GetListQuery(m => m.Specificulture == lang).ToList(),
-                Endpoints = _endpointService.RawSettings
+                Endpoints = _endpointService.AppSettings
             };
         }
     }

@@ -335,24 +335,20 @@ namespace Mix.Lib.Services
                 var dtExpired = dtIssued.AddMinutes(AuthConfigService.AppSettings.AccessTokenExpiration);
                 var dtRefreshTokenExpired = dtIssued.AddMinutes(AuthConfigService.AppSettings.RefreshTokenExpiration);
                 var refreshTokenId = Guid.Empty;
-                var refreshToken = Guid.Empty;
                 var userInfo = await GetOrCreateUserData(user, additionalData, cancellationToken);
                 if (isRemember)
                 {
-                    refreshToken = Guid.NewGuid();
-                    var vmRefreshToken = new RefreshTokenViewModel(
-                        new RefreshTokens()
-                        {
-                            Id = refreshToken,
-                            Email = user.Email,
-                            IssuedUtc = dtIssued,
-                            ClientId = AuthConfigService.AppSettings.ClientId,
-                            UserName = user.UserName,
-                            ExpiresUtc = dtRefreshTokenExpired
-                        }, AccountUow);
+                    refreshTokenId = Guid.NewGuid();
 
-                    var saveRefreshTokenResult = await vmRefreshToken.SaveAsync(cancellationToken);
-                    refreshTokenId = saveRefreshTokenResult;
+                    await CacheService.SetAsync($"tokens:{refreshTokenId}", new RefreshTokens()
+                    {
+                        Id = refreshTokenId,
+                        Email = user.Email,
+                        IssuedUtc = dtIssued,
+                        ClientId = AuthConfigService.AppSettings.ClientId,
+                        UserName = user.UserName,
+                        ExpiresUtc = dtRefreshTokenExpired
+                    }, TimeSpan.FromMinutes(AuthConfigService.AppSettings.RefreshTokenExpiration));
                 }
 
                 var token = new TokenResponseModel()
@@ -361,7 +357,7 @@ namespace Mix.Lib.Services
                     EmailConfirmed = user.EmailConfirmed,
                     IsActive = user.IsActive,
                     AccessToken = await GenerateTokenAsync(
-                        user, new(), dtExpired, refreshToken.ToString(), AuthConfigService.AppSettings),
+                        user, new(), dtExpired, refreshTokenId.ToString(), AuthConfigService.AppSettings),
                     RefreshToken = refreshTokenId,
                     TokenType = AuthConfigService.AppSettings.TokenType,
                     ExpiresIn = AuthConfigService.AppSettings.AccessTokenExpiration,
@@ -407,36 +403,7 @@ namespace Mix.Lib.Services
                         return await GetAuthData(user, true, CurrentTenant.Id, model.Data, cancellationToken);
                     }
 
-                    // register new account
-                    else
-                    {
-                        string userName = model.UserName ?? model.Email?.Split('@')[0] ?? model.PhoneNumber;
-
-                        if (!string.IsNullOrEmpty(userName))
-                        {
-                            user = await UserManager.FindByNameAsync(userName);
-                            user ??= await RegisterAsync(
-                                new RegisterRequestModel
-                                {
-                                    Email = model.Email,
-                                    PhoneNumber = model.PhoneNumber,
-                                    UserName = userName,
-                                    Provider = model.Provider,
-                                    ProviderKey = verifiedAccessToken.user_id,
-                                    //Data = model.Data
-                                },
-                                CurrentTenant.Id,
-                                CmsUow,
-                                model.Data,
-                                cancellationToken);
-
-                            return await GetAuthData(user, true, CurrentTenant.Id, model.Data, cancellationToken);
-                        }
-                        else
-                        {
-                            throw new MixException(MixErrorStatus.Badrequest, "Login Failed");
-                        }
-                    }
+                    throw new MixException(MixErrorStatus.Badrequest, "Invalid Account");
                 }
                 throw new MixException(MixErrorStatus.Badrequest);
             }
@@ -453,9 +420,15 @@ namespace Mix.Lib.Services
         public async Task<TokenResponseModel> RenewTokenAsync(RenewTokenDto refreshTokenDto, CancellationToken cancellationToken = default)
         {
             var result = new TokenResponseModel();
-            var oldToken = await RefreshTokenRepo.GetSingleAsync(t => t.Id == refreshTokenDto.RefreshToken, cancellationToken);
+            if (refreshTokenDto.RefreshToken == default(Guid))
+            {
+                throw new MixException(MixErrorStatus.Badrequest, "Invalid Token");
+            }
+            string key = $"tokens:{refreshTokenDto.RefreshToken}";
+            var oldToken = await CacheService.GetAsync<RefreshTokens>(key, cancellationToken);
             if (oldToken != null)
             {
+                await CacheService.RemoveCacheAsync(key);
                 if (oldToken.ExpiresUtc > DateTime.UtcNow)
                 {
 
@@ -464,24 +437,15 @@ namespace Mix.Lib.Services
                     {
                         var user = await UserManager.FindByNameAsync(oldToken.UserName);
                         await SignInManager.SignInAsync(user, true).ConfigureAwait(false);
-
-                        var token = await GetAuthData(user, true, CurrentTenant.Id, default, cancellationToken);
-                        if (token != null)
-                        {
-                            await oldToken.DeleteAsync(cancellationToken);
-                            result = token;
-                        }
+                        return await GetAuthData(user, true, CurrentTenant.Id, default, cancellationToken);
                     }
                     else
-                    {
+                    {                        
                         throw new MixException(MixErrorStatus.Badrequest, "Invalid Token");
                     }
-
-                    return result;
                 }
                 else
                 {
-                    await oldToken.DeleteAsync(cancellationToken);
                     throw new MixException(MixErrorStatus.Badrequest, "Token expired");
                 }
             }
