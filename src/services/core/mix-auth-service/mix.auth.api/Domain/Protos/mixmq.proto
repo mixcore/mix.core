@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option csharp_namespace = "Mix.Auth.Service.Domain.Protos";
+import "google/protobuf/empty.proto";
+
+package mixmq;
+
+// The greeting service definition.
+service MixMq {
+  // Sends a greeting
+  rpc Subscribe (SubscribeRequest) returns (stream SubscribeReply);
+  rpc Publish (PublishMessageRequest) returns (google.protobuf.Empty);
+}
+
+// The request message containing the user's name.
+message SubscribeRequest {
+  string topicId = 1;
+  string subsctiptionId = 2;
+}
+
+message PublishMessageRequest {
+	string topicId = 1;
+  string message = 2;
+}
+
+// The response message containing the greetings.
+message SubscribeReply {
+  repeated string messages = 1;
+}

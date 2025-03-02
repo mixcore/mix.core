@@ -1,0 +1,205 @@
+/* Sat Sep 09 2023 14:08:55 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
+  max-width: 100%; }
+
+fb-login {
+  background-color: aqua; }
+
+medias .modal {
+  z-index: 1049; }
+
+medias #modal-files .modal-body .table img {
+  height: 30px; }
+
+medias #modal-files .modal-body .table img.preview {
+  height: auto; }
+
+mix-column-preview .row {
+  max-height: 120px;
+  margin: 10px 0;
+  overflow: hidden; }
+
+mix-column-preview img {
+  max-width: 100%; }
+
+mix-module-data-table .data-table .header {
+  padding: 5px;
+  color: #495057;
+  background-color: hsla(var(--primary-color-hue, 211), 100%, 50%, 0.075);
+  border-color: #dee2e6;
+  font-weight: 400;
+  font-size: small; }
+
+mix-module-data-table .preview-container {
+  max-height: 4em;
+  overflow: hidden; }
+
+qr-code .qr-output canvas {
+  max-width: 100%; }
+
+#dlg-preview-popup .modal-body img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto; }
+
+#dlg-preview-popup pre {
+  overflow: visible; }
+
+/* PROPORTIONALLY resize the canvas to the intended viewing size */
+/* canvas{width:300px; height:380px;} */
+upload-croppie .cr-boundary {
+  overflow: hidden; }
+
+/* GENERAL STYLE */
+html,
+body {
+  height: 100%; }
+
+.btn,
+.btn-link {
+  cursor: pointer; }
+
+.content-body {
+  max-width: 66vw; }
+
+.w-85 {
+  width: 85vw; }
+
+/* body {
+    color: #212529!important;
+}
+
+#sidebar.sw-toc-sub-link{
+    color: #212529!important;
+} */
+.display-4 {
+  font-size: 2rem !important; }
+
+/* CARD STYLE */
+/* .card.manual{
+    padding: 20px 20px 0 20px;
+} */
+/**
+ * The dnd-list should always have a min-height,
+ * otherwise you can't drop to it once it's empty
+ */
+ul[dnd-list],
+div[dnd-list] {
+  min-height: 42px;
+  padding-left: 0px; }
+
+/**
+ * The dndDraggingSource class will be applied to
+ * the source element of a drag operation. It makes
+ * sense to hide it to give the user the feeling
+ * that he's actually moving it.
+ */
+ul[dnd-list] .dndDraggingSource,
+div[dnd-list] .dndDraggingSource {
+  display: none; }
+
+/**
+ * An element with .dndPlaceholder class will be
+ * added to the dnd-list while the user is dragging
+ * over it.
+ */
+ul[dnd-list] .dndPlaceholder,
+div[dnd-list] .dndPlaceholder {
+  background-color: #ddd;
+  display: block;
+  min-height: 42px; }
+
+ul[dnd-list] li,
+div[dnd-list] .dnd-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: -1px; }
+
+/**
+ * Show selected elements in green
+ */
+ul[dnd-list] li.selected,
+div[dnd-list] .dnd-item.selected {
+  background-color: #dff0d8;
+  color: #3c763d; }
+
+.mouse {
+  z-index: 9999999;
+  width: 70px;
+  height: 70px;
+  background-color: transparent;
+  color: #fff;
+  position: absolute; }
+
+hub-messages .nav-link {
+  position: relative; }
+  hub-messages .nav-link .new-msg-count {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    top: -5px;
+    right: 5px;
+    background-color: red;
+    padding: 2px 4px 0; }
+
+log-stream #modal-log-stream .modal-body {
+  max-height: 80vh;
+  overflow-y: scroll; }
+
+log-stream .nav-link {
+  position: relative; }
+  log-stream .nav-link .new-msg-count {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    top: -5px;
+    right: 5px;
+    background-color: red;
+    padding: 2px 4px 0; }
+
+main-side-bar-dynamic .sw-sidebar .sw-toc-item {
+  position: relative; }
+  main-side-bar-dynamic .sw-sidebar .sw-toc-item .sw-toc-link .sw-toc-link {
+    padding-left: 0; }
+  main-side-bar-dynamic .sw-sidebar .sw-toc-item .btn-group {
+    right: 20px;
+    opacity: 1; }
+
+main-side-bar-dynamic .sw-sidebar ul {
+  padding-left: 15px; }
+
+main-side-bar-dynamic .sw-sidebar .sw-toc-sub-link .btn-group {
+  padding: 2px 0; }
+
+.custom-image {
+  max-width: 30vw; }
+
+.attr-set-value-item:last-child {
+  border-bottom: 0 !important; }
+
+mix-database-nav-values .row {
+  padding: 10px 0; }
+
+mix-database-nav-values mix-column-preview .rowx {
+  max-height: 110px;
+  overflow: hidden; }
+
+@media (min-width: 992px) {
+  #modal-content-filter .modal-lg,
+  #modal-content-filter .modal-xl {
+    max-width: 80vw; } }
+
+.table-data td.preview {
+  max-width: 120px;
+  overflow: hidden; }
+
+.content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: transparent; }

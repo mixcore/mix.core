@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Mix.Communicator</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Shared.Dtos" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="FirebaseAdmin" Version="3.0.1" />
+		<PackageReference Include="Google.Api.Gax.Rest" Version="4.9.0" />
+		<PackageReference Include="Google.Cloud.Firestore" Version="3.9.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\mix.quartz\mix.quartz.csproj" />
+		<ProjectReference Include="..\mix.shared\mix.shared.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,23 @@
+{
+  "MessageQueueSetting": {
+    "Provider": "MIX",
+    "GoogleQueueSetting": {
+      "CredentialFile": "",
+      "ProjectId": ""
+    },
+    "AzureServiceBus": {
+      "ConnectionString": "",
+      "QueueName": ""
+    },
+    "Mix": {
+      "ProjectId": ""
+    },
+    "RabitMqQueueSetting": {
+      "HostName": "localhost",
+      "UserName": "",
+      "Password": "",
+      "VHost": null,
+      "Port": 5672
+    }
+  }
+}

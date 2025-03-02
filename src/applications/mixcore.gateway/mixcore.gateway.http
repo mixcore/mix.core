@@ -1,0 +1,6 @@
+@mixcore.gateway_HostAddress = http://localhost:5025
+
+GET {{mixcore.gateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

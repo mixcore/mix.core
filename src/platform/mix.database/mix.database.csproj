@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<RootNamespace>Mix.Database</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="Entities\Account\_ApplicationDbContext.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="9.5.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="9.0.0" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="9.0.0-preview.2.efcore.9.0.0" />
+		
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Mix.Heart.Entities" />
+		<Using Include="Mix.Heart.Enums" />
+		<Using Include="System" />
+		<Using Include="Microsoft.AspNetCore.Identity" />
+		<Using Include="Microsoft.EntityFrameworkCore" />
+		<Using Include="Microsoft.EntityFrameworkCore.Metadata.Builders" />
+		<Using Include="Mix.Database.Entities.Cms" />
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Shared.Dtos" />
+		<Using Include="Mix.Database.Entities.Base" />
+		<Using Include="Mix.Database.Constants" />
+
+		<Using Include="Mix.Database.Base" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Entities\Queue\EntityConfigurations\" />
+		<Folder Include="Migrations\Account\" />
+		<Folder Include="Migrations\AuditLog\" />
+		<Folder Include="Migrations\Cms\" />
+		<Folder Include="Migrations\QueueLog\" />
+		<Folder Include="Migrations\Settings\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\mix.shared\mix.shared.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,65 @@
+﻿@model PageContentViewModel
+@{
+    Layout = Model.Layout?.FilePath;
+}
+<input type="hidden" id="view-type" value="Page" />
+<input type="hidden" id="view-id" value="@Model.Id" />
+@if (!string.IsNullOrEmpty(Model.Template?.FilePath))
+{
+    try
+    {
+        <partial name="@Model.Template.FilePath" model="@Model" />
+    }
+    catch (System.InvalidOperationException invalidOperationException)
+    {
+        <p class="danger text-center has-error">Unable load template @Model.Template.FilePath with Exception detail below:</p>
+        <code>
+            @invalidOperationException
+        </code>
+    }
+    catch (Exception ex)
+    {
+        <p class="danger text-center has-error">Unable load template @Model.Template.FilePath with Exception detail below:</p>
+        <code>
+            @ex
+        </code>
+    }
+}
+else
+{
+    <section class="container">
+        <h1>Please choose template</h1>
+    </section>
+}
+@{
+    string url = ViewData["OgUrl"] != null ? (string)ViewData["OgUrl"] : Model.DetailUrl;
+    var domain = url.IndexOf("http") == -1 ? $"{Context.Request.Scheme}://{Context.Request.Host}" : string.Empty;
+    string title = ViewData["OgTitle"] != null ? (string)ViewData["OgTitle"] : Model.SeoTitle;
+    string desc = ViewData["OgDescription"] != null ? (string)ViewData["OgDescription"] : Model.SeoDescription;
+    string image = ViewData["OgImage"] != null ? (string)ViewData["OgImage"] : Model.Image;
+}
+@section Seo{
+    <title>@Model.SeoTitle</title>
+    <meta property="og:type" content="post" />
+    <!--points to the regular HTML version of the AMP H%TML document or to itself if no such HTML version exists-->
+    <link rel="canonical" href="@domain@url" />
+    <meta property="og:url" content="@domain@url" />
+    <meta property="og:title" content="@title" />
+    <meta property="og:description" content="@desc" />
+    <meta property="og:image" content="@domain@image" />
+    <meta name="title" content="@title" />
+    <meta name="description" content="@desc" />
+    <meta name="keywords" content="@desc" />
+}
+@section Styles{
+    <!-- master styles -->
+    @Html.Raw(Model.Layout?.Styles)
+    <!-- end master styles -->
+    @Html.Raw(Model.Template?.Styles)
+}
+@section Scripts{
+    <!-- master scripts -->
+    @Html.Raw(Model.Layout?.Scripts)
+    <!-- end master scripts -->
+    @Html.Raw(Model.Template?.Scripts)
+}

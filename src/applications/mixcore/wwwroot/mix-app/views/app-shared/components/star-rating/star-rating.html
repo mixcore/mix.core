@@ -1,0 +1,1 @@
+<div ng-model="$ctrl.ratingValue"><ul class="star-rating" ng-class="{readonly: $ctrl.readonly}" ng-init="$ctrl.init()"><li ng-repeat="star in $ctrl.stars track by $index" class="star" ng-class="{filled: $ctrl.filled($index)}" ng-click="$ctrl.toggle($index)"><i class="bi" ng-class="{'bi-star-fill': $ctrl.filled($index), 'bi-star': !$ctrl.filled($index)}"></i></li></ul></div>

@@ -26,6 +26,7 @@ bld/
 
 # Visual Studio 2015 cache/options directory
 .vs/
+.idea/
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
@@ -63,7 +64,6 @@ artifacts/
 *.tlh
 *.tmp
 *.tmp_proj
-*.log
 *.vspscc
 *.vssscc
 .builds
@@ -222,7 +222,6 @@ FakesAssemblies/
 *.opt
 
 azure-pipelines.yml
-appsettings.json
 
 # Visual Studio LightSwitch build output
 **/*.HTMLClient/GeneratedArtifacts
@@ -240,45 +239,17 @@ ModelManifest.xml
 .fake/
 
 # Source
-.gitignore
-src/Mix.Cms.Web.old
-src/Mix.Cms.Web/appsettings.*.*
-src/Mix.Cms.Web/wwwroot/content/*
-src/Mix.Cms.Web/wwwroot/Exports/*
-src/Mix.Cms.Web/Exports
-src/Mix.Cms.Web/.vscode
-src/Mix.Cms.Web/node_modules/*
-src/Mix.Cms.Web/Views/Shared/Templates/*
-src/Mix\.Cms\.Web/Cache/
 .DS_Store
 .vscode/
-src/_MixCore.sln
-
-src/Mix.Cms.Web/logs/
-
-src/Mix.Cms.Web.old/
-
-src/Mix.Cms.Web/wwwroot/edms/
-
-src/portal-app/
-src/Mix.Cms.Webbk
-src/ref
-src/Mix.Cms.Web/wwwroot/css/app-vendor-scss.min.css
-/src/Mix.Cms.Web/MixContent/cache
-/src/Mix.Cms.Web/MixContent/logs
-/src/Mix.Cms.Web/wwwroot/mix-content/content
-/src/Mix.Cms.Web/wwwroot/mix-content/assets
-/src/Mix.Cms.Web/MixContent/mix-cms.db
-
-src/Mix.Cms.Web/MixContent/mix-cms.db-wal
-
-src/Mix.Cms.Web/MixContent/mix-cms.db-shm
-/src/Mix.Cms.Web/wwwroot/mix-content/exports
-
-src/Mix.Cms.Web/MixContent/mix_cache.db
-
 *.db
 
-src/Mix.Cms.Web/Properties/PublishProfiles/
-/src/Mix.Cms.Web/wwwroot/mix-content/imports/themes/**/*
-/src/Mix.Cms.Web/wwwroot/Imports/Themes/24-07-2021/bs-5
+src/applications/**/PublishProfiles/
+src/applications/**/ServiceDependencies/
+
+src/applications/Mixcore/wwwroot/portal-apps/
+src/**/__pycache__/
+src/**/logs/
+
+src/**/*.sqlite-shm
+src/**/*.sqlite-wal
+src/applications/mixcore/wwwroot/**/*.sqlite

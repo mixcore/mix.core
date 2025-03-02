@@ -4,10 +4,10 @@
 
 ### Fully Open Source UI Tools to create multi-purpose Enterprise Web Apps, Mobile Apps & Application Services
 
-## Branchs
+## Online Run & Build
+Click the button below to start a new development environment:
 
-- **master**: Mixcore v1.0.x LTS
-- **develop**: Mixcore v2.0.0-alpha.x
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/mixcore/mix.core/tree/develop)
 
 ## UI Screenshots 
 
@@ -43,7 +43,7 @@
 - [x] **Easy Backup** - Powerful 1 step export.
 - [x] **More Coffee time!** - You can relax and explore more ton of features are not listed here...
 
-### Architecture
+## Architecture
 ![image](https://user-images.githubusercontent.com/3785721/160266730-f02415a1-870b-45b2-ae4b-ed6c26ca5787.png)
 
 
@@ -62,21 +62,18 @@ Codefactor     |[![CodeFactor](https://www.codefactor.io/repository/github/mixco
 
 |  |Links  |
 |---------|---------|
-|STAG / Demo     |https://demo.mixcore.org <br /> https://dev.mixcore.org <br /> https://v2.dev.mixcore.org <br /> https://mochahost.demo.mixcore.org/portal (administrator / P@ssw0rd) <br /> |
-|Swagger (v2) | https://v2.dev.mixcore.org/api/v2/mixcore/swagger/index.html |
+|STAG / Demo     |https://demo.mixcore.org or https://dev.mixcore.org or https://mochahost.demo.mixcore.org/portal (administrator / P@ssw0rd)  Ref: [How to install Mixcore CMS with Azure Docker Composer](https://community.mixcore.org/topic/4/install-mixcore-cms-with-azure-and-docker-compose)|
 |Dev docs     |https://docs.mixcore.org / https://mixcore.dev|
 |Community     |https://community.mixcore.org|
 |Youtube     |https://www.youtube.com/channel/UChqzh6JnC8HBUSQ9AWIcZAw|
 |Twitter     |https://twitter.com/mixcore_cms         |
 |Medium     |https://medium.com/mixcore         |
 
-Ref: [How to install Mixcore CMS with Azure Docker Composer](https://community.mixcore.org/topic/4/install-mixcore-cms-with-azure-and-docker-compose)
-
 ## Run with Docker
 
 ###  Latest Docker Image
 ```sh
-docker pull ghcr.io/mixcore/mix.core:master
+docker pull mixcore/mix.core:latest
 docker run -it --rm -p 5000:80 --name mixcore_cms mixcore/mix.core:latest
 ```
 
@@ -91,7 +88,7 @@ docker-compose up
 mkdir mixcore
 cd mixcore
 
-git clone https://github.com/mixcore/mix.core.git
+git clone --branch develop --recursive https://github.com/mixcore/mix.core.git
 ```
 
 Optional:
@@ -99,8 +96,7 @@ Optional:
 > Optional steps as those packages are Nuget Library
 
 ```bash
-git clone https://github.com/mixcore/mix.heart.git
-git clone https://github.com/mixcore/mix.identity.git
+git submodule update --init --recursive
 ```
 
 
@@ -162,7 +158,6 @@ Mixcore CMS is licensed under the **[MIT](https://github.com/mixcore/mix.core/bl
 
 ![Alt](https://repobeats.axiom.co/api/embed/4ec425735bae424c69c063f2bac106c3107b6db4.svg "Repobeats analytics image")
 =======
-
 
 ## Star History
 

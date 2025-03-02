@@ -1,0 +1,29 @@
+﻿/* swagger ui customization */
+/*body.swagger-section #header {
+    background-color: white;
+    background: url(your-new-logo.png) no-repeat;
+    background-position-x: 250px;
+    height: 50px;
+}
+
+    body.swagger-section #header .swagger-ui-wrap #logo {
+        display: none;
+    }
+*/
+.topbar{
+    display: none;
+}
+.swagger-ui .opblock-tag {
+    font-size: 18px;
+    /*    color: #3b4151;
+    font-family: sans-serif;
+    margin: 0 0 5px;
+    background: #333;*/
+}
+.opblock-tag-section.is-open h3{
+    color: #fff;
+    background: #333;
+}
+.swagger-ui .opblock-tag:hover {
+    color: #333;
+}

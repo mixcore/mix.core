@@ -1,0 +1,110 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<RootNamespace>Mix.Lib</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<Using Include="System" />
+		<Using Include="System.Threading.Tasks" />
+		<Using Include="Mix.Lib.Base" />
+		<Using Include="Mix.Shared.Services" />
+		<Using Include="Mix.Database.Entities.Cms" />
+		<Using Include="Mix.Database.Entities.Base" />
+		<Using Include="Mix.Heart.Enums" />
+		<Using Include="Mix.Heart.ViewModel" />
+		<Using Include="Mix.Heart.UnitOfWork" />
+		<Using Include="Mix.Heart.Services" />
+		<Using Include="Mix.Heart.Constants" />
+		<Using Include="Mix.Heart.Entities" />
+		<Using Include="Mix.Heart.Models" />
+		<Using Include="Mix.Heart.Repository" />
+		<Using Include="Mix.Heart.Helpers" />
+		<Using Include="Mix.Heart.Exceptions" />
+		<Using Include="Mix.Heart.Extensions" />
+		<Using Include="Mix.Heart.Entities.Cache" />
+		<Using Include="Mix.Lib.Attributes" />
+		<Using Include="Mix.Lib.Helpers" />
+		<Using Include="Mix.Lib.ViewModels" />
+		<Using Include="Mix.Lib.Repositories" />
+		<Using Include="Mix.Queue.Interfaces" />
+		<Using Include="Mix.Queue.Models" />
+		<Using Include="Mix.Queue.Attributes" />
+		<Using Include="Newtonsoft.Json.Linq" />
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Shared.Dtos" />
+		<Using Include="Mix.Service.Services" />
+		<Using Include="Mix.Service.Models" />
+		<Using Include="Mix.Shared.Extensions" />
+		<Using Include="Mix.Shared.Helpers" />
+		<Using Include="Mix.Auth.Models" />
+
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Constants\**" />
+		<Compile Remove="Entities\Cms\**" />
+		<Compile Remove="Entities\EntityConfigurations\**" />
+		<Compile Remove="Entities\Messenger\**" />
+		<Compile Remove="Enums\**" />
+		<Compile Remove="UnitOfWorks\**" />
+		<Compile Remove="ViewModels\Account\**" />
+		<Compile Remove="ViewModels\Cms\**" />
+		<EmbeddedResource Remove="Constants\**" />
+		<EmbeddedResource Remove="Entities\Cms\**" />
+		<EmbeddedResource Remove="Entities\EntityConfigurations\**" />
+		<EmbeddedResource Remove="Entities\Messenger\**" />
+		<EmbeddedResource Remove="Enums\**" />
+		<EmbeddedResource Remove="UnitOfWorks\**" />
+		<EmbeddedResource Remove="ViewModels\Account\**" />
+		<EmbeddedResource Remove="ViewModels\Cms\**" />
+		<None Remove="Constants\**" />
+		<None Remove="Entities\Cms\**" />
+		<None Remove="Entities\EntityConfigurations\**" />
+		<None Remove="Entities\Messenger\**" />
+		<None Remove="Enums\**" />
+		<None Remove="UnitOfWorks\**" />
+		<None Remove="ViewModels\Account\**" />
+		<None Remove="ViewModels\Cms\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="Helpers\MixAssociationHelper.cs" />
+		<Compile Remove="Services\HttpService.cs" />
+		<Compile Remove="Services\MixAppSettingService.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ClosedXML" Version="0.104.0-preview2" />
+		<PackageReference Include="CommandLineParser" Version="2.9.1" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="9.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
+		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.8.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.8.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.8.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\core\mix.mixdb.event\mix.mixdb.event.csproj" />
+		<ProjectReference Include="..\mix.communicator\mix.communicator.csproj" />
+		<ProjectReference Include="..\mix.mixdb\mix.mixdb.csproj" />
+		<ProjectReference Include="..\mix.repodb\mix.repodb.csproj" />
+		<ProjectReference Include="..\mix.scylladb\mix.scylladb.csproj" />
+		<ProjectReference Include="..\mix.service\mix.service.csproj" />
+		<ProjectReference Include="..\mix.shared\mix.shared.csproj" />
+		<ProjectReference Include="..\mix.signalr.hub\mix.signalr.hub.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,18 @@
+{
+    "profiles": {
+        "local": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Local",
+                "API_ENCRYPT_KEY": "NElUempOSmx4QVlXRFRmSys5Z0lpZz09LERBSENTUUlZWEVNYVRJRlErc256bE9Ibmo1Z0wwcm5PRm9iMDlXSEJSM0U9",
+                "SETTINGS_CONNECTION_STRING": "Host=localhost;Port=5432;Database=mixcore_portal;Username=postgres;Password=postgres",
+                "DATABASE_PROVIDER": "SQLITE",
+                "SERVICE_NAME": "gateway"
+            },
+            "dotnetRunMessages": true,
+            "applicationUrl": "https://localhost:7142;http://localhost:5025"
+        }
+    },
+  "$schema": "http://json.schemastore.org/launchsettings.json"
+}

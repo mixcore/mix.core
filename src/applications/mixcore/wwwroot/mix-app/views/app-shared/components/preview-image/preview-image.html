@@ -1,0 +1,1 @@
+<div ng-init="$ctrl.init()" ng-if="$ctrl.imgSrc"><a ng-if="$ctrl.isImage" style="cursor: pointer" ng-click="$ctrl.showImage()"><img class="{{$ctrl.imgClass}} list-thumbnail-img-fluid" width="{{$ctrl.imgWidth}}" height="{{$ctrl.imgHeight}}" ng-src="{{$ctrl.imgSrc}}"> </a><a ng-if="!$ctrl.isImage && $ctrl.imgSrc" href="{{$ctrl.imgSrc}}" target="_blank">View</a></div>

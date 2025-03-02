@@ -1,0 +1,18 @@
+:root {
+    --bg-color: #e0e4e7;
+    --bg-color-hover: #d1e0de;
+    --border-color: #d1e0de;
+    --border-color-hover: #e0e4e7;
+    --link-color: #20b2aa;
+    --link-color-hover: #404040;
+    --text-color: #404040;
+    --text-color-hover: #008b8b;
+    --primary-color: #20b2aa;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}

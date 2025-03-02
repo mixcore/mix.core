@@ -1,0 +1,12 @@
+﻿@model Mix.Auth.Models.ExternalLoginResultModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<input type="hidden" value="@Model.Token" id="token" />
+<script>
+    var token = document.getElementById("token").value
+    window.localStorage.setItem('ls.authorizationData', token)
+    window.location.href = '@Model.ReturnUrl';
+</script>

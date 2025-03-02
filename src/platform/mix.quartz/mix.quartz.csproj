@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>Mix.Quartz</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="9.0.0" />
+    <PackageReference Include="Quartz" Version="3.13.0" />
+    <PackageReference Include="Quartz.AspNetCore" Version="3.13.0" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.13.0" />
+    <PackageReference Include="Quartz.Serialization.Json" Version="3.13.0" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Quartz" />
+		<Using Include="Quartz.Spi" />
+		<Using Include="Mix.Quartz.Models" />
+		<Using Include="Mix.Quartz.Jobs" />
+		<Using Include="Mix.Quartz.Enums" />
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Shared.Dtos" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\mix.database\mix.database.csproj" />
+    <ProjectReference Include="..\mix.queue\mix.queue.csproj" />
+    <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
+    <ProjectReference Include="..\mix.signalr\mix.signalr.csproj" />
+  </ItemGroup>
+
+</Project>

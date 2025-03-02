@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Mix.Storage.Lib</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.23.0" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.300" />
+    <PackageReference Include="Google.Cloud.Storage.V1" Version="4.10.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
+    <ProjectReference Include="..\mix.library\mix.library.csproj" />
+  </ItemGroup>
+	<ItemGroup>
+		<Using Include="System" />
+		<Using Include="System.Threading.Tasks" />
+		<Using Include="Mix.Lib.Base" />
+		<Using Include="Mix.Shared.Services" />
+		<Using Include="Mix.Database.Entities.Cms" />
+		<Using Include="Mix.Heart.Enums" />
+		<Using Include="Mix.Heart.ViewModel" />
+		<Using Include="Mix.Heart.UnitOfWork" />
+		<Using Include="Mix.Heart.Services" />
+		<Using Include="Mix.Heart.Constants" />
+		<Using Include="Mix.Heart.Entities" />
+		<Using Include="Mix.Heart.Models" />
+		<Using Include="Mix.Heart.Repository" />
+		<Using Include="Mix.Heart.Helpers" />
+		<Using Include="Mix.Heart.Exceptions" />
+		<Using Include="Mix.Heart.Extensions" />
+		<Using Include="Mix.Heart.Entities.Cache" />
+		<Using Include="Mix.Lib.Attributes" />
+		<Using Include="Mix.Lib.Helpers" />
+		<Using Include="Mix.Lib.ViewModels" />
+		<Using Include="Mix.Lib.Repositories" />
+		<Using Include="Mix.Queue.Interfaces" />
+		<Using Include="Mix.Queue.Models" />
+		<Using Include="Mix.Queue.Attributes" />
+		<Using Include="Newtonsoft.Json.Linq" />
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Shared.Dtos" />
+
+	</ItemGroup>
+
+</Project>

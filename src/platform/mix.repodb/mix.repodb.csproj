@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Mix.RepoDb</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RepoDb" Version="1.13.1" />
+    <PackageReference Include="RepoDb.MySql" Version="1.13.1" />
+    <PackageReference Include="RepoDb.MySqlConnector" Version="1.13.1" />
+    <PackageReference Include="RepoDb.PostgreSql" Version="1.13.1" />
+    <PackageReference Include="RepoDb.Sqlite.Microsoft" Version="1.13.1" />
+    <PackageReference Include="RepoDb.SqlServer" Version="1.13.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\mix.scylladb\mix.scylladb.csproj" />
+    <ProjectReference Include="..\mix.service\mix.service.csproj" />
+    <ProjectReference Include="..\mix.signalr\mix.signalr.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,1 @@
+used for staticfiles
