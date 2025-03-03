@@ -103,7 +103,7 @@ namespace Mix.Tenancy.Controllers
                 await _quartzService.LoadScheduler();
                 await _uow.CompleteAsync();
                 await _mixTenantService.Reload();
-                _mixEndpointService.SetDefaultDomain($"https://{model.PrimaryDomain}");
+                _mixEndpointService.InitDomain($"https://{model.PrimaryDomain}");
                 _appSettingsService.SetConfig(nameof(AppSettingsModel.DatabaseProvider), model.DatabaseProvider.ToString());
                 _appSettingsService.SetConfig(nameof(AppSettingsModel.InitStatus), InitStep.InitAccount);
                 _appSettingsService.SaveSettings();
