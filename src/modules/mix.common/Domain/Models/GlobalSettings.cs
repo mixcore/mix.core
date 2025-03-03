@@ -1,4 +1,6 @@
-﻿namespace Mix.Common.Models
+﻿using Mix.Shared.Models.Configurations;
+
+namespace Mix.Common.Models
 {
     public class GlobalSettings
 
@@ -9,7 +11,7 @@
 
         public string LangIcon { get; set; }
 
-        public JObject PortalThemeSettings { get; set; }
+        public PortalConfigurationModel PortalThemeSettings { get; set; }
 
         public string ApiEncryptKey { get; set; }
 
