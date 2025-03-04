@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.AuditLog;
 using Mix.Database.Services.MixGlobalSettings;
@@ -9,10 +10,12 @@ using Mix.Log.Lib.Interfaces;
 using Mix.Log.Lib.Models;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
+using Mix.Service.Models;
 using Mix.Service.Services;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
+using Mix.Shared.Extensions;
 
 namespace Mix.Log.Lib.Services
 {
@@ -22,9 +25,25 @@ namespace Mix.Log.Lib.Services
         private readonly ILogStreamHubClientService _logStreamHub;
         private readonly IMemoryQueueService<MessageQueueModel> _queueService;
         private AuditLogDbContext _dbContext;
-        public int TenantId { get; set; }
-        public AuditLogService(IMemoryQueueService<MessageQueueModel> queueService, ILogStreamHubClientService logStreamHub, DatabaseService databaseService)
+        protected ISession? Session;
+        private MixTenantSystemModel _currentTenant;
+        public MixTenantSystemModel CurrentTenant
         {
+            get
+            {
+                if (_currentTenant == null)
+                {
+                    _currentTenant = Session?.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant) ?? new MixTenantSystemModel()
+                    {
+                        Id = 1
+                    };
+                }
+                return _currentTenant;
+            }
+        }
+        public AuditLogService(IHttpContextAccessor httpContextAccessor, IMemoryQueueService<MessageQueueModel> queueService, ILogStreamHubClientService logStreamHub, DatabaseService databaseService)
+        {
+            Session = httpContextAccessor?.HttpContext?.Session;
             _queueService = queueService;
             _logStreamHub = logStreamHub;
             _databaseService = databaseService;
@@ -59,7 +78,7 @@ namespace Mix.Log.Lib.Services
         {
             request.CreatedAt = DateTime.UtcNow;
             var cmd = new LogAuditLogCommand(request);
-            _queueService.PushMemoryQueue(TenantId, MixQueueTopics.MixLog, MixQueueActions.AuditLog, cmd);
+            _queueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixLog, MixQueueActions.AuditLog, cmd);
         }
 
         #region Helpers

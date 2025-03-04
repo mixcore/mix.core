@@ -51,7 +51,7 @@ namespace Mix.Queue.Engines
             try
             {
                 var queuePublishers = new List<IQueuePublisher<MessageQueueModel>>();
-                var providerSetting = Configuration["MessageQueueSetting:Provider"];
+                var providerSetting = Configuration[$"{MixAppSettingsSection.MessageQueueSettings}:Provider"];
                 if (string.IsNullOrEmpty(providerSetting))
                 {
                     return default;
@@ -62,7 +62,7 @@ namespace Mix.Queue.Engines
                 switch (Provider)
                 {
                     case MixQueueProvider.AZURE:
-                        var azureSettingPath = Configuration.GetSection("MessageQueueSetting:AzureServiceBus");
+                        var azureSettingPath = Configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:AzureServiceBus");
                         var azureSetting = new AzureQueueSetting();
                         azureSettingPath.Bind(azureSetting);
 
@@ -71,7 +71,7 @@ namespace Mix.Queue.Engines
                                 Provider, azureSetting, topicId, MixEndpointService));
                         break;
                     case MixQueueProvider.GOOGLE:
-                        var googleSettingPath = Configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
+                        var googleSettingPath = Configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:GoogleQueueSetting");
                         var googleSetting = new GoogleQueueSetting();
                         googleSettingPath.Bind(googleSetting);
                         googleSetting.CredentialFile = googleSetting.CredentialFile;
@@ -89,7 +89,7 @@ namespace Mix.Queue.Engines
                     case MixQueueProvider.MIX:
                         if (MixEndpointService.MixMq != null)
                         {
-                            var mixSettingPath = Configuration.GetSection("MessageQueueSetting:Mix");
+                            var mixSettingPath = Configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:Mix");
                             var mixSetting = new MixQueueSetting();
                             mixSettingPath.Bind(mixSetting);
                             queuePublishers.Add(

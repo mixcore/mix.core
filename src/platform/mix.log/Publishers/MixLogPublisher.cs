@@ -12,15 +12,13 @@ namespace Mix.Log.Lib.Publishers
 {
     public class MixLogPublisher : PublisherBase
     {
-        private const string TopicId = MixQueueTopics.MixLog;
-
         public MixLogPublisher(
             IMemoryQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
             MixEndpointService mixEndpointService,
             ILogger<MixLogPublisher> logger,
             IPooledObjectPolicy<RabbitMQ.Client.IModel>? rabbitMQObjectPolicy = null)
-            : base(TopicId, queueService, configuration, mixEndpointService, logger, rabbitMQObjectPolicy)
+            : base(MixQueueTopics.MixLog, queueService, configuration, mixEndpointService, logger, rabbitMQObjectPolicy)
         {
         }
     }
