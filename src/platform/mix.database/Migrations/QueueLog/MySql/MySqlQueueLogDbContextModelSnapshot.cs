@@ -2,33 +2,33 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.QueueLog;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.QueueLog.Postgres
+namespace Mix.Database.Migrations.QueueLog.MySql
 {
-    [DbContext(typeof(PostgresQueueLogDbContext))]
-    partial class PostgresQueueLogDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(MySqlQueueLogDbContext))]
+    partial class MySqlQueueLogDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("Mix.Database.Entities.QueueLog.QueueLog", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("char(36)")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("Action")
                         .HasColumnType("varchar(250)")
@@ -39,7 +39,7 @@ namespace Mix.Database.Migrations.QueueLog.Postgres
                         .HasColumnName("created_by");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetime")
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("DataTypeFullName")
@@ -47,15 +47,15 @@ namespace Mix.Database.Migrations.QueueLog.Postgres
                         .HasColumnName("data_type_full_name");
 
                     b.Property<string>("Exception")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("exception");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
                     b.Property<string>("ModifiedBy")
@@ -67,31 +67,33 @@ namespace Mix.Database.Migrations.QueueLog.Postgres
                         .HasColumnName("note");
 
                     b.Property<string>("ObjectData")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("object_data");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int")
                         .HasColumnName("priority");
 
-                    b.Property<Guid?>("QueueMessageId")
-                        .HasColumnType("uuid")
+                    b.Property<string>("QueueMessageId")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("queue_message_id");
 
                     b.Property<string>("State")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("state")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("state");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("State"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<string>("StringData")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("string_data");
 
                     b.Property<string>("SubscriptionId")
@@ -99,11 +101,11 @@ namespace Mix.Database.Migrations.QueueLog.Postgres
                         .HasColumnName("subscription_id");
 
                     b.Property<string>("Subscriptions")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("subscriptions");
 
                     b.Property<int>("TenantId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("tenant_id");
 
                     b.Property<string>("TopicId")

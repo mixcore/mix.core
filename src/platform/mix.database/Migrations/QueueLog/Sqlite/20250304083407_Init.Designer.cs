@@ -11,14 +11,14 @@ using Mix.Database.Entities.QueueLog;
 namespace Mix.Database.Migrations.QueueLog.Sqlite
 {
     [DbContext(typeof(SqliteQueueLogDbContext))]
-    [Migration("20250123101902_Init")]
+    [Migration("20250304083407_Init")]
     partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
 
             modelBuilder.Entity("Mix.Database.Entities.QueueLog.QueueLog", b =>
                 {
@@ -111,7 +111,7 @@ namespace Mix.Database.Migrations.QueueLog.Sqlite
                     b.HasKey("Id")
                         .HasName("pk_queue_log");
 
-                    b.ToTable("queue_log", (string)null);
+                    b.ToTable("mix_queue_log", (string)null);
                 });
 #pragma warning restore 612, 618
         }

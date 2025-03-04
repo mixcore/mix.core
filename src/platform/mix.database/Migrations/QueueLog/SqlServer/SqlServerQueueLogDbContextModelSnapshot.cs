@@ -2,36 +2,33 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.QueueLog;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.QueueLog.Postgres
+namespace Mix.Database.Migrations.QueueLog.SqlServer
 {
-    [DbContext(typeof(PostgresQueueLogDbContext))]
-    [Migration("20250129125128_Upd")]
-    partial class Upd
+    [DbContext(typeof(SqlServerQueueLogDbContext))]
+    partial class SqlServerQueueLogDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Mix.Database.Entities.QueueLog.QueueLog", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasDefaultValueSql("newid()");
 
                     b.Property<string>("Action")
                         .HasColumnType("varchar(250)")
@@ -42,7 +39,7 @@ namespace Mix.Database.Migrations.QueueLog.Postgres
                         .HasColumnName("created_by");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetime")
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("DataTypeFullName")
@@ -50,15 +47,15 @@ namespace Mix.Database.Migrations.QueueLog.Postgres
                         .HasColumnName("data_type_full_name");
 
                     b.Property<string>("Exception")
-                        .HasColumnType("text")
+                        .HasColumnType("ntext")
                         .HasColumnName("exception");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
                     b.Property<string>("ModifiedBy")
@@ -70,7 +67,7 @@ namespace Mix.Database.Migrations.QueueLog.Postgres
                         .HasColumnName("note");
 
                     b.Property<string>("ObjectData")
-                        .HasColumnType("text")
+                        .HasColumnType("ntext")
                         .HasColumnName("object_data");
 
                     b.Property<int>("Priority")
@@ -78,7 +75,7 @@ namespace Mix.Database.Migrations.QueueLog.Postgres
                         .HasColumnName("priority");
 
                     b.Property<Guid?>("QueueMessageId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("queue_message_id");
 
                     b.Property<string>("State")
@@ -94,7 +91,7 @@ namespace Mix.Database.Migrations.QueueLog.Postgres
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("StringData")
-                        .HasColumnType("text")
+                        .HasColumnType("ntext")
                         .HasColumnName("string_data");
 
                     b.Property<string>("SubscriptionId")
@@ -102,11 +99,11 @@ namespace Mix.Database.Migrations.QueueLog.Postgres
                         .HasColumnName("subscription_id");
 
                     b.Property<string>("Subscriptions")
-                        .HasColumnType("text")
+                        .HasColumnType("ntext")
                         .HasColumnName("subscriptions");
 
                     b.Property<int>("TenantId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("tenant_id");
 
                     b.Property<string>("TopicId")
@@ -116,7 +113,7 @@ namespace Mix.Database.Migrations.QueueLog.Postgres
                     b.HasKey("Id")
                         .HasName("pk_queue_log");
 
-                    b.ToTable("queue_log", (string)null);
+                    b.ToTable("mix_queue_log", (string)null);
                 });
 #pragma warning restore 612, 618
         }

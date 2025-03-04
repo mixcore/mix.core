@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.QueueLog.Sqlite
+namespace Mix.Database.Migrations.QueueLog.Postgres
 {
     /// <inheritdoc />
     public partial class Init : Migration
@@ -12,11 +12,11 @@ namespace Mix.Database.Migrations.QueueLog.Sqlite
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "queue_log",
+                name: "mix_queue_log",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()"),
-                    queue_message_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    queue_message_id = table.Column<Guid>(type: "uuid", nullable: true),
                     topic_id = table.Column<string>(type: "varchar(250)", nullable: true),
                     subscription_id = table.Column<string>(type: "varchar(250)", nullable: true),
                     action = table.Column<string>(type: "varchar(250)", nullable: true),
@@ -27,14 +27,14 @@ namespace Mix.Database.Migrations.QueueLog.Sqlite
                     data_type_full_name = table.Column<string>(type: "varchar(250)", nullable: true),
                     note = table.Column<string>(type: "varchar(250)", nullable: true),
                     state = table.Column<string>(type: "varchar(50)", nullable: false),
-                    tenant_id = table.Column<int>(type: "INTEGER", nullable: false),
-                    created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
-                    last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    tenant_id = table.Column<int>(type: "integer", nullable: false),
+                    created_date_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    last_modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     created_by = table.Column<string>(type: "varchar(250)", nullable: true),
                     modified_by = table.Column<string>(type: "varchar(250)", nullable: true),
-                    priority = table.Column<int>(type: "integer", nullable: false),
+                    priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false),
-                    is_deleted = table.Column<bool>(type: "INTEGER", nullable: false)
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,7 +46,7 @@ namespace Mix.Database.Migrations.QueueLog.Sqlite
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "queue_log");
+                name: "mix_queue_log");
         }
     }
 }

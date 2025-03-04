@@ -18,7 +18,7 @@ namespace Mix.Database.Services.MixGlobalSettings
 {
     public class DatabaseService : GlobalSettingServiceBase<DatabaseConfigurations>
     {
-        public MixDatabaseProvider DatabaseProvider => AppSettings.DatabaseProvider;
+        public MixDatabaseProvider DatabaseProvider =>  AppSettings.DatabaseProvider;
         protected IHttpContextAccessor HttpContextAccessor;
 
         public DatabaseService(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixGlobalSetting settings)
