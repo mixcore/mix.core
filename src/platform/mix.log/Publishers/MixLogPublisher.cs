@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Mix.Constant.Constants;
@@ -18,7 +18,7 @@ namespace Mix.Log.Lib.Publishers
             IConfiguration configuration,
             MixEndpointService mixEndpointService,
             ILogger<MixLogPublisher> logger,
-            RabbitModelPooledObjectPolicy? rabbitMQObjectPolicy = null)
+            IPooledObjectPolicy<RabbitMQ.Client.IModel>? rabbitMQObjectPolicy = null)
             : base(MixQueueTopics.MixLog, queueService, configuration, mixEndpointService, logger, rabbitMQObjectPolicy)
         {
         }
