@@ -23,7 +23,7 @@ namespace Mix.Storage.Lib.Engines.AzureStorage
             : base(httpContext, configuration, cmsUow)
         {
             _settings = new();
-            Configuration.Bind("StorageSetting:AzureStorageSetting", _settings);
+            Configuration.Bind("StorageSettings:AzureStorageSetting", _settings);
             _blobClient = new BlobContainerClient(_settings.AzureWebJobStorage, _settings.ContainerName);
             if (string.IsNullOrEmpty(_settings.CdnUrl))
             {

@@ -100,10 +100,10 @@
                 {
                     "title": "Create New",
                     "icon": "mi mi-Add",
-                    "path": "/admin/mix-database-data/create?mixDatabaseName=metadata&mixDatabaseTitle=Metadata"
+                    "path": "/admin/mix-database-data/create?mixDatabaseName=mix_metadata&mixDatabaseTitle=Metadata"
                 },
                 {
-                    "path": "/admin/mix-database-data/list?mixDatabaseName=Metadata&mixDatabaseTitle=Metadata&isGroup=true",
+                    "path": "/admin/mix-database-data/list?mixDatabaseName=mix_metadata&mixDatabaseTitle=Metadata&isGroup=true",
                     "title": "List",
                     "icon": "mi mi-List"
                 }
@@ -212,10 +212,10 @@
                 {
                     "title": "Create New",
                     "icon": "mi mi-Add",
-                    "path": "/admin/mix-database-data/create?mixDatabaseId=2&mixDatabaseName=sysNavigation&mixDatabaseTitle=Navigation&dataId=default"
+                    "path": "/admin/mix-database-data/create?mixDatabaseId=2&mixDatabaseName=mix_navigation&mixDatabaseTitle=Navigation&dataId=default"
                 },
                 {
-                    "path": "/admin/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sysNavigation&mixDatabaseTitle=Navigation",
+                    "path": "/admin/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=mix_navigation&mixDatabaseTitle=Navigation",
 
                     "title": "List",
                     "icon": "mi mi-List"
@@ -268,7 +268,7 @@
                     "icon": "mi mi-GuestUser"
                 },
                 {
-                    "path": "/admin/mix-database-data/list?mixDatabaseId=6&mixDatabaseName=sysPermission&mixDatabaseTitle=Permission",
+                    "path": "/admin/mix-database-data/list?mixDatabaseId=6&mixDatabaseName=mix_permission&mixDatabaseTitle=Permission",
                     "title": "Permission",
                     "icon": "mi mi-Permissions"
                 }
@@ -332,7 +332,7 @@
                     "path": "/admin/store/list"
                 },
                 {
-                    "path": "/admin/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sysNavigation&mixDatabaseTitle=Navigation",
+                    "path": "/admin/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=mix_navigation&mixDatabaseTitle=Navigation",
 
                     "title": "Navigations",
                     "icon": "mi mi-ButtonMenu"
@@ -348,7 +348,7 @@
                     "icon": "mi mi-Wheel"
                 },
                 {
-                    "path": "/admin/mix-database/list",
+                    "path": "/admin/mix-database/list?mixDatabaseContextId=1",
                     "title": "Databases",
                     "icon": "mi mi-Wheel"
                 }
@@ -867,7 +867,7 @@
                     "controller": "PermissionController"
                 },
                 {
-                    "path": "/admin/mix-database-data/list?mixDatabaseId=6&mixDatabaseName=sysPermission&mixDatabaseTitle=Permission",
+                    "path": "/admin/mix-database-data/list?mixDatabaseId=6&mixDatabaseName=mix_permission&mixDatabaseTitle=Permission",
                     "templatePath": "/mix-app/views/app-portal/pages/permission/list.html",
                     "controller": "PermissionController"
                 },

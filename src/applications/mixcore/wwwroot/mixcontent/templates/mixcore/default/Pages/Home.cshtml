@@ -1,0 +1,29 @@
+@{
+    var highlighMdl = Model.GetModule("productHighlight");
+    var ourTeamMdl = Model.GetModule("ourTeam");
+    var contactUsMdl = Model.GetModule("workWithUs");
+    var latestBlogPost = Model.GetModule("latestBlogPosts");
+
+}
+
+@await Html.PartialAsync("../Layouts/MainNavigation.cshtml", null, null)
+@await Html.PartialAsync("../Widgets/PageHeroBanner.cshtml", Model, null)
+<div class="main main-raised">
+    <div class="section section-basic">
+        <div class="container">
+            @if(highlighMdl != null){
+                @await Html.PartialAsync(highlighMdl.Template.FilePath, highlighMdl, null);
+            }
+            @if(ourTeamMdl != null){
+                 @await Html.PartialAsync(ourTeamMdl.Template.FilePath, ourTeamMdl, null);
+            }
+            @if(contactUsMdl != null){
+                @await Html.PartialAsync(contactUsMdl.Template.FilePath, contactUsMdl, null);
+            }
+            <!-- @Html.Raw(Model.Content) -->
+        </div>
+    </div>
+</div>
+@await Html.PartialAsync("../Widgets/LatestBlogPosts.cshtml", null, null);
+@await Html.PartialAsync("../Layouts/Footer.cshtml", null, null);
+

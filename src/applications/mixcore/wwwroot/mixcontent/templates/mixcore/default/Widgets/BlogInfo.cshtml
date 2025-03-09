@@ -1,0 +1,45 @@
+<div class="section section-blog-info">
+    <div class="row">
+        <div class="col-md-8 ml-auto mr-auto">
+        <div class="row">
+            <div class="col-md-6">
+            <div class="container blog-tags">
+                Tags:
+                @*<partial name="PostTags.cshtml" model="Model.ListTag"/>*@
+            </div>
+            </div>
+            <div class="col-md-6">
+            <!-- <a href="#pablo" class="btn btn-google btn-round float-right">
+                <i class="fa fa-google"></i> 232
+            </a>
+            <a href="#pablo" class="btn btn-twitter btn-round float-right">
+                <i class="fa fa-twitter"></i> 910
+            </a>
+            <a href="#pablo" class="btn btn-facebook btn-round float-right">
+                <i class="fa fa-facebook-square"></i> 872
+            </a> -->
+            </div>
+        </div>
+        <hr>
+        <div class="container card card-profile card-plain">
+            <div class="row">
+            <div class="col-md-2">
+                <div class="card-avatar">
+                <a href="#pablo">
+                    <img src="/mix-app/assets/img/user.png" class="img img-raised rounded-circle img-fluid" width="200"/>
+                </a>
+                <div class="ripple-container"></div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h4 class="card-title">@Model.CreatedBy - Published on @Model.CreatedDateTime</h4>
+                <p class="description">I've been trying to figure out the bed design for the master bedroom at our Hidden Hills compound...I like good music from Youtube.</p>
+            </div>
+            <!-- <div class="col-md-2">
+                <button type="button" class="btn btn-default pull-right btn-round">Follow</button>
+            </div> --> 
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
