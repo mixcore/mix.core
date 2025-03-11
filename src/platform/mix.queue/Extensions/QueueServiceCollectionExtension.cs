@@ -70,7 +70,7 @@ namespace Mix.Queue.Extensions
             builder.Services.Configure<RabitMqQueueSetting>(rabbitConfig);
 
             builder.Services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
-            builder.Services.AddSingleton<IPooledObjectPolicy<IModel>, RabbitModelPooledObjectPolicy>();
+            builder.Services.AddSingleton<RabbitModelPooledObjectPolicy>();
 
             return builder.Services;
         }

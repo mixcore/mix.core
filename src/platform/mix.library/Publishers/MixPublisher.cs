@@ -19,7 +19,7 @@ namespace Mix.Lib.Publishers
             IConfiguration configuration, IWebHostEnvironment environment,
             MixEndpointService mixEndpointService,
             ILogger<MixRepoDbPublisher> logger,
-            IPooledObjectPolicy<RabbitMQ.Client.IModel>? rabbitMQObjectPolicy = null)
+            IPooledObjectPolicy<RabbitMQ.Client.IChannel>? rabbitMQObjectPolicy = null)
             : base(topicId, queueService, configuration, mixEndpointService, logger, rabbitMQObjectPolicy)
         {
         }

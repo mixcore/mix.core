@@ -8,12 +8,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="GraphQL.Server.Ui.Playground" Version="8.0.2" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+	  <PackageReference Include="GraphQL.Server.Ui.Playground" Version="8.2.0" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
 	     <PrivateAssets>all</PrivateAssets>
 	</PackageReference>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="9.0.0" />
-	  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore" Version="8.0.5" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="9.0.2" />
+	  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore" Version="9.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

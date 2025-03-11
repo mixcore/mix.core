@@ -21,7 +21,7 @@ namespace Mix.Lib.Subscribers
             IMixTenantService mixTenantService,
             IMemoryQueueService<MessageQueueModel> queueService,
             ILogger<MixViewModelChangedSubscriber> logger,
-            IPooledObjectPolicy<RabbitMQ.Client.IModel>? rabbitMQObjectPolicy = null)
+            IPooledObjectPolicy<RabbitMQ.Client.IChannel>? rabbitMQObjectPolicy = null)
             : base(TopicId, nameof(MixDbCommandSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMQObjectPolicy)
         {
             _mixTenantService = mixTenantService;

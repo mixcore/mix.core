@@ -5,6 +5,7 @@ using Microsoft.Extensions.ObjectPool;
 using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Exceptions;
 using Mix.Mq.Lib.Models;
+using Mix.Queue.Engines.RabbitMQ;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
 using RabbitMQ.Client;
@@ -27,7 +28,7 @@ namespace Mix.Queue.Engines
         protected readonly IConfiguration Configuration;
         protected readonly MixEndpointService MixEndpointService;
         protected readonly ILogger<PublisherBase> ILogger;
-        protected readonly IPooledObjectPolicy<IModel>? RabbitMqObjectPolicy;
+        protected readonly IPooledObjectPolicy<IChannel>? RabbitMqObjectPolicy;
 
         protected PublisherBase(
             string topicId,
@@ -35,7 +36,7 @@ namespace Mix.Queue.Engines
             IConfiguration configuration,
             MixEndpointService mixEndpointService,
             ILogger<PublisherBase> logger,
-            IPooledObjectPolicy<IModel>? rabbitMQObjectPolicy = null)
+            IPooledObjectPolicy<IChannel>? rabbitMQObjectPolicy = null)
         {
             _topicId = topicId;
             ILogger = logger;

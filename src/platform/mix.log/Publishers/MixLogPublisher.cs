@@ -6,6 +6,7 @@ using Mix.Database.Services.MixGlobalSettings;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
+using Mix.Queue.Engines.RabbitMQ;
 using Mix.Queue.Interfaces;
 
 namespace Mix.Log.Lib.Publishers
@@ -17,7 +18,7 @@ namespace Mix.Log.Lib.Publishers
             IConfiguration configuration,
             MixEndpointService mixEndpointService,
             ILogger<MixLogPublisher> logger,
-            IPooledObjectPolicy<RabbitMQ.Client.IModel>? rabbitMQObjectPolicy = null)
+            RabbitModelPooledObjectPolicy? rabbitMQObjectPolicy = null)
             : base(MixQueueTopics.MixLog, queueService, configuration, mixEndpointService, logger, rabbitMQObjectPolicy)
         {
         }

@@ -16,37 +16,37 @@ namespace Mix.Queue.Engines.RabitMQ
     public class RabitMQPublisher<T> : IQueuePublisher<T>
         where T : MessageQueueModel
     {
-        private DefaultObjectPool<IModel> _objectPool;
+        private DefaultObjectPool<IChannel> _objectPool;
         private readonly string _topicId;
 
-        public RabitMQPublisher(IPooledObjectPolicy<IModel> objectPolicy, string topicId)
+        public RabitMQPublisher(IPooledObjectPolicy<IChannel> objectPolicy, string topicId)
         {
             _topicId = topicId;
             InitializeQueue(objectPolicy);
         }
 
-        private void InitializeQueue(IPooledObjectPolicy<IModel> objectPolicy)
+        private void InitializeQueue(IPooledObjectPolicy<IChannel> objectPolicy)
         {
-            _objectPool = new DefaultObjectPool<IModel>(objectPolicy, Environment.ProcessorCount * 2);
+            _objectPool = new DefaultObjectPool<IChannel>(objectPolicy, Environment.ProcessorCount * 2);
         }
 
-        public Task SendMessage(T message)
+        public async Task SendMessage(T message)
         {
             var channel = _objectPool.Get();
             try
             {
                 var sendBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
 
-                var properties = channel.CreateBasicProperties();
+                var properties = new BasicProperties();
                 properties.Persistent = true;
 
-                channel.BasicPublish(
+                await channel.BasicPublishAsync(
                     exchange: _topicId,
                     routingKey: $"{_topicId}",
+                    true,
                     basicProperties: properties,
                     body: sendBytes);
 
-                return Task.CompletedTask;
             }
             catch
             {

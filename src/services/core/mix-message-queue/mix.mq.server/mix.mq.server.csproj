@@ -18,11 +18,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Grpc.AspNetCore" Version="2.66.0" />
-		<PackageReference Include="Google.Protobuf" Version="3.28.2" />
-		<PackageReference Include="Grpc.AspNetCore.Server" Version="2.66.0" />
-		<PackageReference Include="Grpc.AspNetCore.Web" Version="2.66.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.70.0" />
+		<PackageReference Include="Google.Protobuf" Version="3.30.0" />
+		<PackageReference Include="Grpc.AspNetCore.Server" Version="2.70.0" />
+		<PackageReference Include="Grpc.AspNetCore.Web" Version="2.70.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.2" />
 	</ItemGroup>
 
 	<ItemGroup>

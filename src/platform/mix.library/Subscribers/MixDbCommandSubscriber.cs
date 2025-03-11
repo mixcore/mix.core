@@ -30,7 +30,7 @@ namespace Mix.Lib.Subscribers
             IConfiguration configuration,
             IMemoryQueueService<MessageQueueModel> queueService,
             ILogger<MixDbCommandSubscriber> logger,
-            IPooledObjectPolicy<RabbitMQ.Client.IModel>? rabbitMQObjectPolicy = null)
+            IPooledObjectPolicy<RabbitMQ.Client.IChannel>? rabbitMQObjectPolicy = null)
             : base(TopicId, nameof(MixDbCommandSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMQObjectPolicy)
         {
             _allowActions = [.. Enum.GetNames(typeof(MixDbCommandQueueAction))];

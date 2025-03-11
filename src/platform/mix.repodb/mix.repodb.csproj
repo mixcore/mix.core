@@ -20,6 +20,7 @@
     <PackageReference Include="RepoDb.PostgreSql" Version="1.13.1" />
     <PackageReference Include="RepoDb.Sqlite.Microsoft" Version="1.13.1" />
     <PackageReference Include="RepoDb.SqlServer" Version="1.13.1" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
   </ItemGroup>
 
   <ItemGroup>
