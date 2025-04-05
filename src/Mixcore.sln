@@ -1,4 +1,4 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -134,16 +134,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.automation.api", "services\mix.automation\mix.automation.api\mix.automation.api.csproj", "{003DC8DF-59D4-4E31-8BF5-397AFB3654B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.automation.lib", "services\mix.automation\mix.automation.lib\mix.automation.lib.csproj", "{820D972E-A0DB-4014-8F7A-48952140D50C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platform", "platform", "{C83AA9EA-6F69-4107-898A-35A9A7A9B67E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{2609CDA8-69FE-4C84-B162-6F2D09BAF06C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mix-heart", "mix-heart", "{93ED8319-4F00-4986-BC0D-CDB11F862D8D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CEAC9BE3-496D-4E39-B09E-65BA3A3779B3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.heart", "platform\core\mix-heart\src\mix.heart\mix.heart.csproj", "{BBD6A749-DE24-438A-B6C5-ADC066BCD9C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -315,10 +305,6 @@ Global
 		{820D972E-A0DB-4014-8F7A-48952140D50C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{820D972E-A0DB-4014-8F7A-48952140D50C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{820D972E-A0DB-4014-8F7A-48952140D50C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BBD6A749-DE24-438A-B6C5-ADC066BCD9C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BBD6A749-DE24-438A-B6C5-ADC066BCD9C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BBD6A749-DE24-438A-B6C5-ADC066BCD9C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BBD6A749-DE24-438A-B6C5-ADC066BCD9C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -387,10 +373,6 @@ Global
 		{7F7A886F-E0E7-4CF1-B303-E2789FB0421E} = {C0A05428-767E-46C5-A31F-0D220E41F7C5}
 		{003DC8DF-59D4-4E31-8BF5-397AFB3654B7} = {7F7A886F-E0E7-4CF1-B303-E2789FB0421E}
 		{820D972E-A0DB-4014-8F7A-48952140D50C} = {7F7A886F-E0E7-4CF1-B303-E2789FB0421E}
-		{2609CDA8-69FE-4C84-B162-6F2D09BAF06C} = {C83AA9EA-6F69-4107-898A-35A9A7A9B67E}
-		{93ED8319-4F00-4986-BC0D-CDB11F862D8D} = {2609CDA8-69FE-4C84-B162-6F2D09BAF06C}
-		{CEAC9BE3-496D-4E39-B09E-65BA3A3779B3} = {93ED8319-4F00-4986-BC0D-CDB11F862D8D}
-		{BBD6A749-DE24-438A-B6C5-ADC066BCD9C7} = {CEAC9BE3-496D-4E39-B09E-65BA3A3779B3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0143C230-7F40-44B2-8BA3-EF5B92D55848}
