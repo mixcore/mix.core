@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mixcore
+  namespace: mixcore
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+    name: http
+  - port: 443
+    targetPort: 443
+    name: https
+  selector:
+    app: mixcore
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mixcore-sqlserver
+  namespace: mixcore
+spec:
+  ports:
+  - port: 1433
+    targetPort: 1433
+  selector:
+    app: mixcore-sqlserver
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mixcore-mysql
+  namespace: mixcore
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+  selector:
+    app: mixcore-mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mixcore-redis
+  namespace: mixcore
+spec:
+  ports:
+  - port: 6379
+    targetPort: 6379
+  selector:
+    app: mixcore-redis 

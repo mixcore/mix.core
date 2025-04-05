@@ -1,0 +1,164 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mixcore
+  namespace: mixcore
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mixcore
+  template:
+    metadata:
+      labels:
+        app: mixcore
+    spec:
+      containers:
+      - name: mixcore
+        image: mixcore/mix.core:latest
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        envFrom:
+        - configMapRef:
+            name: mixcore-config
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "1"
+            memory: "2Gi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mixcore-sqlserver
+  namespace: mixcore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mixcore-sqlserver
+  template:
+    metadata:
+      labels:
+        app: mixcore-sqlserver
+    spec:
+      containers:
+      - name: sqlserver
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        ports:
+        - containerPort: 1433
+        env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mixcore-secrets
+              key: sqlserver-password
+        volumeMounts:
+        - name: sqlserver-data
+          mountPath: /var/opt/mssql
+        resources:
+          requests:
+            cpu: "1"
+            memory: "2Gi"
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+      volumes:
+      - name: sqlserver-data
+        persistentVolumeClaim:
+          claimName: mixcore-sqlserver-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mixcore-mysql
+  namespace: mixcore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mixcore-mysql
+  template:
+    metadata:
+      labels:
+        app: mixcore-mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mixcore-secrets
+              key: mysql-password
+        - name: MYSQL_DATABASE
+          value: "mixcore"
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "1"
+            memory: "2Gi"
+      volumes:
+      - name: mysql-data
+        persistentVolumeClaim:
+          claimName: mixcore-mysql-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mixcore-redis
+  namespace: mixcore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mixcore-redis
+  template:
+    metadata:
+      labels:
+        app: mixcore-redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7.0
+        ports:
+        - containerPort: 6379
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+      volumes:
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: mixcore-redis-pvc 
