@@ -30,6 +30,7 @@ using Mix.Mixdb.Helpers;
 using Mix.Database.Services.MixGlobalSettings;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Extensions;
+using MySqlX.XDevAPI.Common;
 
 namespace Mix.Mixdb.Services
 {
@@ -98,6 +99,14 @@ namespace Mix.Mixdb.Services
         {
             await LoadMixDb(tableName);
             return await GetSingleByAsync(tableName, new MixQueryField(_fieldNameService.Id, objId, MixCompareOperator.Equal), selectColumns, cancellationToken);
+        }
+        
+        public async Task<T?> GetByIdAsync<T>(string tableName, object objId, string? selectColumns, CancellationToken cancellationToken)
+            where T : class
+        {
+            await LoadMixDb(tableName);
+            var obj = await GetSingleByAsync(tableName, new MixQueryField(_fieldNameService.Id, objId, MixCompareOperator.Equal), selectColumns, cancellationToken);
+            return obj?.ToObject<T>();
         }
 
         public async Task<JObject?> GetSingleByAsync(string tableName, MixQueryField query, string? selectColumns, CancellationToken cancellationToken)
@@ -336,6 +345,7 @@ namespace Mix.Mixdb.Services
         {
             while (!cancellationToken.IsCancellationRequested)
             {
+                req.Queries ??= new();
                 var parentId = _fieldNameService.NamingConvention == MixDatabaseNamingConvention.SnakeCase
                     ? $"{rel.SourceDatabaseName}_id"
                     : $"{rel.SourceDatabaseName}Id";
@@ -928,23 +938,29 @@ namespace Mix.Mixdb.Services
         {
             if (_mixDb != null && _mixDb.SystemName == tableName)
             {
+                _fieldNameService = new FieldNameService(_mixDb.NamingConvention);
                 return;
             }
             string name = $"{typeof(MixDbDatabaseViewModel).FullName}_{tableName}";
             _mixDb = await GetMixDb(tableName);
+            if (_mixDb == null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, "Invalid table name");
+            }
             _fieldNameService = new FieldNameService(_mixDb.NamingConvention);
         }
 
-        private async Task<MixDbDatabaseViewModel> GetMixDb(string tableName)
+        private async Task<MixDbDatabaseViewModel?> GetMixDb(string tableName)
         {
+            string name = $"{typeof(MixDbDatabaseViewModel).FullName}_{tableName}";
             return await _memoryCache.TryGetValueAsync(
-                tableName,
+                name,
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
                     return MixDbDatabaseViewModel.GetRepository(_uow, _cacheSrv).GetSingleAsync(m => m.SystemName == tableName);
                 }
-                ) ?? throw new NullReferenceException(tableName);
+                );
         }
 
         #endregion

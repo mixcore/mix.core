@@ -25,7 +25,8 @@ namespace Microsoft.Extensions.DependencyInjection
             
             builder.Services.TryAddScoped<EmailService>();
             builder.Services.TryAddScoped<IMixEdmService, MixEdmService>();
-            
+            builder.Services.AddMixCache(builder.Configuration);
+            builder.Services.TryAddSingleton<IMixTenantService, MixTenantService>();
             return builder;
         }
     }

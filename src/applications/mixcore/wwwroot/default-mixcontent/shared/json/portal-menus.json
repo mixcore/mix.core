@@ -15,6 +15,13 @@
             "subMenus": []
         },
         {
+            "path": "/admin/workflow-trigger",
+            "icon": "mi mi-Tiles",
+            "svg": "tabler-icon-smart-home.svg",
+            "title": "Workflow Trigger",
+            "subMenus": []
+        },
+        {
             "title": "Tenants",
             "path": "#",
             "icon": "mi mi-ReadingList",
@@ -440,6 +447,21 @@
                     "path": "/admin/scheduler/details/:name",
                     "templatePath": "/mix-app/views/app-portal/pages/scheduler/details.html",
                     "controller": "SchedulerController"
+                },
+                {
+                    "path": "/admin/workflow-trigger",
+                    "templatePath": "/mix-app/views/app-portal/pages/workflow-trigger/list.html",
+                    "controller": "WorkflowTriggerController"
+                },
+                {
+                    "path": "/admin/workflow-trigger/create",
+                    "templatePath": "/mix-app/views/app-portal/pages/workflow-trigger/details.html",
+                    "controller": "WorkflowTriggerController"
+                },
+                {
+                    "path": "/admin/workflow-trigger/details/:id",
+                    "templatePath": "/mix-app/views/app-portal/pages/workflow-trigger/details.html",
+                    "controller": "WorkflowTriggerController"
                 },
                 {
                     "path": "/admin/import",

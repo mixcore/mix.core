@@ -37,7 +37,7 @@ if (!builder.Environment.IsLocal())
 {
     builder.Services.AddEndpointsApiExplorer();
 }
-if (isInit)
+if (builder.Configuration.IsInit())
 {
     builder.Services.AddCors(options =>
     {
@@ -55,7 +55,6 @@ else
 }
 
 var app = builder.Build();
-app.MapDefaultEndpoints();
 
 Configure(app, builder.Environment, builder.Configuration);
 

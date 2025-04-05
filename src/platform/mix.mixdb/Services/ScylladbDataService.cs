@@ -695,16 +695,17 @@ namespace Mix.Mixdb.Services
             _fieldNameService = new FieldNameService(_mixDb.NamingConvention);
         }
 
-        private async Task<MixDbDatabaseViewModel> GetMixDb(string tableName)
+        private async Task<MixDbDatabaseViewModel?> GetMixDb(string tableName)
         {
+            string name = $"{typeof(MixDbDatabaseViewModel).FullName}_{tableName}";
             return await _memoryCache.TryGetValueAsync(
-                tableName,
+                name,
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
                     return MixDbDatabaseViewModel.GetRepository(_cmsUow, _cacheSrv).GetSingleAsync(m => m.SystemName == tableName);
                 }
-                ) ?? throw new NullReferenceException(tableName);
+                );
         }
 
         public async Task<object> ExtractIdAsync(string tableName, JObject obj)
@@ -723,6 +724,12 @@ namespace Mix.Mixdb.Services
         public Task<List<JObject>?> GetListByParentAsync(string tableName, MixContentType parentType, object parentId, List<MixSortByColumn>? sortByFields = null, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<T?> GetByIdAsync<T>(string tableName, object objId, string? selectColumns, CancellationToken cancellationToken) where T : class
+        {
+            var obj = await GetSingleByAsync(tableName, new MixQueryField(_fieldNameService.Id, objId, MixCompareOperator.Equal), selectColumns, cancellationToken);
+            return obj?.ToObject<T>();
         }
 
 

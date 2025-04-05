@@ -27,8 +27,14 @@ namespace Mix.Quartz.Jobs
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                await ExceptionHandler(ex);
             }
+        }
+
+        public virtual Task ExceptionHandler(Exception ex)
+        {
+            Console.WriteLine(ex);
+            return Task.CompletedTask;
         }
 
         public string JobName { get; set; }

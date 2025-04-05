@@ -159,6 +159,7 @@ namespace Mix.Service.Services
                    })
                    .WithAutomaticReconnect()
                    .Build();
+                
                 Connection.Closed += async (error) =>
                 {
                     await Task.Delay(new Random().Next(0, 5) * 1000);

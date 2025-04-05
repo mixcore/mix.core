@@ -37,31 +37,52 @@ namespace Microsoft.Extensions.DependencyInjection
                         AddJsonStream(new MemoryStream(jsonString));
                 }
                 builder.Configuration.Build();
-
-                builder.Services.TryAddSingleton(
+                if (settings.Any(m => m.SystemName == "endpoints"))
+                {
+                    builder.Services.TryAddSingleton(
                     m => new MixEndpointService(
                         builder.Configuration,
                         settings.First(m => m.SystemName == "endpoints")));
-                builder.Services.TryAddSingleton(
+                }
+                if (settings.Any(m => m.SystemName == "portal"))
+                {
+                    builder.Services.TryAddSingleton(
                     m => new PortalConfigService(
                         builder.Configuration,
                         settings.First(m => m.SystemName == "portal")));
-                builder.Services.TryAddSingleton(
-                    m => new AuthConfigService(
-                        builder.Configuration,
-                        settings.First(m => m.SystemName == "authentication")));
-                builder.Services.TryAddSingleton(m => new GlobalSettingsService(
+                }
+                if (settings.Any(m => m.SystemName == "authentication"))
+                {
+                    builder.Services.TryAddSingleton(
+                        m => new AuthConfigService(
+                            builder.Configuration,
+                            settings.First(m => m.SystemName == "authentication")));
+                }
+                if (settings.Any(m => m.SystemName == "global"))
+                {
+                    builder.Services.TryAddSingleton(m => new GlobalSettingsService(
                     builder.Configuration,
                     settings.First(m => m.SystemName == "global")));
-                builder.Services.TryAddSingleton(m => new DatabaseService(
+                }
+                if (settings.Any(m => m.SystemName == "database"))
+                {
+                    builder.Services.TryAddSingleton(m => new DatabaseService(
                    builder.Services.GetService<IHttpContextAccessor>(),
                    builder.Configuration,
                    settings.First(m => m.SystemName == "database")));
-
-                builder.Services.TryAddSingleton(m => new SmtpConfigService(builder.Configuration, settings.First(m => m.SystemName == "smtp")));
-                builder.Services.TryAddSingleton(m => new MixHeartConfigService(builder.Configuration, settings.First(m => m.SystemName == "mix_heart")));
-                builder.Services.TryAddSingleton(m => new IPSecurityConfigService(builder.Configuration, settings.First(m => m.SystemName == "ip")));
-                
+                }
+                if (settings.Any(m => m.SystemName == "smtp"))
+                {
+                    builder.Services.TryAddSingleton(m => new SmtpConfigService(builder.Configuration, settings.First(m => m.SystemName == "smtp")));
+                }
+                if (settings.Any(m => m.SystemName == "mix_heart"))
+                {
+                    builder.Services.TryAddSingleton(m => new MixHeartConfigService(builder.Configuration, settings.First(m => m.SystemName == "mix_heart")));
+                }
+                if (settings.Any(m => m.SystemName == "ip"))
+                {
+                    builder.Services.TryAddSingleton(m => new IPSecurityConfigService(builder.Configuration, settings.First(m => m.SystemName == "ip")));
+                }
                 builder.Services.TryAddSingleton<MixPermissionService>();
                 return builder;
             }
