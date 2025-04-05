@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Mix.Automation.Api</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\applications\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\mix.automation.lib\mix.automation.lib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Protos\arduino.proto">
+      <GrpcServices>Client</GrpcServices>
+    </None>
+  </ItemGroup>
+
+</Project>

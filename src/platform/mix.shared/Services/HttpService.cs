@@ -35,9 +35,14 @@ namespace Mix.Shared.Services
             switch (method)
             {
                 case "GET":
-                    return await GetAsync<JObject>(request.RequestUrl, cancellationToken: cancellationToken);
+                    return await GetAsync<JObject>(
+                        request.RequestUrl, 
+                        queryParams: request.QueryParams,
+                        bearerToken: request.BearerToken,
+                        requestHeaders: request.Headers,
+                        cancellationToken: cancellationToken);
                 case "POST":
-                    return await PostAsync<JObject, JObject>(request.RequestUrl, request.Body, cancellationToken: cancellationToken);
+                    return await PostAsync<JObject, JObject>(request.RequestUrl, request.Body,bearerToken: request.BearerToken, requestHeaders: request.Headers, cancellationToken: cancellationToken);
             }
             return default;
         }

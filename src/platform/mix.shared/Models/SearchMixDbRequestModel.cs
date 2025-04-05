@@ -32,7 +32,7 @@ namespace Mix.Shared.Models
             string? requestedBy = default)
         {
             TableName = tableName;
-            Queries = queries.ToList();
+            Queries = queries?.ToList();
             Paging = paging;
             RequestedBy = requestedBy;
         }
@@ -40,7 +40,7 @@ namespace Mix.Shared.Models
         public SearchMixDbRequestModel Clone()
         {
             var result = ReflectionHelper.CloneObject(this);
-            result.Queries = Queries.ToList();
+            result.Queries = Queries?.ToList();
             return result;
         }
 
@@ -48,7 +48,7 @@ namespace Mix.Shared.Models
         public MixConjunction Conjunction { get; set; } = MixConjunction.And;
         public string TableName { get; set; }
         public string? RequestedBy { get; set; }
-        public List<MixQueryField> Queries { get; set; }
+        public List<MixQueryField>? Queries { get; set; }
         public PagingRequestModel Paging { get; set; }
         public List<SearchMixDbRequestModel> RelatedDataRequests { get; set; }
     }

@@ -116,10 +116,6 @@ namespace Mix.Lib.Base
             cancellationToken.ThrowIfCancellationRequested();
             return RestApiService.SaveManyHandler(data, cancellationToken);
         }
-        private async Task RemoveCacheHandler(MixCacheService cacheService, TPrimaryKey id)
-        {
-            await cacheService.RemoveCacheAsync(id, typeof(TEntity).FullName);
-        }
 
         #endregion
 

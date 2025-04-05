@@ -231,22 +231,15 @@ namespace Mix.Mixdb.Services
         #region Helpers
         protected async Task<MixDbDatabaseViewModel> GetMixDatabase(string tableName)
         {
+            string name = $"{typeof(MixDbDatabaseViewModel).FullName}_{tableName}";
             var result = await _memoryCache.TryGetValueAsync(
-                tableName,
-                async cache =>
+                name,
+                cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    var db = await MixDbDatabaseViewModel.GetRepository(_cmsUow, CacheService)
-                        .GetSingleAsync(m => m.SystemName == tableName);
-                    if (db != null)
-                    {
-                        db.DatabaseProvider = db.MixDatabaseContext != null
-                        ? db.MixDatabaseContext.DatabaseProvider
-                        : _databaseService.DatabaseProvider;
-                    }
-                    return db;
+                    return MixDbDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
                 }
-            );
+                );
             if (result == null)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Invalid table name");

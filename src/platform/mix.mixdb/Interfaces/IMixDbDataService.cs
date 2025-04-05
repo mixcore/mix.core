@@ -44,6 +44,6 @@ namespace Mix.Mixdb.Interfaces
         object? ParseObjectValueToDbType(MixDataType? dataType, JToken value);
         void SetDbConnection(UnitOfWorkInfo<MixCmsContext> uow);
         Task<object> ExtractIdAsync(string tableName, JObject obj);
-
+        Task<T?> GetByIdAsync<T>(string tableName, object objId, string? selectColumns, CancellationToken cancellationToken) where T : class;
     }
 }
