@@ -2,17 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.AuditLog;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace Mix.Database.Migrations.AuditLog.Postgres
 {
     [DbContext(typeof(PostgresAuditLogDbContext))]
-    [Migration("20250304082709_Init")]
+    [Migration("20250331040444_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -21,94 +21,93 @@ namespace Mix.Database.Migrations.AuditLog.Postgres
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Mix.Database.Entities.AuditLog.AuditLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("(uuid())");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasColumnName("id")
+                    .HasDefaultValueSql("gen_random_uuid()");
 
-                    b.Property<string>("Body")
-                        .HasColumnType("longtext")
-                        .HasColumnName("body");
+                b.Property<string>("Body")
+                    .HasColumnType("text")
+                    .HasColumnName("body");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("created_by");
+                b.Property<string>("CreatedBy")
+                    .HasColumnType("varchar(250)")
+                    .HasColumnName("created_by");
 
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime")
-                        .HasColumnName("created_date_time");
+                b.Property<DateTime>("CreatedDateTime")
+                    .HasColumnType("timestamp with time zone")
+                    .HasColumnName("created_date_time");
 
-                    b.Property<string>("Endpoint")
-                        .HasColumnType("varchar(2000)")
-                        .HasColumnName("endpoint");
+                b.Property<string>("Endpoint")
+                    .HasColumnType("varchar(4000)")
+                    .HasColumnName("endpoint");
 
-                    b.Property<string>("Exception")
-                        .HasColumnType("longtext")
-                        .HasColumnName("exception");
+                b.Property<string>("Exception")
+                    .HasColumnType("text")
+                    .HasColumnName("exception");
 
-                    b.Property<sbyte>("IsDeleted")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("is_deleted");
+                b.Property<bool>("IsDeleted")
+                    .HasColumnType("boolean")
+                    .HasColumnName("is_deleted");
 
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime")
-                        .HasColumnName("last_modified");
+                b.Property<DateTime?>("LastModified")
+                    .HasColumnType("timestamp with time zone")
+                    .HasColumnName("last_modified");
 
-                    b.Property<string>("Method")
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("method");
+                b.Property<string>("Method")
+                    .HasColumnType("varchar(50)")
+                    .HasColumnName("method");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("modified_by");
+                b.Property<string>("ModifiedBy")
+                    .HasColumnType("varchar(250)")
+                    .HasColumnName("modified_by");
 
-                    b.Property<int>("Priority")
-                        .HasColumnType("int")
-                        .HasColumnName("priority");
+                b.Property<int>("Priority")
+                    .HasColumnType("int")
+                    .HasColumnName("priority");
 
-                    b.Property<string>("QueryString")
-                        .HasColumnType("varchar(2000)")
-                        .HasColumnName("query_string");
+                b.Property<string>("QueryString")
+                    .HasColumnType("varchar(4000)")
+                    .HasColumnName("query_string");
 
-                    b.Property<string>("RequestIp")
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("request_ip");
+                b.Property<string>("RequestIp")
+                    .HasColumnType("varchar(50)")
+                    .HasColumnName("request_ip");
 
-                    b.Property<string>("Response")
-                        .HasColumnType("longtext")
-                        .HasColumnName("response");
+                b.Property<string>("Response")
+                    .HasColumnType("text")
+                    .HasColumnName("response");
 
-                    b.Property<int>("ResponseTime")
-                        .HasColumnType("int")
-                        .HasColumnName("response_time");
+                b.Property<int>("ResponseTime")
+                    .HasColumnType("int")
+                    .HasColumnName("response_time");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("status");
+                b.Property<string>("Status")
+                    .IsRequired()
+                    .HasColumnType("varchar(50)")
+                    .HasColumnName("status")
+                    .HasAnnotation("MySql:CharSet", "utf8");
 
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+                b.Property<int>("StatusCode")
+                    .HasColumnType("int")
+                    .HasColumnName("status_code");
 
-                    b.Property<int>("StatusCode")
-                        .HasColumnType("int")
-                        .HasColumnName("status_code");
+                b.Property<bool>("Success")
+                    .HasColumnType("boolean")
+                    .HasColumnName("success");
 
-                    b.Property<sbyte>("Success")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("success");
+                b.HasKey("Id")
+                    .HasName("pk_audit_log");
 
-                    b.HasKey("Id")
-                        .HasName("pk_audit_log");
-
-                    b.ToTable("mix_audit_log", (string)null);
-                });
+                b.ToTable("mix_audit_log", (string)null);
+            });
 #pragma warning restore 612, 618
         }
     }
