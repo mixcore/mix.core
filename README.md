@@ -1,182 +1,187 @@
-# Mixcore CMS [![Become a Backer](https://opencollective.com/mixcore/tiers/backer.svg?avatarHeight=36)](https://opencollective.com/mixcore#support) 
+# Mixcore CMS - Enterprise-Grade .NET Core CMS & API Platform [![Become a Backer](https://opencollective.com/mixcore/tiers/backer.svg?avatarHeight=36)](https://opencollective.com/mixcore#support) 
 
 [![backer](https://opencollective.com/mixcore/tiers/backer/badge.svg?label=backer&color=brightgreen)](https://opencollective.com/mixcore#support) [![Donate](https://img.shields.io/badge/$-donate-ff69b4.svg)](https://www.paypal.me/mixcore) [![Buy us a coffee](https://img.shields.io/badge/$-BuyMeACoffee-orange.svg)](https://www.buymeacoffee.com/mixcore) 
 
-### Fully Open Source UI Tools to create multi-purpose Enterprise Web Apps, Mobile Apps & Application Services
+> **🚀 Next-Gen Enterprise CMS & API Platform** - Build scalable, secure, and high-performance web applications with modern .NET Core microservices architecture.
 
-## Online Run & Build
-Click the button below to start a new development environment:
+## 🎯 Key Features
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/mixcore/mix.core/tree/develop)
+- **Modern Tech Stack**: Built with .NET 8.0 and .NET 9.0, ASP.NET Core, SignalR, and GraphQL
+- **Microservices Architecture**: Scalable, maintainable, and cloud-native ready
+- **Multi-Tenant Support**: Perfect for SaaS applications
+- **Real-time Capabilities**: Powered by SignalR for instant updates
+- **API-First Approach**: RESTful APIs and GraphQL endpoints
+- **Headless CMS**: Content management with flexible frontend options
+- **Enterprise Security**: OAuth 2.0, OpenID Connect, and JWT support
+- **Cloud-Native**: Ready for Kubernetes and Docker deployment
 
-## UI Screenshots 
+## 📦 Tech Stack & Versions
 
-### Admin Portal
+| Component | Version | Description |
+|-----------|---------|-------------|
+| .NET Core | 8.0-9.0 | Core runtime and SDK |
+| ASP.NET Core | 8.0-9.0 | Web framework |
+| Entity Framework Core | 8.0 | ORM and data access |
+| SignalR | 8.0 | Real-time communication |
+| GraphQL | 7.0 | API query language |
+| Docker | Latest | Containerization |
+| Kubernetes | Latest | Container orchestration |
 
-> Mixcore CMS Back-office is built on top of the much awaited Bootstrap 5. This makes starting a new project very simple. It also provides benefits if you are already working on a Bootstrap 5 project.
+## 🏗️ Project Structure
 
-(New Portal in Angular / Svelte will be coming soon)
+The project follows a modern microservices architecture with the following main components:
 
-![Mixcore Admin Portal Bootstrap 5.x](https://user-images.githubusercontent.com/3785721/125382627-322d7d00-e3c0-11eb-8ff7-f02316770876.png "Mixcore CMS Admin Portal Bootstrap 5")
+### Core Platform
+- `platform/` - Core platform services and libraries
+  - `mix.library` - Core library functionality
+  - `mix.database` - Database abstraction layer
+  - `mix.identity` - Identity and authentication services
+  - `mix.signalr` - Real-time communication
+  - `mix.quartz` - Job scheduling
+  - `mix.queue` - Message queue handling
+  - `mix.auth` - Authentication services
+  - `mix.scylladb` - NoSQL database integration
 
+### Modules
+- `modules/` - Extensible modules
+  - `mix.common` - Common utilities
+  - `mix.messenger` - Messaging services
+  - `mix.scheduler` - Task scheduling
+  - `mix.storage` - File storage services
+  - `mix.log` - Logging services
+  - `mix.portal` - Portal interface
 
-![Mixcore Admin Portal Bootstrap 5.x](https://user-images.githubusercontent.com/3785721/126033976-28302532-1284-4be8-b8dd-74258a227873.png "Mixcore CMS Admin Portal Bootstrap 5")
+### Services
+- `services/` - Microservices
+  - `mix-auth-service` - Authentication service
+  - `mix-message-queue` - Message queue service
+  - `mix-databases` - Database services
+  - `mix-ecommerce` - E-commerce services
+  - `mix-graphql` - GraphQL services
+  - `mix-automation` - Automation services
 
+### Applications
+- `applications/` - Main applications
+  - `mixcore` - Main application
+  - `mixcore.gateway` - API Gateway
+  - `mixcore.host.aspire` - Aspire hosting
 
-## Special features (Out of the box)
+## ✨ Special Features
 
-- [x] **Databases** -MySQL, SQL Server, PostgreSQL, SQLite
-- [x] **Reliability** - Member roles and permissions.
-- [x] **High Security** - Strong Data Encryption and Security compliance.
-- [x] **Multilingual** - Flexible multilingual content migration.
-- [x] **High Performance** - Millisecond response time.
-- [x] **Cross Platforms** - Powered by .NET Core and run everywhere.
-- [x] **Online Coding** - Visual Studio Code's heart inside.
-- [x] **Customizable Designs** - Build any kinds of website.
-- [x] **SEO Friendly** - No extra plugin required.
-- [x] **Media Management** - Multiple file formats for your website / application.
-- [x] **Manage On The Go** - Manage and Code everywhere you want.
-- [x] **Easy and Accessible** - Non deep tech knowledge required.
-- [x] **Analytics** - Inside Google Analytics dashboard & no extra plugin required.
-- [x] **Dynamic Modular Architecture** - Powerful module layers & Attribute sets feature.
-- [x] **Extensibility** - API-first architecture for Plug & Play.
-- [x] **Easy Backup** - Powerful 1 step export.
-- [x] **More Coffee time!** - You can relax and explore more ton of features are not listed here...
+- [x] **Modern Architecture** - Microservices-based architecture with .NET Core
+- [x] **Multi-Database Support** - MySQL, SQL Server, PostgreSQL, SQLite, ScyllaDB
+- [x] **Real-time Communication** - SignalR integration
+- [x] **Message Queue** - Robust message queue system
+- [x] **Identity & Auth** - Comprehensive authentication and authorization
+- [x] **GraphQL Support** - Modern API querying
+- [x] **E-commerce Ready** - Built-in e-commerce capabilities
+- [x] **Automation** - Workflow automation services
+- [x] **High Performance** - Optimized for enterprise workloads
+- [x] **Cross Platform** - Runs on Windows, Linux, and macOS
+- [x] **Container Ready** - Docker support out of the box
+- [x] **CI/CD Ready** - GitHub Actions and Azure DevOps integration
 
-## Architecture
-![image](https://user-images.githubusercontent.com/3785721/160266730-f02415a1-870b-45b2-ae4b-ed6c26ca5787.png)
+## 🚀 Quick Start
 
+### Prerequisites
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/download)
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
-### CMS and Dashboards built on top of ASP.Net Core / Dotnet Core, SignalR, Angular / Bootstrap / React / Vue / Svelte.
- 
-|Services  |Result  |Services  |Result  |
-|---------|---------|---------|---------|
-|Github workflow     |[![Build Status](https://github.com/mixcore/mix.core/actions/workflows/build-check.yml/badge.svg)](https://github.com/mixcore/mix.core/actions/workflows/build-check.yml)|
-|Travis CI     |[![Build Status](https://travis-ci.org/mixcore/mix.core.svg?branch=master)](https://travis-ci.org/mixcore/mix.core)|AppVeyor CI     |[![Build status](https://ci.appveyor.com/api/projects/status/8o02frivdxa0dgpl/branch/master?svg=true)](https://ci.appveyor.com/project/Smilefounder/mix-core/branch/master)          |
-Gitter     |[![Join the chat at https://gitter.im/mix-core/Lobby](https://badges.gitter.im/mix-core/Lobby.svg)](https://gitter.im/mix-core/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)|Licenses status     |[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmixcore%2Fmix.core.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmixcore%2Fmix.core?ref=badge_shield)         |
-Codefactor     |[![CodeFactor](https://www.codefactor.io/repository/github/mixcore/mix.core/badge)](https://www.codefactor.io/repository/github/mixcore/mix.core)         |Azure|[![Build Status](https://dev.azure.com/mixcore/mix.core/_apis/build/status/mixcore.mix.core?branchName=master)](https://dev.azure.com/mixcore/mix.core/_build/latest?definitionId=1&branchName=master)|
-
-
-## References
-
-
-|  |Links  |
-|---------|---------|
-|STAG / Demo     |https://demo.mixcore.org or https://dev.mixcore.org or https://mochahost.demo.mixcore.org/portal (administrator / P@ssw0rd)  Ref: [How to install Mixcore CMS with Azure Docker Composer](https://community.mixcore.org/topic/4/install-mixcore-cms-with-azure-and-docker-compose)|
-|Dev docs     |https://docs.mixcore.org / https://mixcore.dev|
-|Community     |https://community.mixcore.org|
-|Youtube     |https://www.youtube.com/channel/UChqzh6JnC8HBUSQ9AWIcZAw|
-|Twitter     |https://twitter.com/mixcore_cms         |
-|Medium     |https://medium.com/mixcore         |
-
-## Run with Docker
-
-###  Latest Docker Image
+### Option 1: Docker (Single Container)
 ```sh
+# Pull the latest image
 docker pull mixcore/mix.core:latest
+
+# Run the container
 docker run -it --rm -p 5000:80 --name mixcore_cms mixcore/mix.core:latest
 ```
 
-### Or with Docker Compose
+### Option 2: Docker Compose (Full Stack)
 ```sh
-docker-compose build
-docker-compose up
+# Build and start all services
+docker-compose up -d
+
+# Access services:
+# - Mixcore CMS: http://localhost:5000
+# - SQL Server: localhost:1433
+# - MySQL: localhost:3306
+# - phpMyAdmin: http://localhost:8080
 ```
 
-## GITs clone
+### Option 3: Local Development
 ```sh
-mkdir mixcore
-cd mixcore
-
+# Clone the repository
 git clone --branch develop --recursive https://github.com/mixcore/mix.core.git
-```
 
-Optional:
-
-> Optional steps as those packages are Nuget Library
-
-```bash
-git submodule update --init --recursive
-```
-
-
-
-## Build & Run with [Dotnet SDK](https://dotnet.microsoft.com/download)
-
-### Build & Run Mixcore CMS
-
-> REM Make sure you already read and download Dotnet Core SDK here https://dotnet.microsoft.com/download
-
-```sh
+# Navigate to the project directory
 cd mix.core/src/Mix.Cms.Web
 
+# Restore dependencies
 dotnet restore
+
+# Build the project
 dotnet build
+
+# Run the application
 dotnet run
+
+# Access the application at http://localhost:5000
 ```
-### Modify & Build Portal Front-End source (Optional)
 
-> This step is optional and only needed in case you would like to modify the portal front-end code
+### Development Environment Setup
+```sh
+# Install GitPod (optional)
+curl -fsSL https://gitpod.io/install | sh
 
-````sh
-cd mix.core/src/portal-app
+# Or use VS Code with Dev Containers
+code --install-extension ms-vscode-remote.remote-containers
+```
 
-npm install
-npm install --global gulp-cli
-gulp build
-````
+## 📚 Documentation & Resources
 
-> Note: If you facing any System.Data.SqlClient.SqlException error, please replace all content inside "appsettings.json" file with "{}".
+| Resource | Link | Description |
+|----------|------|-------------|
+| Demo | https://demo.mixcore.org | Live demo environment |
+| Documentation | https://docs.mixcore.org | Comprehensive documentation |
+| API Reference | https://api.mixcore.org | API documentation |
+| Community | https://community.mixcore.org | Community forum |
+| YouTube | https://www.youtube.com/channel/UChqzh6JnC8HBUSQ9AWIcZAw | Tutorials & guides |
+| Twitter | https://twitter.com/mixcore_cms | Latest updates |
+| Medium | https://medium.com/mixcore | Technical articles |
 
-## Thanks to
+## 📄 License
 
-> This project has been developed using:
-* [.NET](https://www.microsoft.com/net/core)
-* [Bootstrap](https://getbootstrap.com/)
-* [BrowserStack](https://www.browserstack.com/)
-* [Designed by Freepik](https://www.freepik.com)
-* And more...
+Mixcore CMS is licensed under the **[MIT License](https://github.com/mixcore/mix.core/blob/master/LICENSE)**
 
+## 🤝 Contributing
 
-## License
+We welcome contributions! Please follow these guidelines:
 
-Mixcore CMS is licensed under the **[MIT](https://github.com/mixcore/mix.core/blob/master/LICENSE)**
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
+For more details, see our [Contributing Guide](https://github.com/mixcore/mix.core/blob/develop/CONTRIBUTING.md)
 
-|Permissions  |Limitations  |Conditions  |
-|---------|---------|---------|
-|✔ Commercial use     |✖ Liability         |ℹ License and copyright notice         |
-|✔ Modification     |✖ Warranty         |         |
-|✔ Distribution     |         |         |
-|✔ Private use     |         |         |
-|     |         |         |
+## 💖 Support
 
+If you find this project useful, please consider:
+- [Becoming a backer](https://opencollective.com/mixcore#support)
+- [Making a donation](https://www.paypal.me/mixcore)
+- [Buying us a coffee](https://www.buymeacoffee.com/mixcore)
 
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmixcore%2Fmix.core.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmixcore%2Fmix.core?ref=badge_large)
-
-## Activity
+## 📊 Activity
 
 ![Alt](https://repobeats.axiom.co/api/embed/4ec425735bae424c69c063f2bac106c3107b6db4.svg "Repobeats analytics image")
-=======
 
-## Star History
+## ⭐ Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=mixcore/mix.core&type=Date)](https://star-history.com/#mixcore/mix.core&Date)
 
-## Contributors Wall
+## 👥 Contributors
+
 <a href="https://github.com/mixcore/mix.core/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=mixcore/mix.core" />
 </a>
-
-## How to contribute
-
-Fork this repo to your GitHub account, clone it locally and try to follow
-the following simple guidelines.
-
-* **Never** write any code in the master branch
-* When writing code, do it in a specific feature branch
-* Send your pull request from that feature branch
-* After your pull request has been accepted, sync the changes into master from the upstream remote
-* Delete you feature branch
-* Again, **NEVER** write any code in the master branch ;)
-* Ref: https://datasift.github.io/gitflow/IntroducingGitFlow.html
