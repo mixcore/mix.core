@@ -42,8 +42,18 @@ services:
             interval: 30s
             timeout: 10s
             retries: 3
-    # redis:
-    #     image: redis
+    redis:
+        image: redis
+        volumes:
+            - redis_data:/data
+        restart: always
+        ports:
+            - "6379:6379"
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
     mysql:
         image: mysql:8.0
         volumes:

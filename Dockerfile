@@ -1,25 +1,24 @@
 # https://hub.docker.com/_/microsoft-dotnet-sdk
 
 # Build stage
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 
-# Copy solution and restore dependencies
-COPY *.sln .
-COPY src/*/*.csproj ./
-RUN for file in $(ls *.csproj); do mkdir -p src/${file%.*}/ && mv $file src/${file%.*}/; done
+# Copy the entire source directory
+COPY src/ .
+
+# Restore dependencies
 RUN dotnet restore
 
-# Copy everything else and build
-COPY src/. ./src/
-RUN dotnet publish src/applications/mixcore/mixcore.csproj -c Release -o /app/publish
+# Build and publish the main application
+RUN dotnet publish applications/mixcore/mixcore.csproj -c Release -o /app/publish
 
 # Build gateway
 FROM build AS gateway
-RUN dotnet publish src/applications/mixcore.gateway/mixcore.gateway.csproj -c Release -o /app/publish
+RUN dotnet publish applications/mixcore.gateway/mixcore.gateway.csproj -c Release -o /app/publish
 
 # Runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/publish .
 

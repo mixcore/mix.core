@@ -21,7 +21,7 @@
 - **Agency Dashboard**: Centralized dashboard for managing all client projects
 
 ### For Developers
-- **Modern Stack**: Latest .NET 8.0, ASP.NET Core, and modern frontend technologies
+- **Modern Stack**: Latest .NET 9.0, ASP.NET Core, and modern frontend technologies
 - **API-First**: RESTful APIs and GraphQL for flexible integration
 - **Extensible**: Modular architecture for easy customization
 - **Developer Tools**: Comprehensive SDKs and development tools
@@ -30,7 +30,7 @@
 ## 🛠️ Key Features
 
 ### Core Platform
-- **Modern Tech Stack**: Built with .NET 8.0, ASP.NET Core, SignalR, and GraphQL
+- **Modern Tech Stack**: Built with .NET 9.0, ASP.NET Core, SignalR, and GraphQL
 - **Microservices Architecture**: Scalable, maintainable, and cloud-native ready
 - **Multi-Tenant Support**: Perfect for SaaS applications and agencies
 - **Real-time Capabilities**: Powered by SignalR for instant updates
@@ -63,10 +63,10 @@
 
 | Component | Version | Description |
 |-----------|---------|-------------|
-| .NET Core | 8.0 | Core runtime and SDK |
-| ASP.NET Core | 8.0 | Web framework |
-| Entity Framework Core | 8.0 | ORM and data access |
-| SignalR | 8.0 | Real-time communication |
+| .NET Core | 9.0 | Core runtime and SDK |
+| ASP.NET Core | 9.0 | Web framework |
+| Entity Framework Core | 9.0 | ORM and data access |
+| SignalR | 9.0 | Real-time communication |
 | GraphQL | 7.0 | API query language |
 | Docker | Latest | Containerization |
 | Kubernetes | Latest | Container orchestration |
@@ -115,7 +115,7 @@
 ## 🚀 Getting Started
 
 ### Prerequisites
-- [.NET 8.0 SDK](https://dotnet.microsoft.com/download)
+- [.NET 9.0 SDK](https://dotnet.microsoft.com/download)
 - [Docker](https://www.docker.com/get-started)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
@@ -128,7 +128,7 @@ git clone --branch develop --recursive https://github.com/mixcore/mix.core.git
 cd mix.core
 
 # Build and start all services
-docker-compose up -d
+docker-compose up --build
 
 # Access services:
 # - Mixcore CMS: http://localhost:5000
