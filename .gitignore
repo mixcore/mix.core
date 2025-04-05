@@ -253,3 +253,5 @@ src/**/logs/
 src/**/*.sqlite-shm
 src/**/*.sqlite-wal
 src/applications/mixcore/wwwroot/**/*.sqlite
+
+src/applications/mixcore/wwwroot/mixcontent/

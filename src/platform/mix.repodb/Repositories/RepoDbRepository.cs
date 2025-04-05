@@ -15,13 +15,16 @@ using MySqlConnector;
 using Newtonsoft.Json.Linq;
 using Npgsql;
 using RepoDb;
+using RepoDb.DbHelpers;
+using RepoDb.DbSettings;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
+using RepoDb.StatementBuilders;
 using System.Data;
 
 namespace Mix.RepoDb.Repositories
 {
-    public class RepoDbRepository: IDisposable
+    public class RepoDbRepository : IDisposable
     {
         #region Properties
         private bool _isRoot;
@@ -139,10 +142,17 @@ namespace Mix.RepoDb.Repositories
             switch (_databaseProvider)
             {
                 case MixDatabaseProvider.SQLSERVER:
+                    var dbSetting = new SqlServerDbSetting();
                     GlobalConfiguration.Setup().UseSqlServer();
+                    DbSettingMapper
+                        .Add<SqlConnection>(dbSetting, true);
+                    DbHelperMapper
+                        .Add<SqlConnection>(new SqlServerDbHelper(), true);
+                    StatementBuilderMapper
+                        .Add<SqlConnection>(new SqlServerStatementBuilder(dbSetting), true);
                     break;
                 case MixDatabaseProvider.MySQL:
-                    GlobalConfiguration.Setup().UseMySql();
+                    GlobalConfiguration.Setup().UseMySql().UseMySqlConnector();
                     break;
                 case MixDatabaseProvider.PostgreSQL:
                     GlobalConfiguration.Setup().UsePostgreSql();
@@ -200,11 +210,11 @@ namespace Mix.RepoDb.Repositories
             {
                 throw new MixException(MixErrorStatus.Badrequest, $"{nameof(pagingRequest.SortByColumns)} must have value");
             }
-            
+
             List<OrderField> sortByColumns = pagingRequest.SortByColumns
                 .Select(m => new OrderField(m.FieldName, m.Direction == SortDirection.Asc ? Order.Ascending : Order.Descending))
                 .ToList();
-            builder = _databaseProvider == MixDatabaseProvider.PostgreSQL ? new OptimizedPostgresSqlStatementBuilder(true) : _connection.GetStatementBuilder();
+            builder = GetStatementBuilder(_databaseProvider)?? _connection.GetStatementBuilder();
 
             int pageSize = pagingRequest.PageSize ?? 100;
 
@@ -224,8 +234,19 @@ namespace Mix.RepoDb.Repositories
                     PageSize = pagingRequest.PageSize,
                     Total = count,
                     TotalPage = (int)Math.Ceiling((double)count / pageSize),
-                    SortByColumns= pagingRequest.SortByColumns
+                    SortByColumns = pagingRequest.SortByColumns
                 }
+            };
+        }
+
+        private IStatementBuilder? GetStatementBuilder(MixDatabaseProvider databaseProvider)
+        {
+            return _databaseProvider switch
+            {
+                MixDatabaseProvider.PostgreSQL => new OptimizedPostgresSqlStatementBuilder(true),
+                MixDatabaseProvider.MySQL => StatementBuilderMapper.Get<MySqlConnection>(),
+                MixDatabaseProvider.SQLSERVER => StatementBuilderMapper.Get<SqlConnection>(),
+                MixDatabaseProvider.SQLITE => StatementBuilderMapper.Get<SqliteConnection>()
             };
         }
 

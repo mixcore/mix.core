@@ -37,7 +37,7 @@ namespace Mix.Log.Lib.Subscribers
             IMixQueueLog queueMessageLogService,
             IAuditLogService auditLogService,
             ILogger<MixLogSubscriber> logger,
-            IPooledObjectPolicy<RabbitMQ.Client.IModel>? rabbitMQObjectPolicy = null)
+            IPooledObjectPolicy<RabbitMQ.Client.IChannel>? rabbitMQObjectPolicy = null)
             : base(TopicId, nameof(MixLogSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMQObjectPolicy)
         {
             _queueMessageLogService = queueMessageLogService;

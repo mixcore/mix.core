@@ -33,7 +33,7 @@ namespace Mix.Storage.Lib.Services
 
         private IMixUploader CreateUploader(IHttpContextAccessor httpContext, UnitOfWorkInfo<MixCmsContext> cmsUow)
         {
-            _configuration.Bind("StorageSetting", Settings);
+            _configuration.Bind("StorageSettings", Settings);
 
             return Settings.Provider switch
             {

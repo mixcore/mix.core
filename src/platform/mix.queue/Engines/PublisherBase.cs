@@ -5,6 +5,7 @@ using Microsoft.Extensions.ObjectPool;
 using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Exceptions;
 using Mix.Mq.Lib.Models;
+using Mix.Queue.Engines.RabbitMQ;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
 using RabbitMQ.Client;
@@ -27,7 +28,7 @@ namespace Mix.Queue.Engines
         protected readonly IConfiguration Configuration;
         protected readonly MixEndpointService MixEndpointService;
         protected readonly ILogger<PublisherBase> ILogger;
-        protected readonly IPooledObjectPolicy<IModel>? RabbitMqObjectPolicy;
+        protected readonly IPooledObjectPolicy<IChannel>? RabbitMqObjectPolicy;
 
         protected PublisherBase(
             string topicId,
@@ -35,7 +36,7 @@ namespace Mix.Queue.Engines
             IConfiguration configuration,
             MixEndpointService mixEndpointService,
             ILogger<PublisherBase> logger,
-            IPooledObjectPolicy<IModel>? rabbitMQObjectPolicy = null)
+            IPooledObjectPolicy<IChannel>? rabbitMQObjectPolicy = null)
         {
             _topicId = topicId;
             ILogger = logger;
@@ -51,7 +52,7 @@ namespace Mix.Queue.Engines
             try
             {
                 var queuePublishers = new List<IQueuePublisher<MessageQueueModel>>();
-                var providerSetting = Configuration["MessageQueueSetting:Provider"];
+                var providerSetting = Configuration[$"{MixAppSettingsSection.MessageQueueSettings}:Provider"];
                 if (string.IsNullOrEmpty(providerSetting))
                 {
                     return default;
@@ -62,7 +63,7 @@ namespace Mix.Queue.Engines
                 switch (Provider)
                 {
                     case MixQueueProvider.AZURE:
-                        var azureSettingPath = Configuration.GetSection("MessageQueueSetting:AzureServiceBus");
+                        var azureSettingPath = Configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:AzureServiceBus");
                         var azureSetting = new AzureQueueSetting();
                         azureSettingPath.Bind(azureSetting);
 
@@ -71,7 +72,7 @@ namespace Mix.Queue.Engines
                                 Provider, azureSetting, topicId, MixEndpointService));
                         break;
                     case MixQueueProvider.GOOGLE:
-                        var googleSettingPath = Configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
+                        var googleSettingPath = Configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:GoogleQueueSetting");
                         var googleSetting = new GoogleQueueSetting();
                         googleSettingPath.Bind(googleSetting);
                         googleSetting.CredentialFile = googleSetting.CredentialFile;
@@ -89,7 +90,7 @@ namespace Mix.Queue.Engines
                     case MixQueueProvider.MIX:
                         if (MixEndpointService.MixMq != null)
                         {
-                            var mixSettingPath = Configuration.GetSection("MessageQueueSetting:Mix");
+                            var mixSettingPath = Configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:Mix");
                             var mixSetting = new MixQueueSetting();
                             mixSettingPath.Bind(mixSetting);
                             queuePublishers.Add(

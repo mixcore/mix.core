@@ -56,21 +56,21 @@ namespace Mix.Lib.Base
 
         private void LoadCulture()
         {
-            if (RouteData.Values["culture"]?.ToString()?.ToLower() is not null)
-            {
-                Culture = RouteData.Values["culture"]?.ToString()?.ToLower();
-            }
-            if (RouteData.Values["seoName"] is not null)
-            {
-                string seoName = RouteData.Values["seoName"]?.ToString()?.ToLower();
-                string culture = seoName.Split('/')[0];
-                if (TenantService.AllCultures.Any(m => m.Specificulture == culture))
-                {
-                    RouteData.Values["culture"] = culture;
-                    RouteData.Values["seoName"] = seoName.Replace(culture, string.Empty);
-                    Culture = culture;
-                }
-            }
+            //if (RouteData.Values["culture"]?.ToString()?.ToLower() is not null)
+            //{
+            //    Culture = RouteData.Values["culture"]?.ToString()?.ToLower();
+            //}
+            //if (RouteData.Values["seoName"] is not null)
+            //{
+            //    string seoName = RouteData.Values["seoName"]?.ToString()?.ToLower();
+            //    string culture = seoName.Split('/')[0];
+            //    if (TenantService.AllCultures.Any(m => m.Specificulture == culture))
+            //    {
+            //        RouteData.Values["culture"] = culture;
+            //        RouteData.Values["seoName"] = seoName.Replace(culture, string.Empty);
+            //        Culture = culture;
+            //    }
+            //}
             //if (!_globalConfigService.Instance.CheckValidCulture(Culture))
             //{
             //    Culture = GlobalSettingsService.Instance.DefaultCulture;

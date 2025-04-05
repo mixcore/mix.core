@@ -60,7 +60,7 @@ namespace Mix.Services.Ecommerce.Lib.Migrations
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("DisplayName")
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("vpc_AccessCode")

@@ -20,7 +20,9 @@ using Mix.Mixdb.ViewModels;
 using Mix.Mq.Lib.Models;
 using Mix.RepoDb.Repositories;
 using Mix.Service.Commands;
+using Mix.Shared.Models;
 using Mix.Shared.Models.Configurations;
+using MySqlX.XDevAPI.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -131,7 +133,7 @@ namespace Mix.Lib.Services
             return null;
         }
 
-        public virtual async Task<TokenResponseModel> LoginAsync(LoginRequestModel model, CancellationToken cancellationToken = default)
+        public virtual async Task<ApiResponseModel<TokenResponseModel>> LoginAsync(LoginRequestModel model, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -155,23 +157,24 @@ namespace Mix.Lib.Services
 
                 if (user == null)
                 {
-                    throw new MixException(MixErrorStatus.Badrequest, "Login failed");
+                    return new ApiResponseModel<TokenResponseModel>(false, null, "Login failed");
                 }
 
                 var result = await SignInManager.PasswordSignInAsync(user, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
 
                 if (result.IsLockedOut)
                 {
-                    throw new MixException(MixErrorStatus.Badrequest, "This account has been locked out, please try again later.");
+                    return new ApiResponseModel<TokenResponseModel>(false, null, "This account has been locked out, please try again later.");
                 }
 
                 if (result.Succeeded)
                 {
-                    return await GetAuthData(user, model.RememberMe, CurrentTenant.Id, default, cancellationToken);
+                    return new ApiResponseModel<TokenResponseModel>(true,
+                            await GetAuthData(user, true, CurrentTenant.Id, default, cancellationToken));
                 }
                 else
                 {
-                    throw new MixException(MixErrorStatus.Badrequest, "Login failed");
+                    return new ApiResponseModel<TokenResponseModel>(false, null, "Login failed");
                 }
             }
             catch (MixException)
@@ -211,7 +214,7 @@ namespace Mix.Lib.Services
             //return default;
         }
 
-        public virtual async Task<TokenResponseModel> GetTokenAsync(GetTokenModel model, CancellationToken cancellationToken = default)
+        public virtual async Task<ApiResponseModel<TokenResponseModel>> GetTokenAsync(GetTokenModel model, CancellationToken cancellationToken = default)
         {
             MixUser user = null;
             if (!string.IsNullOrEmpty(model.Email))
@@ -225,7 +228,8 @@ namespace Mix.Lib.Services
 
             if (user != null)
             {
-                return await GetAuthData(user, true, CurrentTenant.Id, default, cancellationToken);
+                return new ApiResponseModel<TokenResponseModel>(true,
+                            await GetAuthData(user, true, CurrentTenant.Id, default, cancellationToken));
             }
             return default;
         }
@@ -374,7 +378,7 @@ namespace Mix.Lib.Services
             }
         }
 
-        public virtual async Task<TokenResponseModel> ExternalLogin(RegisterExternalBindingModel model, CancellationToken cancellationToken = default)
+        public virtual async Task<ApiResponseModel<TokenResponseModel>> ExternalLogin(RegisterExternalBindingModel model, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -400,10 +404,10 @@ namespace Mix.Lib.Services
                     // return local token if already register
                     if (user != null)
                     {
-                        return await GetAuthData(user, true, CurrentTenant.Id, model.Data, cancellationToken);
+                        return new ApiResponseModel<TokenResponseModel>(true, await GetAuthData(user, true, CurrentTenant.Id, model.Data, cancellationToken));
                     }
 
-                    throw new MixException(MixErrorStatus.Badrequest, "Invalid Account");
+                    return new ApiResponseModel<TokenResponseModel>(false, null, "Invalid account");
                 }
                 throw new MixException(MixErrorStatus.Badrequest);
             }
@@ -417,12 +421,12 @@ namespace Mix.Lib.Services
             }
         }
 
-        public async Task<TokenResponseModel> RenewTokenAsync(RenewTokenDto refreshTokenDto, CancellationToken cancellationToken = default)
+        public async Task<ApiResponseModel<TokenResponseModel>> RenewTokenAsync(RenewTokenDto refreshTokenDto, CancellationToken cancellationToken = default)
         {
             var result = new TokenResponseModel();
             if (refreshTokenDto.RefreshToken == default(Guid))
             {
-                throw new MixException(MixErrorStatus.Badrequest, "Invalid Token");
+                return new ApiResponseModel<TokenResponseModel>(false, result, "Invalid Token");
             }
             string key = $"tokens:{refreshTokenDto.RefreshToken}";
             var oldToken = await CacheService.GetAsync<RefreshTokens>(key, cancellationToken);
@@ -437,21 +441,23 @@ namespace Mix.Lib.Services
                     {
                         var user = await UserManager.FindByNameAsync(oldToken.UserName);
                         await SignInManager.SignInAsync(user, true).ConfigureAwait(false);
-                        return await GetAuthData(user, true, CurrentTenant.Id, default, cancellationToken);
+                        return new ApiResponseModel<TokenResponseModel>(true, await GetAuthData(user, true, CurrentTenant.Id, default, cancellationToken));
+
                     }
                     else
-                    {                        
+                    {
+                        return new ApiResponseModel<TokenResponseModel>(false, result, "Invalid Token");
                         throw new MixException(MixErrorStatus.Badrequest, "Invalid Token");
                     }
                 }
                 else
                 {
-                    throw new MixException(MixErrorStatus.Badrequest, "Token expired");
+                    return new ApiResponseModel<TokenResponseModel>(false, result, "Token Expired");
                 }
             }
             else
             {
-                throw new MixException(MixErrorStatus.Badrequest, "Token expired");
+                return new ApiResponseModel<TokenResponseModel>(false, result, "Token Expired");
             }
         }
 

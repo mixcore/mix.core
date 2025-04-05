@@ -22,39 +22,38 @@ namespace Mix.Queue.Engines.RabbitMQ
     {
         public string SubscriptionId { get; set; }
         private readonly Func<T, Task> _messageHandler;
-        private EventingBasicConsumer _consumer;
+        private AsyncEventingBasicConsumer _consumer;
         private string _topicId;
-        private DefaultObjectPool<IModel> _objectPool;
-        private IModel _channel;
+        private DefaultObjectPool<IChannel> _objectPool;
+        private IChannel _channel;
 
         public RabbitMQSubscriber(
-            IPooledObjectPolicy<IModel> objectPolicy,
+            IPooledObjectPolicy<IChannel> objectPolicy,
             string topicId,
             string subscriptionId,
             Func<T, Task> messageHandler)
         {
             _messageHandler = messageHandler;
-            InitializeQueue(objectPolicy, topicId, subscriptionId);
         }
 
-        private void InitializeQueue(IPooledObjectPolicy<IModel> objectPolicy, string topicId, string subscriptionId)
+        public async Task InitializeQueueAsync(IPooledObjectPolicy<IChannel> objectPolicy, string topicId, string subscriptionId)
         {
             SubscriptionId = subscriptionId;
             _topicId = topicId;
-            _objectPool = new DefaultObjectPool<IModel>(objectPolicy, Environment.ProcessorCount * 2);
+            _objectPool = new DefaultObjectPool<IChannel>(objectPolicy, Environment.ProcessorCount * 2);
             _channel = _objectPool.Get();
-            _channel.ExchangeDeclare(exchange: topicId, type: ExchangeType.Topic);
-            var queueResult = _channel.QueueDeclare(queue: subscriptionId,
+            await _channel.ExchangeDeclareAsync(exchange: topicId, type: ExchangeType.Topic);
+            var queueResult = await _channel.QueueDeclareAsync(queue: subscriptionId,
                      durable: true,
                      exclusive: false,
                      autoDelete: false,
                      arguments: null);
-            _channel.QueueBind(queue: queueResult.QueueName,
+            await _channel.QueueBindAsync(queue: queueResult.QueueName,
                               exchange: _topicId,
                               routingKey: _topicId);
-            _channel.BasicQos(0, 1, false);
-            _consumer = new EventingBasicConsumer(_channel);
-            _consumer.Received += (ch, ea) =>
+            await _channel.BasicQosAsync(0, 1, false);
+            _consumer = new AsyncEventingBasicConsumer(_channel);
+            _consumer.ReceivedAsync += async (ch, ea) =>
             {
                 // received message  
                 try
@@ -64,17 +63,17 @@ namespace Mix.Queue.Engines.RabbitMQ
                     {
                         var msg = JObject.Parse(body).ToObject<T>();
                         _messageHandler(msg);
-                        _channel.BasicAck(ea.DeliveryTag, false);
+                        await _channel.BasicAckAsync(ea.DeliveryTag, false);
                     }
                 }
                 catch (Exception ex)
                 {
                     Console.Error.WriteLine($"Cannot process message {subscriptionId}");
                     Console.Error.WriteLine(ex);
-                    _channel.BasicNack(ea.DeliveryTag, false, false);
+                    await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
                 }
             };
-            _channel.BasicConsume(queueResult.QueueName, false, _consumer);
+            await _channel.BasicConsumeAsync(queueResult.QueueName, false, _consumer);
         }
 
         /// <summary>

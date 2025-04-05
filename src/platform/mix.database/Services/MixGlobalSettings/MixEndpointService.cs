@@ -18,6 +18,15 @@ namespace Mix.Database.Services.MixGlobalSettings
             MixMq ??= domain;
             Mixcore ??= domain;
         }
+        
+        public void InitDomain(string domain)
+        {
+            Account ??= domain;
+            Mixcore ??= domain;
+            Messenger ??= domain;
+            MixMq ??= domain;
+            SaveSettings();
+        }
 
         protected override void LoadAppSettings()
         {

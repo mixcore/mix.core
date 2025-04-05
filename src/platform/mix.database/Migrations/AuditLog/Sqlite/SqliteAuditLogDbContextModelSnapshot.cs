@@ -15,7 +15,7 @@ namespace Mix.Database.Migrations.AuditLog.Sqlite
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
 
             modelBuilder.Entity("Mix.Database.Entities.AuditLog.AuditLog", b =>
                 {
@@ -98,7 +98,7 @@ namespace Mix.Database.Migrations.AuditLog.Sqlite
                     b.HasKey("Id")
                         .HasName("pk_audit_log");
 
-                    b.ToTable("audit_log", (string)null);
+                    b.ToTable("mix_audit_log", (string)null);
                 });
 #pragma warning restore 612, 618
         }

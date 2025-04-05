@@ -40,7 +40,7 @@ namespace Mix.Queue.Engines
             return publisher;
         }
 
-        public static IQueuePublisher<T> CreateRabbitMqPublisher<T>(IPooledObjectPolicy<IModel> objectPolicy, string topicId)
+        public static IQueuePublisher<T> CreateRabbitMqPublisher<T>(IPooledObjectPolicy<IChannel> objectPolicy, string topicId)
              where T : MessageQueueModel
         {
             return new RabbitMQPublisher<T>(objectPolicy, topicId);
@@ -74,10 +74,12 @@ namespace Mix.Queue.Engines
             subscriber.SubscriptionId = subscriptionId;
             return subscriber;
         }
-        public static IQueueSubscriber CreateRabbitMQSubscriber<T>(IPooledObjectPolicy<IModel> objectPolicy, string topicId, string subscriptionId, Func<T, Task> handler)
+        public static IQueueSubscriber CreateRabbitMQSubscriber<T>(IPooledObjectPolicy<IChannel> objectPolicy, string topicId, string subscriptionId, Func<T, Task> handler)
             where T : MessageQueueModel
         {
-            return new RabbitMQSubscriber<T>(objectPolicy, topicId, subscriptionId, handler);
+            var subscriber = new RabbitMQSubscriber<T>(objectPolicy, topicId, subscriptionId, handler);
+            subscriber.InitializeQueueAsync(objectPolicy, topicId, subscriptionId).Wait();
+            return subscriber;
         }
         #endregion
 

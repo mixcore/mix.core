@@ -17,7 +17,7 @@ namespace Mix.Database.Migrations.QueueLog.Postgres
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -113,7 +113,7 @@ namespace Mix.Database.Migrations.QueueLog.Postgres
                     b.HasKey("Id")
                         .HasName("pk_queue_log");
 
-                    b.ToTable("queue_log", (string)null);
+                    b.ToTable("mix_queue_log", (string)null);
                 });
 #pragma warning restore 612, 618
         }

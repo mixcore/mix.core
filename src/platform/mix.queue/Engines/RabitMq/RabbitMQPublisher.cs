@@ -14,31 +14,27 @@ namespace Mix.Queue.Engines.RabbitMQ
         where T : MessageQueueModel
     {
         private readonly string _topicId;
-        private readonly DefaultObjectPool<IModel> _objectPool;
+        private readonly DefaultObjectPool<IChannel> _objectPool;
 
-        public RabbitMQPublisher(IPooledObjectPolicy<IModel> objectPolicy, string topicId)
+        public RabbitMQPublisher(IPooledObjectPolicy<IChannel> objectPolicy, string topicId)
         {
             _topicId = topicId;
-            _objectPool = new DefaultObjectPool<IModel>(objectPolicy, Environment.ProcessorCount * 2);
+            _objectPool = new DefaultObjectPool<IChannel>(objectPolicy, Environment.ProcessorCount * 2);
         }
 
-        public Task SendMessage(T message)
+        public async Task SendMessage(T message)
         {
             var channel = _objectPool.Get();
             try
             {
                 var sendBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
 
-                var properties = channel.CreateBasicProperties();
-                properties.Persistent = true;
-
-                channel.BasicPublish(
+                await channel.BasicPublishAsync(
                     exchange: _topicId,
                     routingKey: $"{_topicId}",
-                    basicProperties: properties,
+                    true,
+                    basicProperties: new BasicProperties() { Persistent = true },
                     body: sendBytes);
-
-                return Task.CompletedTask;
             }
             catch
             {

@@ -29,6 +29,7 @@
 		<ProjectReference Include="..\..\services\core\mix-auth-service\mix.auth.api\mix.auth.api.csproj" />
 		<ProjectReference Include="..\..\services\core\mix-databases\mix.servives.databases\mix.services.databases.csproj" />
 		<ProjectReference Include="..\..\services\core\mix-message-queue\mix.mq.server\mix.mq.server.csproj" />
+		<ProjectReference Include="..\..\services\mix.automation\mix.automation.api\mix.automation.api.csproj" />
 		<ProjectReference Include="..\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
 	</ItemGroup>
 	<ItemGroup>
@@ -64,15 +65,15 @@
 	  <None Remove="Domain\Protos\mixmq.proto" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.1" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
+	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.2" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.2">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.2" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Grpc.AspNetCore" Version="2.66.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.70.0" />
 		<Protobuf Include="Domain\Protos\mixmq.proto" GrpcServices="Client" />
 	</ItemGroup>
 </Project>

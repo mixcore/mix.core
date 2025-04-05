@@ -10,12 +10,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Aspire.Hosting.AppHost" Version="9.0.0" />
+        <PackageReference Include="Aspire.Hosting.AppHost" Version="9.1.0" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\services\core\mix-message-queue\mix.mq.server\mix.mq.server.csproj" />
         <ProjectReference Include="..\..\services\core\mix-message-queue\mix.mq.server\mix.mq.server.csproj" />
+        <ProjectReference Include="..\..\services\mix.automation\mix.automation.api\mix.automation.api.csproj" />
         <ProjectReference Include="..\mixcore.gateway\mixcore.gateway.csproj" />
         <ProjectReference Include="..\mixcore\mixcore.csproj" />
     </ItemGroup>

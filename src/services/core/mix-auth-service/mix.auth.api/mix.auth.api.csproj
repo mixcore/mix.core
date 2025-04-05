@@ -14,7 +14,7 @@
 		<RootNamespace>Mix.Auth.Api</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.2" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -47,7 +47,7 @@
 		<Using Include="Mix.Auth.Models" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Grpc.AspNetCore" Version="2.66.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.70.0" />
 		<Protobuf Include="Domain\Protos\mixmq.proto" GrpcServices="Client" />
 	</ItemGroup>
 </Project>

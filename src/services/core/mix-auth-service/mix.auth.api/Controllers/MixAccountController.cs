@@ -238,7 +238,7 @@ namespace mix.auth.service.Controllers
             string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, Configuration.AesKey());
             var model = JsonConvert.DeserializeObject<LoginRequestModel>(decryptMsg);
             var loginResult = await _idService.LoginAsync(model);
-            return Ok(loginResult);
+            return loginResult.IsSuccess ? Ok(loginResult.Result) : BadRequest(loginResult.Errors);
         }
 
         [Route("external-login")]
@@ -249,7 +249,7 @@ namespace mix.auth.service.Controllers
             string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, Configuration.AesKey());
             var model = JsonConvert.DeserializeObject<RegisterExternalBindingModel>(decryptMsg);
             var loginResult = await _idService.ExternalLogin(model);
-            return Ok(loginResult);
+            return loginResult.IsSuccess ? Ok(loginResult.Result) : BadRequest(loginResult.Errors);
         }
 
         [Route("login-unsecure")]
@@ -258,7 +258,7 @@ namespace mix.auth.service.Controllers
         public async Task<ActionResult> LoginUnSecure([FromBody] LoginRequestModel model)
         {
             var loginResult = await _idService.LoginAsync(model);
-            return Ok(loginResult);
+            return loginResult.IsSuccess ? Ok(loginResult.Result) : BadRequest(loginResult.Errors);
         }
 
         [AllowAnonymous]
@@ -266,7 +266,7 @@ namespace mix.auth.service.Controllers
         public async Task<ActionResult> ExternalLoginUnSecure([FromBody] RegisterExternalBindingModel model)
         {
             var loginResult = await _idService.ExternalLogin(model);
-            return Ok(loginResult);
+            return loginResult.IsSuccess ? Ok(loginResult.Result) : BadRequest(loginResult.Errors);
         }
 
         [Route("get-external-login-providers")]
@@ -282,7 +282,7 @@ namespace mix.auth.service.Controllers
         public async Task<ActionResult> RenewToken([FromBody] RenewTokenDto refreshTokenDto)
         {
             var token = await _idService.RenewTokenAsync(refreshTokenDto);
-            return Ok(token);
+            return token.IsSuccess ? Ok(token.Result): BadRequest(token.Errors);
         }
 
         [MixAuthorize]

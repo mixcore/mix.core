@@ -94,7 +94,7 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.EcommerceDb
                     b.Property<Guid>("TempId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("DisplayName")
                         .HasColumnType("longtext");
 
                     b.Property<double?>("Total")
@@ -176,7 +176,7 @@ namespace Mix.Services.Ecommerce.Lib.Migrations.EcommerceDb
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("DisplayName")
                         .HasColumnType("longtext");
 
                     b.Property<double>("Total")

@@ -2,6 +2,7 @@
 {
     public class MixAppSettingsSection
     {
+        public const string MessageQueueSettings = "MessageQueueSettings";
         public const string Database = "Database";
         public const string MixConfigurations = "MixConfigurations";
         public const string Authentication = "Authentication";

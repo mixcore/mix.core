@@ -20,5 +20,7 @@
         public const string SYSTEM_DATA_RELATIONSHIP = "mix_data_relationship";
         public const string DATA_RELATIONSHIP_TITLE_CASE = "data_relationship";
         public const string DATA_RELATIONSHIP_SNAKE_CASE = "data_relationship";
+        public const string AUDIT_LOG = "mix_audit_log";
+        public const string QUEUE_LOG = "mix_queue_log";
     }
 }

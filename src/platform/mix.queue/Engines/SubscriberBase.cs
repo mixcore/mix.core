@@ -34,7 +34,7 @@ namespace Mix.Queue.Engines
         protected IQueueSubscriber _subscriber;
         protected IServiceScope ServiceScope { get; set; }
 
-        private readonly IPooledObjectPolicy<IModel>? _rabbitMQObjectPolicy;
+        private readonly IPooledObjectPolicy<IChannel>? _rabbitMQObjectPolicy;
 
         protected SubscriberBase(
             string topicId,
@@ -44,7 +44,7 @@ namespace Mix.Queue.Engines
             IConfiguration configuration,
             IMemoryQueueService<MessageQueueModel> queueService,
             ILogger<SubscriberBase> logger,
-            IPooledObjectPolicy<IModel>? rabbitMQObjectPolicy = null)
+            IPooledObjectPolicy<IChannel>? rabbitMQObjectPolicy = null)
         {
             _timeout = timeout;
             _configuration = configuration;

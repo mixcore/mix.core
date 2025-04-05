@@ -2,9 +2,9 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.AuditLog;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -17,21 +17,21 @@ namespace Mix.Database.Migrations.AuditLog.Postgres
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("Mix.Database.Entities.AuditLog.AuditLog", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("char(36)")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("Body")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("body");
 
                     b.Property<string>("CreatedBy")
@@ -39,23 +39,23 @@ namespace Mix.Database.Migrations.AuditLog.Postgres
                         .HasColumnName("created_by");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetime")
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Endpoint")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("endpoint");
 
                     b.Property<string>("Exception")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("exception");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
                     b.Property<string>("Method")
@@ -71,7 +71,7 @@ namespace Mix.Database.Migrations.AuditLog.Postgres
                         .HasColumnName("priority");
 
                     b.Property<string>("QueryString")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("query_string");
 
                     b.Property<string>("RequestIp")
@@ -79,7 +79,7 @@ namespace Mix.Database.Migrations.AuditLog.Postgres
                         .HasColumnName("request_ip");
 
                     b.Property<string>("Response")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("response");
 
                     b.Property<int>("ResponseTime")
@@ -89,21 +89,22 @@ namespace Mix.Database.Migrations.AuditLog.Postgres
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<int>("StatusCode")
                         .HasColumnType("int")
                         .HasColumnName("status_code");
 
-                    b.Property<bool>("Success")
-                        .HasColumnType("boolean")
+                    b.Property<sbyte>("Success")
+                        .HasColumnType("tinyint")
                         .HasColumnName("success");
 
                     b.HasKey("Id")
                         .HasName("pk_audit_log");
 
-                    b.ToTable("audit_log", (string)null);
+                    b.ToTable("mix_audit_log", (string)null);
                 });
 #pragma warning restore 612, 618
         }
