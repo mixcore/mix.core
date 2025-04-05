@@ -1,19 +1,41 @@
 # https://hub.docker.com/_/microsoft-dotnet-sdk
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build-env
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
+
+# Copy solution and restore dependencies
+COPY *.sln .
+COPY src/*/*.csproj ./
+RUN for file in $(ls *.csproj); do mkdir -p src/${file%.*}/ && mv $file src/${file%.*}/; done
+RUN dotnet restore
 
 # Copy everything else and build
-COPY src/. ./
-# RUN dotnet restore Mix.Cms.Web/Mixcore.csproj
-RUN dotnet publish Mix.Cms.Web/Mixcore.csproj -c Release
+COPY src/. ./src/
+RUN dotnet publish src/applications/mixcore/mixcore.csproj -c Release -o /app/publish
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS runtime
+# Build gateway
+FROM build AS gateway
+RUN dotnet publish src/applications/mixcore.gateway/mixcore.gateway.csproj -c Release -o /app/publish
+
+# Runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-# COPY --from=node-env /app/Mix.Cms.Web/wwwroot .
-COPY --from=build-env /app/Mix.Cms.Web/bin/Release/net5.0/publish .
+COPY --from=build /app/publish .
+
+# Expose ports
 EXPOSE 80
+EXPOSE 443
+
+# Set environment variables
+ENV ASPNETCORE_URLS=http://+:80;https://+:443
+ENV ASPNETCORE_ENVIRONMENT=Development
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD curl -f http://localhost/health || exit 1
+
+# Entry point
 ENTRYPOINT ["dotnet", "mixcore.dll"]
 
 
