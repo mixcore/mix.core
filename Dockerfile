@@ -19,6 +19,9 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y protobuf-compiler && \
     rm -rf /var/lib/apt/lists/*
 
+# Copy submodule from previous stage first
+COPY --from=submodules /app/src/platform/core/mix-heart src/platform/core/mix-heart
+
 # Copy project files in order of dependency
 # Core Dependencies (mix.heart is the base)
 COPY src/platform/core/mix-heart/src/mix.heart/mix.heart.csproj src/platform/core/mix-heart/src/mix.heart/
@@ -80,9 +83,6 @@ COPY src/applications/mixcore.host.aspire.ServiceDefaults/mixcore.host.aspire.Se
 COPY src/applications/mixcore.gateway/mixcore.gateway.csproj src/applications/mixcore.gateway/
 COPY src/applications/mixcore.host.aspire.AppHost/mixcore.host.aspire.AppHost.csproj src/applications/mixcore.host.aspire.AppHost/
 COPY src/applications/mixcore/mixcore.csproj src/applications/mixcore/
-
-# Copy submodule from previous stage
-COPY --from=submodules /app/src/platform/core/mix-heart src/platform/core/mix-heart
 
 # Restore packages
 RUN dotnet restore src/applications/mixcore/mixcore.csproj
