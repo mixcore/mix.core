@@ -36,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.grpc", "modules\mix.grp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.queue", "platform\mix.queue\mix.queue.csproj", "{2E843175-B948-4D90-A11B-415EE67D9E1A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.heart", "platform\core\mix-heart\src\mix.heart\mix.heart.csproj", "{D4938E22-22C3-4364-A710-557B63954B5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.heart", "platform\core\mix-heart\src\mix.heart.csproj", "{D4938E22-22C3-4364-A710-557B63954B5E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.tenancy", "modules\mix.tenancy\mix.tenancy.csproj", "{2D254550-CE54-43A2-8AE9-FAA72F2C0FD6}"
 EndProject
