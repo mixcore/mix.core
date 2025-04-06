@@ -1,0 +1,203 @@
+name: Portal Dispatch
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'src/applications/mix.spa.portal/**'
+      - 'src/modules/mix.portal/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'src/applications/mix.spa.portal/**'
+      - 'src/modules/mix.portal/**'
+
+env:
+  DOCKER_IMAGE: mixcore/mix.spa.portal
+  DOCKER_TAG: ${{ github.sha }}
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Run Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'Mixcore Portal'
+          path: 'src/applications/mix.spa.portal'
+          format: 'HTML'
+          out: 'reports'
+          
+      - name: Run Container Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: 'src/applications/mix.spa.portal'
+          
+      - name: Run Secret Scan
+        uses: github/codeql-action/init@v2
+        with:
+          languages: javascript
+          
+  build-and-test:
+    needs: security
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        dotnet: ['9.0.x']
+        
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet }}
+          
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('src/applications/mix.spa.portal/**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+            
+      - name: Restore dependencies
+        run: dotnet restore src/applications/mix.spa.portal/mix.spa.portal.csproj
+        
+      - name: Build
+        run: dotnet build src/applications/mix.spa.portal/mix.spa.portal.csproj --no-restore
+        
+      - name: Test
+        run: dotnet test src/applications/mix.spa.portal/mix.spa.portal.csproj --no-build --verbosity normal
+        
+      - name: Run SonarCloud analysis
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=mix.spa.portal
+            -Dsonar.organization=mixcore
+            -Dsonar.verbose=true
+            
+  build-and-push:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ env.DOCKER_IMAGE }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: src/applications/mix.spa.portal
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          
+      - name: Sign container image
+        uses: sigstore/cosign-installer@main
+        with:
+          cosign-release: 'v2.0.0'
+        if: github.ref == 'refs/heads/main'
+        
+      - name: Sign the published Docker image
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        run: cosign sign ${{ steps.meta.outputs.tags }}@${{ steps.build-and-push.outputs.digest }}
+        if: github.ref == 'refs/heads/main'
+        
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-1
+          
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --name mixcore-cluster
+        
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f src/applications/mix.spa.portal/k8s/namespace.yaml
+          kubectl apply -f src/applications/mix.spa.portal/k8s/secrets.yaml
+          kubectl apply -f src/applications/mix.spa.portal/k8s/configmap.yaml
+          kubectl apply -f src/applications/mix.spa.portal/k8s/storage.yaml
+          kubectl apply -f src/applications/mix.spa.portal/k8s/deployments.yaml
+          kubectl apply -f src/applications/mix.spa.portal/k8s/services.yaml
+          
+      - name: Verify deployment
+        run: |
+          kubectl get all -n mixcore-portal
+          kubectl rollout status deployment/mixcore-portal -n mixcore-portal
+          
+      - name: Run performance tests
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install and run Lighthouse
+        run: |
+          npm install -g lighthouse
+          lighthouse https://portal.mixcore.org --output=html --output-path=./lighthouse-results.html
+          
+  notify:
+    needs: deploy
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify on Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 
