@@ -5,6 +5,7 @@
 ## 2. Copy MixContent to Module's source code
 ## 3. Update ocelot.json.(Ref: https://ocelot.readthedocs.io/en/latest/features/configuration.html). 
 Ex:
+
 ```
 git reset HEAD src/platform/core/mix-heart
 
