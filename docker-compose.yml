@@ -18,7 +18,7 @@ services:
             - ./src:/app/src
             - ~/.aspnet/https:/https:ro
         depends_on:
-            - sqlserver
+            # - sqlserver
             - mysql
             - redis
         healthcheck:
@@ -26,22 +26,22 @@ services:
             interval: 30s
             timeout: 10s
             retries: 3
-    sqlserver:
-        image: "mcr.microsoft.com/mssql/server:2022-latest"
-        environment:
-            - SA_PASSWORD=P@ssw0rd
-            - ACCEPT_EULA=Y
-            - MSSQL_PID=Developer
-        ports:
-            - "1433:1433"
-        volumes:
-            - sqlserver_data:/var/opt/mssql
-        restart: always
-        healthcheck:
-            test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "P@ssw0rd", "-Q", "SELECT 1"]
-            interval: 30s
-            timeout: 10s
-            retries: 3
+    # sqlserver:
+    #     image: "mcr.microsoft.com/mssql/server:2022-latest"
+    #     environment:
+    #         - SA_PASSWORD=P@ssw0rd
+    #         - ACCEPT_EULA=Y
+    #         - MSSQL_PID=Developer
+    #     ports:
+    #         - "1433:1433"
+    #     volumes:
+    #         - sqlserver_data:/var/opt/mssql
+    #     restart: always
+    #     healthcheck:
+    #         test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "P@ssw0rd", "-Q", "SELECT 1"]
+    #         interval: 30s
+    #         timeout: 10s
+    #         retries: 3
     redis:
         image: redis
         volumes:
@@ -84,7 +84,7 @@ services:
             - MYSQL_ROOT_PASSWORD=P@ssw0rd
 
 volumes:
-    sqlserver_data:
+    # sqlserver_data:
     mysql_data:
     redis_data:
 
