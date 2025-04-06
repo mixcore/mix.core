@@ -20,10 +20,13 @@
 		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.2" />
 		<PackageReference Include="System.Reactive" Version="6.0.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
+		<PackageReference Include="Azure.Core" Version="1.38.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\core\mix-heart\src\mix.heart.csproj" />
+	  <ProjectReference Include="..\core\mix-heart\src\mix.heart\mix.heart.csproj" />
 	  <ProjectReference Include="..\mix.constant\mix.constant.csproj" />
 	</ItemGroup>
 
