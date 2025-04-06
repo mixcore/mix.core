@@ -1,0 +1,58 @@
+image: mcr.microsoft.com/dotnet/sdk:9.0
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+
+services:
+  - docker:dind
+
+stages:
+  - build
+  - test
+  - build-docker
+  - deploy
+
+build:
+  stage: build
+  script:
+    - dotnet restore
+    - dotnet build --no-restore
+
+test:
+  stage: test
+  script:
+    - dotnet test --no-build --verbosity normal
+
+build-docker:
+  stage: build-docker
+  image: docker:latest
+  script:
+    - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
+    - docker build -t $DOCKER_IMAGE:$CI_COMMIT_SHA .
+    - docker push $DOCKER_IMAGE:$CI_COMMIT_SHA
+  only:
+    - main
+
+deploy:
+  stage: deploy
+  image: 
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
+  script:
+    - kubectl config set-cluster k8s --server="$KUBE_URL" --insecure-skip-tls-verify=true
+    - kubectl config set-credentials admin --token="$KUBE_TOKEN"
+    - kubectl config set-context default --cluster=k8s --user=admin
+    - kubectl config use-context default
+    
+    - kubectl apply -f k8s/namespace.yaml
+    - kubectl apply -f k8s/secrets.yaml
+    - kubectl apply -f k8s/configmap.yaml
+    - kubectl apply -f k8s/storage.yaml
+    - kubectl apply -f k8s/deployments.yaml
+    - kubectl apply -f k8s/services.yaml
+    
+    - kubectl get all -n mixcore
+    - kubectl rollout status deployment/mixcore -n mixcore
+  only:
+    - main 

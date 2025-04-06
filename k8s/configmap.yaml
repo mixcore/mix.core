@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mixcore-config
+  namespace: mixcore
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ASPNETCORE_URLS: "http://+:80;https://+:443"
+  ConnectionStrings__DefaultConnection: "Server=mixcore-sqlserver;Database=mixcore;User=sa;Password=P@ssw0rd;"
+  ConnectionStrings__MySqlConnection: "Server=mixcore-mysql;Database=mixcore;User=root;Password=root;"
+  Redis__ConnectionString: "mixcore-redis:6379" 
