@@ -1,8 +1,24 @@
 # https://hub.docker.com/_/microsoft-dotnet-sdk
 
+# Submodule stage
+FROM --platform=linux/amd64 alpine/git AS submodules
+WORKDIR /app
+RUN git clone --branch develop/v2 https://github.com/mixcore/mix.heart.git src/platform/core/mix-heart && \
+    cd src/platform/core/mix-heart && \
+    echo "Directory structure:" && \
+    find . -type f -name "*.csproj" && \
+    echo "Current directory contents:" && \
+    ls -la
+
 # Build stage
 FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
+
+# Create necessary directories
+RUN mkdir -p src/platform/core/mix-heart
+
+# Copy submodules
+COPY --from=submodules /app/src/platform/core/mix-heart /app/src/platform/core/mix-heart
 
 # Copy project files first to leverage Docker cache
 COPY ["src/applications/mixcore/mixcore.csproj", "src/applications/mixcore/"]
@@ -14,7 +30,6 @@ COPY ["src/applications/mixcore.host.aspire.AppHost/mixcore.host.aspire.AppHost.
 COPY ["src/platform/mix.identity/mix.identity.csproj", "src/platform/mix.identity/"]
 COPY ["src/platform/mix.database/mix.database.csproj", "src/platform/mix.database/"]
 COPY ["src/platform/mix.shared/mix.shared.csproj", "src/platform/mix.shared/"]
-COPY ["src/platform/core/mix-heart/src/mix.heart/mix.heart.csproj", "src/platform/core/mix-heart/src/mix.heart/"]
 COPY ["src/platform/mix.constant/mix.constant.csproj", "src/platform/mix.constant/"]
 COPY ["src/platform/mix.library/mix.library.csproj", "src/platform/mix.library/"]
 COPY ["src/platform/core/mix.mixdb.event/mix.mixdb.event.csproj", "src/platform/core/mix.mixdb.event/"]
