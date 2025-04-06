@@ -9,7 +9,7 @@ EXPOSE 443
 # Stage 2: Get submodules
 FROM alpine/git:latest AS submodules
 WORKDIR /app
-RUN git clone --branch develop/v2 --depth 1 https://github.com/mixcore/mix.heart.git src/platform/core/mix-heart
+RUN git clone --branch master --depth 1 https://github.com/mixcore/mix.heart.git src/platform/core/mix-heart
 
 # Stage 3: Build
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
