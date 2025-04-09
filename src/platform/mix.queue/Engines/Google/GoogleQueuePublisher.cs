@@ -90,5 +90,10 @@ namespace Mix.Queue.Engines.GooglePubSub
                });
             await Task.WhenAll(publishTasks);
         }
+
+        public async Task StopAsync()
+        {
+            await _publisher.DisposeAsync();
+        }
     }
 }

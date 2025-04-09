@@ -10,5 +10,7 @@ namespace Mix.Queue.Interfaces
         Task SendMessage(T message);
 
         Task SendMessages(IList<T> messages);
+
+        Task StopAsync();
     }
 }
