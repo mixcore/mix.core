@@ -63,5 +63,11 @@ namespace Mix.Queue.Engines.Azure
                });
             await Task.WhenAll(publishTasks);
         }
+
+        public async Task StopAsync()
+        {
+            await _publisher.DisposeAsync();
+            await _client.DisposeAsync();
+        }
     }
 }

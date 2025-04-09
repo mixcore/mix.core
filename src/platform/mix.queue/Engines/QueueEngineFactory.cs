@@ -4,6 +4,7 @@ using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines.Azure;
 using Mix.Queue.Engines.GooglePubSub;
 using Mix.Queue.Engines.MixQueue;
+using Mix.Queue.Engines.Mqtt;
 using Mix.Queue.Engines.RabbitMQ;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
@@ -35,6 +36,9 @@ namespace Mix.Queue.Engines
 
                 case MixQueueProvider.MIX:
                     publisher = new MixQueuePublisher<T>(queueSetting, topicId, mixEndpointService);
+                    break;
+                case MixQueueProvider.MQTT:
+                    publisher = new MqttPublisher<T>(queueSetting, topicId, mixEndpointService);
                     break;
             }
             return publisher;
@@ -69,6 +73,9 @@ namespace Mix.Queue.Engines
                     break;
                 case MixQueueProvider.MIX:
                     subscriber = new MixQueueSubscriber<T>(queueSetting, topicId, subscriptionId, handler, memQueues, mixEndpointService);
+                    break;
+                case MixQueueProvider.MQTT:
+                    subscriber = new MqttSubscriber<T>(queueSetting, topicId, mixEndpointService, handler);
                     break;
             }
             subscriber.SubscriptionId = subscriptionId;

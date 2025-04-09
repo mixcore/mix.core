@@ -59,5 +59,10 @@ namespace Mix.Queue.Engines.MixQueue
                });
             await Task.WhenAll(publishTasks);
         }
+
+        public Task StopAsync()
+        {
+            return Task.CompletedTask;
+        }
     }
 }

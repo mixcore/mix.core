@@ -55,5 +55,10 @@ namespace Mix.Queue.Engines.RabbitMQ
             }
             return Task.WhenAll(tasks);
         }
+
+        public Task StopAsync()
+        {
+            return Task.CompletedTask;
+        }
     }
 }

@@ -6,6 +6,7 @@
         RABBITMQ,
         AWS,
         AZURE,
-        MIX
+        MIX,
+        MQTT
     }
 }

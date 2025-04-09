@@ -79,15 +79,15 @@ namespace Mix.Queue.Engines
         #region Privates
         private async Task StartProcessQueue(CancellationToken cancellationToken)
         {
-            Logger.LogInformation($"StartProcessQueue: {_subscriber.SubscriptionId} started at {DateTime.UtcNow.AddHours(7)}");
+            Logger.LogInformation($"StartProcessQueue: {_subscriber.SubscriptionId} starting at {DateTime.UtcNow.AddHours(7)}");
             while (!cancellationToken.IsCancellationRequested)
             {
                 try
                 {
-
                     if (_subscriber != null)
                     {
                         await _subscriber.ProcessQueue(cancellationToken);
+                        Logger.LogInformation($"StartProcessQueue: {_subscriber.SubscriptionId} started at {DateTime.UtcNow.AddHours(7)}");
                     }
                 }
                 catch (Exception ex)
@@ -152,6 +152,10 @@ namespace Mix.Queue.Engines
                         mixSettingPath.Bind(mixSetting);
                         return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
                            provider, mixSetting, topicId, subscriptionId, MessageHandler, _memoryQueueService, mixEndpointService);
+
+                    case MixQueueProvider.MQTT:
+                        return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
+                           provider, _configuration.GetSection("MessageQueueSettings:Mix").Get<MixQueueSetting>(), topicId, subscriptionId, MessageHandler, _memoryQueueService, mixEndpointService);
                 }
             }
             catch (Exception ex)

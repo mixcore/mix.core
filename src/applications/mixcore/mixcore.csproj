@@ -19,11 +19,13 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
 		<ProjectReference Include="..\..\modules\mix.grpc\mix.grpc.csproj" />
+		<ProjectReference Include="..\..\modules\mix.mqtt\mix.mqtt.csproj" />
 		<ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
 		<ProjectReference Include="..\..\modules\mix.log\mix.log.csproj" />
 		<ProjectReference Include="..\..\modules\mix.scheduler\mix.scheduler.csproj" />
 		<ProjectReference Include="..\..\modules\mix.storage\mix.storage.csproj" />
 		<ProjectReference Include="..\..\modules\mix.tenancy\mix.tenancy.csproj" />
+		<ProjectReference Include="..\..\platform\mix.mqtt.lib\mix.mqtt.lib.csproj" />
 		<ProjectReference Include="..\..\services\core\ecommerces\mix.services.ecommerce\mix.services.ecommerce.csproj" />
 		<ProjectReference Include="..\..\services\core\graphql\mix.services.graphql\mix.services.graphql.csproj" />
 		<ProjectReference Include="..\..\services\core\mix-auth-service\mix.auth.api\mix.auth.api.csproj" />
