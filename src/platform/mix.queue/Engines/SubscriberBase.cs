@@ -112,7 +112,7 @@ namespace Mix.Queue.Engines
             Logger.LogInformation($"StartProcessQueue: {_subscriber.SubscriptionId} stopped at {DateTime.UtcNow.AddHours(7)}");
         }
 
-        private IQueueSubscriber CreateSubscriber(string topicId, string subscriptionId)
+        private IQueueSubscriber? CreateSubscriber(string topicId, string subscriptionId)
         {
             try
             {
@@ -127,18 +127,11 @@ namespace Mix.Queue.Engines
                 switch (provider)
                 {
                     case MixQueueProvider.AZURE:
-                        var azureSettingPath = _configuration.GetSection("MessageQueueSettings:AzureServiceBus");
-                        var azureSetting = new AzureQueueSetting();
-                        azureSettingPath.Bind(azureSetting);
                         return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
-                            provider, azureSetting, topicId, subscriptionId, MessageHandler, _memoryQueueService, mixEndpointService);
+                            provider, _configuration, topicId, subscriptionId, MessageHandler, _memoryQueueService, mixEndpointService);
                     case MixQueueProvider.GOOGLE:
-                        var googleSettingPath = _configuration.GetSection("MessageQueueSettings:GoogleQueueSetting");
-                        var googleSetting = new GoogleQueueSetting();
-                        googleSettingPath.Bind(googleSetting);
-                        googleSetting.CredentialFile = googleSetting.CredentialFile;
                         return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
-                            provider, googleSetting, topicId, subscriptionId, MessageHandler, _memoryQueueService, mixEndpointService);
+                            provider, _configuration, topicId, subscriptionId, MessageHandler, _memoryQueueService, mixEndpointService);
                     case MixQueueProvider.RABBITMQ:
                         return QueueEngineFactory.CreateRabbitMQSubscriber<MessageQueueModel>(_rabbitMQObjectPolicy, topicId, subscriptionId, MessageHandler);
                     case MixQueueProvider.MIX:
@@ -146,16 +139,12 @@ namespace Mix.Queue.Engines
                         {
                             return default;
                         }
-
-                        var mixSettingPath = _configuration.GetSection("MessageQueueSettings:Mix");
-                        var mixSetting = new MixQueueSetting();
-                        mixSettingPath.Bind(mixSetting);
                         return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
-                           provider, mixSetting, topicId, subscriptionId, MessageHandler, _memoryQueueService, mixEndpointService);
+                           provider, _configuration, topicId, subscriptionId, MessageHandler, _memoryQueueService, mixEndpointService);
 
                     case MixQueueProvider.MQTT:
                         return QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
-                           provider, _configuration.GetSection("MessageQueueSettings:Mix").Get<MixQueueSetting>(), topicId, subscriptionId, MessageHandler, _memoryQueueService, mixEndpointService);
+                           provider, _configuration, topicId, subscriptionId, MessageHandler, _memoryQueueService, mixEndpointService);
                 }
             }
             catch (Exception ex)

@@ -1,8 +1,8 @@
 ﻿using Mix.Database.Services.MixGlobalSettings;
 using Mix.Mq.Lib.Models;
-using Mix.Mqtt.Lib.Extensions;
+using Mix.Mqtt.Lib.Helpers;
+using Mix.Mqtt.Lib.Models;
 using Mix.Queue.Interfaces;
-using Mix.Queue.Models.QueueSetting;
 using MQTTnet;
 using System;
 using System.Collections.Generic;
@@ -20,16 +20,13 @@ namespace Mix.Queue.Engines.Mqtt
         private string _topicId;
         private readonly MixEndpointService _mixEndpointService;
         private MqttClientOptions _mqttClientOptions;
-        public MqttPublisher(IQueueSetting queueSetting, string topicName, MixEndpointService mixEndpointService)
+        public MqttPublisher(MQTTSetting? queueSetting, string topicName, MixEndpointService mixEndpointService)
         {
             _topicId = topicName;
             _mixEndpointService = mixEndpointService;
             var mqttFactory = new MqttClientFactory();
             _mqttClient = mqttFactory.CreateMqttClient();
-            _mqttClientOptions = new MqttClientOptionsBuilder()
-                .WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce)
-                    .WithTcpServer("localhost", 1883)
-                    .Build();
+            _mqttClientOptions = MqttHelper.GetClientOptions(queueSetting);
 
         }
 

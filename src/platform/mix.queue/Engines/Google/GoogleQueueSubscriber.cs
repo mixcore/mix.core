@@ -18,17 +18,17 @@ namespace Mix.Queue.Engines.GooglePubSub
     {
         public string SubscriptionId { get; set; }
         private SubscriberClient _subscriber;
-        private readonly GoogleQueueSetting _queueSetting;
+        private readonly GoogleQueueSetting? _queueSetting;
         private SubscriptionName _subscriptionName;
         private readonly Func<T, Task> _messageHandler;
 
         public GoogleQueueSubscriber(
-            IQueueSetting queueSetting,
+            GoogleQueueSetting? queueSetting,
             string topicId,
             string subscriptionId,
             Func<T, Task> messageHandler)
         {
-            _queueSetting = queueSetting as GoogleQueueSetting;
+            _queueSetting = queueSetting;
             _messageHandler = messageHandler;
             InitializeQueue(topicId, subscriptionId);
         }

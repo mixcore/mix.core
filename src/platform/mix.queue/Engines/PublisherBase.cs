@@ -5,6 +5,7 @@ using Microsoft.Extensions.ObjectPool;
 using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Exceptions;
 using Mix.Mq.Lib.Models;
+using Mix.Mqtt.Lib.Models;
 using Mix.Queue.Engines.RabbitMQ;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
@@ -46,7 +47,7 @@ namespace Mix.Queue.Engines
             RabbitMqObjectPolicy = rabbitMQObjectPolicy;
         }
 
-        protected List<IQueuePublisher<MessageQueueModel>> CreatePublisher(
+        protected List<IQueuePublisher<MessageQueueModel>>? CreatePublisher(
             string topicId)
         {
             try
@@ -63,23 +64,14 @@ namespace Mix.Queue.Engines
                 switch (Provider)
                 {
                     case MixQueueProvider.AZURE:
-                        var azureSettingPath = Configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:AzureServiceBus");
-                        var azureSetting = new AzureQueueSetting();
-                        azureSettingPath.Bind(azureSetting);
-
                         queuePublishers.Add(
                             QueueEngineFactory.CreatePublisher<MessageQueueModel>(
-                                Provider, azureSetting, topicId, MixEndpointService));
+                                Provider, Configuration, topicId, MixEndpointService));
                         break;
                     case MixQueueProvider.GOOGLE:
-                        var googleSettingPath = Configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:GoogleQueueSetting");
-                        var googleSetting = new GoogleQueueSetting();
-                        googleSettingPath.Bind(googleSetting);
-                        googleSetting.CredentialFile = googleSetting.CredentialFile;
-
                         queuePublishers.Add(
                             QueueEngineFactory.CreatePublisher<MessageQueueModel>(
-                                Provider, googleSetting, topicId, MixEndpointService));
+                                Provider, Configuration, topicId, MixEndpointService));
                         break;
 
                     case MixQueueProvider.RABBITMQ:
@@ -90,11 +82,8 @@ namespace Mix.Queue.Engines
                     case MixQueueProvider.MIX:
                         if (MixEndpointService.MixMq != null)
                         {
-                            var mixSettingPath = Configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:Mix");
-                            var mixSetting = new MixQueueSetting();
-                            mixSettingPath.Bind(mixSetting);
                             queuePublishers.Add(
-                               QueueEngineFactory.CreatePublisher<MessageQueueModel>(Provider, mixSetting, topicId, MixEndpointService));
+                               QueueEngineFactory.CreatePublisher<MessageQueueModel>(Provider, Configuration, topicId, MixEndpointService));
                         }
                         break; 
                     case MixQueueProvider.MQTT:
@@ -104,7 +93,7 @@ namespace Mix.Queue.Engines
                             queuePublishers.Add(
                                QueueEngineFactory.CreatePublisher<MessageQueueModel>(
                                    Provider, 
-                                   Configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:Mix").Get<MixQueueSetting>()!, 
+                                   Configuration, 
                                    topicId, 
                                    MixEndpointService));
                         //}
