@@ -17,11 +17,11 @@ namespace Mix.Queue.Engines.Azure
         private ServiceBusSender _publisher;
         private static ServiceBusAdministrationClient _adminClient;
         private static ServiceBusClient _client;
-        private readonly AzureQueueSetting _queueSetting;
+        private readonly AzureQueueSetting? _queueSetting;
 
-        public AzureQueuePublisher(IQueueSetting queueSetting, string topicName)
+        public AzureQueuePublisher(AzureQueueSetting? queueSetting, string topicName)
         {
-            _queueSetting = queueSetting as AzureQueueSetting;
+            _queueSetting = queueSetting;
             InitializeQueue(topicName);
         }
 

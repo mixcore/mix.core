@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\modules\mix.mqtt\mix.mqtt.csproj" />
         <ProjectReference Include="..\..\services\core\mix-message-queue\mix.mq.server\mix.mq.server.csproj" />
         <ProjectReference Include="..\..\services\core\mix-message-queue\mix.mq.server\mix.mq.server.csproj" />
         <ProjectReference Include="..\..\services\mix.automation\mix.automation.api\mix.automation.api.csproj" />
