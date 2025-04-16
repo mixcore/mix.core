@@ -1,21 +1,109 @@
-MIT License
+# MIXCORE SOURCE AVAILABLE LICENSE v1.0
 
-Copyright (c) 2019 Mixcore Foundation
+## PREAMBLE
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This Mixcore Source Available License (the "License") sets forth the terms under which the Mixcore software and associated documentation files (the "Software") may be used, copied, modified, and distributed. This License is designed to preserve the open nature of the Software while protecting Mixcore's sustainability as an ongoing project.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+## TERMS AND CONDITIONS
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+### 1. MIT LICENSE GRANT
+
+Copyright © 2018-2025 Mixcore and Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+### 2. COMMONS CLAUSE LIMITATION
+
+The MIT License permissions granted above are subject to the following restrictions:
+
+Without limiting other conditions in this License, the grant of rights under this License will not include, and the License does not grant to you, the right to Sell the Software or to provide the Software as a part of a hosted, managed service, or online service where the primary value of such service is the availability of the Software.
+
+For purposes of the foregoing:
+
+"Sell" means practicing any or all of the rights granted to you under the License to provide to third parties, for a fee or other consideration (including without limitation fees for hosting, consulting, support, or managed services, or receiving revenue from advertising displayed within the Software), a product or service whose value derives, entirely or substantially, from the functionality of the Software.
+
+This restriction does not apply to:
+1. Individual developers or small businesses with annual gross revenue under US $1,000,000
+2. Non-profit organizations and educational institutions
+3. Internal use within an organization, regardless of size, where the Software is not part of a service offered to external customers
+
+### 3. TRADEMARK AND ATTRIBUTION REQUIREMENTS
+
+In addition to the terms and conditions above, all uses of the Software are subject to the following attribution requirements:
+
+a) All copies of the Software in Executable and Source Code form must include on each user interface screen the "powered by Mixcore CMS" text, which must be:
+   i. Visible to all users
+   ii. Appear in each user interface screen
+   iii. Maintain consistent positioning across the application
+   iv. Be clearly legible with reasonable contrast against its background
+
+b) When users click on the "powered by Mixcore CMS" text, they must be directed to https://www.mixcore.org
+
+c) The Mixcore name and logo are trademarks of Mixcore and may only be used in the required attribution and may not be used to promote or endorse derivative products without explicit written permission.
+
+### 4. REVENUE TIER EXEMPTIONS
+
+The restrictions in Section 2 (Commons Clause Limitation) and Section 3 (Trademark and Attribution Requirements) are automatically adjusted based on the annual gross revenue of the entity using the Software as follows:
+
+a) **Tier 1: Under US $1,000,000 annual gross revenue**
+   - Exempt from Commons Clause limitations
+   - Must comply with attribution requirements
+
+b) **Tier 2: US $1,000,000 to $10,000,000 annual gross revenue**
+   - Subject to Commons Clause limitations
+   - Must comply with attribution requirements
+   - May obtain exemptions through Commercial License options
+
+c) **Tier 3: Over US $10,000,000 annual gross revenue**
+   - Subject to Commons Clause limitations
+   - Must comply with attribution requirements
+   - Commercial License required for any exemptions
+
+### 5. GEOGRAPHICAL ADJUSTMENTS
+
+The revenue tiers specified in Section 4 are adjusted based on location to account for economic differences across regions:
+
+a) **High-income economies** (as defined by the World Bank): 100% of the stated thresholds
+
+b) **Upper-middle-income economies**: 60% of the stated thresholds
+
+c) **Lower-middle-income economies**: 30% of the stated thresholds
+
+d) **Low-income economies**: 10% of the stated thresholds
+
+The current classification of economies can be found on the World Bank website. The applicable classification at the time of initial Software acquisition applies for the duration of use unless a Commercial License specifies otherwise.
+
+### 6. COMMERCIAL LICENSE OPTION
+
+Entities wishing to be exempt from the Commons Clause limitations and/or the Trademark and Attribution Requirements may purchase a Commercial License from Mixcore. A Commercial License grants additional rights beyond this License and supersedes the restrictions in Sections 2, 3, 4, and 5 according to its terms.
+
+Details about Commercial License options and pricing can be found at:
+https://www.mixcore.org/commercial-license
+
+### 7. TERMINATION
+
+This License automatically terminates if you fail to comply with any of its terms or conditions. Upon termination, you must destroy all copies of the Software in your possession.
+
+### 8. ATTRIBUTION LICENSE
+
+If you wish to be exempt solely from the attribution requirements in Section 3 while remaining subject to the Commons Clause in Section 2, you may purchase an Attribution License at a lower cost than a full Commercial License. Visit the Mixcore website for details.
+
+### 9. CONTRIBUTION
+
+Any contribution intentionally submitted for inclusion in the Software shall be subject to this License without any additional terms or conditions.
+
+### 10. SEVERABILITY
+
+If any provision of this License is held to be unenforceable, such provision shall be reformed only to the extent necessary to make it enforceable.
+
+---
+
+For questions regarding this License, please contact:
+legal@mixcore.org
+
+For Commercial License inquiries, please contact:
+sales@mixcore.org
