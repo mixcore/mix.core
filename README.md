@@ -84,7 +84,7 @@ Contact us at [enterprise@mixcore.org](mailto:enterprise@mixcore.org) for more i
 
 ## 📄 License
 
-Mixcore CMS is licensed under the **[MIT License](https://github.com/mixcore/mix.core/blob/master/LICENSE)**
+Mixcore CMS is licensed under the **[Mixcore Community License (MCL)](https://github.com/mixcore/mix.core/blob/master/LICENSE)**
 
 ## 🤝 Contributing
 
