@@ -4,6 +4,8 @@
 
 > **🚀 Enterprise-Grade CMS & API Platform** - Build scalable, secure, and high-performance web applications with modern .NET Core microservices architecture. Perfect for agencies, enterprises, and developers building complex digital experiences.
 
+![image](https://github.com/user-attachments/assets/713fa9fd-2cfe-45ff-80a4-e83a9442ae99)
+
 ## 🎯 Quick Links
 
 - [Documentation](https://github.com/mixcore/mix.core/wiki)
