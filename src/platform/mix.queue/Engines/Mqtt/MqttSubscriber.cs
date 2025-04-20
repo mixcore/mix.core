@@ -36,7 +36,7 @@ namespace Mix.Queue.Engines.Mqtt
             _mqttClient = _mqttFactory.CreateMqttClient();
             _mqttClientOptions = MqttHelper.GetClientOptions(queueSetting);
             _mqttSubscribeOptions = _mqttFactory.CreateSubscribeOptionsBuilder().WithTopicFilter(_topic).Build();
-            
+
         }
 
         /// <summary>
@@ -49,10 +49,13 @@ namespace Mix.Queue.Engines.Mqtt
             {
                 _mqttClient.ApplicationMessageReceivedAsync += async e =>
                 {
-                    Console.WriteLine($"{SubscriptionId} Received application message.");
-                    var msg = JsonSerializer.Deserialize<T>(Encoding.UTF8.GetString(e.ApplicationMessage.Payload));
-                    await _messageHandler(msg);
-                    await e.AcknowledgeAsync(cancellationToken);
+                    if (e.ApplicationMessage.Payload.Length > 0)
+                    {
+                        Console.WriteLine($"{SubscriptionId} Received application message.");
+                        var msg = JsonSerializer.Deserialize<T>(Encoding.UTF8.GetString(e.ApplicationMessage.Payload));
+                        await _messageHandler(msg);
+                        await e.AcknowledgeAsync(cancellationToken);
+                    }
                 };
 
                 while (!cancellationToken.IsCancellationRequested)

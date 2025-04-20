@@ -1,13 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
-using Mix.Mqtt.Lib.Helpers;
-using MQTTnet.Samples.Server;
+using Mix.Mqtt.Lib.Extensions;
 using MQTTnet.Server;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Authentication;
-using System.Text;
-using System.Threading.Tasks;
+using MQTTnet;
 
 namespace Mix.Mqtt.Lib.Service
 {
@@ -25,23 +19,33 @@ namespace Mix.Mqtt.Lib.Service
             *
             * See sample "Run_Minimal_Server" for more details.
             */
-
-            var mqttServerFactory = new MqttServerFactory();
-
-            var mqttServerOptions = new MqttServerOptionsBuilder()
-                .WithDefaultEndpoint() // This call disables the default unencrypted endpoint on port 1883
-                //.WithEncryptedEndpoint()
-                //.WithEncryptedEndpointPort(1883) // the secured port
-                //.WithEncryptionCertificate(CertificateHelper.CreateSelfSignedCertificate("localhost", "1.3.6.1.5.5.7.3.1"))
-                //.WithEncryptionSslProtocol(SslProtocols.Tls12)
-                .Build();
-            _server = mqttServerFactory.CreateMqttServer(mqttServerOptions);
-            await _server.StartAsync();
+            try
+            {
+                var mqttServerFactory = new MqttServerFactory();
+                var mqttServerOptions = new MqttServerOptionsBuilder()
+                    .WithDefaultEndpoint() // This call disables the default unencrypted endpoint on port 1883
+                                           //.WithEncryptedEndpoint()
+                                           //.WithEncryptedEndpointPort(1883) // the secured port
+                                           //.WithEncryptionCertificate(CertificateHelper.CreateSelfSignedCertificate("localhost", "1.3.6.1.5.5.7.3.1"))
+                                           //.WithEncryptionSslProtocol(SslProtocols.Tls12)
+                    .Build();
+                _server = mqttServerFactory.CreateMqttServer(mqttServerOptions);
+                await _server.StartAsync();
+                Console.WriteLine("MQTT Server started");
+                Console.WriteLine(mqttServerOptions.DefaultEndpointOptions.Port);
+                Console.WriteLine(_server.IsStarted);
+                Console.WriteLine(_server.ServerSessionItems.DumpToConsole());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Cannot start mqtt server");
+                ex.DumpToConsole();
+            }
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _server.StopAsync();
+            _server?.StopAsync();
             return base.StopAsync(cancellationToken);
         }
     }
