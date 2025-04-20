@@ -60,6 +60,13 @@ namespace mix.auth.service.Controllers
             return Ok(result);
         }
 
+        [HttpPost("create")]
+        public Task<ActionResult<Guid>> CreateRole([FromBody]string name)
+        {
+            var role = new MixRole(name);
+            return Create(role);
+        }
+
         protected override async Task<Guid> CreateHandlerAsync(MixRole data)
         {
             data.Id = Guid.NewGuid();

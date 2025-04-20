@@ -44,6 +44,7 @@ namespace Mix.Queue.Engines.Mqtt
                 }
                 message.CreatedDate = DateTime.UtcNow;
                 await _mqttClient.PublishAsync(new MqttApplicationMessageBuilder().WithTopic(_topicId).WithPayload(JsonSerializer.SerializeToUtf8Bytes(message)).Build());
+                await _mqttClient.DisconnectAsync();
             }
             catch (Exception ex)
             {
