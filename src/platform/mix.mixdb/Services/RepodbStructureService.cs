@@ -170,6 +170,16 @@ namespace Mix.Mixdb.Services
             }
         }
 
+        public async Task ExecuteSqlAsync(string sql, params object[] parameters)
+        {
+            if (string.IsNullOrEmpty(sql))
+            {
+                throw new ArgumentNullException(nameof(sql));
+            }
+
+            await _cmsUow.DbContext.Database.ExecuteSqlRawAsync(sql, parameters);
+        }
+
         #endregion
 
         #region Methods

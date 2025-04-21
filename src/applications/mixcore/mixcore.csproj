@@ -32,6 +32,7 @@
 		<ProjectReference Include="..\..\services\core\mix-databases\mix.servives.databases\mix.services.databases.csproj" />
 		<ProjectReference Include="..\..\services\core\mix-message-queue\mix.mq.server\mix.mq.server.csproj" />
 		<ProjectReference Include="..\..\services\mix.automation\mix.automation.api\mix.automation.api.csproj" />
+		<ProjectReference Include="..\..\services\mix.mcp\mix.mcp.api\mix.mcp.api.csproj" />
 		<ProjectReference Include="..\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
 	</ItemGroup>
 	<ItemGroup>
