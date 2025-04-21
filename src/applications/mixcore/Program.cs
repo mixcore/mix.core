@@ -22,6 +22,7 @@ using Mix.Mixdb.Subscribers;
 using Mix.Lib.Extensions;
 using MQTTnet.Samples.Server;
 using Mix.Mqtt.Lib.Service;
+using MQTTnet.AspNetCore;
 
 var builder = MixCmsHelper.CreateWebApplicationBuilder(args);
 
@@ -36,7 +37,6 @@ builder.Services.AddWebEncoders(options =>
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.AddConfigurations();
-builder.Services.AddHostedService<MqttServerHostedService>();
 var globalConfig = builder.Configuration.GetSection(MixAppSettingsSection.GlobalSettings)
                                             .Get<GlobalSettingsModel>();
 builder.AddMixQueue();
@@ -49,7 +49,6 @@ builder.Services.AddMixLogSubscriber(builder.Configuration);
 builder.Services.AddMixAuthorize<MixCmsAccountContext>(builder.Configuration);
 builder.Services.AddScoped<MixIdentityService>();
 builder.Services.TryAddScoped<MixcorePostService>();
-
 
 
 AddPortalServices(builder.Services, builder.Configuration);

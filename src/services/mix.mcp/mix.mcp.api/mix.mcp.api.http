@@ -1,0 +1,6 @@
+@mix.mcp.api_HostAddress = http://localhost:5252
+
+GET {{mix.mcp.api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

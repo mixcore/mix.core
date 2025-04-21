@@ -40,5 +40,15 @@ namespace Mix.Mqtt.Lib.Helpers
                 }
             }
         }
+
+        public static X509Certificate2 LoadCertificate(byte[] certificateData, string password)
+        {
+            if (certificateData == null)
+            {
+                throw new ArgumentNullException(nameof(certificateData));
+            }
+
+            return new X509Certificate2(certificateData, password, X509KeyStorageFlags.DefaultKeySet);
+        }
     }
 }

@@ -48,6 +48,14 @@ namespace Mix.Communicator.Services
             await docRef.DeleteAsync();
         }
 
+        public async Task SendMessageAsync(string message)
+        {
+            if (string.IsNullOrEmpty(message))
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
 
+            await _db.Collection("messages").AddAsync(new { Text = message, Timestamp = DateTime.UtcNow });
+        }
     }
 }
