@@ -32,6 +32,8 @@ namespace Mix.MCP.Lib.Extensions
                 .WithHttpTransport()
                 .WithStdioServerTransport()
                 .WithPrompts<DeepseekPrompts>()
+                .WithPrompts<GeneratePrompt>()
+                .WithPrompts<IoTHealthDataPrompt>()
                 .WithTools<EchoTool>()
                 .WithTools<LlmTools>()
                 .WithToolsFromAssembly();

@@ -206,7 +206,7 @@ namespace Mix.Portal.Domain.Services
                 _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Modifying {name}.cshtml");
 
                 var indexFile = MixFileHelper.GetFileByFullName($"{deployUrl}/index.html");
-
+                string webPath = deployUrl.Replace("wwwroot", string.Empty).TrimStart('/').TrimEnd('/');
                 if (string.IsNullOrEmpty(indexFile.Content))
                 {
                     throw new MixException(MixErrorStatus.Badrequest, "Invalid Application Package");
@@ -216,9 +216,9 @@ namespace Mix.Portal.Domain.Services
                 Regex regex = new($"((\\\"|\\'|\\(\\/|\\`)(\\.)?(\\/)?(([0-9a-zA-Z\\/\\.\\$\\{{\\}}_-])+)\\.({allowExtensionsPattern})(\\\"|\\'|\\)|\\`))");
                 Regex baseHrefRegex = new("(base href=\"(.{0,})\")");
                 Regex basePathRegex = new("(\\[\\[?basePath\\]\\]?\\/?)");
-                indexFile.Content = regex.Replace(indexFile.Content, $"$2/{deployUrl}/$5.$7$2");
+                indexFile.Content = regex.Replace(indexFile.Content, $"$2/{webPath}/$5.$7$2");
                 indexFile.Content = baseHrefRegex.Replace(indexFile.Content, $"base href=\"{baseHref}\"");
-                indexFile.Content = basePathRegex.Replace(indexFile.Content, $"/{deployUrl}/");
+                indexFile.Content = basePathRegex.Replace(indexFile.Content, $"/{webPath}/");
 
                 var activeTheme = await _themeService.GetActiveTheme();
                 MixTemplateViewModel template = await MixTemplateViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.Id == templateId);
@@ -234,7 +234,7 @@ namespace Mix.Portal.Domain.Services
                     Styles = string.Empty,
                 };
                 template.Content = indexFile.Content.Replace("@", "@@")
-                                                    .Replace("<body>", "<body><pre id=\"app-settings-container\" style=\"display:none\">@Model.AppSettingsModel.ToString()</pre>");
+                                                    .Replace("<body>", "<body><pre id=\"app-settings-container\" style=\"display:none\">@Model.AppSettings.ToString()</pre>");
                 await template.SaveAsync();
                 _queueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), template);
                 MixFileHelper.SaveFile(indexFile);
