@@ -56,7 +56,7 @@ namespace Mix.Storage.Lib.Engines.Mix
 
                 if (saveResult)
                 {
-                    result = $"{_httpScheme}://{CurrentTenant.Configurations.Domain}/{fileModel.FileFolder.Replace(MixFolders.WebRootPath, string.Empty)}/{fileModel.Filename}{fileModel.Extension}";
+                    result = $"{_httpScheme}://{CurrentTenant.Configurations.Domain.TrimEnd('/')}/{fileModel.FileFolder.Replace(MixFolders.WebRootPath, string.Empty)}/{fileModel.Filename}{fileModel.Extension}";
                 }
                 return Task.FromResult(result);
             }

@@ -76,7 +76,6 @@ namespace Mix.Storage.Lib.Engines.Base
             string fileName = fullname[(fullname.LastIndexOf('/') + 1)..];
             var media = new MixMediaViewModel(CmsUow)
             {
-                Id = Guid.NewGuid(),
                 DisplayName = fileName,
                 Status = MixContentStatus.Published,
                 FileFolder = fileFolder,

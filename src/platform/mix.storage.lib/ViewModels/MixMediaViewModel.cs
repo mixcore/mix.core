@@ -1,6 +1,6 @@
 ﻿namespace Mix.Storage.Lib.ViewModels
 {
-    public class MixMediaViewModel : TenantDataViewModelBase<MixCmsContext, MixMedia, Guid, MixMediaViewModel>
+    public class MixMediaViewModel : TenantDataViewModelBase<MixCmsContext, MixMedia, int, MixMediaViewModel>
     {
         #region Constructors
 
