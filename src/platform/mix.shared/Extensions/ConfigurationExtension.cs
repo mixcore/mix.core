@@ -44,7 +44,7 @@ namespace Mix.Lib.Extensions
         
         public static string? SettingsConnection(this IConfiguration configuration)
         {
-            return configuration.GetValue<string>(MixConstants.CONST_SETTINGS_CONNECTION) ?? "Data Source=wwwroot\\mixcontent\\settings.sqlite";
+            return configuration.GetConnectionString(MixConstants.CONST_SETTINGS_CONNECTION) ?? "Data Source=wwwroot\\mixcontent\\settings.sqlite";
         }
     }
 }
