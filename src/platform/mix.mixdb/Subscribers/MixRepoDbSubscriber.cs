@@ -62,13 +62,15 @@ namespace Mix.Mixdb.Subscribers
 
         private async Task BackupDatabase(MessageQueueModel model)
         {
-            await _mixDbService.BackupDatabase(model.Data);
+            // TODO: create new sqlite file and store model.Data to sqlite
+            //await _mixDbService.BackupDatabase(model.Data);
             await SendMessage($"{MixRepoDbQueueAction.Backup} {model.Data} Successfully", true);
         }
 
         private async Task RestoreDatabase(MessageQueueModel model)
         {
-            await _mixDbService.RestoreFromLocal(model.Data);
+            // TODO: load data from sqlite file and restore to database
+            //await _mixDbService.RestoreFromLocal(model.Data);
             await SendMessage($"{MixRepoDbQueueAction.Restore} {model.Data} Successfully", true);
         }
 
@@ -81,9 +83,9 @@ namespace Mix.Mixdb.Subscribers
 
         private async Task UpdateDatabase(MessageQueueModel model)
         {
-            await _mixDbService.BackupDatabase(model.Data);
+            //await _mixDbService.BackupDatabase(model.Data);
             await _mixDbService.MigrateDatabase(model.Data);
-            await _mixDbService.RestoreFromLocal(model.Data);
+            //await _mixDbService.RestoreFromLocal(model.Data);
             string msg = $"{MixRepoDbQueueAction.Update} {model.Data} Successfully";
             await SendMessage(msg, true);
         }

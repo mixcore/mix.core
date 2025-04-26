@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Mix.Constant.Constants;
 using Mix.Constant.Enums;
 using Mix.Database.Base;
@@ -26,25 +27,24 @@ using System.Dynamic;
 
 namespace Mix.Mixdb.Services
 {
+    /// <summary>
+    /// Service for managing database structure operations
+    /// </summary>
     public class MixdbStructureService : TenantServiceBase, IMixdbStructure
     {
-        #region Properties
-        IEnumerable<IMixdbStructureService> _dbStructureServices;
-        protected IMixdbStructureService _dbStructureSrv { get; set; }
-        protected IDatabaseConstants _databaseConstant;
-        protected MixDatabaseProvider _databaseProvider;
-        protected IMixMemoryCacheService _memoryCache;
+        private readonly ILogger<MixdbStructureService> _logger;
+        private readonly IEnumerable<IMixdbStructureService> _dbStructureServices;
+        private readonly IDatabaseConstants _databaseConstant;
+        private readonly MixDatabaseProvider _databaseProvider;
+        private readonly IMixMemoryCacheService _memoryCache;
         private readonly IConfiguration _configuration;
-        protected readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
-        protected readonly DatabaseService _databaseService;
+        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
+        private readonly DatabaseService _databaseService;
         private readonly ICache _cache;
-        private RepoDbRepository _repository;
-        private AppSetting _settings;
-        protected RuntimeDbContextService _runtimeDbContextService;
-
-        #endregion
-
-        #region Constructors
+        private readonly RepoDbRepository _repository;
+        private readonly AppSetting _settings;
+        private readonly RuntimeDbContextService _runtimeDbContextService;
+        private IMixdbStructureService _dbStructureSrv;
 
         public MixdbStructureService(
             IConfiguration configuration,
@@ -55,11 +55,12 @@ namespace Mix.Mixdb.Services
             MixCacheService cacheService,
             IMixTenantService mixTenantService,
             ICache cache,
-            IEnumerable<IMixdbStructureService> dbStructureServices) : base(httpContextAccessor, cacheService, mixTenantService)
+            IEnumerable<IMixdbStructureService> dbStructureServices,
+            ILogger<MixdbStructureService> logger) : base(httpContextAccessor, cacheService, mixTenantService)
         {
-            _configuration = configuration;
-            _cmsUow = uow;
-            _databaseService = databaseService;
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _cmsUow = uow ?? throw new ArgumentNullException(nameof(uow));
+            _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
             _databaseProvider = _databaseService.DatabaseProvider;
             _databaseConstant = _databaseProvider switch
             {
@@ -68,11 +69,11 @@ namespace Mix.Mixdb.Services
                 MixDatabaseProvider.PostgreSQL => new PostgresDatabaseConstants(),
                 MixDatabaseProvider.SQLITE => new SqliteDatabaseConstants(),
                 MixDatabaseProvider.SCYLLADB => new CassandraDatabaseConstants(),
-                _ => throw new NotImplementedException()
+                _ => throw new NotImplementedException($"Database provider {_databaseProvider} is not supported")
             };
-            _memoryCache = memoryCache;
+            _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
             _runtimeDbContextService = new RuntimeDbContextService(httpContextAccessor, databaseService);
-            _cache = cache;
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _settings = new AppSetting()
             {
                 CacheItemExpiration = 10,
@@ -82,100 +83,197 @@ namespace Mix.Mixdb.Services
                databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION),
                databaseService.DatabaseProvider,
                _settings);
-            _dbStructureServices = dbStructureServices;
+            _dbStructureServices = dbStructureServices ?? throw new ArgumentNullException(nameof(dbStructureServices));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        #endregion
-
-
+        /// <summary>
+        /// Migrates and initializes new database context
+        /// </summary>
         public async Task MigrateInitNewDbContextDatabases(MixDatabaseContext dbContext, CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             try
             {
-                var cnn = dbContext.ConnectionString;
-                if (AesEncryptionHelper.IsEncrypted(dbContext.ConnectionString, _configuration.AesKey()))
-                {
-                    cnn = AesEncryptionHelper.DecryptString(dbContext.ConnectionString, _configuration.AesKey());
-                }
+                _logger.LogInformation("Starting migration for new database context: {ContextName}", dbContext.SystemName);
+                
+                cancellationToken.ThrowIfCancellationRequested();
+                ValidateDatabaseContext(dbContext);
+
+                var cnn = GetDecryptedConnectionString(dbContext.ConnectionString);
                 InitDbStructureService(cnn, dbContext.DatabaseProvider);
+
                 if (dbContext.DatabaseProvider == MixDatabaseProvider.PostgreSQL)
                 {
                     await _dbStructureSrv.ExecuteCommand("CREATE EXTENSION IF NOT EXISTS \"unaccent\";");
                 }
+
                 var strMixDbs = MixFileHelper.GetFile(
                     "init-new-dbcontext-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
                 var obj = JObject.Parse(strMixDbs.Content);
                 var databases = obj.Value<JArray>("databases")?.ToObject<List<MixDatabase>>();
                 var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
+
                 if (databases != null)
                 {
-                    foreach (var database in databases)
-                    {
-                        string newDbName = dbContext.NamingConvention == MixDatabaseNamingConvention.SnakeCase
-                            ? $"{dbContext.SystemName}_{database.DisplayName.ToColumnName(false)}"
-                            : $"{dbContext.SystemName.ToTitleCase()}{database.DisplayName.ToColumnName(true)}";
-                        var currentDb = await MixDbDatabaseViewModel.GetRepository(_cmsUow, CacheService)
-                            .GetSingleAsync(m => m.SystemName == newDbName);
-                        if (currentDb == null)
-                        {
-                            currentDb = new(database, _cmsUow);
-                            currentDb.Id = 0;
-                            currentDb.NamingConvention = dbContext.NamingConvention;
-                            currentDb.SystemName = newDbName;
-                            currentDb.TenantId = CurrentTenant?.Id ?? 1;
-                            currentDb.MixDatabaseContextId = dbContext.Id;
-                            currentDb.DatabaseProvider = dbContext.DatabaseProvider;
-                            currentDb.CreatedDateTime = DateTime.UtcNow;
-                            currentDb.Columns = new();
-
-                            if (columns is not null)
-                            {
-                                currentDb.AddDefaultColumns();
-                                var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
-                                foreach (var col in cols)
-                                {
-                                    string newColName =
-                                        dbContext.NamingConvention == MixDatabaseNamingConvention.SnakeCase
-                                            ? col.DisplayName.ToColumnName(false)
-                                            : col.DisplayName.ToColumnName(true);
-                                    col.Id = 0;
-                                    col.SystemName = newColName;
-                                    col.MixDatabaseName = newDbName;
-                                    currentDb.Columns.Add(new(col, _cmsUow));
-                                }
-                            }
-
-                            await currentDb.SaveAsync(cancellationToken);
-                        }
-
-                        if (currentDb is { Columns.Count: > 0 })
-                        {
-                            await _dbStructureSrv.Migrate(currentDb, dbContext.DatabaseProvider);
-                        }
-                    }
-
+                    await ProcessDatabasesAsync(databases, columns, dbContext, cancellationToken);
                 }
 
+                _logger.LogInformation("Successfully completed migration for database context: {ContextName}", dbContext.SystemName);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error migrating database context: {ContextName}", dbContext.SystemName);
                 throw new MixException(MixErrorStatus.Badrequest, ex);
             }
         }
 
+        /// <summary>
+        /// Migrates system databases
+        /// </summary>
         public async Task MigrateSystemDatabases(CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            try
+            {
+                _logger.LogInformation("Starting system databases migration");
+                
+                cancellationToken.ThrowIfCancellationRequested();
 
-            var strMixDbs = MixFileHelper.GetFile(
-                "system-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
-            var obj = JObject.Parse(strMixDbs.Content);
-            var databases = obj.Value<JArray>("databases")?.ToObject<List<MixDatabase>>();
-            var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
+                var strMixDbs = MixFileHelper.GetFile(
+                    "system-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
+                var obj = JObject.Parse(strMixDbs.Content);
+                var databases = obj.Value<JArray>("databases")?.ToObject<List<MixDatabase>>();
+                var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
+
+                var masterDbContext = await GetOrCreateMasterDbContextAsync();
+                
+                if (databases != null)
+                {
+                    await ProcessSystemDatabasesAsync(databases, columns, masterDbContext, cancellationToken);
+                }
+
+                _logger.LogInformation("Successfully completed system databases migration");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error migrating system databases");
+                throw;
+            }
+        }
+
+        #region Private Methods
+
+        private void ValidateDatabaseContext(MixDatabaseContext dbContext)
+        {
+            if (dbContext == null)
+            {
+                throw new ArgumentNullException(nameof(dbContext));
+            }
+
+            if (string.IsNullOrEmpty(dbContext.ConnectionString))
+            {
+                throw new ArgumentException("Connection string cannot be null or empty", nameof(dbContext));
+            }
+
+            if (string.IsNullOrEmpty(dbContext.SystemName))
+            {
+                throw new ArgumentException("System name cannot be null or empty", nameof(dbContext));
+            }
+        }
+
+        private string GetDecryptedConnectionString(string connectionString)
+        {
+            if (AesEncryptionHelper.IsEncrypted(connectionString, _configuration.AesKey()))
+            {
+                return AesEncryptionHelper.DecryptString(connectionString, _configuration.AesKey());
+            }
+            return connectionString;
+        }
+
+        private async Task ProcessDatabasesAsync(
+            List<MixDatabase> databases,
+            List<MixDatabaseColumn>? columns,
+            MixDatabaseContext dbContext,
+            CancellationToken cancellationToken)
+        {
+            foreach (var database in databases)
+            {
+                string newDbName = GetNewDatabaseName(dbContext, database);
+                var currentDb = await GetOrCreateDatabaseAsync(database, newDbName, dbContext, columns, cancellationToken);
+
+                if (currentDb is { Columns.Count: > 0 })
+                {
+                    await _dbStructureSrv.Migrate(currentDb, dbContext.DatabaseProvider, cancellationToken);
+                }
+            }
+        }
+
+        private string GetNewDatabaseName(MixDatabaseContext dbContext, MixDatabase database)
+        {
+            return dbContext.NamingConvention == MixDatabaseNamingConvention.SnakeCase
+                ? $"{dbContext.SystemName}_{database.DisplayName.ToColumnName(false)}"
+                : $"{dbContext.SystemName.ToTitleCase()}{database.DisplayName.ToColumnName(true)}";
+        }
+
+        private async Task<MixDbDatabaseViewModel> GetOrCreateDatabaseAsync(
+            MixDatabase database,
+            string newDbName,
+            MixDatabaseContext dbContext,
+            List<MixDatabaseColumn>? columns,
+            CancellationToken cancellationToken)
+        {
+            var currentDb = await MixDbDatabaseViewModel.GetRepository(_cmsUow, CacheService)
+                .GetSingleAsync(m => m.SystemName == newDbName);
+
+            if (currentDb == null)
+            {
+                currentDb = new(database, _cmsUow)
+                {
+                    Id = 0,
+                    NamingConvention = dbContext.NamingConvention,
+                    SystemName = newDbName,
+                    TenantId = CurrentTenant?.Id ?? 1,
+                    MixDatabaseContextId = dbContext.Id,
+                    DatabaseProvider = dbContext.DatabaseProvider,
+                    CreatedDateTime = DateTime.UtcNow,
+                    Columns = new()
+                };
+
+                if (columns is not null)
+                {
+                    currentDb.AddDefaultColumns();
+                    await AddColumnsAsync(currentDb, columns, database.SystemName, dbContext.NamingConvention);
+                }
+
+                await currentDb.SaveAsync(cancellationToken);
+            }
+
+            return currentDb;
+        }
+
+        private async Task AddColumnsAsync(
+            MixDbDatabaseViewModel currentDb,
+            List<MixDatabaseColumn> columns,
+            string databaseSystemName,
+            MixDatabaseNamingConvention namingConvention)
+        {
+            var cols = columns.Where(c => c.MixDatabaseName == databaseSystemName).ToList();
+            foreach (var col in cols)
+            {
+                string newColName = namingConvention == MixDatabaseNamingConvention.SnakeCase
+                    ? col.DisplayName.ToColumnName(false)
+                    : col.DisplayName.ToColumnName(true);
+                col.Id = 0;
+                col.SystemName = newColName;
+                col.MixDatabaseName = currentDb.SystemName;
+                currentDb.Columns.Add(new(col, _cmsUow));
+            }
+        }
+
+        private async Task<MixDatabaseContext> GetOrCreateMasterDbContextAsync()
+        {
             var masterDbContext = _cmsUow.DbContext.MixDatabaseContext.FirstOrDefault(
                 m => m.SystemName == "master");
+
             if (masterDbContext is null)
             {
                 masterDbContext = new MixDatabaseContext()
@@ -191,172 +289,167 @@ namespace Mix.Mixdb.Services
                     DisplayName = "Master"
                 };
                 await _cmsUow.DbContext.AddAsync(masterDbContext);
+                await _cmsUow.DbContext.SaveChangesAsync();
             }
-            if (databases != null)
+
+            return masterDbContext;
+        }
+
+        private async Task ProcessSystemDatabasesAsync(
+            List<MixDatabase> databases,
+            List<MixDatabaseColumn>? columns,
+            MixDatabaseContext masterDbContext,
+            CancellationToken cancellationToken)
+        {
+            foreach (var database in databases)
             {
-                foreach (var database in databases)
+                if (!_cmsUow.DbContext.MixDatabase.Any(m => m.SystemName == database.SystemName))
                 {
-                    if (!_cmsUow.DbContext.MixDatabase.Any(m => m.SystemName == database.SystemName))
+                    var currentDb = new MixDbDatabaseViewModel(database, _cmsUow)
                     {
-                        MixDbDatabaseViewModel currentDb = new(database, _cmsUow);
-                        currentDb.Id = 0;
-                        currentDb.MixDatabaseContextId = masterDbContext.Id;
-                        currentDb.TenantId = CurrentTenant?.Id ?? 1;
-                        currentDb.CreatedDateTime = DateTime.UtcNow;
-                        currentDb.Columns = new();
+                        Id = 0,
+                        MixDatabaseContextId = masterDbContext.Id,
+                        TenantId = CurrentTenant?.Id ?? 1,
+                        CreatedDateTime = DateTime.UtcNow,
+                        Columns = new()
+                    };
 
-                        if (columns is not null)
-                        {
-                            var cols = columns.Where(c => c.MixDatabaseName == database.SystemName).ToList();
-                            foreach (var col in cols)
-                            {
-                                col.Id = 0;
-                                currentDb.Columns.Add(new(col, _cmsUow));
-                            }
-                        }
+                    if (columns is not null)
+                    {
+                        await AddColumnsAsync(currentDb, columns, database.SystemName, masterDbContext.NamingConvention);
+                    }
 
-                        await currentDb.SaveAsync(cancellationToken);
+                    await currentDb.SaveAsync(cancellationToken);
 
-                        if (currentDb is { Columns.Count: > 0 })
-                        {
-                            await _dbStructureSrv.Migrate(currentDb, _databaseService.DatabaseProvider);
-                        }
+                    if (currentDb is { Columns.Count: > 0 })
+                    {
+                        await _dbStructureSrv.Migrate(currentDb, _databaseService.DatabaseProvider, cancellationToken);
                     }
                 }
-
             }
         }
 
+        #endregion
 
-        #region Helpers
-        protected async Task<MixDbDatabaseViewModel> GetMixDatabase(string tableName)
+        #region Public Methods
+
+        public async Task<MixDbDatabaseViewModel> GetMixDatabase(string tableName)
         {
+            if (string.IsNullOrEmpty(tableName))
+            {
+                throw new ArgumentException("Table name cannot be null or empty", nameof(tableName));
+            }
+
             string name = $"{typeof(MixDbDatabaseViewModel).FullName}_{tableName}";
             var result = await _memoryCache.TryGetValueAsync(
                 name,
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return MixDbDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
-                }
-                );
+                    return MixDbDatabaseViewModel.GetRepository(_cmsUow, CacheService)
+                        .GetSingleAsync(m => m.SystemName == tableName);
+                });
+
             if (result == null)
             {
-                throw new MixException(MixErrorStatus.Badrequest, "Invalid table name");
+                throw new MixException(MixErrorStatus.Badrequest, $"Invalid table name: {tableName}");
             }
-            string cnn = result.MixDatabaseContext?.ConnectionString.Decrypt(_configuration.AesKey()) ?? _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+
+            string cnn = result.MixDatabaseContext?.ConnectionString.Decrypt(_configuration.AesKey()) 
+                ?? _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             InitDbStructureService(cnn, result.DatabaseProvider);
             return result;
         }
 
         public void InitDbStructureService(string cnn, MixDatabaseProvider databaseProvider)
         {
-            switch (databaseProvider)
+            if (string.IsNullOrEmpty(cnn))
             {
-                case MixDatabaseProvider.SCYLLADB:
-                    _dbStructureSrv = _dbStructureServices.First(m => m.DbProvider == MixDatabaseProvider.SCYLLADB);
-                    break;
-                case MixDatabaseProvider.SQLSERVER:
-                case MixDatabaseProvider.MySQL:
-                case MixDatabaseProvider.PostgreSQL:
-                case MixDatabaseProvider.SQLITE:
-                default:
-                    _dbStructureSrv = _dbStructureServices.First(m => m.DbProvider != MixDatabaseProvider.SCYLLADB);
-                    break;
+                throw new ArgumentException("Connection string cannot be null or empty", nameof(cnn));
             }
+
+            _dbStructureSrv = databaseProvider switch
+            {
+                MixDatabaseProvider.SCYLLADB => _dbStructureServices.First(m => m.DbProvider == MixDatabaseProvider.SCYLLADB),
+                _ => _dbStructureServices.First(m => m.DbProvider != MixDatabaseProvider.SCYLLADB)
+            };
             _dbStructureSrv.Init(cnn, databaseProvider);
         }
 
-        protected string GetRelationshipDbName(MixDbDatabaseViewModel mixDb)
+        public async Task ExecuteCommand(string commandText, CancellationToken cancellationToken)
         {
-            string relName = mixDb.NamingConvention == MixDatabaseNamingConvention.SnakeCase
-                ? MixDatabaseNames.DATA_RELATIONSHIP_SNAKE_CASE
-                : MixDatabaseNames.DATA_RELATIONSHIP_TITLE_CASE;
-            return mixDb.MixDatabaseContextId.HasValue
-                ? $"{mixDb.MixDatabaseContext.SystemName}_{relName}"
-                : MixDatabaseNames.SYSTEM_DATA_RELATIONSHIP;
-        }
-
-        protected void GetMembers(ExpandoObject obj, List<string> selectMembers, FieldNameService fieldNameService)
-        {
-            var result = obj.ToList();
-            foreach (KeyValuePair<string, object?> kvp in result)
+            if (string.IsNullOrEmpty(commandText))
             {
-                if (fieldNameService.GetAllFieldName().All(m => m != kvp.Key) && selectMembers.All(m => m != kvp.Key))
-                {
-                    obj!.Remove(kvp.Key, out _);
-                }
+                throw new ArgumentException("Command text cannot be null or empty", nameof(commandText));
             }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await _dbStructureSrv.ExecuteCommand(commandText);
         }
 
-
-
-
-
-        #endregion
-
-        #region Methods
-        public Task ExecuteCommand(string commandText, CancellationToken cancellationToken)
-        {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                return _dbStructureSrv.ExecuteCommand(commandText);
-            }
-            throw new TaskCanceledException();
-        }
         public async Task MigrateDatabase(string databaseName, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrEmpty(databaseName))
+            {
+                throw new ArgumentException("Database name cannot be null or empty", nameof(databaseName));
+            }
+
             cancellationToken.ThrowIfCancellationRequested();
             var db = await GetMixDatabase(databaseName);
             if (db is null)
             {
-                throw new NullReferenceException(databaseName);
+                throw new NullReferenceException($"Database not found: {databaseName}");
             }
-            await _dbStructureSrv.Migrate(db, db.DatabaseProvider);
-        }
-        public Task<bool> BackupDatabase(string databaseName, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> RestoreFromLocal(string databaseName, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
+            await _dbStructureSrv.Migrate(db, db.DatabaseProvider, cancellationToken);
         }
 
         public async Task AlterColumn(MixdbDatabaseColumnViewModel col, bool isDrop, CancellationToken cancellationToken = default)
         {
+            if (col == null)
+            {
+                throw new ArgumentNullException(nameof(col));
+            }
+
             cancellationToken.ThrowIfCancellationRequested();
             var db = await GetMixDatabase(col.MixDatabaseName);
             if (db is null)
             {
-                throw new NullReferenceException(col.MixDatabaseName);
+                throw new NullReferenceException($"Database not found: {col.MixDatabaseName}");
             }
             await _dbStructureSrv.AlterColumn(db, col, isDrop, cancellationToken);
         }
 
         public async Task AddColumn(MixdbDatabaseColumnViewModel repoCol, CancellationToken cancellationToken = default)
         {
+            if (repoCol == null)
+            {
+                throw new ArgumentNullException(nameof(repoCol));
+            }
+
             cancellationToken.ThrowIfCancellationRequested();
             var db = await GetMixDatabase(repoCol.MixDatabaseName);
             if (db is null)
             {
-                throw new NullReferenceException(repoCol.MixDatabaseName);
+                throw new NullReferenceException($"Database not found: {repoCol.MixDatabaseName}");
             }
             await _dbStructureSrv.AddColumn(db, repoCol, cancellationToken);
         }
 
         public async Task DropColumn(MixdbDatabaseColumnViewModel repoCol, CancellationToken cancellationToken = default)
         {
+            if (repoCol == null)
+            {
+                throw new ArgumentNullException(nameof(repoCol));
+            }
+
             cancellationToken.ThrowIfCancellationRequested();
             var db = await GetMixDatabase(repoCol.MixDatabaseName);
             if (db is null)
             {
-                throw new NullReferenceException(repoCol.MixDatabaseName);
+                throw new NullReferenceException($"Database not found: {repoCol.MixDatabaseName}");
             }
             await _dbStructureSrv.DropColumn(db, repoCol, cancellationToken);
         }
-
 
         #endregion
     }
