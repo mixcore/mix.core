@@ -4,6 +4,7 @@ using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Mix.Mixdb.Dtos;
+using Mix.Shared.Dtos;
 using Mix.Shared.Models;
 using Newtonsoft.Json.Linq;
 
