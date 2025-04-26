@@ -1,17 +1,22 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Mix.MCP.Lib.Prompts;
 using Mix.MCP.Lib.Services;
 using Mix.MCP.Lib.Tools;
 using ModelContextProtocol.Server;
+using MySql.Data.MySqlClient;
+
 namespace Mix.MCP.Lib.Extensions
 {
     public static class StartupExtensions
     {
         public static IHostApplicationBuilder AddMCPServices(this IHostApplicationBuilder builder)
         {
+            // Register HTTP clients
             builder.Services.AddHttpClient("Deepseek", client =>
             {
                 // Thay thế bằng URL API base của Deepseek
@@ -27,6 +32,18 @@ namespace Mix.MCP.Lib.Extensions
                 // Có thể thêm các cấu hình mặc định khác ở đây nếu cần
                 // client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
+
+            // Register MySQL services
+            builder.Services.AddScoped<IDatabaseService, MySqlService>();
+            builder.Services.AddSingleton<IDatabaseService>(provider =>
+            {
+                var factory = new DatabaseServiceFactory(
+                    builder.Configuration,
+                    provider.GetRequiredService<ILoggerFactory>());
+                return factory.CreateService();
+            });
+
+            // Register MCP services
             builder.Services
                 .AddMcpServer()
                 .WithHttpTransport()
@@ -34,11 +51,15 @@ namespace Mix.MCP.Lib.Extensions
                 .WithPrompts<DeepseekPrompts>()
                 .WithPrompts<GeneratePrompt>()
                 .WithPrompts<IoTHealthDataPrompt>()
+                .WithPrompts<DatabaseAnalysisPrompt>()
                 .WithTools<EchoTool>()
                 .WithTools<LlmTools>()
+                .WithTools<MySqlTools>()
                 .WithToolsFromAssembly();
 
+            // Register other services
             builder.Services.AddSingleton<ILlmService, LlmService>();
+
             return builder;
         }
 
