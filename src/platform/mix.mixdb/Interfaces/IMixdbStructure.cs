@@ -17,8 +17,6 @@ namespace Mix.Mixdb.Interfaces
     public interface IMixdbStructure
     {
         public Task MigrateDatabase(string databaseName, CancellationToken cancellationToken = default);
-        public Task<bool> BackupDatabase(string databaseName, CancellationToken cancellationToken = default);
-        public Task<bool> RestoreFromLocal(string databaseName, CancellationToken cancellationToken = default);
         public Task ExecuteCommand(string commandText, CancellationToken cancellationToken);
         public Task AlterColumn(MixdbDatabaseColumnViewModel colDto, bool isDrop, CancellationToken cancellationToken = default);
         public Task AddColumn(MixdbDatabaseColumnViewModel repoCol, CancellationToken cancellationToken = default);
