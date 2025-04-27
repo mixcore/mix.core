@@ -1,27 +1,31 @@
-﻿using Mix.Heart.Enums;
+﻿using Mix.Constant.Enums;
 using Mix.Mixdb.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Mix.Heart.Enums;
 
 namespace Mix.Mixdb.Services
 {
-    public class MixDbDataServiceFactory
+    /// <summary>
+    /// Factory implementation for creating IMixDbDataService instances
+    /// </summary>
+    public class MixDbDataServiceFactory : IMixDbDataServiceFactory
     {
-        IEnumerable<IMixDbDataService> _dataServices;
-        public MixDbDataServiceFactory(IEnumerable<IMixDbDataService> dataServices)
+        private readonly IServiceProvider _serviceProvider;
+
+        public MixDbDataServiceFactory(IServiceProvider serviceProvider)
         {
-            _dataServices = dataServices;
+            _serviceProvider = serviceProvider;
         }
-        public IMixDbDataService? GetDataService(MixDatabaseProvider provider, string connectionString)
+
+        /// <inheritdoc/>
+        public IMixDbDataService Create(MixDatabaseProvider provider, string connectionString)
         {
-            var srv = _dataServices.FirstOrDefault(m => m.DbProvider == provider);
-            if (srv != null)
+            IMixDbDataService srv = provider switch
             {
-                srv.Init(connectionString);
-            }
+                MixDatabaseProvider.SCYLLADB => _serviceProvider.GetRequiredService<ScylladbDataService>(),
+                _ => _serviceProvider.GetRequiredService<RepodbDataService>()
+            };
+            srv.InitConnection(provider, connectionString);
             return srv;
         }
     }

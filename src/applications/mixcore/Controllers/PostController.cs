@@ -30,7 +30,7 @@ namespace Mixcore.Controllers
             MixCacheService cacheService,
             IMixTenantService tenantService,
              IConfiguration configuration,
-             IMixDbDataService mixDbDataService)
+             IMixDbDataServiceFactory mixDbDataServiceFactory)
             : base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
         {
             CmsContext = cmsContext;
@@ -39,7 +39,9 @@ namespace Mixcore.Controllers
             CmsContext = cmsContext;
             _metadataService = metadataService;
             _cacheService = cacheService;
-            _mixDbDataService = mixDbDataService;
+            _mixDbDataService = mixDbDataServiceFactory.Create(
+                databaseService.DatabaseProvider,
+                databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION));
             _mixDbDataService.SetDbConnection(Uow);
         }
 

@@ -50,7 +50,7 @@ namespace Mix.Lib.Services
             _context = context;
             _cacheService = cacheService;
             _themeRepository = MixThemeViewModel.GetRepository(new UnitOfWorkInfo(_context), _cacheService);
-            _mixDbDataSrv = mixDbDataFactory.GetDataService(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION))!;
+            _mixDbDataSrv = mixDbDataFactory.Create(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION))!;
         }
 
         #region Export

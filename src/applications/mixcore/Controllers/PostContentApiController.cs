@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
@@ -35,14 +36,17 @@ namespace Mixcore.Controllers
             IMixMetadataService metadataService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService,
-            IMixDbDataService mixDbDataService)
+            IMixDbDataServiceFactory mixDbDataServiceFactory,
+            DatabaseService databaseService)
             : base(httpContextAccessor, configuration,
                   cacheService, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _postService = postService;
             _mixRepoDbRepository = mixRepoDbRepository;
             _metadataService = metadataService;
-            _mixDbDataService = mixDbDataService;
+            _mixDbDataService = mixDbDataServiceFactory.Create(
+                databaseService.DatabaseProvider,
+                databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION));
         }
 
         

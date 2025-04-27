@@ -31,7 +31,7 @@ namespace Mix.Portal.Controllers
         ILogger<MixDbController> _logger;
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private readonly IMixMemoryCacheService _memoryCache;
-        private readonly MixDbDataServiceFactory _mixDbDataFactory;
+        private readonly IMixDbDataServiceFactory _mixDbDataFactory;
         private readonly DatabaseService _databaseService;
         private readonly IPortalHubClientService PortalHub;
         private string _tableName;
@@ -52,7 +52,7 @@ namespace Mix.Portal.Controllers
             ICache cache,
             DatabaseService databaseService,
             MixIdentityService idService,
-            MixDbDataServiceFactory mixDbDataFactory,
+            IMixDbDataServiceFactory mixDbDataFactory,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService,
             ILogger<MixDbController> logger)
@@ -78,7 +78,7 @@ namespace Mix.Portal.Controllers
                 _mixDb.DatabaseProvider = _databaseService.DatabaseProvider;
 
             }
-            _mixDbDataService = _mixDbDataFactory.GetDataService(_mixDb.DatabaseProvider,
+            _mixDbDataService = _mixDbDataFactory.Create(_mixDb.DatabaseProvider,
                 _mixDb.MixDatabaseContext?.ConnectionString.Decrypt(Configuration.AesKey()) ??
                 _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION));
             _fieldNameService = new FieldNameService(_mixDb.NamingConvention);

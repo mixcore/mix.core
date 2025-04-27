@@ -4,6 +4,7 @@ using Mix.Mixdb.Interfaces;
 using Mix.Mixdb.Services;
 using Mix.RepoDb.Repositories;
 using Mix.Scylladb.Repositories;
+using Mix.Service.Services;
 using Mix.Shared.Models.Configurations;
 using RepoDb;
 using RepoDb.Interfaces;
@@ -12,17 +13,23 @@ namespace Mix.Mixdb.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMixRepoDb(this IServiceCollection services, GlobalSettingsModel globalConfig)
+        public static IServiceCollection AddMixDbServices(this IServiceCollection services, GlobalSettingsModel globalConfig)
         {
             services.TryAddScoped<ICache, MemoryCache>();
-
-            services.AddScoped<IMixDbDataService, RepodbDataService>();
+            services.TryAddScoped<IMixDbInfoService, MixDbInfoService>();
+            services.TryAddScoped<IMixDbDataParser, MixDbDataParser>();
             services.TryAddSingleton<ScylladbRepository>();
-            services.AddScoped<IMixDbDataService, ScylladbDataService>();
+
+            // Register concrete implementations
+            services.TryAddScoped<RepodbDataService>();
+            services.TryAddScoped<ScylladbDataService>();
+
+            // Register factory
+            services.TryAddScoped<IMixDbDataServiceFactory, MixDbDataServiceFactory>();
+
             services.TryAddScoped<IMixdbStructure, MixdbStructureService>();
             services.AddScoped<IMixdbStructureService, RepodbStructureService>();
             services.AddScoped<IMixdbStructureService, ScylladbStructureService>();
-            services.TryAddScoped<MixDbDataServiceFactory>();
 
             return services;
         }

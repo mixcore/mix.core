@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Mix.Lib.Models.Common;
@@ -27,12 +28,15 @@ namespace Mixcore.Controllers
             IMixMetadataService metadataService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService,
-            IMixDbDataService mixDbDataService)
+            IMixDbDataServiceFactory mixDbDataServiceFactory,
+            DatabaseService databaseService)
             : base(httpContextAccessor, configuration,
                   cacheService, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             _metadataService = metadataService;
-            _mixDbDataService = mixDbDataService;
+            _mixDbDataService = mixDbDataServiceFactory.Create(
+            databaseService.DatabaseProvider,
+            databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION));
         }
 
         protected override async Task<PageContentViewModel> GetById(int id, CancellationToken cancellationToken = default)

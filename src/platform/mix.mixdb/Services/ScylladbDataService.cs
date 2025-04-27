@@ -732,6 +732,21 @@ namespace Mix.Mixdb.Services
             return obj?.ToObject<T>();
         }
 
+        public Task<List<JObject>?> GetListByAsync(string tableName, List<QueryField> queryFields, List<MixSortByColumn>? sortByFields = null, string? selectFields = null, bool loadNestedData = false, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<MixDbDatabaseViewModel?> IMixDbDataService.GetMixDb(string tableName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InitConnection(MixDatabaseProvider databaseProvider, string connectionString)
+        {
+            throw new NotImplementedException();
+        }
+
 
         #endregion
     }

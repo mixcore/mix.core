@@ -11,7 +11,6 @@ using Newtonsoft.Json.Linq;
 using RepoDb.Interfaces;
 using RepoDb;
 using RepoDb.Enumerations;
-using Mix.Heart.Extensions;
 using Mix.Constant.Constants;
 using Mix.Heart.Services;
 using Mix.Heart.Exceptions;
@@ -19,9 +18,7 @@ using Mix.Mixdb.ViewModels;
 using System.Data;
 using Mix.RepoDb.Models;
 using Mix.Mixdb.Interfaces;
-using Mix.Service.Interfaces;
 using Mix.Heart.Helpers;
-using Newtonsoft.Json;
 using NuGet.Protocol;
 using Mix.RepoDb.ViewModels;
 using Mix.Heart.Model;
@@ -29,30 +26,46 @@ using Mix.Mixdb.Dtos;
 using Mix.Mixdb.Helpers;
 using Mix.Database.Services.MixGlobalSettings;
 using Microsoft.Extensions.Configuration;
-using Mix.Lib.Extensions;
-using MySqlX.XDevAPI.Common;
+using Mix.Service.Interfaces;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Mix.Mixdb.Services
 {
+    /// <summary>
+    /// Service process data MixDb using RepoDb
+    /// </summary>
     public class RepodbDataService : IMixDbDataService
     {
         #region Properties
         public MixDatabaseProvider DbProvider { get; }
-        private readonly RepoDbRepository _repository;
+        private RepoDbRepository _repository;
         private readonly MixCacheService _cacheSrv;
-        private UnitOfWorkInfo<MixCmsContext> _uow;
-        private MixDbDatabaseViewModel _mixDb;
-        private readonly IConfiguration _configuration;
         private readonly IMixMemoryCacheService _memoryCache;
-        private FieldNameService _fieldNameService;
+        private readonly IMixDbRelationshipService _relationshipService;
+        private readonly IMixDbDataParser _dataParser;
+        private readonly ILogger<RepodbDataService> _logger;
+        private UnitOfWorkInfo<MixCmsContext> _uow;
+        private readonly IMixDbInfoService _mixDbInfoService;
+        private MixDbDatabaseViewModel? _mixDb;
+        private readonly IConfiguration _configuration;
+        private FieldNameService? _fieldNameService;
         #endregion
 
         public RepodbDataService(
             IConfiguration configuration,
-            ICache cache, DatabaseService databaseService, IMixMemoryCacheService memoryCache, MixCacheService cacheSrv, UnitOfWorkInfo<MixCmsContext> uow)
+            ICache cache,
+            DatabaseService databaseService,
+            IMixMemoryCacheService memoryCache,
+            MixCacheService cacheSrv,
+            UnitOfWorkInfo<MixCmsContext> uow,
+            IMixDbDataParser dataParser,
+            IMixDbInfoService mixDbInfoService,
+            ILogger<RepodbDataService> logger)
         {
             _configuration = configuration;
             DbProvider = databaseService.DatabaseProvider;
+            _fieldNameService = new FieldNameService(MixDatabaseNamingConvention.SnakeCase);
             _repository = new(
                 databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION),
                 databaseService.DatabaseProvider,
@@ -64,6 +77,10 @@ namespace Mix.Mixdb.Services
             _memoryCache = memoryCache;
             _cacheSrv = cacheSrv;
             _uow = uow;
+            _dataParser = dataParser;
+            _mixDbInfoService = mixDbInfoService;
+            _logger = logger;
+            _relationshipService = new MixDbRelationshipService(this, _fieldNameService, _logger);
         }
 
         public RepodbDataService(ICache cache, MixDatabaseProvider databaseProvider, string connectionString, UnitOfWorkInfo<MixCmsContext> cmsUow, IMixMemoryCacheService memoryCache, MixCacheService cacheSrv, UnitOfWorkInfo<MixCmsContext> uow)
@@ -90,6 +107,16 @@ namespace Mix.Mixdb.Services
         {
             _repository.CreateConnection(connectionString, true, true);
         }
+        
+        public void InitConnection(MixDatabaseProvider databaseProvider, string connectionString)
+        {
+            _repository = new(connectionString, databaseProvider, new AppSetting()
+            {
+                CacheItemExpiration = 10,
+                CommandTimeout = 1000
+            });
+            _repository.CreateConnection(connectionString, true, true);
+        }
 
         #region GET
 
@@ -97,21 +124,37 @@ namespace Mix.Mixdb.Services
 
         public async Task<JObject?> GetByIdAsync(string tableName, object objId, string? selectColumns, CancellationToken cancellationToken)
         {
-            await LoadMixDb(tableName);
-            return await GetSingleByAsync(tableName, new MixQueryField(_fieldNameService.Id, objId, MixCompareOperator.Equal), selectColumns, cancellationToken);
+            try
+            {
+                await LoadMixDb(tableName);
+                return await GetSingleByAsync(tableName, new MixQueryField(_fieldNameService.Id, objId, MixCompareOperator.Equal), selectColumns, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when getting data by ID from table {tableName}");
+                throw;
+            }
         }
         
         public async Task<T?> GetByIdAsync<T>(string tableName, object objId, string? selectColumns, CancellationToken cancellationToken)
             where T : class
         {
-            await LoadMixDb(tableName);
-            var obj = await GetSingleByAsync(tableName, new MixQueryField(_fieldNameService.Id, objId, MixCompareOperator.Equal), selectColumns, cancellationToken);
-            return obj?.ToObject<T>();
+            try
+            {
+                await LoadMixDb(tableName);
+                var obj = await GetSingleByAsync(tableName, new MixQueryField(_fieldNameService.Id, objId, MixCompareOperator.Equal), selectColumns, cancellationToken);
+                return obj?.ToObject<T>();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when getting data by ID from table {tableName}");
+                throw;
+            }
         }
 
         public async Task<JObject?> GetSingleByAsync(string tableName, MixQueryField query, string? selectColumns, CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            try
             {
                 await LoadMixDb(tableName);
                 _repository.BeginTransaction();
@@ -124,17 +167,22 @@ namespace Mix.Mixdb.Services
                 MixDbHelper.ParseRawDataToEntityAsync(result, _mixDb.Columns);
                 if (result != null && !string.IsNullOrEmpty(selectColumns))
                 {
-                    await LoadRelationShips(result, await ParseRelatedDataRequests(selectColumns, tableName), _mixDb, cancellationToken);
+                    await _relationshipService.LoadNestedDataAsync(tableName, result, await _relationshipService.ParseRelatedDataRequests(selectColumns, tableName), cancellationToken);
                 }
                 _repository.CompleteTransaction();
                 return result;
             }
-            throw new TaskCanceledException();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when getting single data from table {tableName}");
+                _repository.RollbackTransaction();
+                throw;
+            }
         }
 
         public async Task<JObject?> GetSingleByAsync(string tableName, List<MixQueryField> queries, string selectColumns, CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            try
             {
                 await LoadMixDb(tableName);
                 _repository.BeginTransaction();
@@ -142,17 +190,22 @@ namespace Mix.Mixdb.Services
                 if (result != null)
                 {
                     MixDbHelper.ParseRawDataToEntityAsync(result, _mixDb.Columns);
-                    await LoadRelationShips(result, null, _mixDb, cancellationToken);
+                    await _relationshipService.LoadNestedDataAsync(tableName, result, null, cancellationToken);
                 }
                 _repository.CompleteTransaction();
                 return result;
             }
-            throw new TaskCanceledException();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when getting single data from table {tableName}");
+                _repository.RollbackTransaction();
+                throw;
+            }
         }
 
         public async Task<JObject?> GetSingleByParentAsync(string tableName, MixContentType parentType, object parentId, string selectColumns, CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            try
             {
                 await LoadMixDb(tableName);
                 var queries = new List<MixQueryField>()
@@ -164,7 +217,11 @@ namespace Mix.Mixdb.Services
                     queries,
                     selectColumns, cancellationToken);
             }
-            throw new TaskCanceledException();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when getting data by parent from table {tableName}");
+                throw;
+            }
         }
 
         #endregion
@@ -173,7 +230,7 @@ namespace Mix.Mixdb.Services
 
         public async Task<List<JObject>?> GetListByAsync(SearchMixDbRequestModel request, CancellationToken cancellationToken = default)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            try
             {
                 await LoadMixDb(request.TableName);
                 List<QueryField> queries = ParseSearchQuery(request.Queries);
@@ -188,12 +245,16 @@ namespace Mix.Mixdb.Services
                     foreach (var item in data)
                     {
                         MixDbHelper.ParseRawDataToEntityAsync(item, _mixDb.Columns);
-                        await LoadRelationShips(item, null, _mixDb, cancellationToken);
+                        await _relationshipService.LoadNestedDataAsync(request.TableName, item, null, cancellationToken);
                     }
                 }
                 return data;
             }
-            throw new TaskCanceledException();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when getting list data from table {request.TableName}");
+                throw;
+            }
         }
 
         public async Task<List<JObject>?> GetListByAsync(
@@ -204,7 +265,7 @@ namespace Mix.Mixdb.Services
             bool loadNestedData = false,
             CancellationToken cancellationToken = default)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            try
             {
                 _repository.BeginTransaction();
                 await LoadMixDb(tableName);
@@ -214,12 +275,17 @@ namespace Mix.Mixdb.Services
                     foreach (var item in data)
                     {
                         MixDbHelper.ParseRawDataToEntityAsync(item, _mixDb.Columns);
-                        await LoadRelationShips(item, null, _mixDb, cancellationToken);
+                        await _relationshipService.LoadNestedDataAsync(tableName, item, null, cancellationToken);
                     }
                 }
                 return data;
             }
-            throw new TaskCanceledException();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when getting list data from table {tableName}");
+                _repository.RollbackTransaction();
+                throw;
+            }
         }
         public async Task<List<JObject>?> GetListByParentAsync(SearchMixDbRequestModel request, MixContentType parentType, object parentId, CancellationToken cancellationToken = default)
         {
@@ -238,16 +304,16 @@ namespace Mix.Mixdb.Services
                     foreach (var item in data)
                     {
                         MixDbHelper.ParseRawDataToEntityAsync(item, _mixDb.Columns);
-                        await LoadRelationShips(item, null, _mixDb, cancellationToken);
+                        await _relationshipService.LoadNestedDataAsync(request.TableName, item, null, cancellationToken);
                     }
                 }
                 return data;
             }
             catch (Exception ex)
             {
-                await MixLogService.LogExceptionAsync(ex);
+                _logger.LogError(ex, $"Error when getting list data by parent from table {request.TableName}");
                 _repository.RollbackTransaction();
-                throw new MixException(MixErrorStatus.Badrequest, ex);
+                throw;
             }
         }
 
@@ -264,14 +330,14 @@ namespace Mix.Mixdb.Services
                     foreach (var item in data)
                     {
                         MixDbHelper.ParseRawDataToEntityAsync(item, _mixDb.Columns);
-                        await LoadRelationShips(item, request.RelatedDataRequests, _mixDb, cancellationToken);
+                        await _relationshipService.LoadNestedDataAsync(request.TableName, item, request.RelatedDataRequests, cancellationToken);
                     }
                 }
                 return data;
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex.Message);
+                _logger.LogError(ex, $"Error when getting all data from table {request.TableName}");
                 _repository.RollbackTransaction();
                 throw;
             }
@@ -282,25 +348,33 @@ namespace Mix.Mixdb.Services
             SearchMixDbRequestModel request,
             CancellationToken cancellationToken = default)
         {
-            var mixDb = await GetMixDb(request.TableName);
-            var fieldNameSrv = new FieldNameService(mixDb.NamingConvention);
-            if (request.Paging.SortByColumns.Count == 0)
+            try
             {
-                request.Paging.SortByColumns.Add(new MixSortByColumn(fieldNameSrv.Id, SortDirection.Desc));
-            }
+                var mixDb = await GetMixDb(request.TableName);
+                var fieldNameSrv = new FieldNameService(mixDb.NamingConvention);
+                if (request.Paging.SortByColumns.Count == 0)
+                {
+                    request.Paging.SortByColumns.Add(new MixSortByColumn(fieldNameSrv.Id, SortDirection.Desc));
+                }
 
-            var data = await _repository.GetPagingAsync(
-                request.TableName,
-                ParseSearchQuery(request.Queries),
-                request.Paging,
-                request.Conjunction,
-                await ParseFieldName(request.SelectColumns, request.TableName), cancellationToken: cancellationToken);
-            foreach (var item in data.Items)
-            {
-                MixDbHelper.ParseRawDataToEntityAsync(item, mixDb.Columns);
-                await LoadRelationShips(item, request.RelatedDataRequests, mixDb, cancellationToken);
+                var data = await _repository.GetPagingAsync(
+                    request.TableName,
+                    ParseSearchQuery(request.Queries),
+                    request.Paging,
+                    request.Conjunction,
+                    await ParseFieldName(request.SelectColumns, request.TableName), cancellationToken: cancellationToken);
+                foreach (var item in data.Items)
+                {
+                    MixDbHelper.ParseRawDataToEntityAsync(item, mixDb.Columns);
+                    await _relationshipService.LoadNestedDataAsync(request.TableName, item, request.RelatedDataRequests, cancellationToken);
+                }
+                return data;
             }
-            return data;
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when getting paging data from table {request.TableName}");
+                throw;
+            }
         }
 
         #region Load Nested Data
@@ -449,7 +523,7 @@ namespace Mix.Mixdb.Services
             {
                 await LoadMixDb(tableName);
                 _repository.BeginTransaction();
-                Dictionary<string, object> dicObj = await ParseDtoToEntityAsync(obj, createdBy);
+                Dictionary<string, object> dicObj = await _dataParser.ParseDtoToEntityAsync(obj, createdBy);
 
                 var fields = dicObj!.Keys.Select(m => new Field(m)).ToList();
                 var result = await _repository.InsertAsync(tableName, dicObj, cancellationToken: cancellationToken);
@@ -458,6 +532,7 @@ namespace Mix.Mixdb.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error when creating data in table {tableName}");
                 _repository.RollbackTransaction();
                 throw new MixException(MixErrorStatus.Badrequest, ex);
             }
@@ -466,7 +541,6 @@ namespace Mix.Mixdb.Services
 
         public async Task CreateManyAsync(string tableName, List<JObject> entities, string? createdBy = null, CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
             try
             {
                 await LoadMixDb(tableName);
@@ -479,7 +553,7 @@ namespace Mix.Mixdb.Services
 
                 foreach (var entity in entities)
                 {
-                    var dicObj = await ParseDtoToEntityAsync(entity, createdBy);
+                    var dicObj = await _dataParser.ParseDtoToEntityAsync(entity, createdBy);
                     if (dicObj != null)
                     {
                         dicObjs.Add(dicObj);
@@ -496,6 +570,7 @@ namespace Mix.Mixdb.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error when creating multiple data in table {tableName}");
                 _repository.RollbackTransaction();
                 throw new MixException(MixErrorStatus.ServerError, ex);
             }
@@ -503,23 +578,31 @@ namespace Mix.Mixdb.Services
 
         public async Task CreateDataRelationshipAsync(string tableName, CreateDataRelationshipDto obj, string? createdBy = null, CancellationToken cancellationToken = default)
         {
-            await LoadMixDb(tableName);
-            string relDbName = GetRelationshipDbName();
-            var rel = new Dictionary<string, object?>()
+            try
             {
-                { _fieldNameService.CreatedBy, createdBy},
-                { _fieldNameService.ParentDatabaseName, obj.ParentDatabaseName},
-                { _fieldNameService.ChildDatabaseName, obj.ChildDatabaseName },
-                { _fieldNameService.GuidParentId, obj.GuidParentId },
-                { _fieldNameService.GuidChildId, obj.GuidChildId },
-                { _fieldNameService.ParentId, obj.ParentId },
-                { _fieldNameService.ChildId, obj.ChildId },
-                { _fieldNameService.Priority, 0 },
-                { _fieldNameService.Status, MixContentStatus.Published.ToString() },
-                { _fieldNameService.CreatedDateTime, DateTime.UtcNow },
-                { _fieldNameService.IsDeleted, false },
-            };
-            await _repository.InsertAsync(relDbName, rel, cancellationToken: cancellationToken);
+                await LoadMixDb(tableName);
+                string relDbName = GetRelationshipDbName();
+                var rel = new Dictionary<string, object?>()
+                {
+                    { _fieldNameService.CreatedBy, createdBy},
+                    { _fieldNameService.ParentDatabaseName, obj.ParentDatabaseName},
+                    { _fieldNameService.ChildDatabaseName, obj.ChildDatabaseName },
+                    { _fieldNameService.GuidParentId, obj.GuidParentId },
+                    { _fieldNameService.GuidChildId, obj.GuidChildId },
+                    { _fieldNameService.ParentId, obj.ParentId },
+                    { _fieldNameService.ChildId, obj.ChildId },
+                    { _fieldNameService.Priority, 0 },
+                    { _fieldNameService.Status, MixContentStatus.Published.ToString() },
+                    { _fieldNameService.CreatedDateTime, DateTime.UtcNow },
+                    { _fieldNameService.IsDeleted, false },
+                };
+                await _repository.InsertAsync(relDbName, rel, cancellationToken: cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when creating data relationship in table {tableName}");
+                throw;
+            }
         }
         #endregion
 
@@ -527,7 +610,6 @@ namespace Mix.Mixdb.Services
 
         public async Task<int?> UpdateManyAsync(string tableName, List<JObject> entities, string? modifiedBy = null, CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
             try
             {
                 await LoadMixDb(tableName);
@@ -540,7 +622,7 @@ namespace Mix.Mixdb.Services
 
                 foreach (var entity in entities)
                 {
-                    var dicObj = await ParseDtoToEntityAsync(entity, modifiedBy);
+                    var dicObj = await _dataParser.ParseDtoToEntityAsync(entity, modifiedBy);
                     if (dicObj != null)
                     {
                         dicObjs.Add(dicObj);
@@ -557,6 +639,7 @@ namespace Mix.Mixdb.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error when updating multiple data in table {tableName}");
                 _repository.RollbackTransaction();
                 throw new MixException(MixErrorStatus.ServerError, ex);
             }
@@ -565,14 +648,13 @@ namespace Mix.Mixdb.Services
         public async Task<object?> UpdateAsync(string tableName, object id, JObject entity, string? modifiedBy = null, IEnumerable<string>? fieldNames = default,
             CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
             try
             {
                 await LoadMixDb(tableName);
                 _repository.BeginTransaction();
                 QueryField idQuery = new QueryField(_fieldNameService.Id, id);
                 var result = await _repository.UpdateAsync(tableName, idQuery,
-                    await ParseDtoToEntityAsync(entity, modifiedBy), fieldNames: fieldNames, cancellationToken: cancellationToken
+                    await _dataParser.ParseDtoToEntityAsync(entity, modifiedBy), fieldNames: fieldNames, cancellationToken: cancellationToken
                     );
                 var cacheFolder = GetCacheFolder(tableName);
                 await _cacheSrv.RemoveCacheAsync(id, cacheFolder, cancellationToken);
@@ -581,9 +663,9 @@ namespace Mix.Mixdb.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error when updating data in table {tableName}");
                 _repository.RollbackTransaction();
-                await MixLogService.LogExceptionAsync(ex);
-                throw ex;
+                throw;
             }
         }
         #endregion
@@ -591,7 +673,6 @@ namespace Mix.Mixdb.Services
         #region DELETE
         public async Task<int> DeleteAsync(string tableName, object id, string? modifiedBy = null, CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
             try
             {
                 await LoadMixDb(tableName);
@@ -601,15 +682,14 @@ namespace Mix.Mixdb.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error when deleting data from table {tableName}");
                 _repository.RollbackTransaction();
-                await MixLogService.LogExceptionAsync(ex);
-                return default;
+                throw;
             }
         }
 
         public async Task<int> DeleteManyAsync(string tableName, List<MixQueryField> queries, string? modifiedBy = null, CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
             try
             {
                 await LoadMixDb(tableName);
@@ -618,16 +698,24 @@ namespace Mix.Mixdb.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error when deleting multiple data from table {tableName}");
                 _repository.RollbackTransaction();
-                await MixLogService.LogExceptionAsync(ex);
-                return default;
+                throw;
             }
         }
 
         public async Task DeleteDataRelationshipAsync(string tableName, int id, string? modifiedBy = null, CancellationToken cancellationToken = default)
         {
-            await LoadMixDb(tableName);
-            await _repository.DeleteAsync(GetRelationshipDbName(), new QueryField(_fieldNameService.Id, id), cancellationToken: cancellationToken);
+            try
+            {
+                await LoadMixDb(tableName);
+                await _repository.DeleteAsync(GetRelationshipDbName(), new QueryField(_fieldNameService.Id, id), cancellationToken: cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when deleting data relationship from table {tableName}");
+                throw;
+            }
         }
 
         #endregion
@@ -700,31 +788,18 @@ namespace Mix.Mixdb.Services
 
         private Operation ParseMixOperator(MixQueryField field)
         {
-            switch (field.CompareOperator)
+            return field.CompareOperator switch
             {
-                case MixCompareOperator.InRange:
-                    return Operation.In;
-                case MixCompareOperator.ILike:
-                case MixCompareOperator.Like:
-                case MixCompareOperator.Contain:
-                    return Operation.Like;
-                case MixCompareOperator.NotEqual:
-                    return Operation.NotEqual;
-                case MixCompareOperator.NotContain:
-                case MixCompareOperator.NotInRange:
-                    return Operation.NotIn;
-                case MixCompareOperator.GreaterThanOrEqual:
-                    return Operation.GreaterThanOrEqual;
-                case MixCompareOperator.GreaterThan:
-                    return Operation.GreaterThan;
-                case MixCompareOperator.LessThanOrEqual:
-                    return Operation.LessThanOrEqual;
-                case MixCompareOperator.LessThan:
-                    return Operation.LessThan;
-                case MixCompareOperator.Equal:
-                default:
-                    return Operation.Equal;
-            }
+                MixCompareOperator.InRange => Operation.In,
+                MixCompareOperator.ILike or MixCompareOperator.Like or MixCompareOperator.Contain => Operation.Like,
+                MixCompareOperator.NotEqual => Operation.NotEqual,
+                MixCompareOperator.NotContain or MixCompareOperator.NotInRange => Operation.NotIn,
+                MixCompareOperator.GreaterThanOrEqual => Operation.GreaterThanOrEqual,
+                MixCompareOperator.GreaterThan => Operation.GreaterThan,
+                MixCompareOperator.LessThanOrEqual => Operation.LessThanOrEqual,
+                MixCompareOperator.LessThan => Operation.LessThan,
+                MixCompareOperator.Equal or _ => Operation.Equal
+            };
         }
 
         private string GetRelationshipDbName()
@@ -765,202 +840,17 @@ namespace Mix.Mixdb.Services
             return orderFields;
         }
 
-        public Task<Dictionary<string, object>> ParseDtoToEntityAsync(JObject dto, string? username = null)
-        {
-            try
-            {
-                Dictionary<string, object> result = new();
-                var encryptedColumnNames = _mixDb.Columns
-                    .Where(m => m.ColumnConfigurations.IsEncrypt)
-                    .Select(c => c.SystemName)
-                    .ToList();
-                foreach (var pr in dto.Properties())
-                {
-                    var colName = _fieldNameService.NamingConvention == MixDatabaseNamingConvention.TitleCase ? pr.Name.ToTitleCase() : pr.Name.ToHyphenCase('_', true);
-                    var col = _mixDb.Columns.FirstOrDefault(c => c.SystemName.Equals(colName, StringComparison.InvariantCultureIgnoreCase));
-
-                    if (encryptedColumnNames.Contains(colName))
-                    {
-                        result.Add(colName, AesEncryptionHelper.EncryptString(pr.Value.ToString(),
-                                    _configuration.AesKey()));
-                    }
-                    else
-                    {
-                        if (col != null)
-                        {
-                            result.Add(colName, ParseObjectValueToDbType(col.DataType, pr.Value));
-                        }
-                        else
-                        {
-                            result.Add(colName, GetPropertyValue(pr));
-                        }
-                    }
-                }
-
-                if (!result.ContainsKey(_fieldNameService.Id))
-                {
-                    if (_mixDb.Type == MixDatabaseType.GuidService)
-                    {
-                        result.Add(_fieldNameService.Id, Guid.NewGuid());
-                    }
-                    else
-                    {
-                        result.Add(_fieldNameService.Id, string.Empty);
-                    }
-                    if (!result.ContainsKey(_fieldNameService.LastModified)
-                        && _mixDb.Columns.Any(m => m.SystemName == _fieldNameService.LastModified))
-                    {
-                        result.Add(_fieldNameService.LastModified, DateTime.UtcNow);
-                    }
-                }
-                else
-                {
-                    if (_mixDb.Columns.Any(m => m.SystemName == _fieldNameService.ModifiedBy))
-                    {
-                        result[_fieldNameService.ModifiedBy] = username ?? string.Empty;
-                    }
-                    if (_mixDb.Columns.Any(m => m.SystemName == _fieldNameService.LastModified))
-                    {
-                        result[_fieldNameService.LastModified] = DateTime.UtcNow;
-                    }
-                }
-                if (!result.ContainsKey(_fieldNameService.CreatedBy))
-                {
-                    result.Add(_fieldNameService.CreatedBy, username ?? string.Empty);
-                }
-                if (!result.ContainsKey(_fieldNameService.CreatedDateTime)
-                    && _mixDb.Columns.Any(m => m.SystemName == _fieldNameService.CreatedDateTime))
-                {
-                    result.Add(_fieldNameService.CreatedDateTime, DateTime.UtcNow);
-                }
-                
-                if (!result.ContainsKey(_fieldNameService.Priority)
-                    && _mixDb.Columns.Any(m => m.SystemName == _fieldNameService.Priority))
-                {
-                    result.Add(_fieldNameService.Priority, 0);
-                }
-
-                if (!result.ContainsKey(_fieldNameService.Status))
-                {
-                    result.Add(_fieldNameService.Status, MixContentStatus.Published.ToString());
-                }
-
-                if (!result.ContainsKey(_fieldNameService.IsDeleted))
-                {
-                    result.Add(_fieldNameService.IsDeleted, false);
-                }
-                return Task.FromResult(result);
-            }
-            catch (MixException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, ex);
-            }
-        }
-
-
-        private object? GetPropertyValue(JProperty prop)
-        {
-            string strVal = prop.Value.ToString();
-            return string.IsNullOrEmpty(strVal) || prop.Value?.Type == null
-                ? default
-                : prop.Value.Type switch
-                {
-                    JTokenType.Date => DateTime.Parse(strVal),
-                    JTokenType.Array => JArray.Parse(strVal),
-                    JTokenType.Object => JObject.Parse(strVal),
-                    JTokenType.Integer => int.Parse(strVal),
-                    JTokenType.Float => double.Parse(strVal),
-                    JTokenType.Boolean => bool.Parse(strVal),
-                    _ => prop.Value?.ToString()
-                };
-        }
-
-        public object? ParseObjectValueToDbType(MixDataType? dataType, JToken value)
-        {
-            try
-            {
-                if (value != null)
-                {
-                    string strValue = value.ToString();
-                    if (string.IsNullOrEmpty(strValue))
-                    {
-                        return default;
-                    }
-                    switch (dataType)
-                    {
-                        case MixDataType.Date:
-                        case MixDataType.DateTime:
-                            DateTime.TryParse(strValue, out var dateValue);
-                            if (dateValue.Kind != DateTimeKind.Utc)
-                            {
-                                return dateValue.ToUniversalTime();
-                            }
-                            return dateValue;
-
-                        case MixDataType.Boolean:
-                            return bool.Parse(strValue);
-                        case MixDataType.Array:
-                        case MixDataType.ArrayMedia:
-                            return value.Type != JTokenType.String
-                                ? JArray.FromObject(value).ToString(Formatting.None)
-                                : value.Value<string>();
-                        case MixDataType.Json:
-                        case MixDataType.ArrayRadio:
-                            return value.Type != JTokenType.String
-                                    ? JObject.FromObject(value).ToString(Formatting.None)
-                                    : value.Value<string>(); ;
-                        case MixDataType.Integer:
-                        case MixDataType.Reference:
-                            return int.Parse(strValue);
-                        case MixDataType.Double:
-                            return double.Parse(strValue);
-                        case MixDataType.Guid:
-                            Guid.TryParse(value.ToString(), out var guildResult);
-                            return guildResult;
-                        default:
-                            return value.ToString();
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, ex);
-            }
-            return null;
-        }
-
         private async Task LoadMixDb(string tableName)
         {
-            if (_mixDb != null && _mixDb.SystemName == tableName)
-            {
-                _fieldNameService = new FieldNameService(_mixDb.NamingConvention);
-                return;
-            }
-            string name = $"{typeof(MixDbDatabaseViewModel).FullName}_{tableName}";
-            _mixDb = await GetMixDb(tableName);
-            if (_mixDb == null)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, "Invalid table name");
-            }
+            await _mixDbInfoService.LoadMixDb(tableName);
+            _mixDb = await _mixDbInfoService.GetMixDb(tableName);
             _fieldNameService = new FieldNameService(_mixDb.NamingConvention);
+            await _dataParser.LoadMixDb(tableName);
         }
 
-        private async Task<MixDbDatabaseViewModel?> GetMixDb(string tableName)
+        public async Task<MixDbDatabaseViewModel?> GetMixDb(string tableName)
         {
-            string name = $"{typeof(MixDbDatabaseViewModel).FullName}_{tableName}";
-            return await _memoryCache.TryGetValueAsync(
-                name,
-                cache =>
-                {
-                    cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return MixDbDatabaseViewModel.GetRepository(_uow, _cacheSrv).GetSingleAsync(m => m.SystemName == tableName);
-                }
-                );
+            return await _mixDbInfoService.GetMixDb(tableName);
         }
 
         #endregion

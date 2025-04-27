@@ -20,7 +20,6 @@ namespace Mix.Portal.Controllers
     {
         private string _requestedBy;
         private readonly PortalPostService _postService;
-        private readonly IMixDbDataService _mixDbDataSrv;
         public MixPostContentController(
             MixIdentityService identityService,
             TenantUserManager userManager,
@@ -30,13 +29,11 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IMemoryQueueService<MessageQueueModel> queueService,
-            IMixDbDataService mixDbDataSrv,
             PortalPostService postService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
             : base(MixContentType.Post, identityService, userManager, httpContextAccessor, configuration, cacheService, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
-            _mixDbDataSrv = mixDbDataSrv;
             _postService = postService;
         }
         public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)

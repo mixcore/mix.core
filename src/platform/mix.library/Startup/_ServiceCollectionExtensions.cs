@@ -122,7 +122,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
             builder.Services.TryAddSingleton<IMixDbCommandHubClientService, MixDbCommandHubClientService>();
             builder.Services.TryAddSingleton<MixDbEventService>();
-            builder.Services.AddMixRepoDb(globalConfig);
+            builder.Services.AddMixDbServices(globalConfig);
 
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCacheDbContext>>();
 
@@ -166,7 +166,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             builder.Services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
             builder.Services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
-            builder.Services.AddMixRepoDb(globalConfig);
+            builder.Services.AddMixDbServices(globalConfig);
 
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCacheDbContext>>();
             return builder;

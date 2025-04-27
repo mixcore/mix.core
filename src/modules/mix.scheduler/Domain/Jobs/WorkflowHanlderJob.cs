@@ -34,12 +34,12 @@ namespace Mix.Scheduler.Domain.Jobs
             IPortalHubClientService portalHub,
             HttpService httpService,
             DatabaseService databaseService,
-            MixDbDataServiceFactory mixDbDataFactory)
+            IMixDbDataServiceFactory mixDbDataFactory)
             : base(serviceProvider, queueService)
         {
             _portalHub = portalHub;
             _httpService = httpService;
-            _mixDbDataService = mixDbDataFactory.GetDataService(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION));
+            _mixDbDataService = mixDbDataFactory.Create(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION));
         }
 
         public override async Task ExceptionHandler(Exception ex)
