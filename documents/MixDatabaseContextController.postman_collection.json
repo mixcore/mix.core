@@ -1,0 +1,106 @@
+{
+  "info": {
+    "name": "MixDatabaseContext API",
+    "description": "API endpoints for managing MixDatabaseContext",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Database Context",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v2/rest/mix-portal/mixdb-context",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v2", "rest", "mix-portal", "mixdb-context"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"systemName\": \"context_name\",\n    \"connectionString\": \"encrypted_connection_string\",\n    \"decryptedConnectionString\": \"your_connection_string\",\n    \"databaseProvider\": \"PostgreSQL\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Database Context",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v2/rest/mix-portal/mixdb-context/:id",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v2", "rest", "mix-portal", "mixdb-context", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "1",
+              "description": "ID of the database context"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"systemName\": \"updated_context_name\",\n    \"connectionString\": \"encrypted_connection_string\",\n    \"decryptedConnectionString\": \"your_connection_string\",\n    \"databaseProvider\": \"PostgreSQL\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Migrate Init Databases",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v2/rest/mix-portal/mixdb-context/migrate",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v2", "rest", "mix-portal", "mixdb-context", "migrate"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"systemName\": \"context_name\",\n    \"connectionString\": \"encrypted_connection_string\",\n    \"databaseProvider\": \"PostgreSQL\"\n}"
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "your_jwt_token",
+      "type": "string"
+    }
+  ]
+} 
