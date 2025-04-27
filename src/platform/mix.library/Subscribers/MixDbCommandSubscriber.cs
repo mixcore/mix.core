@@ -5,6 +5,7 @@ using Microsoft.Extensions.ObjectPool;
 using Mix.Communicator.Models;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.MixDb;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Mixdb.Event.Services;
 using Mix.Mixdb.Interfaces;
 using Mix.Mq.Lib.Models;
@@ -43,7 +44,9 @@ namespace Mix.Lib.Subscribers
                 return;
             }
 
-            IMixDbDataService mixDbDataService = GetRequiredService<IMixDbDataService>();
+            var databaseService = GetRequiredService<DatabaseService>();
+            IMixDbDataService mixDbDataService = GetRequiredService<IMixDbDataServiceFactory>()
+                .Create(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION));
             IMixDbCommandHubClientService mixDbCommandHub = GetRequiredService<IMixDbCommandHubClientService>();
             UnitOfWorkInfo<MixCmsContext> uow = GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
             mixDbDataService.SetDbConnection(uow);

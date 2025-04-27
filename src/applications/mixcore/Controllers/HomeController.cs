@@ -24,10 +24,12 @@ namespace Mixcore.Controllers
         MixCacheService cacheService,
         IMixTenantService tenantService,
          IConfiguration configuration,
-         IMixDbDataService mixDbDataService) : MvcBaseController(httpContextAccessor, ipSecurityConfigService, mixCmsService, databaseService, uow, cacheService, tenantService, configuration)
+         IMixDbDataServiceFactory mixDbDataServiceFactory) : MvcBaseController(httpContextAccessor, ipSecurityConfigService, mixCmsService, databaseService, uow, cacheService, tenantService, configuration)
     {
         private readonly IMixMetadataService _metadataService = metadataService;
-        private readonly IMixDbDataService _mixDbDataService = mixDbDataService;
+        private readonly IMixDbDataService _mixDbDataService = mixDbDataServiceFactory.Create(
+            databaseService.DatabaseProvider,
+            databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION));
         protected override void ValidateRequest()
         {
             base.ValidateRequest();

@@ -169,7 +169,9 @@ namespace Mix.Lib.Services
                 {
                     _uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
                     var mixdbUow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixDbDbContext>>();
-                    _mixdbDataSrv = serviceScope.ServiceProvider.GetRequiredService<IMixDbDataService>();
+                    _mixdbDataSrv = serviceScope.ServiceProvider.GetRequiredService<IMixDbDataServiceFactory>()
+                        .Create(_databaseService.DatabaseProvider, 
+                        _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION));
                     _mixdbDataSrv.SetDbConnection(_uow);
                     _context = _uow.DbContext;
                     _uow.Begin();

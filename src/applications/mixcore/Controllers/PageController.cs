@@ -21,7 +21,7 @@ namespace Mixcore.Controllers
         private readonly IMixDbDataService _mixDbDataService;
 
         public PageController(IHttpContextAccessor httpContextAccessor, IPSecurityConfigService ipSecurityConfigService, IMixCmsService mixCmsService, DatabaseService databaseService, MixCmsContext cmsContext, IMixMetadataService metadataService, MixCacheService cacheService, IMixTenantService tenantService,
-             IConfiguration configuration, IMixDbDataService mixDbDataService, GlobalSettingsService globalConfigService, AppSettingsService appSettingsService) :
+             IConfiguration configuration, IMixDbDataServiceFactory mixDbDataServiceFactory, GlobalSettingsService globalConfigService, AppSettingsService appSettingsService) :
             base(httpContextAccessor, mixCmsService, ipSecurityConfigService, tenantService, configuration)
         {
             CmsContext = cmsContext;
@@ -30,7 +30,9 @@ namespace Mixcore.Controllers
             CmsContext = cmsContext;
             _metadataService = metadataService;
             _cacheService = cacheService;
-            _mixDbDataService = mixDbDataService;
+            _mixDbDataService = mixDbDataServiceFactory.Create(
+                databaseService.DatabaseProvider,
+                databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION));
             _globalConfigService = globalConfigService;
             _appSettingsService = appSettingsService;
         }

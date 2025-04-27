@@ -34,8 +34,7 @@ namespace Mix.MCP.Lib.Extensions
             });
 
             // Register MySQL services
-            builder.Services.AddScoped<IDatabaseService, MySqlService>();
-            builder.Services.AddSingleton<IDatabaseService>(provider =>
+            builder.Services.AddSingleton(provider =>
             {
                 var factory = new DatabaseServiceFactory(
                     builder.Configuration,

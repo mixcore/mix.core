@@ -1,0 +1,164 @@
+using Microsoft.Extensions.Logging;
+using Mix.Constant.Constants;
+using Mix.Constant.Enums;
+using Mix.Heart.Helpers;
+using Mix.Heart.Models;
+using Mix.Mixdb.Dtos;
+using Mix.Mixdb.Helpers;
+using Mix.Mixdb.Interfaces;
+using Mix.Mixdb.ViewModels;
+using Mix.RepoDb.Models;
+using Mix.RepoDb.ViewModels;
+using Mix.Service.Services;
+using Mix.Shared.Dtos;
+using Mix.Shared.Models;
+using Newtonsoft.Json.Linq;
+using RepoDb;
+using RepoDb.Enumerations;
+
+namespace Mix.Mixdb.Services
+{
+    /// <summary>
+    /// Service xử lý các mối quan hệ dữ liệu trong MixDb
+    /// </summary>
+    public class MixDbRelationshipService : IMixDbRelationshipService
+    {
+        private readonly IMixDbDataService _dataService;
+        private readonly FieldNameService _fieldNameService;
+        private readonly ILogger _logger;
+
+        public MixDbRelationshipService(
+            IMixDbDataService dataService,
+            FieldNameService fieldNameService,
+            ILogger logger)
+        {
+            _dataService = dataService;
+            _fieldNameService = fieldNameService;
+            _logger = logger;
+        }
+
+        /// <inheritdoc/>
+        public async Task LoadNestedDataAsync(string tableName, JObject item, List<SearchMixDbRequestModel> relatedDataRequests, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (relatedDataRequests != null)
+                {
+
+                    var db = await _dataService.GetMixDb(tableName);
+                    foreach (var req in relatedDataRequests)
+                    {
+                        var rel = db.Relationships.FirstOrDefault(m => m.DestinateDatabaseName == req.TableName);
+                        if (rel == null)
+                        {
+                            _logger.LogWarning($"Relationship not found for table {req.TableName}");
+                            continue;
+                        }
+
+                        if (rel.Type == MixDatabaseRelationshipType.OneToMany)
+                        {
+                            await LoadOneToMany(tableName, item, rel, req.Clone(), cancellationToken);
+                        }
+                        if (rel.Type == MixDatabaseRelationshipType.ManyToMany)
+                        {
+                            await LoadManyToMany(tableName, item, rel, req.Clone(), cancellationToken);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when loading related data for table {tableName}");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task LoadOneToMany(string tableName, JObject item, MixDatabaseRelationshipViewModel rel, SearchMixDbRequestModel req, CancellationToken cancellationToken)
+        {
+            try
+            {
+                req.Queries ??= new();
+                var parentId = _fieldNameService.NamingConvention == MixDatabaseNamingConvention.SnakeCase
+                    ? $"{rel.SourceDatabaseName}_id"
+                    : $"{rel.SourceDatabaseName}Id";
+                req.Queries.Add(new MixQueryField(parentId, await _dataService.ExtractIdAsync(tableName, item)));
+                var data = await _dataService.GetPagingAsync(req, cancellationToken: cancellationToken);
+                item.Add(new JProperty(rel.DisplayName, ReflectionHelper.ParseObject(data)));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when loading one-to-many relationship data for table {tableName}");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task LoadManyToMany(string tableName, JObject item, MixDatabaseRelationshipViewModel rel, SearchMixDbRequestModel req, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var relQuery = new List<QueryField>() {
+                    new QueryField(_fieldNameService.ParentDatabaseName, rel.SourceDatabaseName),
+                    new QueryField(_fieldNameService.ChildDatabaseName, rel.DestinateDatabaseName)
+                };
+                var parentDb = await _dataService.GetMixDb(rel.SourceDatabaseName);
+                var childDb = await _dataService.GetMixDb(rel.DestinateDatabaseName);
+
+                if (parentDb.Type == MixDatabaseType.GuidService)
+                {
+                    relQuery.Add(new(_fieldNameService.GuidParentId, await _dataService.ExtractIdAsync(rel.SourceDatabaseName, item)));
+                }
+                else
+                {
+                    relQuery.Add(new(_fieldNameService.ParentId, await _dataService.ExtractIdAsync(rel.DestinateDatabaseName, item)));
+                }
+
+                var allowsRels = await _dataService.GetListByAsync(GetRelationshipDbName(), relQuery);
+                if (allowsRels != null)
+                {
+                    req.Queries ??= new List<MixQueryField>();
+                    req.Queries.Add(
+                        new(
+                            _fieldNameService.Id,
+                            childDb.Type == MixDatabaseType.GuidService
+                            ? allowsRels.Select(m => m.Value<int>(_fieldNameService.GuidChildId)).ToList()
+                            : allowsRels.Select(m => m.Value<int>(_fieldNameService.ChildId)).ToList(),
+                            MixCompareOperator.InRange
+                    ));
+                    var data = await _dataService.GetPagingAsync(req, cancellationToken: cancellationToken);
+                    item.Add(new JProperty(rel.DisplayName, data));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when loading many-to-many relationship data for table {tableName}");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<SearchMixDbRequestModel>?> ParseRelatedDataRequests(string? selectFieldNames, string tableName)
+        {
+            if (string.IsNullOrEmpty(selectFieldNames))
+            {
+                return default;
+            }
+            var fields = selectFieldNames.Split(',');
+            var mixDb = await _dataService.GetMixDb(tableName);
+            return mixDb.Relationships.Where(m => fields.Contains(m.DisplayName)).Select(m => new SearchMixDbRequestModel()
+            {
+                TableName = m.DestinateDatabaseName,
+                Paging = new PagingRequestModel()
+            }).ToList();
+        }
+
+        private string GetRelationshipDbName()
+        {
+            var mixDb = _dataService.GetMixDb(_fieldNameService.NamingConvention == MixDatabaseNamingConvention.SnakeCase
+                            ? MixDatabaseNames.DATA_RELATIONSHIP_SNAKE_CASE
+                            : MixDatabaseNames.DATA_RELATIONSHIP_TITLE_CASE);
+            return $"{mixDb.Result?.MixDatabaseContext.SystemName}_{MixDatabaseNames.SYSTEM_DATA_RELATIONSHIP}";
+        }
+    }
+}

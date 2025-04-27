@@ -29,13 +29,13 @@ namespace Mix.Portal.Controllers
             IMemoryQueueService<MessageQueueModel> queueService,
             TenantUserManager userManager,
             IMixTenantService mixTenantService,
-            MixDbDataServiceFactory mixDbDataFactory)
+            IMixDbDataServiceFactory mixDbDataFactory)
             : base(httpContextAccessor, configuration,
                   cacheService, mixIdentityService, queueService, mixTenantService)
         {
             _context = context;
             UserManager = userManager;
-            _mixDbDataSrv = mixDbDataFactory.GetDataService(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION))!;
+            _mixDbDataSrv = mixDbDataFactory.Create(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION))!;
         }
 
         [HttpGet]
