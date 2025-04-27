@@ -185,7 +185,7 @@ namespace Mix.RepoDb.Repositories
 
         #endregion
 
-        public async Task<int> ExecuteCommand(string commandSql, IDbTransaction? _dbTransaction = null, CancellationToken cancellationToken = default)
+        public async Task<int> ExecuteCommand(string commandSql, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             BeginTransaction();

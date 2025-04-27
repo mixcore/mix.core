@@ -10,8 +10,8 @@ namespace Mix.Shared.Dtos
         public string DisplayName { get; set; }
         public string MixDatabaseName { get; set; }
         public MixDataType DataType { get; set; } = MixDataType.String;
-        public string DefaultValue { get; set; }
-        public ColumnConfigurations ColumnConfigurations { get; set; } = new();
+        public string? DefaultValue { get; set; }
+        public ColumnConfigurations? ColumnConfigurations { get; set; } = new();
         public bool IsDrop { get; set; }
         #endregion
 
