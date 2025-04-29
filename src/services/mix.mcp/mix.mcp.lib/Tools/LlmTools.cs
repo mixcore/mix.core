@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Mix.MCP.Lib.Services;
+using Mix.MCP.Lib.Services.LLM;
 using ModelContextProtocol.Server;
 using System;
 using System.ComponentModel;
@@ -11,43 +12,30 @@ namespace Mix.MCP.Lib.Tools
     /// Tools for working with large language models
     /// </summary>
     [McpServerToolType]
-    public class LlmTools
+    public class LLMTools
     {
-        private readonly ILlmService _llmService;
-        private readonly ILogger<LlmTools> _logger;
+        private readonly ILlmServiceFactory _llmServiceFactory;
+        private readonly ILogger<LLMTools> _logger;
 
-        public LlmTools(ILlmService llmService, ILogger<LlmTools> logger)
+        public LLMTools(ILlmServiceFactory llmServiceFactory, ILogger<LLMTools> logger)
         {
-            _llmService = llmService;
+            _llmServiceFactory = llmServiceFactory;
             _logger = logger;
         }
 
         /// <summary>
-        /// Send a message to ChatGPT and get response
+        /// Send a message to LLM service and get response
         /// </summary>
-        [McpServerTool, Description("Send message to ChatGPT and get response")]
-        public async Task<string> ChatWithOpenAI(
-            [Description("OpenAI API key")] string apiKey,
+        [McpServerTool, Description("Send message to LLM service and get response")]
+        public async Task<LLMChatResponse> ChatWithLLM(
+            [Description("LLM service type (OpenAI, DeepSeek, etc.)")] LLMServiceType serviceType,
             [Description("Message to send")] string message,
-            [Description("ChatGPT model (default: gpt-4o)")] string model = "gpt-4o",
-            [Description("Creativity level (0.0-2.0)")] float temperature = 0.7f,
-            CancellationToken cancellationToken = default)
+            [Description("Model name")] string model,
+            [Description("API key (optional)")] string? apiKey = null,
+            [Description("Creativity level (0.0-2.0)")] float temperature = 0.7f)
         {
-            return await _llmService.ChatWithOpenAIAsync(apiKey, message, model, temperature, cancellationToken);
-        }
-
-        /// <summary>
-        /// Send a message to Deepseek and get response
-        /// </summary>
-        [McpServerTool, Description("Send message to Deepseek and get response")]
-        public async Task<string> ChatWithDeepseek(
-            [Description("Deepseek API key")] string apiKey,
-            [Description("Message to send")] string message,
-            [Description("Deepseek model (default: deepseek-chat)")] string model = "deepseek-chat",
-            [Description("Creativity level (0.0-1.0)")] float temperature = 0.7f,
-            CancellationToken cancellationToken = default)
-        {
-            return await _llmService.ChatWithDeepseekAsync(apiKey, message, model, temperature, cancellationToken);
+            var llmService = _llmServiceFactory.CreateService(serviceType);
+            return await llmService.ChatAsync(message, model, temperature, -1);
         }
     }
 }
