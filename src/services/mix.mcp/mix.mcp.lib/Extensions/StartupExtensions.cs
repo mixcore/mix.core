@@ -66,6 +66,8 @@ namespace Mix.MCP.Lib.Extensions
         public static IEndpointRouteBuilder MapMCPEndpoints(this IEndpointRouteBuilder endpoints, bool isDevelop)
         {
             endpoints.MapMcp("/mcp");
+            endpoints.MapMcp("/sse");
+            endpoints.MapMcp("/message");
             Console.WriteLine("Mapped Mcp endpoint to /mcp");
             return endpoints;
         }
