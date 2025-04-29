@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Mix.MCP.Lib.Prompts;
 using Mix.MCP.Lib.Services;
+using Mix.MCP.Lib.Services.LLM;
 using Mix.MCP.Lib.Tools;
 using ModelContextProtocol.Server;
 using MySql.Data.MySqlClient;
@@ -52,12 +53,12 @@ namespace Mix.MCP.Lib.Extensions
                 .WithPrompts<IoTHealthDataPrompt>()
                 .WithPrompts<DatabaseAnalysisPrompt>()
                 .WithTools<EchoTool>()
-                .WithTools<LlmTools>()
+                .WithTools<LLMTools>()
                 .WithTools<MySqlTools>()
                 .WithToolsFromAssembly();
 
             // Register other services
-            builder.Services.AddSingleton<ILlmService, LlmService>();
+            builder.Services.AddSingleton<ILlmServiceFactory, LlmServiceFactory>();
 
             return builder;
         }
