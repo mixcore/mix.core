@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -15,21 +16,49 @@ namespace Mix.MCP.Lib.Extensions
     {
         public static IHostApplicationBuilder AddMCPServices(this IHostApplicationBuilder builder)
         {
-            // Register HTTP clients
-            builder.Services.AddHttpClient("Deepseek", client =>
+            // Register LLM service options
+            builder.Services.Configure<LlmServiceOptions>(options =>
             {
-                // Thay thế bằng URL API base của Deepseek
-                client.BaseAddress = new Uri("https://api.deepseek.com"); // Ví dụ URL, hãy kiểm tra lại URL chính xác
-                                                                          // Có thể thêm các cấu hình mặc định khác ở đây nếu cần
-                                                                          // client.DefaultRequestHeaders.Add("Accept", "application/json");
+                // Configure from appsettings if available
+                var config = builder.Configuration.GetSection("LlmServices");
+                if (config.Exists())
+                {
+                    config.Bind(options);
+                }
+                
+                // Ensure timeout is at least 60 seconds
+                options.DefaultTimeoutSeconds = Math.Max(60, options.DefaultTimeoutSeconds);
             });
-            // Trong phương thức ConfigureServices hoặc tương đương
-            builder.Services.AddHttpClient("ChatGPT", client =>
+
+            // Register HTTP clients
+            builder.Services.AddHttpClient("LmStudio", client =>
             {
-                // URL API base của OpenAI
-                client.BaseAddress = new Uri("https://api.openai.com/v1/");
-                // Có thể thêm các cấu hình mặc định khác ở đây nếu cần
-                // client.DefaultRequestHeaders.Add("Accept", "application/json");
+                // Use default LM Studio URL but allow override from configuration
+                var baseUrl = builder.Configuration.GetValue<string>("LlmServices:LmStudioBaseUrl") 
+                    ?? "http://localhost:1234/v1";
+                client.BaseAddress = new Uri(baseUrl);
+                client.Timeout = TimeSpan.FromSeconds(
+                    builder.Configuration.GetValue<int>("LlmServices:DefaultTimeoutSeconds", 120));
+            });
+            
+            builder.Services.AddHttpClient("OpenAI", client =>
+            {
+                // OpenAI API configuration
+                var baseUrl = builder.Configuration.GetValue<string>("LlmServices:OpenAIBaseUrl") 
+                    ?? "https://api.openai.com/v1";
+                client.BaseAddress = new Uri(baseUrl);
+                client.Timeout = TimeSpan.FromSeconds(
+                    builder.Configuration.GetValue<int>("LlmServices:DefaultTimeoutSeconds", 120));
+            });
+            
+            builder.Services.AddHttpClient("DeepSeek", client =>
+            {
+                // DeepSeek API configuration
+                var baseUrl = builder.Configuration.GetValue<string>("LlmServices:DeepSeekBaseUrl") 
+                    ?? "https://api.deepseek.com/v1";
+                client.BaseAddress = new Uri(baseUrl);
+                client.Timeout = TimeSpan.FromSeconds(
+                    builder.Configuration.GetValue<int>("LlmServices:DefaultTimeoutSeconds", 120));
             });
 
             // Register MySQL services
@@ -58,7 +87,7 @@ namespace Mix.MCP.Lib.Extensions
                 .WithHttpTransport()
                 .WithStdioServerTransport()
                 .WithTools<EchoTool>()
-                //.WithPrompts<GeneratePrompt>()
+                .WithPrompts<GeneratePrompt>()
                 .WithPrompts<ResourcePrompts>()
                 .WithPrompts<MixDatabasePrompts>()
                 .WithTools<LLMTools>()

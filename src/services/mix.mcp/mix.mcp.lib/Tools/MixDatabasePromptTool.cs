@@ -27,7 +27,7 @@ namespace Mix.MCP.Lib.Tools
     public class MixDatabasePromptTool
     {
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
-        private readonly IMixdbStructureService _mixDbService;
+        private readonly IMixdbStructure _mixDbStructureService;
         private readonly IMixMemoryCacheService _memoryCache;
         private readonly MixCacheService _cacheService;
         private readonly DatabaseService _databaseService;
@@ -39,7 +39,7 @@ namespace Mix.MCP.Lib.Tools
         /// </summary>
         public MixDatabasePromptTool(
             UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IMixdbStructureService mixDbService,
+            IMixdbStructure mixDbService,
             IMixMemoryCacheService memoryCache,
             MixCacheService cacheService,
             DatabaseService databaseService,
@@ -47,7 +47,7 @@ namespace Mix.MCP.Lib.Tools
             ILogger<MixDatabasePromptTool> logger)
         {
             _cmsUow = cmsUow;
-            _mixDbService = mixDbService;
+            _mixDbStructureService = mixDbService;
             _memoryCache = memoryCache;
             _cacheService = cacheService;
             _databaseService = databaseService;
@@ -96,6 +96,7 @@ namespace Mix.MCP.Lib.Tools
                 // Create database
                 var dbViewModel = new MixDbDatabaseViewModel(_cmsUow)
                 {
+                    TenantId = 1,
                     DisplayName = displayName,
                     SystemName = systemName,
                     Type = type,
@@ -104,8 +105,6 @@ namespace Mix.MCP.Lib.Tools
                     MixDatabaseContextId = mixDatabaseContextId
                 };
 
-                // Add standard columns
-                AddStandardColumns(dbViewModel);
                 
                 // Add custom columns from the schema description
                 foreach (var column in columns)
@@ -121,7 +120,7 @@ namespace Mix.MCP.Lib.Tools
                 }
                 
                 // Migrate the database schema
-                await _mixDbService.Migrate(dbViewModel, _databaseService.DatabaseProvider);
+                await _mixDbStructureService.MigrateDatabase(systemName);
 
                 return JsonSerializer.Serialize(new
                 {
@@ -455,27 +454,6 @@ Infer missing information from context where possible.";
 
             name = Regex.Replace(name, @"[^a-z0-9_]", "").ToSEOString('_');
             return prefix + name;
-        }
-
-        /// <summary>
-        /// Add standard columns to the database
-        /// </summary>
-        private void AddStandardColumns(MixDbDatabaseViewModel db)
-        {
-            // Id column
-            AddColumnToViewModel(db, "id", MixDataType.Integer, true, "Primary key");
-            
-            // Created by
-            AddColumnToViewModel(db, "created_by", MixDataType.String, false, "User who created the record");
-            
-            // Created datetime
-            AddColumnToViewModel(db, "created_date_time", MixDataType.DateTime, true, "Creation date and time", "now()");
-            
-            // Last modified
-            AddColumnToViewModel(db, "last_modified", MixDataType.DateTime, true, "Last modification date and time", "now()");
-            
-            // Priority
-            AddColumnToViewModel(db, "priority", MixDataType.Integer, false, "Display priority", "0");
         }
 
         /// <summary>
