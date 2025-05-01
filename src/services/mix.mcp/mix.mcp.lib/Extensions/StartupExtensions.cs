@@ -1,15 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Mix.MCP.Lib.Prompts;
+using Mix.MCP.Lib.Resources;
 using Mix.MCP.Lib.Services;
 using Mix.MCP.Lib.Services.LLM;
 using Mix.MCP.Lib.Tools;
-using ModelContextProtocol.Server;
-using MySql.Data.MySqlClient;
 
 namespace Mix.MCP.Lib.Extensions
 {
@@ -43,18 +41,30 @@ namespace Mix.MCP.Lib.Extensions
                 return factory.CreateService();
             });
 
+            // Register MCP resources
+            builder.Services.AddMCPResources();
+
             // Register MCP services
             builder.Services
-                .AddMcpServer()
+                .AddMcpServer(options => 
+                {
+                    options.ServerInfo = new ModelContextProtocol.Protocol.Types.Implementation
+                    {
+                        Name = MCPResources.ServerDefaults.ServerName,
+                        Version = MCPResources.ServerDefaults.ServerVersion
+                    };
+                    options.ServerInstructions = "This MCP server provides tools and prompts for Mixcore applications.";
+                })
                 .WithHttpTransport()
                 .WithStdioServerTransport()
-                .WithPrompts<DeepseekPrompts>()
-                .WithPrompts<GeneratePrompt>()
-                .WithPrompts<IoTHealthDataPrompt>()
-                .WithPrompts<DatabaseAnalysisPrompt>()
                 .WithTools<EchoTool>()
+                //.WithPrompts<GeneratePrompt>()
+                //.WithPrompts<MixCoreDatabaseTools>()
+                .WithPrompts<ResourcePrompts>()
+                .WithPrompts<MixDatabasePrompts>()
                 .WithTools<LLMTools>()
-                .WithTools<MySqlTools>()
+                .WithTools<ResourceTool>()
+                .WithTools<MixDatabasePromptTool>()
                 .WithToolsFromAssembly();
 
             // Register other services
