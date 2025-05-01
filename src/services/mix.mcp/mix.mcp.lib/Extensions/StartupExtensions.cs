@@ -59,7 +59,6 @@ namespace Mix.MCP.Lib.Extensions
                 .WithStdioServerTransport()
                 .WithTools<EchoTool>()
                 //.WithPrompts<GeneratePrompt>()
-                //.WithPrompts<MixCoreDatabaseTools>()
                 .WithPrompts<ResourcePrompts>()
                 .WithPrompts<MixDatabasePrompts>()
                 .WithTools<LLMTools>()
