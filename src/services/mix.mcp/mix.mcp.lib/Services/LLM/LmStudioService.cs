@@ -7,30 +7,29 @@ using Microsoft.Extensions.Logging;
 namespace Mix.MCP.Lib.Services.LLM
 {
     /// <summary>
-    /// Service for interacting with DeepSeek API
+    /// Service for interacting with LM Studio API
     /// </summary>
-    public class DeepSeekService : BaseLlmService
+    public class LlmStudioService : BaseLlmService
     {
-        private const string HttpClientName = "DeepSeek";
+        private const string HttpClientName = "LmStudio";
 
         /// <summary>
-        /// Initialize a new instance of DeepSeekService
+        /// Initialize a new instance of LmStudioService
         /// </summary>
-        public DeepSeekService(
+        public LlmStudioService(
             IHttpClientFactory httpClientFactory,
-            ILogger<DeepSeekService> logger,
-            string apiKey,
-            string baseUrl = "https://api.deepseek.com/v1")
-            : base(httpClientFactory, logger, baseUrl, apiKey)
+            ILogger<LlmStudioService> logger,
+            string baseUrl = "http://localhost:1234/v1")
+            : base(httpClientFactory, logger, baseUrl)
         {
         }
 
         /// <summary>
-        /// Send a chat message to DeepSeek API
+        /// Send a chat message to LM Studio API
         /// </summary>
         public override async Task<LLMChatResponse> ChatAsync(
             string message, 
-            string model = "deepseek-chat", 
+            string model = "mathstral-7b-v0.1", 
             double temperature = 0.7, 
             int maxTokens = -1, 
             CancellationToken cancellationToken = default)
@@ -43,7 +42,8 @@ namespace Mix.MCP.Lib.Services.LLM
                     new { role = "user", content = message }
                 },
                 temperature = temperature,
-                max_tokens = maxTokens > 0 ? maxTokens : -1
+                max_tokens = maxTokens > 0 ? maxTokens : -1, // Only include if positive
+                stream = false
             };
 
             var client = CreateHttpClient(HttpClientName);
@@ -55,11 +55,11 @@ namespace Mix.MCP.Lib.Services.LLM
         }
 
         /// <summary>
-        /// Send a completion request to DeepSeek API
+        /// Send a completion request to LM Studio API
         /// </summary>
         public override async Task<LLMCompletionResponse> CompleteAsync(
             string prompt, 
-            string model = "deepseek-coder", 
+            string model = "mathstral-7b-v0.1", 
             double temperature = 0.7, 
             int maxTokens = -1, 
             CancellationToken cancellationToken = default)
@@ -81,11 +81,11 @@ namespace Mix.MCP.Lib.Services.LLM
         }
 
         /// <summary>
-        /// Create embeddings using DeepSeek API
+        /// Create embeddings using LM Studio API
         /// </summary>
         public override async Task<LLMEmbeddingResponse> CreateEmbeddingsAsync(
             string input, 
-            string model = "deepseek-embedding", 
+            string model = "text-embedding-nomic-embed-text-v1.5", 
             CancellationToken cancellationToken = default)
         {
             var request = new

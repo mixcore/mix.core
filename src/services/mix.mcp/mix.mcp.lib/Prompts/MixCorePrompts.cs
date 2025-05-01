@@ -9,11 +9,11 @@ namespace Mix.MCP.Lib.Prompts
     public class MixCorePrompts
     {
         [McpServerPrompt, Description("Create a new database schema with columns")]
-        public static ChatMessage CreateDatabaseSchema(
+        public static Microsoft.Extensions.AI.ChatMessage CreateDatabaseSchema(
             [Description("Name of the database to create")] string databaseName,
             [Description("Purpose and description of this database")] string purpose)
         {
-            return new ChatMessage(ChatRole.User, $@"Please help me design a database schema for a {databaseName} database. 
+            return new Microsoft.Extensions.AI.ChatMessage(ChatRole.User, $@"Please help me design a database schema for a {databaseName} database. 
 
 Purpose: {purpose}
 
@@ -35,11 +35,11 @@ Please format your response so I can easily use it with MixCore CMS's database c
         }
 
         [McpServerPrompt, Description("Design database relationships for existing schemas")]
-        public static ChatMessage DesignDatabaseRelationships(
+        public static Microsoft.Extensions.AI.ChatMessage DesignDatabaseRelationships(
             [Description("Names of the databases to create relationships between")] string databaseNames,
             [Description("Purpose of these relationships")] string purpose)
         {
-            return new ChatMessage(ChatRole.User, $@"I need to design relationships between these databases: {databaseNames}
+            return new Microsoft.Extensions.AI.ChatMessage(ChatRole.User, $@"I need to design relationships between these databases: {databaseNames}
 
 Purpose: {purpose}
 
@@ -60,11 +60,11 @@ Format your response so I can easily implement these relationships using MixCore
         }
 
         [McpServerPrompt, Description("Create a database query for specific requirements")]
-        public static ChatMessage CreateDatabaseQuery(
+        public static Microsoft.Extensions.AI.ChatMessage CreateDatabaseQuery(
             [Description("Name of the database to query")] string databaseName,
             [Description("Description of what you want to query")] string queryDescription)
         {
-            return new ChatMessage(ChatRole.User, $@"I need to create a database query for the '{databaseName}' database.
+            return new Microsoft.Extensions.AI.ChatMessage(ChatRole.User, $@"I need to create a database query for the '{databaseName}' database.
 
 Query requirements: {queryDescription}
 
@@ -86,11 +86,11 @@ Include examples of how to handle common scenarios like:
         }
 
         [McpServerPrompt, Description("Design a multi-tenant data structure")]
-        public static ChatMessage DesignMultiTenantStructure(
+        public static Microsoft.Extensions.AI.ChatMessage DesignMultiTenantStructure(
             [Description("Types of tenants needed")] string tenantTypes,
             [Description("Description of data isolation requirements")] string isolationRequirements)
         {
-            return new ChatMessage(ChatRole.User, $@"I need to design a multi-tenant data structure in MixCore CMS.
+            return new Microsoft.Extensions.AI.ChatMessage(ChatRole.User, $@"I need to design a multi-tenant data structure in MixCore CMS.
 
 Tenant types: {tenantTypes}
 Data isolation requirements: {isolationRequirements}
@@ -112,11 +112,11 @@ Include a section on how to manage relationships between tenant-specific and sha
         }
 
         [McpServerPrompt, Description("Generate sample data for testing a database")]
-        public static ChatMessage GenerateSampleData(
+        public static Microsoft.Extensions.AI.ChatMessage GenerateSampleData(
             [Description("Name of the database to generate data for")] string databaseName,
             [Description("Number of sample records to generate")] int recordCount)
         {
-            return new ChatMessage(ChatRole.User, $@"I need to generate {recordCount} sample records for testing the '{databaseName}' database in MixCore CMS.
+            return new Microsoft.Extensions.AI.ChatMessage(ChatRole.User, $@"I need to generate {recordCount} sample records for testing the '{databaseName}' database in MixCore CMS.
 
 Please create realistic test data that:
 1. Follows the schema constraints (required fields, data types, etc.)
