@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Logging;
 
 namespace Mix.MCP.Lib.Services.LLM
@@ -118,17 +119,12 @@ namespace Mix.MCP.Lib.Services.LLM
 
     public class LLMChatResponse
     {
-        public ChatChoice[] choices { get; set; }
+        public ChatResponse[] choices { get; set; }
     }
 
     public class ChatChoice
     {
         public ChatMessage message { get; set; }
-    }
-
-    public class ChatMessage
-    {
-        public string content { get; set; }
     }
 
     public class LLMCompletionResponse
