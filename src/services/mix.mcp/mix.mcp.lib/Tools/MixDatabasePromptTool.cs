@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Mix.Heart.Extensions;
+using Mix.Mixdb.Services;
 
 namespace Mix.MCP.Lib.Tools
 {
@@ -24,7 +25,7 @@ namespace Mix.MCP.Lib.Tools
     public class MixDatabasePromptTool
     {
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
-        private readonly IMixdbStructureService _mixDbService;
+        private readonly IMixdbStructure _mixDbService;
         private readonly IMixMemoryCacheService _memoryCache;
         private readonly MixCacheService _cacheService;
         private readonly DatabaseService _databaseService;
@@ -35,7 +36,7 @@ namespace Mix.MCP.Lib.Tools
         /// </summary>
         public MixDatabasePromptTool(
             UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IMixdbStructureService mixDbService,
+            IMixdbStructure mixDbService,
             IMixMemoryCacheService memoryCache,
             MixCacheService cacheService,
             DatabaseService databaseService,
@@ -114,7 +115,7 @@ namespace Mix.MCP.Lib.Tools
                 }
                 
                 // Migrate the database schema
-                await _mixDbService.Migrate(dbViewModel, _databaseService.DatabaseProvider);
+                await _mixDbService.MigrateDatabase(systemName);
 
                 return JsonSerializer.Serialize(new
                 {
