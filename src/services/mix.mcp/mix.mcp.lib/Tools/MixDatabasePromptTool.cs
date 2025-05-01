@@ -63,12 +63,12 @@ namespace Mix.MCP.Lib.Tools
         {
             try
             {
-                _logger.LogInformation("Creating database {DisplayName} with schema description: {SchemaDescription}", 
+                _logger.LogInformation("Creating database {DisplayName} with schema description: {SchemaDescription}",
                     displayName, schemaDescription);
-                
+
                 // Parse the schema description to extract columns
                 var columns = ParseSchemaDescription(schemaDescription);
-                
+
                 if (columns.Count == 0)
                 {
                     return "Could not determine columns from the schema description. Please provide more details.";
@@ -76,7 +76,7 @@ namespace Mix.MCP.Lib.Tools
 
                 // Generate system name based on display name and naming convention
                 string systemName = GenerateSystemName(displayName, namingConvention);
-                
+
                 // Check if database already exists
                 var existingDb = await _cmsUow.DbContext.MixDatabase
                     .FirstOrDefaultAsync(db => db.SystemName == systemName && !db.IsDeleted);
@@ -98,9 +98,6 @@ namespace Mix.MCP.Lib.Tools
                     MixDatabaseContextId = mixDatabaseContextId
                 };
 
-                // Add standard columns
-                AddStandardColumns(dbViewModel);
-                
                 // Add custom columns from the schema description
                 foreach (var column in columns)
                 {
@@ -113,7 +110,7 @@ namespace Mix.MCP.Lib.Tools
                 {
                     return $"Failed to create database: {systemName}";
                 }
-                
+
                 // Migrate the database schema
                 await _mixDbService.MigrateDatabase(systemName);
 
@@ -138,7 +135,7 @@ namespace Mix.MCP.Lib.Tools
         private List<ColumnInfo> ParseSchemaDescription(string schemaDescription)
         {
             var columns = new List<ColumnInfo>();
-            
+
             // Common field patterns to look for
             var fieldPatterns = new List<(string Pattern, MixDataType DataType)>
             {
@@ -170,7 +167,7 @@ namespace Mix.MCP.Lib.Tools
                 {
                     if (Regex.IsMatch(word, pattern, RegexOptions.IgnoreCase))
                     {
-                        bool isRequired = schemaDescription.Contains($"required {word}") || 
+                        bool isRequired = schemaDescription.Contains($"required {word}") ||
                                         schemaDescription.Contains($"{word} required") ||
                                         schemaDescription.Contains($"mandatory {word}") ||
                                         schemaDescription.Contains($"{word} mandatory");
@@ -227,7 +224,7 @@ namespace Mix.MCP.Lib.Tools
                         dataType = MapStringToDataType(typeName);
                     }
 
-                    bool isRequired = schemaDescription.Contains($"required {fieldName}") || 
+                    bool isRequired = schemaDescription.Contains($"required {fieldName}") ||
                                     schemaDescription.Contains($"{fieldName} required") ||
                                     schemaDescription.Contains($"mandatory {fieldName}") ||
                                     schemaDescription.Contains($"{fieldName} mandatory");
@@ -287,34 +284,13 @@ namespace Mix.MCP.Lib.Tools
         }
 
         /// <summary>
-        /// Add standard columns to the database
-        /// </summary>
-        private void AddStandardColumns(MixDbDatabaseViewModel db)
-        {
-            // Id column
-            AddColumnToViewModel(db, "id", MixDataType.Integer, true, "Primary key");
-            
-            // Created by
-            AddColumnToViewModel(db, "created_by", MixDataType.String, false, "User who created the record");
-            
-            // Created datetime
-            AddColumnToViewModel(db, "created_date_time", MixDataType.DateTime, true, "Creation date and time", "now()");
-            
-            // Last modified
-            AddColumnToViewModel(db, "last_modified", MixDataType.DateTime, true, "Last modification date and time", "now()");
-            
-            // Priority
-            AddColumnToViewModel(db, "priority", MixDataType.Integer, false, "Display priority", "0");
-        }
-
-        /// <summary>
         /// Add a column to the database view model
         /// </summary>
         private void AddColumnToViewModel(
-            MixDbDatabaseViewModel db, 
-            string name, 
-            MixDataType dataType, 
-            bool isRequired, 
+            MixDbDatabaseViewModel db,
+            string name,
+            MixDataType dataType,
+            bool isRequired,
             string description,
             string defaultValue = null)
         {
@@ -359,4 +335,4 @@ namespace Mix.MCP.Lib.Tools
             public string Description { get; set; }
         }
     }
-} 
+}

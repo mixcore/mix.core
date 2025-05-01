@@ -53,6 +53,7 @@ namespace Mix.Mixdb.ViewModels
         #endregion
 
         #region Overrides
+
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             Columns = await MixdbDatabaseColumnViewModel.GetRepository(UowInfo, CacheService).GetListAsync(c => c.MixDatabaseId == Id, cancellationToken);
@@ -63,22 +64,21 @@ namespace Mix.Mixdb.ViewModels
                 NamingConvention = MixDatabaseContext.NamingConvention;
                 DatabaseProvider = MixDatabaseContext.DatabaseProvider;
             }
-            AddDefaultColumns();
         }
 
         public void AddDefaultColumns()
         {
-            if (MixDatabaseContextId.HasValue)
+            if (Id == 0 && MixDatabaseContextId.HasValue)
             {
 
-                var fieldNameSrv = new FieldNameService(NamingConvention);
+                var fieldNameSrv = new FieldNameService(MixDatabaseNamingConvention.SnakeCase);
                 var dbConstants = MixDbHelper.GetDatabaseConstant(DatabaseProvider);
                 bool isGuid = DatabaseProvider == MixDatabaseProvider.SCYLLADB || Type == MixDatabaseType.GuidService;
                 if (!Columns.Any(m => m.SystemName == fieldNameSrv.Id))
                 {
                     Columns.Add(new MixdbDatabaseColumnViewModel()
                     {
-                        DisplayName = fieldNameSrv.Id,
+                        DisplayName = "Id",
                         SystemName = fieldNameSrv.Id,
                         DataType = isGuid ? MixDataType.Guid
                         : MixDataType.Integer,
@@ -90,7 +90,7 @@ namespace Mix.Mixdb.ViewModels
                 {
                     Columns.Add(new MixdbDatabaseColumnViewModel()
                     {
-                        DisplayName = fieldNameSrv.CreatedBy.ToSEOString(' '),
+                        DisplayName = "Created By",
                         SystemName = fieldNameSrv.CreatedBy,
                         DataType = MixDataType.String
                     });
@@ -100,10 +100,9 @@ namespace Mix.Mixdb.ViewModels
                 {
                     Columns.Add(new MixdbDatabaseColumnViewModel()
                     {
-                        DisplayName = fieldNameSrv.CreatedDateTime.ToSEOString(' '),
+                        DisplayName = "Created Date",
                         SystemName = fieldNameSrv.CreatedDateTime,
-                        DataType = MixDataType.DateTime,
-                        DefaultValue = dbConstants.Now
+                        DataType = MixDataType.DateTime
                     });
                     DefaultColumns = DefaultColumns?.Where(m => !Columns.Any(n => n.SystemName == m.SystemName)).ToList();
                 }
@@ -112,6 +111,8 @@ namespace Mix.Mixdb.ViewModels
 
         protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity, CancellationToken cancellationToken = default)
         {
+            AddDefaultColumns();
+
             if (Columns != null)
             {
                 if (Type == MixDatabaseType.AdditionalData || Type == MixDatabaseType.GuidAdditionalData)

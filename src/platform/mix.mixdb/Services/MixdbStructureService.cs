@@ -95,7 +95,7 @@ namespace Mix.Mixdb.Services
             try
             {
                 _logger.LogInformation("Starting migration for new database context: {ContextName}", dbContext.SystemName);
-                
+
                 cancellationToken.ThrowIfCancellationRequested();
                 ValidateDatabaseContext(dbContext);
 
@@ -135,7 +135,7 @@ namespace Mix.Mixdb.Services
             try
             {
                 _logger.LogInformation("Starting system databases migration");
-                
+
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var strMixDbs = MixFileHelper.GetFile(
@@ -145,7 +145,7 @@ namespace Mix.Mixdb.Services
                 var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
 
                 var masterDbContext = await GetOrCreateMasterDbContextAsync();
-                
+
                 if (databases != null)
                 {
                     await ProcessSystemDatabasesAsync(databases, columns, masterDbContext, cancellationToken);
@@ -355,7 +355,7 @@ namespace Mix.Mixdb.Services
                 throw new MixException(MixErrorStatus.Badrequest, $"Invalid table name: {tableName}");
             }
 
-            string cnn = result.MixDatabaseContext?.ConnectionString.Decrypt(_configuration.AesKey()) 
+            string cnn = result.MixDatabaseContext?.ConnectionString.Decrypt(_configuration.AesKey())
                 ?? _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             InitDbStructureService(cnn, result.DatabaseProvider);
             return result;
