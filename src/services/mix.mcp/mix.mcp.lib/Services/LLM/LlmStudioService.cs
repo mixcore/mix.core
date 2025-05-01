@@ -21,7 +21,7 @@ namespace Mix.MCP.Lib.Services.LLM
             _logger = logger;
         }
 
-        public async Task<LLMChatResponse> ChatAsync(string message, string model = "meta-llama-3.1-8b-instruct", double temperature = 0.7, int maxTokens = -1, CancellationToken cancellationToken = default)
+        public async Task<LLMChatResponse> ChatAsync(string message, string model = "mathstral-7b-v0.1", double temperature = 0.7, int maxTokens = -1, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace Mix.MCP.Lib.Services.LLM
             }
         }
 
-        public async Task<LLMCompletionResponse> CompleteAsync(string prompt, string model = "llama-3.2-1b-instruct", double temperature = 0.7, int maxTokens = -1, CancellationToken cancellationToken = default)
+        public async Task<LLMCompletionResponse> CompleteAsync(string prompt, string model = "mathstral-7b-v0.1", double temperature = 0.7, int maxTokens = -1, CancellationToken cancellationToken = default)
         {
             try
             {
