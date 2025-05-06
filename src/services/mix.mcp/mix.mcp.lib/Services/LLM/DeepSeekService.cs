@@ -26,7 +26,7 @@ namespace Mix.MCP.Lib.Services.LLM
         }
 
         /// <summary>
-        /// Send a chat message to DeepSeek API
+        /// Send a chat Message to DeepSeek API
         /// </summary>
         public override async Task<LLMChatResponse> ChatAsync(
             string message, 

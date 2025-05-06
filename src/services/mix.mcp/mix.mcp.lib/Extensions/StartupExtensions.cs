@@ -1,21 +1,24 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Google.Apis.Util;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Mix.Heart.Services;
 using Mix.MCP.Lib.Prompts;
 using Mix.MCP.Lib.Resources;
 using Mix.MCP.Lib.Services;
 using Mix.MCP.Lib.Services.LLM;
 using Mix.MCP.Lib.Tools;
-
 namespace Mix.MCP.Lib.Extensions
 {
     public static class StartupExtensions
     {
         public static IHostApplicationBuilder AddMCPServices(this IHostApplicationBuilder builder)
         {
+            builder.Services.TryAddScoped<MixCacheService>();
             // Register LLM service options
             builder.Services.Configure<LlmServiceOptions>(options =>
             {
@@ -105,7 +108,7 @@ namespace Mix.MCP.Lib.Extensions
         {
             endpoints.MapMcp("/mcp");
             endpoints.MapMcp("/sse");
-            endpoints.MapMcp("/message");
+            endpoints.MapMcp("/Message");
             Console.WriteLine("Mapped Mcp endpoint to /mcp");
             return endpoints;
         }

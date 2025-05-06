@@ -24,9 +24,9 @@ namespace Mix.MCP.Lib.Tools
         }
 
         /// <summary>
-        /// Send a message to LLM service and get response
+        /// Send a Message to LLM service and get response
         /// </summary>
-        [McpServerTool, Description("Send message to LLM service and get response")]
+        [McpServerTool, Description("Send Message to LLM service and get response")]
         public async Task<LLMChatResponse> ChatWithLLM(
             [Description("LLM service type (OpenAI, DeepSeek, etc.)")] LLMServiceType serviceType,
             [Description("Message to send")] string message,

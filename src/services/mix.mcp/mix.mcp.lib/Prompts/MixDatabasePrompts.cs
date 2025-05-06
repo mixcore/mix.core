@@ -27,7 +27,7 @@ namespace Mix.MCP.Lib.Prompts
         /// </summary>
         /// <param name="purpose">Purpose or domain of the database</param>
         /// <param name="requirements">Additional requirements or context</param>
-        /// <returns>A chat message with the schema generation prompt</returns>
+        /// <returns>A chat Message with the schema generation prompt</returns>
         [McpServerPrompt, Description("Create a prompt for generating a database schema description")]
         public ChatMessage CreateMixDatabaseDescriptionPrompt(
             [Description("Purpose or domain of the database (e.g., e-commerce, blog, inventory)")] string purpose,
@@ -51,7 +51,7 @@ namespace Mix.MCP.Lib.Prompts
         /// Create a prompt for analyzing existing database schema
         /// </summary>
         /// <param name="schema">JSON representation of the database schema</param>
-        /// <returns>A chat message with the schema analysis prompt</returns>
+        /// <returns>A chat Message with the schema analysis prompt</returns>
         [McpServerPrompt, Description("Create a prompt for analyzing existing database schema")]
         public ChatMessage CreateMixDatabaseAnalysisPrompt(
             [Description("JSON representation of the database schema")] string schema)
@@ -72,7 +72,7 @@ namespace Mix.MCP.Lib.Prompts
         /// </summary>
         /// <param name="currentMixDatabase">Current database schema</param>
         /// <param name="targetMixDatabase">Target database schema</param>
-        /// <returns>A chat message with the migration guidance prompt</returns>
+        /// <returns>A chat Message with the migration guidance prompt</returns>
         [McpServerPrompt, Description("Create a prompt for database migration guidance")]
         public ChatMessage CreateMigrationGuidancePrompt(
             [Description("Current database schema")] string currentMixDatabase,
@@ -94,7 +94,7 @@ namespace Mix.MCP.Lib.Prompts
         /// </summary>
         /// <param name="schema">Database schema</param>
         /// <param name="recordCount">Number of sample records to generate</param>
-        /// <returns>A chat message with the sample data generation prompt</returns>
+        /// <returns>A chat Message with the sample data generation prompt</returns>
         [McpServerPrompt, Description("Create a prompt for generating sample data for a database")]
         public ChatMessage CreateSampleDataPrompt(
             [Description("Database schema")] string schema,
@@ -115,7 +115,7 @@ namespace Mix.MCP.Lib.Prompts
         /// </summary>
         /// <param name="currentQuery">Current database query</param>
         /// <param name="tableStructure">Structure of relevant tables</param>
-        /// <returns>A chat message with the query optimization prompt</returns>
+        /// <returns>A chat Message with the query optimization prompt</returns>
         [McpServerPrompt, Description("Create a prompt for optimizing database queries")]
         public ChatMessage CreateQueryOptimizationPrompt(
             [Description("Current database query")] string currentQuery,

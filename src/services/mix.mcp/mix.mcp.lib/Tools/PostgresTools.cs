@@ -20,12 +20,12 @@ namespace Mix.MCP.Lib.Tools
             _logger = logger;
         }
 
-        [McpServerTool, Description("Execute a read-only SQL message")]
+        [McpServerTool, Description("Execute a read-only SQL Message")]
         public async Task<DataTable> ExecuteQueryAsync(
-            [Description("SQL message to execute")] string message,
+            [Description("SQL Message to execute")] string message,
             CancellationToken cancellationToken = default)
         {
-            // Validate message is read-only
+            // Validate Message is read-only
             if (message.TrimStart().StartsWith("INSERT", StringComparison.OrdinalIgnoreCase) ||
                 message.TrimStart().StartsWith("UPDATE", StringComparison.OrdinalIgnoreCase) ||
                 message.TrimStart().StartsWith("DELETE", StringComparison.OrdinalIgnoreCase) ||

@@ -2,6 +2,7 @@ using System;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net.Http;
+using Mix.Shared.Services;
 
 namespace Mix.MCP.Lib.Services.LLM
 {

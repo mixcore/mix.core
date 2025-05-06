@@ -31,7 +31,7 @@ namespace Mix.MCP.Lib.Prompts
         /// </summary>
         /// <param name="text">Text to summarize</param>
         /// <param name="sentenceCount">Number of sentences in the summary</param>
-        /// <returns>A chat message with the summarization prompt</returns>
+        /// <returns>A chat Message with the summarization prompt</returns>
         [McpServerPrompt, Description("Create a prompt for text summarization")]
         public ChatMessage CreateSummarizePrompt(
             [Description("Text to summarize")] string text,
@@ -47,7 +47,7 @@ namespace Mix.MCP.Lib.Prompts
         /// </summary>
         /// <param name="analysisType">Type of analysis to perform</param>
         /// <param name="data">Data to analyze</param>
-        /// <returns>A chat message with the analysis prompt</returns>
+        /// <returns>A chat Message with the analysis prompt</returns>
         [McpServerPrompt, Description("Create a prompt for data analysis")]
         public ChatMessage CreateAnalysisPrompt(
             [Description("Analysis type (e.g., sentiment, trends, patterns)")] string analysisType,
@@ -64,7 +64,7 @@ namespace Mix.MCP.Lib.Prompts
         /// <param name="sourceLanguage">Source language</param>
         /// <param name="targetLanguage">Target language</param>
         /// <param name="text">Text to translate</param>
-        /// <returns>A chat message with the translation prompt</returns>
+        /// <returns>A chat Message with the translation prompt</returns>
         [McpServerPrompt, Description("Create a prompt for text translation")]
         public ChatMessage CreateTranslationPrompt(
             [Description("Source language")] string sourceLanguage,
@@ -81,7 +81,7 @@ namespace Mix.MCP.Lib.Prompts
         /// Creates an entity extraction prompt using resources
         /// </summary>
         /// <param name="text">Text to extract entities from</param>
-        /// <returns>A chat message with the entity extraction prompt</returns>
+        /// <returns>A chat Message with the entity extraction prompt</returns>
         [McpServerPrompt, Description("Create a prompt for entity extraction")]
         public ChatMessage CreateEntityExtractionPrompt(
             [Description("Text to extract entities from")] string text)
@@ -96,7 +96,7 @@ namespace Mix.MCP.Lib.Prompts
         /// </summary>
         /// <param name="operation">SQL operation to perform</param>
         /// <param name="tableDescription">Description of the database tables</param>
-        /// <returns>A chat message with the SQL generation prompt</returns>
+        /// <returns>A chat Message with the SQL generation prompt</returns>
         [McpServerPrompt, Description("Create a prompt for SQL generation")]
         public ChatMessage CreateSqlGenerationPrompt(
             [Description("SQL operation to perform (e.g., query, insert, update)")] string operation,
