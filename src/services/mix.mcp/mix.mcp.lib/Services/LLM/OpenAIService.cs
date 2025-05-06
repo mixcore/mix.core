@@ -26,7 +26,7 @@ namespace Mix.MCP.Lib.Services.LLM
         }
 
         /// <summary>
-        /// Send a chat message to OpenAI API
+        /// Send a chat Message to OpenAI API
         /// </summary>
         public override async Task<LLMChatResponse> ChatAsync(
             string message, 

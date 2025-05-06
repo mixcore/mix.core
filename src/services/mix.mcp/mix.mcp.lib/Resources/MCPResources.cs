@@ -37,7 +37,7 @@ namespace Mix.MCP.Lib.Resources
         /// </summary>
         public static class StandardTools
         {
-            public static readonly string EchoDescription = "Echo back the received message";
+            public static readonly string EchoDescription = "Echo back the received Message";
             public static readonly string SummarizeDescription = "Summarize the provided content";
             public static readonly string AnalyzeDescription = "Analyze the provided data";
         }

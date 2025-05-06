@@ -19,7 +19,7 @@ namespace Mix.MCP.Lib.Services.LLM
         protected readonly ILogger _logger;
         protected readonly string _baseUrl;
         protected readonly string _apiKey;
-        protected readonly TimeSpan _timeout = TimeSpan.FromSeconds(120); // 2 minutes timeout
+        protected TimeSpan _timeout = TimeSpan.FromSeconds(120); // 2 minutes timeout
 
         protected BaseLlmService(
             IHttpClientFactory httpClientFactory,
@@ -50,7 +50,7 @@ namespace Mix.MCP.Lib.Services.LLM
         }
 
         /// <summary>
-        /// Send message to chat API
+        /// Send Message to chat API
         /// </summary>
         public abstract Task<LLMChatResponse> ChatAsync(
             string message, 
@@ -116,6 +116,11 @@ namespace Mix.MCP.Lib.Services.LLM
                 throw;
             }
         }
+
+        public void SetTimeout(TimeSpan timeSpan)
+        {
+            this._timeout = timeSpan;
+        }
     }
 
     /// <summary>
@@ -124,19 +129,24 @@ namespace Mix.MCP.Lib.Services.LLM
     public class LLMChatResponse
     {
         [JsonPropertyName("choices")]
-        public ChatChoice[] choices { get; set; } = Array.Empty<ChatChoice>();
+        public LLMChatChoice[] choices { get; set; } = Array.Empty<LLMChatChoice>();
     }
 
     /// <summary>
     /// Single chat choice
     /// </summary>
-    public class ChatChoice
+    public class LLMChatChoice
     {
         [JsonPropertyName("message")]
-        public ChatMessage message { get; set; }
-        
-        [JsonPropertyName("text")]
-        public string Text { get; set; }
+        public LLMChatMessage Message { get; set; }
+    }
+
+    public class LLMChatMessage
+    {
+        [JsonPropertyName("role")]
+        public string Role { get; set; }
+        [JsonPropertyName("content")]
+        public string Content { get; set; }
     }
 
     /// <summary>
