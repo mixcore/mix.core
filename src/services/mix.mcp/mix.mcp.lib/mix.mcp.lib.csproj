@@ -29,6 +29,8 @@
     <PackageReference Include="Npgsql" Version="9.0.3" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.2" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
+    <PackageReference Include="OllamaSharp" Version="5.1.14" />
+    <PackageReference Include="OllamaSharp.ModelContextProtocol" Version="5.1.14" />
   </ItemGroup>
 
   <ItemGroup>

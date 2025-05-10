@@ -8,7 +8,7 @@ namespace Mix.MCP.Lib.Prompts
     [McpServerPromptType]
     public class IoTHealthDataPrompt
     {
-        [McpServerPrompt, Description("Create prompt for analyzing IoT health data")]
+        [McpServerPrompt, Description("CreateMixDbData prompt for analyzing IoT health data")]
         public static ChatMessage CreateHeartBreathPrompt(
             [Description("Heart rate data")] string heartRate,
             [Description("Breath rate data")] string breathRate,

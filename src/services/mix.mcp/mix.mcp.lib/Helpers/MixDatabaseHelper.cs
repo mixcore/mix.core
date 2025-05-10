@@ -57,7 +57,7 @@ namespace Mix.MCP.Lib.Helpers
         }
 
         /// <summary>
-        /// Create a new database with the specified columns
+        /// CreateMixDbData a new database with the specified columns
         /// </summary>
         public async Task<MixDbDatabaseViewModel> CreateDatabase(
             string displayName,
@@ -68,7 +68,7 @@ namespace Mix.MCP.Lib.Helpers
             MixDatabaseType type = MixDatabaseType.Service,
             int mixDatabaseContextId = 1)
         {
-            // Create database
+            // CreateMixDbData database
             var dbViewModel = new MixDbDatabaseViewModel(_cmsUow)
             {
                 TenantId = 1,
@@ -130,7 +130,7 @@ namespace Mix.MCP.Lib.Helpers
         }
 
         /// <summary>
-        /// Update a column in a database
+        /// UpdateMixDbData a column in a database
         /// </summary>
         public async Task<bool> UpdateColumn(
             MixDbDatabaseViewModel database,
@@ -170,7 +170,7 @@ namespace Mix.MCP.Lib.Helpers
                 return false;
             }
 
-            // Update column properties
+            // UpdateMixDbData column properties
             bool dataTypeChanged = false;
 
             if (!string.IsNullOrEmpty(newDisplayName))
@@ -212,7 +212,7 @@ namespace Mix.MCP.Lib.Helpers
         }
 
         /// <summary>
-        /// Delete a column from a database
+        /// DeleteMixDbData a column from a database
         /// </summary>
         public async Task<bool> DeleteColumn(
             MixDbDatabaseViewModel database,

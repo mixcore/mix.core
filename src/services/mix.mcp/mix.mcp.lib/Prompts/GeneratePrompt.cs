@@ -8,7 +8,7 @@ namespace Mix.MCP.Lib.Prompts
     [McpServerPromptType]
     public class GeneratePrompt
     {
-        [McpServerPrompt, Description("Create prompt for generating code")]
+        [McpServerPrompt, Description("CreateMixDbData prompt for generating code")]
         public static ChatMessage GenerateCodePrompt(
             [Description("Requirements for code generation")] string requirements,
             [Description("Programming language to use")] string programmingLanguage = "C#") =>
@@ -31,7 +31,7 @@ namespace Mix.MCP.Lib.Prompts
                 12. Must be performant and optimized
                 """);
 
-        [McpServerPrompt, Description("Create prompt for generating documentation")]
+        [McpServerPrompt, Description("CreateMixDbData prompt for generating documentation")]
         public static ChatMessage GenerateDocumentationPrompt(
             [Description("Code to document")] string code,
             [Description("Type of documentation to generate")] string documentationType = "XML") =>
@@ -52,7 +52,7 @@ namespace Mix.MCP.Lib.Prompts
                 10. Must follow the language's documentation conventions
                 """);
 
-        [McpServerPrompt, Description("Create prompt for generating unit tests")]
+        [McpServerPrompt, Description("CreateMixDbData prompt for generating unit tests")]
         public static ChatMessage GenerateUnitTestsPrompt(
             [Description("Code to generate tests for")] string code,
             [Description("Testing framework to use")] string testingFramework = "xUnit") =>

@@ -81,7 +81,7 @@ namespace Mix.MCP.Lib.Services.LLM
         }
 
         /// <summary>
-        /// Create embeddings using LM Studio API
+        /// CreateMixDbData embeddings using LM Studio API
         /// </summary>
         public override async Task<LLMEmbeddingResponse> CreateEmbeddingsAsync(
             string input, 

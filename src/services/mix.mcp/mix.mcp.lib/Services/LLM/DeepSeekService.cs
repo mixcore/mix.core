@@ -81,7 +81,7 @@ namespace Mix.MCP.Lib.Services.LLM
         }
 
         /// <summary>
-        /// Create embeddings using DeepSeek API
+        /// CreateMixDbData embeddings using DeepSeek API
         /// </summary>
         public override async Task<LLMEmbeddingResponse> CreateEmbeddingsAsync(
             string input, 
