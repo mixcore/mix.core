@@ -34,7 +34,7 @@ namespace Mix.MCP.Lib.Services.LLM
         }
 
         /// <summary>
-        /// Create and configure an HttpClient with the proper timeout and headers
+        /// CreateMixDbData and configure an HttpClient with the proper timeout and headers
         /// </summary>
         protected HttpClient CreateHttpClient(string clientName)
         {
@@ -70,7 +70,7 @@ namespace Mix.MCP.Lib.Services.LLM
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Create embeddings for the input
+        /// CreateMixDbData embeddings for the input
         /// </summary>
         public abstract Task<LLMEmbeddingResponse> CreateEmbeddingsAsync(
             string input, 

@@ -12,7 +12,7 @@ namespace Mix.MCP.Lib.Services.LLM
     public interface ILlmServiceFactory
     {
         /// <summary>
-        /// Create an LLM service for the specified service type
+        /// CreateMixDbData an LLM service for the specified service type
         /// </summary>
         ILlmService CreateService(LLMServiceType serviceType);
     }
@@ -40,7 +40,7 @@ namespace Mix.MCP.Lib.Services.LLM
         }
 
         /// <summary>
-        /// Create an LLM service for the specified service type
+        /// CreateMixDbData an LLM service for the specified service type
         /// </summary>
         public ILlmService CreateService(LLMServiceType serviceType)
         {

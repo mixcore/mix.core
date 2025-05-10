@@ -81,7 +81,7 @@ namespace Mix.MCP.Lib.Services.LLM
         }
 
         /// <summary>
-        /// Create embeddings using OpenAI API
+        /// CreateMixDbData embeddings using OpenAI API
         /// </summary>
         public override async Task<LLMEmbeddingResponse> CreateEmbeddingsAsync(
             string input, 

@@ -15,7 +15,7 @@ namespace Mix.MCP.Lib.Tools
     {
         protected readonly ILogger _logger;
         protected readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
-        private const int DEFAULT_TIMEOUT_SECONDS = 120;
+        private const int DEFAULT_TIMEOUT_SECONDS = 300;
 
         protected BaseMcpTool(UnitOfWorkInfo<MixCmsContext> cmsUow, ILogger logger)
         {

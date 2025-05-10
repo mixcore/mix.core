@@ -38,10 +38,10 @@ namespace Mix.MCP.Lib.Helpers
 
             try
             {
-                // Create LLM service
+                // CreateMixDbData LLM service
                 var llmService = _llmServiceFactory.CreateService(serviceType);
 
-                // Create prompt for the LLM
+                // CreateMixDbData prompt for the LLM
                 string prompt = $@"
 You are a database schema designer for a CMS system. Analyze this database schema description and extract structured column information.
 

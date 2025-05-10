@@ -8,7 +8,7 @@ namespace Mix.MCP.Lib.Prompts
     [McpServerPromptType]
     public class MixCorePrompts
     {
-        [McpServerPrompt, Description("Create a new database schema with columns")]
+        [McpServerPrompt, Description("CreateMixDbData a new database schema with columns")]
         public static Microsoft.Extensions.AI.ChatMessage CreateDatabaseSchema(
             [Description("Name of the database to create")] string databaseName,
             [Description("Purpose and description of this database")] string purpose)
@@ -59,7 +59,7 @@ For each relationship, explain:
 Format your response so I can easily implement these relationships using MixCore's relationship creation tools.");
         }
 
-        [McpServerPrompt, Description("Create a database query for specific requirements")]
+        [McpServerPrompt, Description("CreateMixDbData a database query for specific requirements")]
         public static Microsoft.Extensions.AI.ChatMessage CreateDatabaseQuery(
             [Description("Name of the database to query")] string databaseName,
             [Description("Description of what you want to query")] string queryDescription)

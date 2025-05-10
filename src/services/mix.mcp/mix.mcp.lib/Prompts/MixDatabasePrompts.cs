@@ -23,12 +23,12 @@ namespace Mix.MCP.Lib.Prompts
         }
 
         /// <summary>
-        /// Create a prompt for generating a database schema description
+        /// CreateMixDbData a prompt for generating a database schema description
         /// </summary>
         /// <param name="purpose">Purpose or domain of the database</param>
         /// <param name="requirements">Additional requirements or context</param>
         /// <returns>A chat Message with the schema generation prompt</returns>
-        [McpServerPrompt, Description("Create a prompt for generating a database schema description")]
+        [McpServerPrompt, Description("CreateMixDbData a prompt for generating a database schema description")]
         public ChatMessage CreateMixDatabaseDescriptionPrompt(
             [Description("Purpose or domain of the database (e.g., e-commerce, blog, inventory)")] string purpose,
             [Description("Additional requirements or context (optional)")] string requirements = null)
@@ -48,11 +48,11 @@ namespace Mix.MCP.Lib.Prompts
         }
 
         /// <summary>
-        /// Create a prompt for analyzing existing database schema
+        /// CreateMixDbData a prompt for analyzing existing database schema
         /// </summary>
         /// <param name="schema">JSON representation of the database schema</param>
         /// <returns>A chat Message with the schema analysis prompt</returns>
-        [McpServerPrompt, Description("Create a prompt for analyzing existing database schema")]
+        [McpServerPrompt, Description("CreateMixDbData a prompt for analyzing existing database schema")]
         public ChatMessage CreateMixDatabaseAnalysisPrompt(
             [Description("JSON representation of the database schema")] string schema)
         {
@@ -68,12 +68,12 @@ namespace Mix.MCP.Lib.Prompts
         }
 
         /// <summary>
-        /// Create a prompt for database migration guidance
+        /// CreateMixDbData a prompt for database migration guidance
         /// </summary>
         /// <param name="currentMixDatabase">Current database schema</param>
         /// <param name="targetMixDatabase">Target database schema</param>
         /// <returns>A chat Message with the migration guidance prompt</returns>
-        [McpServerPrompt, Description("Create a prompt for database migration guidance")]
+        [McpServerPrompt, Description("CreateMixDbData a prompt for database migration guidance")]
         public ChatMessage CreateMigrationGuidancePrompt(
             [Description("Current database schema")] string currentMixDatabase,
             [Description("Target database schema")] string targetMixDatabase)
@@ -90,12 +90,12 @@ namespace Mix.MCP.Lib.Prompts
         }
 
         /// <summary>
-        /// Create a prompt for generating sample data for a database
+        /// CreateMixDbData a prompt for generating sample data for a database
         /// </summary>
         /// <param name="schema">Database schema</param>
         /// <param name="recordCount">Number of sample records to generate</param>
         /// <returns>A chat Message with the sample data generation prompt</returns>
-        [McpServerPrompt, Description("Create a prompt for generating sample data for a database")]
+        [McpServerPrompt, Description("CreateMixDbData a prompt for generating sample data for a database")]
         public ChatMessage CreateSampleDataPrompt(
             [Description("Database schema")] string schema,
             [Description("Number of sample records to generate")] int recordCount = 5)
@@ -111,12 +111,12 @@ namespace Mix.MCP.Lib.Prompts
         }
 
         /// <summary>
-        /// Create a prompt for optimizing database queries
+        /// CreateMixDbData a prompt for optimizing database queries
         /// </summary>
         /// <param name="currentQuery">Current database query</param>
         /// <param name="tableStructure">Structure of relevant tables</param>
         /// <returns>A chat Message with the query optimization prompt</returns>
-        [McpServerPrompt, Description("Create a prompt for optimizing database queries")]
+        [McpServerPrompt, Description("CreateMixDbData a prompt for optimizing database queries")]
         public ChatMessage CreateQueryOptimizationPrompt(
             [Description("Current database query")] string currentQuery,
             [Description("Structure of relevant tables")] string tableStructure)

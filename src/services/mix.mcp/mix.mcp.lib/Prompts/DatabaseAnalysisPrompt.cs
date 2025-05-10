@@ -8,7 +8,7 @@ namespace Mix.MCP.Lib.Prompts
     [McpServerPromptType]
     public class DatabaseAnalysisPrompt
     {
-        [McpServerPrompt, Description("Create prompt for data analysis")]
+        [McpServerPrompt, Description("CreateMixDbData prompt for data analysis")]
         public static ChatMessage CreateAnalysisTablePrompt(
             [Description("Table name")] string tableName,
             [Description("Analysis type")] string analysisType,
@@ -38,7 +38,7 @@ namespace Mix.MCP.Lib.Prompts
                 4. Recommendations for next steps
                 """);
 
-        [McpServerPrompt, Description("Create prompt for data exploration")]
+        [McpServerPrompt, Description("CreateMixDbData prompt for data exploration")]
         public static ChatMessage CreateExplorationTablePrompt(
             [Description("Table name")] string tableName,
             [Description("Exploration goals")] string goals) =>

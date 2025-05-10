@@ -19,6 +19,7 @@ namespace Mix.MCP.Lib.Extensions
         public static IHostApplicationBuilder AddMCPServices(this IHostApplicationBuilder builder)
         {
             builder.Services.TryAddScoped<MixCacheService>();
+            builder.Services.AddMixDbContexts();
             // Register LLM service options
             builder.Services.Configure<LlmServiceOptions>(options =>
             {
@@ -96,6 +97,7 @@ namespace Mix.MCP.Lib.Extensions
                 .WithTools<LLMTools>()
                 .WithTools<ResourceTool>()
                 .WithTools<MixDatabasePromptTool>()
+                .WithTools<MixDatabaseDataTool>()
                 .WithToolsFromAssembly();
 
             // Register other services

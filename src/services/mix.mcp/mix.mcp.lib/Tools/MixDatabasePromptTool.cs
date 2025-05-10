@@ -61,17 +61,16 @@ namespace Mix.MCP.Lib.Tools
         }
 
         /// <summary>
-        /// Create a Mix Database with columns based on a prompt description
+        /// CreateMixDbData a Mix Database with columns based on a prompt description
         /// </summary>
-        [McpServerTool, Description("Create a Mix Database with columns based on a prompt description"), DisableRequestTimeout]
+        [McpServerTool, Description("CreateMixDbData a Mix Database with columns based on a prompt description"), DisableRequestTimeout]
         public async Task<string> CreateDatabaseFromPrompt(
             [Description("Display name for the database")] string displayName,
-            [Description("Description of the database schema in natural language (e.g., 'Create a Product table with name, price, and description')")] string schemaDescription,
-            [Description("Naming convention to use (SnakeCase, CamelCase, KebabCase, PascalCase)")] MixDatabaseNamingConvention namingConvention = MixDatabaseNamingConvention.SnakeCase,
-            [Description("Type of database (Service, GuidService, AdditionalData, GuidAdditionalData)")] MixDatabaseType type = MixDatabaseType.Service,
+            [Description("Description of the database schema in natural language (e.g., 'CreateMixDbData a Product table with name, price, and description')")] string schemaDescription,
             [Description("Mix Database Context ID (default: 1)")] int mixDatabaseContextId = 1,
             [Description("LLM service type to use for schema parsing (OpenAI, DeepSeek, LmStudio)")] LLMServiceType llmServiceType = LLMServiceType.LmStudio,
-            [Description("LLM model to use (e.g., gpt-4, deepseek-chat, mathstral-7b-v0.1)")] string llmModel = "mathstral-7b-v0.1")
+            [Description("LLM model to use (e.g., gpt-4, deepseek-chat, mathstral-7b-v0.1)")] string llmModel = "mathstral-7b-v0.1",
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(displayName))
                 return "Display name cannot be empty.";
@@ -85,7 +84,7 @@ namespace Mix.MCP.Lib.Tools
                 var columns = await _schemaParser.ParseSchemaDescriptionWithLLM(schemaDescription, llmServiceType, llmModel);
                 if (columns.Count == 0)
                     return "Could not determine columns from the schema description. Please provide more details about the fields needed for your database.";
-                string systemName = MixDatabaseHelper.GenerateSystemName(displayName, namingConvention);
+                string systemName = MixDatabaseHelper.GenerateSystemName(displayName, MixDatabaseNamingConvention.SnakeCase);
                 bool databaseExists = await _databaseHelper.DatabaseExists(systemName);
                 if (databaseExists)
                     return $"A database with the system name '{systemName}' already exists. Please use a different name or delete the existing database first.";
@@ -94,8 +93,8 @@ namespace Mix.MCP.Lib.Tools
                     systemName,
                     columns,
                     schemaDescription,
-                    namingConvention,
-                    type,
+                    MixDatabaseNamingConvention.SnakeCase,
+                    MixDatabaseType.Service,
                     mixDatabaseContextId);
                 if (database == null)
                     return $"Failed to create database: {systemName}. Please check the logs for more details.";
@@ -124,7 +123,8 @@ namespace Mix.MCP.Lib.Tools
             [Description("Schema description for the columns (e.g., 'Add a price column that stores decimal values and is required, and a description column for long text')")] string schemaText,
             [Description("LLM service type to use for schema parsing (OpenAI, DeepSeek, LmStudio)")] LLMServiceType llmServiceType = LLMServiceType.LmStudio,
             [Description("LLM model to use (e.g., gpt-4, deepseek-chat, mathstral-7b-v0.1)")] string llmModel = "mathstral-7b-v0.1",
-            [Description("Timeout in seconds for LLM operations (default: 120)")] int timeoutSeconds = 120)
+            [Description("Timeout in seconds for LLM operations (default: 120)")] int timeoutSeconds = 120,
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(databaseSystemName))
                 return "Database system name cannot be empty.";
@@ -171,15 +171,16 @@ namespace Mix.MCP.Lib.Tools
         }
 
         /// <summary>
-        /// Update multiple columns in a Mix Database using schema text
+        /// UpdateMixDbData multiple columns in a Mix Database using schema text
         /// </summary>
-        [McpServerTool, Description("Update multiple columns in a Mix Database using schema text")]
+        [McpServerTool, Description("UpdateMixDbData multiple columns in a Mix Database using schema text")]
         public async Task<string> UpdateDatabaseColumn(
             [Description("System name of the database (e.g., mix_products)")] string databaseSystemName,
             [Description("Schema description for updating columns (e.g., 'Change the product_price column to be non-required and set a default value of 0.00, and rename the description column to product_details')")] string schemaText,
             [Description("LLM service type to use for schema parsing (OpenAI, DeepSeek, LmStudio)")] LLMServiceType llmServiceType = LLMServiceType.LmStudio,
             [Description("LLM model to use (e.g., gpt-4, deepseek-chat, mathstral-7b-v0.1)")] string llmModel = "mathstral-7b-v0.1",
-            [Description("Timeout in seconds for LLM operations (default: 120)")] int timeoutSeconds = 120)
+            [Description("Timeout in seconds for LLM operations (default: 120)")] int timeoutSeconds = 120,
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(databaseSystemName))
                 return "Database system name cannot be empty.";
@@ -226,16 +227,17 @@ namespace Mix.MCP.Lib.Tools
         }
 
         /// <summary>
-        /// Delete multiple columns from a Mix Database using schema text
+        /// DeleteMixDbData multiple columns from a Mix Database using schema text
         /// </summary>
-        [McpServerTool, Description("Delete multiple columns from a Mix Database using schema text")]
+        [McpServerTool, Description("DeleteMixDbData multiple columns from a Mix Database using schema text")]
         public async Task<string> DeleteDatabaseColumn(
             [Description("System name of the database (e.g., mix_products)")] string databaseSystemName,
             [Description("Schema description indicating columns to delete (e.g., 'Remove the product_code column and the manufacturer column')")] string schemaText,
             [Description("LLM service type to use for schema parsing (OpenAI, DeepSeek, LmStudio)")] LLMServiceType llmServiceType = LLMServiceType.LmStudio,
             [Description("LLM model to use (e.g., gpt-4, deepseek-chat, mathstral-7b-v0.1)")] string llmModel = "mathstral-7b-v0.1",
             [Description("Timeout in seconds for LLM operations (default: 120)")] int timeoutSeconds = 120,
-            [Description("Confirm drop with 'YES' (case sensitive)")] string confirmDropColumn = null)
+            [Description("Confirm drop with 'YES' (case sensitive)")] string confirmDropColumn = null,
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(databaseSystemName))
                 return "Database system name cannot be empty.";
