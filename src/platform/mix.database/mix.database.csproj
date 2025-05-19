@@ -37,6 +37,7 @@
 		<Folder Include="Entities\Queue\EntityConfigurations\" />
 		<Folder Include="Migrations\Account\" />
 		<Folder Include="Migrations\AuditLog\" />
+		<Folder Include="Migrations\AuditLog\Postgres\" />
 		<Folder Include="Migrations\Cms\" />
 		<Folder Include="Migrations\QueueLog\" />
 		<Folder Include="Migrations\Settings\" />
