@@ -36,6 +36,7 @@ namespace Mix.Mixdb.Interfaces
         Task<JObject?> GetSingleByAsync(string tableName, MixQueryField query, string? selectColumns, CancellationToken cancellationToken);
         Task<JObject?> GetSingleByAsync(string tableName, List<MixQueryField> queries, string selectColumns, CancellationToken cancellationToken);
         Task<JObject?> GetSingleByParentAsync(string tableName, MixContentType parentType, object parentId, string selectColumns, CancellationToken cancellationToken);
+        Task<JObject?> GetSingleByColumnAsync(string tableName, string columnName, object columnValue, string selectColumns, CancellationToken cancellationToken);
         Task<List<JObject>?> GetListByAsync(SearchMixDbRequestModel request, CancellationToken cancellationToken = default);
         Task<List<JObject>?> GetListByAsync(string tableName, List<QueryField> queryFields, List<MixSortByColumn>? sortByFields = null, string? selectFields = null, bool loadNestedData = false, CancellationToken cancellationToken = default);
         Task<List<JObject>?> GetListByParentAsync(SearchMixDbRequestModel request, MixContentType parentType, object parentId, CancellationToken cancellationToken = default);

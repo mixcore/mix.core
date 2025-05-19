@@ -19,7 +19,7 @@ namespace Mix.MCP.Lib.Services.LLM
         protected readonly ILogger _logger;
         protected readonly string _baseUrl;
         protected readonly string _apiKey;
-        protected TimeSpan _timeout = TimeSpan.FromSeconds(120); // 2 minutes timeout
+        protected TimeSpan _timeout = TimeSpan.FromSeconds(3000); // 2 minutes timeout
 
         protected BaseLlmService(
             IHttpClientFactory httpClientFactory,

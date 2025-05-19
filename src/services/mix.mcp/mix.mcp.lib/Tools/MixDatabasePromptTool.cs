@@ -68,8 +68,8 @@ namespace Mix.MCP.Lib.Tools
             [Description("Display name for the database")] string displayName,
             [Description("Description of the database schema in natural language (e.g., 'CreateMixDbData a Product table with name, price, and description')")] string schemaDescription,
             [Description("Mix Database Context ID (default: 1)")] int mixDatabaseContextId = 1,
-            [Description("LLM service type to use for schema parsing (OpenAI, DeepSeek, LmStudio)")] LLMServiceType llmServiceType = LLMServiceType.LmStudio,
-            [Description("LLM model to use (e.g., gpt-4, deepseek-chat, mathstral-7b-v0.1)")] string llmModel = "mathstral-7b-v0.1",
+            [Description("LLM service type to use for schema parsing (OpenAI, DeepSeek, LmStudio)")] LLMServiceType llmServiceType = LLMServiceType.DeepSeek,
+            [Description("LLM model to use (e.g., gpt-4, deepseek-chat, mathstral-7b-v0.1)")] string llmModel = "deepseek-chat",
             CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(displayName))
@@ -108,7 +108,6 @@ namespace Mix.MCP.Lib.Tools
                         Name = c.Name,
                         Type = c.DataType.ToString(),
                         IsRequired = c.IsRequired,
-                        Description = c.Description ?? "No description provided"
                     }).ToList()
                 });
             }, "CreateDatabaseFromPrompt");
@@ -121,8 +120,8 @@ namespace Mix.MCP.Lib.Tools
         public async Task<string> AddColumnToDatabase(
             [Description("System name of the database (e.g., mix_products)")] string databaseSystemName,
             [Description("Schema description for the columns (e.g., 'Add a price column that stores decimal values and is required, and a description column for long text')")] string schemaText,
-            [Description("LLM service type to use for schema parsing (OpenAI, DeepSeek, LmStudio)")] LLMServiceType llmServiceType = LLMServiceType.LmStudio,
-            [Description("LLM model to use (e.g., gpt-4, deepseek-chat, mathstral-7b-v0.1)")] string llmModel = "mathstral-7b-v0.1",
+            [Description("LLM service type to use for schema parsing (OpenAI, DeepSeek, LmStudio)")] LLMServiceType llmServiceType = LLMServiceType.DeepSeek,
+            [Description("LLM model to use (e.g., gpt-4, deepseek-chat, mathstral-7b-v0.1)")] string llmModel = "deepseek-chat",
             [Description("Timeout in seconds for LLM operations (default: 120)")] int timeoutSeconds = 120,
             CancellationToken cancellationToken = default)
         {
@@ -155,7 +154,6 @@ namespace Mix.MCP.Lib.Tools
                         DisplayName = MixDatabaseHelper.FormatDisplayName(column.Name),
                         DataType = column.DataType.ToString(),
                         IsRequired = column.IsRequired,
-                        Description = column.Description ?? "No description provided",
                         DefaultValue = column.DefaultValue,
                         Success = success
                     });
@@ -177,8 +175,8 @@ namespace Mix.MCP.Lib.Tools
         public async Task<string> UpdateDatabaseColumn(
             [Description("System name of the database (e.g., mix_products)")] string databaseSystemName,
             [Description("Schema description for updating columns (e.g., 'Change the product_price column to be non-required and set a default value of 0.00, and rename the description column to product_details')")] string schemaText,
-            [Description("LLM service type to use for schema parsing (OpenAI, DeepSeek, LmStudio)")] LLMServiceType llmServiceType = LLMServiceType.LmStudio,
-            [Description("LLM model to use (e.g., gpt-4, deepseek-chat, mathstral-7b-v0.1)")] string llmModel = "mathstral-7b-v0.1",
+            [Description("LLM service type to use for schema parsing (OpenAI, DeepSeek, LmStudio)")] LLMServiceType llmServiceType = LLMServiceType.DeepSeek,
+            [Description("LLM model to use (e.g., gpt-4, deepseek-chat, mathstral-7b-v0.1)")] string llmModel = "deepseek-chat",
             [Description("Timeout in seconds for LLM operations (default: 120)")] int timeoutSeconds = 120,
             CancellationToken cancellationToken = default)
         {
@@ -211,7 +209,6 @@ namespace Mix.MCP.Lib.Tools
                         DisplayName = MixDatabaseHelper.FormatDisplayName(column.Name),
                         DataType = column.DataType.ToString(),
                         IsRequired = column.IsRequired,
-                        Description = column.Description ?? "No description provided",
                         DefaultValue = column.DefaultValue,
                         Success = success
                     });
@@ -233,8 +230,8 @@ namespace Mix.MCP.Lib.Tools
         public async Task<string> DeleteDatabaseColumn(
             [Description("System name of the database (e.g., mix_products)")] string databaseSystemName,
             [Description("Schema description indicating columns to delete (e.g., 'Remove the product_code column and the manufacturer column')")] string schemaText,
-            [Description("LLM service type to use for schema parsing (OpenAI, DeepSeek, LmStudio)")] LLMServiceType llmServiceType = LLMServiceType.LmStudio,
-            [Description("LLM model to use (e.g., gpt-4, deepseek-chat, mathstral-7b-v0.1)")] string llmModel = "mathstral-7b-v0.1",
+            [Description("LLM service type to use for schema parsing (OpenAI, DeepSeek, LmStudio)")] LLMServiceType llmServiceType = LLMServiceType.DeepSeek,
+            [Description("LLM model to use (e.g., gpt-4, deepseek-chat, mathstral-7b-v0.1)")] string llmModel = "deepseek-chat",
             [Description("Timeout in seconds for LLM operations (default: 120)")] int timeoutSeconds = 120,
             [Description("Confirm drop with 'YES' (case sensitive)")] string confirmDropColumn = null,
             CancellationToken cancellationToken = default)
@@ -271,7 +268,6 @@ namespace Mix.MCP.Lib.Tools
                         DisplayName = MixDatabaseHelper.FormatDisplayName(column.Name),
                         DataType = column.DataType.ToString(),
                         IsRequired = column.IsRequired,
-                        Description = column.Description ?? "No description provided",
                         DefaultValue = column.DefaultValue,
                         Success = success
                     });
