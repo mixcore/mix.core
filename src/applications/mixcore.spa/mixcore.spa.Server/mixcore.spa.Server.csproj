@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <SpaRoot>..\mixcore.spa.client</SpaRoot>
+        <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
+        <SpaProxyServerUrl>https://localhost:60280</SpaProxyServerUrl>
+    </PropertyGroup>
+
+    <ItemGroup>
+
+        <ProjectReference Include="..\..\..\modules\mix.common\mix.common.csproj" />
+        <ProjectReference Include="..\..\..\modules\mix.grpc\mix.grpc.csproj" />
+        <ProjectReference Include="..\..\..\modules\mix.portal\mix.portal.csproj" />
+        <ProjectReference Include="..\..\..\modules\mix.log\mix.log.csproj" />
+        <ProjectReference Include="..\..\..\modules\mix.scheduler\mix.scheduler.csproj" />
+        <ProjectReference Include="..\..\..\modules\mix.storage\mix.storage.csproj" />
+        <ProjectReference Include="..\..\..\modules\mix.tenancy\mix.tenancy.csproj" />
+        <ProjectReference Include="..\..\..\services\core\ecommerces\mix.services.ecommerce\mix.services.ecommerce.csproj" />
+        <ProjectReference Include="..\..\..\services\core\graphql\mix.services.graphql\mix.services.graphql.csproj" />
+        <ProjectReference Include="..\..\..\services\core\mix-auth-service\mix.auth.api\mix.auth.api.csproj" />
+        <ProjectReference Include="..\..\..\services\core\mix-databases\mix.servives.databases\mix.services.databases.csproj" />
+        <ProjectReference Include="..\..\..\services\core\mix-message-queue\mix.mq.server\mix.mq.server.csproj" />
+        <ProjectReference Include="..\..\mixcore.host.aspire.ServiceDefaults\mixcore.host.aspire.ServiceDefaults.csproj" />
+
+        <ProjectReference Include="..\mixcore.spa.client\mixcore.spa.client.esproj">
+            <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+        </ProjectReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
+            <Version>9.*-*</Version>
+        </PackageReference>
+    </ItemGroup>
+
+</Project>
