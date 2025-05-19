@@ -1,8 +1,10 @@
 # Mixcore CMS - Enterprise-Grade .NET Core CMS & API Platform [![Become a Backer](https://opencollective.com/mixcore/tiers/backer.svg?avatarHeight=36)](https://opencollective.com/mixcore#support) 
 
-[![backer](https://opencollective.com/mixcore/tiers/backer/badge.svg?label=backer&color=brightgreen)](https://opencollective.com/mixcore#support) [![Donate](https://img.shields.io/badge/$-donate-ff69b4.svg)](https://www.paypal.me/mixcore) [![Buy us a coffee](https://img.shields.io/badge/$-BuyMeACoffee-orange.svg)](https://www.buymeacoffee.com/mixcore) 
+[![backer](https://opencollective.com/mixcore/tiers/backer/badge.svg?label=backer&color=brightgreen)](https://opencollective.com/mixcore#support) [![Donate](https://img.shields.io/badge/$-donate-ff69b4.svg)](https://www.paypal.me/mixcore) [![Buy us a coffee](https://img.shields.io/badge/$-BuyMeACoffee-orange.svg)](https://www.buymeacoffee.com/mixcore) [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/mixcore/mix.core)
 
 > **🚀 Enterprise-Grade CMS & API Platform** - Build scalable, secure, and high-performance web applications with modern .NET Core microservices architecture. Perfect for agencies, enterprises, and developers building complex digital experiences.
+
+![image](https://github.com/user-attachments/assets/713fa9fd-2cfe-45ff-80a4-e83a9442ae99)
 
 ## 🎯 Quick Links
 
@@ -84,7 +86,7 @@ Contact us at [enterprise@mixcore.org](mailto:enterprise@mixcore.org) for more i
 
 ## 📄 License
 
-Mixcore CMS is licensed under the **[MIT License](https://github.com/mixcore/mix.core/blob/master/LICENSE)**
+Mixcore CMS is licensed under the **[Mixcore Community License (MCL)](https://github.com/mixcore/mix.core/blob/master/LICENSE)**
 
 ## 🤝 Contributing
 

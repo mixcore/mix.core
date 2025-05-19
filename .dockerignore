@@ -1,9 +1,47 @@
-.dockerignore
-.env
+# Git
 .git
 .gitignore
-.vs
+
+# IDE
 .vscode
-*/bin
-*/obj
-**/.toolstarget
+.idea
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+bin/
+obj/
+publish/
+*.dll
+*.exe
+*.pdb
+*.config
+*.xml
+
+# Test files
+tests/
+*.Tests/
+*.Test/
+
+# Documentation
+docs/
+*.md
+*.txt
+
+# Node modules and package files
+node_modules/
+package-lock.json
+yarn.lock
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.cache
+
+# Environment files
+.env
+.env.*
+!.env.example
