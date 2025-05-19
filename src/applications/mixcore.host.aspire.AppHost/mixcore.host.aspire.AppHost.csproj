@@ -20,6 +20,7 @@
         <ProjectReference Include="..\..\services\mix.automation\mix.automation.api\mix.automation.api.csproj" />
         <ProjectReference Include="..\..\services\mix.mcp\mix.mcp.api\mix.mcp.api.csproj" />
         <ProjectReference Include="..\mixcore.gateway\mixcore.gateway.csproj" />
+        <ProjectReference Include="..\mixcore.spa\mixcore.spa.Server\mixcore.spa.Server.csproj" />
         <ProjectReference Include="..\mixcore\mixcore.csproj" />
     </ItemGroup>
 
