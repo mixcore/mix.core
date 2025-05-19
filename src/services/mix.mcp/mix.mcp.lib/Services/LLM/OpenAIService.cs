@@ -32,7 +32,7 @@ namespace Mix.MCP.Lib.Services.LLM
             string message, 
             string model = "gpt-3.5-turbo", 
             double temperature = 0.7, 
-            int maxTokens = -1, 
+            int maxTokens = 8000, 
             CancellationToken cancellationToken = default)
         {
             var request = new
@@ -43,7 +43,7 @@ namespace Mix.MCP.Lib.Services.LLM
                     new { role = "user", content = message }
                 },
                 temperature = temperature,
-                max_tokens = maxTokens > 0 ? maxTokens : -1
+                max_tokens = maxTokens > 0 ? maxTokens : 8000
             };
 
             var client = CreateHttpClient(HttpClientName);
@@ -61,7 +61,7 @@ namespace Mix.MCP.Lib.Services.LLM
             string prompt, 
             string model = "text-davinci-003", 
             double temperature = 0.7, 
-            int maxTokens = -1, 
+            int maxTokens = 8000, 
             CancellationToken cancellationToken = default)
         {
             var request = new
@@ -69,7 +69,7 @@ namespace Mix.MCP.Lib.Services.LLM
                 model = model,
                 prompt = prompt,
                 temperature = temperature,
-                max_tokens = maxTokens > 0 ? maxTokens : -1
+                max_tokens = maxTokens > 0 ? maxTokens : 8000
             };
 
             var client = CreateHttpClient(HttpClientName);

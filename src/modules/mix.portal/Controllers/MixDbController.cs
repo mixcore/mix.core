@@ -163,6 +163,13 @@ namespace Mix.Portal.Controllers
             return result != default ? Ok(result) : NotFound(id);
         }
 
+        [HttpGet("get-by-column/{colName}/{colValue}")]
+        public async Task<ActionResult<JObject>> GetSingleByParent(string colName, string colValue, [FromQuery] string selectColumns, CancellationToken cancellationToken = default)
+        {
+            var data = await _mixDbDataService.GetSingleByColumnAsync(_tableName, colName, colValue, selectColumns, cancellationToken);
+            return NotFound();
+        }
+
         [HttpGet("get-by-parent/{parentType}/{parentId}")]
         public async Task<ActionResult<JObject>> GetSingleByParent(MixContentType parentType, int parentId, [FromQuery] string selectColumns, CancellationToken cancellationToken = default)
         {

@@ -224,6 +224,26 @@ namespace Mix.Mixdb.Services
             }
         }
 
+        public async Task<JObject?> GetSingleByColumnAsync(string tableName, string columnName, object columnValue, string selectColumns, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await LoadMixDb(tableName);
+                var queries = new List<MixQueryField>()
+                    {
+                        new MixQueryField(columnName, columnValue)
+                    };
+                return await GetSingleByAsync(
+                    tableName,
+                    queries,
+                    selectColumns, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when getting data by parent from table {tableName}");
+                throw;
+            }
+        }
         #endregion
 
         #region Get List
@@ -859,6 +879,5 @@ namespace Mix.Mixdb.Services
         {
             _repository.Dispose();
         }
-
     }
 }

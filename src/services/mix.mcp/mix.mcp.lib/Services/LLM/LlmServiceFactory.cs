@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net.Http;
 using Mix.Shared.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace Mix.MCP.Lib.Services.LLM
 {
@@ -23,20 +24,21 @@ namespace Mix.MCP.Lib.Services.LLM
     public class LlmServiceFactory : ILlmServiceFactory
     {
         private readonly ILoggerFactory _loggerFactory;
-        private readonly LlmServiceOptions _options;
+        private readonly LlmServiceOptions? _options;
         private readonly IHttpClientFactory _httpClientFactory;
 
         /// <summary>
         /// Initialize a new instance of LlmServiceFactory
         /// </summary>
         public LlmServiceFactory(
+            IConfiguration configuration,
             ILoggerFactory loggerFactory,
-            IHttpClientFactory httpClientFactory,
-            IOptions<LlmServiceOptions> options)
+            IHttpClientFactory httpClientFactory)
         {
             _loggerFactory = loggerFactory;
             _httpClientFactory = httpClientFactory;
-            _options = options.Value;
+            _options = configuration.GetSection("LlmServiceOptions").Get<LlmServiceOptions>()
+                ?? new();
         }
 
         /// <summary>

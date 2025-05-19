@@ -747,6 +747,11 @@ namespace Mix.Mixdb.Services
             throw new NotImplementedException();
         }
 
+        public Task<JObject?> GetSingleByColumnAsync(string tableName, string columnName, object columnValue, string selectColumns, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
 
         #endregion
     }

@@ -23,11 +23,6 @@ namespace Mix.MCP.Lib.Models
         public bool IsRequired { get; set; }
 
         /// <summary>
-        /// Description of the column's purpose
-        /// </summary>
-        public string Description { get; set; }
-
-        /// <summary>
         /// Default value for the column
         /// </summary>
         public string DefaultValue { get; set; }

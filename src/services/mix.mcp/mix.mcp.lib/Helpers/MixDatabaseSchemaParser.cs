@@ -60,8 +60,7 @@ For each column/field mentioned or implied in the description:
    - Upload: For files, images, or other uploads
    - Json: For structured data
 3. Determine if the field should be required (true/false)
-4. Write a brief description of the field's purpose
-5. Add a default value if appropriate (optional)
+4. Add a default value if appropriate (optional)
 
 Response format (JSON array only):
 [
@@ -69,14 +68,12 @@ Response format (JSON array only):
     ""name"": ""product_name"",
     ""dataType"": ""String"",
     ""isRequired"": true,
-    ""description"": ""Name of the product"",
     ""defaultValue"": null
   }},
   {{
     ""name"": ""price"",
     ""dataType"": ""Double"",
     ""isRequired"": true,
-    ""description"": ""Product price in dollars"",
     ""defaultValue"": ""0.00""
   }}
 ]
@@ -130,7 +127,6 @@ Respond ONLY with a valid JSON array.";
                             {
                                 Name = GetStringPropertyOrDefault(columnElement, "name", ""),
                                 IsRequired = GetBoolPropertyOrDefault(columnElement, "isRequired", false),
-                                Description = GetStringPropertyOrDefault(columnElement, "description", null),
                                 DefaultValue = GetStringPropertyOrDefault(columnElement, "defaultValue", null)
                             };
 

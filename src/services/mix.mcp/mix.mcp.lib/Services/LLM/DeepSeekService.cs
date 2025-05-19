@@ -32,7 +32,7 @@ namespace Mix.MCP.Lib.Services.LLM
             string message, 
             string model = "deepseek-chat", 
             double temperature = 0.7, 
-            int maxTokens = -1, 
+            int maxTokens = 8000, 
             CancellationToken cancellationToken = default)
         {
             var request = new
@@ -43,7 +43,7 @@ namespace Mix.MCP.Lib.Services.LLM
                     new { role = "user", content = message }
                 },
                 temperature = temperature,
-                max_tokens = maxTokens > 0 ? maxTokens : -1
+                max_tokens = maxTokens > 0 ? maxTokens : 8000
             };
 
             var client = CreateHttpClient(HttpClientName);
@@ -59,9 +59,9 @@ namespace Mix.MCP.Lib.Services.LLM
         /// </summary>
         public override async Task<LLMCompletionResponse> CompleteAsync(
             string prompt, 
-            string model = "deepseek-coder", 
+            string model = "deepseek-chat", 
             double temperature = 0.7, 
-            int maxTokens = -1, 
+            int maxTokens = 8000, 
             CancellationToken cancellationToken = default)
         {
             var request = new
@@ -69,7 +69,7 @@ namespace Mix.MCP.Lib.Services.LLM
                 model = model,
                 prompt = prompt,
                 temperature = temperature,
-                max_tokens = maxTokens > 0 ? maxTokens : -1
+                max_tokens = maxTokens > 0 ? maxTokens : 8000
             };
 
             var client = CreateHttpClient(HttpClientName);

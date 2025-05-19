@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Lib.Interfaces;
+using Mix.Mixdb.Interfaces;
+using Mix.Mixdb.Services;
 using Mix.Portal.Domain.Interfaces;
 using Mix.Portal.Domain.Services;
 using Mix.Shared.Interfaces;
@@ -10,10 +12,11 @@ namespace Mix.Portal
     {
         public void AddServices(IHostApplicationBuilder builder)
         {
+            builder.Services.TryAddScoped<IMixDbDataServiceFactory, MixDbDataServiceFactory>();
             builder.Services.TryAddScoped<IMixApplicationService, MixApplicationService>();
             builder.Services.TryAddScoped<PortalPostService>();
-            builder.Services.AddScoped<IMixThemeExportService, MixThemeExportService>();
-            builder.Services.AddScoped<IMixThemeImportService, MixThemeImportService>();
+            builder.Services.TryAddScoped<IMixThemeExportService, MixThemeExportService>();
+            builder.Services.TryAddScoped<IMixThemeImportService, MixThemeImportService>();
             builder.Services.TryAddScoped<ICloneCultureService, CloneCultureService>();
             builder.Services.TryAddScoped<IThemeService, ThemeService>();
         }

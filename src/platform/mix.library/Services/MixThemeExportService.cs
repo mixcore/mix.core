@@ -43,7 +43,7 @@ namespace Mix.Lib.Services
         private MixTenantSystemModel _currentTenant;
         public MixThemeExportService(
             IConfiguration configuration,
-            IHttpContextAccessor httpContext, MixCmsContext context, DatabaseService databaseService, MixDbDataServiceFactory mixDbDataFactory, MixCacheService cacheService)
+            IHttpContextAccessor httpContext, MixCmsContext context, DatabaseService databaseService, IMixDbDataServiceFactory mixDbDataFactory, MixCacheService cacheService)
         {
             _session = httpContext.HttpContext?.Session;
             _configuration = configuration;

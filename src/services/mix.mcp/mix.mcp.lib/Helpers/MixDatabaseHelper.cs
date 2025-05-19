@@ -75,7 +75,7 @@ namespace Mix.MCP.Lib.Helpers
                 DisplayName = displayName,
                 SystemName = systemName,
                 Type = type,
-                Description = description,
+                //Description = description,
                 NamingConvention = namingConvention,
                 MixDatabaseContextId = mixDatabaseContextId
             };
