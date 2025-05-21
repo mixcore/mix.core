@@ -46,7 +46,7 @@ namespace Mix.MCP.Lib.Tools
         public async Task<string> GetMixDbDataById(
             [Description("System name of the database (e.g., mix_products)")] string databaseSystemName,
             [Description("ID of the record to retrieve")] int id,
-            [Description("Comma-separated list of columns to select (e.g., 'id,name,price')")] string selectColumns = null)
+            [Description("Comma-separated list of columns to select (e.g., 'objId,name,price')")] string selectColumns = null)
         {
             if (string.IsNullOrWhiteSpace(databaseSystemName))
                 return "Database system name cannot be empty.";
@@ -77,7 +77,7 @@ namespace Mix.MCP.Lib.Tools
             [Description("System name of the database (e.g., mix_products)")] string databaseSystemName,
             [Description("Query conditions in JSON format (e.g., '[{\"Field\":\"name\",\"Value\":\"Product 1\",\"Method\":\"Equal\"}]')")] string queryJson,
             [Description("Sort conditions in JSON format (e.g., '[{\"Field\":\"name\",\"Direction\":\"Ascending\"}]')")] string sortJson = null,
-            [Description("Comma-separated list of columns to select (e.g., 'id,name,price')")] string selectColumns = null,
+            [Description("Comma-separated list of columns to select (e.g., 'objId,name,price')")] string selectColumns = null,
             [Description("Whether to load nested data")] bool loadNestedData = false)
         {
             if (string.IsNullOrWhiteSpace(databaseSystemName))
@@ -92,8 +92,8 @@ namespace Mix.MCP.Lib.Tools
                     return $"Database with system name '{databaseSystemName}' not found.";
 
                 var queryFields = System.Text.Json.JsonSerializer.Deserialize<List<QueryField>>(queryJson);
-                var sortFields = !string.IsNullOrEmpty(sortJson) 
-                    ? System.Text.Json.JsonSerializer.Deserialize<List<MixSortByColumn>>(sortJson) 
+                var sortFields = !string.IsNullOrEmpty(sortJson)
+                    ? System.Text.Json.JsonSerializer.Deserialize<List<MixSortByColumn>>(sortJson)
                     : null;
 
                 var records = await _mixDbService.GetListByAsync(
@@ -181,7 +181,7 @@ namespace Mix.MCP.Lib.Tools
         [McpServerTool, Description("Update a record in a Mix Database")]
         public async Task<string> UpdateMixDbData(
             [Description("System name of the database (e.g., mix_products)")] string databaseSystemName,
-            [Description("ID of the record to update")] object id,
+            [Description("ID of the record to update")] string strId,
             [Description("Record data in JSON format (e.g., '{\"name\":\"Updated Product\",\"price\":199.99}')")] string dataJson,
             [Description("Username of the modifier")] string modifiedBy = null,
             [Description("Comma-separated list of fields to update (e.g., 'name,price')")] string fieldNames = null)
@@ -199,6 +199,19 @@ namespace Mix.MCP.Lib.Tools
 
                 var data = JObject.Parse(dataJson);
                 var fields = !string.IsNullOrEmpty(fieldNames) ? fieldNames.Split(',') : null;
+                object? id = default;
+                if (int.TryParse(strId, out int integerId))
+                {
+                    id = integerId;
+                }
+                else if (Guid.TryParse(strId, out Guid guidId))
+                {
+                    id = guidId;
+                }
+                if (!data.ContainsKey("id"))
+                {
+                    data.Add(new JProperty("id", id));
+                }
                 var result = await _mixDbService.UpdateAsync(databaseSystemName, id, data, modifiedBy, fields, ct);
 
                 return ReflectionHelper.ParseObject(new
@@ -249,7 +262,7 @@ namespace Mix.MCP.Lib.Tools
             [Description("Page size")] int pageSize = 10,
             [Description("Query conditions in JSON format (e.g., '[{\"Field\":\"name\",\"Value\":\"Product\",\"Method\":\"Contains\"}]')")] string queryJson = null,
             [Description("Sort conditions in JSON format (e.g., '[{\"Field\":\"name\",\"Direction\":\"Ascending\"}]')")] string sortJson = null,
-            [Description("Comma-separated list of columns to select (e.g., 'id,name,price')")] string selectColumns = null)
+            [Description("Comma-separated list of columns to select (e.g., 'objId,name,price')")] string selectColumns = null)
         {
             if (string.IsNullOrWhiteSpace(databaseSystemName))
                 return "Database system name cannot be empty.";
