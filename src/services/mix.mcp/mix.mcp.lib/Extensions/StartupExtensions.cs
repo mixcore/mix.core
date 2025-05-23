@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Mix.Heart.Services;
+using Mix.MCP.Lib.Agents;
 using Mix.MCP.Lib.Prompts;
 using Mix.MCP.Lib.Resources;
 using Mix.MCP.Lib.Services;
@@ -76,7 +77,7 @@ namespace Mix.MCP.Lib.Extensions
 
             // Register MCP resources
             builder.Services.AddMCPResources();
-
+            builder.Services.AddSingleton<RetrievalAgent>();
             // Register MCP services
             builder.Services
                 .AddMcpServer(options => 
@@ -94,13 +95,15 @@ namespace Mix.MCP.Lib.Extensions
                 .WithPrompts<GeneratePrompt>()
                 .WithPrompts<ResourcePrompts>()
                 .WithPrompts<MixDatabasePrompts>()
-                .WithTools<LLMTools>()
-                .WithTools<ResourceTool>()
                 .WithTools<MixDatabasePromptTool>()
-                .WithTools<MixDatabaseDataTool>()
+                .WithTools<RetrievalAgent>()
+                //.WithTools<LLMTools>()
+                //.WithTools<ResourceTool>()
+                //.WithTools<MixDatabaseDataTool>()
                 .WithToolsFromAssembly();
 
             // Register other services
+            
             builder.Services.AddSingleton<ILlmServiceFactory, LlmServiceFactory>();
 
             return builder;
