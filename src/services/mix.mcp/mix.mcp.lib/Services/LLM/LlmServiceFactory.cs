@@ -51,19 +51,19 @@ namespace Mix.MCP.Lib.Services.LLM
                 LLMServiceType.LmStudio => new LlmStudioService(
                     _httpClientFactory,
                     _loggerFactory.CreateLogger<LlmStudioService>(),
-                    _options.LmStudioBaseUrl),
+                    _options.LmStudio.BaseUrl),
 
                 LLMServiceType.OpenAI => new OpenAIService(
                     _httpClientFactory,
                     _loggerFactory.CreateLogger<OpenAIService>(),
-                    _options.OpenAIApiKey,
-                    _options.OpenAIBaseUrl),
+                    _options.OpenAI.ApiKey,
+                    _options.OpenAI.BaseUrl),
 
                 LLMServiceType.DeepSeek => new DeepSeekService(
                     _httpClientFactory,
                     _loggerFactory.CreateLogger<DeepSeekService>(),
-                    _options.DeepSeekApiKey,
-                    _options.DeepSeekBaseUrl),
+                    _options.DeepSeek.ApiKey,
+                    _options.DeepSeek.BaseUrl),
 
                 _ => throw new ArgumentException($"Unsupported service type: {serviceType}")
             };
@@ -78,31 +78,58 @@ namespace Mix.MCP.Lib.Services.LLM
         /// <summary>
         /// Base URL for LM Studio API
         /// </summary>
-        public string LmStudioBaseUrl { get; set; } = "http://localhost:1234/v1";
+        public LmStudioServiceOptions LmStudio{ get; set; }
         
         /// <summary>
         /// API key for OpenAI
         /// </summary>
-        public string OpenAIApiKey { get; set; }
-        
-        /// <summary>
-        /// Base URL for OpenAI API
-        /// </summary>
-        public string OpenAIBaseUrl { get; set; } = "https://api.openai.com/v1";
+        public OpenAIServiceOptions OpenAI { get; set; }
         
         /// <summary>
         /// API key for DeepSeek
         /// </summary>
-        public string DeepSeekApiKey { get; set; }
+        public DeepSeekServiceOptions DeepSeek { get; set; }
         
-        /// <summary>
-        /// Base URL for DeepSeek API
-        /// </summary>
-        public string DeepSeekBaseUrl { get; set; } = "https://api.deepseek.com/v1";
-        
-        /// <summary>
-        /// Default timeout for LLM requests in seconds
-        /// </summary>
         public int DefaultTimeoutSeconds { get; set; } = 120;
+    }
+
+    public class LmStudioServiceOptions : ILLMServiceOptions
+    {
+        public string Model { get; set; } = "mathstral-7b-v0.1";
+        public double Temperature { get; set; } = 0.7;
+        public int MaxTokens { get; set; } = -1;
+        public string BaseUrl { get; set; }
+        public string ApiKey { get; set; }
+        public int TimeoutSeconds { get; set; } = 300;
+    }
+
+    public class OpenAIServiceOptions : ILLMServiceOptions
+    {
+        public string Model { get; set; } = "gpt-3.5-turbo";
+        public double Temperature { get; set; } = 0.7;
+        public int MaxTokens { get; set; } = 8000;
+        public string BaseUrl { get; set; }
+        public string ApiKey { get; set; }
+        public int TimeoutSeconds { get; set; } = 300;
+    }
+
+    public class DeepSeekServiceOptions : ILLMServiceOptions
+    {
+        public string Model { get; set; } = "deepseek-chat";
+        public double Temperature { get; set; } = 0.7;
+        public int MaxTokens { get; set; } = 8000;
+        public string BaseUrl { get; set; }
+        public string ApiKey { get; set; }
+        public int TimeoutSeconds { get; set; } = 300;
+    }
+
+    public interface ILLMServiceOptions
+    {
+        public string BaseUrl { get; set; }
+        public string ApiKey { get; set; }
+        public string Model { get; set; }
+        public double Temperature { get; set; } 
+        public int MaxTokens { get; set; }
+        public int TimeoutSeconds { get; set; }
     }
 } 

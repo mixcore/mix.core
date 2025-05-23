@@ -75,6 +75,8 @@ namespace Mix.MCP.Lib.Extensions
                 return factory.CreateService();
             });
 
+            builder.AddAgents();
+
             // Register MCP resources
             builder.Services.AddMCPResources();
             builder.Services.AddSingleton<RetrievalAgent>();
