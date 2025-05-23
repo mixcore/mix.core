@@ -15,6 +15,7 @@ namespace Mix.MCP.Lib.Helpers
     {
         private readonly ILogger _logger;
         private readonly ILlmServiceFactory _llmServiceFactory;
+        
 
         /// <summary>
         /// Initialize a new instance of MixDatabaseSchemaParser
@@ -98,14 +99,14 @@ Respond ONLY with a valid JSON array.";
                 _logger.LogDebug("LLM Response: {Response}", responseText);
 
                 // Extract JSON array from response (handling possible text before/after JSON)
-                string jsonContent = ExtractJsonArrayFromText(responseText);
+                string jsonContent = JsonHelper.ExtractJsonArrayFromText(responseText);
                 
                 if (string.IsNullOrEmpty(jsonContent))
                 {
                     _logger.LogWarning("Could not extract valid JSON from LLM response: {Response}", responseText);
                     
                     // Try a more aggressive JSON extraction
-                    jsonContent = ExtractJsonWithRegex(responseText);
+                    jsonContent = JsonHelper.ExtractJsonWithRegex(responseText);
                     
                     if (string.IsNullOrEmpty(jsonContent))
                     {
@@ -125,13 +126,13 @@ Respond ONLY with a valid JSON array.";
                         {
                             var column = new ColumnInfo
                             {
-                                Name = GetStringPropertyOrDefault(columnElement, "name", ""),
-                                IsRequired = GetBoolPropertyOrDefault(columnElement, "isRequired", false),
-                                DefaultValue = GetStringPropertyOrDefault(columnElement, "defaultValue", null)
+                                Name = JsonHelper.GetStringPropertyOrDefault(columnElement, "name", ""),
+                                IsRequired = JsonHelper.GetBoolPropertyOrDefault(columnElement, "isRequired", false),
+                                DefaultValue = JsonHelper.GetStringPropertyOrDefault(columnElement, "defaultValue", null)
                             };
 
                             // Parse data type
-                            string dataTypeStr = GetStringPropertyOrDefault(columnElement, "dataType", "String");
+                            string dataTypeStr = JsonHelper.GetStringPropertyOrDefault(columnElement, "dataType", "String");
                             column.DataType = MapStringToDataType(dataTypeStr);
 
                             // Validate and clean column name
@@ -192,81 +193,6 @@ Respond ONLY with a valid JSON array.";
             
             return cleanName;
         }
-
-        /// <summary>
-        /// Extract JSON array from text using regex as a fallback method
-        /// </summary>
-        private static string ExtractJsonWithRegex(string text)
-        {
-            // Try to match a JSON array with any content
-            var match = Regex.Match(text, @"\[\s*{.*}\s*\]", RegexOptions.Singleline);
-            
-            if (match.Success)
-            {
-                return match.Value;
-            }
-            
-            return string.Empty;
-        }
-
-        /// <summary>
-        /// Extract JSON array from text that may contain explanatory text before/after the JSON
-        /// </summary>
-        private static string ExtractJsonArrayFromText(string text)
-        {
-            // Try to find the first '[' and last ']' for a JSON array
-            int startIndex = text.IndexOf('[');
-            int endIndex = text.LastIndexOf(']');
-            
-            if (startIndex >= 0 && endIndex > startIndex)
-            {
-                return text.Substring(startIndex, endIndex - startIndex + 1);
-            }
-            
-            return string.Empty;
-        }
-
-        /// <summary>
-        /// Get string property from JsonElement with default value if not found
-        /// </summary>
-        private static string GetStringPropertyOrDefault(JsonElement element, string propertyName, string defaultValue)
-        {
-            if (element.TryGetProperty(propertyName, out JsonElement property) && 
-                property.ValueKind == JsonValueKind.String)
-            {
-                return property.GetString() ?? defaultValue;
-            }
-            return defaultValue;
-        }
-
-        /// <summary>
-        /// Get boolean property from JsonElement with default value if not found
-        /// </summary>
-        private static bool GetBoolPropertyOrDefault(JsonElement element, string propertyName, bool defaultValue)
-        {
-            if (element.TryGetProperty(propertyName, out JsonElement property))
-            {
-                if (property.ValueKind == JsonValueKind.True || property.ValueKind == JsonValueKind.False)
-                {
-                    return property.GetBoolean();
-                }
-                else if (property.ValueKind == JsonValueKind.String)
-                {
-                    // Handle string representations of boolean values
-                    string boolStr = property.GetString()?.ToLower();
-                    if (boolStr == "true" || boolStr == "yes" || boolStr == "1")
-                    {
-                        return true;
-                    }
-                    else if (boolStr == "false" || boolStr == "no" || boolStr == "0")
-                    {
-                        return false;
-                    }
-                }
-            }
-            return defaultValue;
-        }
-
         /// <summary>
         /// Convert string type name to MixDataType
         /// </summary>
