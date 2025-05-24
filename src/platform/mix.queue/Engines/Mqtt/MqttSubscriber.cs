@@ -36,8 +36,7 @@ namespace Mix.Queue.Engines.Mqtt
             _mqttClient = _mqttFactory.CreateMqttClient();
             _mqttClientOptions = MqttHelper.GetClientOptions(queueSetting);
             _mqttSubscribeOptions = _mqttFactory.CreateSubscribeOptionsBuilder().WithTopicFilter(_topic).Build();
-
-        }
+        }    
 
         /// <summary>
         /// Process message queue

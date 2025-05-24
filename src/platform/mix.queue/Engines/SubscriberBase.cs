@@ -146,7 +146,7 @@ namespace Mix.Queue.Engines
             await StartProcessQueue(cancellationToken).ConfigureAwait(false);
         }
 
-        private IQueueSubscriber? CreateSubscriber(string topicId, string subscriptionId)
+        public virtual IQueueSubscriber? CreateSubscriber(string topicId, string subscriptionId)
         {
             try
             {

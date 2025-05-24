@@ -152,7 +152,7 @@ Respond ONLY with a valid JSON array.";
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error using LLM to parse schema description: {Message}", ex.Message);
+                _logger.LogError(ex, "Error using LLM to parse schema description: {LLMMessage}", ex.Message);
                 throw;
             }
 

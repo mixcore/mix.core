@@ -40,7 +40,7 @@ namespace Mix.MCP.Lib.Services.LLM
         {
             var client = _httpClientFactory.CreateClient(clientName);
             client.Timeout = _timeout;
-            
+            client.BaseAddress = new Uri(_baseUrl);
             if (!string.IsNullOrEmpty(_apiKey))
             {
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKey}");
@@ -50,7 +50,7 @@ namespace Mix.MCP.Lib.Services.LLM
         }
 
         /// <summary>
-        /// Send Message to chat API
+        /// Send LLMMessage to chat API
         /// </summary>
         public abstract Task<LLMChatResponse> ChatAsync(
             string message, 
@@ -112,7 +112,7 @@ namespace Mix.MCP.Lib.Services.LLM
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error sending request to {Endpoint}: {Message}", endpoint, ex.Message);
+                _logger.LogError(ex, "Error sending request to {Endpoint}: {LLMMessage}", endpoint, ex.Message);
                 throw;
             }
         }
