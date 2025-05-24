@@ -31,6 +31,7 @@ namespace Mix.MCP.Lib.Agents
         /// </summary>
         public override async Task<string> ProcessInputAsync(
             string userInput,
+            string deviceId,
             string sessionId = "default",
             LLMServiceType serviceType = LLMServiceType.DeepSeek,
             CancellationToken cancellationToken = default)

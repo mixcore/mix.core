@@ -1,5 +1,8 @@
 using Microsoft.Extensions.Logging;
 using Mix.MCP.Lib.Services.LLM;
+using ModelContextProtocol.Client;
+using ModelContextProtocol.Protocol.Transport;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +21,9 @@ namespace Mix.MCP.Lib.Agents
         private const int MAX_TASK_HISTORY = 20;
 
         private readonly Dictionary<string, Func<TaskState, string, Task<string>>> _commandHandlers;
+
+        // --- MCP Client field ---
+        private IMcpClient _mcpClient;
 
         /// <summary>
         /// Initializes a new instance of the TaskAgent class
@@ -43,12 +49,24 @@ namespace Mix.MCP.Lib.Agents
         /// </summary>
         public override async Task<string> ProcessInputAsync(
             string userInput,
+            string deviceId,
             string sessionId = "default",
             LLMServiceType serviceType = LLMServiceType.DeepSeek,
             CancellationToken cancellationToken = default)
         {
             try
             {
+                // Ensure _mcpClient is initialized
+                if (_mcpClient == null)
+                {
+                    var clientTransport = new SseClientTransport(new SseClientTransportOptions()
+                    {
+                        Endpoint = new Uri("http://localhost:5011/mcp/sse"),
+                        Name = "MixTaskAgentClient"
+                    });
+                    _mcpClient = McpClientFactory.CreateAsync(clientTransport).GetAwaiter().GetResult();
+                }
+
                 ValidateInput(userInput, sessionId);
                 _logger.LogInformation("Processing task input for session {SessionId}: {UserInput}", sessionId, userInput);
 
@@ -56,13 +74,31 @@ namespace Mix.MCP.Lib.Agents
                 var taskState = GetTaskState(memory);
                 var taskHistory = GetTaskHistory(memory);
 
+                // --- LLM-based analysis for MCP Tool usage ---
+                var (isTool, toolName, toolParams) = await AnalyzeInputForToolAsync(userInput, serviceType, cancellationToken);
+
+                if (isTool && !string.IsNullOrEmpty(toolName))
+                {
+                    var toolResult = await CallMcpToolAsync(toolName, toolParams, cancellationToken);
+                    // Optionally, add to history
+                    taskHistory.Add(new TaskHistoryEntry
+                    {
+                        Timestamp = DateTime.UtcNow,
+                        Command = $"tool:{toolName}",
+                        Arguments = string.Join(", ", toolParams.Select(kv => $"{kv.Key}={kv.Value}")),
+                        Response = toolResult
+                    });
+                    memory.SetValue(TASK_HISTORY_KEY, taskHistory);
+                    return toolResult;
+                }
+
                 // Parse command and arguments
                 var (command, args) = ParseCommand(userInput);
-                
+
                 if (_commandHandlers.TryGetValue(command, out var handler))
                 {
                     var response = await handler(taskState, args);
-                    
+
                     // Update task history
                     taskHistory.Add(new TaskHistoryEntry
                     {
@@ -91,6 +127,67 @@ namespace Mix.MCP.Lib.Agents
             catch (Exception ex)
             {
                 return HandleException(ex, userInput);
+            }
+        }
+
+        // --- LLM analysis for MCP Tool usage ---
+        private async Task<(bool isTool, string toolName, Dictionary<string, object> toolParams)> AnalyzeInputForToolAsync(
+            string userInput,
+            LLMServiceType serviceType,
+            CancellationToken cancellationToken)
+        {
+            var llmService = _llmServiceFactory.CreateService(serviceType);
+            var prompt = $@"
+You are an AI assistant. Analyze the following user input and determine if it should be handled by an MCP Tool.
+Respond in this JSON format:
+{{
+  ""type"": ""tool"" | ""chat"",
+  ""toolName"": ""..."", // Only if type is tool
+  ""parameters"": {{ ... }} // Only if type is tool
+}}
+User input: ""{userInput}""
+";
+            var response = await llmService.ChatAsync(prompt, "deepseek-chat", 0.2, -1, cancellationToken);
+            var content = response?.choices?.FirstOrDefault()?.Message?.Content;
+            if (string.IsNullOrWhiteSpace(content))
+                return (false, null, null);
+
+            try
+            {
+                var jsonStart = content.IndexOf('{');
+                var jsonEnd = content.LastIndexOf('}');
+                if (jsonStart < 0 || jsonEnd < 0 || jsonEnd < jsonStart)
+                    return (false, null, null);
+
+                var json = content.Substring(jsonStart, jsonEnd - jsonStart + 1);
+                var doc = JObject.Parse(json);
+                var type = doc.Value<string>("type");
+                if (type == "tool")
+                {
+                    var toolName = doc.Value<string>("toolName");
+                    var parameters = doc["parameters"]?.ToObject<Dictionary<string, object>>() ?? new Dictionary<string, object>();
+                    return (true, toolName, parameters);
+                }
+            }
+            catch
+            {
+                // Ignore parse errors, fallback to normal flow
+            }
+            return (false, null, null);
+        }
+
+        // --- Call MCP Tool ---
+        private async Task<string> CallMcpToolAsync(string toolName, Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var result = await _mcpClient.CallToolAsync(toolName, parameters, cancellationToken: cancellationToken);
+                return result.Content.FirstOrDefault(c => c.Type == "text")?.Text ?? "No response received from tool.";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error calling MCP tool {ToolName}: {ErrorMessage}", toolName, ex.Message);
+                return $"Error calling MCP tool {toolName}: {ex.Message}";
             }
         }
 
@@ -240,6 +337,8 @@ namespace Mix.MCP.Lib.Agents
     {
         NotStarted,
         InProgress,
+        Pending,
+        Failed,
         Completed,
         Cancelled
     }
