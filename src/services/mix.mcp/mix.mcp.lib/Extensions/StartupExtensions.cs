@@ -35,37 +35,6 @@ namespace Mix.MCP.Lib.Extensions
                 options.DefaultTimeoutSeconds = Math.Max(60, options.DefaultTimeoutSeconds);
             });
 
-            // Register HTTP clients
-            builder.Services.AddHttpClient("LmStudio", client =>
-            {
-                // Use default LM Studio URL but allow override from configuration
-                var baseUrl = builder.Configuration.GetValue<string>("LlmServices:LmStudioBaseUrl") 
-                    ?? "http://localhost:1234/v1";
-                client.BaseAddress = new Uri(baseUrl);
-                client.Timeout = TimeSpan.FromSeconds(
-                    builder.Configuration.GetValue<int>("LlmServices:DefaultTimeoutSeconds", 120));
-            });
-            
-            builder.Services.AddHttpClient("OpenAI", client =>
-            {
-                // OpenAI API configuration
-                var baseUrl = builder.Configuration.GetValue<string>("LlmServices:OpenAIBaseUrl") 
-                    ?? "https://api.openai.com/v1";
-                client.BaseAddress = new Uri(baseUrl);
-                client.Timeout = TimeSpan.FromSeconds(
-                    builder.Configuration.GetValue<int>("LlmServices:DefaultTimeoutSeconds", 120));
-            });
-            
-            builder.Services.AddHttpClient("DeepSeek", client =>
-            {
-                // DeepSeek API configuration
-                var baseUrl = builder.Configuration.GetValue<string>("LlmServices:DeepSeekBaseUrl") 
-                    ?? "https://api.deepseek.com/v1";
-                client.BaseAddress = new Uri(baseUrl);
-                client.Timeout = TimeSpan.FromSeconds(
-                    builder.Configuration.GetValue<int>("LlmServices:DefaultTimeoutSeconds", 120));
-            });
-
             // Register MySQL services
             builder.Services.AddSingleton(provider =>
             {
@@ -79,7 +48,7 @@ namespace Mix.MCP.Lib.Extensions
 
             // Register MCP resources
             builder.Services.AddMCPResources();
-            builder.Services.AddSingleton<RetrievalAgent>();
+            builder.Services.AddSingleton<DatabaseAgent>();
             // Register MCP services
             builder.Services
                 .AddMcpServer(options => 
@@ -98,7 +67,7 @@ namespace Mix.MCP.Lib.Extensions
                 .WithPrompts<ResourcePrompts>()
                 .WithPrompts<MixDatabasePrompts>()
                 .WithTools<MixDatabasePromptTool>()
-                .WithTools<RetrievalAgent>()
+                .WithTools<DatabaseAgent>()
                 //.WithTools<LLMTools>()
                 //.WithTools<ResourceTool>()
                 //.WithTools<MixDatabaseDataTool>()
@@ -115,7 +84,7 @@ namespace Mix.MCP.Lib.Extensions
         {
             endpoints.MapMcp("/mcp");
             endpoints.MapMcp("/sse");
-            endpoints.MapMcp("/Message");
+            endpoints.MapMcp("/LLMMessage");
             Console.WriteLine("Mapped Mcp endpoint to /mcp");
             return endpoints;
         }

@@ -25,7 +25,7 @@ namespace Mix.MCP.Lib.Services.LLM
         }
 
         /// <summary>
-        /// Send a chat Message to LM Studio API
+        /// Send a chat LLMMessage to LM Studio API
         /// </summary>
         public override async Task<LLMChatResponse> ChatAsync(
             string message, 

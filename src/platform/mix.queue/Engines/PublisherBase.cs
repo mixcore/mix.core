@@ -47,7 +47,7 @@ namespace Mix.Queue.Engines
             RabbitMqObjectPolicy = rabbitMQObjectPolicy;
         }
 
-        protected List<IQueuePublisher<MessageQueueModel>>? CreatePublisher(
+        public virtual List<IQueuePublisher<MessageQueueModel>>? CreatePublisher(
             string topicId)
         {
             try

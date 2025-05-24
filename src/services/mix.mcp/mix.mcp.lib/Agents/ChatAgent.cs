@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using Mix.MCP.Lib.Models;
 using Mix.MCP.Lib.Services.LLM;
 using System;
 using System.Threading;
@@ -41,13 +42,13 @@ namespace Mix.MCP.Lib.Agents
 
                 var memory = GetOrCreateMemory(sessionId);
                 var conversationHistory = GetConversationHistory(memory);
-                
+
                 // Add user input to history
-                conversationHistory.Add(new ChatMessage { Role = "user", Content = userInput });
-                
+                conversationHistory.Add(new LLMMessage { SessionId = sessionId, Data = { Role = "user", Content = userInput } });
+
                 // Prepare the prompt with conversation history
                 var prompt = BuildPrompt(conversationHistory);
-                
+
                 // Get response from LLM
                 var llmService = _llmServiceFactory.CreateService(serviceType);
                 var response = await llmService.ChatAsync(
@@ -63,10 +64,10 @@ namespace Mix.MCP.Lib.Agents
                 }
 
                 var assistantResponse = response.choices.First().Message.Content;
-                
+
                 // Add assistant response to history
-                conversationHistory.Add(new ChatMessage { Role = "assistant", Content = assistantResponse });
-                
+                conversationHistory.Add(new LLMMessage { SessionId = sessionId, Data = { Role = "user", Content = userInput } });
+
                 // Update memory with new history
                 memory.SetValue(CONVERSATION_HISTORY_KEY, conversationHistory);
 
@@ -81,12 +82,12 @@ namespace Mix.MCP.Lib.Agents
         /// <summary>
         /// Gets the conversation history from memory or creates a new one
         /// </summary>
-        private List<ChatMessage> GetConversationHistory(AgentMemory memory)
+        private List<LLMMessage> GetConversationHistory(AgentMemory memory)
         {
-            var history = memory.GetValue<List<ChatMessage>>(CONVERSATION_HISTORY_KEY);
+            var history = memory.GetValue<List<LLMMessage>>(CONVERSATION_HISTORY_KEY);
             if (history == null)
             {
-                history = new List<ChatMessage>();
+                history = new List<LLMMessage>();
                 memory.SetValue(CONVERSATION_HISTORY_KEY, history);
             }
             return history;
@@ -95,30 +96,38 @@ namespace Mix.MCP.Lib.Agents
         /// <summary>
         /// Builds a prompt from the conversation history
         /// </summary>
-        private string BuildPrompt(List<ChatMessage> conversationHistory)
+        private string BuildPrompt(List<LLMMessage> conversationHistory)
         {
             var prompt = new System.Text.StringBuilder();
-            
+
             // Add system message
-            prompt.AppendLine("You are a helpful AI assistant. Please respond to the user's message based on the conversation history:");
+            prompt.AppendLine("""
+You are an AI assistant. When a user sends a message, decide if you should:
+- Respond directly as a chatbot (for general questions, greetings, small talk, etc.)
+- Or, if the user is asking for a tool operation, classify the request and extract parameters with selected tool parameters.
+You are an AI assistant for a database platform. Classify the user's request into one of these intents:
+{0}
+User message: \"{1}\"
+
+Respond in this JSON format:
+{{
+  "type": "chatbot" | "tool",
+  "response": "...", // Only if type is chatbot
+  "action": "...", // Only if type is tool
+  "parameters": {{ ... }} // Only if type is tool
+}}
+""");
             prompt.AppendLine();
 
             // Add conversation history
             foreach (var message in conversationHistory.TakeLast(MAX_HISTORY_LENGTH))
             {
-                prompt.AppendLine($"{message.Role}: {message.Content}");
+                prompt.AppendLine($"{message.Data.Role}: {message.Data.Content}");
             }
 
             return prompt.ToString();
         }
     }
 
-    /// <summary>
-    /// Represents a message in the conversation history
-    /// </summary>
-    public class ChatMessage
-    {
-        public string Role { get; set; }
-        public string Content { get; set; }
-    }
-} 
+
+}
