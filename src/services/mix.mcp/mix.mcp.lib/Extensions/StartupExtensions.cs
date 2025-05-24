@@ -48,7 +48,7 @@ namespace Mix.MCP.Lib.Extensions
 
             // Register MCP resources
             builder.Services.AddMCPResources();
-            builder.Services.AddSingleton<DatabaseAgent>();
+            
             // Register MCP services
             builder.Services
                 .AddMcpServer(options => 

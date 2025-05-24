@@ -36,6 +36,7 @@ namespace Mix.MCP.Lib.Agents
         /// </summary>
         public abstract Task<string> ProcessInputAsync(
             string userInput,
+            string deviceId,
             string sessionId = "default",
             LLMServiceType serviceType = LLMServiceType.DeepSeek,
             CancellationToken cancellationToken = default);
