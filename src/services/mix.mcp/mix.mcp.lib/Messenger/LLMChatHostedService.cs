@@ -14,7 +14,6 @@ namespace Mix.MCP.Lib.Messenger
 {
     public class LLMChatHostedService : Microsoft.Extensions.Hosting.BackgroundService
     {
-        private const string subscriptionsId = "chat_server";
         private readonly RoutingAgent _routingAgent;
         private readonly IMqttMessageService _mqttService;
         private readonly ILogger<LLMChatHostedService> _logger;
@@ -24,11 +23,10 @@ namespace Mix.MCP.Lib.Messenger
             IConfiguration configuration,
             IMemoryQueueService<MessageQueueModel> queueService,
             ILogger<LLMChatHostedService> logger,
-            RoutingAgent routingAgent,
-            IMqttMessageService mqttService)
+            RoutingAgent routingAgent)
         {
             _routingAgent = routingAgent;
-            _mqttService = mqttService;
+            _mqttService = new MqttMessageService(configuration);
             _logger = logger;
         }
 
@@ -40,7 +38,6 @@ namespace Mix.MCP.Lib.Messenger
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _mqttService.ConnectAsync(stoppingToken);
             await _mqttService.SubscribeAsync(LLMChatTopics.LLMChat, async payload =>
             {
                 try

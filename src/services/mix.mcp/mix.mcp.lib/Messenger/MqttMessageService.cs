@@ -11,20 +11,18 @@ namespace Mix.MCP.Lib.Messenger
     {
         private readonly IMqttClient _mqttClient;
         private readonly MqttClientOptions _mqttClientOptions;
-        private readonly ILogger<MqttMessageService> _logger;
 
         public bool IsConnected => _mqttClient.IsConnected;
 
-        public MqttMessageService(IConfiguration configuration, ILogger<MqttMessageService> logger)
+        public MqttMessageService(IConfiguration configuration)
         {
-            _logger = logger;
             var queueSetting = configuration.GetSection("MessageQueueSettings:MQTT").Get<MQTTSetting>();
             var factory = new MqttClientFactory();
             _mqttClient = factory.CreateMqttClient();
             _mqttClientOptions = MqttHelper.GetClientOptions(queueSetting);
         }
 
-        public async Task ConnectAsync(CancellationToken cancellationToken = default)
+        private async Task ConnectAsync(CancellationToken cancellationToken = default)
         {
             if (!_mqttClient.IsConnected)
             {
@@ -34,6 +32,7 @@ namespace Mix.MCP.Lib.Messenger
 
         public async Task SubscribeAsync(string topic, Func<string, Task> messageHandler, CancellationToken cancellationToken = default)
         {
+            await ConnectAsync(cancellationToken);
             var topicFilter = new MqttTopicFilterBuilder()
                 .WithTopic(topic)
                 .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce)
@@ -53,10 +52,7 @@ namespace Mix.MCP.Lib.Messenger
 
         public async Task PublishAsync(string topic, string payload, CancellationToken cancellationToken = default)
         {
-            if (!_mqttClient.IsConnected)
-            {
-                await ConnectAsync(cancellationToken);
-            }
+            await ConnectAsync(cancellationToken);
             var message = new MqttApplicationMessageBuilder()
                 .WithTopic(topic)
                 .WithPayload(payload)

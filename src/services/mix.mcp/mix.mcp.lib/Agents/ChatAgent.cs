@@ -102,22 +102,7 @@ namespace Mix.MCP.Lib.Agents
             var prompt = new System.Text.StringBuilder();
 
             // Add system message
-            prompt.AppendLine("""
-You are an AI assistant. When a user sends a message, decide if you should:
-- Respond directly as a chatbot (for general questions, greetings, small talk, etc.)
-- Or, if the user is asking for a tool operation, classify the request and extract parameters with selected tool parameters.
-You are an AI assistant for a database platform. Classify the user's request into one of these intents:
-{0}
-User message: \"{1}\"
-
-Respond in this JSON format:
-{{
-  "type": "chatbot" | "tool",
-  "response": "...", // Only if type is chatbot
-  "action": "...", // Only if type is tool
-  "parameters": {{ ... }} // Only if type is tool
-}}
-""");
+            prompt.AppendLine("You are a helpful AI assistant. Please respond to the user's message based on the conversation history:");
             prompt.AppendLine();
 
             // Add conversation history
