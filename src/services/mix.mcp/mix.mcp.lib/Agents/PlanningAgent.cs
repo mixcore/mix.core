@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace Mix.MCP.Lib.Agents
 {
@@ -16,15 +17,15 @@ namespace Mix.MCP.Lib.Agents
         private readonly IMqttMessageService _mqttMessageService;
 
         public PlanningAgent(
+            IConfiguration configuration,
             ILlmServiceFactory llmServiceFactory,
             ILogger<PlanningAgent> logger,
             TaskAgent taskAgent,
-            IMqttMessageService mqttMessageService,
             TimeSpan? defaultTimeout = null)
             : base(llmServiceFactory, logger, defaultTimeout)
         {
             _taskAgent = taskAgent;
-            _mqttMessageService = mqttMessageService;
+            _mqttMessageService = new MqttMessageService(configuration);
         }
 
         public override async Task<string> ProcessInputAsync(
@@ -45,12 +46,12 @@ namespace Mix.MCP.Lib.Agents
                 // Publish prompts analysis to device
                 var promptsContent = prompts.Count == 0
                     ? "No actionable prompts were found in your request."
-                    : $"Prompts extracted: {JsonSerializer.Serialize(prompts)}";
+                    : $"Prompts extracted: {string.Join('\n', prompts)}";
                 await SendMqttMessageAsync(deviceId, sessionId, serviceType, promptsContent, cancellationToken);
 
                 if (prompts.Count == 0)
                     return "No actionable prompts were found in your request.";
-                
+
                 // 2. Execute each prompt using TaskAgent
                 var results = new List<string>();
                 foreach (var prompt in prompts)
@@ -88,18 +89,18 @@ namespace Mix.MCP.Lib.Agents
             string content,
             CancellationToken cancellationToken)
         {
-            var msg = new LLMMessage
-            {
-                DeviceId = deviceId,
-                SessionId = sessionId,
-                ServiceType = serviceType,
-                Data = new LLMMessageContent
-                {
-                    Role = "system",
-                    Content = content
-                }
-            };
-            await _mqttMessageService.PublishAsync(deviceId, JsonSerializer.Serialize(msg), cancellationToken);
+            //var msg = new LLMMessage
+            //{
+            //    DeviceId = deviceId,
+            //    SessionId = sessionId,
+            //    ServiceType = serviceType,
+            //    Data = new LLMMessageContent
+            //    {
+            //        Role = "system",
+            //        Content = content
+            //    }
+            //};
+            await _mqttMessageService.PublishAsync(deviceId, content, cancellationToken);
         }
 
         private async Task<List<string>> AnalyzeAndExtractPromptsAsync(
