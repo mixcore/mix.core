@@ -3,3 +3,23 @@ version = 1
 [[analyzers]]
 name = "csharp"
 enabled = true
+
+  [analyzers.meta]
+  dotnet_version = "9.0.x"
+  skip_doc_coverage = ["test", "tests", "Test", "Tests"]
+
+[[analyzers]]
+name = "secrets"
+enabled = true
+
+[[analyzers]]
+name = "docker"
+enabled = true
+
+[[transformers]]
+name = "autopep8"
+enabled = false
+
+[[transformers]]
+name = "dotnet-format"
+enabled = true

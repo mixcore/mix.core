@@ -6,74 +6,40 @@ on:
     tags: [ 'v*.*.*' ]
   pull_request:
     branches: [ main, develop ]
-  schedule:
-    - cron: '0 0 * * *' # Daily security scans
 
 env:
+  DOTNET_VERSION: '9.0.x'
   DOCKER_IMAGE: mixcore/mix.core
-  DOCKER_TAG: ${{ github.sha }}
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  security:
+  # Code Quality and Security Checks
+  code-analysis:
+    name: Code Analysis
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Run Dependency Check
-        uses: dependency-check/Dependency-Check_Action@main
+      - uses: actions/checkout@v4
         with:
-          project: 'Mixcore'
-          path: '.'
-          format: 'HTML'
-          out: 'reports'
-          
-      - name: Run Container Scan
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          
-      - name: Run Secret Scan
-        uses: github/codeql-action/init@v2
-        with:
-          languages: javascript
-          
-  build-and-test:
-    needs: security
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        dotnet: ['9.0.x']
-        
-    steps:
-      - uses: actions/checkout@v3
-      
+          fetch-depth: 0
+
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ matrix.dotnet }}
-          
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
-            
+
       - name: Restore dependencies
-        run: dotnet restore
-        
-      - name: Build
-        run: dotnet build --no-restore
-        
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
-        
-      - name: Run SonarCloud analysis
+        run: dotnet restore src/Mixcore.sln
+
+      - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -83,118 +49,212 @@ jobs:
             -Dsonar.projectKey=mix.core
             -Dsonar.organization=mixcore
             -Dsonar.verbose=true
-            
-  build-and-push:
-    needs: build-and-test
+
+      - name: Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'Mixcore'
+          path: '.'
+          format: 'SARIF'
+          out: 'reports'
+
+      - name: Upload Dependency Check results
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: reports/dependency-check-report.sarif
+
+  # Build and Test
+  build-test:
+    name: Build and Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: dotnet restore src/Mixcore.sln
+
+      - name: Build solution
+        run: dotnet build src/Mixcore.sln --no-restore --configuration Release
+
+      - name: Run tests
+        run: dotnet test src/Mixcore.sln --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
+
+      - name: Upload coverage to Codecov
+        if: matrix.os == 'ubuntu-latest'
+        uses: codecov/codecov-action@v4
+        with:
+          directory: ./coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  # Docker Build and Push
+  docker:
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
+    needs: [code-analysis, build-test]
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
     permissions:
       contents: read
       packages: write
       id-token: write
-      
+
     steps:
-      - uses: actions/checkout@v3
-      
+      - uses: actions/checkout@v4
+
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-        
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
+
+      - name: Log in to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Extract Docker metadata
+
+      - name: Extract metadata
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: |
             ${{ env.DOCKER_IMAGE }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-            
-      - name: Build and push
-        uses: docker/build-push-action@v4
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha,prefix={{branch}}-
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
         with:
           context: .
-          push: true
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          
-      - name: Sign container image
-        uses: sigstore/cosign-installer@main
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
         with:
-          cosign-release: 'v2.0.0'
-        if: github.ref == 'refs/heads/main'
-        
-      - name: Sign the published Docker image
-        env:
-          COSIGN_EXPERIMENTAL: "true"
-        run: cosign sign ${{ steps.meta.outputs.tags }}@${{ steps.build-and-push.outputs.digest }}
-        if: github.ref == 'refs/heads/main'
-        
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # Deploy to Staging/Production
   deploy:
-    needs: build-and-push
+    name: Deploy to ${{ github.ref == 'refs/heads/main' && 'Production' || 'Staging' }}
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    environment: production
+    needs: [docker]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
     
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v3
-        
+      - uses: actions/checkout@v4
+
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-southeast-1
-          
+          aws-region: ${{ vars.AWS_REGION || 'ap-southeast-1' }}
+
       - name: Update kubeconfig
-        run: aws eks update-kubeconfig --name mixcore-cluster
-        
+        run: aws eks update-kubeconfig --name ${{ vars.EKS_CLUSTER_NAME || 'mixcore-cluster' }}
+
       - name: Deploy to Kubernetes
         run: |
+          export IMAGE_TAG=${{ github.sha }}
+          export ENVIRONMENT=${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+          
+          # Apply Kubernetes manifests
           kubectl apply -f k8s/namespace.yaml
-          kubectl apply -f k8s/secrets.yaml
           kubectl apply -f k8s/configmap.yaml
+          kubectl apply -f k8s/secrets.yaml
           kubectl apply -f k8s/storage.yaml
           kubectl apply -f k8s/deployments.yaml
           kubectl apply -f k8s/services.yaml
           
+          # Update deployment with new image
+          kubectl set image deployment/mixcore mixcore=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} -n mixcore
+          
+          # Wait for rollout to complete
+          kubectl rollout status deployment/mixcore -n mixcore --timeout=600s
+
       - name: Verify deployment
         run: |
           kubectl get all -n mixcore
-          kubectl rollout status deployment/mixcore -n mixcore
-          
-      - name: Run performance tests
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          
-      - name: Install and run Lighthouse
+          kubectl describe deployment/mixcore -n mixcore
+
+      - name: Run smoke tests
         run: |
-          npm install -g lighthouse
-          lighthouse https://mixcore.org --output=html --output-path=./lighthouse-results.html
+          # Wait for service to be ready
+          kubectl wait --for=condition=ready pod -l app=mixcore -n mixcore --timeout=300s
           
+          # Get service URL and run basic health check
+          SERVICE_URL=$(kubectl get service mixcore -n mixcore -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+          if [ ! -z "$SERVICE_URL" ]; then
+            curl -f http://$SERVICE_URL/health || exit 1
+          fi
+
+  # Notification
   notify:
-    needs: deploy
-    if: always()
+    name: Notify Deployment Status
     runs-on: ubuntu-latest
+    needs: [deploy]
+    if: always()
+    
     steps:
-      - name: Notify on Slack
+      - name: Notify Slack
+        if: vars.SLACK_WEBHOOK_URL
         uses: 8398a7/action-slack@v3
         with:
-          status: ${{ job.status }}
+          status: ${{ needs.deploy.result }}
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          text: |
+            Deployment ${{ needs.deploy.result }} for ${{ github.repository }}
+            Branch: ${{ github.ref_name }}
+            Commit: ${{ github.sha }}
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 
+          SLACK_WEBHOOK_URL: ${{ vars.SLACK_WEBHOOK_URL }}
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/') && needs.deploy.result == 'success'
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          token: ${{ secrets.GITHUB_TOKEN }} 

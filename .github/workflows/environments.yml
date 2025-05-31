@@ -1,0 +1,112 @@
+name: Environment Deployments
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
+      image_tag:
+        description: 'Docker image tag to deploy (default: main branch latest)'
+        required: false
+        type: string
+        default: ''
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  deploy:
+    name: Deploy to ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set image tag
+        id: image-tag
+        run: |
+          if [ -n "${{ github.event.inputs.image_tag }}" ]; then
+            echo "tag=${{ github.event.inputs.image_tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=main" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION || 'ap-southeast-1' }}
+
+      - name: Update kubeconfig
+        run: |
+          if [ "${{ github.event.inputs.environment }}" = "production" ]; then
+            aws eks update-kubeconfig --name ${{ vars.EKS_CLUSTER_NAME_PROD || 'mixcore-prod' }}
+          else
+            aws eks update-kubeconfig --name ${{ vars.EKS_CLUSTER_NAME_DEV || 'mixcore-dev' }}
+          fi
+
+      - name: Deploy to Kubernetes
+        run: |
+          export IMAGE_TAG=${{ steps.image-tag.outputs.tag }}
+          export ENVIRONMENT=${{ github.event.inputs.environment }}
+          export NAMESPACE=mixcore-${{ github.event.inputs.environment }}
+          
+          # Create namespace if it doesn't exist
+          kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+          
+          # Apply environment-specific configurations
+          if [ -d "k8s/environments/$ENVIRONMENT" ]; then
+            kubectl apply -f k8s/environments/$ENVIRONMENT/ -n $NAMESPACE
+          else
+            # Apply default configurations with environment overrides
+            envsubst < k8s/deployments.yaml | kubectl apply -f - -n $NAMESPACE
+            envsubst < k8s/services.yaml | kubectl apply -f - -n $NAMESPACE
+            envsubst < k8s/configmap.yaml | kubectl apply -f - -n $NAMESPACE
+          fi
+          
+          # Update deployment with specified image
+          kubectl set image deployment/mixcore mixcore=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.image-tag.outputs.tag }} -n $NAMESPACE
+          
+          # Wait for rollout to complete
+          kubectl rollout status deployment/mixcore -n $NAMESPACE --timeout=600s
+
+      - name: Verify deployment
+        run: |
+          export NAMESPACE=mixcore-${{ github.event.inputs.environment }}
+          kubectl get all -n $NAMESPACE
+          kubectl describe deployment/mixcore -n $NAMESPACE
+
+      - name: Run health checks
+        run: |
+          export NAMESPACE=mixcore-${{ github.event.inputs.environment }}
+          
+          # Wait for pods to be ready
+          kubectl wait --for=condition=ready pod -l app=mixcore -n $NAMESPACE --timeout=300s
+          
+          # Get service endpoint and test
+          if kubectl get service mixcore -n $NAMESPACE &> /dev/null; then
+            echo "Service found, checking health..."
+            # Add health check logic here based on your application
+          fi
+
+      - name: Notify deployment
+        if: always()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          text: |
+            Manual deployment to ${{ github.event.inputs.environment }} ${{ job.status }}
+            Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.image-tag.outputs.tag }}
+            Triggered by: ${{ github.actor }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ vars.SLACK_WEBHOOK_URL }} 
