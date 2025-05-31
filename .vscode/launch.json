@@ -4,33 +4,172 @@
     // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
     "version": "0.2.0",
     "configurations": [
-         {
-             "name": ".NET Core Launch (web)",
-             "type": "coreclr",
-             "request": "launch",
-             "preLaunchTask": "build",
-             // If you have changed target frameworks, make sure to update the program path.
-             "program": "${workspaceFolder}/src/Mix.Cms.Web/bin/Debug/net5.0/Mixcore.dll",
-             "args": [],
-             "cwd": "${workspaceFolder}/src/Mix.Cms.Web",
-             "stopAtEntry": false,
-             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
-             "serverReadyAction": {
-                 "action": "openExternally",
-                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-             },
-             "env": {
-                 "ASPNETCORE_ENVIRONMENT": "Development"
-             },
-             "sourceFileMap": {
-                 "/Views": "${workspaceFolder}/Views"
-             }
-         },
-         {
-             "name": ".NET Core Attach",
-             "type": "coreclr",
-             "request": "attach",
-             "processId": "${command:pickProcess}"
-         }
-     ]
- }
+        {
+            "name": "🚀 Mixcore Web API (Development)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/applications/mixcore/bin/Debug/net9.0/mixcore.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/applications/mixcore",
+            "stopAtEntry": false,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "openOnSessionStart",
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "%s/swagger"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "https://localhost:7001;http://localhost:5001",
+                "DOTNET_USE_POLLING_FILE_WATCHER": "true",
+                "ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS": "false"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/src/applications/mixcore/Views"
+            },
+            "requireExactSource": false,
+            "enableStepFiltering": true,
+            "justMyCode": false,
+            "suppressJITOptimizations": true
+        },
+        {
+            "name": "🌐 Mixcore Gateway (Development)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/applications/mixcore.gateway/bin/Debug/net9.0/mixcore.gateway.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/applications/mixcore.gateway",
+            "stopAtEntry": false,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "openOnSessionStart",
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "https://localhost:7002;http://localhost:5002",
+                "DOTNET_USE_POLLING_FILE_WATCHER": "true",
+                "ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS": "false"
+            },
+            "requireExactSource": false,
+            "enableStepFiltering": true,
+            "justMyCode": false,
+            "suppressJITOptimizations": true
+        },
+        {
+            "name": "☁️ Aspire App Host (Development)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/applications/mixcore.host.aspire.AppHost/bin/Debug/net9.0/mixcore.host.aspire.AppHost.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/applications/mixcore.host.aspire.AppHost",
+            "stopAtEntry": false,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "openOnSessionStart",
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DOTNET_ENVIRONMENT": "Development",
+                "DOTNET_DASHBOARD_OTLP_ENDPOINT_URL": "https://localhost:21888",
+                "ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS": "false"
+            },
+            "requireExactSource": false,
+            "enableStepFiltering": true,
+            "justMyCode": false
+        },
+        {
+            "name": "🧪 Mixcore Web API (Testing)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/applications/mixcore/bin/Debug/net9.0/mixcore.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/applications/mixcore",
+            "stopAtEntry": false,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "openOnSessionStart",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Testing",
+                "ASPNETCORE_URLS": "https://localhost:7001;http://localhost:5001",
+                "DOTNET_USE_POLLING_FILE_WATCHER": "true",
+                "ASPNETCORE_LOGGING__LOGLEVEL__DEFAULT": "Debug",
+                "ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS": "false"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/src/applications/mixcore/Views"
+            },
+            "requireExactSource": false,
+            "enableStepFiltering": false,
+            "justMyCode": false,
+            "suppressJITOptimizations": true
+        },
+        {
+            "name": "🔧 Mixcore Web API (Production-like)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/applications/mixcore/bin/Debug/net9.0/mixcore.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/applications/mixcore",
+            "stopAtEntry": false,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "openOnSessionStart",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Production",
+                "ASPNETCORE_URLS": "https://localhost:7001;http://localhost:5001",
+                "ASPNETCORE_LOGGING__LOGLEVEL__DEFAULT": "Warning",
+                "ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS": "false"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/src/applications/mixcore/Views"
+            },
+            "requireExactSource": false,
+            "enableStepFiltering": true,
+            "justMyCode": true
+        },
+        {
+            "name": "🔌 .NET Core Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickProcess}",
+            "justMyCode": false,
+            "enableStepFiltering": true,
+            "requireExactSource": false
+        },
+        {
+            "name": "🔗 .NET Core Attach (Docker)",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickRemoteProcess}",
+            "pipeTransport": {
+                "pipeProgram": "docker",
+                "pipeArgs": [ "exec", "-i", "mixcore-container" ],
+                "debuggerPath": "/vsdbg/vsdbg",
+                "pipeCwd": "${workspaceFolder}",
+                "quoteArgs": false
+            },
+            "justMyCode": false,
+            "enableStepFiltering": true,
+            "requireExactSource": false
+        }
+    ],
+    "compounds": [
+        {
+            "name": "🎯 Launch All Services",
+            "configurations": [
+                "🚀 Mixcore Web API (Development)",
+                "🌐 Mixcore Gateway (Development)"
+            ],
+            "stopAll": true,
+            "preLaunchTask": "build"
+        }
+    ]
+}
