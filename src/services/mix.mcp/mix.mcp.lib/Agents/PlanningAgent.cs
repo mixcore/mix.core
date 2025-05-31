@@ -52,20 +52,30 @@ namespace Mix.MCP.Lib.Agents
                 if (prompts.Count == 0)
                     return "No actionable prompts were found in your request.";
 
-                // 2. Execute each prompt using TaskAgent
+                // 2. Execute each prompt using TaskAgent, passing previous result as context
                 var results = new List<string>();
-                foreach (var prompt in prompts)
+                string previousResult = null;
+                for (int i = 0; i < prompts.Count; i++)
                 {
+                    string prompt = prompts[i];
+                    if (i > 0 && !string.IsNullOrWhiteSpace(previousResult))
+                    {
+                        // Add previous result as context to the next prompt
+                        prompt = $"Previous result:\n{previousResult}\n\nNext task:\n{prompt}";
+                    }
+
                     string resultMsg;
                     try
                     {
                         var result = await _taskAgent.ProcessInputAsync(prompt, sessionId, deviceId, serviceType, cancellationToken);
-                        resultMsg = $"[Success] {prompt}: {result}";
+                        resultMsg = $"[Success] {prompts[i]}: {result}";
+                        previousResult = result; // Pass this to the next prompt
                         results.Add(resultMsg);
                     }
                     catch (Exception ex)
                     {
-                        resultMsg = $"[Failed] {prompt}: {ex.Message}";
+                        resultMsg = $"[Failed] {prompts[i]}: {ex.Message}";
+                        previousResult = ex.Message; // Still pass error as context
                         results.Add(resultMsg);
                     }
 
@@ -89,17 +99,6 @@ namespace Mix.MCP.Lib.Agents
             string content,
             CancellationToken cancellationToken)
         {
-            //var msg = new LLMMessage
-            //{
-            //    DeviceId = deviceId,
-            //    SessionId = sessionId,
-            //    ServiceType = serviceType,
-            //    Data = new LLMMessageContent
-            //    {
-            //        Role = "system",
-            //        Content = content
-            //    }
-            //};
             await _mqttMessageService.PublishAsync(deviceId, content, cancellationToken);
         }
 

@@ -214,7 +214,7 @@ namespace Mix.Portal.Domain.Services
 
                 Regex regex = new($"(\\\")([^\\.])(\\/)?([^\\\",\\',\\`]+)((\\.)({allowExtensionsPattern}))(\\\")");
                 Regex basePathRegex = new("(\\[\\[?basePath\\]\\]?\\/?)");
-                indexFile.Content = regex.Replace(indexFile.Content, $"$1/{webPath}/$3$4$5$8");
+                indexFile.Content = regex.Replace(indexFile.Content, $"$1/{webPath}/$2$3$4$5$8");
                 if (indexFile.Content.IndexOf("base href") > 0)
                 {
                     Regex baseHrefRegex = new("(base href=(\")([^\\\",\\',\\`]+)(\"))");
@@ -262,7 +262,7 @@ namespace Mix.Portal.Domain.Services
                     Regex apiEndpointRegex = new("(\\[\\[?apiEndpoint\\]\\]?\\/?)");
                     if (rg.IsMatch(file.Content))
                     {
-                        file.Content = rg.Replace(file.Content, $"$1/{webPath}/$3$4$5$8");
+                        file.Content = rg.Replace(file.Content, $"$1/{webPath}/$2$3$4$5$8");
                     }
                     if (!string.IsNullOrEmpty(folders))
                     {

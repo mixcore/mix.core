@@ -12,7 +12,7 @@ namespace Mix.Mqtt.Lib.Models
         public string? Topic { get; set; }
         public int Port { get; set; }
         public bool UseTls { get; set; }
-        public SslProtocols SslProtocol { get; set; } = SslProtocols.None;
+        public SslProtocols SslProtocol { get; set; } = SslProtocols.Tls12;
         public bool UseWebSocket { get; set; }
         public MqttQualityOfServiceLevel Qos { get; set; } = MqttQualityOfServiceLevel.AtLeastOnce;
     }

@@ -154,6 +154,8 @@ namespace Mix.MCP.Lib.Services.LLM
     /// </summary>
     public class LLMCompletionResponse
     {
+        // TODO: Check response confidence
+
         [JsonPropertyName("choices")]
         public CompletionChoice[] choices { get; set; } = Array.Empty<CompletionChoice>();
     }

@@ -314,7 +314,6 @@ namespace Mix.MCP.Lib.Helpers
                 DataType = column.DataType,
                 DisplayName = displayName,
                 SystemName = column.Name,
-                DefaultValue = column.DefaultValue,
                 ColumnConfigurations = new Mix.Shared.Models.ColumnConfigurations
                 {
                     IsRequire = column.IsRequired,

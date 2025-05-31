@@ -21,10 +21,5 @@ namespace Mix.MCP.Lib.Models
         /// Whether the column is required
         /// </summary>
         public bool IsRequired { get; set; }
-
-        /// <summary>
-        /// Default value for the column
-        /// </summary>
-        public string DefaultValue { get; set; }
     }
 } 
