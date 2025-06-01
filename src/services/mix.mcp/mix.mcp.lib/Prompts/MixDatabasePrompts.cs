@@ -62,7 +62,7 @@ namespace Mix.MCP.Lib.Prompts
                 "Are there any missing fields? Are the data types appropriate? " +
                 "Are there any potential performance issues or design flaws? " +
                 "Suggest improvements if necessary.\n\n" +
-                $"MixDatabase:\n{schema}";
+                $"MixDbTable:\n{schema}";
                 
             return new ChatMessage(ChatRole.User, prompt);
         }
@@ -83,8 +83,8 @@ namespace Mix.MCP.Lib.Prompts
             string prompt = "Compare the current database schema and the target schema below. " +
                 "Generate a migration plan that outlines the steps needed to migrate from the current schema to the target schema. " +
                 "Consider data preservation, potential conflicts, and required transformations.\n\n" +
-                $"Current MixDatabase:\n{currentMixDatabase}\n\n" +
-                $"Target MixDatabase:\n{targetMixDatabase}";
+                $"Current MixDbTable:\n{currentMixDatabase}\n\n" +
+                $"Target MixDbTable:\n{targetMixDatabase}";
                 
             return new ChatMessage(ChatRole.User, prompt);
         }
@@ -105,7 +105,7 @@ namespace Mix.MCP.Lib.Prompts
             string prompt = $"Generate {recordCount} realistic sample records for a database with the following schema. " +
                 "The data should be varied and realistic for the domain. " +
                 "Format the results as a valid JSON array of objects, with each object representing one record.\n\n" +
-                $"MixDatabase:\n{schema}";
+                $"MixDbTable:\n{schema}";
                 
             return new ChatMessage(ChatRole.User, prompt);
         }

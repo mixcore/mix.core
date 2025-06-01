@@ -33,15 +33,15 @@ namespace Mix.Database.Entities.Cms
         public virtual DbSet<MixUrlAlias> MixUrlAlias { get; set; }
         public virtual DbSet<MixConfiguration> MixConfiguration { get; set; }
         public virtual DbSet<MixLanguage> MixLanguage { get; set; }
-        public virtual DbSet<MixDatabaseContext> MixDatabaseContext { get; set; }
-        public virtual DbSet<MixDatabase> MixDatabase { get; set; }
-        public virtual DbSet<MixDatabaseRelationship> MixDatabaseRelationship { get; set; }
+        public virtual DbSet<MixDbDatabase> MixDbDatabase { get; set; }
+        public virtual DbSet<MixDbTable> MixDbTable { get; set; }
+        public virtual DbSet<MixDbTableRelationship> MixDbTableRelationship { get; set; }
         public virtual DbSet<MixTheme> MixTheme { get; set; }
         public virtual DbSet<MixTemplate> MixViewTemplate { get; set; }
         public virtual DbSet<MixConfigurationContent> MixConfigurationContent { get; set; }
         public virtual DbSet<MixLanguageContent> MixLanguageContent { get; set; }
-        public virtual DbSet<MixDatabaseColumn> MixDatabaseColumn { get; set; }
-        public virtual DbSet<MixDatabaseAssociation> MixDatabaseAssociation { get; set; }
+        public virtual DbSet<MixDbColumn> MixDbColumn { get; set; }
+        public virtual DbSet<MixDbDataAssociation> MixDbDataAssociation { get; set; }
         public virtual DbSet<MixPagePostAssociation> MixPagePostAssociation { get; set; }
         public virtual DbSet<MixPostPostAssociation> MixPostPostAssociation { get; set; }
         public virtual DbSet<MixPageModuleAssociation> MixPageModuleAssociation { get; set; }

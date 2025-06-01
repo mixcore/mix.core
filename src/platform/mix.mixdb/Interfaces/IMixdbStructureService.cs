@@ -16,9 +16,9 @@ namespace Mix.Mixdb.Interfaces
         public MixDatabaseProvider DbProvider { get; }
         void Init(string connectionString, MixDatabaseProvider dbProvider);
         public Task<int> ExecuteCommand(string commandText);
-        public Task AlterColumn(MixDbDatabaseViewModel database, MixdbDatabaseColumnViewModel col, bool isDrop, CancellationToken cancellationToken = default);
-        public Task AddColumn(MixDbDatabaseViewModel database, MixdbDatabaseColumnViewModel col, CancellationToken cancellationToken = default);
-        public Task DropColumn(MixDbDatabaseViewModel database, MixdbDatabaseColumnViewModel col, CancellationToken cancellationToken = default);
+        public Task AlterColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col, bool isDrop, CancellationToken cancellationToken = default);
+        public Task AddColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col, CancellationToken cancellationToken = default);
+        public Task DropColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col, CancellationToken cancellationToken = default);
         public Task Migrate(MixDbDatabaseViewModel database, MixDatabaseProvider databaseProvider, CancellationToken cancellationToken = default);
     }
 }

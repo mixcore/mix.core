@@ -45,6 +45,19 @@ namespace Mix.Shared.Services
                 SaveSettings();
             }
         }
+        
+        public virtual void SetConnnectionString<TValue>(string name, TValue value, bool isSave = false)
+        {
+            if (string.IsNullOrEmpty(_sectionName))
+            {
+                RawSettings["ConnectionStrings"][name] = value != null ? JToken.FromObject(value) : null;
+                AppSettings = RawSettings.ToObject<T>();
+            }
+            if (isSave)
+            {
+                SaveSettings();
+            }
+        }
 
         public virtual bool SaveSettings()
         {

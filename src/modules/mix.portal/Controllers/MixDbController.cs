@@ -38,7 +38,7 @@ namespace Mix.Portal.Controllers
         private string _requestedBy;
         private readonly MixIdentityService _idService;
         private IMixDbDataService _mixDbDataService;
-        private const string AssociationTableName = nameof(MixDatabaseAssociation);
+        private const string AssociationTableName = nameof(MixDbDataAssociation);
         private MixDbDatabaseViewModel _mixDb;
         private FieldNameService _fieldNameService;
         public MixDbController(
@@ -540,7 +540,7 @@ namespace Mix.Portal.Controllers
 
         private async Task<List<MixQueryField>> BuildSearchQueryAsync(SearchMixDbRequestDto request)
         {
-            var mixDb = await GetMixDatabase(request.MixDatabaseName);
+            var mixDb = await GetMixDatabase(request.MixDbTableName);
             var queries = new List<MixQueryField>();
             if (request.ObjParentId != null)
             {
