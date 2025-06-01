@@ -12,11 +12,11 @@ using MySqlX.XDevAPI.Common;
 
 namespace Mix.Portal.Controllers
 {
-    [Route("api/v2/rest/mix-portal/mixdb-context")]
+    [Route("api/v2/rest/mix-portal/mixdb-databases")]
     [ApiController]
     [MixAuthorize(MixRoles.Owner)]
     public class MixDatabaseContextController
-        : MixRestfulApiControllerBase<MixDatabaseContextViewModel, MixCmsContext, MixDatabaseContext, int>
+        : MixRestfulApiControllerBase<MixDatabaseContextViewModel, MixCmsContext, MixDbDatabase, int>
     {
         private readonly IMixdbStructure _mixDbService;
         public MixDatabaseContextController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> uow, IMemoryQueueService<MessageQueueModel> queueService,
@@ -40,7 +40,7 @@ namespace Mix.Portal.Controllers
             var result = await base.CreateHandlerAsync(data, cancellationToken);
             if (result > 0)
             {
-                var dbContext = new MixDatabaseContext();
+                var dbContext = new MixDbDatabase();
                 ReflectionHelper.Map(data, dbContext);
                 await _mixDbService.MigrateInitNewDbContextDatabases(dbContext);
             }
@@ -62,7 +62,7 @@ namespace Mix.Portal.Controllers
         #region Routes
 
         [HttpPost("migrate")]
-        public async Task<ActionResult<object>> MigrateInitDatabases([FromBody] MixDatabaseContext dbContext)
+        public async Task<ActionResult<object>> MigrateInitDatabases([FromBody] MixDbDatabase dbContext)
         {
             await _mixDbService.MigrateInitNewDbContextDatabases(dbContext);
             return Ok();

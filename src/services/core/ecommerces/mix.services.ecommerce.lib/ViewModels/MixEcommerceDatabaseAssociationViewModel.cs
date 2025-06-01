@@ -6,7 +6,7 @@ using Mix.Services.Ecommerce.Lib.Entities.Mix;
 namespace Mix.Services.Ecommerce.Lib.ViewModels
 {
     public sealed class MixEcommerceDatabaseAssociationViewModel
-        : ViewModelBase<EcommerceDbContext, MixDatabaseAssociation, Guid, MixEcommerceDatabaseAssociationViewModel>
+        : ViewModelBase<EcommerceDbContext, MixDbDataAssociation, Guid, MixEcommerceDatabaseAssociationViewModel>
     {
         #region Properties
         public int TenantId { get; set; }
@@ -24,7 +24,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         {
         }
 
-        public MixEcommerceDatabaseAssociationViewModel(MixDatabaseAssociation entity, UnitOfWorkInfo? uowInfo = null)
+        public MixEcommerceDatabaseAssociationViewModel(MixDbDataAssociation entity, UnitOfWorkInfo? uowInfo = null)
             : base(entity, uowInfo)
         {
         }

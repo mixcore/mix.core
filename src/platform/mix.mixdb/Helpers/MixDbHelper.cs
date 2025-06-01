@@ -94,7 +94,7 @@ namespace Mix.Mixdb.Helpers
                     _ => prop.Value?.ToString()
                 };
         }
-        public static bool IsLongTextColumn(MixdbDatabaseColumnViewModel col)
+        public static bool IsLongTextColumn(MixdbColumnViewModel col)
         {
             return col.DataType == MixDataType.Text
                    | col.DataType == MixDataType.Array
@@ -105,7 +105,7 @@ namespace Mix.Mixdb.Helpers
                    | col.DataType == MixDataType.TuiEditor;
         }
 
-        public static void ParseRawDataToEntityAsync(JObject? result, List<MixdbDatabaseColumnViewModel> columns)
+        public static void ParseRawDataToEntityAsync(JObject? result, List<MixdbColumnViewModel> columns)
         {
             if (result is null)
             {
@@ -150,7 +150,7 @@ namespace Mix.Mixdb.Helpers
             }
         }
 
-        public static Task<JObject> ParseImportDtoToEntityAsync(JObject dto, List<MixdbDatabaseColumnViewModel> columns,
+        public static Task<JObject> ParseImportDtoToEntityAsync(JObject dto, List<MixdbColumnViewModel> columns,
             FieldNameService fieldNameService,
             string aesKey,
             int? tenantId = null, string? username = null)

@@ -43,7 +43,7 @@ namespace Mix.Signalr.Hub.Attributes
                 {
                     _tableName = context.HttpContext.Request.RouteValues["name"]?.ToString();
                 }
-                var database = _cmsContext.MixDatabase.FirstOrDefault(m => m.SystemName == _tableName);
+                var database = _cmsContext.MixDbTable.FirstOrDefault(m => m.SystemName == _tableName);
                 if (database == null)
                 {
                     context.Result = new BadRequestResult();
@@ -72,7 +72,7 @@ namespace Mix.Signalr.Hub.Attributes
                 }
             }
 
-            private bool CheckByPassAuthenticate(string method, string path, MixDatabase database)
+            private bool CheckByPassAuthenticate(string method, string path, MixDbTable database)
             {
                 return method switch
                 {
@@ -105,7 +105,7 @@ namespace Mix.Signalr.Hub.Attributes
                         && DateTime.UtcNow < expireAt;
             }
 
-            private bool IsInRoles(string method, MixDatabase database, string path)
+            private bool IsInRoles(string method, MixDbTable database, string path)
             {
 
                 UserRoles = GetClaim(userPrinciple, MixClaims.Role).Split(',', StringSplitOptions.RemoveEmptyEntries)

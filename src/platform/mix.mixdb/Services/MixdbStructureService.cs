@@ -90,7 +90,7 @@ namespace Mix.Mixdb.Services
         /// <summary>
         /// Migrates and initializes new database context
         /// </summary>
-        public async Task MigrateInitNewDbContextDatabases(MixDatabaseContext dbContext, CancellationToken cancellationToken = default)
+        public async Task MigrateInitNewDbContextDatabases(MixDbDatabase dbContext, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -108,10 +108,10 @@ namespace Mix.Mixdb.Services
                 }
 
                 var strMixDbs = MixFileHelper.GetFile(
-                    "init-new-dbcontext-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
+                    "init-new-mixdb-database-tables", MixFileExtensions.Json, MixFolders.JsonDataFolder);
                 var obj = JObject.Parse(strMixDbs.Content);
-                var databases = obj.Value<JArray>("databases")?.ToObject<List<MixDatabase>>();
-                var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
+                var databases = obj.Value<JArray>("tables")?.ToObject<List<MixDbTable>>();
+                var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDbColumn>>();
 
                 if (databases != null)
                 {
@@ -139,10 +139,10 @@ namespace Mix.Mixdb.Services
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var strMixDbs = MixFileHelper.GetFile(
-                    "system-databases", MixFileExtensions.Json, MixFolders.JsonDataFolder);
+                    "system-tables", MixFileExtensions.Json, MixFolders.JsonDataFolder);
                 var obj = JObject.Parse(strMixDbs.Content);
-                var databases = obj.Value<JArray>("databases")?.ToObject<List<MixDatabase>>();
-                var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDatabaseColumn>>();
+                var databases = obj.Value<JArray>("tables")?.ToObject<List<MixDbTable>>();
+                var columns = obj.Value<JArray>("columns")?.ToObject<List<MixDbColumn>>();
 
                 var masterDbContext = await GetOrCreateMasterDbContextAsync();
 
@@ -162,7 +162,7 @@ namespace Mix.Mixdb.Services
 
         #region Private Methods
 
-        private void ValidateDatabaseContext(MixDatabaseContext dbContext)
+        private void ValidateDatabaseContext(MixDbDatabase dbContext)
         {
             if (dbContext == null)
             {
@@ -190,9 +190,9 @@ namespace Mix.Mixdb.Services
         }
 
         private async Task ProcessDatabasesAsync(
-            List<MixDatabase> databases,
-            List<MixDatabaseColumn>? columns,
-            MixDatabaseContext dbContext,
+            List<MixDbTable> databases,
+            List<MixDbColumn>? columns,
+            MixDbDatabase dbContext,
             CancellationToken cancellationToken)
         {
             foreach (var database in databases)
@@ -207,7 +207,7 @@ namespace Mix.Mixdb.Services
             }
         }
 
-        private string GetNewDatabaseName(MixDatabaseContext dbContext, MixDatabase database)
+        private string GetNewDatabaseName(MixDbDatabase dbContext, MixDbTable database)
         {
             return dbContext.NamingConvention == MixDatabaseNamingConvention.SnakeCase
                 ? $"{dbContext.SystemName}_{database.DisplayName.ToColumnName(false)}"
@@ -215,10 +215,10 @@ namespace Mix.Mixdb.Services
         }
 
         private async Task<MixDbDatabaseViewModel> GetOrCreateDatabaseAsync(
-            MixDatabase database,
+            MixDbTable database,
             string newDbName,
-            MixDatabaseContext dbContext,
-            List<MixDatabaseColumn>? columns,
+            MixDbDatabase dbContext,
+            List<MixDbColumn>? columns,
             CancellationToken cancellationToken)
         {
             var currentDb = await MixDbDatabaseViewModel.GetRepository(_cmsUow, CacheService)
@@ -252,7 +252,7 @@ namespace Mix.Mixdb.Services
 
         private async Task AddColumnsAsync(
             MixDbDatabaseViewModel currentDb,
-            List<MixDatabaseColumn> columns,
+            List<MixDbColumn> columns,
             string databaseSystemName,
             MixDatabaseNamingConvention namingConvention)
         {
@@ -269,14 +269,14 @@ namespace Mix.Mixdb.Services
             }
         }
 
-        private async Task<MixDatabaseContext> GetOrCreateMasterDbContextAsync()
+        private async Task<MixDbDatabase> GetOrCreateMasterDbContextAsync()
         {
-            var masterDbContext = _cmsUow.DbContext.MixDatabaseContext.FirstOrDefault(
+            var masterDbContext = _cmsUow.DbContext.MixDbDatabase.FirstOrDefault(
                 m => m.SystemName == "master");
 
             if (masterDbContext is null)
             {
-                masterDbContext = new MixDatabaseContext()
+                masterDbContext = new MixDbDatabase()
                 {
                     SystemName = "master",
                     Schema = "mix",
@@ -296,14 +296,14 @@ namespace Mix.Mixdb.Services
         }
 
         private async Task ProcessSystemDatabasesAsync(
-            List<MixDatabase> databases,
-            List<MixDatabaseColumn>? columns,
-            MixDatabaseContext masterDbContext,
+            List<MixDbTable> databases,
+            List<MixDbColumn>? columns,
+            MixDbDatabase masterDbContext,
             CancellationToken cancellationToken)
         {
             foreach (var database in databases)
             {
-                if (!_cmsUow.DbContext.MixDatabase.Any(m => m.SystemName == database.SystemName))
+                if (!_cmsUow.DbContext.MixDbTable.Any(m => m.SystemName == database.SystemName))
                 {
                     var currentDb = new MixDbDatabaseViewModel(database, _cmsUow)
                     {
@@ -403,7 +403,7 @@ namespace Mix.Mixdb.Services
             await _dbStructureSrv.Migrate(db, db.DatabaseProvider, cancellationToken);
         }
 
-        public async Task AlterColumn(MixdbDatabaseColumnViewModel col, bool isDrop, CancellationToken cancellationToken = default)
+        public async Task AlterColumn(MixdbColumnViewModel col, bool isDrop, CancellationToken cancellationToken = default)
         {
             if (col == null)
             {
@@ -419,7 +419,7 @@ namespace Mix.Mixdb.Services
             await _dbStructureSrv.AlterColumn(db, col, isDrop, cancellationToken);
         }
 
-        public async Task AddColumn(MixdbDatabaseColumnViewModel repoCol, CancellationToken cancellationToken = default)
+        public async Task AddColumn(MixdbColumnViewModel repoCol, CancellationToken cancellationToken = default)
         {
             if (repoCol == null)
             {
@@ -435,7 +435,7 @@ namespace Mix.Mixdb.Services
             await _dbStructureSrv.AddColumn(db, repoCol, cancellationToken);
         }
 
-        public async Task DropColumn(MixdbDatabaseColumnViewModel repoCol, CancellationToken cancellationToken = default)
+        public async Task DropColumn(MixdbColumnViewModel repoCol, CancellationToken cancellationToken = default)
         {
             if (repoCol == null)
             {

@@ -10,7 +10,7 @@ namespace Mix.Portal.Controllers
     [ApiController]
     [MixAuthorize(MixRoles.Owner)]
     public class MixDatabaseRelationshipController
-        : MixRestfulApiControllerBase<MixDatabaseRelationshipViewModel, MixCmsContext, MixDatabaseRelationship, int>
+        : MixRestfulApiControllerBase<MixDatabaseRelationshipViewModel, MixCmsContext, MixDbTableRelationship, int>
     {
         public MixDatabaseRelationshipController(
             IHttpContextAccessor httpContextAccessor,

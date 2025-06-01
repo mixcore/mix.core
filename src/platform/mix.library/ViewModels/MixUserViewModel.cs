@@ -109,7 +109,7 @@ namespace Mix.Lib.ViewModels
         //            GetByAllParent<MixDataContentViewModel>(
         //            new SearchDataContentModel(tenantId)
         //            {
-        //                MixDatabaseName = MixDatabaseNames.SYSTEM_ENDPOINT,
+        //                MixDbTableName = MixDatabaseNames.SYSTEM_ENDPOINT,
         //                GuidParentId = role.RoleId
         //            });
         //        endpoints.AddRange(temp.Select(m => m.Data));

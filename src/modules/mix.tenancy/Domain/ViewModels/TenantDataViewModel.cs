@@ -14,8 +14,8 @@
         public List<MixModuleData> ModuleDatas { get; set; }
         public List<MixPage> Pages { get; set; }
         public List<MixPost> Posts { get; set; }
-        public List<MixDatabase> Databases { get; set; }
-        public List<MixDatabaseColumn> DatabaseColumns { get; set; }
+        public List<MixDbTable> Databases { get; set; }
+        public List<MixDbColumn> DatabaseColumns { get; set; }
 
         public TenantDataViewModel()
         {

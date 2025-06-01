@@ -126,7 +126,7 @@ namespace Mix.Portal.Domain.ViewModels
             if (AdditionalData == null && !string.IsNullOrEmpty(MixDatabaseName))
             {
                 isChanged = true;
-                var relationships = Context.MixDatabaseRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName).ToList();
+                var relationships = Context.MixDbTableRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName).ToList();
                 var obj = await mixDbDataSrv.GetSingleByParentAsync(MixDatabaseName, MixContentType.Post, Id, string.Empty, cancellationToken);
                 if (obj != null)
                 {
@@ -135,7 +135,7 @@ namespace Mix.Portal.Domain.ViewModels
                     foreach (var item in relationships)
                     {
 
-                        var allowsIds = Context.MixDatabaseAssociation
+                        var allowsIds = Context.MixDbDataAssociation
                                 .Where(m => m.ParentDatabaseName == MixDatabaseName
                                             && m.ParentId == AdditionalData.GetJObjectProperty<int>("id")
                                             && m.ChildDatabaseName == item.DestinateDatabaseName)

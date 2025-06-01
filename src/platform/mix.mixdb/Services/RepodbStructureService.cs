@@ -144,7 +144,7 @@ namespace Mix.Mixdb.Services
         /// <summary>
         /// Adds a new column to the database
         /// </summary>
-        public async Task AddColumn(MixDbDatabaseViewModel database, MixdbDatabaseColumnViewModel col, CancellationToken cancellationToken = default)
+        public async Task AddColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -169,7 +169,7 @@ namespace Mix.Mixdb.Services
         /// <summary>
         /// Alters an existing column in the database
         /// </summary>
-        public async Task AlterColumn(MixDbDatabaseViewModel database, MixdbDatabaseColumnViewModel col, bool isDrop, CancellationToken cancellationToken = default)
+        public async Task AlterColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col, bool isDrop, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -203,7 +203,7 @@ namespace Mix.Mixdb.Services
         /// <summary>
         /// Drops a column from the database
         /// </summary>
-        public async Task DropColumn(MixDbDatabaseViewModel database, MixdbDatabaseColumnViewModel col, CancellationToken cancellationToken = default)
+        public async Task DropColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -299,7 +299,7 @@ namespace Mix.Mixdb.Services
 
         #region Private Methods
 
-        private void ValidateDatabaseAndColumn(MixDbDatabaseViewModel database, MixdbDatabaseColumnViewModel col)
+        private void ValidateDatabaseAndColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col)
         {
             if (database == null)
             {
@@ -358,7 +358,7 @@ namespace Mix.Mixdb.Services
             };
         }
 
-        private string GenerateColumnSql(MixdbDatabaseColumnViewModel col, MixDatabaseProvider databaseProvider,
+        private string GenerateColumnSql(MixdbColumnViewModel col, MixDatabaseProvider databaseProvider,
             MixDatabaseType dbType, FieldNameService fieldNameService)
         {
             if (string.Equals(col.SystemName, "id", StringComparison.OrdinalIgnoreCase))
@@ -376,20 +376,20 @@ namespace Mix.Mixdb.Services
             return $"{_databaseConstant.BacktickOpen}{col.SystemName}{_databaseConstant.BacktickClose} {colType} {nullable} {unique} {defaultValue}";
         }
 
-        private string GenerateAddColumnSql(MixdbDatabaseColumnViewModel col, MixDatabaseProvider databaseProvider, 
+        private string GenerateAddColumnSql(MixdbColumnViewModel col, MixDatabaseProvider databaseProvider, 
             MixDatabaseType type, FieldNameService fieldNameService)
         {
             return $"ALTER TABLE {_databaseConstant.BacktickOpen}{col.MixDatabaseName}{_databaseConstant.BacktickClose}" +
                    $" ADD {GenerateColumnSql(col, databaseProvider, type, fieldNameService)};";
         }
 
-        private string GenerateDropColumnSql(MixdbDatabaseColumnViewModel col)
+        private string GenerateDropColumnSql(MixdbColumnViewModel col)
         {
             return $"ALTER TABLE {_databaseConstant.BacktickOpen}{col.MixDatabaseName}{_databaseConstant.BacktickClose}" +
                    $" DROP COLUMN IF EXISTS {_databaseConstant.BacktickOpen}{col.SystemName}{_databaseConstant.BacktickClose};";
         }
 
-        private string GenerateAlterColumnSql(MixdbDatabaseColumnViewModel col)
+        private string GenerateAlterColumnSql(MixdbColumnViewModel col)
         {
             string colType = GetColumnType(col.DataType, col.ColumnConfigurations.MaxLength);
             string colName = $"{_databaseConstant.BacktickOpen}{col.SystemName}{_databaseConstant.BacktickClose}";
@@ -424,7 +424,7 @@ namespace Mix.Mixdb.Services
             return result;
         }
 
-        private bool IsLongTextColumn(MixdbDatabaseColumnViewModel col)
+        private bool IsLongTextColumn(MixdbColumnViewModel col)
         {
             return col.DataType == MixDataType.Text
                    | col.DataType == MixDataType.Array
