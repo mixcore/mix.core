@@ -34,7 +34,7 @@ namespace Mix.Lib.Subscribers
             IPooledObjectPolicy<RabbitMQ.Client.IChannel>? rabbitMQObjectPolicy = null)
             : base(TopicId, nameof(MixDbCommandSubscriber), 20, serviceProvider, configuration, queueService, logger, rabbitMQObjectPolicy)
         {
-            _allowActions = [.. Enum.GetNames(typeof(MixDbCommandQueueAction))];
+            _allowActions = [..Enum.GetNames(typeof(MixDbCommandQueueAction))];
         }
 
         public override async Task Handler(MessageQueueModel model, CancellationToken cancellationToken)

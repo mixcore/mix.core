@@ -28,10 +28,10 @@ namespace Mix.MCP.Lib.Services.LLM
         /// Send a chat LLMMessage to LM Studio API
         /// </summary>
         public override async Task<LLMChatResponse> ChatAsync(
-            string message, 
-            string model = "mathstral-7b-v0.1", 
-            double temperature = 0.7, 
-            int maxTokens = -1, 
+            string message,
+            string model = "mathstral-7b-v0.1",
+            double temperature = 0.7,
+            int maxTokens = -1,
             CancellationToken cancellationToken = default)
         {
             var request = new
@@ -48,9 +48,9 @@ namespace Mix.MCP.Lib.Services.LLM
 
             var client = CreateHttpClient(HttpClientName);
             return await SendPostRequestAsync<LLMChatResponse>(
-                client, 
-                "chat/completions", 
-                request, 
+                client,
+                "chat/completions",
+                request,
                 cancellationToken);
         }
 
@@ -58,10 +58,10 @@ namespace Mix.MCP.Lib.Services.LLM
         /// Send a completion request to LM Studio API
         /// </summary>
         public override async Task<LLMCompletionResponse> CompleteAsync(
-            string prompt, 
-            string model = "mathstral-7b-v0.1", 
-            double temperature = 0.7, 
-            int maxTokens = -1, 
+            string prompt,
+            string model = "mathstral-7b-v0.1",
+            double temperature = 0.7,
+            int maxTokens = -1,
             CancellationToken cancellationToken = default)
         {
             var request = new
@@ -74,9 +74,9 @@ namespace Mix.MCP.Lib.Services.LLM
 
             var client = CreateHttpClient(HttpClientName);
             return await SendPostRequestAsync<LLMCompletionResponse>(
-                client, 
-                "completions", 
-                request, 
+                client,
+                "completions",
+                request,
                 cancellationToken);
         }
 
@@ -84,8 +84,8 @@ namespace Mix.MCP.Lib.Services.LLM
         /// CreateMixDbData embeddings using LM Studio API
         /// </summary>
         public override async Task<LLMEmbeddingResponse> CreateEmbeddingsAsync(
-            string input, 
-            string model = "text-embedding-nomic-embed-text-v1.5", 
+            string input,
+            string model = "text-embedding-nomic-embed-text-v1.5",
             CancellationToken cancellationToken = default)
         {
             var request = new
@@ -96,10 +96,10 @@ namespace Mix.MCP.Lib.Services.LLM
 
             var client = CreateHttpClient(HttpClientName);
             return await SendPostRequestAsync<LLMEmbeddingResponse>(
-                client, 
-                "embeddings", 
-                request, 
+                client,
+                "embeddings",
+                request,
                 cancellationToken);
         }
     }
-} 
+}

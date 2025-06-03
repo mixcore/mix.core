@@ -214,7 +214,7 @@ namespace Mix.RepoDb.Repositories
             List<OrderField> sortByColumns = pagingRequest.SortByColumns
                 .Select(m => new OrderField(m.FieldName, m.Direction == SortDirection.Asc ? Order.Ascending : Order.Descending))
                 .ToList();
-            builder = GetStatementBuilder(_databaseProvider)?? _connection.GetStatementBuilder();
+            builder = GetStatementBuilder(_databaseProvider) ?? _connection.GetStatementBuilder();
 
             int pageSize = pagingRequest.PageSize ?? 100;
 

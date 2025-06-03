@@ -12,4 +12,4 @@ namespace Mix.MCP.Lib.Services.LLM
         Task<LLMEmbeddingResponse> CreateEmbeddingsAsync(string input, string model, CancellationToken cancellationToken = default);
         void SetTimeout(TimeSpan timeSpan);
     }
-} 
+}

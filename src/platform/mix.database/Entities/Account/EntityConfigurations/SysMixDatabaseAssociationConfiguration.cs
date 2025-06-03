@@ -18,7 +18,7 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
                .HasColumnName("tenant_id");
             builder.Property(e => e.GuidParentId)
                 .HasColumnName("guid_parent_id")
-                .HasColumnType(Config.Guid); 
+                .HasColumnType(Config.Guid);
             builder.Property(e => e.GuidChildId)
                 .HasColumnName("guid_child_id")
                 .HasColumnType(Config.Guid);

@@ -215,7 +215,7 @@ namespace Mix.Database.Services.MixGlobalSettings
             {
                 MigrateDbContext(accCtx);
             }
-            
+
             using var auditlogCtx = GetAuditLogDbContext();
             {
                 MigrateDbContext(auditlogCtx);

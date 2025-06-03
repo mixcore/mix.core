@@ -29,10 +29,10 @@ namespace Mix.MCP.Lib.Services.LLM
         /// Send a chat LLMMessage to OpenAI API
         /// </summary>
         public override async Task<LLMChatResponse> ChatAsync(
-            string message, 
-            string model = "gpt-3.5-turbo", 
-            double temperature = 0.7, 
-            int maxTokens = 8000, 
+            string message,
+            string model = "gpt-3.5-turbo",
+            double temperature = 0.7,
+            int maxTokens = 8000,
             CancellationToken cancellationToken = default)
         {
             var request = new
@@ -48,9 +48,9 @@ namespace Mix.MCP.Lib.Services.LLM
 
             var client = CreateHttpClient(HttpClientName);
             return await SendPostRequestAsync<LLMChatResponse>(
-                client, 
-                "chat/completions", 
-                request, 
+                client,
+                "chat/completions",
+                request,
                 cancellationToken);
         }
 
@@ -58,10 +58,10 @@ namespace Mix.MCP.Lib.Services.LLM
         /// Send a completion request to OpenAI API
         /// </summary>
         public override async Task<LLMCompletionResponse> CompleteAsync(
-            string prompt, 
-            string model = "text-davinci-003", 
-            double temperature = 0.7, 
-            int maxTokens = 8000, 
+            string prompt,
+            string model = "text-davinci-003",
+            double temperature = 0.7,
+            int maxTokens = 8000,
             CancellationToken cancellationToken = default)
         {
             var request = new
@@ -74,9 +74,9 @@ namespace Mix.MCP.Lib.Services.LLM
 
             var client = CreateHttpClient(HttpClientName);
             return await SendPostRequestAsync<LLMCompletionResponse>(
-                client, 
-                "completions", 
-                request, 
+                client,
+                "completions",
+                request,
                 cancellationToken);
         }
 
@@ -84,8 +84,8 @@ namespace Mix.MCP.Lib.Services.LLM
         /// CreateMixDbData embeddings using OpenAI API
         /// </summary>
         public override async Task<LLMEmbeddingResponse> CreateEmbeddingsAsync(
-            string input, 
-            string model = "text-embedding-ada-002", 
+            string input,
+            string model = "text-embedding-ada-002",
             CancellationToken cancellationToken = default)
         {
             var request = new
@@ -96,10 +96,10 @@ namespace Mix.MCP.Lib.Services.LLM
 
             var client = CreateHttpClient(HttpClientName);
             return await SendPostRequestAsync<LLMEmbeddingResponse>(
-                client, 
-                "embeddings", 
-                request, 
+                client,
+                "embeddings",
+                request,
                 cancellationToken);
         }
     }
-} 
+}

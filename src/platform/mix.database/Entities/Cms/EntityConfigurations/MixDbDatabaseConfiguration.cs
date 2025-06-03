@@ -21,13 +21,13 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
                 .HasColumnName("schema")
                 .HasColumnType($"{Config.String}{Config.SmallLength}")
                 .HasCharSet(Config.CharSet);
-            
+
             builder.Property(e => e.AesKey)
                 .IsRequired()
                 .HasColumnName("aes_key")
                 .HasColumnType($"{Config.String}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet);
-            
+
             builder.Property(e => e.ConnectionString)
                 .IsRequired()
                 .HasColumnName("connection_string")

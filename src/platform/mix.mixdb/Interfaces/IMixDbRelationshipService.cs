@@ -30,4 +30,4 @@ namespace Mix.Mixdb.Interfaces
         /// </summary>
         Task<List<SearchMixDbRequestModel>?> ParseRelatedDataRequests(string? selectFieldNames, string tableName);
     }
-} 
+}

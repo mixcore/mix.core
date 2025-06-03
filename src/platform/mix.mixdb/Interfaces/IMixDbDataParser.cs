@@ -30,4 +30,4 @@ namespace Mix.Mixdb.Interfaces
         object? GetPropertyValue(JProperty prop);
         Task LoadMixDb(string tableName);
     }
-} 
+}

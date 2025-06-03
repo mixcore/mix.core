@@ -22,4 +22,4 @@ namespace Mix.MCP.Lib.Models
         /// </summary>
         public bool IsRequired { get; set; }
     }
-} 
+}

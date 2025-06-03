@@ -61,7 +61,7 @@ namespace mix.auth.service.Controllers
         }
 
         [HttpPost("create")]
-        public Task<ActionResult<Guid>> CreateRole([FromBody]string name)
+        public Task<ActionResult<Guid>> CreateRole([FromBody] string name)
         {
             var role = new MixRole(name);
             return Create(role);

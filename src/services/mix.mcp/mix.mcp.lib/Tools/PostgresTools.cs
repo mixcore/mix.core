@@ -54,4 +54,4 @@ namespace Mix.MCP.Lib.Tools
             return await _postgresService.GetTableSchemaAsync(message, cancellationToken);
         }
     }
-} 
+}

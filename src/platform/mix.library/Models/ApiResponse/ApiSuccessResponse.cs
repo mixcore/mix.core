@@ -124,4 +124,4 @@ namespace Mix.Lib.Models.ApiResponse
             return (ApiSuccessResponse)Create(HttpStatusCode.NoContent, message);
         }
     }
-} 
+}

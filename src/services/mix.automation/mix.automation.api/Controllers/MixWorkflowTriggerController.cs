@@ -40,7 +40,7 @@ namespace Mix.Automation.Api.Controllers
 
         [HttpPost("trigger")]
         public virtual async Task<ActionResult> Trigger([FromBody] CreateWorkflowTriggerModel dto, CancellationToken cancellationToken = default)
-        { 
+        {
             await _workflowService.CreateTrigger(dto, cancellationToken);
             return Ok();
         }

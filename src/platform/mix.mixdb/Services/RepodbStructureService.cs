@@ -149,13 +149,13 @@ namespace Mix.Mixdb.Services
             try
             {
                 _logger.LogInformation("Adding column {ColumnName} to table {TableName}", col.SystemName, col.MixDbTableName);
-                
+
                 cancellationToken.ThrowIfCancellationRequested();
                 ValidateDatabaseAndColumn(database, col);
 
                 var fieldNameService = new FieldNameService(database.NamingConvention);
                 var commandText = GenerateAddColumnSql(col, database.DatabaseProvider, database.Type, fieldNameService);
-                
+
                 await ExecuteCommand(commandText);
                 _logger.LogInformation("Column added successfully");
             }
@@ -174,14 +174,14 @@ namespace Mix.Mixdb.Services
             try
             {
                 _logger.LogInformation("Altering column {ColumnName} in table {TableName}", col.SystemName, col.MixDbTableName);
-                
+
                 cancellationToken.ThrowIfCancellationRequested();
                 ValidateDatabaseAndColumn(database, col);
 
                 if (database.MixDatabaseContext != null && database.MixDatabaseContextId != 1)
                 {
                     _repository.InitializeRepoDb(
-                        database.MixDatabaseContext.ConnectionString.Decrypt(_configuration.AesKey()), 
+                        database.MixDatabaseContext.ConnectionString.Decrypt(_configuration.AesKey()),
                         database.MixDatabaseContext.DatabaseProvider);
                 }
 
@@ -189,7 +189,7 @@ namespace Mix.Mixdb.Services
                 var alterCommandText = isDrop
                     ? $"{GenerateDropColumnSql(col)} {GenerateAddColumnSql(col, database.DatabaseProvider, database.Type, fieldNameService)}"
                     : GenerateAlterColumnSql(col);
-                
+
                 await ExecuteCommand(alterCommandText);
                 _logger.LogInformation("Column altered successfully");
             }
@@ -208,7 +208,7 @@ namespace Mix.Mixdb.Services
             try
             {
                 _logger.LogInformation("Dropping column {ColumnName} from table {TableName}", col.SystemName, col.MixDbTableName);
-                
+
                 cancellationToken.ThrowIfCancellationRequested();
                 ValidateDatabaseAndColumn(database, col);
 
@@ -241,7 +241,7 @@ namespace Mix.Mixdb.Services
             try
             {
                 _logger.LogInformation("Starting migration for database: {DatabaseName}", database.SystemName);
-                
+
                 cancellationToken.ThrowIfCancellationRequested();
                 ValidateDatabaseForMigration(database);
 
@@ -376,7 +376,7 @@ namespace Mix.Mixdb.Services
             return $"{_databaseConstant.BacktickOpen}{col.SystemName}{_databaseConstant.BacktickClose} {colType} {nullable} {unique} {defaultValue}";
         }
 
-        private string GenerateAddColumnSql(MixdbColumnViewModel col, MixDatabaseProvider databaseProvider, 
+        private string GenerateAddColumnSql(MixdbColumnViewModel col, MixDatabaseProvider databaseProvider,
             MixDatabaseType type, FieldNameService fieldNameService)
         {
             return $"ALTER TABLE {_databaseConstant.BacktickOpen}{col.MixDbTableName}{_databaseConstant.BacktickClose}" +
@@ -447,7 +447,7 @@ namespace Mix.Mixdb.Services
                 MixDataType.Guid => _databaseConstant.Guid,
                 MixDataType.Html => _databaseConstant.Text,
                 MixDataType.Boolean => _databaseConstant.Boolean,
-                MixDataType.Json or MixDataType.Array or MixDataType.ArrayMedia or 
+                MixDataType.Json or MixDataType.Array or MixDataType.ArrayMedia or
                 MixDataType.ArrayRadio or MixDataType.Text => _databaseConstant.Text,
                 _ => $"{_databaseConstant.NString}({maxLength ?? 250})"
             };

@@ -71,7 +71,7 @@ namespace Mix.MCP.Lib.Prompts
             [Description("Target language")] string targetLanguage,
             [Description("Text to translate")] string text)
         {
-            _logger.LogInformation("Creating translation prompt from {SourceLanguage} to {TargetLanguage}", 
+            _logger.LogInformation("Creating translation prompt from {SourceLanguage} to {TargetLanguage}",
                 sourceLanguage, targetLanguage);
             string prompt = _resourceLoader.FormatResource("Prompts", "translate", sourceLanguage, targetLanguage, text);
             return new ChatMessage(ChatRole.User, prompt);
@@ -107,4 +107,4 @@ namespace Mix.MCP.Lib.Prompts
             return new ChatMessage(ChatRole.User, prompt);
         }
     }
-} 
+}

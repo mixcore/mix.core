@@ -45,7 +45,7 @@ namespace Mix.Shared.Services
                 SaveSettings();
             }
         }
-        
+
         public virtual void SetConnnectionString<TValue>(string name, TValue value, bool isSave = false)
         {
             if (string.IsNullOrEmpty(_sectionName))

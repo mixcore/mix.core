@@ -281,7 +281,7 @@ namespace mix.auth.service.Controllers
         public async Task<ActionResult> RenewToken([FromBody] RenewTokenDto refreshTokenDto)
         {
             var token = await _idService.RenewTokenAsync(refreshTokenDto);
-            return token.IsSuccess ? Ok(token.Result): BadRequest(token.Errors);
+            return token.IsSuccess ? Ok(token.Result) : BadRequest(token.Errors);
         }
 
         [MixAuthorize]

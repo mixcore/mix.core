@@ -45,7 +45,7 @@ namespace Mix.MCP.Lib.Services.LLM
             {
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKey}");
             }
-            
+
             return client;
         }
 
@@ -53,28 +53,28 @@ namespace Mix.MCP.Lib.Services.LLM
         /// Send LLMMessage to chat API
         /// </summary>
         public abstract Task<LLMChatResponse> ChatAsync(
-            string message, 
-            string model, 
-            double temperature = 0.7, 
-            int maxTokens = -1, 
+            string message,
+            string model,
+            double temperature = 0.7,
+            int maxTokens = -1,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send prompt to completion API
         /// </summary>
         public abstract Task<LLMCompletionResponse> CompleteAsync(
-            string prompt, 
-            string model, 
-            double temperature = 0.7, 
-            int maxTokens = -1, 
+            string prompt,
+            string model,
+            double temperature = 0.7,
+            int maxTokens = -1,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         /// CreateMixDbData embeddings for the input
         /// </summary>
         public abstract Task<LLMEmbeddingResponse> CreateEmbeddingsAsync(
-            string input, 
-            string model, 
+            string input,
+            string model,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -186,4 +186,4 @@ namespace Mix.MCP.Lib.Services.LLM
         [JsonPropertyName("embedding")]
         public float[] embedding { get; set; }
     }
-} 
+}

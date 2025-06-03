@@ -15,4 +15,4 @@ namespace Mix.MCP.Lib.Models
         public bool IsNullable { get; set; }
         public string? DefaultValue { get; set; }
     }
-} 
+}

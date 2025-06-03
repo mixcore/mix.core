@@ -28,4 +28,5 @@ namespace Mix.MCP.Lib.Prompts
         public static ChatMessage CreateSentimentPrompt(
             [Description("Text for sentiment analysis")] string text) =>
             new(ChatRole.User, $"Analyze the sentiment of the following text (positive/negative/neutral):\n\n{text}");
-    }}
+    }
+}

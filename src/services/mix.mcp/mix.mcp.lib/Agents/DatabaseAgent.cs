@@ -259,21 +259,23 @@ namespace Mix.MCP.Lib.Agents
             var toolList = string.Join("\n", supportedActions.Select(a => $"- {a.MethodName}: {a.Description}"));
             var parameters = new Dictionary<string, string>();
             string prompt = string.Format("""
-You are an AI assistant. When a user sends a message, decide if you should:
-- Respond directly as a chatbot (for general questions, greetings, small talk, etc.)
-- Or, if the user is asking for a database/tool operation, classify the request and extract parameters with selected tool parameters.
-You are an AI assistant for a database platform. Classify the user's request into one of these intents:
-{0}
-User message: \"{1}\"
+You are an AI assistant.When a user sends a message, decide if you should:
+                -Respond directly as a chatbot(for general questions, greetings, small talk, etc.)
+                -Or, if the user is asking for a database/ tool operation, classify the request and extract parameters with selected tool parameters.
+               You are an AI assistant for a database platform.Classify the user's request into one of these intents:
+               { 0}
+            User message: \"{1}\"
 
 Respond in this JSON format:
-{{
-  "type": "chatbot" | "tool",
+{
+                {
+                    "type": "chatbot" | "tool",
   "response": "...", // Only if type is chatbot
   "action": "...", // Only if type is tool
-  "parameters": {{ ... }} // Only if type is tool
-}}
-""", toolList, userInput);
+  "parameters": { { ... } } // Only if type is tool
+                }
+            }
+            """, toolList, userInput);
             var llmService = _llmServiceFactory.CreateService(llmServiceType);
             var response = await llmService.ChatAsync(prompt, llmModel, 0.2, -1, cancellationToken);
             if (string.IsNullOrWhiteSpace(response?.choices?.FirstOrDefault()?.Message?.Content))

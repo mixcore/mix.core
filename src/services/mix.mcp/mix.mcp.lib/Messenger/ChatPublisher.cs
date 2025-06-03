@@ -25,9 +25,9 @@ namespace Mix.MCP.Lib.Messenger
     public sealed class ChatPublisher : MqttPublisher
     {
         public ChatPublisher(
-            IMemoryQueueService<MessageQueueModel> queueService, 
-            IConfiguration configuration, 
-            MixEndpointService mixEndpointService, 
+            IMemoryQueueService<MessageQueueModel> queueService,
+            IConfiguration configuration,
+            MixEndpointService mixEndpointService,
             ILogger<PublisherBase> logger) : base(LLMChatTopics.LLMChat, queueService, configuration, mixEndpointService, logger)
         {
         }

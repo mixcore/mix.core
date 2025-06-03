@@ -81,13 +81,13 @@ namespace Mix.MCP.Lib.Tools
             [Description("Comma-separated parameters for formatting")] string parameters)
         {
             _logger.LogInformation("Formatting resource for section {Section} with key {Key}", section, key);
-            
+
             var paramArray = parameters.Split(',')
                 .Select(p => p.Trim())
                 .Cast<object>()
                 .ToArray();
-                
+
             return _resourceLoader.FormatResource(section, key, paramArray);
         }
     }
-} 
+}

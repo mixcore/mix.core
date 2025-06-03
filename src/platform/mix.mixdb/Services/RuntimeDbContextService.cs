@@ -128,7 +128,7 @@ namespace Mix.Mixdb.Services
                 ContextNamespace = "TypedDataContext.Context",
                 //ModelNamespace = "TypedDataContext.Models",
                 SuppressConnectionStringWarning = true,
-                
+
             };
 
             var scaffoldedModelSources = scaffolder.ScaffoldModel(

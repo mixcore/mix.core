@@ -64,7 +64,7 @@ namespace Mix.Mixdb.Helpers
                 }
             }
         }
-        
+
         #endregion
         public static object? ParseSearchKeyword(MixCompareOperator? searchMethod, object? keyword)
         {

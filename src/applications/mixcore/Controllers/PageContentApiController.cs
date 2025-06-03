@@ -26,7 +26,7 @@ namespace Mixcore.Controllers
     {
         private readonly IMixMetadataService _metadataService;
         private readonly IMixDbDataService _mixDbDataService;
-        
+
         /// <summary>
         /// Constructor for PageContentApiController
         /// </summary>
@@ -65,7 +65,7 @@ namespace Mixcore.Controllers
             await result.LoadDataAsync(_mixDbDataService, _metadataService, new(), CacheService);
             return result;
         }
-        
+
         /// <summary>
         /// Gets a paginated list of page content items
         /// </summary>

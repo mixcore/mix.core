@@ -105,7 +105,7 @@ public static class Extensions
         // Uncomment the following line to enable the Prometheus endpoint (requires the OpenTelemetry.Exporter.Prometheus.AspNetCore package)
         app.MapPrometheusScrapingEndpoint()
             .DisableHttpMetrics();
-            //.RequireAuthorization();
+        //.RequireAuthorization();
 
         // All health checks must pass for app to be considered ready to accept traffic after starting
         app.MapHealthChecks("/health");

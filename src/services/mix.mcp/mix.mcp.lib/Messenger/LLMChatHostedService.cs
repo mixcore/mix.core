@@ -43,7 +43,7 @@ namespace Mix.MCP.Lib.Messenger
                 try
                 {
                     // Wait to ensure local mqtt server started before trying to connect again
-                    await Task.Delay(5000); 
+                    await Task.Delay(5000);
                     await SubscribeLLMChatAsync(stoppingToken);
                 }
                 catch

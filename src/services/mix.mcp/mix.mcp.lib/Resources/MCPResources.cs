@@ -66,4 +66,4 @@ namespace Mix.MCP.Lib.Resources
             public static readonly float DefaultTemperature = 0.7f;
         }
     }
-} 
+}

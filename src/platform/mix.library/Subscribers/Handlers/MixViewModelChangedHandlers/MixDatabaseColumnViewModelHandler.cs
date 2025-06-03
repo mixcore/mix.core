@@ -6,7 +6,7 @@ namespace Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers
 {
     public class MixDatabaseColumnViewModelHandler
     {
-        
+
         public static async Task MessageQueueHandler(MessageQueueModel data, IMixdbStructure mixDbService)
         {
             switch (data.Action)

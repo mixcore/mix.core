@@ -47,8 +47,8 @@ namespace Mix.Lib.Models.ApiResponse
         /// <param name="errors">Additional validation errors</param>
         /// <returns>The API error response</returns>
         public static ApiErrorResponse Create(
-            HttpStatusCode statusCode, 
-            string message, 
+            HttpStatusCode statusCode,
+            string message,
             string details = null,
             Dictionary<string, string[]> errors = null)
         {
@@ -117,4 +117,4 @@ namespace Mix.Lib.Models.ApiResponse
             );
         }
     }
-} 
+}

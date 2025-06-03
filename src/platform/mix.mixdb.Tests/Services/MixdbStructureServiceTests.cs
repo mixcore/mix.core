@@ -131,7 +131,7 @@ namespace Mix.Mixdb.Tests.Services
         public async Task MigrateInitNewDbContextDatabases_WithNullContext_ShouldThrow()
         {
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => 
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 _service.MigrateInitNewDbContextDatabases(null));
         }
 
@@ -146,7 +146,7 @@ namespace Mix.Mixdb.Tests.Services
             };
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => 
+            await Assert.ThrowsAsync<ArgumentException>(() =>
                 _service.MigrateInitNewDbContextDatabases(dbContext));
         }
 
@@ -209,7 +209,7 @@ namespace Mix.Mixdb.Tests.Services
         public async Task GetMixDatabase_WithInvalidTableName_ShouldThrow()
         {
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => 
+            await Assert.ThrowsAsync<ArgumentException>(() =>
                 _service.GetMixDatabase(""));
         }
 
@@ -221,7 +221,7 @@ namespace Mix.Mixdb.Tests.Services
                 .ReturnsAsync((MixDbDatabaseViewModel)null);
 
             // Act & Assert
-            await Assert.ThrowsAsync<MixException>(() => 
+            await Assert.ThrowsAsync<MixException>(() =>
                 _service.GetMixDatabase("non-existent-table"));
         }
 
@@ -248,7 +248,7 @@ namespace Mix.Mixdb.Tests.Services
         public async Task ExecuteCommand_WithEmptyCommand_ShouldThrow()
         {
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => 
+            await Assert.ThrowsAsync<ArgumentException>(() =>
                 _service.ExecuteCommand("", CancellationToken.None));
         }
 
@@ -280,7 +280,7 @@ namespace Mix.Mixdb.Tests.Services
         public async Task MigrateDatabase_WithInvalidDatabase_ShouldThrow()
         {
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => 
+            await Assert.ThrowsAsync<ArgumentException>(() =>
                 _service.MigrateDatabase(""));
         }
 
@@ -359,4 +359,4 @@ namespace Mix.Mixdb.Tests.Services
 
         #endregion
     }
-} 
+}

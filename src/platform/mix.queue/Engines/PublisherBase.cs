@@ -85,17 +85,17 @@ namespace Mix.Queue.Engines
                             queuePublishers.Add(
                                QueueEngineFactory.CreatePublisher<MessageQueueModel>(Provider, Configuration, topicId, MixEndpointService));
                         }
-                        break; 
+                        break;
                     case MixQueueProvider.MQTT:
                         //if (MixEndpointService.MixMq != null)
                         //{
                         //    var mixSettingPath = Configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:Mix");
-                            queuePublishers.Add(
-                               QueueEngineFactory.CreatePublisher<MessageQueueModel>(
-                                   Provider, 
-                                   Configuration, 
-                                   topicId, 
-                                   MixEndpointService));
+                        queuePublishers.Add(
+                           QueueEngineFactory.CreatePublisher<MessageQueueModel>(
+                               Provider,
+                               Configuration,
+                               topicId,
+                               MixEndpointService));
                         //}
                         break;
                 }

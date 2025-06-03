@@ -34,16 +34,16 @@ namespace Mix.MCP.Lib.Prompts
             [Description("Additional requirements or context (optional)")] string requirements = null)
         {
             _logger.LogInformation("Creating schema description prompt for {Purpose}", purpose);
-            
+
             string prompt = $"Generate a detailed database schema description for a {purpose} application. " +
                 "Include field names, data types, and which fields should be required. " +
                 "The schema should include all necessary fields to properly model the domain.";
-                
+
             if (!string.IsNullOrEmpty(requirements))
             {
                 prompt += $"\n\nAdditional requirements: {requirements}";
             }
-            
+
             return new ChatMessage(ChatRole.User, prompt);
         }
 
@@ -57,13 +57,13 @@ namespace Mix.MCP.Lib.Prompts
             [Description("JSON representation of the database schema")] string schema)
         {
             _logger.LogInformation("Creating schema analysis prompt");
-            
+
             string prompt = "Analyze the following database schema and provide feedback on its design: " +
                 "Are there any missing fields? Are the data types appropriate? " +
                 "Are there any potential performance issues or design flaws? " +
                 "Suggest improvements if necessary.\n\n" +
                 $"MixDbTable:\n{schema}";
-                
+
             return new ChatMessage(ChatRole.User, prompt);
         }
 
@@ -79,13 +79,13 @@ namespace Mix.MCP.Lib.Prompts
             [Description("Target database schema")] string targetMixDatabase)
         {
             _logger.LogInformation("Creating migration guidance prompt");
-            
+
             string prompt = "Compare the current database schema and the target schema below. " +
                 "Generate a migration plan that outlines the steps needed to migrate from the current schema to the target schema. " +
                 "Consider data preservation, potential conflicts, and required transformations.\n\n" +
                 $"Current MixDbTable:\n{currentMixDatabase}\n\n" +
                 $"Target MixDbTable:\n{targetMixDatabase}";
-                
+
             return new ChatMessage(ChatRole.User, prompt);
         }
 
@@ -101,12 +101,12 @@ namespace Mix.MCP.Lib.Prompts
             [Description("Number of sample records to generate")] int recordCount = 5)
         {
             _logger.LogInformation("Creating sample data prompt for {RecordCount} records", recordCount);
-            
+
             string prompt = $"Generate {recordCount} realistic sample records for a database with the following schema. " +
                 "The data should be varied and realistic for the domain. " +
                 "Format the results as a valid JSON array of objects, with each object representing one record.\n\n" +
                 $"MixDbTable:\n{schema}";
-                
+
             return new ChatMessage(ChatRole.User, prompt);
         }
 
@@ -122,14 +122,14 @@ namespace Mix.MCP.Lib.Prompts
             [Description("Structure of relevant tables")] string tableStructure)
         {
             _logger.LogInformation("Creating query optimization prompt");
-            
+
             string prompt = "Analyze and optimize the following database query for better performance. " +
                 "Suggest improvements to the query structure, indexing, or other optimizations. " +
                 "Explain the reasoning behind your suggestions.\n\n" +
                 $"Table Structure:\n{tableStructure}\n\n" +
                 $"Current Query:\n{currentQuery}";
-                
+
             return new ChatMessage(ChatRole.User, prompt);
         }
     }
-} 
+}

@@ -51,8 +51,8 @@ namespace Mix.Mixdb.Services
 
                 foreach (var pr in dto.Properties())
                 {
-                    var colName = _fieldNameService.NamingConvention == MixDatabaseNamingConvention.TitleCase 
-                        ? pr.Name.ToTitleCase() 
+                    var colName = _fieldNameService.NamingConvention == MixDatabaseNamingConvention.TitleCase
+                        ? pr.Name.ToTitleCase()
                         : pr.Name.ToHyphenCase('_', true);
                     var col = _mixDb.Columns.FirstOrDefault(c => c.SystemName.Equals(colName, StringComparison.InvariantCultureIgnoreCase));
 
@@ -267,6 +267,6 @@ namespace Mix.Mixdb.Services
             }
         }
 
-        
+
     }
-} 
+}

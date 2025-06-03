@@ -47,8 +47,9 @@ namespace Mix.Lib.Subscribers
                     break;
                 case var m when m == typeof(MixDbColumnViewModel).FullName:
                     var mixDbService = GetRequiredService<IMixdbStructure>();
-                    if (mixDbService != null) {
-                        await MixDatabaseColumnViewModelHandler.MessageQueueHandler(model,mixDbService);
+                    if (mixDbService != null)
+                    {
+                        await MixDatabaseColumnViewModelHandler.MessageQueueHandler(model, mixDbService);
                     }
                     break;
                 default:

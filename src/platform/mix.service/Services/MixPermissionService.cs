@@ -102,7 +102,7 @@ namespace Mix.Service.Services
 
         public async Task<bool> CheckEndpointPermissionAsync(string[] userRoles, PathString path, string method)
         {
-            if(RoleEndpoints == null)
+            if (RoleEndpoints == null)
             {
                 await Reload();
             }

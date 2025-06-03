@@ -55,7 +55,7 @@ namespace Mix.Lib.ViewModels
             {
                 var cols = Context.MixDbColumn.Where(m => m.MixDbTableId == db.Id).ToList();
                 Context.MixDbColumn.RemoveRange(cols);
-                
+
                 var rels = Context.MixDbTableRelationship.Where(m => m.SourceDatabaseName == db.SystemName || m.DestinateDatabaseName == db.SystemName).ToList();
                 Context.MixDbTableRelationship.RemoveRange(rels);
             }

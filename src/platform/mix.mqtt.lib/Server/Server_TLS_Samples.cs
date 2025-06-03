@@ -43,5 +43,5 @@ public static class Server_TLS_Samples
             await mqttServer.StopAsync();
         }
     }
-   
+
 }

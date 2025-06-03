@@ -78,18 +78,18 @@ namespace Mix.MCP.Lib.Services.LLM
         /// <summary>
         /// Base URL for LM Studio API
         /// </summary>
-        public LmStudioServiceOptions LmStudio{ get; set; }
-        
+        public LmStudioServiceOptions LmStudio { get; set; }
+
         /// <summary>
         /// API key for OpenAI
         /// </summary>
         public OpenAIServiceOptions OpenAI { get; set; }
-        
+
         /// <summary>
         /// API key for DeepSeek
         /// </summary>
         public DeepSeekServiceOptions DeepSeek { get; set; }
-        
+
         public int DefaultTimeoutSeconds { get; set; } = 120;
     }
 
@@ -128,8 +128,8 @@ namespace Mix.MCP.Lib.Services.LLM
         public string BaseUrl { get; set; }
         public string ApiKey { get; set; }
         public string Model { get; set; }
-        public double Temperature { get; set; } 
+        public double Temperature { get; set; }
         public int MaxTokens { get; set; }
         public int TimeoutSeconds { get; set; }
     }
-} 
+}

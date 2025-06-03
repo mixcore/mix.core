@@ -29,7 +29,7 @@ namespace Mix.Mixdb.ViewModels
 
         #region Constructors
 
-        public MixdbColumnViewModel(AlterColumnDto dto )
+        public MixdbColumnViewModel(AlterColumnDto dto)
         {
             ReflectionHelper.Map(dto, this);
         }

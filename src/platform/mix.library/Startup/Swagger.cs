@@ -23,8 +23,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc(version, new OpenApiInfo { 
-                    Title = title, 
+                c.SwaggerDoc(version, new OpenApiInfo
+                {
+                    Title = title,
                     Version = version,
                     Description = "MixCore API endpoints documentation",
                     Contact = new OpenApiContact
@@ -38,10 +39,10 @@ namespace Microsoft.Extensions.DependencyInjection
                         Url = new Uri("https://github.com/mixcore/mix.core/blob/master/LICENSE")
                     }
                 });
-                
+
                 c.OperationFilter<SwaggerFileOperationFilter>();
                 c.CustomSchemaIds(x => x.FullName);
-                
+
                 // Include XML comments for all assemblies in the API
                 var xmlFile = $"{assembly.GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -49,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     c.IncludeXmlComments(xmlPath);
                 }
-                
+
                 // Also add XML comments from Mix.Lib
                 var libXmlFile = "Mix.Lib.xml";
                 var libXmlPath = Path.Combine(AppContext.BaseDirectory, libXmlFile);
@@ -83,7 +84,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         {securityScheme, new string[] { }}
                     }
                 );
-                
+
                 // Configure parameter descriptions
                 c.DescribeAllParametersInCamelCase();
             });
@@ -102,29 +103,29 @@ namespace Microsoft.Extensions.DependencyInjection
 
             //if (isDevelop)
             //{
-                app.UseSwagger(opt =>
+            app.UseSwagger(opt =>
+            {
+                opt.RouteTemplate = routeTemplate;
+                opt.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
                 {
-                    opt.RouteTemplate = routeTemplate;
-                    opt.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
-                    {
-                        swaggerDoc.Servers = new List<OpenApiServer> { 
-                            new OpenApiServer { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}" } 
-                        };
-                    });
+                    swaggerDoc.Servers = new List<OpenApiServer> {
+                            new OpenApiServer { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}" }
+                    };
                 });
-                app.UseSwaggerUI(c =>
-                {
-                    c.InjectStylesheet("/mix-app/css/swagger.css");
-                    c.InjectJavascript("/mix-app/js/swagger.js");
-                    c.SwaggerEndpoint(endPoint, $"{title} {version}");
-                    c.RoutePrefix = routePrefix;
-                    c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
-                    c.DocumentTitle = "Mixcore - API Specification";
-                    c.EnableFilter();
-                    c.EnableDeepLinking();
-                    c.DisplayRequestDuration();
-                    c.DefaultModelsExpandDepth(0); // Hide schemas section by default
-                });
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.InjectStylesheet("/mix-app/css/swagger.css");
+                c.InjectJavascript("/mix-app/js/swagger.js");
+                c.SwaggerEndpoint(endPoint, $"{title} {version}");
+                c.RoutePrefix = routePrefix;
+                c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
+                c.DocumentTitle = "Mixcore - API Specification";
+                c.EnableFilter();
+                c.EnableDeepLinking();
+                c.DisplayRequestDuration();
+                c.DefaultModelsExpandDepth(0); // Hide schemas section by default
+            });
             //}
             return app;
         }

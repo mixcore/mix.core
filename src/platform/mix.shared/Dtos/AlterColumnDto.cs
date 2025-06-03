@@ -32,4 +32,4 @@ namespace Mix.Shared.Dtos
         }
         #endregion
     }
-} 
+}

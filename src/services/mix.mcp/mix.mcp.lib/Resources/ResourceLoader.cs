@@ -41,7 +41,7 @@ namespace Mix.MCP.Lib.Resources
                     return value;
                 }
             }
-            
+
             _logger.LogWarning("Resource not found for section {Section} with key {Key}", section, key);
             return $"[{section}.{key}]";
         }
@@ -57,7 +57,7 @@ namespace Mix.MCP.Lib.Resources
             {
                 return new Dictionary<string, string>(sectionValues);
             }
-            
+
             _logger.LogWarning("Resource section not found: {Section}", section);
             return new Dictionary<string, string>();
         }
@@ -130,7 +130,7 @@ namespace Mix.MCP.Lib.Resources
                         }
                     }
                 }
-                
+
                 _logger.LogInformation("Loaded {SectionCount} resource sections with a total of {ResourceCount} items",
                     _resources.Count, _resources.Sum(section => section.Value.Count));
             }
@@ -140,4 +140,4 @@ namespace Mix.MCP.Lib.Resources
             }
         }
     }
-} 
+}

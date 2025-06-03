@@ -17,10 +17,11 @@ namespace Mix.MCP.Lib.Prompts
                 Please analyze the data from table '{tableName}' with the following requirements:
                 {context}
 
-                Analysis Type: {analysisType}
+    Analysis Type: {analysisType
+}
 
-                Requirements:
-                1. Provide descriptive statistics
+Requirements:
+1.Provide descriptive statistics
                 2. Identify trends and patterns
                 3. Check for data quality issues
                 4. Suggest relevant visualizations
@@ -32,14 +33,14 @@ namespace Mix.MCP.Lib.Prompts
                 10. Provide actionable insights
 
                 Please provide:
-                1. Summary of findings
+                1.Summary of findings
                 2. Key metrics and statistics
                 3. Visual representation suggestions
                 4. Recommendations for next steps
                 """);
 
         [McpServerPrompt, Description("CreateMixDbData prompt for data exploration")]
-        public static ChatMessage CreateExplorationTablePrompt(
+public static ChatMessage CreateExplorationTablePrompt(
             [Description("Table name")] string tableName,
             [Description("Exploration goals")] string goals) =>
             new(ChatRole.User, $"""
@@ -47,7 +48,7 @@ namespace Mix.MCP.Lib.Prompts
                 {goals}
 
                 Requirements:
-                1. Understand data structure
+1.Understand data structure
                 2. Identify key fields
                 3. Check data distributions
                 4. Find relationships between fields
@@ -59,7 +60,7 @@ namespace Mix.MCP.Lib.Prompts
                 10. Identify data integration opportunities
 
                 Please provide:
-                1. Data structure overview
+                1.Data structure overview
                 2. Key findings
                 3. Potential use cases
                 4. Recommendations for data management

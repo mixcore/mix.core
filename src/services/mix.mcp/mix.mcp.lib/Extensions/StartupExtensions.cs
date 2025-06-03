@@ -30,7 +30,7 @@ namespace Mix.MCP.Lib.Extensions
                 {
                     config.Bind(options);
                 }
-                
+
                 // Ensure timeout is at least 60 seconds
                 options.DefaultTimeoutSeconds = Math.Max(60, options.DefaultTimeoutSeconds);
             });
@@ -48,10 +48,10 @@ namespace Mix.MCP.Lib.Extensions
 
             // Register MCP resources
             builder.Services.AddMCPResources();
-            
+
             // Register MCP services
             builder.Services
-                .AddMcpServer(options => 
+                .AddMcpServer(options =>
                 {
                     options.ServerInfo = new ModelContextProtocol.Protocol.Types.Implementation
                     {
@@ -74,7 +74,7 @@ namespace Mix.MCP.Lib.Extensions
                 .WithToolsFromAssembly();
 
             // Register other services
-            
+
             builder.Services.AddSingleton<ILlmServiceFactory, LlmServiceFactory>();
 
             return builder;

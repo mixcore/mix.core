@@ -60,9 +60,9 @@ namespace Mix.Queue.Engines
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            
+
             _subscriber = CreateSubscriber(_topicId, $"{_topicId}.{_moduleName}");
-            
+
             if (_subscriber == null)
             {
                 throw new InvalidOperationException("Subscriber is not set");
@@ -82,12 +82,12 @@ namespace Mix.Queue.Engines
             }
 
             Logger.LogInformation("{SubscriptionId} stopped at {DateTime}", _subscriber.SubscriptionId, DateTime.UtcNow);
-            
+
             if (_subscriber is MixQueueSubscriber<MessageQueueModel> mixQueueSubscriber)
             {
                 await mixQueueSubscriber.Disconnect(cancellationToken).ConfigureAwait(false);
             }
-            
+
             await base.StopAsync(cancellationToken).ConfigureAwait(false);
         }
 
@@ -98,7 +98,7 @@ namespace Mix.Queue.Engines
                 throw new InvalidOperationException("Subscriber is not initialized");
             }
 
-            Logger.LogInformation("StartProcessQueue: {SubscriptionId} starting at {DateTime}", 
+            Logger.LogInformation("StartProcessQueue: {SubscriptionId} starting at {DateTime}",
                 _subscriber.SubscriptionId, DateTime.UtcNow.AddHours(7));
 
             while (!cancellationToken.IsCancellationRequested)
@@ -106,7 +106,7 @@ namespace Mix.Queue.Engines
                 try
                 {
                     await _subscriber.ProcessQueue(cancellationToken).ConfigureAwait(false);
-                    Logger.LogInformation("StartProcessQueue: {SubscriptionId} started at {DateTime}", 
+                    Logger.LogInformation("StartProcessQueue: {SubscriptionId} started at {DateTime}",
                         _subscriber.SubscriptionId, DateTime.UtcNow.AddHours(7));
                 }
                 catch (Exception ex)
@@ -116,13 +116,13 @@ namespace Mix.Queue.Engines
             }
 
             await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
-            
+
             if (_subscriber is MixQueueSubscriber<MessageQueueModel> mixQueueSubscriber)
             {
                 await mixQueueSubscriber.Disconnect().ConfigureAwait(false);
             }
-            
-            Logger.LogInformation("StartProcessQueue: {SubscriptionId} stopped at {DateTime}", 
+
+            Logger.LogInformation("StartProcessQueue: {SubscriptionId} stopped at {DateTime}",
                 _subscriber.SubscriptionId, DateTime.UtcNow.AddHours(7));
         }
 
@@ -138,7 +138,7 @@ namespace Mix.Queue.Engines
                 await mixQueueSubscriber.Disconnect(cancellationToken).ConfigureAwait(false);
             }
 
-            Logger.LogError(ex, "StartProcessQueue: {SubscriptionId} is broken at {DateTime}, Trying to reconnect from client: {Message}", 
+            Logger.LogError(ex, "StartProcessQueue: {SubscriptionId} is broken at {DateTime}, Trying to reconnect from client: {Message}",
                 _subscriber.SubscriptionId, DateTime.UtcNow.AddHours(7), ex.Message);
 
             await Task.Delay(2000, cancellationToken).ConfigureAwait(false);
@@ -158,13 +158,13 @@ namespace Mix.Queue.Engines
 
                 var provider = Enum.Parse<MixQueueProvider>(providerSetting);
                 var mixEndpointService = GetRequiredService<MixEndpointService>();
-                
+
                 return provider switch
                 {
-                    MixQueueProvider.AZURE or MixQueueProvider.GOOGLE or MixQueueProvider.MIX or MixQueueProvider.MQTT 
+                    MixQueueProvider.AZURE or MixQueueProvider.GOOGLE or MixQueueProvider.MIX or MixQueueProvider.MQTT
                         => QueueEngineFactory.CreateSubscriber<MessageQueueModel>(
                             provider, _configuration, topicId, subscriptionId, MessageHandler, _memoryQueueService, mixEndpointService),
-                    MixQueueProvider.RABBITMQ 
+                    MixQueueProvider.RABBITMQ
                         => QueueEngineFactory.CreateRabbitMQSubscriber<MessageQueueModel>(
                             _rabbitMQObjectPolicy, topicId, subscriptionId, MessageHandler),
                     _ => null

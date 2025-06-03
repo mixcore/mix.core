@@ -76,7 +76,7 @@ namespace Mix.Lib.Filters
                     switch (statusCode)
                     {
                         case 400: // Bad Request
-                            AddErrorExample(response, HttpStatusCode.BadRequest, "Validation failed", 
+                            AddErrorExample(response, HttpStatusCode.BadRequest, "Validation failed",
                                 "One or more validation errors occurred",
                                 new Dictionary<string, string[]>
                                 {
@@ -86,22 +86,22 @@ namespace Mix.Lib.Filters
                             break;
 
                         case 401: // Unauthorized
-                            AddErrorExample(response, HttpStatusCode.Unauthorized, "Unauthorized", 
+                            AddErrorExample(response, HttpStatusCode.Unauthorized, "Unauthorized",
                                 "Authentication credentials are missing or invalid");
                             break;
 
                         case 403: // Forbidden
-                            AddErrorExample(response, HttpStatusCode.Forbidden, "Forbidden", 
+                            AddErrorExample(response, HttpStatusCode.Forbidden, "Forbidden",
                                 "You don't have permission to access this resource");
                             break;
 
                         case 404: // Not Found
-                            AddErrorExample(response, HttpStatusCode.NotFound, "Resource not found", 
+                            AddErrorExample(response, HttpStatusCode.NotFound, "Resource not found",
                                 "The requested resource could not be found");
                             break;
 
                         case 500: // Internal Server Error
-                            AddErrorExample(response, HttpStatusCode.InternalServerError, "Internal server error", 
+                            AddErrorExample(response, HttpStatusCode.InternalServerError, "Internal server error",
                                 "An unexpected error occurred");
                             break;
                     }
@@ -109,7 +109,7 @@ namespace Mix.Lib.Filters
             }
         }
 
-        private void AddErrorExample(OpenApiResponse response, HttpStatusCode statusCode, string message, string details, 
+        private void AddErrorExample(OpenApiResponse response, HttpStatusCode statusCode, string message, string details,
             Dictionary<string, string[]> errors = null)
         {
             if (response.Content.TryGetValue("application/json", out var mediaType))
@@ -142,4 +142,4 @@ namespace Mix.Lib.Filters
             }
         }
     }
-} 
+}

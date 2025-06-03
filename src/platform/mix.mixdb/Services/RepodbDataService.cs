@@ -107,7 +107,7 @@ namespace Mix.Mixdb.Services
         {
             _repository.CreateConnection(connectionString, true, true);
         }
-        
+
         public void InitConnection(MixDatabaseProvider databaseProvider, string connectionString)
         {
             _repository = new(connectionString, databaseProvider, new AppSetting()
@@ -135,7 +135,7 @@ namespace Mix.Mixdb.Services
                 throw;
             }
         }
-        
+
         public async Task<T?> GetByIdAsync<T>(string tableName, object objId, string? selectColumns, CancellationToken cancellationToken)
             where T : class
         {

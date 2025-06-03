@@ -17,4 +17,4 @@ namespace Mix.Mixdb.Interfaces
         /// </summary>
         Task LoadMixDb(string tableName);
     }
-} 
+}

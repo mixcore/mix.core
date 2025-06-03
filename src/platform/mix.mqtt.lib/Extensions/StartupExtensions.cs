@@ -30,8 +30,8 @@ namespace Mix.Mqtt.Lib.Extensions
             return builder;
         }
 
-        public static IApplicationBuilder UseAspNetMqttServer(this IApplicationBuilder app, bool isDevelop) 
-            //MqttController mqttController)
+        public static IApplicationBuilder UseAspNetMqttServer(this IApplicationBuilder app, bool isDevelop)
+        //MqttController mqttController)
         {
             app.UseMqttServer(
                 server =>
@@ -43,9 +43,9 @@ namespace Mix.Mqtt.Lib.Extensions
                 });
             return app;
         }
-        
-        public static IEndpointRouteBuilder MapMqttEndpoints(this IEndpointRouteBuilder endpoints, bool isDevelop) 
-            //MqttController mqttController)
+
+        public static IEndpointRouteBuilder MapMqttEndpoints(this IEndpointRouteBuilder endpoints, bool isDevelop)
+        //MqttController mqttController)
         {
             endpoints.MapConnectionHandler<MqttConnectionHandler>(
                       "/mqtt",

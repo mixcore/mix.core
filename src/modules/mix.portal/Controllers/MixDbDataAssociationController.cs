@@ -21,7 +21,7 @@ namespace Mix.Portal.Controllers
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
 

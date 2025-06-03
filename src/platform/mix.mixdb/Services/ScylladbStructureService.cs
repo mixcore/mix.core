@@ -179,8 +179,8 @@ namespace Mix.Mixdb.Services
             FieldNameService fieldNameService)
         {
             return $"""
-                CREATE TABLE {tableName} (
-                {string.Join(",", colsSql.ToArray())}
+                CREATE TABLE { tableName} (
+                { string.Join(",", colsSql.ToArray())}
                 ) 
                 """;
         }

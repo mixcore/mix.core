@@ -17,8 +17,8 @@ namespace Mix.MCP.Lib.Extensions
         {
             // Register ResourceLoader as singleton
             services.AddSingleton<ResourceLoader>();
-            
+
             return services;
         }
     }
-} 
+}

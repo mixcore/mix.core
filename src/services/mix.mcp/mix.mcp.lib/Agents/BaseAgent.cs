@@ -167,4 +167,4 @@ namespace Mix.MCP.Lib.Agents
             _memory.Clear();
         }
     }
-} 
+}

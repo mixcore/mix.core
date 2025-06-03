@@ -176,23 +176,25 @@ namespace Mix.MCP.Lib.Agents
             // Compose a prompt that includes the context
             var prompt = string.Format(
                 """
-                You are an AI assistant for a database platform. 
+                You are an AI assistant for a database platform.
                 Read the following context before deciding how to handle the user's request.
 
                 Context:
-                - {0}
-                - Last result: {1}
+                - { 0}
+            -Last result: { 1}
 
-                Classify the user's request into one of these supported mcp tools:
-                {2}
-                User message: "{3}"
+            Classify the user's request into one of these supported mcp tools:
+                { 2}
+            User message: "{3}"
                 Respond in this JSON format:
-                {{
-                  "type": "tool" | "chat",
+                {
+                {
+                    "type": "tool" | "chat",
                   "toolName": "...", // Only if type is tool
-                  "parameters": {{ ... }} // Only if type is tool
-                }}
-                """,
+                  "parameters": { { ... } } // Only if type is tool
+                }
+            }
+            """,
                 stateSummary,
                 lastResult,
                 toolList,
@@ -402,4 +404,4 @@ namespace Mix.MCP.Lib.Agents
         public string Arguments { get; set; }
         public string Response { get; set; }
     }
-} 
+}

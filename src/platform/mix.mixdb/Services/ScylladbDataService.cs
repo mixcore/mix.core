@@ -206,7 +206,7 @@ namespace Mix.Mixdb.Services
             {
                 await LoadMixDb(request.TableName);
                 var data = await _repository.GetAllAsync(request.TableName,
-                    await ParseFieldName(request.SelectColumns, request.TableName), 
+                    await ParseFieldName(request.SelectColumns, request.TableName),
                     cancellationToken: cancellationToken);
                 if (data != null && request.RelatedDataRequests != null)
                 {

@@ -170,7 +170,7 @@ namespace Mix.Lib.Services
                     _uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
                     var mixdbUow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixDbDbContext>>();
                     _mixdbDataSrv = serviceScope.ServiceProvider.GetRequiredService<IMixDbDataServiceFactory>()
-                        .Create(_databaseService.DatabaseProvider, 
+                        .Create(_databaseService.DatabaseProvider,
                         _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION));
                     _mixdbDataSrv.SetDbConnection(_uow);
                     _context = _uow.DbContext;
@@ -940,7 +940,7 @@ namespace Mix.Lib.Services
                 && existedColumn.DisplayName == col.DisplayName
                 && existedColumn.Priority == col.Priority
                 && ReflectionHelper.AreEqual(existedColumn.Configurations.ToObject<ColumnConfigurations>(), col.Configurations.ToObject<ColumnConfigurations>());
-                ;
+            ;
         }
 
         #endregion Import

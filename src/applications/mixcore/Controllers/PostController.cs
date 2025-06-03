@@ -92,7 +92,7 @@ namespace Mixcore.Controllers
                 return NotFound();
             }
             await post.LoadAdditionalDataAsync(_mixDbDataService, _metadataService, _cacheService, cancellationToken);
-            
+
             ViewData["Title"] = post.SeoTitle;
             ViewData["Description"] = post.SeoDescription;
             ViewData["Keywords"] = post.SeoKeywords;

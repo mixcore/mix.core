@@ -58,7 +58,7 @@ namespace Mixcore.Domain.ViewModels
         public async Task LoadAdditionalDataAsync(
                 IMixDbDataService mixDbDataService,
                 IMixMetadataService metadataService,
-                MixCacheService cacheService, 
+                MixCacheService cacheService,
                 CancellationToken cancellationToken)
         {
             bool isChanged = false;

@@ -13,4 +13,4 @@ namespace Mix.Mixdb.Interfaces
         /// </summary>
         IMixDbDataService Create(MixDatabaseProvider provider, string connectionString);
     }
-} 
+}

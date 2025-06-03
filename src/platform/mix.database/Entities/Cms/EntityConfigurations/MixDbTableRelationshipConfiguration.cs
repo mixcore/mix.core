@@ -18,7 +18,7 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
             builder.Property(e => e.ParentId)
                .IsRequired()
                .HasColumnName("parent_id");
-            
+
             builder.Property(e => e.ChildId)
                .IsRequired()
                .HasColumnName("child_id");

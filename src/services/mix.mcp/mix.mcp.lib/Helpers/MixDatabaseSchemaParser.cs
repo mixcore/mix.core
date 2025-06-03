@@ -15,7 +15,7 @@ namespace Mix.MCP.Lib.Helpers
     {
         private readonly ILogger _logger;
         private readonly ILlmServiceFactory _llmServiceFactory;
-        
+
 
         /// <summary>
         /// Initialize a new instance of MixDatabaseSchemaParser
@@ -30,8 +30,8 @@ namespace Mix.MCP.Lib.Helpers
         /// Parse the schema description using LLM to extract column information
         /// </summary>
         public async Task<List<ColumnInfo>> ParseSchemaDescriptionWithLLM(
-            string schemaDescription, 
-            LLMServiceType serviceType, 
+            string schemaDescription,
+            LLMServiceType serviceType,
             string model,
             CancellationToken cancellationToken = default)
         {
@@ -85,8 +85,8 @@ Respond ONLY with a valid JSON array.";
 
                 // Get response from LLM
                 var response = await llmService.ChatAsync(prompt, model, 0.7, -1, cancellationToken);
-                
-                if (response?.choices == null || response.choices.Length == 0 || 
+
+                if (response?.choices == null || response.choices.Length == 0 ||
                     string.IsNullOrEmpty(response.choices[0]?.Message.Content))
                 {
                     _logger.LogWarning("No columns extracted from LLM response");
@@ -98,14 +98,14 @@ Respond ONLY with a valid JSON array.";
 
                 // Extract JSON array from response (handling possible text before/after JSON)
                 string jsonContent = JsonHelper.ExtractJsonArrayFromText(responseText);
-                
+
                 if (string.IsNullOrEmpty(jsonContent))
                 {
                     _logger.LogWarning("Could not extract valid JSON from LLM response: {Response}", responseText);
-                    
+
                     // Try a more aggressive JSON extraction
                     jsonContent = JsonHelper.ExtractJsonWithRegex(responseText);
-                    
+
                     if (string.IsNullOrEmpty(jsonContent))
                     {
                         _logger.LogWarning("No columns extracted from LLM response");
@@ -117,7 +117,7 @@ Respond ONLY with a valid JSON array.";
                 try
                 {
                     var columnArray = JsonSerializer.Deserialize<JsonElement>(jsonContent);
-                    
+
                     if (columnArray.ValueKind == JsonValueKind.Array)
                     {
                         foreach (var columnElement in columnArray.EnumerateArray())
@@ -169,25 +169,25 @@ Respond ONLY with a valid JSON array.";
         {
             // Convert to lowercase
             string cleanName = name.ToLower();
-            
+
             // Replace spaces and special characters with underscores
             cleanName = Regex.Replace(cleanName, @"[\s\-\.,]", "_");
-            
+
             // Remove any non-alphanumeric characters (except underscores)
             cleanName = Regex.Replace(cleanName, @"[^a-z0-9_]", "");
-            
+
             // Remove consecutive underscores
             cleanName = Regex.Replace(cleanName, @"_+", "_");
-            
+
             // Remove leading and trailing underscores
             cleanName = cleanName.Trim('_');
-            
+
             // Ensure name isn't empty
             if (string.IsNullOrEmpty(cleanName))
             {
                 cleanName = "field";
             }
-            
+
             return cleanName;
         }
         /// <summary>
@@ -210,4 +210,4 @@ Respond ONLY with a valid JSON array.";
             };
         }
     }
-} 
+}
