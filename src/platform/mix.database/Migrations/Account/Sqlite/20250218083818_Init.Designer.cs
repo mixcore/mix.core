@@ -642,7 +642,7 @@ namespace Mix.Database.Migrations.Account.Sqlite
                     b.ToTable("refresh_tokens", (string)null);
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Account.SysMixDatabaseAssociation", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Account.SysMixDbDataAssociation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

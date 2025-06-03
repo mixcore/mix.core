@@ -1,0 +1,6 @@
+@mix.mqtt_HostAddress = http://localhost:5215
+
+GET {{mix.mqtt_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

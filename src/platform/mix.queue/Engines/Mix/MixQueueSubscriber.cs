@@ -20,7 +20,7 @@ namespace Mix.Queue.Engines.MixQueue
         public string SubscriptionId { get; set; }
         public bool IsProcessing { get; private set; }
         private readonly string _subscriptionId;
-        private readonly MixQueueSetting _queueSetting;
+        private readonly MixQueueSetting? _queueSetting;
         private readonly Func<T, Task> _messageHandler;
         private readonly IMemoryQueueService<MessageQueueModel> _memQueues;
         private readonly MixEndpointService _mixEndpointService;
@@ -28,14 +28,14 @@ namespace Mix.Queue.Engines.MixQueue
         private SubscribeRequest _subscribeRequest;
         private AsyncServerStreamingCall<SubscribeReply> _call;
         public MixQueueSubscriber(
-            IQueueSetting queueSetting,
+            MixQueueSetting? queueSetting,
             string topicId,
             string subscriptionId,
             Func<T, Task> messageHandler,
             IMemoryQueueService<MessageQueueModel> memQueues,
             MixEndpointService mixEndpointService)
         {
-            _queueSetting = queueSetting as MixQueueSetting;
+            _queueSetting = queueSetting;
             _subscriptionId = subscriptionId;
             _messageHandler = messageHandler;
             _memQueues = memQueues;

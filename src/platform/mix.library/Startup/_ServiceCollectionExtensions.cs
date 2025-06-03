@@ -122,7 +122,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
             builder.Services.TryAddSingleton<IMixDbCommandHubClientService, MixDbCommandHubClientService>();
             builder.Services.TryAddSingleton<MixDbEventService>();
-            builder.Services.AddMixRepoDb(globalConfig);
+            builder.Services.AddMixDbServices(globalConfig);
 
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCacheDbContext>>();
 
@@ -166,7 +166,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             builder.Services.TryAddSingleton<IMixMemoryCacheService, MixMemoryCacheService>();
             builder.Services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
-            builder.Services.AddMixRepoDb(globalConfig);
+            builder.Services.AddMixDbServices(globalConfig);
 
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCacheDbContext>>();
             return builder;
@@ -197,12 +197,12 @@ namespace Microsoft.Extensions.DependencyInjection
                     foreach (var startup in startupServices)
                     {
                         ConstructorInfo classConstructor = startup.GetConstructor([]);
-                        var instance = classConstructor.Invoke([]);
-                        startup.GetMethod(nameof(IStartupService.UseEndpoints)).Invoke(instance, [endpoints, configuration, isDevelop]);
-                    }
-                }
-            });
-            return app;
+            var instance = classConstructor.Invoke([]);
+            startup.GetMethod(nameof(IStartupService.UseEndpoints)).Invoke(instance, [endpoints, configuration, isDevelop]);
+        }
+    }
+});
+return app;
         }
 
         #endregion
@@ -212,78 +212,78 @@ namespace Microsoft.Extensions.DependencyInjection
         #region App
 
         public static IApplicationBuilder UseMixStaticFiles(this IApplicationBuilder app, string contentRootPath)
+{
+    app.UseDefaultFiles();
+    var provider = new FileExtensionContentTypeProvider();
+    provider.Mappings[".vue"] = "application/text";
+    provider.Mappings[".xml"] = "application/xml";
+    app.UseStaticFiles();
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        ContentTypeProvider = provider
+    });
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(
+            Path.Combine(contentRootPath, MixFolders.TemplatesFolder))
+    });
+    return app;
+}
+
+#endregion
+
+#region Services
+
+
+private static IHostApplicationBuilder AddSSL(this IHostApplicationBuilder builder)
+{
+    if (builder.Configuration.GetGlobalConfiguration<bool>(
+            nameof(AppSettingsModel.IsHttps)))
+    {
+        builder.Services.AddHttpsRedirection(options =>
         {
-            app.UseDefaultFiles();
-            var provider = new FileExtensionContentTypeProvider();
-            provider.Mappings[".vue"] = "application/text";
-            provider.Mappings[".xml"] = "application/xml";
-            app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                ContentTypeProvider = provider
-            });
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(contentRootPath, MixFolders.TemplatesFolder))
-            });
-            return app;
-        }
+            options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+            options.HttpsPort = 443;
+        });
+    }
+    return builder;
+}
 
-        #endregion
+#endregion
 
-        #region Services
+private static List<Type> GetCandidatesByAttributeType(List<Assembly> assemblies, Type attributeType)
+{
+    List<Type> types = [];
+    assemblies.ForEach(
+        a => types.AddRange(a.GetExportedTypes()
+                .Where(
+                    x => x.GetCustomAttributes(attributeType).Any()
+                    )
+                ));
+    return types;
+}
 
+private static bool IsStartupService(Type type)
+{
+    var typeInfo = type.GetTypeInfo();
+    return
+        typeInfo.IsClass &&
+        !typeInfo.IsAbstract &&
+        !typeInfo.IsGenericType &&
+        typeof(IStartupService).IsAssignableFrom(type);
+}
 
-        private static IHostApplicationBuilder AddSSL(this IHostApplicationBuilder builder)
-        {
-            if (builder.Configuration.GetGlobalConfiguration<bool>(
-                    nameof(AppSettingsModel.IsHttps)))
-            {
-                builder.Services.AddHttpsRedirection(options =>
-                {
-                    options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
-                    options.HttpsPort = 443;
-                });
-            }
-            return builder;
-        }
-
-        #endregion
-
-        private static List<Type> GetCandidatesByAttributeType(List<Assembly> assemblies, Type attributeType)
-        {
-            List<Type> types = [];
-            assemblies.ForEach(
-                a => types.AddRange(a.GetExportedTypes()
-                        .Where(
-                            x => x.GetCustomAttributes(attributeType).Any()
-                            )
-                        ));
-            return types;
-        }
-
-        private static bool IsStartupService(Type type)
-        {
-            var typeInfo = type.GetTypeInfo();
-            return
-                typeInfo.IsClass &&
-                !typeInfo.IsAbstract &&
-                !typeInfo.IsGenericType &&
-                typeof(IStartupService).IsAssignableFrom(type);
-        }
-
-        private static List<Type> GetViewModelCandidates(List<Assembly> assemblies)
-        {
-            List<Type> types = [];
-            assemblies.ForEach(
-                a => types.AddRange(a.GetExportedTypes()
-                        .Where(
-                            x => x.BaseType?.Name == typeof(ViewModelBase<,,,>).Name
-                            )
-                        ));
-            return types;
-        }
+private static List<Type> GetViewModelCandidates(List<Assembly> assemblies)
+{
+    List<Type> types = [];
+    assemblies.ForEach(
+        a => types.AddRange(a.GetExportedTypes()
+                .Where(
+                    x => x.BaseType?.Name == typeof(ViewModelBase<,,,>).Name
+                    )
+                ));
+    return types;
+}
 
         #endregion
     }

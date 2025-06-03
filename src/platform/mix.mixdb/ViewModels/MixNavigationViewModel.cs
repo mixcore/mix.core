@@ -39,7 +39,7 @@ namespace Mix.Mixdb.ViewModels
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            var menuIds = Context.MixDatabaseAssociation.Where(
+            var menuIds = Context.MixDbDataAssociation.Where(
                             m =>
                             m.TenantId == TenantId && !m.IsDeleted
                             && m.ParentDatabaseName == MixDbDatabaseNames.Navigation

@@ -67,5 +67,10 @@ namespace Mix.Queue.Engines.RabitMQ
             }
             return Task.WhenAll(tasks);
         }
+
+        public Task StopAsync()
+        {
+            return Task.CompletedTask;
+        }
     }
 }

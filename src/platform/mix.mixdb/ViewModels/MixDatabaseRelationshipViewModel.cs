@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Mix.RepoDb.ViewModels
 {
     public sealed class MixDatabaseRelationshipViewModel
-        : ViewModelBase<MixCmsContext, MixDatabaseRelationship, int, MixDatabaseRelationshipViewModel>
+        : ViewModelBase<MixCmsContext, MixDbTableRelationship, int, MixDatabaseRelationshipViewModel>
     {
         #region Properties
         public int ParentId { get; set; }
@@ -31,7 +31,7 @@ namespace Mix.RepoDb.ViewModels
         {
         }
 
-        public MixDatabaseRelationshipViewModel(MixDatabaseRelationship entity, UnitOfWorkInfo? uowInfo = null)
+        public MixDatabaseRelationshipViewModel(MixDbTableRelationship entity, UnitOfWorkInfo? uowInfo = null)
             : base(entity, uowInfo)
         {
         }

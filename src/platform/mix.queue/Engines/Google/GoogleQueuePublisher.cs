@@ -16,11 +16,11 @@ namespace Mix.Queue.Engines.GooglePubSub
         where T : MessageQueueModel
     {
         private PublisherClient _publisher;
-        private readonly GoogleQueueSetting _queueSetting;
+        private readonly GoogleQueueSetting? _queueSetting;
 
-        public GoogleQueuePublisher(IQueueSetting queueSetting, string topicName)
+        public GoogleQueuePublisher(GoogleQueueSetting? queueSetting, string topicName)
         {
-            _queueSetting = queueSetting as GoogleQueueSetting;
+            _queueSetting = queueSetting;
             InitializeQueue(topicName);
         }
 
@@ -89,6 +89,11 @@ namespace Mix.Queue.Engines.GooglePubSub
                    await SendMessage(message);
                });
             await Task.WhenAll(publishTasks);
+        }
+
+        public async Task StopAsync()
+        {
+            await _publisher.DisposeAsync();
         }
     }
 }

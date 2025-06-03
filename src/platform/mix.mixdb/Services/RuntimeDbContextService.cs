@@ -108,7 +108,7 @@ namespace Mix.Mixdb.Services
             var sourceFiles = new List<FileModel>();
             using var _cmsContext = new MixCmsContext(_databaseService);
             var scaffolder = CreateScaffolder();
-            var databaseNames = _cmsContext.MixDatabase.Select(m => m.SystemName.ToLower()).ToList();
+            var databaseNames = _cmsContext.MixDbTable.Select(m => m.SystemName.ToLower()).ToList();
 
             if (databaseNames.Count == 0)
             {
@@ -128,7 +128,7 @@ namespace Mix.Mixdb.Services
                 ContextNamespace = "TypedDataContext.Context",
                 //ModelNamespace = "TypedDataContext.Models",
                 SuppressConnectionStringWarning = true,
-                
+
             };
 
             var scaffoldedModelSources = scaffolder.ScaffoldModel(

@@ -1,9 +1,12 @@
-﻿using Microsoft.Extensions.ObjectPool;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.ObjectPool;
 using Mix.Database.Services.MixGlobalSettings;
 using Mix.Mq.Lib.Models;
+using Mix.Mqtt.Lib.Models;
 using Mix.Queue.Engines.Azure;
 using Mix.Queue.Engines.GooglePubSub;
 using Mix.Queue.Engines.MixQueue;
+using Mix.Queue.Engines.Mqtt;
 using Mix.Queue.Engines.RabbitMQ;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
@@ -19,22 +22,25 @@ namespace Mix.Queue.Engines
         #region Publishers
 
         public static IQueuePublisher<T> CreatePublisher<T>(
-            MixQueueProvider provider, IQueueSetting queueSetting, string topicId, MixEndpointService mixEndpointService)
+            MixQueueProvider provider, IConfiguration configuration, string topicId, MixEndpointService mixEndpointService)
             where T : MessageQueueModel
         {
             IQueuePublisher<T> publisher = default;
             switch (provider)
             {
                 case MixQueueProvider.AZURE:
-                    publisher = new AzureQueuePublisher<T>(queueSetting, topicId);
+                    publisher = new AzureQueuePublisher<T>(configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:AzureServiceBus").Get<AzureQueueSetting>(), topicId);
                     break;
 
                 case MixQueueProvider.GOOGLE:
-                    publisher = new GoogleQueuePublisher<T>(queueSetting, topicId);
+                    publisher = new GoogleQueuePublisher<T>(configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:GoogleQueueSetting").Get<GoogleQueueSetting>(), topicId);
                     break;
 
                 case MixQueueProvider.MIX:
-                    publisher = new MixQueuePublisher<T>(queueSetting, topicId, mixEndpointService);
+                    publisher = new MixQueuePublisher<T>(configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:Mix").Get<MixQueueSetting>(), topicId, mixEndpointService);
+                    break;
+                case MixQueueProvider.MQTT:
+                    publisher = new MqttPublisher<T>(configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:MQTT").Get<MQTTSetting>(), topicId, mixEndpointService);
                     break;
             }
             return publisher;
@@ -48,9 +54,9 @@ namespace Mix.Queue.Engines
         #endregion
 
         #region Subscribers
-        public static IQueueSubscriber CreateSubscriber<T>(
+        public static IQueueSubscriber? CreateSubscriber<T>(
             MixQueueProvider provider,
-            IQueueSetting queueSetting,
+            IConfiguration configuration,
             string topicId,
             string subscriptionId,
             Func<T, Task> handler,
@@ -62,13 +68,16 @@ namespace Mix.Queue.Engines
             switch (provider)
             {
                 case MixQueueProvider.AZURE:
-                    subscriber = new AzureQueueSubscriber<T>(queueSetting, topicId, subscriptionId, handler);
+                    subscriber = new AzureQueueSubscriber<T>(configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:AzureServiceBus").Get<AzureQueueSetting>(), topicId, subscriptionId, handler);
                     break;
                 case MixQueueProvider.GOOGLE:
-                    subscriber = new GoogleQueueSubscriber<T>(queueSetting, topicId, subscriptionId, handler);
+                    subscriber = new GoogleQueueSubscriber<T>(configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:GoogleQueueSetting").Get<GoogleQueueSetting>(), topicId, subscriptionId, handler);
                     break;
                 case MixQueueProvider.MIX:
-                    subscriber = new MixQueueSubscriber<T>(queueSetting, topicId, subscriptionId, handler, memQueues, mixEndpointService);
+                    subscriber = new MixQueueSubscriber<T>(configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:Mix").Get<MixQueueSetting>(), topicId, subscriptionId, handler, memQueues, mixEndpointService);
+                    break;
+                case MixQueueProvider.MQTT:
+                    subscriber = new MqttSubscriber<T>(configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:MQTT").Get<MQTTSetting>(), topicId, handler);
                     break;
             }
             subscriber.SubscriptionId = subscriptionId;

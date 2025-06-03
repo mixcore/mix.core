@@ -87,10 +87,10 @@ namespace Mix.Portal.Domain.Services
                 string deployUrl = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{name}";
                 string package = await DownloadPackage(name, app.PackageFilePath, deployUrl);
                 MixFileHelper.UnZipFile(package, deployUrl);
-                
-                await ImportSchema($"{deployUrl}/schema",app.CreatedBy, cancellationToken);
+
+                await ImportSchema($"{deployUrl}/schema", app.CreatedBy, cancellationToken);
                 await SaveTemplate(app.TemplateId, name, deployUrl, app.BaseHref);
-                
+
                 packages.Add(package);
                 app.AppSettings["activePackage"] = package;
                 app.AppSettings["packages"] = packages;
@@ -125,10 +125,10 @@ namespace Mix.Portal.Domain.Services
                 MixFileHelper.UnZipFile(dto.PackageFilePath, deployUrl);
 
                 _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Extract Package {dto.PackageFilePath} Successfully");
-                
+
                 await ImportSchema($"{deployUrl}/schema", app.CreatedBy, cancellationToken);
                 await SaveTemplate(app.TemplateId, name, deployUrl, app.BaseHref);
-                
+
                 app.AppSettings["activePackage"] = dto.PackageFilePath;
 
                 await app.SaveAsync(cancellationToken);
@@ -206,19 +206,21 @@ namespace Mix.Portal.Domain.Services
                 _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Modifying {name}.cshtml");
 
                 var indexFile = MixFileHelper.GetFileByFullName($"{deployUrl}/index.html");
-
+                string webPath = deployUrl.Replace("wwwroot", string.Empty).TrimStart('/').TrimEnd('/');
                 if (string.IsNullOrEmpty(indexFile.Content))
                 {
                     throw new MixException(MixErrorStatus.Badrequest, "Invalid Application Package");
                 }
 
-
-                Regex regex = new($"((\\\"|\\'|\\(\\/|\\`)(\\.)?(\\/)?(([0-9a-zA-Z\\/\\.\\$\\{{\\}}_-])+)\\.({allowExtensionsPattern})(\\\"|\\'|\\)|\\`))");
-                Regex baseHrefRegex = new("(base href=\"(.{0,})\")");
+                Regex regex = new($"(\\\")([^\\.])(\\/)?([^\\\",\\',\\`]+)((\\.)({allowExtensionsPattern}))(\\\")");
                 Regex basePathRegex = new("(\\[\\[?basePath\\]\\]?\\/?)");
-                indexFile.Content = regex.Replace(indexFile.Content, $"$2/{deployUrl}/$5.$7$2");
-                indexFile.Content = baseHrefRegex.Replace(indexFile.Content, $"base href=\"{baseHref}\"");
-                indexFile.Content = basePathRegex.Replace(indexFile.Content, $"/{deployUrl}/");
+                indexFile.Content = regex.Replace(indexFile.Content, $"$1/{webPath}/$2$3$4$5$8");
+                if (indexFile.Content.IndexOf("base href") > 0)
+                {
+                    Regex baseHrefRegex = new("(base href=(\")([^\\\",\\',\\`]+)(\"))");
+                    indexFile.Content = baseHrefRegex.Replace(indexFile.Content, $"base href=\"{baseHref}\"");
+                }
+                indexFile.Content = basePathRegex.Replace(indexFile.Content, $"/{webPath}/");
 
                 var activeTheme = await _themeService.GetActiveTheme();
                 MixTemplateViewModel template = await MixTemplateViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.Id == templateId);
@@ -234,7 +236,7 @@ namespace Mix.Portal.Domain.Services
                     Styles = string.Empty,
                 };
                 template.Content = indexFile.Content.Replace("@", "@@")
-                                                    .Replace("<body>", "<body><pre id=\"app-settings-container\" style=\"display:none\">@Model.AppSettingsModel.ToString()</pre>");
+                                                    .Replace("<body>", "<body><pre id=\"app-settings-container\" style=\"display:none\">@Model.AppSettings.ToString()</pre>");
                 await template.SaveAsync();
                 _queueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), template);
                 MixFileHelper.SaveFile(indexFile);
@@ -254,23 +256,24 @@ namespace Mix.Portal.Domain.Services
                 try
                 {
                     _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Modifying {file.Filename}{file.Extension}");
-                    Regex rg = new($"((\\\"|\\'|\\(\\/|\\`)(\\.)?(\\/)?(([0-9a-zA-Z\\/\\.\\$\\{{\\}}_-])+)\\.({allowExtensionsPattern})(\\\"|\\'|\\)|\\`))");
+                    Regex rg = new($"(\\\")([^\\.])(\\/)?([^\\\",\\',\\`]+)((\\.)({allowExtensionsPattern}))(\\\")");
                     Regex basePathRegex = new("(\\[\\[?basePath\\]\\]?\\/?)");
+                    string webPath = deployUrl.Replace("wwwroot", string.Empty).TrimStart('/').TrimEnd('/');
                     Regex apiEndpointRegex = new("(\\[\\[?apiEndpoint\\]\\]?\\/?)");
                     if (rg.IsMatch(file.Content))
                     {
-                        file.Content = rg.Replace(file.Content, $"$2/{deployUrl}/$5.$7$2");
+                        file.Content = rg.Replace(file.Content, $"$1/{webPath}/$2$3$4$5$8");
                     }
                     if (!string.IsNullOrEmpty(folders))
                     {
                         rg = new($"((\\\"|\\'|\\(|\\`)(\\.)?(\\/)?({folders})(([0-9a-zA-Z\\/\\._-])+)(\\\"|\\'|\\(|\\`))");
                         if (rg.IsMatch(file.Content))
                         {
-                            file.Content = rg.Replace(file.Content, $"$2/{deployUrl}/$5$6$2");
+                            file.Content = rg.Replace(file.Content, $"$2/{webPath}/$5$6$2");
                         }
                     }
 
-                    file.Content = basePathRegex.Replace(file.Content, $"/{deployUrl}/");
+                    file.Content = basePathRegex.Replace(file.Content, $"/{webPath}/");
                     file.Content = apiEndpointRegex.Replace(file.Content, $"{CurrentTenant.Configurations.Domain.TrimEnd('/')}");
 
                     MixFileHelper.SaveFile(file);
@@ -312,7 +315,7 @@ namespace Mix.Portal.Domain.Services
             }
         }
 
-        
+
 
         #region Helpers
         public async Task AlertAsync<T>(IClientProxy clients, string action, int status, T message)

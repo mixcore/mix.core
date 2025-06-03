@@ -36,15 +36,15 @@ namespace Mix.Lib.Extensions
         {
             return configuration.GetValue<InitStep>(nameof(AppSettingsModel.InitStatus));
         }
-        
+
         public static string? AesKey(this IConfiguration configuration)
         {
             return configuration["AesKey"];
         }
-        
+
         public static string? SettingsConnection(this IConfiguration configuration)
         {
-            return configuration.GetValue<string>(MixConstants.CONST_SETTINGS_CONNECTION) ?? "Data Source=wwwroot\\mixcontent\\settings.sqlite";
+            return configuration.GetConnectionString(MixConstants.CONST_SETTINGS_CONNECTION) ?? "Data Source=wwwroot\\mixcontent\\settings.sqlite";
         }
     }
 }

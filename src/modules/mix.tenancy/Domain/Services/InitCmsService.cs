@@ -5,6 +5,7 @@ using Mix.Database.Entities.Account;
 using Mix.Database.Services;
 using Mix.Database.Services.MixGlobalSettings;
 using Mix.Identity.Enums;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Shared.Helpers;
@@ -49,11 +50,10 @@ namespace Mix.Tenancy.Domain.Services
 
         public Task InitDbContext(InitCmsDto model)
         {
-            _appSettingsService.SetConfig(MixConstants.CONST_SETTINGS_CONNECTION, model.ConnectionString);
+            _appSettingsService.SetConnnectionString(MixConstants.CONST_SETTINGS_CONNECTION, model.ConnectionString);
             _appSettingsService.SetConfig(nameof(AppSettingsModel.DefaultCulture), model.Culture.Specificulture);
             _appSettingsService.SetConfig(nameof(AppSettingsModel.DatabaseProvider), model.DatabaseProvider.ToString(), true);
             _configuration[nameof(AppSettingsModel.DatabaseProvider)] = model.DatabaseProvider.ToString();
-            _configuration[MixConstants.CONST_SETTINGS_CONNECTION] = model.ConnectionString;
             _databaseService.InitConnectionStrings(model.ConnectionString, model.DatabaseProvider);
             _databaseService.UpdateMixCmsContext();
             return Task.CompletedTask;

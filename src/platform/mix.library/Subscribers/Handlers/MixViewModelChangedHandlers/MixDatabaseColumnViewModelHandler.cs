@@ -6,7 +6,7 @@ namespace Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers
 {
     public class MixDatabaseColumnViewModelHandler
     {
-        
+
         public static async Task MessageQueueHandler(MessageQueueModel data, IMixdbStructure mixDbService)
         {
             switch (data.Action)
@@ -14,8 +14,8 @@ namespace Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers
                 case "Get":
                     break;
                 case "Post":
-                    var repoCol = new MixdbDatabaseColumnViewModel();
-                    ReflectionHelper.Map(data.ParseData<MixDatabaseColumnViewModel>(), repoCol);
+                    var repoCol = new MixdbColumnViewModel();
+                    ReflectionHelper.Map(data.ParseData<MixDbColumnViewModel>(), repoCol);
                     await mixDbService.AddColumn(repoCol);
                     break;
                 case "Put":

@@ -7,7 +7,7 @@ using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Services.Graphql.Lib.Entities.EntityConfigurations
 {
-    public class MixMediaConfiguration : EntityBaseConfiguration<MixMedia, int>
+    public class MixMediaConfiguration : EntityBaseConfiguration<MixMedia, Guid>
     {
         public MixMediaConfiguration(DatabaseService databaseService) : base(databaseService)
         {

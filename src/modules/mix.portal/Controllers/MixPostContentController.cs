@@ -20,7 +20,6 @@ namespace Mix.Portal.Controllers
     {
         private string _requestedBy;
         private readonly PortalPostService _postService;
-        private readonly IMixDbDataService _mixDbDataSrv;
         public MixPostContentController(
             MixIdentityService identityService,
             TenantUserManager userManager,
@@ -30,13 +29,11 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IMemoryQueueService<MessageQueueModel> queueService,
-            IMixDbDataService mixDbDataSrv,
             PortalPostService postService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
             : base(MixContentType.Post, identityService, userManager, httpContextAccessor, configuration, cacheService, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
-            _mixDbDataSrv = mixDbDataSrv;
             _postService = postService;
         }
         public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -51,16 +48,16 @@ namespace Mix.Portal.Controllers
         //{
         //    var searchRequest = BuildSearchRequest(req);
         //    searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
-        //        !string.IsNullOrEmpty(req.MixDatabaseName), m => m.MixDatabaseName == req.MixDatabaseName);
+        //        !string.IsNullOrEmpty(req.MixDbTableName), m => m.MixDbTableName == req.MixDbTableName);
         //    var metadataPostIds = _postService.ParseMetadataQueriesPredicate(req.MetadataQueries)?.ToList();
         //    searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(metadataPostIds != null,
         //                                m => metadataPostIds.Contains(m.Id));
 
-        //    if (!string.IsNullOrEmpty(req.MixDatabaseName) && req.Queries.Count > 0)
+        //    if (!string.IsNullOrEmpty(req.MixDbTableName) && req.Queries.Count > 0)
         //    {
         //        var listData = await _mixDbDataSrv.GetListByAsync(
         //            new Shared.Models.SearchMixDbRequestModel() {
-        //                TableName = req.MixDatabaseName, 
+        //                TableName = req.MixDbTableName, 
         //                Queries = req.Queries, 
         //            },
         //            cancellationToken: cancellationToken);

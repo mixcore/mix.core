@@ -1,0 +1,191 @@
+{
+  "info": {
+    "name": "MixDatabase API",
+    "description": "API endpoints for managing MixDatabase",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Database by Name",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v2/rest/mix-portal/mix-database/get-by-name/:name",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v2", "rest", "mix-portal", "mix-database", "get-by-name", ":name"],
+          "variable": [
+            {
+              "key": "name",
+              "value": "database_name",
+              "description": "Name of the database"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Duplicate Database",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v2/rest/mix-portal/mix-database/duplicate/:id",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v2", "rest", "mix-portal", "mix-database", "duplicate", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "1",
+              "description": "ID of the database to duplicate"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Export Entity",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v2/rest/mix-portal/mix-database/export-entity/:dbContextName",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v2", "rest", "mix-portal", "mix-database", "export-entity", ":dbContextName"],
+          "variable": [
+            {
+              "key": "dbContextName",
+              "value": "context_name",
+              "description": "Name of the database context"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Migrate Database",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v2/rest/mix-portal/mix-database/migrate/:name",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v2", "rest", "mix-portal", "mix-database", "migrate", ":name"],
+          "variable": [
+            {
+              "key": "name",
+              "value": "database_name",
+              "description": "Name of the database to migrate"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Backup Database",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v2/rest/mix-portal/mix-database/backup/:name",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v2", "rest", "mix-portal", "mix-database", "backup", ":name"],
+          "variable": [
+            {
+              "key": "name",
+              "value": "database_name",
+              "description": "Name of the database to backup"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Restore Database",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v2/rest/mix-portal/mix-database/restore/:name",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v2", "rest", "mix-portal", "mix-database", "restore", ":name"],
+          "variable": [
+            {
+              "key": "name",
+              "value": "database_name",
+              "description": "Name of the database to restore"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Database",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v2/rest/mix-portal/mix-database/update/:name",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v2", "rest", "mix-portal", "mix-database", "update", ":name"],
+          "variable": [
+            {
+              "key": "name",
+              "value": "database_name",
+              "description": "Name of the database to update"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "your_jwt_token",
+      "type": "string"
+    }
+  ]
+} 

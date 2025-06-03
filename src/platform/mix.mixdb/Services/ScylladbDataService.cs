@@ -206,7 +206,7 @@ namespace Mix.Mixdb.Services
             {
                 await LoadMixDb(request.TableName);
                 var data = await _repository.GetAllAsync(request.TableName,
-                    await ParseFieldName(request.SelectColumns, request.TableName), 
+                    await ParseFieldName(request.SelectColumns, request.TableName),
                     cancellationToken: cancellationToken);
                 if (data != null && request.RelatedDataRequests != null)
                 {
@@ -730,6 +730,26 @@ namespace Mix.Mixdb.Services
         {
             var obj = await GetSingleByAsync(tableName, new MixQueryField(_fieldNameService.Id, objId, MixCompareOperator.Equal), selectColumns, cancellationToken);
             return obj?.ToObject<T>();
+        }
+
+        public Task<List<JObject>?> GetListByAsync(string tableName, List<QueryField> queryFields, List<MixSortByColumn>? sortByFields = null, string? selectFields = null, bool loadNestedData = false, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<MixDbDatabaseViewModel?> IMixDbDataService.GetMixDb(string tableName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InitConnection(MixDatabaseProvider databaseProvider, string connectionString)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<JObject?> GetSingleByColumnAsync(string tableName, string columnName, object columnValue, string selectColumns, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
 

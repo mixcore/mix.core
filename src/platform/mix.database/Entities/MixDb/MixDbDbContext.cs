@@ -23,7 +23,7 @@ namespace Mix.Database.Entities.MixDb
         public DbSet<MixPermissionEndpoint> MixPermissionEndpoint { get; set; }
         public DbSet<MixUserData> MixUserData { get; set; }
         public DbSet<MixUserPermission> MixUserPermission { get; set; }
-        public DbSet<MixDatabaseAssociation> MixDatabaseAssociation { get; set; }
+        public DbSet<MixDbDataAssociation> MixDbDataAssociation { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

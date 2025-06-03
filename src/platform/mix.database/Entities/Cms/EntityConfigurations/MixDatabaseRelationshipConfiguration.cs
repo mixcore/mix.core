@@ -4,21 +4,21 @@ using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
-    public class MixDatabaseRelationshipConfiguration : EntityBaseConfiguration<MixDatabaseRelationship, int>
+    public class MixDatabaseRelationshipConfiguration : EntityBaseConfiguration<MixDbTableRelationship, int>
 
     {
         public MixDatabaseRelationshipConfiguration(DatabaseService databaseService) : base(databaseService)
         {
         }
 
-        public override void Configure(EntityTypeBuilder<MixDatabaseRelationship> builder)
+        public override void Configure(EntityTypeBuilder<MixDbTableRelationship> builder)
         {
             base.Configure(builder);
 
             builder.Property(e => e.ParentId)
                .IsRequired()
                .HasColumnName("parent_id");
-            
+
             builder.Property(e => e.ChildId)
                .IsRequired()
                .HasColumnName("child_id");

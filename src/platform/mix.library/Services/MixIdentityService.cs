@@ -86,7 +86,7 @@ namespace Mix.Lib.Services
             UnitOfWorkInfo<MixDbDbContext> mixDbUow,
             IConfiguration configuration,
             IMemoryQueueService<MessageQueueModel> queueService,
-            MixDbDataServiceFactory mixDbDataFactory)
+            IMixDbDataServiceFactory mixDbDataFactory)
         {
             Session = httpContextAccessor.HttpContext?.Session;
             Configuration = configuration;
@@ -104,7 +104,7 @@ namespace Mix.Lib.Services
             DatabaseService = databaseService;
             _accContext = accContext;
             MixDbUow = mixDbUow;
-            MixDbDataService = mixDbDataFactory.GetDataService(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION));
+            MixDbDataService = mixDbDataFactory.Create(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION));
             GlobalConfig = Configuration.GetSection(MixAppSettingsSection.GlobalSettings).Get<GlobalSettingsModel>();
             QueueService = queueService;
         }

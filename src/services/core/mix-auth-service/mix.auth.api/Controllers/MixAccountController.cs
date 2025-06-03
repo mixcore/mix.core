@@ -66,8 +66,7 @@ namespace mix.auth.service.Controllers
             IMixEdmService edmService,
             IMixTenantService mixTenantService,
             IOAuthTokenService authResultService,
-            IMixDbDataService mixDbDataService,
-            MixDbDataServiceFactory mixDbDataFactory,
+            IMixDbDataServiceFactory mixDbDataSrvFactory,
             DatabaseService databaseService)
             : base(httpContextAccessor, configuration, mixService,
                 mixIdentityService, queueService, mixTenantService)
@@ -86,7 +85,7 @@ namespace mix.auth.service.Controllers
             _authConfigService = authConfigService;
             _edmService = edmService;
             _oauthTokenService = authResultService;
-            _mixDbDataService = mixDbDataFactory.GetDataService(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION))!;
+            _mixDbDataService = mixDbDataSrvFactory.Create(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION))!;
         }
 
         #region Overrides
@@ -282,7 +281,7 @@ namespace mix.auth.service.Controllers
         public async Task<ActionResult> RenewToken([FromBody] RenewTokenDto refreshTokenDto)
         {
             var token = await _idService.RenewTokenAsync(refreshTokenDto);
-            return token.IsSuccess ? Ok(token.Result): BadRequest(token.Errors);
+            return token.IsSuccess ? Ok(token.Result) : BadRequest(token.Errors);
         }
 
         [MixAuthorize]

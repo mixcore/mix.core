@@ -25,7 +25,7 @@ namespace Mix.Services.Databases.Lib.Services
         private readonly MixDbDbContext _permissionDbContext;
         private readonly UnitOfWorkInfo<MixCmsAccountContext> _accUow;
         private readonly UnitOfWorkInfo<MixDbDbContext> _mixUow;
-        private readonly IQueryable<SysMixDatabaseAssociation> _permissionQuery;
+        private readonly IQueryable<SysMixDbDataAssociation> _permissionQuery;
         public MixUserPermissionService(
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<MixCmsAccountContext> accUow,
@@ -64,7 +64,7 @@ namespace Mix.Services.Databases.Lib.Services
                 {
                     if (dto.IsActive)
                     {
-                        _accUow.DbContext.SysMixDatabaseAssociation.Add(new SysMixDatabaseAssociation()
+                        _accUow.DbContext.SysMixDatabaseAssociation.Add(new SysMixDbDataAssociation()
                         {
                             ParentDatabaseName = MixDatabaseNames.ROLE,
                             ChildDatabaseName = MixDatabaseNames.SYSTEM_PERMISSION,

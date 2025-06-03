@@ -16,15 +16,15 @@ namespace Mix.Queue.Engines.Azure
         private ServiceBusProcessor _subscriber;
         private static ServiceBusAdministrationClient _adminClient;
         private static ServiceBusClient _client;
-        private readonly AzureQueueSetting _queueSetting;
+        private readonly AzureQueueSetting? _queueSetting;
         private readonly Func<T, Task> _messageHandler;
         public AzureQueueSubscriber(
-            IQueueSetting queueSetting,
+            AzureQueueSetting? queueSetting,
             string topicId,
             string subscriptionId,
             Func<T, Task> messageHandler)
         {
-            _queueSetting = queueSetting as AzureQueueSetting;
+            _queueSetting = queueSetting;
             _messageHandler = messageHandler;
             InitializeQueue(topicId, subscriptionId);
         }

@@ -31,5 +31,14 @@
 
         public string FullPath => $"{FileFolder}/{FileName}{Extension}";
         #endregion
+
+        public override void InitDefaultValues(string language = null, int? cultureId = null)
+        {
+            base.InitDefaultValues(language, cultureId);
+            if (Id.Equals(default))
+            {
+                Id = Guid.NewGuid();
+            }
+        }
     }
 }

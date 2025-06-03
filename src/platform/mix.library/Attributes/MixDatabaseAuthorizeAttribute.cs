@@ -42,36 +42,36 @@ namespace Mix.Lib.Attributes
             {
                 _tableName = context.HttpContext.Request.RouteValues["name"]?.ToString();
             }
-            var database = _cmsContext.MixDatabase.FirstOrDefault(m => m.SystemName == _tableName);
+            var database = _cmsContext.MixDbTable.FirstOrDefault(m => m.SystemName == _tableName);
             if (database == null)
             {
                 context.Result = new BadRequestResult();
                 return;
             }
 
-            // Not allow bypass by default for security => if not set, only superadmin can access this database
-            //if (!CheckByPassAuthenticate(context.HttpContext.Request.Method, context.HttpContext.Request.Path, database))
-            //{
-            if (ValidToken())
+            // allow bypass by default
+            if (!CheckByPassAuthenticate(context.HttpContext.Request.Method, context.HttpContext.Request.Path, database))
             {
-                if (!IsInRoles(context.HttpContext.Request.Method, database, context.HttpContext.Request.Path))
+                if (ValidToken())
                 {
-                    if (!ValidEnpointPermission(context))
+                    if (!IsInRoles(context.HttpContext.Request.Method, database, context.HttpContext.Request.Path))
                     {
-                        context.Result = new ForbidResult();
-                        return;
+                        if (!ValidEnpointPermission(context))
+                        {
+                            context.Result = new ForbidResult();
+                            return;
+                        }
                     }
                 }
+                else
+                {
+                    context.Result = new UnauthorizedResult();
+                    return;
+                }
             }
-            else
-            {
-                context.Result = new UnauthorizedResult();
-                return;
-            }
-            //}
         }
 
-        private bool CheckByPassAuthenticate(string method, string path, MixDatabase database)
+        private bool CheckByPassAuthenticate(string method, string path, MixDbTable database)
         {
             return method switch
             {
@@ -104,7 +104,7 @@ namespace Mix.Lib.Attributes
                     && DateTime.UtcNow < expireAt;
         }
 
-        private bool IsInRoles(string method, MixDatabase database, string path)
+        private bool IsInRoles(string method, MixDbTable database, string path)
         {
 
             UserRoles = _idService.GetClaim(userPrinciple, MixClaims.Role).Split(',', StringSplitOptions.RemoveEmptyEntries)

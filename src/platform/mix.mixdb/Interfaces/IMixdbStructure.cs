@@ -17,13 +17,11 @@ namespace Mix.Mixdb.Interfaces
     public interface IMixdbStructure
     {
         public Task MigrateDatabase(string databaseName, CancellationToken cancellationToken = default);
-        public Task<bool> BackupDatabase(string databaseName, CancellationToken cancellationToken = default);
-        public Task<bool> RestoreFromLocal(string databaseName, CancellationToken cancellationToken = default);
         public Task ExecuteCommand(string commandText, CancellationToken cancellationToken);
-        public Task AlterColumn(MixdbDatabaseColumnViewModel colDto, bool isDrop, CancellationToken cancellationToken = default);
-        public Task AddColumn(MixdbDatabaseColumnViewModel repoCol, CancellationToken cancellationToken = default);
-        public Task DropColumn(MixdbDatabaseColumnViewModel repoCol, CancellationToken cancellationToken = default);
-        Task MigrateInitNewDbContextDatabases(MixDatabaseContext dbContext, CancellationToken cancellationToken = default);
+        public Task AlterColumn(MixdbColumnViewModel colDto, bool isDrop, CancellationToken cancellationToken = default);
+        public Task AddColumn(MixdbColumnViewModel repoCol, CancellationToken cancellationToken = default);
+        public Task DropColumn(MixdbColumnViewModel repoCol, CancellationToken cancellationToken = default);
+        Task MigrateInitNewDbContextDatabases(MixDbDatabase dbContext, CancellationToken cancellationToken = default);
         Task MigrateSystemDatabases(CancellationToken cancellationToken = default);
         public void InitDbStructureService(string cnn, MixDatabaseProvider databaseProvider);
     }

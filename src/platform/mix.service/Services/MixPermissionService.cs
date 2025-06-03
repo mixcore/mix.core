@@ -50,10 +50,10 @@ namespace Mix.Service.Services
 
                     foreach (var role in roles)
                     {
-                        var permissionIds = cmsDbContext.MixDatabaseAssociation
+                        var permissionIds = cmsDbContext.MixDbDataAssociation
                                             .Where(m => m.GuidParentId == role.Id)
                                             .Select(m => m.ChildId);
-                        var endpointIds = cmsDbContext.MixDatabaseAssociation
+                        var endpointIds = cmsDbContext.MixDbDataAssociation
                                             .Where(m => m.ParentDatabaseName == MixDatabaseNames.SYSTEM_PERMISSION
                                                         && m.ChildDatabaseName == MixDatabaseNames.SYSTEM_PERMISSION_ENDPOINT
                                                         && permissionIds.Contains(m.ParentId))
@@ -102,7 +102,7 @@ namespace Mix.Service.Services
 
         public async Task<bool> CheckEndpointPermissionAsync(string[] userRoles, PathString path, string method)
         {
-            if(RoleEndpoints == null)
+            if (RoleEndpoints == null)
             {
                 await Reload();
             }

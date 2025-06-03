@@ -33,7 +33,7 @@ namespace Mixcore.Domain.ViewModels
         public string Domain { get; set; }
         public string BaseApiUrl { get; set; }
         public int? TemplateId { get; set; }
-        public string MixDatabaseName { get; set; }
+        public string MixDbTableName { get; set; }
         public int? MixDbId { get; set; }
 
         public JObject ExtraData { get; set; }
@@ -67,7 +67,7 @@ namespace Mixcore.Domain.ViewModels
         #region Private Methods
         public async Task LoadAdditionalDataAsync(IMixDbDataService mixDbDataService, CancellationToken cancellationToken = default)
         {
-            var obj = await mixDbDataService.GetSingleByParentAsync(MixDatabaseName, MixContentType.Post, Id, string.Empty, cancellationToken);
+            var obj = await mixDbDataService.GetSingleByParentAsync(MixDbTableName, MixContentType.Post, Id, string.Empty, cancellationToken);
             ExtraData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
         }
 

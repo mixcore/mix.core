@@ -20,7 +20,7 @@ namespace Mix.Shared.Models
         public SearchMixDbRequestModel(SearchMixDbRequestDto request)
         {
             Paging = new PagingRequestModel(request);
-            TableName = request.MixDatabaseName;
+            TableName = request.MixDbTableName;
             SelectColumns = request.SelectColumns;
             Conjunction = request.Conjunction;
         }

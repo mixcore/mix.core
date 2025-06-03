@@ -46,6 +46,19 @@ namespace Mix.Shared.Services
             }
         }
 
+        public virtual void SetConnnectionString<TValue>(string name, TValue value, bool isSave = false)
+        {
+            if (string.IsNullOrEmpty(_sectionName))
+            {
+                RawSettings["ConnectionStrings"][name] = value != null ? JToken.FromObject(value) : null;
+                AppSettings = RawSettings.ToObject<T>();
+            }
+            if (isSave)
+            {
+                SaveSettings();
+            }
+        }
+
         public virtual bool SaveSettings()
         {
             var settings = MixFileHelper.GetFileByFullName($"{FilePath}{MixFileExtensions.Json}", true, "{}");

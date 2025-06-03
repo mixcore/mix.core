@@ -43,14 +43,14 @@ namespace Mix.Lib.Services
         private MixTenantSystemModel _currentTenant;
         public MixThemeExportService(
             IConfiguration configuration,
-            IHttpContextAccessor httpContext, MixCmsContext context, DatabaseService databaseService, MixDbDataServiceFactory mixDbDataFactory, MixCacheService cacheService)
+            IHttpContextAccessor httpContext, MixCmsContext context, DatabaseService databaseService, IMixDbDataServiceFactory mixDbDataFactory, MixCacheService cacheService)
         {
             _session = httpContext.HttpContext?.Session;
             _configuration = configuration;
             _context = context;
             _cacheService = cacheService;
             _themeRepository = MixThemeViewModel.GetRepository(new UnitOfWorkInfo(_context), _cacheService);
-            _mixDbDataSrv = mixDbDataFactory.GetDataService(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION))!;
+            _mixDbDataSrv = mixDbDataFactory.Create(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION))!;
         }
 
         #region Export
@@ -240,9 +240,9 @@ namespace Mix.Lib.Services
             }
             foreach (var database in _siteData.MixDatabases)
             {
-                if (database.MixDatabaseContextId.HasValue)
+                if (database.MixDbTableId.HasValue)
                 {
-                    var dbContext = _siteData.MixDatabaseContexts.First(m => m.Id == database.MixDatabaseContextId.Value);
+                    var dbContext = _siteData.MixDatabaseContexts.First(m => m.Id == database.MixDbTableId.Value);
                     if (dbContext == null)
                     {
                         return;
@@ -372,19 +372,19 @@ namespace Mix.Lib.Services
 
         private async Task ExportDatabases(CancellationToken cancellationToken)
         {
-            _siteData.MixDatabaseContexts = await _context.MixDatabaseContext
+            _siteData.MixDatabaseContexts = await _context.MixDbDatabase
                 .Where(m => _dto.Content.MixDatabaseContextIds.Any(p => p == m.Id))
                 .AsNoTracking()
                 .ToListAsync();
-            _siteData.MixDatabases = await _context.MixDatabase
+            _siteData.MixDatabases = await _context.MixDbTable
                 .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.Id))
                 .AsNoTracking()
                 .ToListAsync();
-            _siteData.MixDatabaseColumns = await _context.MixDatabaseColumn
-                .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.MixDatabaseId))
+            _siteData.MixDatabaseColumns = await _context.MixDbColumn
+                .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.MixDbTableId))
                 .AsNoTracking()
                 .ToListAsync();
-            _siteData.MixDatabaseRelationships = await _context.MixDatabaseRelationship
+            _siteData.MixDbTableRelationships = await _context.MixDbTableRelationship
                 .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.ParentId))
                 .AsNoTracking()
                 .ToListAsync();
@@ -408,7 +408,7 @@ namespace Mix.Lib.Services
             _siteData.Posts = _context.MixPost.ToList();
             _siteData.Pages = _context.MixPage.ToList();
             _siteData.Modules = _context.MixModule.ToList();
-            _siteData.MixDatabases = _context.MixDatabase.ToList();
+            _siteData.MixDatabases = _context.MixDbTable.ToList();
             _siteData.Templates = _context.MixViewTemplate.ToList();
             _siteData.Configurations = _context.MixConfiguration.ToList();
             _siteData.Languages = _context.MixLanguage.ToList();

@@ -84,23 +84,23 @@ namespace Mix.Mixdb.Services
             }
         }
 
-        public async Task AddColumn(MixDbDatabaseViewModel database, MixdbDatabaseColumnViewModel col, CancellationToken cancellationToken = default)
+        public async Task AddColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (database == null)
             {
-                throw new MixException(MixErrorStatus.Badrequest, $"Invalid table {col.MixDatabaseName}");
+                throw new MixException(MixErrorStatus.Badrequest, $"Invalid table {col.MixDbTableName}");
             }
             var commandText = GenerateAddColumnSql(col);
             await ExecuteCommand(commandText);
         }
 
-        public async Task AlterColumn(MixDbDatabaseViewModel database, MixdbDatabaseColumnViewModel col, bool isDrop, CancellationToken cancellationToken = default)
+        public async Task AlterColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col, bool isDrop, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (database == null)
             {
-                throw new MixException(MixErrorStatus.Badrequest, $"Invalid table {col.MixDatabaseName}");
+                throw new MixException(MixErrorStatus.Badrequest, $"Invalid table {col.MixDbTableName}");
             }
 
             var alterCommandText = isDrop
@@ -109,12 +109,12 @@ namespace Mix.Mixdb.Services
             await ExecuteCommand(alterCommandText);
         }
 
-        public async Task DropColumn(MixDbDatabaseViewModel database, MixdbDatabaseColumnViewModel col, CancellationToken cancellationToken = default)
+        public async Task DropColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (database == null)
             {
-                throw new MixException(MixErrorStatus.Badrequest, $"Invalid table {col.MixDatabaseName}");
+                throw new MixException(MixErrorStatus.Badrequest, $"Invalid table {col.MixDbTableName}");
             }
 
             var alterCommandText = GenerateDropColumnSql(col);
@@ -179,8 +179,8 @@ namespace Mix.Mixdb.Services
             FieldNameService fieldNameService)
         {
             return $"""
-                CREATE TABLE {tableName} (
-                {string.Join(",", colsSql.ToArray())}
+                CREATE TABLE { tableName} (
+                { string.Join(",", colsSql.ToArray())}
                 ) 
                 """;
         }
@@ -204,7 +204,7 @@ namespace Mix.Mixdb.Services
             };
         }
 
-        private string GenerateColumnSql(MixdbDatabaseColumnViewModel col)
+        private string GenerateColumnSql(MixdbColumnViewModel col)
         {
             string colType = GetColumnType(col.DataType, _databaseConstant, col.ColumnConfigurations.MaxLength);
             string primaryKey = string.Equals("id", col.SystemName, StringComparison.OrdinalIgnoreCase) ? "primary key" : string.Empty;
@@ -212,26 +212,26 @@ namespace Mix.Mixdb.Services
                 $"{_databaseConstant.BacktickOpen}{col.SystemName}{_databaseConstant.BacktickClose} {colType} {primaryKey}";
         }
 
-        private string GenerateAddColumnSql(MixdbDatabaseColumnViewModel col)
+        private string GenerateAddColumnSql(MixdbColumnViewModel col)
         {
             return
-                $"ALTER TABLE {_databaseConstant.BacktickOpen}{col.MixDatabaseName}{_databaseConstant.BacktickClose}" +
+                $"ALTER TABLE {_databaseConstant.BacktickOpen}{col.MixDbTableName}{_databaseConstant.BacktickClose}" +
                 $" ADD {GenerateColumnSql(col)};";
         }
 
-        private string GenerateDropColumnSql(MixdbDatabaseColumnViewModel col)
+        private string GenerateDropColumnSql(MixdbColumnViewModel col)
         {
             return
-                $"ALTER TABLE {_databaseConstant.BacktickOpen}{col.MixDatabaseName}{_databaseConstant.BacktickClose}" +
+                $"ALTER TABLE {_databaseConstant.BacktickOpen}{col.MixDbTableName}{_databaseConstant.BacktickClose}" +
                 $" DROP {_databaseConstant.BacktickOpen}{col.SystemName}{_databaseConstant.BacktickClose};";
         }
 
-        private string GenerateAlterColumnSql(MixdbDatabaseColumnViewModel col)
+        private string GenerateAlterColumnSql(MixdbColumnViewModel col)
         {
             string colType = GetColumnType(col.DataType, _databaseConstant, col.ColumnConfigurations.MaxLength);
             string colName = $"{_databaseConstant.BacktickOpen}{col.SystemName}{_databaseConstant.BacktickClose}";
             string tableName =
-                $"{_databaseConstant.BacktickOpen}{col.MixDatabaseName}{_databaseConstant.BacktickClose}";
+                $"{_databaseConstant.BacktickOpen}{col.MixDbTableName}{_databaseConstant.BacktickClose}";
             string alterTable = $"ALTER TABLE {tableName} ";
             var result = alterTable +
                          $" ALTER {colName} TYPE {colType}";

@@ -22,8 +22,8 @@ public static class Extensions
 
         builder.Services.ConfigureHttpClientDefaults(http =>
         {
-            // Turn on resilience by default
-            http.AddStandardResilienceHandler();
+            //// Turn on resilience by default
+            //http.AddStandardResilienceHandler();
 
             // Turn on service discovery by default
             http.AddServiceDiscovery();
@@ -105,7 +105,7 @@ public static class Extensions
         // Uncomment the following line to enable the Prometheus endpoint (requires the OpenTelemetry.Exporter.Prometheus.AspNetCore package)
         app.MapPrometheusScrapingEndpoint()
             .DisableHttpMetrics();
-            //.RequireAuthorization();
+        //.RequireAuthorization();
 
         // All health checks must pass for app to be considered ready to accept traffic after starting
         app.MapHealthChecks("/health");

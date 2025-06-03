@@ -28,7 +28,7 @@ namespace Mix.Shared.Dtos
         public string? PagingState { get; set; }
         public string? SortBy { get; set; }
         public SortDirection Direction { get; set; }
-        public string? MixDatabaseName { get; set; }
+        public string? MixDbTableName { get; set; }
         public MixConjunction Conjunction { get; set; } = MixConjunction.And;
         public string? SelectColumns { get; set; }
         public string? ParentId { get; set; }

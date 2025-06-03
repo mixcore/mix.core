@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Cassandra;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Lib.Extensions;
 using Mix.Lib.Middlewares;
 using Mix.Lib.Publishers;
@@ -9,10 +10,13 @@ using Mix.Log.Lib.Publishers;
 using Mix.Log.Lib.Services;
 using Mix.Mixdb.Publishers;
 using Mix.Mixdb.Subscribers;
+using Mix.Mqtt.Lib.Extensions;
+using Mix.Mqtt.Lib.Service;
 using Mix.Quartz.Services;
 using Mix.Shared.Interfaces;
 using Mix.Shared.Models.Configurations;
 using Mix.Storage.Lib.Subscribers;
+using MQTTnet.AspNetCore;
 
 namespace Mixcore.Domain
 {
@@ -44,6 +48,8 @@ namespace Mixcore.Domain
             }
 
             builder.AddMixRateLimiter();
+
+            builder.AddMqttServices();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
@@ -51,11 +57,13 @@ namespace Mixcore.Domain
             // auditlog middleware must go after auth
             app.UseMiddleware<AuditlogMiddleware>();
             app.UseMixRateLimiter();
+            app.UseAspNetMqttServer(isDevelop);
         }
 
         public void UseEndpoints(IEndpointRouteBuilder endpoints, IConfiguration configuration, bool isDevelop)
         {
             endpoints.UseMixMVCEndpoints();
+            endpoints.MapMqttEndpoints(isDevelop);
         }
     }
 }
