@@ -12,14 +12,14 @@ using MySqlX.XDevAPI.Common;
 
 namespace Mix.Portal.Controllers
 {
-    [Route("api/v2/rest/mix-portal/mixdb-databases")]
+    [Route("api/v2/rest/mix-portal/mix-db-database")]
     [ApiController]
     [MixAuthorize(MixRoles.Owner)]
-    public class MixDatabaseContextController
+    public class MixDbDatabaseContextController
         : MixRestfulApiControllerBase<MixDatabaseContextViewModel, MixCmsContext, MixDbDatabase, int>
     {
         private readonly IMixdbStructure _mixDbService;
-        public MixDatabaseContextController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> uow, IMemoryQueueService<MessageQueueModel> queueService,
+        public MixDbDatabaseContextController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> uow, IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService,
             IMixdbStructure mixDbService)

@@ -18,7 +18,7 @@ namespace Mix.Mixdb.ViewModels
         public int? MixDatabaseContextId { get; set; }
         [Required]
         public string SystemName { get; set; }
-        public MixDatabaseNamingConvention NamingConvention { get; set; } = MixDatabaseNamingConvention.TitleCase;
+        public MixDatabaseNamingConvention NamingConvention { get; set; } = MixDatabaseNamingConvention.SnakeCase;
         public MixDatabaseType Type { get; set; } = MixDatabaseType.Service;
         public List<string> ReadPermissions { get; set; }
         public List<string> CreatePermissions { get; set; }
@@ -145,8 +145,8 @@ namespace Mix.Mixdb.ViewModels
                 foreach (var item in Columns)
                 {
                     item.SetUowInfo(UowInfo, CacheService);
-                    item.MixDatabaseId = parentEntity.Id;
-                    item.MixDatabaseName = parentEntity.SystemName;
+                    item.MixDbTableId = parentEntity.Id;
+                    item.MixDbTableName = parentEntity.SystemName;
                     await item.SaveAsync(cancellationToken);
                     ModifiedEntities.AddRange(item.ModifiedEntities);
                 }

@@ -2,7 +2,7 @@
 
 namespace Mix.Database.Entities.Account
 {
-    public class SysMixDatabaseAssociation : EntityBase<int>
+    public class SysMixDbDataAssociation : EntityBase<int>
     {
         public int TenantId { get; set; }
         public string ParentDatabaseName { get; set; }

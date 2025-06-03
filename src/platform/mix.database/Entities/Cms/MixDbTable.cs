@@ -6,7 +6,7 @@ namespace Mix.Database.Entities.Cms
 {
     public class MixDbTable : TenantEntityBase<int>
     {
-        public int? MixDatabaseId { get; set; }
+        public int? MixDbTableId { get; set; }
         public string SystemName { get; set; }
         public MixDatabaseType Type { get; set; }
         public List<string> ReadPermissions { get; set; }

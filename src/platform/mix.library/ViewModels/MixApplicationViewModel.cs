@@ -11,7 +11,7 @@
         public string Domain { get; set; }
         public string BaseApiUrl { get; set; }
         public int? TemplateId { get; set; }
-        public string MixDatabaseName { get; set; }
+        public string MixDbTableName { get; set; }
         public int? MixDbId { get; set; }
 
         public string DetailUrl { get; set; }

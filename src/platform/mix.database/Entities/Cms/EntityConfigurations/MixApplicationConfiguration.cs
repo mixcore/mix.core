@@ -52,8 +52,8 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
                 .HasColumnName("base_api_url")
                 .HasColumnType($"{Config.String}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet);
-            builder.Property(e => e.MixDatabaseName)
-                .HasColumnName("mix_database_name")
+            builder.Property(e => e.MixDbTableName)
+                .HasColumnName("mix_db_table_name")
                 .HasColumnType($"{Config.String}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet);
         }

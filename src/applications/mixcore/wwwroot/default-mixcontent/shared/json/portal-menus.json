@@ -172,25 +172,6 @@
             ]
         },
         {
-            "title": "MixDb Context",
-            "path": "#",
-            "icon": "mi mi-ResolutionLegacy",
-            "svg": "tabler-icon-table.svg",
-            "isHiden": true,
-            "subMenus": [
-                {
-                    "title": "Create New",
-                    "icon": "mi mi-Add",
-                    "path": "/admin/mixdb-context/create"
-                },
-                {
-                    "path": "/admin/mixdb-context/list",
-                    "title": "List",
-                    "icon": "mi mi-List"
-                }
-            ]
-        },
-        {
             "title": "Databases",
             "path": "#",
             "icon": "mi mi-ResolutionLegacy",
@@ -200,10 +181,10 @@
                 {
                     "title": "Create New",
                     "icon": "mi mi-Add",
-                    "path": "/admin/mix-db-table/create"
+                    "path": "/admin/mix-db-database/create"
                 },
                 {
-                    "path": "/admin/mix-db-table/list",
+                    "path": "/admin/mix-db-database/list",
                     "title": "List",
                     "icon": "mi mi-List"
                 }
@@ -350,12 +331,7 @@
                     "icon": "mi mi-Apps"
                 },
                 {
-                    "path": "/admin/mixdb-context/list",
-                    "title": "MixDb Context",
-                    "icon": "mi mi-Wheel"
-                },
-                {
-                    "path": "/admin/mix-db-table/list?mixDbDatabaseId=1",
+                    "path": "/admin/mix-db-database/list",
                     "title": "Databases",
                     "icon": "mi mi-Wheel"
                 }
@@ -941,42 +917,22 @@
             ]
         },
         {
-            "cate": "Mix Database",
+            "cate": "Databases",
             "items": [
                 {
-                    "path": "/admin/mix-db-table/create",
-                    "templatePath": "/mix-app/views/app-portal/pages/mix-db-table/details.html",
-                    "controller": "mixDbTableController"
+                    "path": "/admin/mix-db-database/create",
+                    "templatePath": "/mix-app/views/app-portal/pages/mix-db-database/details.html",
+                    "controller": "MixDbDatabaseController"
                 },
                 {
-                    "path": "/admin/mix-db-table/list",
-                    "templatePath": "/mix-app/views/app-portal/pages/mix-db-table/list.html",
-                    "controller": "mixDbTableController"
+                    "path": "/admin/mix-db-database/list",
+                    "templatePath": "/mix-app/views/app-portal/pages/mix-db-database/list.html",
+                    "controller": "MixDbDatabaseController"
                 },
                 {
-                    "path": "/admin/mix-db-table/details/:id",
-                    "templatePath": "/mix-app/views/app-portal/pages/mix-db-table/details.html",
-                    "controller": "mixDbTableController"
-                }
-            ]
-        },
-        {
-            "cate": "MixDb Context",
-            "items": [
-                {
-                    "path": "/admin/mixdb-context/create",
-                    "templatePath": "/mix-app/views/app-portal/pages/mixdb-context/details.html",
-                    "controller": "mixDbDatabaseController"
-                },
-                {
-                    "path": "/admin/mixdb-context/list",
-                    "templatePath": "/mix-app/views/app-portal/pages/mixdb-context/list.html",
-                    "controller": "mixDbDatabaseController"
-                },
-                {
-                    "path": "/admin/mixdb-context/details/:id",
-                    "templatePath": "/mix-app/views/app-portal/pages/mixdb-context/details.html",
-                    "controller": "mixDbDatabaseController"
+                    "path": "/admin/mix-db-database/details/:id",
+                    "templatePath": "/mix-app/views/app-portal/pages/mix-db-database/details.html",
+                    "controller": "MixDbDatabaseController"
                 }
             ]
         },
@@ -1056,17 +1012,17 @@
                 {
                     "path": "/admin/mix-db-data/create",
                     "templatePath": "/mix-app/views/app-portal/pages/mix-db-data/details.html",
-                    "controller": "mixDbTableDataController"
+                    "controller": "MixDbDataController"
                 },
                 {
                     "path": "/admin/mix-db-data/list",
                     "templatePath": "/mix-app/views/app-portal/pages/mix-db-data/list.html",
-                    "controller": "mixDbTableDataController"
+                    "controller": "MixDbDataController"
                 },
                 {
                     "path": "/admin/mix-db-data/details",
                     "templatePath": "/mix-app/views/app-portal/pages/mix-db-data/details.html",
-                    "controller": "mixDbTableDataController"
+                    "controller": "MixDbDataController"
                 }
             ]
         },

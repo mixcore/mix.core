@@ -6,7 +6,7 @@ using Mix.Services.Ecommerce.Lib.Entities.Mix;
 namespace Mix.Services.Ecommerce.Lib.ViewModels
 {
     public sealed class MixEcommerceDatabaseAssociationViewModel
-        : ViewModelBase<EcommerceDbContext, MixDbDataAssociation, Guid, MixEcommerceDatabaseAssociationViewModel>
+        : ViewModelBase<EcommerceDbContext, MixDbDataAssociation, int, MixEcommerceDatabaseAssociationViewModel>
     {
         #region Properties
         public int TenantId { get; set; }
@@ -51,14 +51,6 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             {
                 IsValid = false;
                 Errors.Add(new("This association is existed"));
-            }
-        }
-        public override void InitDefaultValues(string? language = null, int? cultureId = null)
-        {
-            base.InitDefaultValues(language, cultureId);
-            if (Id == default)
-            {
-                Id = Guid.NewGuid();
             }
         }
         #endregion

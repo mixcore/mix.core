@@ -309,8 +309,8 @@ namespace Mix.MCP.Lib.Helpers
             string displayName = FormatDisplayName(column.Name);
             return new MixdbColumnViewModel(_cmsUow)
             {
-                MixDatabaseId = db.Id,
-                MixDatabaseName = db.SystemName,
+                MixDbTableId = db.Id,
+                MixDbTableName = db.SystemName,
                 DataType = column.DataType,
                 DisplayName = displayName,
                 SystemName = column.Name,

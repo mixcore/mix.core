@@ -516,7 +516,7 @@ namespace Mix.Lib.Services
             {
                 try
                 {
-                    var oldDbContext = _siteData.MixDatabaseContexts.Find(m => m.Id == item.MixDatabaseId);
+                    var oldDbContext = _siteData.MixDatabaseContexts.Find(m => m.Id == item.MixDbTableId);
                     var oldId = item.Id;
                     var oldName = item.SystemName;
                     var currentDbContext = oldDbContext != null ? context.MixDbDatabase.SingleOrDefault(m => m.SystemName == oldDbContext.SystemName) : default;
@@ -524,7 +524,7 @@ namespace Mix.Lib.Services
 
 
                     // Skip install database if there is no predefined db context
-                    if (item.MixDatabaseId.HasValue && currentDbContext is null)
+                    if (item.MixDbTableId.HasValue && currentDbContext is null)
                     {
                         continue;
                     }
@@ -536,7 +536,7 @@ namespace Mix.Lib.Services
 
                         currentDb.Id = 0;
                         currentDb.TenantId = CurrentTenant.Id;
-                        currentDb.MixDatabaseId = currentDbContext?.Id;
+                        currentDb.MixDbTableId = currentDbContext?.Id;
                         currentDb.CreatedBy = _siteData.CreatedBy;
                         currentDb.CreatedDateTime = DateTime.UtcNow;
                         context.Entry(currentDb).State = EntityState.Added;
@@ -587,7 +587,7 @@ namespace Mix.Lib.Services
                         obj.CreatedBy = _siteData.CreatedBy;
                         obj.CreatedDateTime = DateTime.UtcNow;
                         obj.MixDbTableId = database.Id;
-                        obj.MixDatabaseName = database.SystemName;
+                        obj.MixDbTableName = database.SystemName;
                         context.MixDbColumn.Add(obj);
                     }
                     else
@@ -653,7 +653,7 @@ namespace Mix.Lib.Services
             foreach (var mixGroupData in groupData)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var oldDbContext = _siteData.MixDatabaseContexts.Find(m => m.Id == _siteData.MixDatabases.First(m => m.SystemName == mixGroupData.Key).MixDatabaseId);
+                var oldDbContext = _siteData.MixDatabaseContexts.Find(m => m.Id == _siteData.MixDatabases.First(m => m.SystemName == mixGroupData.Key).MixDbTableId);
                 var dbContext = oldDbContext != null ? _context.MixDbDatabase.SingleOrDefault(m => m.SystemName == oldDbContext.SystemName) : default;
                 if (dbContext == null)
                 {
@@ -875,7 +875,7 @@ namespace Mix.Lib.Services
                 {
                     Id = siteData.MixDatabases.First(m => m.SystemName == db.SystemName).Id,
                     Name = db.DisplayName,
-                    DifferentColumns = CompareColumns(siteData.MixDatabaseColumns.Where(m => m.MixDatabaseName == db.SystemName), cols)
+                    DifferentColumns = CompareColumns(siteData.MixDatabaseColumns.Where(m => m.MixDbTableName == db.SystemName), cols)
                 });
             }
             siteData.IsValid = !siteData.Errors.Any();

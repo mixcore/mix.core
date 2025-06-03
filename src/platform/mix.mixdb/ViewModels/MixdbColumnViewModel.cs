@@ -16,12 +16,12 @@ namespace Mix.Mixdb.ViewModels
         #region Properties
         public string SystemName { get; set; }
         public string DisplayName { get; set; }
-        public string MixDatabaseName { get; set; }
+        public string MixDbTableName { get; set; }
         public MixDataType DataType { get; set; } = MixDataType.String;
         public int? ReferenceId { get; set; }
 
         public string DefaultValue { get; set; }
-        public int MixDatabaseId { get; set; }
+        public int MixDbTableId { get; set; }
         [Newtonsoft.Json.JsonIgnore]
         public JObject Configurations { get; set; }
         public ColumnConfigurations ColumnConfigurations { get; set; } = new();

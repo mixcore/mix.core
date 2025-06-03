@@ -3,7 +3,7 @@
 namespace Mix.Lib.ViewModels
 {
     public sealed class MixDbDataAssociationViewModel
-        : ViewModelBase<MixCmsContext, MixDbDataAssociation, Guid, MixDbDataAssociationViewModel>
+        : ViewModelBase<MixCmsContext, MixDbDataAssociation, int, MixDbDataAssociationViewModel>
     {
         #region Properties
         public int TenantId { get; set; }
@@ -54,14 +54,6 @@ namespace Mix.Lib.ViewModels
             {
                 IsValid = false;
                 Errors.Add(new("This association is existed"));
-            }
-        }
-        public override void InitDefaultValues(string language = null, int? cultureId = null)
-        {
-            base.InitDefaultValues(language, cultureId);
-            if (Id == default)
-            {
-                Id = Guid.NewGuid();
             }
         }
         #endregion

@@ -3,7 +3,7 @@ using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.MixDb.EntityConfigurations
 {
-    public class MixDbDataAssociationConfiguration : EntityBaseConfiguration<MixDbDataAssociation, Guid>
+    public class MixDbDataAssociationConfiguration : EntityBaseConfiguration<MixDbDataAssociation, int>
 
     {
         public MixDbDataAssociationConfiguration(DatabaseService databaseService) : base(databaseService)

@@ -256,7 +256,7 @@ namespace Mix.Mixdb.Services
             string databaseSystemName,
             MixDatabaseNamingConvention namingConvention)
         {
-            var cols = columns.Where(c => c.MixDatabaseName == databaseSystemName).ToList();
+            var cols = columns.Where(c => c.MixDbTableName == databaseSystemName).ToList();
             foreach (var col in cols)
             {
                 string newColName = namingConvention == MixDatabaseNamingConvention.SnakeCase
@@ -264,7 +264,7 @@ namespace Mix.Mixdb.Services
                     : col.DisplayName.ToColumnName(true);
                 col.Id = 0;
                 col.SystemName = newColName;
-                col.MixDatabaseName = currentDb.SystemName;
+                col.MixDbTableName = currentDb.SystemName;
                 currentDb.Columns.Add(new(col, _cmsUow));
             }
         }
@@ -411,10 +411,10 @@ namespace Mix.Mixdb.Services
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            var db = await GetMixDatabase(col.MixDatabaseName);
+            var db = await GetMixDatabase(col.MixDbTableName);
             if (db is null)
             {
-                throw new NullReferenceException($"Database not found: {col.MixDatabaseName}");
+                throw new NullReferenceException($"Database not found: {col.MixDbTableName}");
             }
             await _dbStructureSrv.AlterColumn(db, col, isDrop, cancellationToken);
         }
@@ -427,10 +427,10 @@ namespace Mix.Mixdb.Services
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            var db = await GetMixDatabase(repoCol.MixDatabaseName);
+            var db = await GetMixDatabase(repoCol.MixDbTableName);
             if (db is null)
             {
-                throw new NullReferenceException($"Database not found: {repoCol.MixDatabaseName}");
+                throw new NullReferenceException($"Database not found: {repoCol.MixDbTableName}");
             }
             await _dbStructureSrv.AddColumn(db, repoCol, cancellationToken);
         }
@@ -443,10 +443,10 @@ namespace Mix.Mixdb.Services
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            var db = await GetMixDatabase(repoCol.MixDatabaseName);
+            var db = await GetMixDatabase(repoCol.MixDbTableName);
             if (db is null)
             {
-                throw new NullReferenceException($"Database not found: {repoCol.MixDatabaseName}");
+                throw new NullReferenceException($"Database not found: {repoCol.MixDbTableName}");
             }
             await _dbStructureSrv.DropColumn(db, repoCol, cancellationToken);
         }

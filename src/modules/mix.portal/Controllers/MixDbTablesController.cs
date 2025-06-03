@@ -13,7 +13,7 @@ using Mix.SignalR.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
-    [Route("api/v2/rest/mix-portal/mix-db-tables")]
+    [Route("api/v2/rest/mix-portal/mix-db-table")]
     [ApiController]
 
     public class MixDbTablesController
@@ -137,11 +137,11 @@ namespace Mix.Portal.Controllers
             var predicate = base.BuildSearchRequest(req);
             if (int.TryParse(HttpContext.Request.Query["MixDbTableId"], out int mixDatabaseContextId))
             {
-                predicate.Predicate = predicate.Predicate.AndAlso(m => m.MixDatabaseId == mixDatabaseContextId);
+                predicate.Predicate = predicate.Predicate.AndAlso(m => m.MixDbTableId == mixDatabaseContextId);
             }
             else
             {
-                predicate.Predicate = predicate.Predicate.AndAlso(m => m.MixDatabaseId == null);
+                predicate.Predicate = predicate.Predicate.AndAlso(m => m.MixDbTableId == null);
             }
             return predicate;
         }

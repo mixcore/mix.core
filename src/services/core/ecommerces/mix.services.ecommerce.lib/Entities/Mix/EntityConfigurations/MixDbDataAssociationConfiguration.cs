@@ -6,7 +6,7 @@ using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
 {
-    public class MixDbDataAssociationConfiguration : EntityBaseConfiguration<MixDbDataAssociation, Guid>
+    public class MixDbDataAssociationConfiguration : EntityBaseConfiguration<MixDbDataAssociation, int>
 
     {
         public MixDbDataAssociationConfiguration(DatabaseService databaseService) : base(databaseService)
@@ -19,11 +19,13 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
 
             builder.Property(e => e.ParentDatabaseName)
                .HasColumnType($"{Config.NString}{Config.MediumLength}")
+               .HasColumnName("parent_database_name")
                .HasCharSet(Config.CharSet)
                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.ChildDatabaseName)
                .HasColumnType($"{Config.NString}{Config.MediumLength}")
+               .HasColumnName("child_database_name")
                .HasCharSet(Config.CharSet);
         }
     }

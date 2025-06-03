@@ -647,7 +647,7 @@ namespace Mix.Database.Migrations.Account.Postgres
                     b.ToTable("refresh_tokens", (string)null);
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Account.SysMixDatabaseAssociation", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Account.SysMixDbDataAssociation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -718,9 +718,9 @@ namespace Mix.Database.Migrations.Account.Postgres
                         .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_sys_mix_database_association");
+                        .HasName("pk_sys_mix_db_data_association");
 
-                    b.ToTable("sys_mix_database_association", (string)null);
+                    b.ToTable("sys_mix_db_data_association", (string)null);
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserClaims", b =>

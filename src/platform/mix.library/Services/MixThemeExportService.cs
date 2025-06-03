@@ -240,9 +240,9 @@ namespace Mix.Lib.Services
             }
             foreach (var database in _siteData.MixDatabases)
             {
-                if (database.MixDatabaseId.HasValue)
+                if (database.MixDbTableId.HasValue)
                 {
-                    var dbContext = _siteData.MixDatabaseContexts.First(m => m.Id == database.MixDatabaseId.Value);
+                    var dbContext = _siteData.MixDatabaseContexts.First(m => m.Id == database.MixDbTableId.Value);
                     if (dbContext == null)
                     {
                         return;

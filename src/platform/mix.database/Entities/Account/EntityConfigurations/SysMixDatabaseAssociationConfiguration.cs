@@ -3,14 +3,14 @@ using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Account.EntityConfigurations
 {
-    public class SysMixDatabaseAssociationConfiguration : EntityBaseConfiguration<SysMixDatabaseAssociation, int>
+    public class SysMixDatabaseAssociationConfiguration : EntityBaseConfiguration<SysMixDbDataAssociation, int>
 
     {
         public SysMixDatabaseAssociationConfiguration(DatabaseService databaseService) : base(databaseService)
         {
         }
 
-        public override void Configure(EntityTypeBuilder<SysMixDatabaseAssociation> builder)
+        public override void Configure(EntityTypeBuilder<SysMixDbDataAssociation> builder)
         {
             builder.ToTable(MixDatabaseNames.SYSTEM_DATA_RELATIONSHIP);
             base.Configure(builder);

@@ -6,13 +6,13 @@ using Mix.SignalR.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
-    [Route("api/v2/rest/mix-portal/mix-database-relationship")]
+    [Route("api/v2/rest/mix-portal/mix-db-table-relationship")]
     [ApiController]
     [MixAuthorize(MixRoles.Owner)]
-    public class MixDatabaseRelationshipController
+    public class MixDbTableRelationshipController
         : MixRestfulApiControllerBase<MixDatabaseRelationshipViewModel, MixCmsContext, MixDbTableRelationship, int>
     {
-        public MixDatabaseRelationshipController(
+        public MixDbTableRelationshipController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,

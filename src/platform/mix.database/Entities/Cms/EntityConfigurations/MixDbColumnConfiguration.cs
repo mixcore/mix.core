@@ -36,9 +36,9 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
 
-            builder.Property(e => e.MixDatabaseName)
+            builder.Property(e => e.MixDbTableName)
                 .IsRequired()
-                .HasColumnName("mix_database_name")
+                .HasColumnName("mix_db_table_name")
                 .HasColumnType($"{Config.NString}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);

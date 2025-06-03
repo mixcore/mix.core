@@ -35,9 +35,9 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
             builder.Property(e => e.SelfManaged)
                .HasColumnName("self_managed");
 
-            builder.Property(e => e.MixDatabaseId)
+            builder.Property(e => e.MixDbTableId)
                .IsRequired(false)
-               .HasColumnName("mix_database_id");
+               .HasColumnName("mix_db_table_id");
 
             builder.Property(e => e.ReadPermissions)
             .IsRequired(false)

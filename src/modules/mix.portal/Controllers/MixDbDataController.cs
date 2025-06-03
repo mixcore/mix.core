@@ -24,11 +24,11 @@ using RepoDb.Interfaces;
 namespace Mix.Portal.Controllers
 {
     [MixDatabaseAuthorize("")]
-    [Route("api/v2/rest/mix-portal/mix-db/{name}")]
+    [Route("api/v2/rest/mix-portal/mix-db-data/{name}")]
     [ApiController]
-    public class MixDbController : MixTenantApiControllerBase
+    public class MixDbDataController : MixTenantApiControllerBase
     {
-        ILogger<MixDbController> _logger;
+        ILogger<MixDbDataController> _logger;
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private readonly IMixMemoryCacheService _memoryCache;
         private readonly IMixDbDataServiceFactory _mixDbDataFactory;
@@ -38,10 +38,9 @@ namespace Mix.Portal.Controllers
         private string _requestedBy;
         private readonly MixIdentityService _idService;
         private IMixDbDataService _mixDbDataService;
-        private const string AssociationTableName = nameof(MixDbDataAssociation);
         private MixDbDatabaseViewModel _mixDb;
         private FieldNameService _fieldNameService;
-        public MixDbController(
+        public MixDbDataController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCacheService cacheService,
@@ -55,7 +54,7 @@ namespace Mix.Portal.Controllers
             IMixDbDataServiceFactory mixDbDataFactory,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService,
-            ILogger<MixDbController> logger)
+            ILogger<MixDbDataController> logger)
             : base(httpContextAccessor, configuration,
                   cacheService, mixIdentityService, queueService, mixTenantService)
         {
@@ -85,7 +84,11 @@ namespace Mix.Portal.Controllers
             _requestedBy = User == null ? default : _idService.GetClaim(User, MixClaims.UserName);
             await base.OnActionExecutionAsync(context, next);
         }
-
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            base.OnActionExecuted(context);
+            _mixDbDataService.Dispose();
+        }
         #endregion
 
         [HttpPost("by-ids")]
@@ -280,7 +283,7 @@ namespace Mix.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "MixDbController Cannot Notify");
+                _logger.LogError(ex, "MixDbDataController Cannot Notify");
             }
         }
 

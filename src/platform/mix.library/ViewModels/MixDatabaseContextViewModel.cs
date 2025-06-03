@@ -40,7 +40,7 @@ namespace Mix.Lib.ViewModels
         #region Overrides
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Databases = await MixDbTableReadViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixDatabaseId == Id, cancellationToken);
+            Databases = await MixDbTableReadViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixDbTableId == Id, cancellationToken);
         }
 
         public override Task<MixDbDatabase> ParseEntity(CancellationToken cancellationToken = default)
@@ -50,7 +50,7 @@ namespace Mix.Lib.ViewModels
 
         protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
-            var databases = Context.MixDbTable.Where(m => m.MixDatabaseId == Id).ToList();
+            var databases = Context.MixDbTable.Where(m => m.MixDbTableId == Id).ToList();
             foreach (var db in databases)
             {
                 var cols = Context.MixDbColumn.Where(m => m.MixDbTableId == db.Id).ToList();

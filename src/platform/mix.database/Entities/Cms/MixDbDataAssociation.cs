@@ -1,6 +1,6 @@
 ﻿namespace Mix.Database.Entities.Cms
 {
-    public class MixDbDataAssociation : EntityBase<Guid>
+    public class MixDbDataAssociation : EntityBase<int>
     {
         public int TenantId { get; set; }
         public string ParentDatabaseName { get; set; }

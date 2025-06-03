@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 
 namespace Mix.Portal.Controllers
 {
-    [Route("api/v2/rest/mix-portal/mix-db-columns")]
+    [Route("api/v2/rest/mix-portal/mix-db-column")]
     [ApiController]
     [MixAuthorize(MixRoles.Owner)]
     public class MixDbColumnPortalController
@@ -38,7 +38,7 @@ namespace Mix.Portal.Controllers
         {
             int.TryParse(mixDatabase, out int mixDatabaseId);
             var getData = await Repository.GetListAsync(
-                f => f.MixDatabaseName == mixDatabase || f.MixDbTableId == mixDatabaseId);
+                f => f.MixDbTableName == mixDatabase || f.MixDbTableId == mixDatabaseId);
             return Ok(getData);
         }
 
@@ -78,7 +78,7 @@ namespace Mix.Portal.Controllers
             {
                 Expression<Func<MixDbColumn, bool>> keywordPred =
                     model =>
-                     model.MixDatabaseName.Contains(req.Keyword)
+                     model.MixDbTableName.Contains(req.Keyword)
                      || model.SystemName.Contains(req.Keyword)
                      || model.DisplayName.Contains(req.Keyword)
                      || model.DefaultValue.Contains(req.Keyword);

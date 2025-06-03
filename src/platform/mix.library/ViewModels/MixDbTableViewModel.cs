@@ -179,7 +179,7 @@ namespace Mix.Lib.ViewModels
             {
                 var referenceColumnName = fieldNameService.GetParentId(item.SourceDatabaseName);
 
-                if (!Context.MixDbColumn.Any(m => m.MixDatabaseName == item.DestinateDatabaseName && m.SystemName == referenceColumnName))
+                if (!Context.MixDbColumn.Any(m => m.MixDbTableName == item.DestinateDatabaseName && m.SystemName == referenceColumnName))
                 {
                     var srcDb = Context.MixDbTable.FirstOrDefault(m => m.SystemName == item.SourceDatabaseName);
                     var destDb = Context.MixDbTable.FirstOrDefault(m => m.SystemName == item.DestinateDatabaseName);
