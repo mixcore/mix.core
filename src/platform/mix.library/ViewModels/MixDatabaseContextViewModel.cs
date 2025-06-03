@@ -5,7 +5,7 @@ using Mix.Lib.ViewModels.ReadOnly;
 namespace Mix.Lib.ViewModels
 {
     public sealed class MixDatabaseContextViewModel
-        : TenantDataViewModelBase<MixCmsContext, MixDatabaseContext, int, MixDatabaseContextViewModel>
+        : TenantDataViewModelBase<MixCmsContext, MixDbDatabase, int, MixDatabaseContextViewModel>
     {
         #region Properties
         public MixDatabaseProvider DatabaseProvider { get; set; }
@@ -14,7 +14,7 @@ namespace Mix.Lib.ViewModels
         public string Schema { get; set; }
         public string SystemName { get; set; }
 
-        public List<MixDatabaseReadViewModel> Databases { get; set; }
+        public List<MixDbTableReadViewModel> Databases { get; set; }
 
         public string DecryptedConnectionString { get; set; }
         #endregion
@@ -30,7 +30,7 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixDatabaseContextViewModel(MixDatabaseContext entity, UnitOfWorkInfo uowInfo)
+        public MixDatabaseContextViewModel(MixDbDatabase entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }
@@ -40,26 +40,26 @@ namespace Mix.Lib.ViewModels
         #region Overrides
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Databases = await MixDatabaseReadViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixDatabaseContextId == Id, cancellationToken);
+            Databases = await MixDbTableReadViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixDbTableId == Id, cancellationToken);
         }
 
-        public override Task<MixDatabaseContext> ParseEntity(CancellationToken cancellationToken = default)
+        public override Task<MixDbDatabase> ParseEntity(CancellationToken cancellationToken = default)
         {
             return base.ParseEntity(cancellationToken);
         }
 
         protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
-            var databases = Context.MixDatabase.Where(m => m.MixDatabaseContextId == Id).ToList();
+            var databases = Context.MixDbTable.Where(m => m.MixDbTableId == Id).ToList();
             foreach (var db in databases)
             {
-                var cols = Context.MixDatabaseColumn.Where(m => m.MixDatabaseId == db.Id).ToList();
-                Context.MixDatabaseColumn.RemoveRange(cols);
+                var cols = Context.MixDbColumn.Where(m => m.MixDbTableId == db.Id).ToList();
+                Context.MixDbColumn.RemoveRange(cols);
                 
-                var rels = Context.MixDatabaseRelationship.Where(m => m.SourceDatabaseName == db.SystemName || m.DestinateDatabaseName == db.SystemName).ToList();
-                Context.MixDatabaseRelationship.RemoveRange(rels);
+                var rels = Context.MixDbTableRelationship.Where(m => m.SourceDatabaseName == db.SystemName || m.DestinateDatabaseName == db.SystemName).ToList();
+                Context.MixDbTableRelationship.RemoveRange(rels);
             }
-            Context.MixDatabase.RemoveRange(databases);
+            Context.MixDbTable.RemoveRange(databases);
 
             await Context.SaveChangesAsync(cancellationToken);
             await base.DeleteHandlerAsync(cancellationToken);

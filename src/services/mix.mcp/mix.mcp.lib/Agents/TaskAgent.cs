@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Mix.MCP.Lib.Services.LLM;
+using Mix.MCP.Lib.Tools;
 using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol.Transport;
 using Newtonsoft.Json.Linq;
@@ -16,13 +17,11 @@ namespace Mix.MCP.Lib.Agents
     /// </summary>
     public class TaskAgent : BaseAgent
     {
-        private const string TASK_STATE_KEY = "task_state";
-        private const string TASK_HISTORY_KEY = "task_history";
-        private const int MAX_TASK_HISTORY = 20;
+        private const string TaskStateKey = "task_state";
+        private const string TaskHistoryKey = "task_history";
+        private const int MaxTaskHistory = 20;
 
         private readonly Dictionary<string, Func<TaskState, string, Task<string>>> _commandHandlers;
-
-        // --- MCP Client field ---
         private IMcpClient _mcpClient;
 
         /// <summary>
@@ -36,17 +35,15 @@ namespace Mix.MCP.Lib.Agents
         {
             _commandHandlers = new Dictionary<string, Func<TaskState, string, Task<string>>>(StringComparer.OrdinalIgnoreCase)
             {
-                { "start", HandleStartTask },
-                { "status", HandleTaskStatus },
-                { "complete", HandleCompleteTask },
-                { "cancel", HandleCancelTask },
-                { "list", HandleListTasks }
+                { "start", HandleStartTaskAsync },
+                { "status", HandleTaskStatusAsync },
+                { "complete", HandleCompleteTaskAsync },
+                { "cancel", HandleCancelTaskAsync },
+                { "list", HandleListTasksAsync }
             };
         }
 
-        /// <summary>
-        /// Processes user input and handles task-related commands
-        /// </summary>
+        /// <inheritdoc />
         public override async Task<string> ProcessInputAsync(
             string userInput,
             string deviceId,
@@ -56,16 +53,7 @@ namespace Mix.MCP.Lib.Agents
         {
             try
             {
-                // Ensure _mcpClient is initialized
-                if (_mcpClient == null)
-                {
-                    var clientTransport = new SseClientTransport(new SseClientTransportOptions()
-                    {
-                        Endpoint = new Uri("http://localhost:5011/mcp/sse"),
-                        Name = "MixTaskAgentClient"
-                    });
-                    _mcpClient = McpClientFactory.CreateAsync(clientTransport).GetAwaiter().GetResult();
-                }
+                EnsureMcpClientInitialized();
 
                 ValidateInput(userInput, sessionId);
                 _logger.LogInformation("Processing task input for session {SessionId}: {UserInput}", sessionId, userInput);
@@ -74,55 +62,29 @@ namespace Mix.MCP.Lib.Agents
                 var taskState = GetTaskState(memory);
                 var taskHistory = GetTaskHistory(memory);
 
-                // --- LLM-based analysis for MCP Tool usage ---
                 var (isTool, toolName, toolParams) = await AnalyzeInputForToolAsync(userInput, serviceType, cancellationToken);
 
                 if (isTool && !string.IsNullOrEmpty(toolName))
                 {
                     var toolResult = await CallMcpToolAsync(toolName, toolParams, cancellationToken);
-                    // Optionally, add to history
-                    taskHistory.Add(new TaskHistoryEntry
-                    {
-                        Timestamp = DateTime.UtcNow,
-                        Command = $"tool:{toolName}",
-                        Arguments = string.Join(", ", toolParams.Select(kv => $"{kv.Key}={kv.Value}")),
-                        Response = toolResult
-                    });
-                    memory.SetValue(TASK_HISTORY_KEY, taskHistory);
+                    AddToTaskHistory(taskHistory, $"tool:{toolName}", FormatToolArguments(toolParams), toolResult);
+                    memory.SetValue(TaskHistoryKey, taskHistory);
                     return toolResult;
                 }
 
-                // Parse command and arguments
                 var (command, args) = ParseCommand(userInput);
 
                 if (_commandHandlers.TryGetValue(command, out var handler))
                 {
                     var response = await handler(taskState, args);
-
-                    // Update task history
-                    taskHistory.Add(new TaskHistoryEntry
-                    {
-                        Timestamp = DateTime.UtcNow,
-                        Command = command,
-                        Arguments = args,
-                        Response = response
-                    });
-
-                    // Trim history if needed
-                    if (taskHistory.Count > MAX_TASK_HISTORY)
-                    {
-                        taskHistory.RemoveRange(0, taskHistory.Count - MAX_TASK_HISTORY);
-                    }
-
-                    // Update memory
-                    memory.SetValue(TASK_STATE_KEY, taskState);
-                    memory.SetValue(TASK_HISTORY_KEY, taskHistory);
-
+                    AddToTaskHistory(taskHistory, command, args, response);
+                    TrimTaskHistory(taskHistory);
+                    memory.SetValue(TaskStateKey, taskState);
+                    memory.SetValue(TaskHistoryKey, taskHistory);
                     return response;
                 }
 
-                // If no command handler found, use LLM to process the input
-                return await ProcessWithLLM(userInput, taskState, serviceType, cancellationToken);
+                return await ProcessWithLlmAsync(userInput, taskState, serviceType, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -130,23 +92,114 @@ namespace Mix.MCP.Lib.Agents
             }
         }
 
-        // --- LLM analysis for MCP Tool usage ---
-        private async Task<(bool isTool, string toolName, Dictionary<string, object> toolParams)> AnalyzeInputForToolAsync(
+        private void EnsureMcpClientInitialized()
+        {
+            if (_mcpClient != null) return;
+
+            var clientTransport = new SseClientTransport(new SseClientTransportOptions
+            {
+                Endpoint = new Uri("http://localhost:5011/mcp/sse"),
+                Name = "MixTaskAgentClient"
+            });
+            _mcpClient = McpClientFactory.CreateAsync(clientTransport).GetAwaiter().GetResult();
+        }
+
+        private static void AddToTaskHistory(List<TaskHistoryEntry> history, string command, string arguments, string response)
+        {
+            history.Add(new TaskHistoryEntry
+            {
+                Timestamp = DateTime.UtcNow,
+                Command = command,
+                Arguments = arguments,
+                Response = response
+            });
+        }
+
+        private static void TrimTaskHistory(List<TaskHistoryEntry> history)
+        {
+            if (history.Count > MaxTaskHistory)
+            {
+                history.RemoveRange(0, history.Count - MaxTaskHistory);
+            }
+        }
+
+        private static string FormatToolArguments(Dictionary<string, object> toolParams)
+        {
+            return string.Join(", ", toolParams.Select(kv => $"{kv.Key}={kv.Value}"));
+        }
+
+        private static (string Command, string Args) ParseCommand(string input)
+        {
+            var parts = input.Split(new[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
+            return (parts[0].ToLowerInvariant(), parts.Length > 1 ? parts[1] : string.Empty);
+        }
+
+        private TaskState GetTaskState(AgentMemory memory)
+        {
+            var state = memory.GetValue<TaskState>(TaskStateKey);
+            if (state == null)
+            {
+                state = new TaskState();
+                memory.SetValue(TaskStateKey, state);
+            }
+            return state;
+        }
+
+        private List<TaskHistoryEntry> GetTaskHistory(AgentMemory memory)
+        {
+            var history = memory.GetValue<List<TaskHistoryEntry>>(TaskHistoryKey);
+            if (history == null)
+            {
+                history = new List<TaskHistoryEntry>();
+                memory.SetValue(TaskHistoryKey, history);
+            }
+            return history;
+        }
+
+        private async Task<(bool IsTool, string ToolName, Dictionary<string, object> ToolParams)> AnalyzeInputForToolAsync(
             string userInput,
             LLMServiceType serviceType,
             CancellationToken cancellationToken)
         {
+            // Gather context from session memory (e.g., last task result, task state, or history)
+            var memory = GetOrCreateMemory("default");
+            var taskState = GetTaskState(memory);
+            var taskHistory = GetTaskHistory(memory);
+
+            // You can customize what context to include. Here, we include the last task result and current state.
+            string lastResult = taskHistory.LastOrDefault()?.Response ?? "";
+            string stateSummary = $"Current task: {taskState.CurrentTask}, Status: {taskState.Status}";
+
+            var supportedActions = ToolDiscovery.SupportedPromptToolActions;
+            var toolList = string.Join("\n", supportedActions.Select(a => $"- {a.MethodName}: {a.Description}"));
+
+            // Compose a prompt that includes the context
+            var prompt = string.Format(
+                """
+                You are an AI assistant for a database platform. 
+                Read the following context before deciding how to handle the user's request.
+
+                Context:
+                - {0}
+                - Last result: {1}
+
+                Classify the user's request into one of these supported mcp tools:
+                {2}
+                User message: "{3}"
+                Respond in this JSON format:
+                {{
+                  "type": "tool" | "chat",
+                  "toolName": "...", // Only if type is tool
+                  "parameters": {{ ... }} // Only if type is tool
+                }}
+                """,
+                stateSummary,
+                lastResult,
+                toolList,
+                userInput
+            );
+
             var llmService = _llmServiceFactory.CreateService(serviceType);
-            var prompt = $@"
-You are an AI assistant. Analyze the following user input and determine if it should be handled by an MCP Tool.
-Respond in this JSON format:
-{{
-  ""type"": ""tool"" | ""chat"",
-  ""toolName"": ""..."", // Only if type is tool
-  ""parameters"": {{ ... }} // Only if type is tool
-}}
-User input: ""{userInput}""
-";
             var response = await llmService.ChatAsync(prompt, "deepseek-chat", 0.2, -1, cancellationToken);
             var content = response?.choices?.FirstOrDefault()?.Message?.Content;
             if (string.IsNullOrWhiteSpace(content))
@@ -176,7 +229,6 @@ User input: ""{userInput}""
             return (false, null, null);
         }
 
-        // --- Call MCP Tool ---
         private async Task<string> CallMcpToolAsync(string toolName, Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             try
@@ -192,50 +244,47 @@ User input: ""{userInput}""
         }
 
         /// <summary>
-        /// Gets the current task state from memory or creates a new one
+        /// Helper to get all supported [McpServerTool] methods and their descriptions from all [McpServerToolType] classes in the assembly
         /// </summary>
-        private TaskState GetTaskState(AgentMemory memory)
+        private static List<(string MethodName, string Description)> GetSupportedPromptToolActions()
         {
-            var state = memory.GetValue<TaskState>(TASK_STATE_KEY);
-            if (state == null)
+            var actions = new List<(string MethodName, string Description)>();
+            var assembly = typeof(TaskAgent).Assembly;
+
+            foreach (var type in assembly.GetTypes())
             {
-                state = new TaskState();
-                memory.SetValue(TASK_STATE_KEY, state);
+                // Only consider classes with [McpServerToolType] attribute
+                var hasToolType = type.GetCustomAttributes(false)
+                    .Any(attr => attr.GetType().Name == "McpServerToolTypeAttribute");
+                if (!hasToolType)
+                    continue;
+
+                foreach (var method in type.GetMethods(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public))
+                {
+                    // Only consider methods with [McpServerTool] attribute
+                    var hasToolAttr = method.GetCustomAttributes(false)
+                        .Any(attr => attr.GetType().Name == "McpServerToolAttribute");
+                    if (!hasToolAttr)
+                        continue;
+
+                    // Try to get a [Description] attribute if present
+                    var descAttr = method.GetCustomAttributes(false)
+                        .FirstOrDefault(attr => attr.GetType().Name == "DescriptionAttribute");
+                    string description = descAttr != null
+                        ? (string)descAttr.GetType().GetProperty("Description")?.GetValue(descAttr)
+                        : string.Join(", ", method.GetParameters().Where(p => !p.HasDefaultValue).Select(p => $"{p.Name} ({p.ParameterType.Name})"));
+
+                    actions.Add(($"{type.Name}.{method.Name}", description));
+                }
             }
-            return state;
+            return actions;
         }
 
-        /// <summary>
-        /// Gets the task history from memory or creates a new one
-        /// </summary>
-        private List<TaskHistoryEntry> GetTaskHistory(AgentMemory memory)
-        {
-            var history = memory.GetValue<List<TaskHistoryEntry>>(TASK_HISTORY_KEY);
-            if (history == null)
-            {
-                history = new List<TaskHistoryEntry>();
-                memory.SetValue(TASK_HISTORY_KEY, history);
-            }
-            return history;
-        }
-
-        /// <summary>
-        /// Parses the user input into a command and arguments
-        /// </summary>
-        private (string command, string args) ParseCommand(string input)
-        {
-            var parts = input.Split(new[] { ' ' }, 2);
-            return (parts[0].ToLower(), parts.Length > 1 ? parts[1] : string.Empty);
-        }
-
-        /// <summary>
-        /// Processes input using LLM when no specific command is recognized
-        /// </summary>
-        private async Task<string> ProcessWithLLM(string input, TaskState taskState, LLMServiceType serviceType, CancellationToken cancellationToken)
+        private async Task<string> ProcessWithLlmAsync(string input, TaskState taskState, LLMServiceType serviceType, CancellationToken cancellationToken)
         {
             var llmService = _llmServiceFactory.CreateService(serviceType);
             var prompt = $"Current task state: {taskState.Status}\nUser input: {input}\nPlease provide a helpful response.";
-            
+
             var response = await llmService.ChatAsync(
                 prompt,
                 "deepseek-chat",
@@ -243,68 +292,68 @@ User input: ""{userInput}""
                 -1,
                 cancellationToken);
 
-            return response?.choices?.FirstOrDefault()?.Message?.Content 
+            return response?.choices?.FirstOrDefault()?.Message?.Content
                 ?? "I apologize, but I couldn't process your request.";
         }
 
         #region Command Handlers
 
-        private async Task<string> HandleStartTask(TaskState state, string args)
+        private static Task<string> HandleStartTaskAsync(TaskState state, string args)
         {
             if (state.Status == TaskStatus.InProgress)
             {
-                return "A task is already in progress. Please complete or cancel it first.";
+                return Task.FromResult("A task is already in progress. Please complete or cancel it first.");
             }
 
             state.Status = TaskStatus.InProgress;
             state.CurrentTask = args;
             state.StartTime = DateTime.UtcNow;
-            return $"Started new task: {args}";
+            return Task.FromResult($"Started new task: {args}");
         }
 
-        private async Task<string> HandleTaskStatus(TaskState state, string args)
+        private static Task<string> HandleTaskStatusAsync(TaskState state, string args)
         {
             if (state.Status == TaskStatus.NotStarted)
             {
-                return "No task is currently in progress.";
+                return Task.FromResult("No task is currently in progress.");
             }
 
             var duration = DateTime.UtcNow - state.StartTime;
-            return $"Current task: {state.CurrentTask}\nStatus: {state.Status}\nDuration: {duration.TotalMinutes:F1} minutes";
+            return Task.FromResult($"Current task: {state.CurrentTask}\nStatus: {state.Status}\nDuration: {duration.TotalMinutes:F1} minutes");
         }
 
-        private async Task<string> HandleCompleteTask(TaskState state, string args)
+        private static Task<string> HandleCompleteTaskAsync(TaskState state, string args)
         {
             if (state.Status != TaskStatus.InProgress)
             {
-                return "No task is currently in progress.";
+                return Task.FromResult("No task is currently in progress.");
             }
 
             state.Status = TaskStatus.Completed;
             state.CompletionTime = DateTime.UtcNow;
-            return $"Completed task: {state.CurrentTask}";
+            return Task.FromResult($"Completed task: {state.CurrentTask}");
         }
 
-        private async Task<string> HandleCancelTask(TaskState state, string args)
+        private static Task<string> HandleCancelTaskAsync(TaskState state, string args)
         {
             if (state.Status != TaskStatus.InProgress)
             {
-                return "No task is currently in progress.";
+                return Task.FromResult("No task is currently in progress.");
             }
 
             state.Status = TaskStatus.Cancelled;
             state.CompletionTime = DateTime.UtcNow;
-            return $"Cancelled task: {state.CurrentTask}";
+            return Task.FromResult($"Cancelled task: {state.CurrentTask}");
         }
 
-        private async Task<string> HandleListTasks(TaskState state, string args)
+        private Task<string> HandleListTasksAsync(TaskState state, string args)
         {
             var memory = GetOrCreateMemory("default");
             var history = GetTaskHistory(memory);
-            
+
             if (!history.Any())
             {
-                return "No task history available.";
+                return Task.FromResult("No task history available.");
             }
 
             var response = new System.Text.StringBuilder("Recent tasks:\n");
@@ -313,7 +362,7 @@ User input: ""{userInput}""
                 response.AppendLine($"- {entry.Timestamp:g}: {entry.Command} {entry.Arguments}");
             }
 
-            return response.ToString();
+            return Task.FromResult(response.ToString());
         }
 
         #endregion

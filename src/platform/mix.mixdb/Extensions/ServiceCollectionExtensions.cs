@@ -21,11 +21,11 @@ namespace Mix.Mixdb.Extensions
             services.TryAddSingleton<ScylladbRepository>();
 
             // Register concrete implementations
-            services.TryAddScoped<RepodbDataService>();
+            services.TryAddTransient<RepodbDataService>();
             services.TryAddScoped<ScylladbDataService>();
 
             // Register factory
-            services.TryAddScoped<IMixDbDataServiceFactory, MixDbDataServiceFactory>();
+            services.TryAddSingleton<IMixDbDataServiceFactory, MixDbDataServiceFactory>();
 
             services.TryAddScoped<IMixdbStructure, MixdbStructureService>();
             services.AddScoped<IMixdbStructureService, RepodbStructureService>();

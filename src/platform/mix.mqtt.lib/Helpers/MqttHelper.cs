@@ -12,34 +12,40 @@ namespace Mix.Mqtt.Lib.Helpers
 {
     public static class MqttHelper
     {
-        public static MqttClientOptions GetClientOptions(MQTTSetting? queueSetting)
+        public static MqttClientOptions? GetClientOptions(MQTTSetting? queueSetting)
         {
             queueSetting ??= new MQTTSetting();
-            MqttClientOptionsBuilder builder = new MqttClientOptionsBuilder();
-            if (queueSetting.UseTls)
+            if (!string.IsNullOrEmpty(queueSetting.HostName))
             {
-                builder.WithTlsOptions(new MqttClientTlsOptions()
+
+                MqttClientOptionsBuilder builder = new MqttClientOptionsBuilder();
+                if (queueSetting.UseTls)
                 {
-                    UseTls = true,
-                    SslProtocol = queueSetting.SslProtocol,
-                    CertificateValidationHandler = (certificate) => true
-                });
+                    builder.WithTlsOptions(new MqttClientTlsOptions()
+                    {
+                        UseTls = true,
+                        SslProtocol = queueSetting.SslProtocol,
+                        CertificateValidationHandler = (certificate) => true
+                    });
+                }
+                if (!string.IsNullOrEmpty(queueSetting.UserName))
+                {
+                    builder.WithCredentials(queueSetting.UserName, queueSetting.Password);
+                }
+                if (queueSetting.UseWebSocket)
+                {
+                    builder.WithWebSocketServer(config =>
+                    {
+                        config.WithUri(queueSetting.HostName);
+                    });
+                }
+                else
+                {
+                    builder.WithTcpServer(queueSetting.HostName, queueSetting.Port);
+                }
+                return builder.WithWillQualityOfServiceLevel(queueSetting.Qos).Build();
             }
-            if (!string.IsNullOrEmpty(queueSetting.UserName))
-            {
-                builder.WithCredentials(queueSetting.UserName, queueSetting.Password);
-            }
-            if (queueSetting.UseWebSocket)
-            {
-                builder.WithWebSocketServer(config => {
-                    config.WithUri(queueSetting.HostName);
-                });
-            }
-            else
-            {
-                builder.WithTcpServer(queueSetting.HostName, queueSetting.Port);
-            }
-            return builder.WithWillQualityOfServiceLevel(queueSetting.Qos).Build();
+            return default;
         }
 
         #region Helpers

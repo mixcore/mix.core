@@ -12,7 +12,6 @@ namespace Mix.Portal
     {
         public void AddServices(IHostApplicationBuilder builder)
         {
-            builder.Services.TryAddScoped<IMixDbDataServiceFactory, MixDbDataServiceFactory>();
             builder.Services.TryAddScoped<IMixApplicationService, MixApplicationService>();
             builder.Services.TryAddScoped<PortalPostService>();
             builder.Services.TryAddScoped<IMixThemeExportService, MixThemeExportService>();

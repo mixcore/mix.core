@@ -6,7 +6,7 @@ namespace Mix.Shared.Dtos
     public class SearchRequestDto
     {
         public bool LoadNestedData { get; set; }
-        public string? MixDatabaseName { get; set; } = default;
+        public string? MixDbTableName { get; set; } = default;
         public string? Keyword { get; set; } = default;
         public string? Culture { get; set; } = default;
         public DateTime? FromDate { get; set; }

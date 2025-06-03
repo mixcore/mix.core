@@ -139,7 +139,7 @@ namespace Mix.SignalR.Hubs
 
         }
 
-        private bool IsInRoles(MixDbCommandQueueAction method, MixDatabase database)
+        private bool IsInRoles(MixDbCommandQueueAction method, MixDbTable database)
         {
 
             var userRoles = GetClaim(Context.User!, MixClaims.Role).Split(',', StringSplitOptions.RemoveEmptyEntries)
@@ -177,7 +177,7 @@ namespace Mix.SignalR.Hubs
             return string.Join(',', User.Claims.Where(c => c.Type == claimType).Select(m => m.Value));
         }
 
-        private bool CheckByPassAuthenticate(MixDbCommandQueueAction method, MixDatabase database)
+        private bool CheckByPassAuthenticate(MixDbCommandQueueAction method, MixDbTable database)
         {
             return method switch
             {
@@ -204,14 +204,14 @@ namespace Mix.SignalR.Hubs
             });
         }
 
-        private async Task<MixDatabase?> GetMixDatabase(string tableName)
+        private async Task<MixDbTable?> GetMixDatabase(string tableName)
         {
-            return await _memoryCache.TryGetValueAsync<MixDatabase?>(
+            return await _memoryCache.TryGetValueAsync<MixDbTable?>(
                 tableName,
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    var db = _ctx.MixDatabase.SingleOrDefault(m => m.SystemName == tableName);
+                    var db = _ctx.MixDbTable.SingleOrDefault(m => m.SystemName == tableName);
                     return Task.FromResult(db);
                 }
                 );

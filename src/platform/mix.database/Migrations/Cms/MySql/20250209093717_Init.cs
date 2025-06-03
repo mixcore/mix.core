@@ -359,7 +359,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    mix_database_context_id = table.Column<int>(type: "int", nullable: true),
+                    mix_database_id = table.Column<int>(type: "int", nullable: true),
                     system_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     type = table.Column<string>(type: "varchar(50)", nullable: false)

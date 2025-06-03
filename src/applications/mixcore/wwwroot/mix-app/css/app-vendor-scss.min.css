@@ -1,4 +1,4 @@
-/* Sat Sep 09 2023 14:08:55 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
+/* Sun Jun 01 2025 14:50:43 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
   max-width: 100%; }
 
 fb-login {
@@ -127,6 +127,10 @@ div[dnd-list] .dnd-item.selected {
   background-color: #dff0d8;
   color: #3c763d; }
 
+.table-data td.preview {
+  max-width: 120px;
+  overflow: hidden; }
+
 .mouse {
   z-index: 9999999;
   width: 70px;
@@ -181,21 +185,23 @@ main-side-bar-dynamic .sw-sidebar .sw-toc-sub-link .btn-group {
 .attr-set-value-item:last-child {
   border-bottom: 0 !important; }
 
-mix-database-nav-values .row {
+mix-db-table-nav-values .row {
   padding: 10px 0; }
 
-mix-database-nav-values mix-column-preview .rowx {
+mix-db-table-nav-values mix-column-preview .rowx {
   max-height: 110px;
   overflow: hidden; }
+
+.attr-set-value-item:last-child {
+  border-bottom: 0 !important; }
+
+.attr-set-value-item:last-child {
+  border-bottom: 0 !important; }
 
 @media (min-width: 992px) {
   #modal-content-filter .modal-lg,
   #modal-content-filter .modal-xl {
     max-width: 80vw; } }
-
-.table-data td.preview {
-  max-width: 120px;
-  overflow: hidden; }
 
 .content {
   width: 100%;
