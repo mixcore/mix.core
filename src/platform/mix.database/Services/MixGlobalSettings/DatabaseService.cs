@@ -18,7 +18,7 @@ namespace Mix.Database.Services.MixGlobalSettings
 {
     public class DatabaseService : GlobalSettingServiceBase<DatabaseConfigurations>
     {
-        public MixDatabaseProvider DatabaseProvider => MixDatabaseProvider.SQLSERVER;
+        public MixDatabaseProvider DatabaseProvider => AppSettings.DatabaseProvider;
         protected IHttpContextAccessor HttpContextAccessor;
 
         public DatabaseService(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixGlobalSetting settings)
@@ -29,7 +29,6 @@ namespace Mix.Database.Services.MixGlobalSettings
 
         public string GetConnectionString(string name)
         {
-            return "Server=localhost;Database=mixcore_structure;UID=sa;Pwd=myPassword;MultipleActiveResultSets=true;";
             switch (name)
             {
                 case MixConstants.CONST_CMS_CONNECTION:
