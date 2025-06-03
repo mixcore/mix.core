@@ -52,7 +52,7 @@ namespace Mix.MCP.Lib.Helpers
         /// </summary>
         public async Task<bool> DatabaseExists(string databaseSystemName)
         {
-            return await _cmsUow.DbContext.MixDatabase
+            return await _cmsUow.DbContext.MixDbTable
                 .AnyAsync(db => db.SystemName == databaseSystemName && !db.IsDeleted);
         }
 
@@ -191,7 +191,7 @@ namespace Mix.MCP.Lib.Helpers
 
             if (newDescription != null) // Allow empty string to clear description
             {
-                // MixDatabase columns might not have a direct Description property
+                // MixDbTable columns might not have a direct Description property
                 // We might need to store this in metadata or another related field
                 _logger.LogInformation("Would update description for column {ColumnName} to: {Description}",
                     columnSystemName, newDescription);
@@ -304,17 +304,16 @@ namespace Mix.MCP.Lib.Helpers
             db.Columns.Add(ParseColumnToViewModel(db, column));
         }
 
-        private MixdbDatabaseColumnViewModel ParseColumnToViewModel(MixDbDatabaseViewModel db, ColumnInfo column)
+        private MixdbColumnViewModel ParseColumnToViewModel(MixDbDatabaseViewModel db, ColumnInfo column)
         {
             string displayName = FormatDisplayName(column.Name);
-            return new MixdbDatabaseColumnViewModel(_cmsUow)
+            return new MixdbColumnViewModel(_cmsUow)
             {
-                MixDatabaseId = db.Id,
-                MixDatabaseName = db.SystemName,
+                MixDbTableId = db.Id,
+                MixDbTableName = db.SystemName,
                 DataType = column.DataType,
                 DisplayName = displayName,
                 SystemName = column.Name,
-                DefaultValue = column.DefaultValue,
                 ColumnConfigurations = new Mix.Shared.Models.ColumnConfigurations
                 {
                     IsRequire = column.IsRequired,

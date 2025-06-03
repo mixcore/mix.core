@@ -91,6 +91,7 @@
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="7.3.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="7.3.1" />
 		<PackageReference Include="System.IO.Packaging" Version="9.0.2" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>

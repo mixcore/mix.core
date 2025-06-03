@@ -8,7 +8,7 @@ namespace Mix.Shared.Dtos
         #region Properties
         public string SystemName { get; set; }
         public string DisplayName { get; set; }
-        public string MixDatabaseName { get; set; }
+        public string MixDbTableName { get; set; }
         public MixDataType DataType { get; set; } = MixDataType.String;
         public string? DefaultValue { get; set; }
         public ColumnConfigurations? ColumnConfigurations { get; set; } = new();
@@ -21,11 +21,11 @@ namespace Mix.Shared.Dtos
         {
         }
 
-        public AlterColumnDto(MixDatabaseColumnDto model)
+        public AlterColumnDto(MixDbCollumnDto model)
         {
             SystemName = model.SystemName;
             DisplayName = model.DisplayName;
-            MixDatabaseName = model.MixDatabaseName;
+            MixDbTableName = model.MixDbTableName;
             DataType = model.DataType;
             DefaultValue = model.DefaultValue;
             ColumnConfigurations = model.ColumnConfigurations;

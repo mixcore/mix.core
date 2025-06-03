@@ -1,6 +1,6 @@
 ﻿namespace Mix.Database.Entities.Cms
 {
-    public class MixMedia : TenantEntityBase<int>
+    public class MixMedia : TenantEntityBase<Guid>
     {
         public string Extension { get; set; }
         public string FileFolder { get; set; }

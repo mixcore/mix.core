@@ -282,7 +282,7 @@ namespace Mix.Database.Migrations.Cms.SqlServer
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    mix_database_context_id = table.Column<int>(type: "int", nullable: true),
+                    mix_database_id = table.Column<int>(type: "int", nullable: true),
                     system_name = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     type = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     read_permissions = table.Column<string>(type: "nvarchar(250)", nullable: true),

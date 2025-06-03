@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.Extensions.Logging;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.UnitOfWork;
+using ModelContextProtocol;
 using ModelContextProtocol.Server;
 using System;
 using System.ComponentModel;
@@ -39,13 +40,13 @@ namespace Mix.MCP.Lib.Tools
                 {
                     await _cmsUow.RollbackAsync();
                     _logger.LogError("Operation {OperationName} timed out after {Timeout} seconds", operationName, timeoutSeconds ?? DEFAULT_TIMEOUT_SECONDS);
-                    throw new McpToolException($"Operation {operationName} timed out after {timeoutSeconds ?? DEFAULT_TIMEOUT_SECONDS} seconds");
+                    throw new McpException($"timed out after {timeoutSeconds ?? DEFAULT_TIMEOUT_SECONDS} seconds");
                 }
                 catch (Exception ex)
                 {
                     await _cmsUow.RollbackAsync();
                     _logger.LogError(ex, "Error in {OperationName}: {ErrorMessage}", operationName, ex.Message);
-                    throw new McpToolException($"Error in {operationName}: {ex.Message}", ex);
+                    throw new McpException($"{ex.Message}", ex);
                 }
             }
         }
@@ -64,25 +65,14 @@ namespace Mix.MCP.Lib.Tools
             {
                 await _cmsUow.RollbackAsync();
                 _logger.LogError("Operation {OperationName} timed out after {Timeout} seconds", operationName, timeoutSeconds ?? DEFAULT_TIMEOUT_SECONDS);
-                throw new McpToolException($"Operation {operationName} timed out after {timeoutSeconds ?? DEFAULT_TIMEOUT_SECONDS} seconds");
+                throw new McpException($"timed out after {timeoutSeconds ?? DEFAULT_TIMEOUT_SECONDS} seconds");
             }
             catch (Exception ex)
             {
                 await _cmsUow.RollbackAsync();
                 _logger.LogError(ex, "Error in {OperationName}: {ErrorMessage}", operationName, ex.Message);
-                throw new McpToolException($"Error in {operationName}: {ex.Message}", ex);
+                throw new McpException($"{ex.Message}", ex);
             }
-        }
-    }
-
-    public class McpToolException : Exception
-    {
-        public McpToolException(string message) : base(message)
-        {
-        }
-
-        public McpToolException(string message, Exception innerException) : base(message, innerException)
-        {
         }
     }
 } 

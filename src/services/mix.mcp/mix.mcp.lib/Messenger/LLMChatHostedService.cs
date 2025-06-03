@@ -38,6 +38,23 @@ namespace Mix.MCP.Lib.Messenger
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            while (!_mqttService.IsConnected)
+            {
+                try
+                {
+                    // Wait to ensure local mqtt server started before trying to connect again
+                    await Task.Delay(5000); 
+                    await SubscribeLLMChatAsync(stoppingToken);
+                }
+                catch
+                {
+                    Console.WriteLine("Failed to connect to MQTT broker. Retrying...");
+                }
+            }
+        }
+
+        private async Task SubscribeLLMChatAsync(CancellationToken stoppingToken)
+        {
             await _mqttService.SubscribeAsync(LLMChatTopics.LLMChat, async payload =>
             {
                 try

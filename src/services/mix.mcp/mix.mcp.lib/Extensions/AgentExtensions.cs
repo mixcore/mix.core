@@ -23,8 +23,8 @@ namespace Mix.MCP.Lib.Extensions
             builder.Services.TryAddSingleton<DatabaseAgent>();
             builder.Services.TryAddSingleton<TaskAgent>();
             builder.Services.TryAddSingleton<ChatAgent>();
-            builder.Services.TryAddSingleton<PlanningAgent>();
             builder.Services.TryAddSingleton<RoutingAgent>();
+            builder.Services.TryAddSingleton<PlanningAgent>();
             builder.Services.AddHostedService<LLMChatHostedService>();
             return builder;
         }

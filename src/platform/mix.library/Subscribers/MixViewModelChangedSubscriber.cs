@@ -45,7 +45,7 @@ namespace Mix.Lib.Subscribers
                 case var m when m == typeof(MixTenantSystemViewModel).FullName:
                     await MixDomainViewModelHandler.MessageQueueHandler(model, _mixTenantService);
                     break;
-                case var m when m == typeof(MixDatabaseColumnViewModel).FullName:
+                case var m when m == typeof(MixDbColumnViewModel).FullName:
                     var mixDbService = GetRequiredService<IMixdbStructure>();
                     if (mixDbService != null) {
                         await MixDatabaseColumnViewModelHandler.MessageQueueHandler(model,mixDbService);

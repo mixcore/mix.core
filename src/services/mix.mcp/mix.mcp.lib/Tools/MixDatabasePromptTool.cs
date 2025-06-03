@@ -21,6 +21,7 @@ using Mix.MCP.Lib.Helpers;
 using Mix.MCP.Lib.Models;
 using System.Threading;
 using Microsoft.AspNetCore.Http.Timeouts;
+using ModelContextProtocol;
 
 namespace Mix.MCP.Lib.Tools
 {
@@ -73,9 +74,9 @@ namespace Mix.MCP.Lib.Tools
             CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(displayName))
-                return "Display name cannot be empty.";
+                throw new McpException("Display name cannot be empty.");
             if (string.IsNullOrWhiteSpace(schemaDescription))
-                return "Schema description cannot be empty.";
+                throw new McpException("Schema description cannot be empty.");
 
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
@@ -83,11 +84,11 @@ namespace Mix.MCP.Lib.Tools
                     displayName, schemaDescription);
                 var columns = await _schemaParser.ParseSchemaDescriptionWithLLM(schemaDescription, llmServiceType, llmModel);
                 if (columns.Count == 0)
-                    return "Could not determine columns from the schema description. Please provide more details about the fields needed for your database.";
+                    throw new McpException("Could not determine columns from the schema description. Please provide more details about the fields needed for your database.");
                 string systemName = MixDatabaseHelper.GenerateSystemName(displayName, MixDatabaseNamingConvention.SnakeCase);
                 bool databaseExists = await _databaseHelper.DatabaseExists(systemName);
                 if (databaseExists)
-                    return $"A database with the system name '{systemName}' already exists. Please use a different name or delete the existing database first.";
+                    throw new McpException($"A database with the system name '{systemName}' already exists. Please use a different name or delete the existing database first.");
                 var database = await _databaseHelper.CreateDatabase(
                     displayName,
                     systemName,
@@ -97,7 +98,7 @@ namespace Mix.MCP.Lib.Tools
                     MixDatabaseType.Service,
                     mixDatabaseContextId);
                 if (database == null)
-                    return $"Failed to create database: {systemName}. Please check the logs for more details.";
+                    throw new McpException($"Failed to create database: {systemName}. Please check the logs for more details.");
                 return JsonSerializer.Serialize(new
                 {
                     Success = true,
@@ -126,23 +127,23 @@ namespace Mix.MCP.Lib.Tools
             CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(databaseSystemName))
-                return "Database system name cannot be empty.";
+                throw new McpException("Database system name cannot be empty.");
             if (string.IsNullOrWhiteSpace(schemaText))
-                return "Schema text cannot be empty.";
+                throw new McpException("Schema text cannot be empty.");
             if (timeoutSeconds <= 0)
-                return "Timeout must be greater than 0 seconds.";
+                throw new McpException("Timeout must be greater than 0 seconds.");
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Adding columns to database {DatabaseName} with schema: {SchemaText}, timeout: {Timeout}s",
                     databaseSystemName, schemaText, timeoutSeconds);
                 var database = await _databaseHelper.GetDatabaseBySystemName(databaseSystemName);
                 if (database == null)
-                    return $"Database with system name '{databaseSystemName}' not found.";
+                    throw new McpException($"Database with system name '{databaseSystemName}' not found.");
                 var llmService = _llmServiceFactory.CreateService(llmServiceType);
                 llmService.SetTimeout(TimeSpan.FromSeconds(timeoutSeconds));
                 var columns = await _schemaParser.ParseSchemaDescriptionWithLLM(schemaText, llmServiceType, llmModel, ct);
                 if (columns.Count == 0)
-                    return "Could not determine column information from the schema text. Please provide more details.";
+                    throw new McpException("Could not determine column information from the schema text. Please provide more details.");
                 var results = new List<object>();
                 var successCount = 0;
                 foreach (var column in columns)
@@ -154,7 +155,6 @@ namespace Mix.MCP.Lib.Tools
                         DisplayName = MixDatabaseHelper.FormatDisplayName(column.Name),
                         DataType = column.DataType.ToString(),
                         IsRequired = column.IsRequired,
-                        DefaultValue = column.DefaultValue,
                         Success = success
                     });
                     if (success) successCount++;
@@ -181,46 +181,52 @@ namespace Mix.MCP.Lib.Tools
             CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(databaseSystemName))
-                return "Database system name cannot be empty.";
+                throw new McpException("Error: Database system name cannot be empty.");
             if (string.IsNullOrWhiteSpace(schemaText))
-                return "Schema text cannot be empty.";
+                throw new McpException("Error: Schema text cannot be empty.");
             if (timeoutSeconds <= 0)
-                return "Timeout must be greater than 0 seconds.";
-            return await ExecuteWithExceptionHandlingAsync(async (ct) =>
+                throw new McpException("Error: Timeout must be greater than 0 seconds.");
+            try
             {
-                _logger.LogInformation("Updating columns in database {DatabaseName} with schema: {SchemaText}, timeout: {Timeout}s",
-                    databaseSystemName, schemaText, timeoutSeconds);
-                var database = await _databaseHelper.GetDatabaseBySystemName(databaseSystemName);
-                if (database == null)
-                    return $"Database with system name '{databaseSystemName}' not found.";
-                var llmService = _llmServiceFactory.CreateService(llmServiceType);
-                llmService.SetTimeout(TimeSpan.FromSeconds(timeoutSeconds));
-                var columns = await _schemaParser.ParseSchemaDescriptionWithLLM(schemaText, llmServiceType, llmModel, ct);
-                if (columns.Count == 0)
-                    return "Could not determine column information from the schema text. Please provide more details.";
-                var results = new List<object>();
-                var successCount = 0;
-                foreach (var column in columns)
+                return await ExecuteWithExceptionHandlingAsync(async (ct) =>
                 {
-                    bool success = await _databaseHelper.UpdateColumn(database, column.Name);
-                    results.Add(new
+                    _logger.LogInformation("Updating columns in database {DatabaseName} with schema: {SchemaText}, timeout: {Timeout}s",
+                        databaseSystemName, schemaText, timeoutSeconds);
+                    var database = await _databaseHelper.GetDatabaseBySystemName(databaseSystemName);
+                    if (database == null)
+                        throw new McpException($"Error: Database with system name '{databaseSystemName}' not found.");
+                    var llmService = _llmServiceFactory.CreateService(llmServiceType);
+                    llmService.SetTimeout(TimeSpan.FromSeconds(timeoutSeconds));
+                    var columns = await _schemaParser.ParseSchemaDescriptionWithLLM(schemaText, llmServiceType, llmModel, ct);
+                    if (columns.Count == 0)
+                        throw new McpException("Error: Could not determine column information from the schema text. Please provide more details.");
+                    var results = new List<object>();
+                    var successCount = 0;
+                    foreach (var column in columns)
                     {
-                        Name = column.Name,
-                        DisplayName = MixDatabaseHelper.FormatDisplayName(column.Name),
-                        DataType = column.DataType.ToString(),
-                        IsRequired = column.IsRequired,
-                        DefaultValue = column.DefaultValue,
-                        Success = success
+                        bool success = await _databaseHelper.UpdateColumn(database, column.Name);
+                        results.Add(new
+                        {
+                            Name = column.Name,
+                            DisplayName = MixDatabaseHelper.FormatDisplayName(column.Name),
+                            DataType = column.DataType.ToString(),
+                            IsRequired = column.IsRequired,
+                            Success = success
+                        });
+                        if (success) successCount++;
+                    }
+                    return JsonSerializer.Serialize(new
+                    {
+                        Success = successCount > 0,
+                        Message = $"Updated {successCount} of {columns.Count} columns in database '{databaseSystemName}'",
+                        Columns = results
                     });
-                    if (success) successCount++;
-                }
-                return JsonSerializer.Serialize(new
-                {
-                    Success = successCount > 0,
-                    Message = $"Updated {successCount} of {columns.Count} columns in database '{databaseSystemName}'",
-                    Columns = results
-                });
-            }, "UpdateDatabaseColumn", timeoutSeconds);
+                }, "UpdateDatabaseColumn", timeoutSeconds);
+            }
+            catch (McpException ex)
+            {
+                return $"Error: {ex.Message}";
+            }
         }
 
         /// <summary>
@@ -237,13 +243,13 @@ namespace Mix.MCP.Lib.Tools
             CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(databaseSystemName))
-                return "Database system name cannot be empty.";
+                throw new McpException("Database system name cannot be empty.");
             if (string.IsNullOrWhiteSpace(schemaText))
-                return "Schema text cannot be empty.";
+                throw new McpException("Schema text cannot be empty.");
             if (timeoutSeconds <= 0)
-                return "Timeout must be greater than 0 seconds.";
+                throw new McpException("Timeout must be greater than 0 seconds.");
             if (confirmDropColumn != "YES")
-                return "To delete columns, you must confirm by setting confirmDropColumn to 'YES' (case sensitive).";
+                throw new McpException("To delete columns, you must confirm by setting confirmDropColumn to 'YES' (case sensitive).");
 
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
@@ -251,12 +257,12 @@ namespace Mix.MCP.Lib.Tools
                     databaseSystemName, schemaText, timeoutSeconds);
                 var database = await _databaseHelper.GetDatabaseBySystemName(databaseSystemName);
                 if (database == null)
-                    return $"Database with system name '{databaseSystemName}' not found.";
+                    throw new McpException($"Database with system name '{databaseSystemName}' not found.");
                 var llmService = _llmServiceFactory.CreateService(llmServiceType);
                 llmService.SetTimeout(TimeSpan.FromSeconds(timeoutSeconds));
                 var columns = await _schemaParser.ParseSchemaDescriptionWithLLM(schemaText, llmServiceType, llmModel, ct);
                 if (columns.Count == 0)
-                    return "Could not determine column information from the schema text. Please provide more details.";
+                    throw new McpException("Could not determine column information from the schema text. Please provide more details.");
                 var results = new List<object>();
                 var successCount = 0;
                 foreach (var column in columns)
@@ -268,7 +274,6 @@ namespace Mix.MCP.Lib.Tools
                         DisplayName = MixDatabaseHelper.FormatDisplayName(column.Name),
                         DataType = column.DataType.ToString(),
                         IsRequired = column.IsRequired,
-                        DefaultValue = column.DefaultValue,
                         Success = success
                     });
                     if (success) successCount++;

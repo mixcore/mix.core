@@ -20,7 +20,7 @@ namespace Mix.Shared.Dtos
             Direction = req.Direction;
             Status = req.Status;
         }
-        public string MixDatabaseName { get; set; }
+        public string MixDbTableName { get; set; }
         public string MetadataAnd { get; set; }
         public string MetadataOr { get; set; }
         public List<MixQueryField> Queries { get; set; } = new();

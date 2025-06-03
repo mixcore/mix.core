@@ -11,7 +11,7 @@ using System.Text.Json.Serialization;
 namespace Mix.RepoDb.ViewModels
 {
     public sealed class MixDatabaseContextReadViewModel
-        : TenantDataViewModelBase<MixCmsContext, MixDatabaseContext, int, MixDatabaseContextReadViewModel>
+        : TenantDataViewModelBase<MixCmsContext, MixDbDatabase, int, MixDatabaseContextReadViewModel>
     {
         #region Properties
         public MixDatabaseNamingConvention NamingConvention { get; set; }
@@ -34,7 +34,7 @@ namespace Mix.RepoDb.ViewModels
         {
         }
 
-        public MixDatabaseContextReadViewModel(MixDatabaseContext entity, UnitOfWorkInfo uowInfo)
+        public MixDatabaseContextReadViewModel(MixDbDatabase entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

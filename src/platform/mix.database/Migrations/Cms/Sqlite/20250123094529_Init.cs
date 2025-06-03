@@ -282,7 +282,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    mix_database_context_id = table.Column<int>(type: "INTEGER", nullable: true),
+                    mix_database_id = table.Column<int>(type: "INTEGER", nullable: true),
                     system_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     type = table.Column<string>(type: "varchar(50)", nullable: false),
                     read_permissions = table.Column<string>(type: "varchar(250)", nullable: true),

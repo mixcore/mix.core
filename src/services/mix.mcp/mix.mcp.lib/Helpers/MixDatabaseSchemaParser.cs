@@ -68,14 +68,12 @@ Response format (JSON array only):
   {{
     ""name"": ""product_name"",
     ""dataType"": ""String"",
-    ""isRequired"": true,
-    ""defaultValue"": null
+    ""isRequired"": true
   }},
   {{
     ""name"": ""price"",
     ""dataType"": ""Double"",
-    ""isRequired"": true,
-    ""defaultValue"": ""0.00""
+    ""isRequired"": true
   }}
 ]
 
@@ -128,7 +126,6 @@ Respond ONLY with a valid JSON array.";
                             {
                                 Name = JsonHelper.GetStringPropertyOrDefault(columnElement, "name", ""),
                                 IsRequired = JsonHelper.GetBoolPropertyOrDefault(columnElement, "isRequired", false),
-                                DefaultValue = JsonHelper.GetStringPropertyOrDefault(columnElement, "defaultValue", null)
                             };
 
                             // Parse data type

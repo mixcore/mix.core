@@ -91,8 +91,8 @@ namespace Mix.Portal.Controllers
                 var siteData = await _importService.LoadSchema();
                 siteData.ThemeId = dto.ThemeId;
                 siteData.MixDatabases = siteData.MixDatabases.Where(m => dto.MixDatabaseIds.Contains(m.Id)).ToList();
-                siteData.MixDatabaseColumns = siteData.MixDatabaseColumns.Where(m => dto.MixDatabaseIds.Contains(m.MixDatabaseId)).ToList();
-                siteData.MixDatabaseRelationships = siteData.MixDatabaseRelationships.Where(
+                siteData.MixDatabaseColumns = siteData.MixDatabaseColumns.Where(m => dto.MixDatabaseIds.Contains(m.MixDbTableId)).ToList();
+                siteData.MixDbTableRelationships = siteData.MixDbTableRelationships.Where(
                     m => siteData.MixDatabases.Any(n => n.SystemName == m.SourceDatabaseName)
                             && siteData.MixDatabases.Any(n => n.SystemName == m.DestinateDatabaseName)).ToList();
 
