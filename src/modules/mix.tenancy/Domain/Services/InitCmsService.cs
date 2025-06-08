@@ -56,6 +56,7 @@ namespace Mix.Tenancy.Domain.Services
             _configuration[nameof(AppSettingsModel.DatabaseProvider)] = model.DatabaseProvider.ToString();
             _databaseService.InitConnectionStrings(model.ConnectionString, model.DatabaseProvider);
             _databaseService.UpdateMixCmsContext();
+            _databaseService.SaveSettings();
             return Task.CompletedTask;
         }
 

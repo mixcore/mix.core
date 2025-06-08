@@ -181,7 +181,7 @@ namespace Mix.Database.Services.MixGlobalSettings
                 SetConnectionString(MixConstants.CONST_AUDIT_LOG_CONNECTION, connectionString);
                 SetConnectionString(MixConstants.CONST_QUEUE_LOG_CONNECTION, connectionString);
             }
-            SaveSettings();
+            AppSettings = RawSettings.ToObject<DatabaseConfigurations>();
             //ToDo: update init
             //MixHeartConfigService.Instance.AppSettingsModel.DatabaseProvider = databaseProvider;
             //MixHeartConfigService.Instance.SetConnectionString(MixHeartConstants.CACHE_CONNECTION, connectionString);
@@ -203,13 +203,6 @@ namespace Mix.Database.Services.MixGlobalSettings
             {
                 MigrateDbContext(ctx);
             }
-            using var settingsCtx = GetSettingDbContext();
-            {
-                MigrateDbContext(settingsCtx);
-            }
-            //using var cacheCtx = GetCacheDbContext();
-            //if (cacheCtx.Database.GetPendingMigrations().Count() > 0)
-            //    cacheCtx.Database.Migrate();
             using var accCtx = GetAccountDbContext();
             {
                 MigrateDbContext(accCtx);
@@ -227,7 +220,6 @@ namespace Mix.Database.Services.MixGlobalSettings
 
         private void MigrateDbContext(DbContext ctx)
         {
-            ctx.Database.EnsureCreated();
             if (ctx.Database.GetPendingMigrations().Count() > 0)
                 ctx.Database.Migrate();
         }
@@ -240,6 +232,7 @@ namespace Mix.Database.Services.MixGlobalSettings
                 await ctx.Database.MigrateAsync();
             }
         }
+
         public override void SaveSettings()
         {
             base.SaveSettings();
