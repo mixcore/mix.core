@@ -65,12 +65,12 @@ namespace Mix.MCP.Lib.Extensions
                 .WithTools<EchoTool>()
                 .WithPrompts<GeneratePrompt>()
                 .WithPrompts<ResourcePrompts>()
-                .WithPrompts<MixDatabasePrompts>()
-                .WithTools<MixDatabasePromptTool>()
+                .WithPrompts<MixDbPrompts>()
+                .WithTools<MixDbPromptTool>()
                 .WithTools<DatabaseAgent>()
                 //.WithTools<LLMTools>()
                 //.WithTools<ResourceTool>()
-                //.WithTools<MixDatabaseDataTool>()
+                //.WithTools<MixDbDataTool>()
                 .WithToolsFromAssembly();
 
             // Register other services

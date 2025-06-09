@@ -23,7 +23,7 @@ namespace Mix.Database.Entities.Account
         public virtual DbSet<OAuthClient> OAuthClient { get; set; }
         public virtual DbSet<OAuthToken> OAuthToken { get; set; }
         public DbSet<MixPermission> MixPermission { get; set; }
-        public DbSet<SysMixDbDataAssociation> SysMixDatabaseAssociation { get; set; }
+        public DbSet<SysMixDbDataAssociation> SysMixDbDataAssociation { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MixCmsAccountContext" /> class.

@@ -144,7 +144,7 @@ namespace Mix.Mixdb.Services
         /// <summary>
         /// Adds a new column to the database
         /// </summary>
-        public async Task AddColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col, CancellationToken cancellationToken = default)
+        public async Task AddColumn(MixDbTableViewModel database, MixdbColumnViewModel col, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -169,7 +169,7 @@ namespace Mix.Mixdb.Services
         /// <summary>
         /// Alters an existing column in the database
         /// </summary>
-        public async Task AlterColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col, bool isDrop, CancellationToken cancellationToken = default)
+        public async Task AlterColumn(MixDbTableViewModel database, MixdbColumnViewModel col, bool isDrop, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -178,11 +178,11 @@ namespace Mix.Mixdb.Services
                 cancellationToken.ThrowIfCancellationRequested();
                 ValidateDatabaseAndColumn(database, col);
 
-                if (database.MixDatabaseContext != null && database.MixDatabaseContextId != 1)
+                if (database.MixDbDatabase != null && database.MixDbDatabaseId != 1)
                 {
                     _repository.InitializeRepoDb(
-                        database.MixDatabaseContext.ConnectionString.Decrypt(_configuration.AesKey()),
-                        database.MixDatabaseContext.DatabaseProvider);
+                        database.MixDbDatabase.ConnectionString.Decrypt(_configuration.AesKey()),
+                        database.MixDbDatabase.DatabaseProvider);
                 }
 
                 var fieldNameService = new FieldNameService(database.NamingConvention);
@@ -203,7 +203,7 @@ namespace Mix.Mixdb.Services
         /// <summary>
         /// Drops a column from the database
         /// </summary>
-        public async Task DropColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col, CancellationToken cancellationToken = default)
+        public async Task DropColumn(MixDbTableViewModel database, MixdbColumnViewModel col, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -212,11 +212,11 @@ namespace Mix.Mixdb.Services
                 cancellationToken.ThrowIfCancellationRequested();
                 ValidateDatabaseAndColumn(database, col);
 
-                if (database.MixDatabaseContext != null)
+                if (database.MixDbDatabase != null)
                 {
                     _repository.InitializeRepoDb(
-                        database.MixDatabaseContext.ConnectionString.Decrypt(_configuration.AesKey()),
-                        database.MixDatabaseContext.DatabaseProvider);
+                        database.MixDbDatabase.ConnectionString.Decrypt(_configuration.AesKey()),
+                        database.MixDbDatabase.DatabaseProvider);
                 }
 
                 var alterCommandText = GenerateDropColumnSql(col);
@@ -234,7 +234,7 @@ namespace Mix.Mixdb.Services
         /// Migrates the database structure
         /// </summary>
         public async Task Migrate(
-            MixDbDatabaseViewModel database,
+            MixDbTableViewModel database,
             MixDatabaseProvider databaseProvider,
             CancellationToken cancellationToken = default)
         {
@@ -299,7 +299,7 @@ namespace Mix.Mixdb.Services
 
         #region Private Methods
 
-        private void ValidateDatabaseAndColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col)
+        private void ValidateDatabaseAndColumn(MixDbTableViewModel database, MixdbColumnViewModel col)
         {
             if (database == null)
             {
@@ -317,7 +317,7 @@ namespace Mix.Mixdb.Services
             }
         }
 
-        private void ValidateDatabaseForMigration(MixDbDatabaseViewModel database)
+        private void ValidateDatabaseForMigration(MixDbTableViewModel database)
         {
             if (database == null)
             {
@@ -341,9 +341,9 @@ namespace Mix.Mixdb.Services
                    $" {string.Join(",", colsSql.ToArray())})";
         }
 
-        private string GetIdSyntax(MixDatabaseProvider databaseProvider, MixDatabaseType dbType)
+        private string GetIdSyntax(MixDatabaseProvider databaseProvider, MixDbTableType dbType)
         {
-            if (dbType == MixDatabaseType.GuidService)
+            if (dbType == MixDbTableType.GuidService)
             {
                 return $"{_databaseConstant.BacktickOpen}{_databaseConstant.Guid}{_databaseConstant.BacktickClose} PRIMARY KEY";
             }
@@ -359,7 +359,7 @@ namespace Mix.Mixdb.Services
         }
 
         private string GenerateColumnSql(MixdbColumnViewModel col, MixDatabaseProvider databaseProvider,
-            MixDatabaseType dbType, FieldNameService fieldNameService)
+            MixDbTableType dbType, FieldNameService fieldNameService)
         {
             if (string.Equals(col.SystemName, "id", StringComparison.OrdinalIgnoreCase))
             {
@@ -377,7 +377,7 @@ namespace Mix.Mixdb.Services
         }
 
         private string GenerateAddColumnSql(MixdbColumnViewModel col, MixDatabaseProvider databaseProvider,
-            MixDatabaseType type, FieldNameService fieldNameService)
+            MixDbTableType type, FieldNameService fieldNameService)
         {
             return $"ALTER TABLE {_databaseConstant.BacktickOpen}{col.MixDbTableName}{_databaseConstant.BacktickClose}" +
                    $" ADD {GenerateColumnSql(col, databaseProvider, type, fieldNameService)};";

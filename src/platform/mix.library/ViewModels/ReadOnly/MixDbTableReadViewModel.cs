@@ -9,10 +9,10 @@ namespace Mix.Lib.ViewModels.ReadOnly
     public sealed class MixDbTableReadViewModel : TenantDataViewModelBase<MixCmsContext, MixDbTable, int, MixDbTableReadViewModel>
     {
         #region Properties
-        public int? MixDatabaseContextId { get; set; }
+        public int? MixDbDatabaseId { get; set; }
         [Required]
         public string SystemName { get; set; }
-        public MixDatabaseType Type { get; set; }
+        public MixDbTableType Type { get; set; }
         public List<string> ReadPermissions { get; set; }
         public List<string> CreatePermissions { get; set; }
         public List<string> UpdatePermissions { get; set; }

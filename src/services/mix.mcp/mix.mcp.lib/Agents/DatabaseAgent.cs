@@ -16,7 +16,7 @@ using System.Text.Json;
 namespace Mix.MCP.Lib.Agents
 {
     /// <summary>
-    /// Agent for handling database operations using MixDatabasePromptTool
+    /// Agent for handling database operations using MixDbPromptTool
     /// </summary>
     /// 
     public class DatabaseAgent
@@ -128,7 +128,7 @@ namespace Mix.MCP.Lib.Agents
                             ["timeoutSeconds"] = DEFAULT_TIMEOUT_SECONDS,
                             ["confirmation"] = "YES"
                         }, cancellationToken);
-                    // Data CRUD operations (requires MixDatabaseDataTool)
+                    // Data CRUD operations (requires MixDbDataTool)
                     case DatabaseIntent.CreateRecord:
                         _logger.LogWarning("CreateRecord intent detected, but data tool integration is not implemented in this agent.");
                         return "CreateRecord intent detected, but data tool integration is not implemented.";
@@ -225,11 +225,11 @@ namespace Mix.MCP.Lib.Agents
         }
 
         /// <summary>
-        /// Helper to get all supported [McpServerTool] methods and their descriptions from MixDatabasePromptTool
+        /// Helper to get all supported [McpServerTool] methods and their descriptions from MixDbPromptTool
         /// </summary>
         private static List<(string MethodName, string Description)> GetSupportedPromptToolActions()
         {
-            var toolType = typeof(MixDatabasePromptTool);
+            var toolType = typeof(MixDbPromptTool);
             var actions = new List<(string, string)>();
             foreach (var method in toolType.GetMethods(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public))
             {

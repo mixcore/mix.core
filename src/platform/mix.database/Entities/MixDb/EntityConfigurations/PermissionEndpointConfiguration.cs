@@ -11,7 +11,7 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         public override void Configure(EntityTypeBuilder<MixPermissionEndpoint> builder)
         {
             base.Configure(builder);
-            builder.ToTable(MixDatabaseNames.SYSTEM_PERMISSION_ENDPOINT);
+            builder.ToTable(MixDbTableNames.SYSTEM_PERMISSION_ENDPOINT);
             builder.Property(p => p.Title)
                 .HasColumnName("title");
             builder.Property(p => p.Description)

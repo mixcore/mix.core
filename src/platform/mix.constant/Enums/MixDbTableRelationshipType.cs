@@ -1,6 +1,6 @@
 ﻿namespace Mix.Constant.Enums
 {
-    public enum MixDatabaseRelationshipType
+    public enum MixDbTableRelationshipType
     {
         OneToMany,
         ManyToMany

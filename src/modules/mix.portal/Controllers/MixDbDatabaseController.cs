@@ -15,11 +15,11 @@ namespace Mix.Portal.Controllers
     [Route("api/v2/rest/mix-portal/mix-db-database")]
     [ApiController]
     [MixAuthorize(MixRoles.Owner)]
-    public class MixDbDatabaseContextController
-        : MixRestfulApiControllerBase<MixDatabaseContextViewModel, MixCmsContext, MixDbDatabase, int>
+    public class MixDbDatabaseController
+        : MixRestfulApiControllerBase<MixDbDatabaseViewModel, MixCmsContext, MixDbDatabase, int>
     {
         private readonly IMixdbStructure _mixDbService;
-        public MixDbDatabaseContextController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> uow, IMemoryQueueService<MessageQueueModel> queueService,
+        public MixDbDatabaseController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixCacheService cacheService, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCmsContext> uow, IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService,
             IMixdbStructure mixDbService)
@@ -30,7 +30,7 @@ namespace Mix.Portal.Controllers
         }
 
         #region Overrides
-        protected override async Task<int> CreateHandlerAsync(MixDatabaseContextViewModel data, CancellationToken cancellationToken = default)
+        protected override async Task<int> CreateHandlerAsync(MixDbDatabaseViewModel data, CancellationToken cancellationToken = default)
         {
             if (data != null && !string.IsNullOrEmpty(data.DecryptedConnectionString))
             {
@@ -47,7 +47,7 @@ namespace Mix.Portal.Controllers
             return result;
         }
 
-        protected override async Task UpdateHandler(int id, MixDatabaseContextViewModel data, CancellationToken cancellationToken = default)
+        protected override async Task UpdateHandler(int id, MixDbDatabaseViewModel data, CancellationToken cancellationToken = default)
         {
             await base.UpdateHandler(id, data, cancellationToken);
             if (data.DatabaseProvider == MixDatabaseProvider.PostgreSQL)

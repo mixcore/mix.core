@@ -24,9 +24,9 @@
 
         public List<MixModule> Modules { get; set; }
 
-        public List<MixDbDatabase> MixDatabaseContexts { get; set; } = new();
-        public List<MixDbTable> MixDatabases { get; set; } = new();
-        public List<int> ExportMixDatabaseDataIds { get; set; } = new();
+        public List<MixDbDatabase> MixDbDatabases { get; set; } = new();
+        public List<MixDbTable> MixDbTables { get; set; } = new();
+        public List<int> ExportMixDbDataIds { get; set; } = new();
         public List<MixDbTableRelationship> MixDbTableRelationships { get; set; } = new();
 
         public List<MixTemplate> Templates { get; set; } = new();
@@ -39,7 +39,7 @@
 
         #region Association Objects
 
-        public List<MixDbColumn> MixDatabaseColumns { get; set; } = new();
+        public List<MixDbColumn> MixDbColumns { get; set; } = new();
 
         public List<MixPostContent> PostContents { get; set; } = new();
 

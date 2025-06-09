@@ -39,9 +39,9 @@ namespace Mix.Services.Databases.Lib.Services
             _mixUow = mixUow;
             _permissionDbContext = mixUow.DbContext;
             _identityService = identityService;
-            _permissionQuery = _accUow.DbContext.SysMixDatabaseAssociation
-                                .Where(m => m.ParentDatabaseName == MixDatabaseNames.ROLE
-                                            && m.ChildDatabaseName == MixDatabaseNames.SYSTEM_PERMISSION);
+            _permissionQuery = _accUow.DbContext.SysMixDbDataAssociation
+                                .Where(m => m.ParentDatabaseName == MixDbTableNames.ROLE
+                                            && m.ChildDatabaseName == MixDbTableNames.SYSTEM_PERMISSION);
         }
 
         public async Task<List<Database.Entities.Account.MixPermission>> GetPermissionByRoleId(Guid roleId)
@@ -64,10 +64,10 @@ namespace Mix.Services.Databases.Lib.Services
                 {
                     if (dto.IsActive)
                     {
-                        _accUow.DbContext.SysMixDatabaseAssociation.Add(new SysMixDbDataAssociation()
+                        _accUow.DbContext.SysMixDbDataAssociation.Add(new SysMixDbDataAssociation()
                         {
-                            ParentDatabaseName = MixDatabaseNames.ROLE,
-                            ChildDatabaseName = MixDatabaseNames.SYSTEM_PERMISSION,
+                            ParentDatabaseName = MixDbTableNames.ROLE,
+                            ChildDatabaseName = MixDbTableNames.SYSTEM_PERMISSION,
                             GuidParentId = item.RoleId,
                             ChildId = item.PermissionId,
                             CreatedBy = dto.RequestedBy,
@@ -79,7 +79,7 @@ namespace Mix.Services.Databases.Lib.Services
                         var rel = _permissionQuery.FirstOrDefault(m => m.GuidParentId == item.RoleId && m.ChildId == item.PermissionId);
                         if (rel != null)
                         {
-                            _accUow.DbContext.SysMixDatabaseAssociation.Remove(rel);
+                            _accUow.DbContext.SysMixDbDataAssociation.Remove(rel);
                         }
                     }
                     await _accUow.DbContext.SaveChangesAsync();

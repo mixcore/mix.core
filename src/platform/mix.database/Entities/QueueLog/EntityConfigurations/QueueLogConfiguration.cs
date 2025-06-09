@@ -20,7 +20,7 @@ namespace Mix.Database.Entities.QueueLog.EntityConfigurations
         public override void Configure(EntityTypeBuilder<QueueLog> builder)
         {
             base.Configure(builder);
-            builder.ToTable(MixDatabaseNames.QUEUE_LOG);
+            builder.ToTable(MixDbTableNames.QUEUE_LOG);
             builder.Property(e => e.TenantId)
                .HasColumnName("tenant_id");
 

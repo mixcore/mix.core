@@ -55,11 +55,11 @@ namespace Mix.Mixdb.Services
                             continue;
                         }
 
-                        if (rel.Type == MixDatabaseRelationshipType.OneToMany)
+                        if (rel.Type == MixDbTableRelationshipType.OneToMany)
                         {
                             await LoadOneToMany(tableName, item, rel, req.Clone(), cancellationToken);
                         }
-                        if (rel.Type == MixDatabaseRelationshipType.ManyToMany)
+                        if (rel.Type == MixDbTableRelationshipType.ManyToMany)
                         {
                             await LoadManyToMany(tableName, item, rel, req.Clone(), cancellationToken);
                         }
@@ -74,7 +74,7 @@ namespace Mix.Mixdb.Services
         }
 
         /// <inheritdoc/>
-        public async Task LoadOneToMany(string tableName, JObject item, MixDatabaseRelationshipViewModel rel, SearchMixDbRequestModel req, CancellationToken cancellationToken)
+        public async Task LoadOneToMany(string tableName, JObject item, MixDbTableRelationshipViewModel rel, SearchMixDbRequestModel req, CancellationToken cancellationToken)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace Mix.Mixdb.Services
         }
 
         /// <inheritdoc/>
-        public async Task LoadManyToMany(string tableName, JObject item, MixDatabaseRelationshipViewModel rel, SearchMixDbRequestModel req, CancellationToken cancellationToken)
+        public async Task LoadManyToMany(string tableName, JObject item, MixDbTableRelationshipViewModel rel, SearchMixDbRequestModel req, CancellationToken cancellationToken)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace Mix.Mixdb.Services
                 var parentDb = await _dataService.GetMixDb(rel.SourceDatabaseName);
                 var childDb = await _dataService.GetMixDb(rel.DestinateDatabaseName);
 
-                if (parentDb.Type == MixDatabaseType.GuidService)
+                if (parentDb.Type == MixDbTableType.GuidService)
                 {
                     relQuery.Add(new(_fieldNameService.GuidParentId, await _dataService.ExtractIdAsync(rel.SourceDatabaseName, item)));
                 }
@@ -121,7 +121,7 @@ namespace Mix.Mixdb.Services
                     req.Queries.Add(
                         new(
                             _fieldNameService.Id,
-                            childDb.Type == MixDatabaseType.GuidService
+                            childDb.Type == MixDbTableType.GuidService
                             ? allowsRels.Select(m => m.Value<int>(_fieldNameService.GuidChildId)).ToList()
                             : allowsRels.Select(m => m.Value<int>(_fieldNameService.ChildId)).ToList(),
                             MixCompareOperator.InRange
@@ -156,9 +156,9 @@ namespace Mix.Mixdb.Services
         private string GetRelationshipDbName()
         {
             var mixDb = _dataService.GetMixDb(_fieldNameService.NamingConvention == MixDatabaseNamingConvention.SnakeCase
-                            ? MixDatabaseNames.DATA_RELATIONSHIP_SNAKE_CASE
-                            : MixDatabaseNames.DATA_RELATIONSHIP_TITLE_CASE);
-            return $"{mixDb.Result?.MixDatabaseContext.SystemName}_{MixDatabaseNames.SYSTEM_DATA_RELATIONSHIP}";
+                            ? MixDbTableNames.DATA_RELATIONSHIP_SNAKE_CASE
+                            : MixDbTableNames.DATA_RELATIONSHIP_TITLE_CASE);
+            return $"{mixDb.Result?.MixDbDatabase.SystemName}_{MixDbTableNames.SYSTEM_DATA_RELATIONSHIP}";
         }
     }
 }

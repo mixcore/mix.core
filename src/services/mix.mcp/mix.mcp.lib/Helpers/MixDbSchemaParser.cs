@@ -11,16 +11,16 @@ namespace Mix.MCP.Lib.Helpers
     /// <summary>
     /// Helper class for parsing database schema descriptions
     /// </summary>
-    public class MixDatabaseSchemaParser
+    public class MixDbSchemaParser
     {
         private readonly ILogger _logger;
         private readonly ILlmServiceFactory _llmServiceFactory;
 
 
         /// <summary>
-        /// Initialize a new instance of MixDatabaseSchemaParser
+        /// Initialize a new instance of MixDbSchemaParser
         /// </summary>
-        public MixDatabaseSchemaParser(ILlmServiceFactory llmServiceFactory, ILogger logger)
+        public MixDbSchemaParser(ILlmServiceFactory llmServiceFactory, ILogger logger)
         {
             _llmServiceFactory = llmServiceFactory;
             _logger = logger;

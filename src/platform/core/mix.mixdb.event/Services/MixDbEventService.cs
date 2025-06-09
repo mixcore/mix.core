@@ -80,7 +80,7 @@ namespace Mix.Mixdb.Event.Services
                     var id = model.Data.Id;
                     await _cacheService.RemoveCacheAsync(id, $"{MixFolders.MixDbCacheFolder}/{model.MixDbName}");
                 }
-                if (model.MixDbName == MixDatabaseNames.SYSTEM_PERMISSION || model.MixDbName == MixDatabaseNames.SYSTEM_PERMISSION_ENDPOINT)
+                if (model.MixDbName == MixDbTableNames.SYSTEM_PERMISSION || model.MixDbName == MixDbTableNames.SYSTEM_PERMISSION_ENDPOINT)
                 {
                     await _mixPermissionService.Reload();
                 }

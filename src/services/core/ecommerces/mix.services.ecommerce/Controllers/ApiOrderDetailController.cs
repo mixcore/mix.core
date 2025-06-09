@@ -17,7 +17,7 @@ namespace Mix.Services.Ecommerce.Controllers
 {
     [Route("api/v2/rest/ecommerce/order-detail")]
     [ApiController]
-    [MixDatabaseAuthorize("OrderDetail")]
+    [MixDbTableAuthorize("OrderDetail")]
     public class OrderDetailController
         : MixRestfulApiControllerBase<OrderViewModel, EcommerceDbContext, OrderDetail, int>
     {

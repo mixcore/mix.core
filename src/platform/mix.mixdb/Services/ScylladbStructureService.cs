@@ -58,7 +58,7 @@ namespace Mix.Mixdb.Services
             return result.Count();
         }
 
-        public async Task Migrate(MixDbDatabaseViewModel database, MixDatabaseProvider databaseProvider, CancellationToken cancellationToken = default)
+        public async Task Migrate(MixDbTableViewModel database, MixDatabaseProvider databaseProvider, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (database is { Columns.Count: 0 })
@@ -84,7 +84,7 @@ namespace Mix.Mixdb.Services
             }
         }
 
-        public async Task AddColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col, CancellationToken cancellationToken = default)
+        public async Task AddColumn(MixDbTableViewModel database, MixdbColumnViewModel col, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (database == null)
@@ -95,7 +95,7 @@ namespace Mix.Mixdb.Services
             await ExecuteCommand(commandText);
         }
 
-        public async Task AlterColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col, bool isDrop, CancellationToken cancellationToken = default)
+        public async Task AlterColumn(MixDbTableViewModel database, MixdbColumnViewModel col, bool isDrop, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (database == null)
@@ -109,7 +109,7 @@ namespace Mix.Mixdb.Services
             await ExecuteCommand(alterCommandText);
         }
 
-        public async Task DropColumn(MixDbDatabaseViewModel database, MixdbColumnViewModel col, CancellationToken cancellationToken = default)
+        public async Task DropColumn(MixDbTableViewModel database, MixdbColumnViewModel col, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (database == null)
@@ -122,7 +122,7 @@ namespace Mix.Mixdb.Services
         }
 
 
-        public Task<bool> BackupDatabase(MixDbDatabaseViewModel database, CancellationToken cancellationToken = default)
+        public Task<bool> BackupDatabase(MixDbTableViewModel database, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             throw new NotImplementedException();
@@ -130,7 +130,7 @@ namespace Mix.Mixdb.Services
 
 
 
-        public Task<bool> RestoreFromLocal(MixDbDatabaseViewModel database, CancellationToken cancellationToken = default)
+        public Task<bool> RestoreFromLocal(MixDbTableViewModel database, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             throw new NotImplementedException();
@@ -174,7 +174,7 @@ namespace Mix.Mixdb.Services
         }
 
         private string GetMigrateTableSql(string tableName,
-            MixDatabaseType dbType,
+            MixDbTableType dbType,
             List<string> colsSql,
             FieldNameService fieldNameService)
         {
@@ -185,9 +185,9 @@ namespace Mix.Mixdb.Services
                 """;
         }
 
-        private string GetIdSyntax(MixDatabaseProvider databaseProvider, MixDatabaseType dbType)
+        private string GetIdSyntax(MixDatabaseProvider databaseProvider, MixDbTableType dbType)
         {
-            if (dbType == MixDatabaseType.GuidService)
+            if (dbType == MixDbTableType.GuidService)
             {
                 return
                     $"{_databaseConstant.BacktickOpen}{_databaseConstant.Guid}{_databaseConstant.BacktickClose} PRIMARY KEY";

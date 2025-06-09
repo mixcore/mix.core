@@ -90,13 +90,13 @@ namespace Mix.Portal.Controllers
             {
                 var siteData = await _importService.LoadSchema();
                 siteData.ThemeId = dto.ThemeId;
-                siteData.MixDatabases = siteData.MixDatabases.Where(m => dto.MixDatabaseIds.Contains(m.Id)).ToList();
-                siteData.MixDatabaseColumns = siteData.MixDatabaseColumns.Where(m => dto.MixDatabaseIds.Contains(m.MixDbTableId)).ToList();
+                siteData.MixDbTables = siteData.MixDbTables.Where(m => dto.MixDbTableIds.Contains(m.Id)).ToList();
+                siteData.MixDbColumns = siteData.MixDbColumns.Where(m => dto.MixDbTableIds.Contains(m.MixDbTableId)).ToList();
                 siteData.MixDbTableRelationships = siteData.MixDbTableRelationships.Where(
-                    m => siteData.MixDatabases.Any(n => n.SystemName == m.SourceDatabaseName)
-                            && siteData.MixDatabases.Any(n => n.SystemName == m.DestinateDatabaseName)).ToList();
+                    m => siteData.MixDbTables.Any(n => n.SystemName == m.SourceDatabaseName)
+                            && siteData.MixDbTables.Any(n => n.SystemName == m.DestinateDatabaseName)).ToList();
 
-                var exportDataDbNames = siteData.MixDatabases.Where(m => dto.MixDatabaseDataIds.Contains(m.Id));
+                var exportDataDbNames = siteData.MixDbTables.Where(m => dto.MixDbDataIds.Contains(m.Id));
                 siteData.MixDbModels = siteData.MixDbModels.Where(m => exportDataDbNames.Any(n => n.SystemName == m.DatabaseName)).ToList();
 
                 siteData.CreatedBy = MixIdentityService.GetClaim(User, MixClaims.UserName);

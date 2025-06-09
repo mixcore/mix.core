@@ -1,6 +1,6 @@
 ﻿namespace Mix.Constant.Constants
 {
-    public class MixDatabaseNames
+    public class MixDbTableNames
     {
         public const string ROLE = "role";
         public const string PAGE_COLUMN = "mix_page_column";

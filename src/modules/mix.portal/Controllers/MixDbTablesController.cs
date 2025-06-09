@@ -17,7 +17,7 @@ namespace Mix.Portal.Controllers
     [ApiController]
 
     public class MixDbTablesController
-        : MixRestfulApiControllerBase<MixDbTableViewModel, MixCmsContext, MixDbTable, int>
+        : MixRestfulApiControllerBase<Lib.ViewModels.MixDbTableViewModel, MixCmsContext, MixDbTable, int>
     {
         private readonly DatabaseService _databaseService;
         private readonly IMixdbStructure _mixDbService;
@@ -45,12 +45,12 @@ namespace Mix.Portal.Controllers
         #region Routes
         [AllowAnonymous]
         [HttpGet("get-by-name/{name}")]
-        public async Task<ActionResult<MixDbTableViewModel>> GetByName(string name)
+        public async Task<ActionResult<Lib.ViewModels.MixDbTableViewModel>> GetByName(string name)
         {
-            var result = await GetMixDatabase(name);
+            var result = await GetMixDbTable(name);
             if (result != null)
             {
-                if (!result.MixDatabaseContextId.HasValue)
+                if (!result.MixDbDatabaseId.HasValue)
                 {
                     result.DatabaseProvider = _databaseService.DatabaseProvider;
                 }
@@ -61,7 +61,7 @@ namespace Mix.Portal.Controllers
 
         [MixAuthorize(MixRoles.Owner)]
         [HttpGet("duplicate/{id}")]
-        public async Task<ActionResult<MixDbTableViewModel>> Duplicate(int id, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<Lib.ViewModels.MixDbTableViewModel>> Duplicate(int id, CancellationToken cancellationToken = default)
         {
             var data = await GetById(id);
             if (data != null)
@@ -78,7 +78,7 @@ namespace Mix.Portal.Controllers
         [HttpGet("export-entity/{dbContextName}")]
         public async Task<ActionResult> ExportEntity(string dbContextName)
         {
-            MixDatabaseContextViewModel dbContext = await MixDatabaseContextViewModel
+            MixDbDatabaseViewModel dbContext = await MixDbDatabaseViewModel
                        .GetRepository(Uow, CacheService).GetSingleAsync(m => m.SystemName == dbContextName);
             if (dbContext == null)
             {
@@ -135,17 +135,17 @@ namespace Mix.Portal.Controllers
         protected override SearchQueryModel<MixDbTable, int> BuildSearchRequest(SearchRequestDto req)
         {
             var predicate = base.BuildSearchRequest(req);
-            if (int.TryParse(HttpContext.Request.Query["MixDbTableId"], out int mixDatabaseContextId))
+            if (int.TryParse(HttpContext.Request.Query["MixDbDatabaseId"], out int mixDatabaseContextId))
             {
-                predicate.Predicate = predicate.Predicate.AndAlso(m => m.MixDbTableId == mixDatabaseContextId);
+                predicate.Predicate = predicate.Predicate.AndAlso(m => m.MixDbDatabaseId == mixDatabaseContextId);
             }
             else
             {
-                predicate.Predicate = predicate.Predicate.AndAlso(m => m.MixDbTableId == null);
+                predicate.Predicate = predicate.Predicate.AndAlso(m => m.MixDbDatabaseId == null);
             }
             return predicate;
         }
-        protected override async Task UpdateHandler(int id, MixDbTableViewModel data, CancellationToken cancellationToken = default)
+        protected override async Task UpdateHandler(int id, Lib.ViewModels.MixDbTableViewModel data, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -165,9 +165,9 @@ namespace Mix.Portal.Controllers
                 throw new MixException(MixErrorStatus.ServerError, ex);
             }
         }
-        protected override Task DeleteHandler(MixDbTableViewModel data, CancellationToken cancellationToken = default)
+        protected override Task DeleteHandler(Lib.ViewModels.MixDbTableViewModel data, CancellationToken cancellationToken = default)
         {
-            //if (data.Type == MixDatabaseType.System)
+            //if (data.Type == MixDbTableType.System)
             //{
             //    throw new MixException($"Cannot DELETE System Database: {data.SystemName}");
             //}
@@ -176,15 +176,15 @@ namespace Mix.Portal.Controllers
         #endregion
 
         #region Privates
-        private async Task<MixDbDatabaseViewModel> GetMixDatabase(string tableName)
+        private async Task<Mixdb.ViewModels.MixDbTableViewModel> GetMixDbTable(string tableName)
         {
-            string name = $"{typeof(MixDbDatabaseViewModel).FullName}_{tableName}";
+            string name = $"{typeof(Mixdb.ViewModels.MixDbTableViewModel).FullName}_{tableName}";
             return await _memoryCache.TryGetValueAsync(
                 name,
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return MixDbDatabaseViewModel.GetRepository(Uow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
+                    return Mixdb.ViewModels.MixDbTableViewModel.GetRepository(Uow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
                 }
                 );
         }

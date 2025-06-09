@@ -23,7 +23,7 @@ namespace Mix.Common.Models
 
         public string[] ModuleTypes { get; set; }
 
-        public string[] MixDatabaseTypes { get; set; }
+        public string[] MixDbTableTypes { get; set; }
 
         public string[] DataTypes { get; set; }
 

@@ -356,7 +356,7 @@ namespace mix.auth.service.Controllers
                 var idResult = await _userManager.DeleteAsync(user);
                 if (idResult.Succeeded)
                 {
-                    await _mixDbDataService.DeleteManyAsync(MixDatabaseNames.SYSTEM_USER_DATA, new List<MixQueryField>()
+                    await _mixDbDataService.DeleteManyAsync(MixDbTableNames.SYSTEM_USER_DATA, new List<MixQueryField>()
                     {
                         new MixQueryField("parentId", user.Id),
                         new MixQueryField("parentType", MixContentType.User)
@@ -365,10 +365,10 @@ namespace mix.auth.service.Controllers
                     CurrentTenant.Id,
                     MixQueueTopics.MixBackgroundTasks,
                     MixQueueActions.MixDbEvent,
-                    new MixDbEventCommand(user.UserName, MixDbCommandQueueAction.DELETE.ToString(), MixDatabaseNames.SYSTEM_USER_DATA, new Mix.Shared.Models.MixDbAuditLogModel()
+                    new MixDbEventCommand(user.UserName, MixDbCommandQueueAction.DELETE.ToString(), MixDbTableNames.SYSTEM_USER_DATA, new Mix.Shared.Models.MixDbAuditLogModel()
                     {
                         Id = id,
-                        MixDbName = MixDatabaseNames.SYSTEM_USER_DATA,
+                        MixDbName = MixDbTableNames.SYSTEM_USER_DATA,
                         Before = ReflectionHelper.ParseObject(user)
                     }));
                     return Ok();

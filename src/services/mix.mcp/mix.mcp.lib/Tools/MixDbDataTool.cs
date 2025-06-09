@@ -20,23 +20,23 @@ namespace Mix.MCP.Lib.Tools
     /// Tool for performing CRUD operations on Mix Database data
     /// </summary>
     [McpServerToolType]
-    public class MixDatabaseDataTool : BaseMcpTool
+    public class MixDbDataTool : BaseMcpTool
     {
         private readonly IMixDbDataService _mixDbService;
-        private readonly MixDatabaseHelper _databaseHelper;
+        private readonly MixDbHelper _databaseHelper;
 
         /// <summary>
-        /// Initializes a new instance of the MixDatabaseDataTool class
+        /// Initializes a new instance of the MixDbDataTool class
         /// </summary>
-        public MixDatabaseDataTool(
+        public MixDbDataTool(
             DatabaseService databaseService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IMixDbDataServiceFactory mixDbDataSrvFactory,
-            ILogger<MixDatabaseDataTool> logger)
+            ILogger<MixDbDataTool> logger)
             : base(cmsUow, logger)
         {
             _mixDbService = mixDbDataSrvFactory.Create(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION))!;
-            _databaseHelper = new MixDatabaseHelper(cmsUow, null, logger);
+            _databaseHelper = new MixDbHelper(cmsUow, null, logger);
         }
 
         /// <summary>

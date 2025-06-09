@@ -69,7 +69,7 @@ namespace Mix.Portal.Controllers
                         new Shared.Models.SearchMixDbRequestModel()
                         {
 
-                            TableName = MixDatabaseNames.PORTAL_MENU,
+                            TableName = MixDbTableNames.PORTAL_MENU,
                             Queries = new List<MixQueryField>()
                             {
                                 new MixQueryField("Role", roles, MixCompareOperator.InRange)

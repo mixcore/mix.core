@@ -19,12 +19,12 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
               .HasColumnName("page_size")
               .HasColumnType(Config.Integer);
 
-            builder.Property(e => e.MixDatabaseName)
-              .HasColumnName("mix_database_name")
+            builder.Property(e => e.MixDbTableName)
+              .HasColumnName("mix_db_table_name")
               .HasColumnType($"{Config.String}{Config.SmallLength}");
 
-            builder.Property(e => e.MixDbId)
-              .HasColumnName("mix_db_id")
+            builder.Property(e => e.MixDbTableId)
+              .HasColumnName("mix_db_table_id")
               .HasColumnType(Config.Integer);
 
             builder.Property(e => e.ClassName)

@@ -20,7 +20,7 @@ namespace Mix.Mixdb.Helpers
     {
 
         #region Build Search Request
-        public static Task<List<MixQueryField>> BuildSearchQueryAsync(SearchMixDbRequestDto request, MixDbDatabaseViewModel mixDb, FieldNameService fieldNameService)
+        public static Task<List<MixQueryField>> BuildSearchQueryAsync(SearchMixDbRequestDto request, MixDbTableViewModel mixDb, FieldNameService fieldNameService)
         {
             var queries = new List<MixQueryField>();
             if (request.ObjParentId != null)
@@ -47,7 +47,7 @@ namespace Mix.Mixdb.Helpers
             AddCursorQuery(request, queries, mixDb);
             return Task.FromResult(queries);
         }
-        private static void AddCursorQuery(SearchMixDbRequestDto request, List<MixQueryField> queries, MixDbDatabaseViewModel mixDb)
+        private static void AddCursorQuery(SearchMixDbRequestDto request, List<MixQueryField> queries, MixDbTableViewModel mixDb)
         {
             if (!string.IsNullOrEmpty(request.SortBy))
             {

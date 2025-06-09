@@ -25,7 +25,7 @@ namespace Mix.Mixdb.Services
         private readonly ILogger<MixDbDataParser> _logger;
         private readonly FieldNameService _fieldNameService;
         private readonly IMixDbInfoService _mixDbInfoService;
-        private MixDbDatabaseViewModel _mixDb;
+        private MixDbTableViewModel _mixDb;
 
         public MixDbDataParser(
             IConfiguration configuration,
@@ -127,7 +127,7 @@ namespace Mix.Mixdb.Services
             try
             {
                 await LoadMixDb(tableName);
-                return _mixDb.Type == MixDatabaseType.GuidService
+                return _mixDb.Type == MixDbTableType.GuidService
                     ? obj.GetJObjectProperty<Guid>(_fieldNameService.Id)
                     : obj.GetJObjectProperty<int>(_fieldNameService.Id);
             }
@@ -168,7 +168,7 @@ namespace Mix.Mixdb.Services
         {
             if (!result.ContainsKey(_fieldNameService.Id))
             {
-                if (_mixDb.Type == MixDatabaseType.GuidService)
+                if (_mixDb.Type == MixDbTableType.GuidService)
                 {
                     result.Add(_fieldNameService.Id, Guid.NewGuid());
                 }

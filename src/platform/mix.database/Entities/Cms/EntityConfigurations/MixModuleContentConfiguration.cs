@@ -21,11 +21,11 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
             builder.Property(e => e.PageSize)
               .HasColumnName("page_size");
 
-            builder.Property(e => e.MixDbId)
-              .HasColumnName("mix_db_id");
+            builder.Property(e => e.MixDbTableId)
+              .HasColumnName("mix_db_table_id");
 
-            builder.Property(e => e.MixDatabaseName)
-              .HasColumnName("mix_database_name")
+            builder.Property(e => e.MixDbTableName)
+              .HasColumnName("mix_db_table_name")
               .HasColumnType($"{Config.String}{Config.SmallLength}");
 
             builder.Property(e => e.SystemName)

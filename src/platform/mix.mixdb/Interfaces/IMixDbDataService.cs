@@ -43,7 +43,7 @@ namespace Mix.Mixdb.Interfaces
         Task<List<JObject>?> GetAllAsync(SearchMixDbRequestModel request, CancellationToken cancellationToken = default);
         Task<PagingResponseModel<JObject>> GetPagingAsync(SearchMixDbRequestModel request, CancellationToken cancellationToken = default);
         Task<object> ExtractIdAsync(string tableName, JObject obj);
-        Task<MixDbDatabaseViewModel?> GetMixDb(string tableName);
+        Task<MixDbTableViewModel?> GetMixDb(string tableName);
         #endregion
 
         #region CREATE

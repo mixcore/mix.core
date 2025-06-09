@@ -3,8 +3,8 @@ using System.Text.Json.Serialization;
 
 namespace Mix.Lib.ViewModels
 {
-    public sealed class MixDatabaseRelationshipViewModel
-        : ViewModelBase<MixCmsContext, MixDbTableRelationship, int, MixDatabaseRelationshipViewModel>
+    public sealed class MixDbTableRelationshipViewModel
+        : ViewModelBase<MixCmsContext, MixDbTableRelationship, int, MixDbTableRelationshipViewModel>
     {
         #region Properties
         public int ParentId { get; set; }
@@ -12,7 +12,7 @@ namespace Mix.Lib.ViewModels
         public string DisplayName { get; set; }
         public string SourceDatabaseName { get; set; }
         public string DestinateDatabaseName { get; set; }
-        public MixDatabaseRelationshipType Type { get; set; }
+        public MixDbTableRelationshipType Type { get; set; }
 
         [Newtonsoft.Json.JsonIgnore]
         public string ReferenceColumnName => $"{SourceDatabaseName.ToTitleCase()}Id";
@@ -20,16 +20,16 @@ namespace Mix.Lib.ViewModels
 
         #region Constructors
 
-        public MixDatabaseRelationshipViewModel()
+        public MixDbTableRelationshipViewModel()
         {
 
         }
 
-        public MixDatabaseRelationshipViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public MixDbTableRelationshipViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        public MixDatabaseRelationshipViewModel(MixDbTableRelationship entity, UnitOfWorkInfo uowInfo)
+        public MixDbTableRelationshipViewModel(MixDbTableRelationship entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }
@@ -67,12 +67,12 @@ namespace Mix.Lib.ViewModels
         //{
         //    if (!Context.MixDbColumn.Any(m => m.MixDbTableName == DestinateDatabaseName && m.SystemName == ReferenceColumnName))
         //    {
-        //        var srcDb = Context.MixDbTable.FirstOrDefault(m => m.SystemName == SourceDatabaseName);
-        //        var destDb = Context.MixDbTable.FirstOrDefault(m => m.SystemName == DestinateDatabaseName);
+        //        var srcDb = Context.MixDbTableName.FirstOrDefault(m => m.SystemName == SourceDatabaseName);
+        //        var destDb = Context.MixDbTableName.FirstOrDefault(m => m.SystemName == DestinateDatabaseName);
         //        var refCol = new MixDbColumnViewModel(UowInfo)
         //        {
         //            MixDbTableName = DestinateDatabaseName,
-        //            MixDbTableId = destDb.Id,
+        //            MixDbDatabaseId = destDb.Id,
         //            DataType = MixDataType.Reference,
         //            CreatedBy = CreatedBy,
         //            DisplayName = ReferenceColumnName.ToTitleCase(),

@@ -54,8 +54,8 @@ namespace Mix.Service.Services
                                             .Where(m => m.GuidParentId == role.Id)
                                             .Select(m => m.ChildId);
                         var endpointIds = cmsDbContext.MixDbDataAssociation
-                                            .Where(m => m.ParentDatabaseName == MixDatabaseNames.SYSTEM_PERMISSION
-                                                        && m.ChildDatabaseName == MixDatabaseNames.SYSTEM_PERMISSION_ENDPOINT
+                                            .Where(m => m.ParentDatabaseName == MixDbTableNames.SYSTEM_PERMISSION
+                                                        && m.ChildDatabaseName == MixDbTableNames.SYSTEM_PERMISSION_ENDPOINT
                                                         && permissionIds.Contains(m.ParentId))
                                             .Select(m => m.ChildId)
                                             .ToList();

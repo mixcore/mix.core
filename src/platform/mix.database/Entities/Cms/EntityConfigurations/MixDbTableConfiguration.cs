@@ -28,16 +28,16 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
             builder.Property(e => e.Type)
                .IsRequired()
                .HasColumnName("type")
-               .HasConversion(new EnumToStringConverter<MixDatabaseType>())
+               .HasConversion(new EnumToStringConverter<MixDbTableType>())
                .HasColumnType($"{Config.NString}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
 
             builder.Property(e => e.SelfManaged)
                .HasColumnName("self_managed");
 
-            builder.Property(e => e.MixDbTableId)
+            builder.Property(e => e.MixDbDatabaseId)
                .IsRequired(false)
-               .HasColumnName("mix_db_table_id");
+               .HasColumnName("mix_db_database_id");
 
             builder.Property(e => e.ReadPermissions)
             .IsRequired(false)

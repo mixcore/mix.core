@@ -13,16 +13,16 @@ namespace Mix.MCP.Lib.Helpers
     /// <summary>
     /// Helper class for Mix Database operations
     /// </summary>
-    public class MixDatabaseHelper
+    public class MixDbHelper
     {
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private readonly IMixdbStructure _mixDbStructureService;
         private readonly ILogger _logger;
 
         /// <summary>
-        /// Initialize a new instance of MixDatabaseHelper
+        /// Initialize a new instance of MixDbHelper
         /// </summary>
-        public MixDatabaseHelper(
+        public MixDbHelper(
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IMixdbStructure mixDbStructureService,
             ILogger logger)
@@ -38,12 +38,12 @@ namespace Mix.MCP.Lib.Helpers
         /// <param name="databaseSystemName">System name of the database</param>
         /// <param name="cacheService">Cache service if caching is needed</param>
         /// <returns>The database view model or null if not found</returns>
-        public async Task<MixDbDatabaseViewModel> GetDatabaseBySystemName(
+        public async Task<MixDbTableViewModel> GetDatabaseBySystemName(
             string databaseSystemName,
             Mix.Heart.Services.MixCacheService cacheService = null)
         {
             // First try to get the database entity
-            return await MixDbDatabaseViewModel.GetRepository(_cmsUow, cacheService)
+            return await MixDbTableViewModel.GetRepository(_cmsUow, cacheService)
                     .GetSingleAsync(db => db.SystemName == databaseSystemName && !db.IsDeleted);
         }
 
@@ -59,17 +59,17 @@ namespace Mix.MCP.Lib.Helpers
         /// <summary>
         /// CreateMixDbData a new database with the specified columns
         /// </summary>
-        public async Task<MixDbDatabaseViewModel> CreateDatabase(
+        public async Task<MixDbTableViewModel> CreateDatabase(
             string displayName,
             string systemName,
             List<ColumnInfo> columns,
             string description = null,
             MixDatabaseNamingConvention namingConvention = MixDatabaseNamingConvention.SnakeCase,
-            MixDatabaseType type = MixDatabaseType.Service,
+            MixDbTableType type = MixDbTableType.Service,
             int mixDatabaseContextId = 1)
         {
             // CreateMixDbData database
-            var dbViewModel = new MixDbDatabaseViewModel(_cmsUow)
+            var dbViewModel = new MixDbTableViewModel(_cmsUow)
             {
                 TenantId = 1,
                 DisplayName = displayName,
@@ -77,7 +77,7 @@ namespace Mix.MCP.Lib.Helpers
                 Type = type,
                 //Description = description,
                 NamingConvention = namingConvention,
-                MixDatabaseContextId = mixDatabaseContextId
+                MixDbDatabaseId = mixDatabaseContextId
             };
 
             // Add custom columns
@@ -104,7 +104,7 @@ namespace Mix.MCP.Lib.Helpers
         /// Add a column to a database
         /// </summary>
         public async Task<bool> AddColumn(
-            MixDbDatabaseViewModel database,
+            MixDbTableViewModel database,
             ColumnInfo column)
         {
             if (database == null)
@@ -133,7 +133,7 @@ namespace Mix.MCP.Lib.Helpers
         /// UpdateMixDbData a column in a database
         /// </summary>
         public async Task<bool> UpdateColumn(
-            MixDbDatabaseViewModel database,
+            MixDbTableViewModel database,
             string columnSystemName,
             string newDisplayName = null,
             MixDataType? newDataType = null,
@@ -191,7 +191,7 @@ namespace Mix.MCP.Lib.Helpers
 
             if (newDescription != null) // Allow empty string to clear description
             {
-                // MixDbTable columns might not have a direct Description property
+                // MixDbTableName columns might not have a direct Description property
                 // We might need to store this in metadata or another related field
                 _logger.LogInformation("Would update description for column {ColumnName} to: {Description}",
                     columnSystemName, newDescription);
@@ -215,7 +215,7 @@ namespace Mix.MCP.Lib.Helpers
         /// DeleteMixDbData a column from a database
         /// </summary>
         public async Task<bool> DeleteColumn(
-            MixDbDatabaseViewModel database,
+            MixDbTableViewModel database,
             string columnSystemName)
         {
             if (database == null)
@@ -299,12 +299,12 @@ namespace Mix.MCP.Lib.Helpers
         /// <summary>
         /// Add a column to the database view model
         /// </summary>
-        private void AddColumnToViewModel(MixDbDatabaseViewModel db, ColumnInfo column)
+        private void AddColumnToViewModel(MixDbTableViewModel db, ColumnInfo column)
         {
             db.Columns.Add(ParseColumnToViewModel(db, column));
         }
 
-        private MixdbColumnViewModel ParseColumnToViewModel(MixDbDatabaseViewModel db, ColumnInfo column)
+        private MixdbColumnViewModel ParseColumnToViewModel(MixDbTableViewModel db, ColumnInfo column)
         {
             string displayName = FormatDisplayName(column.Name);
             return new MixdbColumnViewModel(_cmsUow)

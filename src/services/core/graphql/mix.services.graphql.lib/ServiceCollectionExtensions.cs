@@ -32,7 +32,7 @@ namespace Mix.Services.Graphql.Lib
                 string mixdbCnn = dbService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
                 var runtimeDbContextService = resolver.GetRequiredService<RuntimeDbContextService>();
                 runtimeDbContextService.LoadDbContextAssembly(mixdbCnn);
-                var dbContext = runtimeDbContextService.GetMixDatabaseDbContext(mixdbCnn)!;
+                var dbContext = runtimeDbContextService.GetMixDbDatabase(mixdbCnn)!;
                 var tableNameLookup = resolver.GetRequiredService<ITableNameLookup>();
                 DatabaseMetadata metaDatabase = new(dbContext, tableNameLookup);
                 var schema = new Schema { Query = new GraphQLQuery(dbContext, metaDatabase, tableNameLookup) };

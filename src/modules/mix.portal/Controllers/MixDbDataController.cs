@@ -23,7 +23,7 @@ using RepoDb.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
-    [MixDatabaseAuthorize("")]
+    [MixDbTableAuthorize("")]
     [Route("api/v2/rest/mix-portal/mix-db-data/{name}")]
     [ApiController]
     public class MixDbDataController : MixTenantApiControllerBase
@@ -38,7 +38,7 @@ namespace Mix.Portal.Controllers
         private string _requestedBy;
         private readonly MixIdentityService _idService;
         private IMixDbDataService _mixDbDataService;
-        private MixDbDatabaseViewModel _mixDb;
+        private Mixdb.ViewModels.MixDbTableViewModel _mixDb;
         private FieldNameService _fieldNameService;
         public MixDbDataController(
             IHttpContextAccessor httpContextAccessor,
@@ -71,14 +71,14 @@ namespace Mix.Portal.Controllers
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             _tableName = RouteData?.Values["name"].ToString();
-            _mixDb = await GetMixDatabase();
-            if (!_mixDb.MixDatabaseContextId.HasValue)
+            _mixDb = await GetMixDbTable();
+            if (!_mixDb.MixDbDatabaseId.HasValue)
             {
                 _mixDb.DatabaseProvider = _databaseService.DatabaseProvider;
 
             }
             _mixDbDataService = _mixDbDataFactory.Create(_mixDb.DatabaseProvider,
-                _mixDb.MixDatabaseContext?.ConnectionString.Decrypt(Configuration.AesKey()) ??
+                _mixDb.MixDbDatabase?.ConnectionString.Decrypt(Configuration.AesKey()) ??
                 _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION));
             _fieldNameService = new FieldNameService(_mixDb.NamingConvention);
             _requestedBy = User == null ? default : _idService.GetClaim(User, MixClaims.UserName);
@@ -122,7 +122,7 @@ namespace Mix.Portal.Controllers
         [HttpPost("nested-data/filter")]
         public async Task<ActionResult<PagingResponseModel<JObject>>> NestedFilter([FromBody] SearchMixDbRequestDto req, CancellationToken cancellationToken = default)
         {
-            if (req.Relationship == MixDatabaseRelationshipType.ManyToMany)
+            if (req.Relationship == MixDbTableRelationshipType.ManyToMany)
             {
                 var result = await SearchManyToManyDataHandler(req);
                 return Ok(result);
@@ -367,11 +367,11 @@ namespace Mix.Portal.Controllers
         private string GetRelationshipDbName()
         {
             string relName = _mixDb.NamingConvention == MixDatabaseNamingConvention.SnakeCase
-                            ? MixDatabaseNames.DATA_RELATIONSHIP_SNAKE_CASE
-                            : MixDatabaseNames.DATA_RELATIONSHIP_TITLE_CASE;
-            return _mixDb.MixDatabaseContextId.HasValue
-                        ? $"{_mixDb.MixDatabaseContext.SystemName}_{relName}"
-                        : MixDatabaseNames.SYSTEM_DATA_RELATIONSHIP;
+                            ? MixDbTableNames.DATA_RELATIONSHIP_SNAKE_CASE
+                            : MixDbTableNames.DATA_RELATIONSHIP_TITLE_CASE;
+            return _mixDb.MixDbDatabaseId.HasValue
+                        ? $"{_mixDb.MixDbDatabase.SystemName}_{relName}"
+                        : MixDbTableNames.SYSTEM_DATA_RELATIONSHIP;
         }
 
         private async Task PatchManyHandler(IEnumerable<JObject> lstObj, CancellationToken cancellationToken)
@@ -467,10 +467,10 @@ namespace Mix.Portal.Controllers
                         new MixQueryField(_fieldNameService.ParentDatabaseName, request.ParentName),
                         new MixQueryField(_fieldNameService.ChildDatabaseName, _tableName)
                 };
-                var parentDb = await GetMixDatabase(request.ParentName);
-                var childDb = await GetMixDatabase(_tableName);
+                var parentDb = await GetMixDbTable(request.ParentName);
+                var childDb = await GetMixDbTable(_tableName);
 
-                if (parentDb.Type == MixDatabaseType.GuidService)
+                if (parentDb.Type == MixDbTableType.GuidService)
                 {
                     relQuery.Add(new(_fieldNameService.GuidParentId, request.ObjParentId));
                 }
@@ -497,7 +497,7 @@ namespace Mix.Portal.Controllers
                 queries.Add(
                     new(
                         _fieldNameService.Id,
-                        childDb.Type == MixDatabaseType.GuidService
+                        childDb.Type == MixDbTableType.GuidService
                         ? allowsRels.Select(m => m.Value<int>(_fieldNameService.GuidChildId)).ToList()
                         : allowsRels.Select(m => m.Value<int>(_fieldNameService.ChildId)).ToList(),
                         MixCompareOperator.InRange
@@ -509,7 +509,7 @@ namespace Mix.Portal.Controllers
 
                 foreach (var item in nestedData.Items)
                 {
-                    var relId = childDb.Type == MixDatabaseType.GuidService
+                    var relId = childDb.Type == MixDbTableType.GuidService
                         ? allowsRels.FirstOrDefault(m => m.Value<Guid>(_fieldNameService.GuidChildId) == item.Value<Guid>(_fieldNameService.Id))
                         : allowsRels.FirstOrDefault(m => m.Value<int>(_fieldNameService.ChildId) == item.Value<int>(_fieldNameService.Id));
                     if (relId != null)
@@ -543,7 +543,7 @@ namespace Mix.Portal.Controllers
 
         private async Task<List<MixQueryField>> BuildSearchQueryAsync(SearchMixDbRequestDto request)
         {
-            var mixDb = await GetMixDatabase(request.MixDbTableName);
+            var mixDb = await GetMixDbTable(request.MixDbTableName);
             var queries = new List<MixQueryField>();
             if (request.ObjParentId != null)
             {
@@ -653,7 +653,7 @@ namespace Mix.Portal.Controllers
             }
             if (parentId != null)
             {
-                if (_mixDb.Type == MixDatabaseType.GuidService)
+                if (_mixDb.Type == MixDbTableType.GuidService)
                 {
                     queries.Add(new MixQueryField(_fieldNameService.GuidParentId, Guid.Parse(parentId.ToString())));
                 }
@@ -664,7 +664,7 @@ namespace Mix.Portal.Controllers
             }
             if (childId != null)
             {
-                if (_mixDb.Type == MixDatabaseType.GuidService)
+                if (_mixDb.Type == MixDbTableType.GuidService)
                 {
                     queries.Add(new MixQueryField(_fieldNameService.GuidChildId, Guid.Parse(childId.ToString())));
                 }
@@ -676,16 +676,16 @@ namespace Mix.Portal.Controllers
             return queries;
         }
 
-        private async Task<MixDbDatabaseViewModel> GetMixDatabase(string tableName = null)
+        private async Task<Mixdb.ViewModels.MixDbTableViewModel> GetMixDbTable(string tableName = null)
         {
             tableName ??= _tableName;
-            string name = $"{typeof(MixDbDatabaseViewModel).FullName}_{tableName}";
+            string name = $"{typeof(Mixdb.ViewModels.MixDbTableViewModel).FullName}_{tableName}";
             return await _memoryCache.TryGetValueAsync(
                 name,
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return MixDbDatabaseViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
+                    return Mixdb.ViewModels.MixDbTableViewModel.GetRepository(_cmsUow, CacheService).GetSingleAsync(m => m.SystemName == tableName);
                 }
                 );
         }

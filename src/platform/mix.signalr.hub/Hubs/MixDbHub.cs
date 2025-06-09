@@ -105,7 +105,7 @@ namespace Mix.SignalR.Hubs
         {
             try
             {
-                var tbl = await GetMixDatabase(tableName);
+                var tbl = await GetMixDbTable(tableName);
                 if (tbl == null)
                 {
                     await SendErrorMessageToCaller($"Invalid table name {tableName}");
@@ -204,7 +204,7 @@ namespace Mix.SignalR.Hubs
             });
         }
 
-        private async Task<MixDbTable?> GetMixDatabase(string tableName)
+        private async Task<MixDbTable?> GetMixDbTable(string tableName)
         {
             return await _memoryCache.TryGetValueAsync<MixDbTable?>(
                 tableName,

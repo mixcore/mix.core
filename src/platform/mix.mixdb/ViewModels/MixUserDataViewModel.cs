@@ -11,7 +11,7 @@ namespace Mix.Mixdb.ViewModels
         #region Properties
 
         public Guid ParentId { get; set; }
-        public MixDatabaseParentType ParentType { get; set; }
+        public MixDbTableParentType ParentType { get; set; }
         public string? Email { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string? UserName { get; set; }

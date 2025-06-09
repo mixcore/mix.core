@@ -49,7 +49,7 @@ namespace Mix.Lib.Subscribers
                     var mixDbService = GetRequiredService<IMixdbStructure>();
                     if (mixDbService != null)
                     {
-                        await MixDatabaseColumnViewModelHandler.MessageQueueHandler(model, mixDbService);
+                        await MixDbColumnViewModelHandler.MessageQueueHandler(model, mixDbService);
                     }
                     break;
                 default:

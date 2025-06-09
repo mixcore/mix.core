@@ -6,9 +6,9 @@ using System.Security.Claims;
 
 namespace Mix.Lib.Attributes
 {
-    public class MixDatabaseAuthorizeAttribute : TypeFilterAttribute
+    public class MixDbTableAuthorizeAttribute : TypeFilterAttribute
     {
-        public MixDatabaseAuthorizeAttribute(string tableName)
+        public MixDbTableAuthorizeAttribute(string tableName)
         : base(typeof(DatabaseAuthorizeActionFilter))
         {
             Arguments = new object[] { tableName };

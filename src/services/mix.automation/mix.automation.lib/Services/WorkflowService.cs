@@ -216,7 +216,7 @@ namespace Mix.Automation.Lib.Services
             {
                 foreach (Match match in Regex.Matches(strBody, pattern))
                 {
-                    strBody = strBody.Replace(match.Value, ExtractInput<string>(match.Groups[2].Value, responses).Escape());
+                    strBody = strBody.Replace(match.Value, ExtractInput<string>(match.Groups[2].Value, responses));
                 }
                 return JObject.Parse(strBody);
             }

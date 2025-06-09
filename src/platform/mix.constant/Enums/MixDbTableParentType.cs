@@ -1,6 +1,6 @@
 ﻿namespace Mix.Constant.Enums
 {
-    public enum MixDatabaseParentType
+    public enum MixDbTableParentType
     {
         MixDatabse,
         Post,

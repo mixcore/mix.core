@@ -5,7 +5,7 @@
         public string Specificulture { get; set; }
         public string ParentId { get; set; }
 
-        public MixDatabaseParentType? ParentType { get; set; }
+        public MixDbTableParentType? ParentType { get; set; }
         public string DatabaseName { get; set; }
         public Guid? GuidParentId
         {

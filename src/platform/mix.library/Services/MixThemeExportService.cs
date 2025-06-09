@@ -156,7 +156,7 @@ namespace Mix.Lib.Services
 
         private async Task ExportAssociations(CancellationToken cancellationToken)
         {
-            await ExportAdditionalData(_dto.Content.PostIds, MixDatabaseParentType.Post);
+            await ExportAdditionalData(_dto.Content.PostIds, MixDbTableParentType.Post);
             await ExportPageDatas();
             await ExportModuleDatas();
             //await ExportDatabaseDatas();
@@ -171,7 +171,7 @@ namespace Mix.Lib.Services
         {
             await ExportPageModules();
             await ExportPagePosts();
-            await ExportAdditionalData(_dto.Associations.PageIds, MixDatabaseParentType.Page);
+            await ExportAdditionalData(_dto.Associations.PageIds, MixDbTableParentType.Page);
         }
 
         private async Task ExportPageModules()
@@ -204,7 +204,7 @@ namespace Mix.Lib.Services
         {
             await ExportModuleSimpleDatas();
             await ExportModulePosts();
-            await ExportAdditionalData(_dto.Associations.ModuleContentIds, MixDatabaseParentType.Module);
+            await ExportAdditionalData(_dto.Associations.ModuleContentIds, MixDbTableParentType.Module);
         }
         private async Task ExportModuleSimpleDatas()
         {
@@ -234,15 +234,15 @@ namespace Mix.Lib.Services
         private async Task ExportMixDbAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (_siteData.ExportMixDatabaseDataIds == null || _siteData.ExportMixDatabaseDataIds.Count == 0)
+            if (_siteData.ExportMixDbDataIds == null || _siteData.ExportMixDbDataIds.Count == 0)
             {
                 return;
             }
-            foreach (var database in _siteData.MixDatabases)
+            foreach (var database in _siteData.MixDbTables)
             {
-                if (database.MixDbTableId.HasValue)
+                if (database.MixDbDatabaseId.HasValue)
                 {
-                    var dbContext = _siteData.MixDatabaseContexts.First(m => m.Id == database.MixDbTableId.Value);
+                    var dbContext = _siteData.MixDbDatabases.First(m => m.Id == database.MixDbDatabaseId.Value);
                     if (dbContext == null)
                     {
                         return;
@@ -372,20 +372,20 @@ namespace Mix.Lib.Services
 
         private async Task ExportDatabases(CancellationToken cancellationToken)
         {
-            _siteData.MixDatabaseContexts = await _context.MixDbDatabase
-                .Where(m => _dto.Content.MixDatabaseContextIds.Any(p => p == m.Id))
+            _siteData.MixDbDatabases = await _context.MixDbDatabase
+                .Where(m => _dto.Content.MixDbDatabaseIds.Any(p => p == m.Id))
                 .AsNoTracking()
                 .ToListAsync();
-            _siteData.MixDatabases = await _context.MixDbTable
-                .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.Id))
+            _siteData.MixDbTables = await _context.MixDbTable
+                .Where(m => _dto.Content.MixDbTableIds.Any(p => p == m.Id))
                 .AsNoTracking()
                 .ToListAsync();
-            _siteData.MixDatabaseColumns = await _context.MixDbColumn
-                .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.MixDbTableId))
+            _siteData.MixDbColumns = await _context.MixDbColumn
+                .Where(m => _dto.Content.MixDbTableIds.Any(p => p == m.MixDbTableId))
                 .AsNoTracking()
                 .ToListAsync();
             _siteData.MixDbTableRelationships = await _context.MixDbTableRelationship
-                .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.ParentId))
+                .Where(m => _dto.Content.MixDbTableIds.Any(p => p == m.ParentId))
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -394,7 +394,7 @@ namespace Mix.Lib.Services
 
         #region Generic
 
-        private Task ExportAdditionalData(List<int> parentIds, MixDatabaseParentType type)
+        private Task ExportAdditionalData(List<int> parentIds, MixDbTableParentType type)
         {
             return Task.CompletedTask;
             //throw new MixException(MixErrorStatus.ServerError, $"Unhandled: {GetType().FullName} line 395");
@@ -408,7 +408,7 @@ namespace Mix.Lib.Services
             _siteData.Posts = _context.MixPost.ToList();
             _siteData.Pages = _context.MixPage.ToList();
             _siteData.Modules = _context.MixModule.ToList();
-            _siteData.MixDatabases = _context.MixDbTable.ToList();
+            _siteData.MixDbTables = _context.MixDbTable.ToList();
             _siteData.Templates = _context.MixViewTemplate.ToList();
             _siteData.Configurations = _context.MixConfiguration.ToList();
             _siteData.Languages = _context.MixLanguage.ToList();

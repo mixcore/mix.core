@@ -18,12 +18,12 @@ namespace Mix.Mixdb.Interfaces
         /// <summary>
         /// Loads one-to-many relationship data
         /// </summary>
-        Task LoadOneToMany(string tableName, JObject item, MixDatabaseRelationshipViewModel rel, SearchMixDbRequestModel req, CancellationToken cancellationToken);
+        Task LoadOneToMany(string tableName, JObject item, MixDbTableRelationshipViewModel rel, SearchMixDbRequestModel req, CancellationToken cancellationToken);
 
         /// <summary>
         /// Loads many-to-many relationship data
         /// </summary>
-        Task LoadManyToMany(string tableName, JObject item, MixDatabaseRelationshipViewModel rel, SearchMixDbRequestModel req, CancellationToken cancellationToken);
+        Task LoadManyToMany(string tableName, JObject item, MixDbTableRelationshipViewModel rel, SearchMixDbRequestModel req, CancellationToken cancellationToken);
 
         /// <summary>
         /// Parses related data requests

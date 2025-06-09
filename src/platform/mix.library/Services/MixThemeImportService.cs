@@ -59,9 +59,9 @@ namespace Mix.Lib.Services
         private readonly Dictionary<int, int> _dicPostContentIds = new();
         private readonly Dictionary<int, int> _dicPageIds = new();
         private readonly Dictionary<int, int> _dicTemplateIds = new();
-        private readonly Dictionary<int, int> _dicMixDatabaseIds = new();
-        private readonly Dictionary<string, string> _dicMixDatabaseNames = new();
-        private readonly Dictionary<int, int> _dicMixDatabaseContextIds = new();
+        private readonly Dictionary<int, int> _dicMixDbTableIds = new();
+        private readonly Dictionary<string, string> _dicMixDbTableNames = new();
+        private readonly Dictionary<int, int> _dicMixDbDatabaseIds = new();
 
         public MixThemeImportService(
             IHttpContextAccessor httpContext,
@@ -213,7 +213,7 @@ namespace Mix.Lib.Services
                     uow.Begin();
                     var mixDbService = serviceScope.ServiceProvider.GetRequiredService<IMixdbStructure>();
 
-                    await ImportMixDatabases(uow, _cacheService, mixDbService);
+                    await ImportMixDbTables(uow, _cacheService, mixDbService);
                     await uow.CompleteAsync();
                     serviceScope.Dispose();
                 }
@@ -290,7 +290,7 @@ namespace Mix.Lib.Services
             await ImportContentDataAsync(_siteData.ConfigurationContents, _dicConfigurationContentIds, _dicConfigurationIds);
         }
 
-        private async Task ImportMixDatabases(
+        private async Task ImportMixDbTables(
                 UnitOfWorkInfo<MixCmsContext> uow,
                 MixCacheService cacheService,
                 IMixdbStructure mixDbService, CancellationToken cancellationToken = default)
@@ -298,24 +298,24 @@ namespace Mix.Lib.Services
             cancellationToken.ThrowIfCancellationRequested();
 
             await ImportDatabaseContextsAsync(uow.DbContext);
-            await ImportDatabasesAsync(uow.DbContext);
+            await ImportMixDbTablesAsync(uow.DbContext);
             await ImportTableRelationshipsAsync(uow.DbContext);
-            await MigrateMixDatabaseAsync(uow, cacheService, mixDbService);
-            await MigrateSystemMixDatabaseAsync(mixDbService, cancellationToken);
+            await MigrateMixDbTablesAsync(uow, cacheService, mixDbService);
+            await MigrateSystemMixDbTablesAsync(mixDbService, cancellationToken);
         }
 
-        private async Task MigrateMixDatabaseAsync(UnitOfWorkInfo<MixCmsContext> uow, MixCacheService cacheService, IMixdbStructure mixDbService)
+        private async Task MigrateMixDbTablesAsync(UnitOfWorkInfo<MixCmsContext> uow, MixCacheService cacheService, IMixdbStructure mixDbService)
         {
-            foreach (var item in _siteData.MixDatabases)
+            foreach (var item in _siteData.MixDbTables)
             {
-                if (_dicMixDatabaseNames.ContainsKey(item.SystemName))
+                if (_dicMixDbTableNames.ContainsKey(item.SystemName))
                 {
                     await mixDbService.MigrateDatabase(item.SystemName);
                 }
             }
         }
 
-        private async Task MigrateSystemMixDatabaseAsync(IMixdbStructure mixDbService, CancellationToken cancellationToken = default)
+        private async Task MigrateSystemMixDbTablesAsync(IMixdbStructure mixDbService, CancellationToken cancellationToken = default)
         {
             mixDbService.InitDbStructureService(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION), _databaseService.DatabaseProvider);
             await mixDbService.MigrateSystemDatabases(cancellationToken);
@@ -474,7 +474,7 @@ namespace Mix.Lib.Services
         private async Task ImportDatabaseContextsAsync(MixCmsContext context)
         {
 
-            foreach (var item in _siteData.MixDatabaseContexts)
+            foreach (var item in _siteData.MixDbDatabases)
             {
                 try
                 {
@@ -494,7 +494,7 @@ namespace Mix.Lib.Services
                         item.ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
                         context.Entry(item).State = EntityState.Added;
                         await context.SaveChangesAsync(_cts.Token);
-                        _dicMixDatabaseContextIds.Add(oldId, item.Id);
+                        _dicMixDbDatabaseIds.Add(oldId, item.Id);
                     }
                 }
                 catch (MixException)
@@ -509,14 +509,14 @@ namespace Mix.Lib.Services
 
         }
 
-        private async Task ImportDatabasesAsync(MixCmsContext context)
+        private async Task ImportMixDbTablesAsync(MixCmsContext context)
         {
 
-            foreach (var item in _siteData.MixDatabases)
+            foreach (var item in _siteData.MixDbTables)
             {
                 try
                 {
-                    var oldDbContext = _siteData.MixDatabaseContexts.Find(m => m.Id == item.MixDbTableId);
+                    var oldDbContext = _siteData.MixDbDatabases.Find(m => m.Id == item.MixDbDatabaseId);
                     var oldId = item.Id;
                     var oldName = item.SystemName;
                     var currentDbContext = oldDbContext != null ? context.MixDbDatabase.SingleOrDefault(m => m.SystemName == oldDbContext.SystemName) : default;
@@ -524,7 +524,7 @@ namespace Mix.Lib.Services
 
 
                     // Skip install database if there is no predefined db context
-                    if (item.MixDbTableId.HasValue && currentDbContext is null)
+                    if (item.MixDbDatabaseId.HasValue && currentDbContext is null)
                     {
                         continue;
                     }
@@ -536,22 +536,22 @@ namespace Mix.Lib.Services
 
                         currentDb.Id = 0;
                         currentDb.TenantId = CurrentTenant.Id;
-                        currentDb.MixDbTableId = currentDbContext?.Id;
+                        currentDb.MixDbDatabaseId = currentDbContext?.Id;
                         currentDb.CreatedBy = _siteData.CreatedBy;
                         currentDb.CreatedDateTime = DateTime.UtcNow;
                         context.Entry(currentDb).State = EntityState.Added;
                         await context.SaveChangesAsync(_cts.Token);
-                        _dicMixDatabaseIds.Add(oldId, currentDb.Id);
-                        _dicMixDatabaseNames.Add(oldName, currentDb.SystemName);
-                        await ImportDatabaseColumnsAsync(context, currentDb, _siteData.MixDatabaseColumns.Where(m => m.MixDbTableId == oldId));
+                        _dicMixDbTableIds.Add(oldId, currentDb.Id);
+                        _dicMixDbTableNames.Add(oldName, currentDb.SystemName);
+                        await ImportMixDbColumnsAsync(context, currentDb, _siteData.MixDbColumns.Where(m => m.MixDbTableId == oldId));
                     }
                     else
                     {
-                        _dicMixDatabaseIds.Add(oldId, currentDb.Id);
-                        _dicMixDatabaseNames.Add(oldName, currentDb.SystemName);
+                        _dicMixDbTableIds.Add(oldId, currentDb.Id);
+                        _dicMixDbTableNames.Add(oldName, currentDb.SystemName);
                         var existing = _siteData.ExistingDatabases.FirstOrDefault(m => m.Id == item.Id);
-                        await ImportDatabaseColumnsAsync(context, currentDb, _siteData.MixDatabaseColumns.Where(m => existing.DifferentColumns.Any(n => n.SystemName == m.SystemName && n.Kind != DifferentType.Deleted)));
-                        await DeleteDatabaseColumnsAsync(context, currentDb, existing.DifferentColumns.Where(n => n.Kind == DifferentType.Deleted).Select(c => c.SystemName).ToList());
+                        await ImportMixDbColumnsAsync(context, currentDb, _siteData.MixDbColumns.Where(m => existing.DifferentColumns.Any(n => n.SystemName == m.SystemName && n.Kind != DifferentType.Deleted)));
+                        await DeleteMixDbColumnsAsync(context, currentDb, existing.DifferentColumns.Where(n => n.Kind == DifferentType.Deleted).Select(c => c.SystemName).ToList());
                     }
                 }
                 catch (MixException)
@@ -560,26 +560,26 @@ namespace Mix.Lib.Services
                 }
                 catch (Exception ex)
                 {
-                    throw new MixException(MixErrorStatus.Badrequest, nameof(ImportDatabasesAsync), item.DisplayName, ex.Message);
+                    throw new MixException(MixErrorStatus.Badrequest, nameof(ImportMixDbTablesAsync), item.DisplayName, ex.Message);
                 }
             }
         }
 
-        private async Task DeleteDatabaseColumnsAsync(MixCmsContext context, MixDbTable currentDb, List<string> colNames)
+        private async Task DeleteMixDbColumnsAsync(MixCmsContext context, MixDbTable currentDb, List<string> colNames)
         {
             var table = context.MixDbColumn.Where(m => m.MixDbTableId == currentDb.Id && colNames.Any(n => n == m.SystemName));
             context.MixDbColumn.RemoveRange(table);
             await context.SaveChangesAsync();
         }
 
-        private async Task ImportDatabaseColumnsAsync(MixCmsContext context, MixDbTable database, IEnumerable<MixDbColumn> cols)
+        private async Task ImportMixDbColumnsAsync(MixCmsContext context, MixDbTable database, IEnumerable<MixDbColumn> cols)
         {
             foreach (var item in cols)
             {
                 try
                 {
                     var table = context.MixDbColumn;
-                    var obj = table.FirstOrDefault(m => m.MixDbTableId == _dicMixDatabaseIds[item.MixDbTableId] && m.SystemName == item.SystemName);
+                    var obj = table.FirstOrDefault(m => m.MixDbTableId == _dicMixDbTableIds[item.MixDbTableId] && m.SystemName == item.SystemName);
                     if (obj == null)
                     {
                         obj = ReflectionHelper.CloneObject(item);
@@ -607,7 +607,7 @@ namespace Mix.Lib.Services
                 }
                 catch (Exception ex)
                 {
-                    throw new MixException(MixErrorStatus.Badrequest, nameof(ImportDatabaseColumnsAsync), database.DisplayName, ex.Message);
+                    throw new MixException(MixErrorStatus.Badrequest, nameof(ImportMixDbColumnsAsync), database.DisplayName, ex.Message);
                 }
             }
         }
@@ -618,11 +618,11 @@ namespace Mix.Lib.Services
             {
                 try
                 {
-                    if (_dicMixDatabaseIds.ContainsKey(item.ParentId) && _dicMixDatabaseIds.ContainsKey(item.ChildId))
+                    if (_dicMixDbTableIds.ContainsKey(item.ParentId) && _dicMixDbTableIds.ContainsKey(item.ChildId))
                     {
                         item.Id = 0;
-                        item.ParentId = _dicMixDatabaseIds[item.ParentId];
-                        item.ChildId = _dicMixDatabaseIds[item.ChildId];
+                        item.ParentId = _dicMixDbTableIds[item.ParentId];
+                        item.ChildId = _dicMixDbTableIds[item.ChildId];
                         item.CreatedBy = _siteData.CreatedBy;
                         item.CreatedDateTime = DateTime.UtcNow;
 
@@ -653,14 +653,14 @@ namespace Mix.Lib.Services
             foreach (var mixGroupData in groupData)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var oldDbContext = _siteData.MixDatabaseContexts.Find(m => m.Id == _siteData.MixDatabases.First(m => m.SystemName == mixGroupData.Key).MixDbTableId);
+                var oldDbContext = _siteData.MixDbDatabases.Find(m => m.Id == _siteData.MixDbTables.First(m => m.SystemName == mixGroupData.Key).MixDbDatabaseId);
                 var dbContext = oldDbContext != null ? _context.MixDbDatabase.SingleOrDefault(m => m.SystemName == oldDbContext.SystemName) : default;
                 if (dbContext == null)
                 {
                     return;
                 }
-                var mixDb = await MixDbDatabaseViewModel.GetRepository(_uow, _cacheService).GetSingleAsync(m => m.SystemName == mixGroupData.Key);
-                if (mixDb.MixDatabaseContextId.HasValue)
+                var mixDb = await Mixdb.ViewModels.MixDbTableViewModel.GetRepository(_uow, _cacheService).GetSingleAsync(m => m.SystemName == mixGroupData.Key);
+                if (mixDb.MixDbDatabaseId.HasValue)
                 {
 
                     _fieldNameService = new FieldNameService(dbContext.NamingConvention);
@@ -675,7 +675,7 @@ namespace Mix.Lib.Services
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     // Not import user data from other site
-                    if (mixData.DatabaseName == MixDatabaseNames.SYSTEM_USER_DATA)
+                    if (mixData.DatabaseName == MixDbTableNames.SYSTEM_USER_DATA)
                     {
                         continue;
                     }
@@ -866,16 +866,16 @@ namespace Mix.Lib.Services
 
         private async Task ValidateSiteData(SiteDataViewModel siteData)
         {
-            var dbNames = siteData.MixDatabases.Select(m => m.SystemName).ToList();
+            var dbNames = siteData.MixDbTables.Select(m => m.SystemName).ToList();
             var existedDbs = _uow.DbContext.MixDbTable.Where(m => dbNames.Contains(m.SystemName)).ToList();
             foreach (var db in existedDbs)
             {
                 var cols = _uow.DbContext.MixDbColumn.Where(m => m.MixDbTableId == db.Id).ToList();
                 siteData.ExistingDatabases.Add(new ExistingDatabase()
                 {
-                    Id = siteData.MixDatabases.First(m => m.SystemName == db.SystemName).Id,
+                    Id = siteData.MixDbTables.First(m => m.SystemName == db.SystemName).Id,
                     Name = db.DisplayName,
-                    DifferentColumns = CompareColumns(siteData.MixDatabaseColumns.Where(m => m.MixDbTableName == db.SystemName), cols)
+                    DifferentColumns = CompareColumns(siteData.MixDbColumns.Where(m => m.MixDbTableName == db.SystemName), cols)
                 });
             }
             siteData.IsValid = !siteData.Errors.Any();
