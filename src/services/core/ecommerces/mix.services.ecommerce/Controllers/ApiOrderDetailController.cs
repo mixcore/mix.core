@@ -32,7 +32,7 @@ namespace Mix.Services.Ecommerce.Controllers
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             Repository.IsCache = false;

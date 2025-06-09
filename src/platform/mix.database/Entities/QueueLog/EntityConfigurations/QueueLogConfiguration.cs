@@ -13,7 +13,7 @@ namespace Mix.Database.Entities.QueueLog.EntityConfigurations
 {
     internal class QueueLogConfiguration : EntityBaseConfiguration<QueueLog, Guid>
     {
-        public QueueLogConfiguration(DatabaseService databaseService): base(databaseService)
+        public QueueLogConfiguration(DatabaseService databaseService) : base(databaseService)
         {
         }
 

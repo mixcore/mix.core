@@ -18,9 +18,9 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
             builder.Property(e => e.MixDbTableName)
                 .HasColumnName("mix_db_table_name")
                .HasColumnType($"{Config.NString}{Config.SmallLength}");
-             builder.Property(e => e.SystemName)
-                .HasColumnName("system_name")
-               .HasColumnType($"{Config.NString}{Config.SmallLength}");
+            builder.Property(e => e.SystemName)
+               .HasColumnName("system_name")
+              .HasColumnType($"{Config.NString}{Config.SmallLength}");
 
             builder.Property(e => e.PreviewUrl)
                 .HasColumnName("preview_url")
@@ -47,7 +47,7 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
                .UseCollation(Config.DatabaseCollation);
 
 
-           
+
         }
     }
 }

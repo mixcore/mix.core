@@ -53,8 +53,8 @@ namespace Mixcore.Domain.ViewModels
 
         #region Public Method
 
-        public async Task LoadDataAsync(IMixDbDataService mixDbDataService, 
-                            IMixMetadataService metadataService, 
+        public async Task LoadDataAsync(IMixDbDataService mixDbDataService,
+                            IMixMetadataService metadataService,
                             PagingRequestModel pagingModel, MixCacheService cacheService)
         {
             await LoadAdditionalDataAsync(mixDbDataService);

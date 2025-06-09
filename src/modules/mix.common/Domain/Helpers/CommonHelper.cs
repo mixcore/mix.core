@@ -9,8 +9,8 @@ namespace Mix.Common.Domain.Helpers
     {
         internal static GlobalSettings GetAppSettings(
             string aesKey,
-            PortalConfigService portalConfigSrv, 
-            MixAuthenticationConfigurations authConfigurations, 
+            PortalConfigService portalConfigSrv,
+            MixAuthenticationConfigurations authConfigurations,
             MixTenantSystemModel currentTenant)
         {
             //var cultures = _cultureService.Cultures;

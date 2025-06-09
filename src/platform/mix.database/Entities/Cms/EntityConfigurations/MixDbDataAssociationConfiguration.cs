@@ -39,7 +39,7 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
                .HasColumnType($"{Config.String}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
 
-          
+
         }
     }
 }
