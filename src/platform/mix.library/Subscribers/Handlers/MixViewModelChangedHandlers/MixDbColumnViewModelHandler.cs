@@ -4,7 +4,7 @@ using Mix.Mq.Lib.Models;
 
 namespace Mix.Lib.Subscribers.Handlers.MixViewModelChangedHandlers
 {
-    public class MixDatabaseColumnViewModelHandler
+    public class MixDbColumnViewModelHandler
     {
 
         public static async Task MessageQueueHandler(MessageQueueModel data, IMixdbStructure mixDbService)

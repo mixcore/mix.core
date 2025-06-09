@@ -7,8 +7,4 @@
     <RootNamespace>Mix.Constant</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\core\mix-heart\src\mix.heart.csproj" />
-  </ItemGroup>
-
 </Project>

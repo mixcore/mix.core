@@ -11,15 +11,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Mixdb.ViewModels
 {
-    public sealed class MixDbDatabaseViewModel
-        : TenantDataViewModelBase<MixCmsContext, MixDbTable, int, MixDbDatabaseViewModel>
+    public sealed class MixDbTableViewModel
+        : TenantDataViewModelBase<MixCmsContext, MixDbTable, int, MixDbTableViewModel>
     {
         #region Properties
-        public int? MixDatabaseContextId { get; set; }
+        public int? MixDbDatabaseId { get; set; }
         [Required]
         public string SystemName { get; set; }
         public MixDatabaseNamingConvention NamingConvention { get; set; } = MixDatabaseNamingConvention.SnakeCase;
-        public MixDatabaseType Type { get; set; } = MixDatabaseType.Service;
+        public MixDbTableType Type { get; set; } = MixDbTableType.Service;
         public List<string> ReadPermissions { get; set; }
         public List<string> CreatePermissions { get; set; }
         public List<string> UpdatePermissions { get; set; }
@@ -28,24 +28,24 @@ namespace Mix.Mixdb.ViewModels
 
         public List<MixdbColumnViewModel> Columns { get; set; } = new();
         public List<MixdbColumnViewModel>? DefaultColumns { get; set; }
-        public List<MixDatabaseRelationshipViewModel> Relationships { get; set; } = new();
-        public MixDatabaseContextReadViewModel MixDatabaseContext { get; set; }
+        public List<MixDbTableRelationshipViewModel> Relationships { get; set; } = new();
+        public MixDbDatabaseReadViewModel MixDbDatabase { get; set; }
 
         public MixDatabaseProvider DatabaseProvider { get; set; }
         #endregion
 
         #region Constructors
 
-        public MixDbDatabaseViewModel()
+        public MixDbTableViewModel()
         {
 
         }
 
-        public MixDbDatabaseViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public MixDbTableViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        public MixDbDatabaseViewModel(MixDbTable entity, UnitOfWorkInfo? uowInfo = null)
+        public MixDbTableViewModel(MixDbTable entity, UnitOfWorkInfo? uowInfo = null)
             : base(entity, uowInfo)
         {
         }
@@ -57,23 +57,23 @@ namespace Mix.Mixdb.ViewModels
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             Columns = await MixdbColumnViewModel.GetRepository(UowInfo, CacheService).GetListAsync(c => c.MixDbTableId == Id, cancellationToken);
-            Relationships = await MixDatabaseRelationshipViewModel.GetRepository(UowInfo, CacheService).GetListAsync(c => c.ParentId == Id, cancellationToken);
-            if (MixDatabaseContextId.HasValue)
+            Relationships = await MixDbTableRelationshipViewModel.GetRepository(UowInfo, CacheService).GetListAsync(c => c.ParentId == Id, cancellationToken);
+            if (MixDbDatabaseId.HasValue)
             {
-                MixDatabaseContext = await MixDatabaseContextReadViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(m => m.Id == MixDatabaseContextId.Value);
-                NamingConvention = MixDatabaseContext.NamingConvention;
-                DatabaseProvider = MixDatabaseContext.DatabaseProvider;
+                MixDbDatabase = await MixDbDatabaseReadViewModel.GetRepository(UowInfo, CacheService).GetSingleAsync(m => m.Id == MixDbDatabaseId.Value);
+                NamingConvention = MixDbDatabase.NamingConvention;
+                DatabaseProvider = MixDbDatabase.DatabaseProvider;
             }
         }
 
         public void AddDefaultColumns()
         {
-            if (Id == 0 && MixDatabaseContextId.HasValue)
+            if (Id == 0 && MixDbDatabaseId.HasValue)
             {
 
                 var fieldNameSrv = new FieldNameService(MixDatabaseNamingConvention.SnakeCase);
                 var dbConstants = MixDbHelper.GetDatabaseConstant(DatabaseProvider);
-                bool isGuid = DatabaseProvider == MixDatabaseProvider.SCYLLADB || Type == MixDatabaseType.GuidService;
+                bool isGuid = DatabaseProvider == MixDatabaseProvider.SCYLLADB || Type == MixDbTableType.GuidService;
                 if (!Columns.Any(m => m.SystemName == fieldNameSrv.Id))
                 {
                     Columns.Add(new MixdbColumnViewModel()
@@ -115,7 +115,7 @@ namespace Mix.Mixdb.ViewModels
 
             if (Columns != null)
             {
-                if (Type == MixDatabaseType.AdditionalData || Type == MixDatabaseType.GuidAdditionalData)
+                if (Type == MixDbTableType.AdditionalData || Type == MixDbTableType.GuidAdditionalData)
                 {
                     if (!Columns.Any(m => m.SystemName == "parentId"))
                     {
@@ -124,7 +124,7 @@ namespace Mix.Mixdb.ViewModels
                         {
                             DisplayName = "Parent Id",
                             SystemName = "parentId",
-                            DataType = Type == MixDatabaseType.AdditionalData ? MixDataType.Reference : MixDataType.Guid
+                            DataType = Type == MixDbTableType.AdditionalData ? MixDataType.Reference : MixDataType.Guid
                         });
                     }
                     if (!Columns.Any(m => m.SystemName == "parentType"))
@@ -168,9 +168,9 @@ namespace Mix.Mixdb.ViewModels
         protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
             // Exception: This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse when delete nested entity using Repository
-            //await MixDataContentValueViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.MixDbTableId == Id);
-            //await MixDataViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.MixDbTableId == Id);
-            //await MixDatabaseColumnViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.MixDbTableId == Id);
+            //await MixDataContentValueViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.MixDbDatabaseId == Id);
+            //await MixDataViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.MixDbDatabaseId == Id);
+            //await MixDatabaseColumnViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.MixDbDatabaseId == Id);
             foreach (var col in Columns)
             {
                 col.SetUowInfo(UowInfo, CacheService);

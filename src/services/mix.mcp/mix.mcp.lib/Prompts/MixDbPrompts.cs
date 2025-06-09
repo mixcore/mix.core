@@ -9,15 +9,15 @@ namespace Mix.MCP.Lib.Prompts
     /// Provides prompts for Mix Database operations
     /// </summary>
     [McpServerPromptType]
-    public class MixDatabasePrompts
+    public class MixDbPrompts
     {
-        private readonly ILogger<MixDatabasePrompts> _logger;
+        private readonly ILogger<MixDbPrompts> _logger;
 
         /// <summary>
-        /// Initializes a new instance of the MixDatabasePrompts class
+        /// Initializes a new instance of the MixDbPrompts class
         /// </summary>
         /// <param name="logger">The logger</param>
-        public MixDatabasePrompts(ILogger<MixDatabasePrompts> logger)
+        public MixDbPrompts(ILogger<MixDbPrompts> logger)
         {
             _logger = logger;
         }
@@ -62,7 +62,7 @@ namespace Mix.MCP.Lib.Prompts
                 "Are there any missing fields? Are the data types appropriate? " +
                 "Are there any potential performance issues or design flaws? " +
                 "Suggest improvements if necessary.\n\n" +
-                $"MixDbTable:\n{schema}";
+                $"MixDbTableName:\n{schema}";
 
             return new ChatMessage(ChatRole.User, prompt);
         }
@@ -83,8 +83,8 @@ namespace Mix.MCP.Lib.Prompts
             string prompt = "Compare the current database schema and the target schema below. " +
                 "Generate a migration plan that outlines the steps needed to migrate from the current schema to the target schema. " +
                 "Consider data preservation, potential conflicts, and required transformations.\n\n" +
-                $"Current MixDbTable:\n{currentMixDatabase}\n\n" +
-                $"Target MixDbTable:\n{targetMixDatabase}";
+                $"Current MixDbTableName:\n{currentMixDatabase}\n\n" +
+                $"Target MixDbTableName:\n{targetMixDatabase}";
 
             return new ChatMessage(ChatRole.User, prompt);
         }
@@ -105,7 +105,7 @@ namespace Mix.MCP.Lib.Prompts
             string prompt = $"Generate {recordCount} realistic sample records for a database with the following schema. " +
                 "The data should be varied and realistic for the domain. " +
                 "Format the results as a valid JSON array of objects, with each object representing one record.\n\n" +
-                $"MixDbTable:\n{schema}";
+                $"MixDbTableName:\n{schema}";
 
             return new ChatMessage(ChatRole.User, prompt);
         }

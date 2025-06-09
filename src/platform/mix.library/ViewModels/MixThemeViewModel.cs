@@ -7,8 +7,8 @@
         public string SystemName { get; set; }
         public string PreviewUrl { get; set; }
         public string ImageUrl { get; set; }
-        public string MixDatabaseName { get; set; }
-        public int? MixDbId { get; set; }
+        public string MixDbTableName { get; set; }
+        public int? MixDbTableId { get; set; }
         public JObject ExtraData { get; set; }
         public string AssetFolder { get; set; }
         public string TemplateFolder { get; set; }

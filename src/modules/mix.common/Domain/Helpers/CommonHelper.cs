@@ -9,8 +9,8 @@ namespace Mix.Common.Domain.Helpers
     {
         internal static GlobalSettings GetAppSettings(
             string aesKey,
-            PortalConfigService portalConfigSrv, 
-            MixAuthenticationConfigurations authConfigurations, 
+            PortalConfigService portalConfigSrv,
+            MixAuthenticationConfigurations authConfigurations,
             MixTenantSystemModel currentTenant)
         {
             //var cultures = _cultureService.Cultures;
@@ -27,7 +27,7 @@ namespace Mix.Common.Domain.Helpers
                 //Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)),
-                MixDatabaseTypes = Enum.GetNames(typeof(MixDatabaseType)),
+                MixDbTableTypes = Enum.GetNames(typeof(MixDbTableType)),
                 DataTypes = Enum.GetNames(typeof(MixDataType)),
                 Statuses = Enum.GetNames(typeof(MixContentStatus)),
                 RSAKeys = RSAEncryptionHelper.GenerateKeys(),

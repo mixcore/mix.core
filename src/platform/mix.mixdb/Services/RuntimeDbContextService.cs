@@ -81,7 +81,7 @@ namespace Mix.Mixdb.Services
             }
         }
 
-        public DbContext? GetMixDatabaseDbContext(string cnnString)
+        public DbContext? GetMixDbDatabase(string cnnString)
         {
             if (!string.IsNullOrEmpty(cnnString))
             {

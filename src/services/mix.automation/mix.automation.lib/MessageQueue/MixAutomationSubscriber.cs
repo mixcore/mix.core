@@ -33,7 +33,6 @@ namespace Mix.Automation.Lib.Subscribers
             IMemoryQueueService<MessageQueueModel> queueService,
             ILogger<SubscriberBase> logger,
             DatabaseService databaseService,
-            MixCacheService cacheService,
             IPooledObjectPolicy<IChannel>? rabbitMQObjectPolicy = null)
             : base(
                   MixAutomationConstants.Topics.MixAutomation,
@@ -81,7 +80,7 @@ namespace Mix.Automation.Lib.Subscribers
 
         private string[] GetAllowActions()
         {
-            return [.. Enum.GetNames(typeof(MixAutomationAction))];
+            return [..Enum.GetNames(typeof(MixAutomationAction))];
         }
     }
 }

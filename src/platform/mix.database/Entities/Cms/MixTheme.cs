@@ -8,8 +8,8 @@ namespace Mix.Database.Entities.Cms
         public string PreviewUrl { get; set; }
         public string AssetFolder { get; set; }
         public string TemplateFolder { get; set; }
-        public string MixDatabaseName { get; set; }
-        public int? MixDbId { get; set; }
+        public string MixDbTableName { get; set; }
+        public int? MixDbTableId { get; set; }
         //public JObject? ExtraData { get; set; }
         public virtual ICollection<MixTemplate> MixViewTemplates { get; set; }
     }

@@ -17,7 +17,7 @@ namespace Mix.Services.Ecommerce.Controllers
 {
     [Route("api/v2/rest/ecommerce/order-detail")]
     [ApiController]
-    [MixDatabaseAuthorize("OrderDetail")]
+    [MixDbTableAuthorize("OrderDetail")]
     public class OrderDetailController
         : MixRestfulApiControllerBase<OrderViewModel, EcommerceDbContext, OrderDetail, int>
     {
@@ -32,7 +32,7 @@ namespace Mix.Services.Ecommerce.Controllers
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, 
+            : base(httpContextAccessor, configuration,
                   cacheService, mixIdentityService, uow, queueService, portalHub, mixTenantService)
         {
             Repository.IsCache = false;

@@ -283,7 +283,7 @@ namespace Mix.Database.Migrations.Cms.Postgres
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    mix_database_id = table.Column<int>(type: "integer", nullable: true),
+                    mix_database_context_id = table.Column<int>(type: "integer", nullable: true),
                     system_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
                     type = table.Column<string>(type: "varchar(50)", nullable: false),
                     read_permissions = table.Column<string>(type: "varchar(250)", nullable: true),

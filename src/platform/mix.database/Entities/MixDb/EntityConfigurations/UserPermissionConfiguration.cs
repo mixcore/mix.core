@@ -11,7 +11,7 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
         public override void Configure(EntityTypeBuilder<MixUserPermission> builder)
         {
             base.Configure(builder);
-            builder.ToTable(MixDatabaseNames.SYSTEM_USER_PERMISSION);
+            builder.ToTable(MixDbTableNames.SYSTEM_USER_PERMISSION);
             builder.Property(p => p.UserId)
                 .HasColumnName("user_id");
             builder.Property(p => p.TenantId)

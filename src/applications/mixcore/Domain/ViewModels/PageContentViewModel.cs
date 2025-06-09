@@ -53,8 +53,8 @@ namespace Mixcore.Domain.ViewModels
 
         #region Public Method
 
-        public async Task LoadDataAsync(IMixDbDataService mixDbDataService, 
-                            IMixMetadataService metadataService, 
+        public async Task LoadDataAsync(IMixDbDataService mixDbDataService,
+                            IMixMetadataService metadataService,
                             PagingRequestModel pagingModel, MixCacheService cacheService)
         {
             await LoadAdditionalDataAsync(mixDbDataService);
@@ -79,9 +79,9 @@ namespace Mixcore.Domain.ViewModels
         #region Private Methods
         private async Task LoadAdditionalDataAsync(IMixDbDataService mixDbDataService, CancellationToken cancellationToken = default)
         {
-            if (!string.IsNullOrEmpty(MixDatabaseName))
+            if (!string.IsNullOrEmpty(MixDbTableName))
             {
-                var obj = await mixDbDataService.GetSingleByParentAsync(MixDatabaseName, MixContentType.Page, Id, string.Empty, cancellationToken);
+                var obj = await mixDbDataService.GetSingleByParentAsync(MixDbTableName, MixContentType.Page, Id, string.Empty, cancellationToken);
                 AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
             }
         }

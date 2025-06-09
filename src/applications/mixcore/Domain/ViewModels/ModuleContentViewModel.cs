@@ -63,9 +63,9 @@ namespace Mixcore.Domain.ViewModels
 
         private async Task LoadAdditionalDataAsync(IMixDbDataService mixDbDataService, CancellationToken cancellationToken = default)
         {
-            if (!string.IsNullOrEmpty(MixDatabaseName))
+            if (!string.IsNullOrEmpty(MixDbTableName))
             {
-                var obj = await mixDbDataService.GetSingleByParentAsync(MixDatabaseName, MixContentType.Page, Id, string.Empty, cancellationToken);
+                var obj = await mixDbDataService.GetSingleByParentAsync(MixDbTableName, MixContentType.Page, Id, string.Empty, cancellationToken);
                 AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
             }
         }

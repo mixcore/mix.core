@@ -54,7 +54,7 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
             builder.Property(e => e.Type)
                .IsRequired()
                .HasColumnName("type")
-               .HasConversion(new EnumToStringConverter<MixDatabaseRelationshipType>())
+               .HasConversion(new EnumToStringConverter<MixDbTableRelationshipType>())
                .HasColumnType($"{Config.NString}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
         }

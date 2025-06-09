@@ -59,7 +59,7 @@ namespace Mix.Lib.ViewModels
 
             try
             {
-                UserData = await mixDbService.GetSingleByParentAsync(MixDatabaseNames.SYSTEM_USER_DATA, MixContentType.User, Id, string.Empty, cancellationToken);
+                UserData = await mixDbService.GetSingleByParentAsync(MixDbTableNames.SYSTEM_USER_DATA, MixContentType.User, Id, string.Empty, cancellationToken);
 
                 var roles = from ur in accContext.AspNetUserRoles
                             join r in accContext.MixRoles
@@ -81,7 +81,7 @@ namespace Mix.Lib.ViewModels
                 if (!roles.Contains(MixRoles.SuperAdmin))
                 {
                     // TODO : update get portal menu by user
-                    //repoDbRepository.InitTableName(MixDatabaseNames.PORTAL_MENU);
+                    //repoDbRepository.InitTableName(MixDbTableNames.PORTAL_MENU);
                     //var menus = await repoDbRepository.GetListByAsync(
                     //    new List<MixQueryField>()
                     //    {
@@ -100,7 +100,7 @@ namespace Mix.Lib.ViewModels
 
         //public async Task LoadUserEndpointsAsync(int tenantId, MixRepoDbRepository repoDbRepository)
         //{
-        //    repoDbRepository.Init(MixDatabaseNames.SYSTEM_ENDPOINT);
+        //    repoDbRepository.Init(MixDbTableNames.SYSTEM_ENDPOINT);
         //    List<JObject> endpoints = new();
         //    foreach (var role in Roles)
         //    {
@@ -109,7 +109,7 @@ namespace Mix.Lib.ViewModels
         //            GetByAllParent<MixDataContentViewModel>(
         //            new SearchDataContentModel(tenantId)
         //            {
-        //                MixDbTableName = MixDatabaseNames.SYSTEM_ENDPOINT,
+        //                MixDbTableName = MixDbTableNames.SYSTEM_ENDPOINT,
         //                GuidParentId = role.RoleId
         //            });
         //        endpoints.AddRange(temp.Select(m => m.Data));

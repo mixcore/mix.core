@@ -30,7 +30,6 @@ namespace Mix.Portal.Domain.ViewModels
         #endregion
 
         #region Properties
-        public new string MixDatabaseName { get; set; }
         public string ClassName { get; set; }
         public string DetailUrl { get; set; }
 
@@ -123,11 +122,11 @@ namespace Mix.Portal.Domain.ViewModels
         {
             cancellationToken.ThrowIfCancellationRequested();
             bool isChanged = false;
-            if (AdditionalData == null && !string.IsNullOrEmpty(MixDatabaseName))
+            if (AdditionalData == null && !string.IsNullOrEmpty(MixDbTableName))
             {
                 isChanged = true;
-                var relationships = Context.MixDbTableRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName).ToList();
-                var obj = await mixDbDataSrv.GetSingleByParentAsync(MixDatabaseName, MixContentType.Post, Id, string.Empty, cancellationToken);
+                var relationships = Context.MixDbTableRelationship.Where(m => m.SourceDatabaseName == MixDbTableName).ToList();
+                var obj = await mixDbDataSrv.GetSingleByParentAsync(MixDbTableName, MixContentType.Post, Id, string.Empty, cancellationToken);
                 if (obj != null)
                 {
                     AdditionalData = ReflectionHelper.ParseObject(obj);
@@ -136,7 +135,7 @@ namespace Mix.Portal.Domain.ViewModels
                     {
 
                         var allowsIds = Context.MixDbDataAssociation
-                                .Where(m => m.ParentDatabaseName == MixDatabaseName
+                                .Where(m => m.ParentDatabaseName == MixDbTableName
                                             && m.ParentId == AdditionalData.GetJObjectProperty<int>("id")
                                             && m.ChildDatabaseName == item.DestinateDatabaseName)
                                 .Select(m => m.ChildId).ToList();

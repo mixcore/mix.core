@@ -12,7 +12,7 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
 
         public override void Configure(EntityTypeBuilder<MixPermission> builder)
         {
-            builder.ToTable(MixDatabaseNames.SYSTEM_PERMISSION);
+            builder.ToTable(MixDbTableNames.SYSTEM_PERMISSION);
             base.Configure(builder);
             builder.Property(e => e.TenantId)
                 .HasColumnName("tenant_id");

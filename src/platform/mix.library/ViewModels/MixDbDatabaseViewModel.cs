@@ -4,8 +4,8 @@ using Mix.Lib.ViewModels.ReadOnly;
 
 namespace Mix.Lib.ViewModels
 {
-    public sealed class MixDatabaseContextViewModel
-        : TenantDataViewModelBase<MixCmsContext, MixDbDatabase, int, MixDatabaseContextViewModel>
+    public sealed class MixDbDatabaseViewModel
+        : TenantDataViewModelBase<MixCmsContext, MixDbDatabase, int, MixDbDatabaseViewModel>
     {
         #region Properties
         public MixDatabaseProvider DatabaseProvider { get; set; }
@@ -21,16 +21,16 @@ namespace Mix.Lib.ViewModels
 
         #region Constructors
 
-        public MixDatabaseContextViewModel()
+        public MixDbDatabaseViewModel()
         {
             CacheExpiration = TimeSpan.FromMicroseconds(1);
         }
 
-        public MixDatabaseContextViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public MixDbDatabaseViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        public MixDatabaseContextViewModel(MixDbDatabase entity, UnitOfWorkInfo uowInfo)
+        public MixDbDatabaseViewModel(MixDbDatabase entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }
@@ -40,7 +40,7 @@ namespace Mix.Lib.ViewModels
         #region Overrides
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Databases = await MixDbTableReadViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixDbTableId == Id, cancellationToken);
+            Databases = await MixDbTableReadViewModel.GetRepository(UowInfo, CacheService).GetListAsync(m => m.MixDbDatabaseId == Id, cancellationToken);
         }
 
         public override Task<MixDbDatabase> ParseEntity(CancellationToken cancellationToken = default)
@@ -50,7 +50,7 @@ namespace Mix.Lib.ViewModels
 
         protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
-            var databases = Context.MixDbTable.Where(m => m.MixDbTableId == Id).ToList();
+            var databases = Context.MixDbTable.Where(m => m.MixDbDatabaseId == Id).ToList();
             foreach (var db in databases)
             {
                 var cols = Context.MixDbColumn.Where(m => m.MixDbTableId == db.Id).ToList();

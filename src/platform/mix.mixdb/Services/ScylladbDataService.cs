@@ -44,7 +44,7 @@ namespace Mix.Mixdb.Services
         private IDatabaseConstants _databaseConstant = new CassandraDatabaseConstants();
         private ScylladbRepository _repository;
         private readonly IMixMemoryCacheService _memoryCache;
-        private MixDbDatabaseViewModel? _mixDb;
+        private MixDbTableViewModel? _mixDb;
         private FieldNameService _fieldNameService;
         private readonly IConfiguration _configuration;
         private UnitOfWorkInfo<MixCmsContext> _cmsUow;
@@ -283,7 +283,7 @@ namespace Mix.Mixdb.Services
             throw new TaskCanceledException();
         }
 
-        private async Task ParseEntity(JObject? obj, List<SearchMixDbRequestModel>? relatedDataRequests, MixDbDatabaseViewModel? mixDb, CancellationToken cancellationToken)
+        private async Task ParseEntity(JObject? obj, List<SearchMixDbRequestModel>? relatedDataRequests, MixDbTableViewModel? mixDb, CancellationToken cancellationToken)
         {
             if (mixDb != null && obj != null)
             {
@@ -598,11 +598,11 @@ namespace Mix.Mixdb.Services
             {
                 foreach (var rel in _mixDb.Relationships)
                 {
-                    if (rel.Type == MixDatabaseRelationshipType.OneToMany)
+                    if (rel.Type == MixDbTableRelationshipType.OneToMany)
                     {
                         await LoadOneToMany(tableName, item, rel, cancellationToken);
                     }
-                    if (rel.Type == MixDatabaseRelationshipType.ManyToMany)
+                    if (rel.Type == MixDbTableRelationshipType.ManyToMany)
                     {
                         await LoadManyToMany(tableName, item, rel, cancellationToken);
                     }
@@ -612,7 +612,7 @@ namespace Mix.Mixdb.Services
             throw new TaskCanceledException();
         }
 
-        private async Task LoadOneToMany(string tableName, JObject item, MixDatabaseRelationshipViewModel rel, CancellationToken cancellationToken)
+        private async Task LoadOneToMany(string tableName, JObject item, MixDbTableRelationshipViewModel rel, CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -631,7 +631,7 @@ namespace Mix.Mixdb.Services
             throw new TaskCanceledException();
         }
 
-        private async Task LoadManyToMany(string tableName, JObject item, MixDatabaseRelationshipViewModel rel, CancellationToken cancellationToken)
+        private async Task LoadManyToMany(string tableName, JObject item, MixDbTableRelationshipViewModel rel, CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -642,7 +642,7 @@ namespace Mix.Mixdb.Services
                 var parentDb = await GetMixDb(rel.SourceDatabaseName);
                 var childDb = await GetMixDb(rel.DestinateDatabaseName);
 
-                if (parentDb.Type == MixDatabaseType.GuidService)
+                if (parentDb.Type == MixDbTableType.GuidService)
                 {
                     relQuery.Add(new(_fieldNameService.GuidParentId, await ExtractIdAsync(rel.SourceDatabaseName, item)));
                 }
@@ -658,7 +658,7 @@ namespace Mix.Mixdb.Services
                     var queries = new List<MixQueryField>() {
                         new(
                             _fieldNameService.Id,
-                            childDb.Type == MixDatabaseType.GuidService
+                            childDb.Type == MixDbTableType.GuidService
                             ? allowsRels.Select(m => m.Value<int>(_fieldNameService.GuidChildId)).ToList()
                             : allowsRels.Select(m => m.Value<int>(_fieldNameService.ChildId)).ToList(),
                             MixCompareOperator.InRange
@@ -678,11 +678,11 @@ namespace Mix.Mixdb.Services
         private string GetRelationshipDbName()
         {
             string relName = _mixDb.NamingConvention == MixDatabaseNamingConvention.SnakeCase
-                            ? MixDatabaseNames.DATA_RELATIONSHIP_SNAKE_CASE
-                            : MixDatabaseNames.DATA_RELATIONSHIP_TITLE_CASE;
-            return _mixDb.MixDatabaseContextId.HasValue
-                        ? $"{_mixDb.MixDatabaseContext.SystemName}_{relName}"
-                        : MixDatabaseNames.SYSTEM_DATA_RELATIONSHIP;
+                            ? MixDbTableNames.DATA_RELATIONSHIP_SNAKE_CASE
+                            : MixDbTableNames.DATA_RELATIONSHIP_TITLE_CASE;
+            return _mixDb.MixDbDatabaseId.HasValue
+                        ? $"{_mixDb.MixDbDatabase.SystemName}_{relName}"
+                        : MixDbTableNames.SYSTEM_DATA_RELATIONSHIP;
         }
         private async Task LoadMixDb(string tableName)
         {
@@ -690,20 +690,20 @@ namespace Mix.Mixdb.Services
             {
                 return;
             }
-            string name = $"{typeof(MixDbDatabaseViewModel).FullName}_{tableName}";
+            string name = $"{typeof(MixDbTableViewModel).FullName}_{tableName}";
             _mixDb = await GetMixDb(tableName);
             _fieldNameService = new FieldNameService(_mixDb.NamingConvention);
         }
 
-        private async Task<MixDbDatabaseViewModel?> GetMixDb(string tableName)
+        private async Task<MixDbTableViewModel?> GetMixDb(string tableName)
         {
-            string name = $"{typeof(MixDbDatabaseViewModel).FullName}_{tableName}";
+            string name = $"{typeof(MixDbTableViewModel).FullName}_{tableName}";
             return await _memoryCache.TryGetValueAsync(
                 name,
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return MixDbDatabaseViewModel.GetRepository(_cmsUow, _cacheSrv).GetSingleAsync(m => m.SystemName == tableName);
+                    return MixDbTableViewModel.GetRepository(_cmsUow, _cacheSrv).GetSingleAsync(m => m.SystemName == tableName);
                 }
                 );
         }
@@ -711,7 +711,7 @@ namespace Mix.Mixdb.Services
         public async Task<object> ExtractIdAsync(string tableName, JObject obj)
         {
             await LoadMixDb(tableName);
-            return _mixDb.Type == MixDatabaseType.GuidService
+            return _mixDb.Type == MixDbTableType.GuidService
                 ? obj.GetJObjectProperty<Guid>(_fieldNameService.Id)
                 : obj.GetJObjectProperty<int>(_fieldNameService.Id);
         }
@@ -737,7 +737,7 @@ namespace Mix.Mixdb.Services
             throw new NotImplementedException();
         }
 
-        Task<MixDbDatabaseViewModel?> IMixDbDataService.GetMixDb(string tableName)
+        Task<MixDbTableViewModel?> IMixDbDataService.GetMixDb(string tableName)
         {
             throw new NotImplementedException();
         }

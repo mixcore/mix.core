@@ -33,7 +33,7 @@ namespace Mix.Shared.Dtos
         public string? SelectColumns { get; set; }
         public string? ParentId { get; set; }
         public object? ObjParentId => GetParentId();
-        public MixDatabaseRelationshipType? Relationship { get; set; } = MixDatabaseRelationshipType.OneToMany;
+        public MixDbTableRelationshipType? Relationship { get; set; } = MixDbTableRelationshipType.OneToMany;
         public string? ParentName { get; set; }
         public List<MixQueryField>? Queries { get; set; }
         public List<MixSortByColumn>? SortByColumns { get; set; }

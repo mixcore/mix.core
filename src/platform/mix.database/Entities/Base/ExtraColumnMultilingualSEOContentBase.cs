@@ -3,7 +3,7 @@
     public abstract class ExtraColumnMultilingualSEOContentBase<TPrimaryKey> : MultilingualSEOContentBase<TPrimaryKey>
         where TPrimaryKey : IComparable
     {
-        public string MixDatabaseName { get; set; }
-        public int? MixDbId { get; set; }
+        public string MixDbTableName { get; set; }
+        public int? MixDbTableId { get; set; }
     }
 }

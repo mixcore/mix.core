@@ -214,14 +214,14 @@ namespace Mix.Mixdb.Services
                 : $"{dbContext.SystemName.ToTitleCase()}{database.DisplayName.ToColumnName(true)}";
         }
 
-        private async Task<MixDbDatabaseViewModel> GetOrCreateDatabaseAsync(
+        private async Task<MixDbTableViewModel> GetOrCreateDatabaseAsync(
             MixDbTable database,
             string newDbName,
             MixDbDatabase dbContext,
             List<MixDbColumn>? columns,
             CancellationToken cancellationToken)
         {
-            var currentDb = await MixDbDatabaseViewModel.GetRepository(_cmsUow, CacheService)
+            var currentDb = await MixDbTableViewModel.GetRepository(_cmsUow, CacheService)
                 .GetSingleAsync(m => m.SystemName == newDbName);
 
             if (currentDb == null)
@@ -232,7 +232,7 @@ namespace Mix.Mixdb.Services
                     NamingConvention = dbContext.NamingConvention,
                     SystemName = newDbName,
                     TenantId = CurrentTenant?.Id ?? 1,
-                    MixDatabaseContextId = dbContext.Id,
+                    MixDbDatabaseId = dbContext.Id,
                     DatabaseProvider = dbContext.DatabaseProvider,
                     CreatedDateTime = DateTime.UtcNow,
                     Columns = new()
@@ -251,7 +251,7 @@ namespace Mix.Mixdb.Services
         }
 
         private async Task AddColumnsAsync(
-            MixDbDatabaseViewModel currentDb,
+            MixDbTableViewModel currentDb,
             List<MixDbColumn> columns,
             string databaseSystemName,
             MixDatabaseNamingConvention namingConvention)
@@ -305,10 +305,10 @@ namespace Mix.Mixdb.Services
             {
                 if (!_cmsUow.DbContext.MixDbTable.Any(m => m.SystemName == database.SystemName))
                 {
-                    var currentDb = new MixDbDatabaseViewModel(database, _cmsUow)
+                    var currentDb = new MixDbTableViewModel(database, _cmsUow)
                     {
                         Id = 0,
-                        MixDatabaseContextId = masterDbContext.Id,
+                        MixDbDatabaseId = masterDbContext.Id,
                         TenantId = CurrentTenant?.Id ?? 1,
                         CreatedDateTime = DateTime.UtcNow,
                         Columns = new()
@@ -333,20 +333,20 @@ namespace Mix.Mixdb.Services
 
         #region Public Methods
 
-        public async Task<MixDbDatabaseViewModel> GetMixDatabase(string tableName)
+        public async Task<MixDbTableViewModel> GetMixDbTable(string tableName)
         {
             if (string.IsNullOrEmpty(tableName))
             {
                 throw new ArgumentException("Table name cannot be null or empty", nameof(tableName));
             }
 
-            string name = $"{typeof(MixDbDatabaseViewModel).FullName}_{tableName}";
+            string name = $"{typeof(MixDbTableViewModel).FullName}_{tableName}";
             var result = await _memoryCache.TryGetValueAsync(
                 name,
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return MixDbDatabaseViewModel.GetRepository(_cmsUow, CacheService)
+                    return MixDbTableViewModel.GetRepository(_cmsUow, CacheService)
                         .GetSingleAsync(m => m.SystemName == tableName);
                 });
 
@@ -355,7 +355,7 @@ namespace Mix.Mixdb.Services
                 throw new MixException(MixErrorStatus.Badrequest, $"Invalid table name: {tableName}");
             }
 
-            string cnn = result.MixDatabaseContext?.ConnectionString.Decrypt(_configuration.AesKey())
+            string cnn = result.MixDbDatabase?.ConnectionString.Decrypt(_configuration.AesKey())
                 ?? _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             InitDbStructureService(cnn, result.DatabaseProvider);
             return result;
@@ -395,7 +395,7 @@ namespace Mix.Mixdb.Services
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            var db = await GetMixDatabase(databaseName);
+            var db = await GetMixDbTable(databaseName);
             if (db is null)
             {
                 throw new NullReferenceException($"Database not found: {databaseName}");
@@ -411,7 +411,7 @@ namespace Mix.Mixdb.Services
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            var db = await GetMixDatabase(col.MixDbTableName);
+            var db = await GetMixDbTable(col.MixDbTableName);
             if (db is null)
             {
                 throw new NullReferenceException($"Database not found: {col.MixDbTableName}");
@@ -427,7 +427,7 @@ namespace Mix.Mixdb.Services
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            var db = await GetMixDatabase(repoCol.MixDbTableName);
+            var db = await GetMixDbTable(repoCol.MixDbTableName);
             if (db is null)
             {
                 throw new NullReferenceException($"Database not found: {repoCol.MixDbTableName}");
@@ -443,7 +443,7 @@ namespace Mix.Mixdb.Services
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            var db = await GetMixDatabase(repoCol.MixDbTableName);
+            var db = await GetMixDbTable(repoCol.MixDbTableName);
             if (db is null)
             {
                 throw new NullReferenceException($"Database not found: {repoCol.MixDbTableName}");

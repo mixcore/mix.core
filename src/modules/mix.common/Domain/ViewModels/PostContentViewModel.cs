@@ -55,7 +55,7 @@ namespace Mix.Common.Domain.ViewModels
         {
             if (AdditionalData == null)
             {
-                var obj = await mixDbDataService.GetSingleByParentAsync(MixDatabaseName, MixContentType.Post, Id, string.Empty, cancellationToken);
+                var obj = await mixDbDataService.GetSingleByParentAsync(MixDbTableName, MixContentType.Post, Id, string.Empty, cancellationToken);
                 AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
             }
         }

@@ -17,7 +17,7 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix
         {
         }
 
-        public DbSet<MixDbDataAssociation> MixDatabaseAssociation { get; set; }
+        public DbSet<MixDbDataAssociation> MixDbDataAssociation { get; set; }
         public DbSet<OrderDetail> OrderDetail { get; set; }
         public DbSet<OrderTracking> OrderTracking { get; set; }
         public DbSet<OrderItem> OrderItem { get; set; }

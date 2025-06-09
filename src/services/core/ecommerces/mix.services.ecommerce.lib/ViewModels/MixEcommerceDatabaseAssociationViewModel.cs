@@ -40,7 +40,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public override async Task Validate(CancellationToken cancellationToken)
         {
             await base.Validate(cancellationToken);
-            if (Context.MixDatabaseAssociation.Any(
+            if (Context.MixDbDataAssociation.Any(
                     m =>
                         m.Id != Id
                         && m.ParentDatabaseName == ParentDatabaseName

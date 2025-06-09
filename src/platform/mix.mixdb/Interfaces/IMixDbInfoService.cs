@@ -10,7 +10,7 @@ namespace Mix.Mixdb.Interfaces
         /// <summary>
         /// Gets MixDb configuration for a specific table
         /// </summary>
-        Task<MixDbDatabaseViewModel?> GetMixDb(string tableName);
+        Task<MixDbTableViewModel?> GetMixDb(string tableName);
 
         /// <summary>
         /// Loads MixDb configuration for a specific table

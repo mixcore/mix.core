@@ -8,8 +8,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mix.RepoDb.ViewModels
 {
-    public sealed class MixDatabaseRelationshipViewModel
-        : ViewModelBase<MixCmsContext, MixDbTableRelationship, int, MixDatabaseRelationshipViewModel>
+    public sealed class MixDbTableRelationshipViewModel
+        : ViewModelBase<MixCmsContext, MixDbTableRelationship, int, MixDbTableRelationshipViewModel>
     {
         #region Properties
         public int ParentId { get; set; }
@@ -17,21 +17,21 @@ namespace Mix.RepoDb.ViewModels
         public string DisplayName { get; set; }
         public string SourceDatabaseName { get; set; }
         public string DestinateDatabaseName { get; set; }
-        public MixDatabaseRelationshipType Type { get; set; }
+        public MixDbTableRelationshipType Type { get; set; }
         #endregion
 
         #region Constructors
 
-        public MixDatabaseRelationshipViewModel()
+        public MixDbTableRelationshipViewModel()
         {
 
         }
 
-        public MixDatabaseRelationshipViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public MixDbTableRelationshipViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        public MixDatabaseRelationshipViewModel(MixDbTableRelationship entity, UnitOfWorkInfo? uowInfo = null)
+        public MixDbTableRelationshipViewModel(MixDbTableRelationship entity, UnitOfWorkInfo? uowInfo = null)
             : base(entity, uowInfo)
         {
         }

@@ -29,27 +29,27 @@ namespace Mix.MCP.Lib.Tools
     /// Tool for creating Mix Databases from prompt descriptions
     /// </summary>
     [McpServerToolType]
-    public class MixDatabasePromptTool : BaseMcpTool
+    public class MixDbPromptTool : BaseMcpTool
     {
         private readonly IMixdbStructure _mixDbStructureService;
         private readonly IMixMemoryCacheService _memoryCache;
         private readonly MixCacheService _cacheService;
         private readonly DatabaseService _databaseService;
         private readonly ILlmServiceFactory _llmServiceFactory;
-        private readonly MixDatabaseHelper _databaseHelper;
-        private readonly MixDatabaseSchemaParser _schemaParser;
+        private readonly MixDbHelper _databaseHelper;
+        private readonly MixDbSchemaParser _schemaParser;
 
         /// <summary>
-        /// Initializes a new instance of the MixDatabasePromptTool class
+        /// Initializes a new instance of the MixDbPromptTool class
         /// </summary>
-        public MixDatabasePromptTool(
+        public MixDbPromptTool(
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IMixdbStructure mixDbService,
             IMixMemoryCacheService memoryCache,
             MixCacheService cacheService,
             DatabaseService databaseService,
             ILlmServiceFactory llmServiceFactory,
-            ILogger<MixDatabasePromptTool> logger)
+            ILogger<MixDbPromptTool> logger)
             : base(cmsUow, logger)
         {
             _mixDbStructureService = mixDbService;
@@ -57,8 +57,8 @@ namespace Mix.MCP.Lib.Tools
             _cacheService = cacheService;
             _databaseService = databaseService;
             _llmServiceFactory = llmServiceFactory;
-            _databaseHelper = new MixDatabaseHelper(cmsUow, mixDbService, logger);
-            _schemaParser = new MixDatabaseSchemaParser(llmServiceFactory, logger);
+            _databaseHelper = new MixDbHelper(cmsUow, mixDbService, logger);
+            _schemaParser = new MixDbSchemaParser(llmServiceFactory, logger);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Mix.MCP.Lib.Tools
                 var columns = await _schemaParser.ParseSchemaDescriptionWithLLM(schemaDescription, llmServiceType, llmModel);
                 if (columns.Count == 0)
                     throw new McpException("Could not determine columns from the schema description. Please provide more details about the fields needed for your database.");
-                string systemName = MixDatabaseHelper.GenerateSystemName(displayName, MixDatabaseNamingConvention.SnakeCase);
+                string systemName = MixDbHelper.GenerateSystemName(displayName, MixDatabaseNamingConvention.SnakeCase);
                 bool databaseExists = await _databaseHelper.DatabaseExists(systemName);
                 if (databaseExists)
                     throw new McpException($"A database with the system name '{systemName}' already exists. Please use a different name or delete the existing database first.");
@@ -95,7 +95,7 @@ namespace Mix.MCP.Lib.Tools
                     columns,
                     schemaDescription,
                     MixDatabaseNamingConvention.SnakeCase,
-                    MixDatabaseType.Service,
+                    MixDbTableType.Service,
                     mixDatabaseContextId);
                 if (database == null)
                     throw new McpException($"Failed to create database: {systemName}. Please check the logs for more details.");
@@ -152,7 +152,7 @@ namespace Mix.MCP.Lib.Tools
                     results.Add(new
                     {
                         Name = column.Name,
-                        DisplayName = MixDatabaseHelper.FormatDisplayName(column.Name),
+                        DisplayName = MixDbHelper.FormatDisplayName(column.Name),
                         DataType = column.DataType.ToString(),
                         IsRequired = column.IsRequired,
                         Success = success
@@ -208,7 +208,7 @@ namespace Mix.MCP.Lib.Tools
                         results.Add(new
                         {
                             Name = column.Name,
-                            DisplayName = MixDatabaseHelper.FormatDisplayName(column.Name),
+                            DisplayName = MixDbHelper.FormatDisplayName(column.Name),
                             DataType = column.DataType.ToString(),
                             IsRequired = column.IsRequired,
                             Success = success
@@ -271,7 +271,7 @@ namespace Mix.MCP.Lib.Tools
                     results.Add(new
                     {
                         Name = column.Name,
-                        DisplayName = MixDatabaseHelper.FormatDisplayName(column.Name),
+                        DisplayName = MixDbHelper.FormatDisplayName(column.Name),
                         DataType = column.DataType.ToString(),
                         IsRequired = column.IsRequired,
                         Success = success

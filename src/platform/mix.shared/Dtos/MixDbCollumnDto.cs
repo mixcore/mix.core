@@ -15,7 +15,7 @@ namespace Mix.Shared.Dtos
         public MixDataType DataType { get; set; } = MixDataType.String;
         public int? ReferenceId { get; set; }
         public string DefaultValue { get; set; }
-        public int MixDatabaseId { get; set; }
+        public int MixDbTableId { get; set; }
         [JsonIgnore]
         public JObject Configurations { get; set; }
         public ColumnConfigurations ColumnConfigurations { get; set; } = new();

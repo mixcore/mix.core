@@ -1,6 +1,6 @@
 ﻿namespace Mix.Constant.Enums
 {
-    public enum MixDatabaseContentAssociationType
+    public enum MixDbDataAssociationType
     {
         DataData,
         DataPost,

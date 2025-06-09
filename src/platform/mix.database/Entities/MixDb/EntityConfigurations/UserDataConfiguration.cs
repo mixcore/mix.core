@@ -35,7 +35,7 @@ namespace Mix.Database.Entities.MixDb.EntityConfigurations
             builder.Property(e => e.ParentType)
                .IsRequired()
                .HasColumnName("parent_type")
-               .HasConversion(new EnumToStringConverter<MixDatabaseParentType>())
+               .HasConversion(new EnumToStringConverter<MixDbTableParentType>())
                .HasColumnType($"{Config.String}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
         }

@@ -13,14 +13,14 @@ namespace Mix.Database.Entities.QueueLog.EntityConfigurations
 {
     internal class QueueLogConfiguration : EntityBaseConfiguration<QueueLog, Guid>
     {
-        public QueueLogConfiguration(DatabaseService databaseService): base(databaseService)
+        public QueueLogConfiguration(DatabaseService databaseService) : base(databaseService)
         {
         }
 
         public override void Configure(EntityTypeBuilder<QueueLog> builder)
         {
             base.Configure(builder);
-            builder.ToTable(MixDatabaseNames.QUEUE_LOG);
+            builder.ToTable(MixDbTableNames.QUEUE_LOG);
             builder.Property(e => e.TenantId)
                .HasColumnName("tenant_id");
 

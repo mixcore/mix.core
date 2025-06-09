@@ -1,6 +1,6 @@
 ﻿namespace Mix.Constant.Enums
 {
-    public enum MixDatabaseType
+    public enum MixDbTableType
     {
         System,
         Service,

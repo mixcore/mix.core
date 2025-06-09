@@ -10,8 +10,8 @@ using System.Text.Json.Serialization;
 
 namespace Mix.RepoDb.ViewModels
 {
-    public sealed class MixDatabaseContextReadViewModel
-        : TenantDataViewModelBase<MixCmsContext, MixDbDatabase, int, MixDatabaseContextReadViewModel>
+    public sealed class MixDbDatabaseReadViewModel
+        : TenantDataViewModelBase<MixCmsContext, MixDbDatabase, int, MixDbDatabaseReadViewModel>
     {
         #region Properties
         public MixDatabaseNamingConvention NamingConvention { get; set; }
@@ -25,16 +25,16 @@ namespace Mix.RepoDb.ViewModels
 
         #region Constructors
 
-        public MixDatabaseContextReadViewModel()
+        public MixDbDatabaseReadViewModel()
         {
 
         }
 
-        public MixDatabaseContextReadViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public MixDbDatabaseReadViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        public MixDatabaseContextReadViewModel(MixDbDatabase entity, UnitOfWorkInfo uowInfo)
+        public MixDbDatabaseReadViewModel(MixDbDatabase entity, UnitOfWorkInfo uowInfo)
             : base(entity, uowInfo)
         {
         }

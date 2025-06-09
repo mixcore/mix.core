@@ -62,11 +62,11 @@ namespace Mixcore.Domain.ViewModels
                 CancellationToken cancellationToken)
         {
             bool isChanged = false;
-            if (AdditionalData == null && !string.IsNullOrEmpty(MixDatabaseName))
+            if (AdditionalData == null && !string.IsNullOrEmpty(MixDbTableName))
             {
                 isChanged = true;
-                var relationships = Context.MixDbTableRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName).ToList();
-                var obj = await mixDbDataService.GetSingleByParentAsync(MixDatabaseName, MixContentType.Post, Id, string.Empty, cancellationToken);
+                var relationships = Context.MixDbTableRelationship.Where(m => m.SourceDatabaseName == MixDbTableName).ToList();
+                var obj = await mixDbDataService.GetSingleByParentAsync(MixDbTableName, MixContentType.Post, Id, string.Empty, cancellationToken);
                 if (obj != null)
                 {
                     AdditionalData = ReflectionHelper.ParseObject(obj);

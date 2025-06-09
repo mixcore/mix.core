@@ -3,7 +3,7 @@
     public sealed class MixUserData : EntityBase<int>
     {
         public Guid ParentId { get; set; }
-        public MixDatabaseParentType ParentType { get; set; }
+        public MixDbTableParentType ParentType { get; set; }
         public string Avatar { get; set; }
         public string PhoneNumber { get; set; }
         public string Fullname { get; set; }

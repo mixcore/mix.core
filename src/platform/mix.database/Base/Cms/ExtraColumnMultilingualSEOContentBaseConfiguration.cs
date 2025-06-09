@@ -16,7 +16,7 @@ namespace Mix.Database.Base.Cms
         {
             base.Configure(builder);
 
-            builder.Property(e => e.MixDatabaseName)
+            builder.Property(e => e.MixDbTableName)
                 .HasColumnName("mix_database_name")
                 .HasColumnType($"{Config.NString}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet)

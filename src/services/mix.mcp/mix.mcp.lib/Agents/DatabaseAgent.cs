@@ -16,7 +16,7 @@ using System.Text.Json;
 namespace Mix.MCP.Lib.Agents
 {
     /// <summary>
-    /// Agent for handling database operations using MixDatabasePromptTool
+    /// Agent for handling database operations using MixDbPromptTool
     /// </summary>
     /// 
     public class DatabaseAgent
@@ -128,7 +128,7 @@ namespace Mix.MCP.Lib.Agents
                             ["timeoutSeconds"] = DEFAULT_TIMEOUT_SECONDS,
                             ["confirmation"] = "YES"
                         }, cancellationToken);
-                    // Data CRUD operations (requires MixDatabaseDataTool)
+                    // Data CRUD operations (requires MixDbDataTool)
                     case DatabaseIntent.CreateRecord:
                         _logger.LogWarning("CreateRecord intent detected, but data tool integration is not implemented in this agent.");
                         return "CreateRecord intent detected, but data tool integration is not implemented.";
@@ -225,11 +225,11 @@ namespace Mix.MCP.Lib.Agents
         }
 
         /// <summary>
-        /// Helper to get all supported [McpServerTool] methods and their descriptions from MixDatabasePromptTool
+        /// Helper to get all supported [McpServerTool] methods and their descriptions from MixDbPromptTool
         /// </summary>
         private static List<(string MethodName, string Description)> GetSupportedPromptToolActions()
         {
-            var toolType = typeof(MixDatabasePromptTool);
+            var toolType = typeof(MixDbPromptTool);
             var actions = new List<(string, string)>();
             foreach (var method in toolType.GetMethods(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public))
             {
@@ -259,21 +259,22 @@ namespace Mix.MCP.Lib.Agents
             var toolList = string.Join("\n", supportedActions.Select(a => $"- {a.MethodName}: {a.Description}"));
             var parameters = new Dictionary<string, string>();
             string prompt = $$"""
-                You are an AI assistant. When a user sends a message, decide if you should:
-                - Respond directly as a chatbot (for general questions, greetings, small talk, etc.)
-                - Or, if the user is asking for a database/tool operation, classify the request and extract parameters with selected tool parameters.
-                You are an AI assistant for a database platform. Classify the user's request into one of these intents:
-                {{toolList}}
-                User message: "{{userInput}}"
+                You are an AI assistant.When a user sends a message, decide if you should:
+                -Respond directly as a chatbot(for general questions, greetings, small talk, etc.)
+                -Or, if the user is asking for a database/ tool operation, classify the request and extract parameters with selected tool parameters.
+
+               You are an AI assistant for a database platform.Classify the user's request into one of these intents:
+                { { toolList} }
+            User message: "{{userInput}}"
 
                 Respond in this JSON format:
                 {
-                    "type": "chatbot" | "tool",
+                "type": "chatbot" | "tool",
                     "response": "...", // Only if type is chatbot
                     "action": "...", // Only if type is tool
-                    "parameters": {...} // Only if type is tool
-                }
-                """;
+                    "parameters": { ...} // Only if type is tool
+            }
+            """;
             var llmService = _llmServiceFactory.CreateService(llmServiceType);
             var response = await llmService.ChatAsync(prompt, llmModel, 0.2, -1, cancellationToken);
             if (string.IsNullOrWhiteSpace(response?.choices?.FirstOrDefault()?.Message?.Content))

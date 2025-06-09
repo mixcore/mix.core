@@ -13,14 +13,14 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
         public override void Configure(EntityTypeBuilder<MixTheme> builder)
         {
             base.Configure(builder);
-            builder.Property(e => e.MixDbId)
-                .HasColumnName("mix_db_id");
-            builder.Property(e => e.MixDatabaseName)
-                .HasColumnName("mix_database_name")
+            builder.Property(e => e.MixDbTableId)
+                .HasColumnName("mix_db_table_id");
+            builder.Property(e => e.MixDbTableName)
+                .HasColumnName("mix_db_table_name")
                .HasColumnType($"{Config.NString}{Config.SmallLength}");
-             builder.Property(e => e.SystemName)
-                .HasColumnName("system_name")
-               .HasColumnType($"{Config.NString}{Config.SmallLength}");
+            builder.Property(e => e.SystemName)
+               .HasColumnName("system_name")
+              .HasColumnType($"{Config.NString}{Config.SmallLength}");
 
             builder.Property(e => e.PreviewUrl)
                 .HasColumnName("preview_url")
@@ -47,7 +47,7 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
                .UseCollation(Config.DatabaseCollation);
 
 
-           
+
         }
     }
 }

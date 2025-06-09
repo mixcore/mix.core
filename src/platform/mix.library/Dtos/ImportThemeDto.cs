@@ -13,9 +13,9 @@
 
         public List<int> ModuleIds { get; set; }
 
-        public List<int> MixDatabaseIds { get; set; }
+        public List<int> MixDbTableIds { get; set; }
 
-        public List<int> MixDatabaseDataIds { get; set; }
+        public List<int> MixDbDataIds { get; set; }
 
         public List<int> ConfigurationIds { get; set; } = new();
 

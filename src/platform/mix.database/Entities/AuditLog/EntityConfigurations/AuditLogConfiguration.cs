@@ -17,7 +17,7 @@ namespace Mix.Database.Entities.AuditLog.EntityConfigurations
         public override void Configure(EntityTypeBuilder<AuditLog> builder)
         {
             base.Configure(builder);
-            builder.ToTable(MixDatabaseNames.AUDIT_LOG);
+            builder.ToTable(MixDbTableNames.AUDIT_LOG);
             builder.Property(e => e.Success)
                 .HasColumnName("success")
                 .HasColumnType(Config.Boolean);

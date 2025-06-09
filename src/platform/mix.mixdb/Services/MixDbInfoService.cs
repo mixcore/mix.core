@@ -22,7 +22,7 @@ namespace Mix.Mixdb.Services
         private readonly MixCacheService _cacheSrv;
         private readonly UnitOfWorkInfo<MixCmsContext> _uow;
         private readonly ILogger<MixDbInfoService> _logger;
-        private MixDbDatabaseViewModel? _mixDb;
+        private MixDbTableViewModel? _mixDb;
         private FieldNameService? _fieldNameService;
 
         public MixDbInfoService(
@@ -37,17 +37,17 @@ namespace Mix.Mixdb.Services
             _logger = logger;
         }
 
-        public async Task<MixDbDatabaseViewModel?> GetMixDb(string tableName)
+        public async Task<MixDbTableViewModel?> GetMixDb(string tableName)
         {
             try
             {
-                string name = $"{typeof(MixDbDatabaseViewModel).FullName}_{tableName}";
+                string name = $"{typeof(MixDbTableViewModel).FullName}_{tableName}";
                 return await _memoryCache.TryGetValueAsync(
                     name,
                     cache =>
                     {
                         cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                        return MixDbDatabaseViewModel.GetRepository(_uow, _cacheSrv).GetSingleAsync(m => m.SystemName == tableName);
+                        return MixDbTableViewModel.GetRepository(_uow, _cacheSrv).GetSingleAsync(m => m.SystemName == tableName);
                     });
             }
             catch (Exception ex)

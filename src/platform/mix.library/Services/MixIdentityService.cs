@@ -280,7 +280,7 @@ namespace Mix.Lib.Services
                     return new JObject();
                 }
 
-                var u = await MixDbDataService.GetSingleByParentAsync(MixDatabaseNames.SYSTEM_USER_DATA, MixContentType.User, user.Id, string.Empty, cancellationToken);
+                var u = await MixDbDataService.GetSingleByParentAsync(MixDbTableNames.SYSTEM_USER_DATA, MixContentType.User, user.Id, string.Empty, cancellationToken);
                 if (u == null && !Configuration.IsInit())
                 {
                     u = new JObject()
@@ -298,16 +298,16 @@ namespace Mix.Lib.Services
                         u.Add(additionalData.Properties());
                     }
 
-                    var id = await MixDbDataService.CreateAsync(MixDatabaseNames.SYSTEM_USER_DATA, u, user.UserName, cancellationToken);
+                    var id = await MixDbDataService.CreateAsync(MixDbTableNames.SYSTEM_USER_DATA, u, user.UserName, cancellationToken);
 
                     QueueService.PushMemoryQueue(
                     CurrentTenant.Id,
                     MixQueueTopics.MixBackgroundTasks,
                     MixQueueActions.MixDbEvent,
-                    new MixDbEventCommand(user.UserName, MixDbCommandQueueAction.POST.ToString(), MixDatabaseNames.SYSTEM_USER_DATA, new Shared.Models.MixDbAuditLogModel()
+                    new MixDbEventCommand(user.UserName, MixDbCommandQueueAction.POST.ToString(), MixDbTableNames.SYSTEM_USER_DATA, new Shared.Models.MixDbAuditLogModel()
                     {
                         Id = id,
-                        MixDbName = MixDatabaseNames.SYSTEM_USER_DATA,
+                        MixDbName = MixDbTableNames.SYSTEM_USER_DATA,
                         After = u
                     }));
                 }
@@ -319,7 +319,7 @@ namespace Mix.Lib.Services
                 return ReflectionHelper.ParseObject(new
                 {
                     ParentId = user?.Id,
-                    ParentType = MixDatabaseParentType.User,
+                    ParentType = MixDbTableParentType.User,
                     Username = user?.UserName,
                     Email = user?.Email,
                     PhoneNumber = user?.PhoneNumber

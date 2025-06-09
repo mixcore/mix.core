@@ -10,7 +10,7 @@
         {
             base.Configure(builder);
 
-            builder.Property(e => e.MixDatabaseName)
+            builder.Property(e => e.MixDbTableName)
                 .HasColumnType($"{Config.NString}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
