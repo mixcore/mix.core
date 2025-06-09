@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.Cms.SqlServer
+namespace Mix.Database.Migrations.Cms.Postgres
 {
     /// <inheritdoc />
     /// <inheritdoc />

@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mix.Database.Migrations.Cms.MySql
 {
     [DbContext(typeof(MySqlMixCmsContext))]
-    [Migration("20250603091816_RefactorMixDb")]
+    [Migration("20250609060203_RefactorMixDb")]
     partial class RefactorMixDb
     {
         /// <inheritdoc />
@@ -103,7 +103,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int?>("MixDbDatabaseId")
+                    b.Property<int?>("MixDbId")
                         .HasColumnType("int")
                         .HasColumnName("mix_db_id");
 
@@ -580,7 +580,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("MixDbDatabaseId")
+                    b.Property<int>("MixDbTableId")
                         .HasColumnType("int")
                         .HasColumnName("mix_db_table_id");
 
@@ -622,7 +622,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                     b.HasKey("Id")
                         .HasName("pk_mix_db_column");
 
-                    b.HasIndex("MixDbDatabaseId");
+                    b.HasIndex("MixDbTableId");
 
                     b.ToTable("mix_db_column", (string)null);
                 });
@@ -631,55 +631,80 @@ namespace Mix.Database.Migrations.Cms.MySql
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ChildDatabaseName")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("child_database_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ChildDatabaseName"), "utf8");
 
                     b.Property<int>("ChildId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("child_id");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("created_by");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_date_time");
 
                     b.Property<Guid?>("GuidChildId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasColumnName("guid_child_id");
 
                     b.Property<Guid?>("GuidParentId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasColumnName("guid_parent_id");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime")
+                        .HasColumnName("last_modified");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("modified_by");
 
                     b.Property<string>("ParentDatabaseName")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("parent_database_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ParentDatabaseName"), "utf8");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("parent_id");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("priority");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_mix_db_data_association");
 
-                    b.ToTable("MixDbDataAssociation");
+                    b.ToTable("mix_db_data_association", (string)null);
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbDatabase", b =>
@@ -793,7 +818,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                     b.ToTable("mix_db_database", (string)null);
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTableName", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTable", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -848,7 +873,7 @@ namespace Mix.Database.Migrations.Cms.MySql
 
                     b.Property<int?>("MixDbDatabaseId")
                         .HasColumnType("int")
-                        .HasColumnName("mix_db_table_id");
+                        .HasColumnName("mix_db_database_id");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
@@ -1647,13 +1672,13 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .HasColumnType("int")
                         .HasColumnName("mix_culture_id");
 
-                    b.Property<string>("        public string MixDbTableName { get; set; }")
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("mix_database_name");
-
-                    b.Property<int?>("MixDbDatabaseId")
+                    b.Property<int?>("MixDbTableId")
                         .HasColumnType("int")
-                        .HasColumnName("mix_db_id");
+                        .HasColumnName("mix_db_table_id");
+
+                    b.Property<string>("MixDbTableName")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("mix_db_table_name");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
@@ -2147,13 +2172,13 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .HasColumnType("int")
                         .HasColumnName("mix_culture_id");
 
-                    b.Property<string>("        public string MixDbTableName { get; set; }")
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("mix_database_name");
-
-                    b.Property<int?>("MixDbDatabaseId")
+                    b.Property<int?>("MixDbTableId")
                         .HasColumnType("int")
-                        .HasColumnName("mix_db_id");
+                        .HasColumnName("mix_db_table_id");
+
+                    b.Property<string>("MixDbTableName")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("mix_db_table_name");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
@@ -2523,15 +2548,15 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .HasColumnType("int")
                         .HasColumnName("mix_culture_id");
 
-                    b.Property<string>("        public string MixDbTableName { get; set; }")
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("mix_database_name");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("        public string MixDbTableName { get; set; }"), "utf8");
-
-                    b.Property<int?>("MixDbDatabaseId")
+                    b.Property<int?>("MixDbTableId")
                         .HasColumnType("int")
-                        .HasColumnName("mix_db_id");
+                        .HasColumnName("mix_db_table_id");
+
+                    b.Property<string>("MixDbTableName")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("mix_db_table_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("MixDbTableName"), "utf8");
 
                     b.Property<int?>("MixPostContentId")
                         .HasColumnType("int")
@@ -2942,13 +2967,13 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<string>("        public string MixDbTableName { get; set; }")
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("mix_database_name");
-
-                    b.Property<int?>("MixDbDatabaseId")
+                    b.Property<int?>("MixDbTableId")
                         .HasColumnType("int")
-                        .HasColumnName("mix_db_id");
+                        .HasColumnName("mix_db_table_id");
+
+                    b.Property<string>("MixDbTableName")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("mix_db_table_name");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
@@ -3132,13 +3157,13 @@ namespace Mix.Database.Migrations.Cms.MySql
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbColumn", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDbTableName", "MixDbTableName")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDbTable", "MixDbTable")
                         .WithMany("MixDbColumns")
-                        .HasForeignKey("MixDbDatabaseId")
+                        .HasForeignKey("MixDbTableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MixDbTableName");
+                    b.Navigation("MixDbTable");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbDatabase", b =>
@@ -3152,7 +3177,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                     b.Navigation("Tenant");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTableName", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTable", b =>
                 {
                     b.HasOne("Mix.Database.Entities.Cms.MixTenant", "Tenant")
                         .WithMany("MixDbTables")
@@ -3165,13 +3190,13 @@ namespace Mix.Database.Migrations.Cms.MySql
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTableRelationship", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDbTableName", "DestinateDatabase")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDbTable", "DestinateDatabase")
                         .WithMany("DestinateRelationships")
                         .HasForeignKey("ChildId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.MixDbTableName", "SourceDatabase")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDbTable", "SourceDatabase")
                         .WithMany("SourceRelationships")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -3392,7 +3417,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                     b.Navigation("MixConfigurationContents");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTableName", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTable", b =>
                 {
                     b.Navigation("DestinateRelationships");
 

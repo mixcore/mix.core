@@ -16,6 +16,5 @@ namespace Mix.Database.Entities.Cms
         public string DefaultValue { get; set; }
 
         public int MixDbTableId { get; set; }
-        public virtual MixDbTable MixDbTable { get; set; }
     }
 }

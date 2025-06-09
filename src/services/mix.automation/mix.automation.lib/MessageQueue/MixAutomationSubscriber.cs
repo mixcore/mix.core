@@ -32,8 +32,7 @@ namespace Mix.Automation.Lib.Subscribers
             IConfiguration configuration,
             IMemoryQueueService<MessageQueueModel> queueService,
             ILogger<SubscriberBase> logger,
-            DatabaseService databaseService,
-            MixCacheService cacheService,
+            DatabaseService databaseService,            
             IPooledObjectPolicy<IChannel>? rabbitMQObjectPolicy = null)
             : base(
                   MixAutomationConstants.Topics.MixAutomation,
