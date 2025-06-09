@@ -2929,13 +2929,11 @@ namespace Mix.Database.Migrations.Cms.Postgres
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbColumn", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDbTable", "MixDbTable")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDbTable", null)
                         .WithMany("MixDbColumns")
                         .HasForeignKey("MixDbTableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("MixDbTable");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbDatabase", b =>
