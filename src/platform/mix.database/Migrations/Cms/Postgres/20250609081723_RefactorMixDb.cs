@@ -97,6 +97,11 @@ namespace Mix.Database.Migrations.Cms.Postgres
                 name: "mix_database_name",
                 table: "mix_theme",
                 newName: "mix_db_table_name");
+
+            migrationBuilder.RenameColumn(
+                name: "mix_database_id",
+                table: "mix_db_column",
+                newName: "mix_db_table_id");
         }
 
         /// <inheritdoc />

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mix.Database.Migrations.Cms.Postgres
 {
     [DbContext(typeof(PostgresqlMixCmsContext))]
-    [Migration("20250609070155_RefactorMixDb")]
+    [Migration("20250609081723_RefactorMixDb")]
     partial class RefactorMixDb
     {
         /// <inheritdoc />
@@ -2932,13 +2932,11 @@ namespace Mix.Database.Migrations.Cms.Postgres
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbColumn", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDbTable", "MixDbTable")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDbTable", null)
                         .WithMany("MixDbColumns")
                         .HasForeignKey("MixDbTableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("MixDbTable");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbDatabase", b =>
