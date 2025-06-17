@@ -103,7 +103,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int?>("MixDbId")
+                    b.Property<int?>("MixDbTableId")
                         .HasColumnType("int")
                         .HasColumnName("mix_db_id");
 
@@ -955,12 +955,12 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .HasColumnType("datetime")
                         .HasColumnName("created_date_time");
 
-                    b.Property<string>("DestinateDatabaseName")
+                    b.Property<string>("DestinateTableName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("destinate_database_name");
 
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DestinateDatabaseName"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DestinateTableName"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
@@ -989,12 +989,12 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .HasColumnType("int")
                         .HasColumnName("priority");
 
-                    b.Property<string>("SourceDatabaseName")
+                    b.Property<string>("SourceTableName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("source_database_name");
 
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SourceDatabaseName"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SourceTableName"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
