@@ -12,6 +12,6 @@ namespace Mix.Database.Entities.Cms
         public int? TemplateId { get; set; }
         public string Image { get; set; }
         public string MixDbTableName { get; set; }
-        public int? MixDbId { get; set; }
+        public int? MixDbTableId { get; set; }
     }
 }

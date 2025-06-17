@@ -3,7 +3,7 @@ using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
-    public class MixMediaConfiguration : TenantEntityBaseConfiguration<MixMedia, Guid>
+    public class MixMediaConfiguration : TenantEntityBaseConfiguration<MixMedia, int>
 
     {
         public MixMediaConfiguration(DatabaseService databaseService) : base(databaseService)

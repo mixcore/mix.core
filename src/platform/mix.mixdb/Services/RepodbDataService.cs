@@ -678,7 +678,7 @@ namespace Mix.Mixdb.Services
                     );
                 var cacheFolder = GetCacheFolder(tableName);
                 await _cacheSrv.RemoveCacheAsync(id, cacheFolder, cancellationToken);
-
+                _repository.CompleteTransaction();
                 return result;
             }
             catch (Exception ex)

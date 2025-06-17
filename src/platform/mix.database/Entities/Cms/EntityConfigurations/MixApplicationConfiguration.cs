@@ -18,8 +18,8 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
             builder.Property(e => e.TemplateId)
                 .HasColumnName("template_id")
                .HasColumnType(Config.Integer);
-            builder.Property(e => e.MixDbId)
-                .HasColumnName("mix_db_id")
+            builder.Property(e => e.MixDbTableId)
+                .HasColumnName("mix_db_table_id")
                .HasColumnType(Config.Integer);
             builder.Property(e => e.Image)
                 .HasColumnName("image")
