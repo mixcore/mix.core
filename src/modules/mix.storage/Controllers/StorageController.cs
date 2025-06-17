@@ -8,7 +8,7 @@ namespace Mix.Storage.Controllers
 {
     [Route("api/v2/rest/mix-storage")]
     [ApiController]
-    public class StorageController : MixRestfulApiControllerBase<MixMediaViewModel, MixCmsContext, MixMedia, Guid>
+    public class StorageController : MixRestfulApiControllerBase<MixMediaViewModel, MixCmsContext, MixMedia, int>
     {
         private readonly MixStorageService _storageService;
 
