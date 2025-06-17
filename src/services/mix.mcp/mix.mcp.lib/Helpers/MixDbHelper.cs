@@ -6,6 +6,7 @@ using Mix.Heart.UnitOfWork;
 using Mix.MCP.Lib.Models;
 using Mix.Mixdb.Interfaces;
 using Mix.Mixdb.ViewModels;
+using Mix.RepoDb.ViewModels;
 using System.Text.RegularExpressions;
 
 namespace Mix.MCP.Lib.Helpers
@@ -321,6 +322,31 @@ namespace Mix.MCP.Lib.Helpers
                     IsUnique = column.Name.Equals("id", StringComparison.OrdinalIgnoreCase)
                 }
             };
+        }
+
+        public async Task CreateRelationship(string sourceTableName, string destTableName, MixDbTableRelationshipType relationshipType, CancellationToken cancellationToken = default)
+        {
+            var sourceTable = await GetDatabaseBySystemName(sourceTableName);
+            if (sourceTable is null)
+            {
+                throw new Exception($"Invalid Table {sourceTableName}");
+            }
+            var destTable = await GetDatabaseBySystemName(destTableName);
+            if (sourceTable is null)
+            {
+                throw new Exception($"Invalid Table {destTableName}");
+            }
+            var relationship = new MixDbTableRelationshipViewModel(_cmsUow)
+            {
+                DisplayName = $"{destTableName}s",
+                SourceDatabaseName = sourceTableName,
+                DestinateDatabaseName = destTableName,
+                Type = relationshipType,
+                ParentId = sourceTable.Id,
+                ChildId = destTable.Id
+            };
+            await relationship.SaveAsync(cancellationToken);
+
         }
     }
 }

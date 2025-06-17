@@ -65,7 +65,6 @@ namespace Mix.RepoDb.ViewModels
 
             await base.Validate(cancellationToken);
         }
-
         #endregion
     }
 }

@@ -65,13 +65,13 @@ namespace Mix.Lib.ViewModels
 
         //protected override async Task SaveEntityRelationshipAsync(MixDbTableRelationship parentEntity, CancellationToken cancellationToken = default)
         //{
-        //    if (!Context.MixDbColumn.Any(m => m.MixDbTableName == DestinateDatabaseName && m.SystemName == ReferenceColumnName))
+        //    if (!Context.MixDbColumn.Any(m => m.MixDbTableName == DestinateTableName && m.SystemName == ReferenceColumnName))
         //    {
-        //        var srcDb = Context.MixDbTableName.FirstOrDefault(m => m.SystemName == SourceDatabaseName);
-        //        var destDb = Context.MixDbTableName.FirstOrDefault(m => m.SystemName == DestinateDatabaseName);
+        //        var srcDb = Context.MixDbTableName.FirstOrDefault(m => m.SystemName == SourceTableName);
+        //        var destDb = Context.MixDbTableName.FirstOrDefault(m => m.SystemName == DestinateTableName);
         //        var refCol = new MixDbColumnViewModel(UowInfo)
         //        {
-        //            MixDbTableName = DestinateDatabaseName,
+        //            MixDbTableName = DestinateTableName,
         //            MixDbDatabaseId = destDb.Id,
         //            DataType = MixDataType.Reference,
         //            CreatedBy = CreatedBy,

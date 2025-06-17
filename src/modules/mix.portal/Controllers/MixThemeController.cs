@@ -93,8 +93,8 @@ namespace Mix.Portal.Controllers
                 siteData.MixDbTables = siteData.MixDbTables.Where(m => dto.MixDbTableIds.Contains(m.Id)).ToList();
                 siteData.MixDbColumns = siteData.MixDbColumns.Where(m => dto.MixDbTableIds.Contains(m.MixDbTableId)).ToList();
                 siteData.MixDbTableRelationships = siteData.MixDbTableRelationships.Where(
-                    m => siteData.MixDbTables.Any(n => n.SystemName == m.SourceDatabaseName)
-                            && siteData.MixDbTables.Any(n => n.SystemName == m.DestinateDatabaseName)).ToList();
+                    m => siteData.MixDbTables.Any(n => n.SystemName == m.SourceTableName)
+                            && siteData.MixDbTables.Any(n => n.SystemName == m.DestinateTableName)).ToList();
 
                 var exportDataDbNames = siteData.MixDbTables.Where(m => dto.MixDbDataIds.Contains(m.Id));
                 siteData.MixDbModels = siteData.MixDbModels.Where(m => exportDataDbNames.Any(n => n.SystemName == m.DatabaseName)).ToList();
