@@ -415,7 +415,7 @@ namespace Mix.Mixdb.Services
                 var db = await GetMixDb(tableName);
                 foreach (var req in relatedDataRequests)
                 {
-                    var rel = db.Relationships.FirstOrDefault(m => m.DestinateDatabaseName == req.TableName);
+                    var rel = db.Relationships.FirstOrDefault(m => m.DestinateTableName == req.TableName);
                     if (rel == null)
                     {
                         continue;
@@ -441,8 +441,8 @@ namespace Mix.Mixdb.Services
             {
                 req.Queries ??= new();
                 var parentId = _fieldNameService.NamingConvention == MixDatabaseNamingConvention.SnakeCase
-                    ? $"{rel.SourceDatabaseName}_id"
-                    : $"{rel.SourceDatabaseName}Id";
+                    ? $"{rel.SourceTableName}_id"
+                    : $"{rel.SourceTableName}Id";
                 req.Queries.Add(new MixQueryField(parentId, await ExtractIdAsync(tableName, item)));
                 var data = await GetPagingAsync(
                     req,
@@ -458,19 +458,19 @@ namespace Mix.Mixdb.Services
             while (!cancellationToken.IsCancellationRequested)
             {
                 var relQuery = new List<QueryField>() {
-                        new QueryField(_fieldNameService.ParentDatabaseName, rel.SourceDatabaseName),
-                        new QueryField(_fieldNameService.ChildDatabaseName, rel.DestinateDatabaseName)
+                        new QueryField(_fieldNameService.ParentDatabaseName, rel.SourceTableName),
+                        new QueryField(_fieldNameService.ChildDatabaseName, rel.DestinateTableName)
                 };
-                var parentDb = await GetMixDb(rel.SourceDatabaseName);
-                var childDb = await GetMixDb(rel.DestinateDatabaseName);
+                var parentDb = await GetMixDb(rel.SourceTableName);
+                var childDb = await GetMixDb(rel.DestinateTableName);
 
                 if (parentDb.Type == MixDbTableType.GuidService)
                 {
-                    relQuery.Add(new(_fieldNameService.GuidParentId, await ExtractIdAsync(rel.SourceDatabaseName, item)));
+                    relQuery.Add(new(_fieldNameService.GuidParentId, await ExtractIdAsync(rel.SourceTableName, item)));
                 }
                 else
                 {
-                    relQuery.Add(new(_fieldNameService.ParentId, await ExtractIdAsync(rel.DestinateDatabaseName, item)));
+                    relQuery.Add(new(_fieldNameService.ParentId, await ExtractIdAsync(rel.DestinateTableName, item)));
                 }
 
                 var allowsRels = await GetListByAsync(GetRelationshipDbName(), relQuery);
@@ -525,7 +525,7 @@ namespace Mix.Mixdb.Services
             await LoadMixDb(tableName);
             return _mixDb.Relationships.Where(m => fields.Contains(m.DisplayName)).Select(m => new SearchMixDbRequestModel()
             {
-                TableName = m.DestinateDatabaseName,
+                TableName = m.DestinateTableName,
                 Paging = new PagingRequestModel()
             }).ToList();
         }

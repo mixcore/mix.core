@@ -120,27 +120,35 @@ namespace Mix.MCP.Lib.Tools
         [McpServerTool, Description("Create a Mix Database with columns based on a prompt description"), DisableRequestTimeout]
         public async Task<string> CreateMixDbRelationshipFromPrompt(
             [Description("Display name for the source table")] string sourceTableName,
-            [Description("Display name for the destinate table")] string destTableName,
+            [Description("Display name for the destinate table")] string destinateTableName,
+            [Description("Display name when load related data")] string displayName,
+            [Description("Property Name when load related data")] string? propertyName = null,
+            [Description("Display name for the source column")] string? sourceColumnName = null,
+            [Description("Display name for the destinate column")] string? destinateColumnName = null,
             [Description("Relationship type")] MixDbTableRelationshipType relationshipType = MixDbTableRelationshipType.OneToMany,
             CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(sourceTableName))
                 throw new McpException("source table name cannot be empty.");
-            if (string.IsNullOrWhiteSpace(destTableName))
+            if (string.IsNullOrWhiteSpace(destinateTableName))
                 throw new McpException("destinate table name cannot be empty.");
 
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
-                _logger.LogInformation("Creating relationship {sourceTableName} with schema description: {destTableName}",
-                    sourceTableName, destTableName);
+                _logger.LogInformation("Creating relationship {sourceTableName} with schema description: {destinateTableName}",
+                    sourceTableName, destinateTableName);
                 await _databaseHelper.CreateRelationship(
                     sourceTableName,
-                    destTableName,
+                    destinateTableName,
+                    displayName,
+                    propertyName,
+                    sourceColumnName,
+                    destinateColumnName,
                     relationshipType);
                 return JsonSerializer.Serialize(new
                 {
                     Success = true,
-                    Message = $"Relationship '{sourceTableName}' and {destTableName} created successfully"
+                    Message = $"Relationship '{sourceTableName}' and {destinateTableName} created successfully"
                 });
             }, "CreateDatabaseFromPrompt");
         }

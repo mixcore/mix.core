@@ -636,19 +636,19 @@ namespace Mix.Mixdb.Services
             while (!cancellationToken.IsCancellationRequested)
             {
                 var relQuery = new List<MixQueryField>() {
-                        new MixQueryField(_fieldNameService.ParentDatabaseName, rel.SourceDatabaseName),
-                        new MixQueryField(_fieldNameService.ChildDatabaseName, rel.DestinateDatabaseName)
+                        new MixQueryField(_fieldNameService.ParentDatabaseName, rel.SourceTableName),
+                        new MixQueryField(_fieldNameService.ChildDatabaseName, rel.DestinateTableName)
                 };
-                var parentDb = await GetMixDb(rel.SourceDatabaseName);
-                var childDb = await GetMixDb(rel.DestinateDatabaseName);
+                var parentDb = await GetMixDb(rel.SourceTableName);
+                var childDb = await GetMixDb(rel.DestinateTableName);
 
                 if (parentDb.Type == MixDbTableType.GuidService)
                 {
-                    relQuery.Add(new(_fieldNameService.GuidParentId, await ExtractIdAsync(rel.SourceDatabaseName, item)));
+                    relQuery.Add(new(_fieldNameService.GuidParentId, await ExtractIdAsync(rel.SourceTableName, item)));
                 }
                 else
                 {
-                    relQuery.Add(new(_fieldNameService.ParentId, await ExtractIdAsync(rel.DestinateDatabaseName, item)));
+                    relQuery.Add(new(_fieldNameService.ParentId, await ExtractIdAsync(rel.DestinateTableName, item)));
                 }
 
                 var allowsRels = await GetListByAsync(GetRelationshipDbName(), relQuery);

@@ -22,21 +22,6 @@ namespace Mix.Database.Migrations.Cms.Postgres
                 table: "mix_db_table_relationship",
                 newName: "source_column_name");
 
-            migrationBuilder.RenameColumn(
-                name: "mix_db_id",
-                table: "mix_application",
-                newName: "mix_db_table_id");
-
-            migrationBuilder.AlterColumn<int>(
-                name: "id",
-                table: "mix_media",
-                type: "integer",
-                nullable: false,
-                oldClrType: typeof(Guid),
-                oldType: "uuid",
-                oldDefaultValueSql: "gen_random_uuid()")
-                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
             migrationBuilder.AddColumn<string>(
                 name: "destinate_column_name",
                 table: "mix_db_table_relationship",
@@ -57,6 +42,44 @@ namespace Mix.Database.Migrations.Cms.Postgres
                 type: "varchar(50)",
                 nullable: false,
                 defaultValue: "");
+
+            migrationBuilder.DropTable("mix_media");
+            migrationBuilder.CreateTable(
+               name: "mix_media",
+               columns: table => new
+               {
+                   id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                   extension = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                   file_folder = table.Column<string>(type: "varchar(250)", nullable: true),
+                   file_name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                   file_properties = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
+                   file_size = table.Column<long>(type: "bigint", nullable: false),
+                   file_type = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                   tags = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
+                   source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                   target_url = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                   created_date_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                   last_modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                   created_by = table.Column<string>(type: "varchar(250)", nullable: true),
+                   modified_by = table.Column<string>(type: "varchar(250)", nullable: true),
+                   priority = table.Column<int>(type: "int", nullable: false),
+                   status = table.Column<string>(type: "varchar(50)", nullable: false),
+                   is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                   display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                   description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
+                   tenant_id = table.Column<int>(type: "int", nullable: false)
+               },
+               constraints: table =>
+               {
+                   table.PrimaryKey("pk_mix_media", x => x.id);
+                   table.ForeignKey(
+                       name: "FK_mix_media_mix_tenant_tenant_id",
+                       column: x => x.tenant_id,
+                       principalTable: "mix_tenant",
+                       principalColumn: "id",
+                       onDelete: ReferentialAction.Cascade);
+               });
         }
 
         /// <inheritdoc />
@@ -84,20 +107,41 @@ namespace Mix.Database.Migrations.Cms.Postgres
                 table: "mix_db_table_relationship",
                 newName: "destinate_database_name");
 
-            migrationBuilder.RenameColumn(
-                name: "mix_db_table_id",
-                table: "mix_application",
-                newName: "mix_db_id");
-
-            migrationBuilder.AlterColumn<Guid>(
-                name: "id",
-                table: "mix_media",
-                type: "uuid",
-                nullable: false,
-                defaultValueSql: "gen_random_uuid()",
-                oldClrType: typeof(int),
-                oldType: "integer")
-                .OldAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+            migrationBuilder.CreateTable(
+               name: "mix_media",
+               columns: table => new
+               {
+                   id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                   extension = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                   file_folder = table.Column<string>(type: "varchar(250)", nullable: true),
+                   file_name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                   file_properties = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
+                   file_size = table.Column<long>(type: "bigint", nullable: false),
+                   file_type = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                   tags = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
+                   source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                   target_url = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                   created_date_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                   last_modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                   created_by = table.Column<string>(type: "varchar(250)", nullable: true),
+                   modified_by = table.Column<string>(type: "varchar(250)", nullable: true),
+                   priority = table.Column<int>(type: "int", nullable: false),
+                   status = table.Column<string>(type: "varchar(50)", nullable: false),
+                   is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                   display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                   description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
+                   tenant_id = table.Column<int>(type: "int", nullable: false)
+               },
+               constraints: table =>
+               {
+                   table.PrimaryKey("pk_mix_media", x => x.id);
+                   table.ForeignKey(
+                       name: "FK_mix_media_mix_tenant_tenant_id",
+                       column: x => x.tenant_id,
+                       principalTable: "mix_tenant",
+                       principalColumn: "id",
+                       onDelete: ReferentialAction.Cascade);
+               });
         }
     }
 }

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
+using Mix.Heart.Extensions;
 using Mix.Heart.UnitOfWork;
 using Mix.MCP.Lib.Models;
 using Mix.Mixdb.Interfaces;
@@ -324,7 +325,15 @@ namespace Mix.MCP.Lib.Helpers
             };
         }
 
-        public async Task CreateRelationship(string sourceTableName, string destTableName, MixDbTableRelationshipType relationshipType, CancellationToken cancellationToken = default)
+        public async Task CreateRelationship(
+            string sourceTableName,
+            string destTableName,
+            string displayName,
+            string? propertyName,
+            string? sourceColumnName,
+            string? destinateColumnName,
+            MixDbTableRelationshipType relationshipType,
+            CancellationToken cancellationToken = default)
         {
             var sourceTable = await GetDatabaseBySystemName(sourceTableName);
             if (sourceTable is null)
@@ -338,9 +347,12 @@ namespace Mix.MCP.Lib.Helpers
             }
             var relationship = new MixDbTableRelationshipViewModel(_cmsUow)
             {
-                DisplayName = $"{destTableName}s",
-                SourceDatabaseName = sourceTableName,
-                DestinateDatabaseName = destTableName,
+                DisplayName = displayName,
+                SourceTableName = sourceTableName,
+                DestinateTableName = destTableName,
+                PropertyName = propertyName ?? displayName.ToSEOString('_'),
+                SourceColumnName = sourceColumnName ?? $"{sourceTableName}_id",
+                DestinateColumnName = destinateColumnName,
                 Type = relationshipType,
                 ParentId = sourceTable.Id,
                 ChildId = destTable.Id

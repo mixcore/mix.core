@@ -9,7 +9,7 @@
         public string SourceTableName { get; set; }
         public string DestinateTableName { get; set; }
         public string SourceColumnName { get; set; }
-        public string DestinateColumnName { get; set; }
+        public string? DestinateColumnName { get; set; }
         public MixDbTableRelationshipType Type { get; set; }
         public virtual MixDbTable SourceDatabase { get; set; }
         public virtual MixDbTable DestinateDatabase { get; set; }
