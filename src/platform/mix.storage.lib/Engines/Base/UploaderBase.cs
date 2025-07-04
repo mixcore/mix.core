@@ -67,7 +67,7 @@ namespace Mix.Storage.Lib.Engines.Base
             Session = httpContextAccessor?.HttpContext?.Session;
         }
 
-        public async Task CreateMedia(string fullname, int tenantId, string? createdBy, CancellationToken cancellationToken = default)
+        public async Task<MixMediaViewModel> CreateMedia(string fullname, int tenantId, string? createdBy, CancellationToken cancellationToken = default)
         {
             string filePath = fullname[..fullname.LastIndexOf('/')];
             string fileFolder = !string.IsNullOrEmpty(GetHost())
@@ -88,19 +88,20 @@ namespace Mix.Storage.Lib.Engines.Base
             };
 
             await media.SaveAsync(cancellationToken);
+            return media;
         }
 
-        public async Task<string?> UploadFile(IFormFile file, string? folder, string? createdBy, CancellationToken cancellationToken)
+        public async Task<MixMediaViewModel?> UploadFile(IFormFile file, string? folder, string? createdBy, CancellationToken cancellationToken)
         {
             try
             {
                 var result = await Upload(file, folder, createdBy, cancellationToken);
                 if (!string.IsNullOrEmpty(result))
                 {
-                    await CreateMedia(result, CurrentTenant.Id, createdBy, cancellationToken);
+                    return await CreateMedia(result, CurrentTenant.Id, createdBy, cancellationToken);
                 }
 
-                return result;
+                return null;
             }
             catch (MixException)
             {
@@ -112,7 +113,7 @@ namespace Mix.Storage.Lib.Engines.Base
             }
         }
 
-        public async Task<string?> UploadFileStream(FileModel file, string? createdBy, CancellationToken cancellationToken)
+        public async Task<MixMediaViewModel?> UploadFileStream(FileModel file, string? createdBy, CancellationToken cancellationToken)
         {
             try
             {
@@ -122,7 +123,7 @@ namespace Mix.Storage.Lib.Engines.Base
                     await CreateMedia(result, CurrentTenant.Id, createdBy, cancellationToken);
                 }
 
-                return result;
+                return null;
             }
             catch (MixException)
             {

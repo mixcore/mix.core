@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services.MixGlobalSettings;
+using Mix.Heart.Exceptions;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Mix.Lib.Models.Common;
@@ -10,8 +11,8 @@ using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Models;
 using Mix.SignalR.Interfaces;
-using System.Net;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 
 namespace Mixcore.Controllers
 {
@@ -49,6 +50,17 @@ namespace Mixcore.Controllers
             _mixDbDataService = mixDbDataServiceFactory.Create(
             databaseService.DatabaseProvider,
             databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION));
+        }
+
+        [HttpGet("get-by-seo-name/{seoName}")]
+        public async Task<ActionResult<MixPageContentViewModel>> GetBySeoName(string seoName, CancellationToken cancellationToken = default)
+        {
+            var data = await RestApiService.Repository.GetFirstAsync(m => m.SeoName == seoName);
+            if (data != null)
+            {
+                return Ok(data);
+            }
+            throw new MixException(MixErrorStatus.NotFound, seoName);
         }
 
         /// <summary>

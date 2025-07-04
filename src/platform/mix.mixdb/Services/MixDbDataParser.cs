@@ -55,7 +55,10 @@ namespace Mix.Mixdb.Services
                         ? pr.Name.ToTitleCase()
                         : pr.Name.ToHyphenCase('_', true);
                     var col = _mixDb.Columns.FirstOrDefault(c => c.SystemName.Equals(colName, StringComparison.InvariantCultureIgnoreCase));
-
+                    if (colName.ToLower() == "id" && pr.Value is null)
+                    {
+                        continue;
+                    }
                     if (encryptedColumnNames.Contains(colName))
                     {
                         result.Add(colName, AesEncryptionHelper.EncryptString(pr.Value.ToString(),

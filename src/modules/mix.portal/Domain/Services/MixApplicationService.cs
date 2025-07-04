@@ -256,13 +256,13 @@ namespace Mix.Portal.Domain.Services
                 try
                 {
                     _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Status", 200, $"Modifying {file.Filename}{file.Extension}");
-                    Regex rg = new($"(\\\")([^\\.])(\\/)?([^\\\",\\',\\`]+)((\\.)({allowExtensionsPattern}))(\\\")");
+                    Regex rg = new($"(\\\"|\\\'|\\()([\\.])?(\\/)?([[a-zA-z\\/]+)((\\.)({allowExtensionsPattern}))(\\\"|\\\'|\\))");
                     Regex basePathRegex = new("(\\[\\[?basePath\\]\\]?\\/?)");
                     string webPath = deployUrl.Replace("wwwroot", string.Empty).TrimStart('/').TrimEnd('/');
                     Regex apiEndpointRegex = new("(\\[\\[?apiEndpoint\\]\\]?\\/?)");
                     if (rg.IsMatch(file.Content))
                     {
-                        file.Content = rg.Replace(file.Content, $"$1/{webPath}/$2$3$4$5$8");
+                        file.Content = rg.Replace(file.Content, $"$1/{webPath}/$4$5$8");
                     }
                     if (!string.IsNullOrEmpty(folders))
                     {

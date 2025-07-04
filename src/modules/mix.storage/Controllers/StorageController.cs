@@ -2,6 +2,7 @@
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.SignalR.Interfaces;
+using Mix.Storage.Lib.Models;
 using Mix.Storage.Lib.ViewModels;
 
 namespace Mix.Storage.Controllers
@@ -38,7 +39,11 @@ namespace Mix.Storage.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _storageService.UploadFile(file, folder, User.Identity?.Name);
-                return Ok(result);
+                if (result == null)
+                {
+                    return BadRequest("File upload failed.");
+                }
+                return Ok(new FileMediaModel(result));
             }
             return BadRequest();
         }
@@ -51,7 +56,11 @@ namespace Mix.Storage.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _storageService.UploadStream(file, User.Identity?.Name);
-                return Ok(result);
+                if (result == null)
+                {
+                    return BadRequest("File upload failed.");
+                }
+                return Ok(new FileMediaModel(result));
             }
             return BadRequest();
         }

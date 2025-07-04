@@ -201,7 +201,7 @@ namespace Mix.MCP.Lib.Tools
                 return ReflectionHelper.ParseObject(new
                 {
                     Success = true,
-                    Message = $"Successfully created {data.Count} records"
+                    Message = $"Successfully updated {data.Count} records"
                 }).ToString(Newtonsoft.Json.Formatting.None);
             }, "CreateManyMixDbData");
         }

@@ -230,7 +230,7 @@ namespace Mix.Portal.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<object>> UpdateFields(string id, [FromBody] JObject dto, CancellationToken cancellationToken = default)
         {
-            var data = await _mixDbDataService.UpdateAsync(_tableName, id, dto, _requestedBy, dto.Properties().Select(m => m.Name), cancellationToken);
+            var data = await _mixDbDataService.UpdateAsync(_tableName, id, dto, _requestedBy, null, cancellationToken);
 
             if (data != null)
             {

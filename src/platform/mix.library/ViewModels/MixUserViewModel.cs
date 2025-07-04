@@ -30,7 +30,7 @@ namespace Mix.Lib.ViewModels
 
         public JObject UserData { get; set; }
 
-        public List<AspNetUserRoles> Roles { get; set; }
+        public List<string> Roles { get; set; }
         public JArray PortalMenus { get; set; }
 
         public List<string> Endpoints { get; set; } = new();
@@ -65,7 +65,7 @@ namespace Mix.Lib.ViewModels
                             join r in accContext.MixRoles
                                 on ur.RoleId equals r.Id
                             where ur.UserId == Id && ur.TenantId == tenantId
-                            select ur;
+                            select r.Name;
                 Roles = await roles.ToListAsync();
             }
             catch (Exception ex)

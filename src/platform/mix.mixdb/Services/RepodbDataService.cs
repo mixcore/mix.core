@@ -673,6 +673,7 @@ namespace Mix.Mixdb.Services
                 await LoadMixDb(tableName);
                 _repository.BeginTransaction();
                 QueryField idQuery = new QueryField(_fieldNameService.Id, id);
+                entity[_fieldNameService.Id] = JToken.FromObject(id);
                 var result = await _repository.UpdateAsync(tableName, idQuery,
                     await _dataParser.ParseDtoToEntityAsync(entity, modifiedBy), fieldNames: fieldNames, cancellationToken: cancellationToken
                     );
