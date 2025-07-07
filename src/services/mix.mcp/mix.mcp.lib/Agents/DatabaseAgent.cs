@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Mix.Constant.Enums;
 using Mix.Heart.Extensions;
@@ -16,12 +17,21 @@ using System.Text.Json;
 namespace Mix.MCP.Lib.Agents
 {
     /// <summary>
+    /// Options for configuring MCP client
+    /// </summary>
+    public class McpOptions
+    {
+        public string Endpoint { get; set; }
+        public string ClientName { get; set; }
+    }
+
+    /// <summary>
     /// Agent for handling database operations using MixDbPromptTool
     /// </summary>
-    /// 
     public class DatabaseAgent
     {
         private readonly ILlmServiceFactory _llmServiceFactory;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<DatabaseAgent> _logger;
         private readonly ConcurrentDictionary<string, Dictionary<string, object>> _sessionMemory;
         private readonly IMcpClient _mcpClient;
@@ -35,20 +45,22 @@ namespace Mix.MCP.Lib.Agents
         public DatabaseAgent(
             ILlmServiceFactory llmServiceFactory,
             ILogger<DatabaseAgent> logger,
-            ChatAgent chatAgent)
+            ChatAgent chatAgent,
+            IConfiguration configuration)
         {
             _llmServiceFactory = llmServiceFactory ?? throw new ArgumentNullException(nameof(llmServiceFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _sessionMemory = new ConcurrentDictionary<string, Dictionary<string, object>>();
-
+            var mcpEndpoint = configuration.GetValue<string>("McpClient:BaseUrl");
             // Initialize MCP client
             var clientTransport = new SseClientTransport(new SseClientTransportOptions()
             {
-                Endpoint = new Uri("http://localhost:5011/mcp/sse"),
+                Endpoint = new Uri(mcpEndpoint),
                 Name = "MixDatabaseAgentClient"
             });
             _mcpClient = McpClientFactory.CreateAsync(clientTransport).GetAwaiter().GetResult();
             _chatAgent = chatAgent;
+            _configuration = configuration;
         }
         /// <summary>
         /// Handles a natural language request by classifying intent and routing to the appropriate tool

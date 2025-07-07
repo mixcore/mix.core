@@ -22,7 +22,7 @@ namespace Mix.MCP.Lib.Messenger
             _mqttClientOptions = MqttHelper.GetClientOptions(queueSetting);
         }
 
-        private async Task ConnectAsync(CancellationToken cancellationToken = default)
+        public async Task ConnectAsync(CancellationToken cancellationToken = default)
         {
             if (!_mqttClient.IsConnected)
             {
