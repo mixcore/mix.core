@@ -19,7 +19,7 @@ namespace Mix.Shared.Models.Configurations
         public string HttpScheme { get; set; } = "https";
         public InitStep InitStatus { get; set; }
         public ConnectionStrings ConnectionStrings { get; set; }
-        public McpSettings McpSettings { get; set; }
+        public McpSettings McpSettings { get; set; } = new McpSettings();
     }
 
     public class McpSettings
