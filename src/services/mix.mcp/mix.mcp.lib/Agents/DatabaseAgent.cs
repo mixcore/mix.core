@@ -1,9 +1,13 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Mix.Constant.Enums;
+using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Extensions;
 using Mix.MCP.Lib.Helpers;
 using Mix.MCP.Lib.Services.LLM;
 using Mix.MCP.Lib.Tools;
+using Mix.Shared.Models.Configurations;
 using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol.Transport;
 using ModelContextProtocol.Server;
@@ -16,9 +20,17 @@ using System.Text.Json;
 namespace Mix.MCP.Lib.Agents
 {
     /// <summary>
+    /// Options for configuring MCP client
+    /// </summary>
+    public class McpOptions
+    {
+        public string Endpoint { get; set; }
+        public string ClientName { get; set; }
+    }
+
+    /// <summary>
     /// Agent for handling database operations using MixDbPromptTool
     /// </summary>
-    /// 
     public class DatabaseAgent
     {
         private readonly ILlmServiceFactory _llmServiceFactory;
@@ -35,16 +47,18 @@ namespace Mix.MCP.Lib.Agents
         public DatabaseAgent(
             ILlmServiceFactory llmServiceFactory,
             ILogger<DatabaseAgent> logger,
-            ChatAgent chatAgent)
+            ChatAgent chatAgent,
+            IConfiguration configuration,
+            AppSettingsService appSettingsService)
         {
             _llmServiceFactory = llmServiceFactory ?? throw new ArgumentNullException(nameof(llmServiceFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _sessionMemory = new ConcurrentDictionary<string, Dictionary<string, object>>();
-
+            
             // Initialize MCP client
             var clientTransport = new SseClientTransport(new SseClientTransportOptions()
             {
-                Endpoint = new Uri("http://localhost:5011/mcp/sse"),
+                Endpoint = new Uri(appSettingsService.AppSettings.McpSettings.BaseUrl),
                 Name = "MixDatabaseAgentClient"
             });
             _mcpClient = McpClientFactory.CreateAsync(clientTransport).GetAwaiter().GetResult();

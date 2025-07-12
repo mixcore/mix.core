@@ -2,13 +2,14 @@
 using Microsoft.Extensions.Configuration;
 using Mix.Mq.Lib.Models;
 using Mix.Storage.Lib.Engines.Aws;
-using Mix.Storage.Lib.Engines.Gcs;
 using Mix.Storage.Lib.Engines.AzureStorage;
 using Mix.Storage.Lib.Engines.Base;
 using Mix.Storage.Lib.Engines.CloudFlare;
+using Mix.Storage.Lib.Engines.Gcs;
 using Mix.Storage.Lib.Engines.Mix;
 using Mix.Storage.Lib.Helpers;
 using Mix.Storage.Lib.Models;
+using Mix.Storage.Lib.ViewModels;
 
 namespace Mix.Storage.Lib.Services
 {
@@ -48,7 +49,7 @@ namespace Mix.Storage.Lib.Services
         }
         #region Methods
 
-        public async Task<string?> UploadFile(IFormFile file, string? themeName, string? createdBy)
+        public async Task<MixMediaViewModel?> UploadFile(IFormFile file, string? themeName, string? createdBy)
         {
             try
             {
@@ -60,7 +61,7 @@ namespace Mix.Storage.Lib.Services
             }
         }
 
-        public async Task<string?> UploadStream(FileModel file, string? createdBy)
+        public async Task<MixMediaViewModel?> UploadStream(FileModel file, string? createdBy)
         {
             return await _uploader.UploadFileStream(file, createdBy);
         }

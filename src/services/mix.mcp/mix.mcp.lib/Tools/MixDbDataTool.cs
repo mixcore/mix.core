@@ -174,6 +174,37 @@ namespace Mix.MCP.Lib.Tools
                 }).ToString(Newtonsoft.Json.Formatting.None);
             }, "CreateManyMixDbData");
         }
+        
+        /// <summary>
+        /// CreateMixDbData multiple records
+        /// </summary>
+        [McpServerTool, Description("Update multiple records in a Mix Database")]
+        public async Task<string> UpdateManyMixDbData(
+            [Description("System name of the database (e.g., mix_products)")] string databaseSystemName,
+            [Description("Array of record data in JSON format (e.g., '[{\"name\":\"Product 1\",\"price\":99.99},{\"name\":\"Product 2\",\"price\":149.99}]')")] string dataJson,
+            [Description("Username of the creator")] string modifiedBy = null)
+        {
+            if (string.IsNullOrWhiteSpace(databaseSystemName))
+                return "Database system name cannot be empty.";
+            if (string.IsNullOrWhiteSpace(dataJson))
+                return "Record data cannot be empty.";
+
+            return await ExecuteWithExceptionHandlingAsync(async (ct) =>
+            {
+                var database = await _databaseHelper.GetDatabaseBySystemName(databaseSystemName);
+                if (database == null)
+                    return $"Database with system name '{databaseSystemName}' not found.";
+
+                var data = JArray.Parse(dataJson).ToObject<List<JObject>>();
+                await _mixDbService.UpdateManyAsync(databaseSystemName, data, modifiedBy, ct);
+
+                return ReflectionHelper.ParseObject(new
+                {
+                    Success = true,
+                    Message = $"Successfully updated {data.Count} records"
+                }).ToString(Newtonsoft.Json.Formatting.None);
+            }, "CreateManyMixDbData");
+        }
 
         /// <summary>
         /// UpdateMixDbData a record
@@ -183,8 +214,7 @@ namespace Mix.MCP.Lib.Tools
             [Description("System name of the database (e.g., mix_products)")] string databaseSystemName,
             [Description("ID of the record to update")] string strId,
             [Description("Record data in JSON format (e.g., '{\"name\":\"Updated Product\",\"price\":199.99}')")] string dataJson,
-            [Description("Username of the modifier")] string modifiedBy = null,
-            [Description("Comma-separated list of fields to update (e.g., 'name,price')")] string fieldNames = null)
+            [Description("Username of the modifier")] string modifiedBy = null)
         {
             if (string.IsNullOrWhiteSpace(databaseSystemName))
                 return "Database system name cannot be empty.";
@@ -198,7 +228,7 @@ namespace Mix.MCP.Lib.Tools
                     return $"Database with system name '{databaseSystemName}' not found.";
 
                 var data = JObject.Parse(dataJson);
-                var fields = !string.IsNullOrEmpty(fieldNames) ? fieldNames.Split(',') : null;
+                var fields = data.Properties().Where(m => m.Name.ToLower() != "id").Select(m => m.Name).ToArray();
                 object? id = default;
                 if (int.TryParse(strId, out int integerId))
                 {

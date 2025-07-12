@@ -42,8 +42,7 @@ namespace Mixcore.Controllers
                 {
                     var newKey = AesEncryptionHelper.GenerateCombinedKeys();
                     _appSettingsService.SetConfig("AesKey", newKey);
-                    Configuration["AesKey"] = newKey;
-                    _appSettingsService.SaveSettings();
+                    Configuration["AesKey"] = newKey;                    
                 }
                 page ??= "";
                 switch (Configuration.InitStep())
@@ -75,25 +74,24 @@ namespace Mixcore.Controllers
                         }
                         break;
                 }
+                _appSettingsService.SaveSettings();
                 return View();
             }
         }
 
         private void InitEndpoints()
         {
-            if (string.IsNullOrEmpty(_mixEndpointService.Messenger))
-            {
-                string endpoint = $"{Request.Scheme}://{Request.Host}";
-                _mixEndpointService.Messenger = endpoint;
-                _mixEndpointService.Portal = endpoint;
-                _mixEndpointService.Grpc = endpoint;
-                _mixEndpointService.Scheduler = endpoint;
-                _mixEndpointService.Theme = endpoint;
-                _mixEndpointService.Account = endpoint;
-                _mixEndpointService.Common = endpoint;
-                _mixEndpointService.Mixcore = endpoint;
-                _mixEndpointService.SaveSettings();
-            }
+            string endpoint = $"{Request.Scheme}://{Request.Host}";
+            _appSettingsService.AppSettings.McpSettings.BaseUrl = $"{endpoint}/mcp/sse";
+            _mixEndpointService.Messenger = endpoint;
+            _mixEndpointService.Portal = endpoint;
+            _mixEndpointService.Grpc = endpoint;
+            _mixEndpointService.Scheduler = endpoint;
+            _mixEndpointService.Theme = endpoint;
+            _mixEndpointService.Account = endpoint;
+            _mixEndpointService.Common = endpoint;
+            _mixEndpointService.Mixcore = endpoint;
+            _mixEndpointService.SaveSettings();
         }
     }
 }

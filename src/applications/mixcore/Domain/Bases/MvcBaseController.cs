@@ -5,7 +5,7 @@ using Mix.Lib.Services;
 
 namespace Mixcore.Domain.Bases
 {
-    [ResponseCache(CacheProfileName = "Default")]
+    [ResponseCache(CacheProfileName = "DefaultBaseUrl")]
     public class MvcBaseController(
         IHttpContextAccessor httpContextAccessor,
         IPSecurityConfigService ipSecurityConfigService,

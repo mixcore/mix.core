@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Cms;
@@ -9,40 +10,49 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.Cms.Sqlite
+namespace Mix.Database.Migrations.Cms.MySql
 {
-    [DbContext(typeof(SqliteMixCmsContext))]
-    [Migration("20250123094529_Init")]
-    partial class Init
+    [DbContext(typeof(MySqlMixCmsContext))]
+    [Migration("20250617094845_UpdateTableRelationship")]
+    partial class UpdateTableRelationship
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixApplication", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("AppSettingsModel")
-                        .HasColumnType("text")
-                        .HasColumnName("app_settings")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AppSettings")
+                        .HasColumnType("longtext")
+                        .HasColumnName("app_settings");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("AppSettings"), "utf8");
 
                     b.Property<string>("BaseApiUrl")
                         .HasColumnType("varchar(250)")
-                        .HasColumnName("base_api_url")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("base_api_url");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("BaseApiUrl"), "utf8");
 
                     b.Property<string>("BaseHref")
                         .HasColumnType("varchar(250)")
-                        .HasColumnName("base_href")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("base_href");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("BaseHref"), "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -54,70 +64,77 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
                     b.Property<string>("DeployUrl")
                         .HasColumnType("varchar(250)")
-                        .HasColumnName("deploy_url")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("deploy_url");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DeployUrl"), "utf8");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
                     b.Property<string>("Domain")
                         .HasColumnType("varchar(250)")
-                        .HasColumnName("domain")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("domain");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Domain"), "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .HasColumnName("image")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("image");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Image"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
+                    b.Property<int?>("MixDbTableId")
+                        .HasColumnType("int")
+                        .HasColumnName("mix_db_table_id");
+
                     b.Property<string>("MixDbTableName")
                         .HasColumnType("varchar(250)")
-                        .HasColumnName("mix_database_name")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("mix_db_table_name");
 
-                    b.Property<int?>("MixDbDatabaseId")
-                        .HasColumnType("integer")
-                        .HasColumnName("mix_db_id");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("MixDbTableName"), "utf8");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("template_id");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_application");
@@ -131,9 +148,11 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -144,50 +163,54 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("system_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_configuration");
@@ -201,21 +224,25 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Category")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("category")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Category"), "utf8");
 
                     b.Property<string>("Content")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("content")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -229,40 +256,45 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("data_type")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DataType"), "utf8");
 
                     b.Property<string>("DefaultContent")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("default_content")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DefaultContent"), "utf8");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("icon")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("INTEGER")
+                    b.Property<sbyte>("IsPublic")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_public");
 
                     b.Property<DateTime?>("LastModified")
@@ -270,48 +302,51 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("last_modified");
 
                     b.Property<int?>("MixConfigurationId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("mix_configuration_id");
 
                     b.Property<int>("MixCultureId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("mix_culture_id");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("parent_id");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("specificulture")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Specificulture"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("system_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_configuration_content");
@@ -327,15 +362,18 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ContentType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("content_type")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("content_type");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ContentType"), "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -345,46 +383,48 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnType("datetime")
                         .HasColumnName("created_date_time");
 
-                    b.Property<Guid?>("GuidContentId")
-                        .HasColumnType("uniqueidentifier")
+                    b.Property<string>("GuidContentId")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("guid_content_id");
 
                     b.Property<int?>("IntContentId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("int_content_id");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
-                    b.Property<bool>("IsOwner")
-                        .HasColumnType("INTEGER")
+                    b.Property<sbyte>("IsOwner")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_owner");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("use_id");
 
                     b.HasKey("Id")
@@ -397,15 +437,18 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Alias")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("alias")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Alias"), "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -416,25 +459,28 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("varchar(4000)")
-                        .HasColumnName("icon")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnType("varchar(2000)")
+                        .HasColumnName("icon");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
@@ -444,32 +490,35 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                     b.Property<string>("Lcid")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("lcid")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Lcid"), "utf8");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("specificulture")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Specificulture"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_culture");
@@ -479,195 +528,18 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                     b.ToTable("mix_culture", (string)null);
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTableName", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("id")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("CreatePermissions")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("create_permissions")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("created_by");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime")
-                        .HasColumnName("created_date_time");
-
-                    b.Property<string>("DeletePermissions")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("delete_permissions")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
-                        .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime")
-                        .HasColumnName("last_modified");
-
-                    b.Property<int?>("MixDbDatabaseId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("mix_database_id");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("modified_by");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("integer")
-                        .HasColumnName("priority");
-
-                    b.Property<string>("ReadPermissions")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("read_permissions")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<bool>("SelfManaged")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("self_managed");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("SystemName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("system_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("type")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("UpdatePermissions")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("update_permissions")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.HasKey("Id")
-                        .HasName("pk_mix_database");
-
-                    b.HasIndex("TenantId");
-
-                    b.ToTable("mix_database", (string)null);
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTableRelationship", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("newid()");
-
-                    b.Property<string>("ChildDatabaseName")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("child_database_name")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<int>("ChildId")
-                        .HasColumnType("integer")
-                        .HasColumnName("child_id");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("created_by");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime")
-                        .HasColumnName("created_date_time");
-
-                    b.Property<Guid?>("GuidChildId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("guid_child_id");
-
-                    b.Property<Guid?>("GuidParentId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("guid_parent_id");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime")
-                        .HasColumnName("last_modified");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("modified_by");
-
-                    b.Property<string>("ParentDatabaseName")
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("parent_database_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<int>("ParentId")
-                        .HasColumnType("integer")
-                        .HasColumnName("parent_id");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("integer")
-                        .HasColumnName("priority");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.HasKey("Id")
-                        .HasName("pk_mix_database_association");
-
-                    b.ToTable("mix_database_association", (string)null);
-                });
-
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbColumn", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("Configurations")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("configurations");
 
                     b.Property<string>("CreatedBy")
@@ -681,93 +553,183 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                     b.Property<string>("DataType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("data_type")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("data_type");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DataType"), "utf8");
 
                     b.Property<string>("DefaultValue")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("default_value")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DefaultValue"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("MixDbDatabaseId")
-                        .HasColumnType("integer")
-                        .HasColumnName("mix_database_id");
+                    b.Property<int>("MixDbTableId")
+                        .HasColumnType("int")
+                        .HasColumnName("mix_db_table_id");
 
                     b.Property<string>("MixDbTableName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .HasColumnName("mix_database_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("mix_db_table_name")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("MixDbTableName"), "utf8");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<int?>("ReferenceId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("reference_id");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("system_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
 
                     b.HasKey("Id")
-                        .HasName("pk_mix_database_column");
+                        .HasName("pk_mix_db_column");
 
-                    b.HasIndex("MixDbDatabaseId");
+                    b.HasIndex("MixDbTableId");
 
-                    b.ToTable("mix_database_column", (string)null);
+                    b.ToTable("mix_db_column", (string)null);
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbDataAssociation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ChildDatabaseName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("child_database_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ChildDatabaseName"), "utf8");
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int")
+                        .HasColumnName("child_id");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_date_time");
+
+                    b.Property<Guid?>("GuidChildId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("guid_child_id");
+
+                    b.Property<Guid?>("GuidParentId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("guid_parent_id");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime")
+                        .HasColumnName("last_modified");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("modified_by");
+
+                    b.Property<string>("ParentDatabaseName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("parent_database_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ParentDatabaseName"), "utf8");
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int")
+                        .HasColumnName("parent_id");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int")
+                        .HasColumnName("priority");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id")
+                        .HasName("pk_mix_db_data_association");
+
+                    b.ToTable("mix_db_data_association", (string)null);
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbDatabase", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AesKey")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .HasColumnName("aes_key")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("aes_key");
 
-                    b.Property<string>("ConnectionStrings")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("AesKey"), "utf8");
+
+                    b.Property<string>("ConnectionString")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .HasColumnName("connection_string")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("connection_string");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ConnectionString"), "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -780,33 +742,32 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                     b.Property<string>("DatabaseProvider")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("database_provider")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("database_provider");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DatabaseProvider"), "utf8");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
@@ -815,50 +776,175 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                     b.Property<string>("NamingConvention")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("naming_convention")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("naming_convention");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("NamingConvention"), "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Schema")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("schema")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("schema");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Schema"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("system_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_mix_database_context");
+                        .HasName("pk_mix_db_database");
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("mix_database_context", (string)null);
+                    b.ToTable("mix_db_database", (string)null);
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatePermissions")
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("create_permissions");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("CreatePermissions"), "utf8");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_date_time");
+
+                    b.Property<string>("DeletePermissions")
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("delete_permissions");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DeletePermissions"), "utf8");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(2000)")
+                        .HasColumnName("description")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("display_name")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime")
+                        .HasColumnName("last_modified");
+
+                    b.Property<int?>("MixDbDatabaseId")
+                        .HasColumnType("int")
+                        .HasColumnName("mix_db_database_id");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("modified_by");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int")
+                        .HasColumnName("priority");
+
+                    b.Property<string>("ReadPermissions")
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("read_permissions");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ReadPermissions"), "utf8");
+
+                    b.Property<bool>("SelfManaged")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("self_managed");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<string>("SystemName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("system_name")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("type");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Type"), "utf8");
+
+                    b.Property<string>("UpdatePermissions")
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("update_permissions");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UpdatePermissions"), "utf8");
+
+                    b.HasKey("Id")
+                        .HasName("pk_mix_db_table");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("mix_db_table", (string)null);
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTableRelationship", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("ChildId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("child_id");
 
                     b.Property<string>("CreatedBy")
@@ -869,20 +955,29 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnType("datetime")
                         .HasColumnName("created_date_time");
 
-                    b.Property<string>("DestinateDatabaseName")
+                    b.Property<string>("DestinateColumnName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("destinate_database_name")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("destinate_column_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DestinateColumnName"), "utf8");
+
+                    b.Property<string>("DestinateTableName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("destinate_table_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DestinateTableName"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("display_name")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("display_name");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
@@ -894,60 +989,81 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("modified_by");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("parent_id");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
-                    b.Property<string>("SourceDatabaseName")
+                    b.Property<string>("PropertyName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("source_database_name")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("property_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("PropertyName"), "utf8");
+
+                    b.Property<string>("SourceColumnName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("source_column_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SourceColumnName"), "utf8");
+
+                    b.Property<string>("SourceTableName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("source_table_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SourceTableName"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("type")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("type");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Type"), "utf8");
 
                     b.HasKey("Id")
-                        .HasName("pk_mix_database_relationship");
+                        .HasName("pk_mix_db_table_relationship");
 
                     b.HasIndex("ChildId");
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("mix_database_relationship", (string)null);
+                    b.ToTable("mix_db_table_relationship", (string)null);
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDiscussion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("content")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnType("longtext")
+                        .HasColumnName("content");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
                     b.Property<string>("ContentType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("content_type")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("content_type");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ContentType"), "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -957,46 +1073,48 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnType("datetime")
                         .HasColumnName("created_date_time");
 
-                    b.Property<Guid?>("GuidContentId")
-                        .HasColumnType("uniqueidentifier")
+                    b.Property<string>("GuidContentId")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("guid_content_id");
 
                     b.Property<int?>("IntContentId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("int_content_id");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int?>("ParentId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("parent_id");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("use_id");
 
                     b.HasKey("Id")
@@ -1009,9 +1127,11 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -1022,50 +1142,54 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
                     b.Property<string>("Host")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("host")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Host"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_domain");
@@ -1079,9 +1203,11 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -1092,50 +1218,54 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("system_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_language");
@@ -1149,21 +1279,25 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Category")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("category")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Category"), "utf8");
 
                     b.Property<string>("Content")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("content")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -1177,40 +1311,45 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("data_type")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DataType"), "utf8");
 
                     b.Property<string>("DefaultContent")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("default_content")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DefaultContent"), "utf8");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("icon")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("INTEGER")
+                    b.Property<sbyte>("IsPublic")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_public");
 
                     b.Property<DateTime?>("LastModified")
@@ -1218,48 +1357,51 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("last_modified");
 
                     b.Property<int>("MixCultureId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("mix_culture_id");
 
                     b.Property<int>("MixLanguageId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("mix_language_id");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("parent_id");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("specificulture")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Specificulture"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("system_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_language_content");
@@ -1273,11 +1415,13 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixMedia", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
+                        .HasColumnType("int")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("newid()");
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -1288,94 +1432,105 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
                     b.Property<string>("Extension")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("extension")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Extension"), "utf8");
 
                     b.Property<string>("FileFolder")
                         .HasColumnType("varchar(250)")
-                        .HasColumnName("file_folder")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("file_folder");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FileFolder"), "utf8");
 
                     b.Property<string>("FileName")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("file_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FileName"), "utf8");
 
                     b.Property<string>("FileProperties")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("file_properties")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FileProperties"), "utf8");
 
                     b.Property<long>("FileSize")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("bigint")
                         .HasColumnName("file_size");
 
                     b.Property<string>("FileType")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("file_type")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FileType"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("source")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Source"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<string>("Tags")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("tags")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Tags"), "utf8");
 
                     b.Property<string>("TargetUrl")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("target_url")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("TargetUrl"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_media");
@@ -1389,9 +1544,11 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -1402,56 +1559,61 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("system_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("type")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("type");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Type"), "utf8");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_module");
@@ -1465,20 +1627,24 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("ClassName")
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("class_name")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("class_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClassName"), "utf8");
 
                     b.Property<string>("Content")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("content")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -1489,29 +1655,32 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("excerpt")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Excerpt"), "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("icon")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("image")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Image"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("INTEGER")
+                    b.Property<sbyte>("IsPublic")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_public");
 
                     b.Property<DateTime?>("LastModified")
@@ -1519,43 +1688,35 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("last_modified");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("layout_id");
 
                     b.Property<int>("MixCultureId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("mix_culture_id");
+
+                    b.Property<int?>("MixDbTableId")
+                        .HasColumnType("int")
+                        .HasColumnName("mix_db_table_id");
 
                     b.Property<string>("MixDbTableName")
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("mix_database_name");
-
-                    b.Property<int?>("MixDbDatabaseId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("mix_db_id");
-
-                    b.Property<int>("MixModuleId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("mix_module_id");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("mix_db_table_name");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int?>("PageSize")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("page_size");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("parent_id");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<DateTime?>("PublishedDateTime")
@@ -1563,79 +1724,93 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("published_date_time");
 
                     b.Property<string>("SeoDescription")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("seo_description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoDescription"), "utf8");
 
                     b.Property<string>("SeoKeywords")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("seo_keywords")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoKeywords"), "utf8");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("seo_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoName"), "utf8");
 
                     b.Property<string>("SeoTitle")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("seo_title")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoTitle"), "utf8");
 
                     b.Property<string>("SimpleDataColumns")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("simple_data_columns");
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("source")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Source"), "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("specificulture")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Specificulture"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<string>("SystemName")
                         .HasColumnType("varchar(250)")
-                        .HasColumnName("system_name")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("system_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("template_id");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("title")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Title"), "utf8");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("type")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("type");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Type"), "utf8");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_module_content");
 
                     b.HasIndex("MixCultureId");
 
-                    b.HasIndex("MixModuleId");
+                    b.HasIndex("ParentId");
 
                     b.ToTable("mix_module_content", (string)null);
                 });
@@ -1644,15 +1819,18 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("Content")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("content")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -1663,29 +1841,32 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("excerpt")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Excerpt"), "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("icon")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("image")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Image"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("INTEGER")
+                    b.Property<sbyte>("IsPublic")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_public");
 
                     b.Property<DateTime?>("LastModified")
@@ -1693,31 +1874,27 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("last_modified");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("layout_id");
 
                     b.Property<int>("MixCultureId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("mix_culture_id");
 
                     b.Property<int>("MixModuleContentId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("mix_module_content_id");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("parent_id");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<DateTime?>("PublishedDateTime")
@@ -1725,76 +1902,90 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("published_date_time");
 
                     b.Property<string>("SeoDescription")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("seo_description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoDescription"), "utf8");
 
                     b.Property<string>("SeoKeywords")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("seo_keywords")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoKeywords"), "utf8");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("seo_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoName"), "utf8");
 
                     b.Property<string>("SeoTitle")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("seo_title")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoTitle"), "utf8");
 
                     b.Property<string>("SimpleDataColumns")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("simple_data_columns")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SimpleDataColumns"), "utf8");
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("source")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Source"), "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("specificulture")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Specificulture"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("template_id");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("title")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Title"), "utf8");
 
                     b.Property<string>("Value")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("value")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Value"), "utf8");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_module_data");
 
                     b.HasIndex("MixCultureId");
 
-                    b.HasIndex("MixModuleContentId");
+                    b.HasIndex("ParentId");
 
                     b.ToTable("mix_module_data", (string)null);
                 });
@@ -1803,12 +1994,14 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("ChildId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("child_id");
 
                     b.Property<string>("CreatedBy")
@@ -1819,8 +2012,8 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnType("datetime")
                         .HasColumnName("created_date_time");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
@@ -1828,30 +2021,31 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("last_modified");
 
                     b.Property<int?>("MixModuleContentId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("mix_module_content_id");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("tenant_id");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("parent_id");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_module_post_association");
@@ -1865,9 +2059,11 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -1878,43 +2074,46 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_page");
@@ -1928,20 +2127,24 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("ClassName")
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("class_name")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("class_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClassName"), "utf8");
 
                     b.Property<string>("Content")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("content")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -1952,29 +2155,32 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("excerpt")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Excerpt"), "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("icon")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("image")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Image"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("INTEGER")
+                    b.Property<sbyte>("IsPublic")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_public");
 
                     b.Property<DateTime?>("LastModified")
@@ -1982,43 +2188,35 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("last_modified");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("layout_id");
 
                     b.Property<int>("MixCultureId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("mix_culture_id");
+
+                    b.Property<int?>("MixDbTableId")
+                        .HasColumnType("int")
+                        .HasColumnName("mix_db_table_id");
 
                     b.Property<string>("MixDbTableName")
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("mix_database_name");
-
-                    b.Property<int?>("MixDbDatabaseId")
-                        .HasColumnType("integer")
-                        .HasColumnName("mix_db_id");
-
-                    b.Property<int>("MixPageId")
-                        .HasColumnType("integer")
-                        .HasColumnName("mix_page_id");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("mix_db_table_name");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int?>("PageSize")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("page_size");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("parent_id");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<DateTime?>("PublishedDateTime")
@@ -2026,70 +2224,83 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("published_date_time");
 
                     b.Property<string>("SeoDescription")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("seo_description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoDescription"), "utf8");
 
                     b.Property<string>("SeoKeywords")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("seo_keywords")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoKeywords"), "utf8");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("seo_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoName"), "utf8");
 
                     b.Property<string>("SeoTitle")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("seo_title")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoTitle"), "utf8");
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("source")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Source"), "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("specificulture")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Specificulture"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("template_id");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("title")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Title"), "utf8");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("type")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("type");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Type"), "utf8");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_page_content");
 
                     b.HasIndex("MixCultureId");
 
-                    b.HasIndex("MixPageId");
+                    b.HasIndex("ParentId");
 
                     b.ToTable("mix_page_content", (string)null);
                 });
@@ -2098,12 +2309,14 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("ChildId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("child_id");
 
                     b.Property<string>("CreatedBy")
@@ -2114,8 +2327,8 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnType("datetime")
                         .HasColumnName("created_date_time");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
@@ -2123,30 +2336,31 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("last_modified");
 
                     b.Property<int>("MixPageContentId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("mix_page_content_id");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("tenant_id");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("parent_id");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_page_module_association");
@@ -2158,12 +2372,14 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("ChildId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("child_id");
 
                     b.Property<string>("CreatedBy")
@@ -2174,8 +2390,8 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnType("datetime")
                         .HasColumnName("created_date_time");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
@@ -2183,30 +2399,31 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("last_modified");
 
                     b.Property<int>("MixPageContentId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("mix_page_content_id");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("tenant_id");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("parent_id");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_page_post_association");
@@ -2218,9 +2435,11 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -2231,43 +2450,46 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_post");
@@ -2281,20 +2503,24 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("ClassName")
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("class_name")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("class_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClassName"), "utf8");
 
                     b.Property<string>("Content")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("content")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -2305,29 +2531,32 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("excerpt")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Excerpt"), "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("icon")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("image")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Image"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("INTEGER")
+                    b.Property<sbyte>("IsPublic")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_public");
 
                     b.Property<DateTime?>("LastModified")
@@ -2335,44 +2564,37 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("last_modified");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("layout_id");
 
                     b.Property<int>("MixCultureId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("mix_culture_id");
+
+                    b.Property<int?>("MixDbTableId")
+                        .HasColumnType("int")
+                        .HasColumnName("mix_db_table_id");
 
                     b.Property<string>("MixDbTableName")
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("mix_database_name")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("mix_db_table_name");
 
-                    b.Property<int?>("MixDbDatabaseId")
-                        .HasColumnType("integer")
-                        .HasColumnName("mix_db_id");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("MixDbTableName"), "utf8");
 
                     b.Property<int?>("MixPostContentId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("mix_post_content_id");
-
-                    b.Property<int>("MixPostId")
-                        .HasColumnType("integer")
-                        .HasColumnName("mix_post_id");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("parent_id");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<DateTime?>("PublishedDateTime")
@@ -2380,57 +2602,69 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("published_date_time");
 
                     b.Property<string>("SeoDescription")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("seo_description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoDescription"), "utf8");
 
                     b.Property<string>("SeoKeywords")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("seo_keywords")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoKeywords"), "utf8");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("seo_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoName"), "utf8");
 
                     b.Property<string>("SeoTitle")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("seo_title")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SeoTitle"), "utf8");
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("source")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Source"), "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("specificulture")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Specificulture"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("template_id");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("title")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Title"), "utf8");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_post_content");
@@ -2439,7 +2673,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
                     b.HasIndex("MixPostContentId");
 
-                    b.HasIndex("MixPostId");
+                    b.HasIndex("ParentId");
 
                     b.ToTable("mix_post_content", (string)null);
                 });
@@ -2448,12 +2682,14 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("ChildId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("child_id");
 
                     b.Property<string>("CreatedBy")
@@ -2464,35 +2700,36 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnType("datetime")
                         .HasColumnName("created_date_time");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("tenant_id");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("parent_id");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_post_post_association");
@@ -2504,15 +2741,18 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("Content")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("content")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -2526,80 +2766,88 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("extension")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Extension"), "utf8");
 
                     b.Property<string>("FileFolder")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("file_folder")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FileFolder"), "utf8");
 
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("file_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FileName"), "utf8");
 
                     b.Property<string>("FolderType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("folder_type")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FolderType"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
-
                     b.Property<int>("MixThemeId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("mix_theme_id");
 
                     b.Property<string>("MixThemeName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("mix_theme_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("MixThemeName"), "utf8");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Scripts")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("scripts")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Scripts"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<string>("Styles")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("styles")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Styles"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_template");
@@ -2609,13 +2857,15 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                     b.ToTable("mix_template", (string)null);
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.Tenant", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixTenant", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -2626,20 +2876,22 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
@@ -2654,25 +2906,28 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("primary_domain")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("PrimaryDomain"), "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("system_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SystemName"), "utf8");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_tenant");
@@ -2684,15 +2939,18 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AssetFolder")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("asset_folder")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("AssetFolder"), "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -2703,43 +2961,42 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("image_url")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ImageUrl"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
+                    b.Property<int?>("MixDbTableId")
+                        .HasColumnType("int")
+                        .HasColumnName("mix_db_table_id");
+
                     b.Property<string>("MixDbTableName")
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("mix_database_name");
-
-                    b.Property<int?>("MixDbDatabaseId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("mix_db_id");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("mix_db_table_name");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
@@ -2748,18 +3005,20 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                     b.Property<string>("PreviewUrl")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("preview_url")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("PreviewUrl"), "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
                     b.Property<string>("SystemName")
                         .HasColumnType("varchar(50)")
@@ -2768,8 +3027,13 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                     b.Property<string>("TemplateFolder")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("template_folder")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("TemplateFolder"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id")
                         .HasName("pk_mix_theme");
@@ -2783,9 +3047,11 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Alias")
                         .HasColumnType("varchar(50)")
@@ -2800,51 +3066,54 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(2000)")
                         .HasColumnName("description")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Description"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("display_name")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<sbyte>("IsDeleted")
+                        .HasColumnType("tinyint")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tenant_id");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("priority");
 
-                    b.Property<Guid?>("SourceContentGuidId")
-                        .HasColumnType("uniqueidentifier")
+                    b.Property<string>("SourceContentGuidId")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("source_content_guid_id");
 
                     b.Property<int?>("SourceContentId")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("source_content_id");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnName("status");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -2861,7 +3130,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixApplication", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.Tenant", "Tenant")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2872,7 +3141,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.Tenant", "Tenant")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2900,19 +3169,8 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixCulture", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.Tenant", "Tenant")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "Tenant")
                         .WithMany()
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tenant");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTableName", b =>
-                {
-                    b.HasOne("Mix.Database.Entities.Cms.Tenant", "Tenant")
-                        .WithMany("MixDbTables")
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2922,19 +3180,28 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbColumn", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDbTableName", "MixDbTableName")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDbTable", null)
                         .WithMany("MixDbColumns")
-                        .HasForeignKey("MixDbDatabaseId")
+                        .HasForeignKey("MixDbTableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("MixDbTableName");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbDatabase", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.Tenant", "Tenant")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "Tenant")
                         .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTable", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "Tenant")
+                        .WithMany("MixDbTables")
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2944,13 +3211,13 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTableRelationship", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDbTableName", "DestinateDatabase")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDbTable", "DestinateDatabase")
                         .WithMany("DestinateRelationships")
                         .HasForeignKey("ChildId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.MixDbTableName", "SourceDatabase")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDbTable", "SourceDatabase")
                         .WithMany("SourceRelationships")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -2963,7 +3230,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDomain", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.Tenant", "Tenant")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2974,7 +3241,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixLanguage", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.Tenant", "Tenant")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3004,7 +3271,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixMedia", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.Tenant", "Tenant")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3015,7 +3282,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixModule", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.Tenant", "Tenant")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "Tenant")
                         .WithMany("MixModules")
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3034,7 +3301,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
                     b.HasOne("Mix.Database.Entities.Cms.MixModule", "MixModule")
                         .WithMany("MixModuleContents")
-                        .HasForeignKey("MixModuleId")
+                        .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -3052,8 +3319,8 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                         .IsRequired();
 
                     b.HasOne("Mix.Database.Entities.Cms.MixModuleContent", "MixModuleContent")
-                        .WithMany()
-                        .HasForeignKey("MixModuleContentId")
+                        .WithMany("MixModuleDatas")
+                        .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -3071,7 +3338,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixPage", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.Tenant", "Tenant")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "Tenant")
                         .WithMany("MixPages")
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3090,7 +3357,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
                     b.HasOne("Mix.Database.Entities.Cms.MixPage", "MixPage")
                         .WithMany("MixPageContents")
-                        .HasForeignKey("MixPageId")
+                        .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -3101,7 +3368,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixPost", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.Tenant", "Tenant")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "Tenant")
                         .WithMany("MixPosts")
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3124,7 +3391,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
                     b.HasOne("Mix.Database.Entities.Cms.MixPost", "MixPost")
                         .WithMany("MixPostContents")
-                        .HasForeignKey("MixPostId")
+                        .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -3146,7 +3413,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixTheme", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.Tenant", "Tenant")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3157,7 +3424,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixUrlAlias", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.Tenant", "Tenant")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3171,7 +3438,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                     b.Navigation("MixConfigurationContents");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTableName", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbTable", b =>
                 {
                     b.Navigation("DestinateRelationships");
 
@@ -3192,6 +3459,8 @@ namespace Mix.Database.Migrations.Cms.Sqlite
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixModuleContent", b =>
                 {
+                    b.Navigation("MixModuleDatas");
+
                     b.Navigation("MixPostContents");
                 });
 
@@ -3210,7 +3479,7 @@ namespace Mix.Database.Migrations.Cms.Sqlite
                     b.Navigation("MixPostContents");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.Tenant", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixTenant", b =>
                 {
                     b.Navigation("MixDbTables");
 

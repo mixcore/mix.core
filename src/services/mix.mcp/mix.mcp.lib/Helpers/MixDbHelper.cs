@@ -2,10 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
+using Mix.Heart.Extensions;
 using Mix.Heart.UnitOfWork;
 using Mix.MCP.Lib.Models;
 using Mix.Mixdb.Interfaces;
 using Mix.Mixdb.ViewModels;
+using Mix.RepoDb.ViewModels;
 using System.Text.RegularExpressions;
 
 namespace Mix.MCP.Lib.Helpers
@@ -321,6 +323,42 @@ namespace Mix.MCP.Lib.Helpers
                     IsUnique = column.Name.Equals("id", StringComparison.OrdinalIgnoreCase)
                 }
             };
+        }
+
+        public async Task CreateRelationship(
+            string sourceTableName,
+            string destTableName,
+            string displayName,
+            string? propertyName,
+            string? sourceColumnName,
+            string? destinateColumnName,
+            MixDbTableRelationshipType relationshipType,
+            CancellationToken cancellationToken = default)
+        {
+            var sourceTable = await GetDatabaseBySystemName(sourceTableName);
+            if (sourceTable is null)
+            {
+                throw new Exception($"Invalid Table {sourceTableName}");
+            }
+            var destTable = await GetDatabaseBySystemName(destTableName);
+            if (sourceTable is null)
+            {
+                throw new Exception($"Invalid Table {destTableName}");
+            }
+            var relationship = new MixDbTableRelationshipViewModel(_cmsUow)
+            {
+                DisplayName = displayName,
+                SourceTableName = sourceTableName,
+                DestinateTableName = destTableName,
+                PropertyName = propertyName ?? displayName.ToSEOString('_'),
+                SourceColumnName = sourceColumnName ?? $"{sourceTableName}_id",
+                DestinateColumnName = destinateColumnName,
+                Type = relationshipType,
+                ParentId = sourceTable.Id,
+                ChildId = destTable.Id
+            };
+            await relationship.SaveAsync(cancellationToken);
+
         }
     }
 }

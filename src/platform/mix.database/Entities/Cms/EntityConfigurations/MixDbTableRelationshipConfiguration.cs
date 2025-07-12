@@ -23,9 +23,9 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
                .IsRequired()
                .HasColumnName("child_id");
 
-            builder.Property(e => e.SourceDatabaseName)
+            builder.Property(e => e.SourceTableName)
                .IsRequired()
-               .HasColumnName("source_database_name")
+               .HasColumnName("source_table_name")
                .HasColumnType($"{Config.String}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
 
@@ -35,9 +35,27 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
                .HasColumnType($"{Config.String}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
 
-            builder.Property(e => e.DestinateDatabaseName)
+            builder.Property(e => e.DestinateTableName)
                .IsRequired()
-               .HasColumnName("destinate_database_name")
+               .HasColumnName("destinate_table_name")
+               .HasColumnType($"{Config.String}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet);
+
+            builder.Property(e => e.SourceColumnName)
+               .IsRequired()
+               .HasColumnName("source_column_name")
+               .HasColumnType($"{Config.String}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet);
+
+            builder.Property(e => e.DestinateColumnName)
+               .IsRequired()
+               .HasColumnName("destinate_column_name")
+               .HasColumnType($"{Config.String}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet);
+
+            builder.Property(e => e.PropertyName)
+               .IsRequired()
+               .HasColumnName("property_name")
                .HasColumnType($"{Config.String}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
 

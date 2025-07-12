@@ -34,12 +34,12 @@ namespace Mix.Mqtt.Lib.Service
                 Console.WriteLine("MQTT Server started");
                 Console.WriteLine(mqttServerOptions.DefaultEndpointOptions.Port);
                 Console.WriteLine(_server.IsStarted);
-                Console.WriteLine(_server.ServerSessionItems.DumpToConsole());
+                //Console.WriteLine(_server.ServerSessionItems.DumpToConsole());
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Cannot start mqtt server");
-                ex.DumpToConsole();
+                //ex.DumpToConsole();
             }
         }
 

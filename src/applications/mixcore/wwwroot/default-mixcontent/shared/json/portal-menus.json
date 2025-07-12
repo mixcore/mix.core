@@ -937,6 +937,21 @@
             ]
         },
         {
+            "cate": "Tables",
+            "items": [
+                {
+                    "path": "/admin/mix-db-table/create",
+                    "templatePath": "/mix-app/views/app-portal/pages/mix-db-table/details.html",
+                    "controller": "MixDbTableController"
+                },
+                {
+                    "path": "/admin/mix-db-table/details/:id",
+                    "templatePath": "/mix-app/views/app-portal/pages/mix-db-table/details.html",
+                    "controller": "MixDbTableController"
+                }
+            ]
+        },
+        {
             "cate": "Mix Store",
             "items": [
                 {

@@ -90,9 +90,9 @@ namespace Mix.Database.Migrations.Cms.Postgres
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_modified");
 
-                    b.Property<int?>("MixDbId")
+                    b.Property<int?>("MixDbTableId")
                         .HasColumnType("int")
-                        .HasColumnName("mix_db_id");
+                        .HasColumnName("mix_db_table_id");
 
                     b.Property<string>("MixDbTableName")
                         .HasColumnType("varchar(250)")
@@ -880,10 +880,16 @@ namespace Mix.Database.Migrations.Cms.Postgres
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_date_time");
 
-                    b.Property<string>("DestinateDatabaseName")
+                    b.Property<string>("DestinateColumnName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("destinate_database_name")
+                        .HasColumnName("destinate_column_name")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("DestinateTableName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("destinate_table_name")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
@@ -912,10 +918,22 @@ namespace Mix.Database.Migrations.Cms.Postgres
                         .HasColumnType("int")
                         .HasColumnName("priority");
 
-                    b.Property<string>("SourceDatabaseName")
+                    b.Property<string>("PropertyName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("source_database_name")
+                        .HasColumnName("property_name")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("SourceColumnName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("source_column_name")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("SourceTableName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("source_table_name")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -1288,11 +1306,12 @@ namespace Mix.Database.Migrations.Cms.Postgres
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixMedia", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")

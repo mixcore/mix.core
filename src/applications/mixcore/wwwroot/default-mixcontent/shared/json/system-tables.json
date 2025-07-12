@@ -1386,7 +1386,7 @@
             "systemName": "parent_id",
             "displayName": "Parent Id",
             "mixDbTableName": "mix_user_data",
-            "dataType": "Integer",
+            "dataType": "Guid",
             "configurations": {
                 "IsUnique": false,
                 "IsRequire": false,

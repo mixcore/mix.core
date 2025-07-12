@@ -430,6 +430,7 @@ namespace Mix.RepoDb.Repositories
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            fieldNames ??= entity.Where(m => m.Key.ToLower() != "id").Select(m => m.Key).ToList();
             if (Exists(tableName, id))
             {
                 return await _connection.UpdateAsync(

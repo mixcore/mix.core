@@ -158,7 +158,7 @@ namespace Mix.Mixdb.ViewModels
                 {
                     item.SetUowInfo(UowInfo, CacheService);
                     item.ParentId = parentEntity.Id;
-                    item.SourceDatabaseName = parentEntity.SystemName;
+                    item.SourceTableName = parentEntity.SystemName;
                     await item.SaveAsync(cancellationToken);
                     ModifiedEntities.AddRange(item.ModifiedEntities);
                 }

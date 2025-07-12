@@ -65,7 +65,7 @@ namespace Mixcore.Domain.ViewModels
             if (AdditionalData == null && !string.IsNullOrEmpty(MixDbTableName))
             {
                 isChanged = true;
-                var relationships = Context.MixDbTableRelationship.Where(m => m.SourceDatabaseName == MixDbTableName).ToList();
+                var relationships = Context.MixDbTableRelationship.Where(m => m.SourceTableName == MixDbTableName).ToList();
                 var obj = await mixDbDataService.GetSingleByParentAsync(MixDbTableName, MixContentType.Post, Id, string.Empty, cancellationToken);
                 if (obj != null)
                 {

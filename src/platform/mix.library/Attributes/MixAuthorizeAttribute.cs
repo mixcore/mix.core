@@ -42,23 +42,40 @@ namespace Mix.Lib.Attributes
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             userPrinciple = context.HttpContext.User;
+            
+            _logger.LogInformation("Authorization check for user: {User}", userPrinciple?.Identity?.Name ?? "Anonymous");
 
             if (ValidToken())
             {
+                _logger.LogInformation("Token is valid");
+                
+                UserRoles = _idService.GetClaim(userPrinciple, MixClaims.Role)
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(r => r.Trim()).ToArray();
+                    
+                _logger.LogInformation("User roles: {Roles}", string.Join(", ", UserRoles));
+                _logger.LogInformation("Required roles: {RequiredRoles}", string.Join(", ", AllowedRoles));
+
                 if (!IsInRoles())
                 {
-                    //_logger.LogError("Not in role");
+                    _logger.LogWarning("User not in required roles");
+                    
                     if (!ValidEndpointPermission(context))
                     {
-                        //_logger.LogError("forbidden");
+                        _logger.LogWarning("Endpoint permission check failed");
                         context.Result = new ForbidResult();
                         return;
                     }
+                    _logger.LogInformation("Endpoint permission check passed");
+                }
+                else
+                {
+                    _logger.LogInformation("User is in required roles");
                 }
             }
             else
             {
-                //_logger.LogError("Invalid Token");
+                _logger.LogWarning("Invalid token");
                 context.Result = new UnauthorizedResult();
                 return;
             }
@@ -73,9 +90,31 @@ namespace Mix.Lib.Attributes
 
         private bool ValidToken()
         {
-            return userPrinciple.Identity.IsAuthenticated
-                    && DateTime.TryParse(_idService.GetClaim(userPrinciple, MixClaims.ExpireAt), out var expireAt)
-                    && DateTime.UtcNow < expireAt;
+            if (!userPrinciple.Identity.IsAuthenticated)
+            {
+                _logger.LogWarning("User is not authenticated");
+                return false;
+            }
+
+            var expireAtClaim = _idService.GetClaim(userPrinciple, MixClaims.ExpireAt);
+            if (string.IsNullOrEmpty(expireAtClaim))
+            {
+                _logger.LogWarning("ExpireAt claim is missing");
+                return false;
+            }
+
+            // Use DateTimeOffset for better timezone handling
+            if (!DateTimeOffset.TryParse(expireAtClaim, out var expireAt))
+            {
+                _logger.LogWarning("ExpireAt claim is not a valid date: {ExpireAt}", expireAtClaim);
+                return false;
+            }
+
+            var isValid = DateTimeOffset.UtcNow < expireAt;
+            _logger.LogInformation("Token expiration check: Current={Current}, Expires={Expires}, IsValid={IsValid}", 
+                DateTimeOffset.UtcNow, expireAt, isValid);
+            
+            return isValid;
         }
 
         private bool IsInRoles()
@@ -85,8 +124,7 @@ namespace Mix.Lib.Attributes
                 return true;
             }
 
-            UserRoles = _idService.GetClaim(userPrinciple, MixClaims.Role).Split(',', StringSplitOptions.RemoveEmptyEntries)
-                .Select(r => r.Trim()).ToArray();
+            // UserRoles is already set in OnAuthorization
             if (UserRoles.Any(r => r == MixRoles.SuperAdmin || r == $"{MixRoles.Owner}-{_idService.CurrentTenant.Id}"))
             {
                 return true;

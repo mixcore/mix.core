@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.AspNetCore.Mvc;
 using Mix.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.SignalR.Interfaces;
@@ -22,11 +23,27 @@ namespace Mix.Portal.Controllers
             IMemoryQueueService<MessageQueueModel> queueService,
             IPortalHubClientService portalHub,
             IMixTenantService mixTenantService)
-            : base(MixContentType.Page, identityService, userManager, 
+            : base(MixContentType.Page, identityService, userManager,
                   httpContextAccessor, configuration, cacheService, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
 
         }
+
+        #region Routes
+
+        [HttpGet("get-by-seo-name/{seoName}")]
+        public async Task<ActionResult<MixPageContentViewModel>> GetBySeoName(string seoName, CancellationToken cancellationToken = default)
+        {
+            var data = await RestApiService.Repository.GetFirstAsync(m => m.SeoName == seoName);
+            if (data != null)
+            {
+                return Ok(data);
+            }
+            throw new MixException(MixErrorStatus.NotFound, seoName);
+        }
+
+
+        #endregion
 
         #region Overrides
 

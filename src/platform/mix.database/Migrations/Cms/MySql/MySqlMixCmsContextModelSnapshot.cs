@@ -100,9 +100,9 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .HasColumnType("datetime")
                         .HasColumnName("last_modified");
 
-                    b.Property<int?>("MixDbId")
+                    b.Property<int?>("MixDbTableId")
                         .HasColumnType("int")
-                        .HasColumnName("mix_db_id");
+                        .HasColumnName("mix_db_table_id");
 
                     b.Property<string>("MixDbTableName")
                         .HasColumnType("varchar(250)")
@@ -952,12 +952,19 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .HasColumnType("datetime")
                         .HasColumnName("created_date_time");
 
-                    b.Property<string>("DestinateDatabaseName")
+                    b.Property<string>("DestinateColumnName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("destinate_database_name");
+                        .HasColumnName("destinate_column_name");
 
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DestinateDatabaseName"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DestinateColumnName"), "utf8");
+
+                    b.Property<string>("DestinateTableName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("destinate_table_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DestinateTableName"), "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
@@ -986,12 +993,26 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .HasColumnType("int")
                         .HasColumnName("priority");
 
-                    b.Property<string>("SourceDatabaseName")
+                    b.Property<string>("PropertyName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("source_database_name");
+                        .HasColumnName("property_name");
 
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SourceDatabaseName"), "utf8");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("PropertyName"), "utf8");
+
+                    b.Property<string>("SourceColumnName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("source_column_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SourceColumnName"), "utf8");
+
+                    b.Property<string>("SourceTableName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("source_table_name");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SourceTableName"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1391,11 +1412,13 @@ namespace Mix.Database.Migrations.Cms.MySql
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixMedia", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
+                        .HasColumnType("int")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("(uuid())");
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -3154,13 +3177,11 @@ namespace Mix.Database.Migrations.Cms.MySql
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbColumn", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDbTable", "MixDbTable")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDbTable", null)
                         .WithMany("MixDbColumns")
                         .HasForeignKey("MixDbTableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("MixDbTable");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDbDatabase", b =>

@@ -21,13 +21,13 @@ I need you to define:
 1. Appropriate columns with their data types
 2. Required fields
 3. Unique constraints
-4. Default values where appropriate
+4. DefaultBaseUrl values where appropriate
 
 For each column, define:
 - Column name
 - Data type (String, Integer, Double, Boolean, DateTime, etc.)
 - Whether it's required
-- Default value (if any)
+- DefaultBaseUrl value (if any)
 - Whether it should be unique
 - Maximum length (for string columns)
 

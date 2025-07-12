@@ -135,6 +135,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<MixDbDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<MixDbDbContext>>();
             services.TryAddScoped<MixIdentityService>();
+            services.TryAddScoped<MixPermissionService>();
             return services;
         }
 

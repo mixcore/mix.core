@@ -64,7 +64,7 @@ namespace Mix.MCP.Lib.Tools
         /// <summary>
         /// CreateMixDbData a Mix Database with columns based on a prompt description
         /// </summary>
-        [McpServerTool, Description("CreateMixDbData a Mix Database with columns based on a prompt description"), DisableRequestTimeout]
+        [McpServerTool, Description("Create a Mix Database with columns based on a prompt description"), DisableRequestTimeout]
         public async Task<string> CreateDatabaseFromPrompt(
             [Description("Display name for the database")] string displayName,
             [Description("Description of the database schema in natural language (e.g., 'CreateMixDbData a Product table with name, price, and description')")] string schemaDescription,
@@ -110,6 +110,45 @@ namespace Mix.MCP.Lib.Tools
                         Type = c.DataType.ToString(),
                         IsRequired = c.IsRequired,
                     }).ToList()
+                });
+            }, "CreateDatabaseFromPrompt");
+        }
+        
+        /// <summary>
+        /// CreateMixDbData a Mix Database with columns based on a prompt description
+        /// </summary>
+        [McpServerTool, Description("Create a Mix Database with columns based on a prompt description"), DisableRequestTimeout]
+        public async Task<string> CreateMixDbRelationshipFromPrompt(
+            [Description("Display name for the source table")] string sourceTableName,
+            [Description("Display name for the destinate table")] string destinateTableName,
+            [Description("Display name when load related data")] string displayName,
+            [Description("Property Name when load related data")] string? propertyName = null,
+            [Description("Display name for the source column")] string? sourceColumnName = null,
+            [Description("Display name for the destinate column")] string? destinateColumnName = null,
+            [Description("Relationship type")] MixDbTableRelationshipType relationshipType = MixDbTableRelationshipType.OneToMany,
+            CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(sourceTableName))
+                throw new McpException("source table name cannot be empty.");
+            if (string.IsNullOrWhiteSpace(destinateTableName))
+                throw new McpException("destinate table name cannot be empty.");
+
+            return await ExecuteWithExceptionHandlingAsync(async (ct) =>
+            {
+                _logger.LogInformation("Creating relationship {sourceTableName} with schema description: {destinateTableName}",
+                    sourceTableName, destinateTableName);
+                await _databaseHelper.CreateRelationship(
+                    sourceTableName,
+                    destinateTableName,
+                    displayName,
+                    propertyName,
+                    sourceColumnName,
+                    destinateColumnName,
+                    relationshipType);
+                return JsonSerializer.Serialize(new
+                {
+                    Success = true,
+                    Message = $"Relationship '{sourceTableName}' and {destinateTableName} created successfully"
                 });
             }, "CreateDatabaseFromPrompt");
         }

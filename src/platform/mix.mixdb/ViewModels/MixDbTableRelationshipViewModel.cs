@@ -15,8 +15,11 @@ namespace Mix.RepoDb.ViewModels
         public int ParentId { get; set; }
         public int ChildId { get; set; }
         public string DisplayName { get; set; }
-        public string SourceDatabaseName { get; set; }
-        public string DestinateDatabaseName { get; set; }
+        public string PropertyName { get; set; }
+        public string SourceTableName { get; set; }
+        public string DestinateTableName { get; set; }
+        public string SourceColumnName { get; set; }
+        public string? DestinateColumnName { get; set; }
         public MixDbTableRelationshipType Type { get; set; }
         #endregion
 
@@ -65,7 +68,6 @@ namespace Mix.RepoDb.ViewModels
 
             await base.Validate(cancellationToken);
         }
-
         #endregion
     }
 }

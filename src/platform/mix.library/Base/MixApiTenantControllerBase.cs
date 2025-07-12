@@ -9,7 +9,7 @@ using Mix.Mq.Lib.Models;
 
 namespace Mix.Lib.Base
 {
-    [ResponseCache(CacheProfileName = "Default")]
+    [ResponseCache(CacheProfileName = "DefaultBaseUrl")]
     public abstract class MixTenantApiControllerBase : Controller
     {
         protected readonly MixCacheService CacheService;
