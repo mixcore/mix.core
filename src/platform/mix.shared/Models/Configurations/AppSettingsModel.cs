@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,5 +19,11 @@ namespace Mix.Shared.Models.Configurations
         public string HttpScheme { get; set; } = "https";
         public InitStep InitStatus { get; set; }
         public ConnectionStrings ConnectionStrings { get; set; }
+        public McpSettings McpSettings { get; set; }
+    }
+
+    public class McpSettings
+    {
+        public string BaseUrl { get; set; }
     }
 }

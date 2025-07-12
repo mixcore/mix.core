@@ -1,11 +1,13 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Mix.Constant.Enums;
+using Mix.Database.Services;
 using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Extensions;
 using Mix.MCP.Lib.Helpers;
 using Mix.MCP.Lib.Services.LLM;
 using Mix.MCP.Lib.Tools;
+using Mix.Shared.Models.Configurations;
 using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol.Transport;
 using ModelContextProtocol.Server;
@@ -47,16 +49,16 @@ namespace Mix.MCP.Lib.Agents
             ILogger<DatabaseAgent> logger,
             ChatAgent chatAgent,
             IConfiguration configuration,
-            MixEndpointService mixEndpointService)
+            AppSettingsService appSettingsService)
         {
             _llmServiceFactory = llmServiceFactory ?? throw new ArgumentNullException(nameof(llmServiceFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _sessionMemory = new ConcurrentDictionary<string, Dictionary<string, object>>();
-            var mcpEndpoint = $"{mixEndpointService.DefaultBaseUrl}/mcp/sse";
+            
             // Initialize MCP client
             var clientTransport = new SseClientTransport(new SseClientTransportOptions()
             {
-                Endpoint = new Uri(mcpEndpoint),
+                Endpoint = new Uri(appSettingsService.AppSettings.McpSettings.BaseUrl),
                 Name = "MixDatabaseAgentClient"
             });
             _mcpClient = McpClientFactory.CreateAsync(clientTransport).GetAwaiter().GetResult();
