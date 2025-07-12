@@ -21,6 +21,7 @@ namespace Mix.Database.Services.MixGlobalSettings
         
         public void InitDomain(string domain)
         {
+            DefaultBaseUrl ??= domain;
             Account ??= domain;
             Mixcore ??= domain;
             Messenger ??= domain;
@@ -41,61 +42,61 @@ namespace Mix.Database.Services.MixGlobalSettings
             return AppSettings?.Value<string>(name);
         }
 
-        public string DefaultDomain
+        public string DefaultBaseUrl
         {
             get => GetConfig<string>(MixModuleNames.Default);
             set => SetConfig(MixModuleNames.Default, value);
         }
         public string MixMq
         {
-            get => GetConfig<string>(MixModuleNames.MixMq) ?? DefaultDomain;
+            get => GetConfig<string>(MixModuleNames.MixMq) ?? DefaultBaseUrl;
             set => SetConfig(MixModuleNames.MixMq, value);
         }
         public string Account
         {
-            get => GetConfig<string>(MixModuleNames.Account) ?? DefaultDomain;
+            get => GetConfig<string>(MixModuleNames.Account) ?? DefaultBaseUrl;
             set => SetConfig(MixModuleNames.Account, value);
         }
 
         public string Common
         {
-            get => GetConfig<string>(MixModuleNames.Common) ?? DefaultDomain;
+            get => GetConfig<string>(MixModuleNames.Common) ?? DefaultBaseUrl;
             set => SetConfig(MixModuleNames.Common, value);
         }
 
         public string Portal
         {
-            get => GetConfig<string>(MixModuleNames.Portal) ?? DefaultDomain;
+            get => GetConfig<string>(MixModuleNames.Portal) ?? DefaultBaseUrl;
             set => SetConfig(MixModuleNames.Portal, value);
         }
 
         public string Theme
         {
-            get => GetConfig<string>(MixModuleNames.Theme) ?? DefaultDomain;
+            get => GetConfig<string>(MixModuleNames.Theme) ?? DefaultBaseUrl;
             set => SetConfig(MixModuleNames.Theme, value);
         }
 
         public string Mixcore
         {
-            get => GetConfig<string>(MixModuleNames.Mixcore) ?? DefaultDomain;
+            get => GetConfig<string>(MixModuleNames.Mixcore) ?? DefaultBaseUrl;
             set => SetConfig(MixModuleNames.Mixcore, value);
         }
 
         public string Messenger
         {
-            get => GetConfig<string>(MixModuleNames.Messenger) ?? DefaultDomain;
+            get => GetConfig<string>(MixModuleNames.Messenger) ?? DefaultBaseUrl;
             set => SetConfig(MixModuleNames.Messenger, value);
         }
 
         public string Scheduler
         {
-            get => GetConfig<string>(MixModuleNames.Scheduler) ?? DefaultDomain;
+            get => GetConfig<string>(MixModuleNames.Scheduler) ?? DefaultBaseUrl;
             set => SetConfig(MixModuleNames.Scheduler, value);
         }
 
         public string Grpc
         {
-            get => GetConfig<string>(MixModuleNames.Grpc) ?? DefaultDomain;
+            get => GetConfig<string>(MixModuleNames.Grpc) ?? DefaultBaseUrl;
             set => SetConfig(MixModuleNames.Grpc, value);
         }
     }

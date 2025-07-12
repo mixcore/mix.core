@@ -23,19 +23,17 @@ namespace Microsoft.Extensions.DependencyInjection
                 opt =>
                 {
                     int responseCache = builder.Configuration.GetGlobalConfiguration<int>(nameof(GlobalSettingsModel.ResponseCache));
-                    opt.CacheProfiles.Add("Default",
-                        new CacheProfile()
-                        {
-                            Duration = responseCache > 0
-                                        ? responseCache
-                                        : 0,
-                            VaryByHeader = "User-Agent",
-                            Location = responseCache > 0
-                                        ? ResponseCacheLocation.Any
-                                        : ResponseCacheLocation.None,
-                            NoStore = responseCache > 0
-                                        ? false : true
-                        });
+                    
+                    var cacheProfile = new CacheProfile()
+                    {
+                        Duration = responseCache > 0 ? responseCache : 0,
+                        VaryByHeader = "User-Agent",
+                        Location = responseCache > 0 ? ResponseCacheLocation.Any : ResponseCacheLocation.None,
+                        NoStore = responseCache > 0 ? false : true
+                    };
+
+                    opt.CacheProfiles.Add("DefaultBaseUrl", cacheProfile);
+                    opt.CacheProfiles.Add("Default", cacheProfile);
                 });
         }
         // Must call after use cors

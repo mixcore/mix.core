@@ -55,7 +55,7 @@ namespace Mix.MCP.Lib.Resources
         }
 
         /// <summary>
-        /// Default settings for MCP server
+        /// DefaultBaseUrl settings for MCP server
         /// </summary>
         public static class ServerDefaults
         {

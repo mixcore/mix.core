@@ -111,17 +111,20 @@ namespace Mix.Lib.Middlewares
 
         private async Task<string> FormatRequest(HttpRequest request)
         {
-            if (request.ContentLength > 0)
+            //This line allows us to set the reader for the request back at the beginning of its stream.
+            string bodyAsText = string.Empty;
+            request.EnableBuffering();
+            if (!string.IsNullOrEmpty(request.ContentType)
+                && !request.HasFormContentType
+                && !request.ContentType.StartsWith("multipart/", StringComparison.OrdinalIgnoreCase)
+                && request.ContentLength > 0)
             {
-                //This line allows us to set the reader for the request back at the beginning of its stream.
-                request.EnableBuffering();
 
                 var requestReader = new StreamReader(request.Body);
-                var bodyAsText = await requestReader.ReadToEndAsync();
-                request.Body.Position = 0;
-                return bodyAsText;
+                bodyAsText = await requestReader.ReadToEndAsync();
             }
-            return string.Empty;
+            request.Body.Position = 0;
+            return bodyAsText;
         }
     }
 }

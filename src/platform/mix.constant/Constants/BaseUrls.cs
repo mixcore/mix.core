@@ -1,6 +1,6 @@
 ﻿namespace Mix.Constant.Constants
 {
-    public class MixModuleNames
+    public class BaseUrls
     {
         public const string Account = "Account";
         public const string Common = "Common";

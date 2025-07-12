@@ -81,19 +81,16 @@ namespace Mixcore.Controllers
 
         private void InitEndpoints()
         {
-            if (string.IsNullOrEmpty(_mixEndpointService.Messenger))
-            {
-                string endpoint = $"{Request.Scheme}://{Request.Host}";
-                _mixEndpointService.Messenger = endpoint;
-                _mixEndpointService.Portal = endpoint;
-                _mixEndpointService.Grpc = endpoint;
-                _mixEndpointService.Scheduler = endpoint;
-                _mixEndpointService.Theme = endpoint;
-                _mixEndpointService.Account = endpoint;
-                _mixEndpointService.Common = endpoint;
-                _mixEndpointService.Mixcore = endpoint;
-                _mixEndpointService.SaveSettings();
-            }
+            string endpoint = $"{Request.Scheme}://{Request.Host}";
+            _mixEndpointService.Messenger = endpoint;
+            _mixEndpointService.Portal = endpoint;
+            _mixEndpointService.Grpc = endpoint;
+            _mixEndpointService.Scheduler = endpoint;
+            _mixEndpointService.Theme = endpoint;
+            _mixEndpointService.Account = endpoint;
+            _mixEndpointService.Common = endpoint;
+            _mixEndpointService.Mixcore = endpoint;
+            _mixEndpointService.SaveSettings();
         }
     }
 }
