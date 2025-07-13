@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Mix.Shared.Services;
 using Mix.Database.Services;
+using System.Linq;
 
 namespace Mix.MCP.Lib.Agents
 {
@@ -111,8 +112,16 @@ namespace Mix.MCP.Lib.Agents
             CancellationToken cancellationToken)
         {
             var llmService = _llmServiceFactory.CreateService(serviceType);
+            // Get supported MCP tools and format for prompt
+            var supportedActions = Mix.MCP.Lib.Tools.ToolDiscovery.SupportedPromptToolActions;
+            var toolList = string.Join("\n", supportedActions.Select(a => $"- {a.MethodName}: {a.Description}"));
+
             var prompt = $@"
 You are a planning assistant. Analyze the following user request and break it down into a list of actionable prompts.
+
+Here is a list of supported MCP tools you can use:
+{toolList}
+
 Respond in this JSON array format:
 [
   ""First prompt as a string."",
