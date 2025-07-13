@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Mix.Lib.Extensions;
 using Mix.Mqtt.Lib.Helpers;
 using Mix.Mqtt.Lib.Models;
 using MQTTnet;
@@ -18,6 +19,7 @@ namespace Mix.MCP.Lib.Messenger
         {
             var queueSetting = configuration.GetSection("MessageQueueSettings:MQTT").Get<MQTTSetting>();
             var factory = new MqttClientFactory();
+            queueSetting.HostName ??= configuration.BaseUrl();
             _mqttClient = factory.CreateMqttClient();
             _mqttClientOptions = MqttHelper.GetClientOptions(queueSetting);
         }

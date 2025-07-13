@@ -29,7 +29,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                     guid_content_id = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     content_type = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
                     created_by = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -38,7 +38,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false)
                 },
                 constraints: table =>
@@ -54,9 +54,9 @@ namespace Mix.Database.Migrations.Cms.MySql
                     id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(uuid())", collation: "ascii_general_ci"),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     parent_database_name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     child_database_name = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     guid_parent_id = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     guid_child_id = table.Column<string>(type: "varchar(255)", nullable: true)
@@ -71,7 +71,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false)
                 },
                 constraints: table =>
@@ -91,12 +91,12 @@ namespace Mix.Database.Migrations.Cms.MySql
                     use_id = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     content = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     int_content_id = table.Column<int>(type: "int", nullable: true),
                     guid_content_id = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     content_type = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
                     created_by = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -105,7 +105,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false)
                 },
                 constraints: table =>
@@ -129,7 +129,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     parent_id = table.Column<int>(type: "int", nullable: false),
@@ -156,7 +156,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     parent_id = table.Column<int>(type: "int", nullable: false),
@@ -182,7 +182,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     parent_id = table.Column<int>(type: "int", nullable: false),
@@ -201,13 +201,13 @@ namespace Mix.Database.Migrations.Cms.MySql
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     primary_domain = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     system_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
                     created_by = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -216,7 +216,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false)
                 },
                 constraints: table =>
@@ -232,20 +232,20 @@ namespace Mix.Database.Migrations.Cms.MySql
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     base_href = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     deploy_url = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     app_settings = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     domain = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     base_api_url = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     template_id = table.Column<int>(type: "int", nullable: true),
                     image = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     mix_database_name = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     mix_db_id = table.Column<int>(type: "int", nullable: true),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -255,12 +255,12 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     tenant_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -289,15 +289,15 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     system_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8")
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -318,13 +318,13 @@ namespace Mix.Database.Migrations.Cms.MySql
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     alias = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     icon = table.Column<string>(type: "varchar(2000)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     lcid = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     specificulture = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
                     created_by = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -333,12 +333,12 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     tenant_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -361,17 +361,17 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     mix_database_context_id = table.Column<int>(type: "int", nullable: true),
                     system_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     type = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     read_permissions = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     create_permissions = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     update_permissions = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     delete_permissions = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     self_managed = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -381,12 +381,12 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     tenant_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -408,15 +408,15 @@ namespace Mix.Database.Migrations.Cms.MySql
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     database_provider = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     aes_key = table.Column<string>(type: "varchar(250)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     connection_string = table.Column<string>(type: "varchar(250)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     schema = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     naming_convention = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
                     created_by = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -425,15 +425,15 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     system_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8")
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -454,7 +454,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     host = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
                     created_by = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -463,12 +463,12 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     tenant_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -497,15 +497,15 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     system_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8")
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -525,22 +525,22 @@ namespace Mix.Database.Migrations.Cms.MySql
                 {
                     id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(uuid())", collation: "ascii_general_ci"),
                     extension = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     file_folder = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     file_name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     file_properties = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     file_size = table.Column<long>(type: "bigint", nullable: false),
                     file_type = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     tags = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     target_url = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
                     created_by = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -549,12 +549,12 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     tenant_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -576,7 +576,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     type = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
                     created_by = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -585,15 +585,15 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     system_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8")
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -621,12 +621,12 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     tenant_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -655,12 +655,12 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     display_name = table.Column<string>(type: "varchar(2000)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     tenant_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -682,13 +682,13 @@ namespace Mix.Database.Migrations.Cms.MySql
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     image_url = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     preview_url = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     asset_folder = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     template_folder = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     mix_database_name = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     mix_db_id = table.Column<int>(type: "int", nullable: true),
@@ -700,12 +700,12 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     system_name = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
@@ -743,12 +743,12 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     tenant_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -771,11 +771,11 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     mix_configuration_id = table.Column<int>(type: "int", nullable: true),
                     default_content = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     category = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     data_type = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
                     created_by = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -784,24 +784,24 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_public = table.Column<sbyte>(type: "tinyint", nullable: false),
                     parent_id = table.Column<int>(type: "int", nullable: false),
                     mix_culture_id = table.Column<int>(type: "int", nullable: false),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     system_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     content = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8")
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -827,18 +827,18 @@ namespace Mix.Database.Migrations.Cms.MySql
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     system_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     mix_database_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     data_type = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     configurations = table.Column<string>(type: "varchar(2000)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     reference_id = table.Column<int>(type: "int", nullable: true),
                     default_value = table.Column<string>(type: "longtext", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     mix_database_id = table.Column<int>(type: "int", nullable: false),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -848,7 +848,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false)
                 },
                 constraints: table =>
@@ -872,13 +872,13 @@ namespace Mix.Database.Migrations.Cms.MySql
                     parent_id = table.Column<int>(type: "int", nullable: false),
                     child_id = table.Column<int>(type: "int", nullable: false),
                     display_name = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     source_database_name = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     destinate_database_name = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     type = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
                     created_by = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -887,7 +887,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false)
                 },
                 constraints: table =>
@@ -913,11 +913,11 @@ namespace Mix.Database.Migrations.Cms.MySql
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     default_content = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     category = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     data_type = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     mix_language_id = table.Column<int>(type: "int", nullable: false),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -927,24 +927,24 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_public = table.Column<sbyte>(type: "tinyint", nullable: false),
                     parent_id = table.Column<int>(type: "int", nullable: false),
                     mix_culture_id = table.Column<int>(type: "int", nullable: false),
                     display_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     system_name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     content = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8")
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -971,12 +971,12 @@ namespace Mix.Database.Migrations.Cms.MySql
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     system_name = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     class_name = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     page_size = table.Column<int>(type: "int", nullable: true),
                     type = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     simple_data_columns = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -987,36 +987,36 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_public = table.Column<sbyte>(type: "tinyint", nullable: false),
                     parent_id = table.Column<int>(type: "int", nullable: false),
                     mix_culture_id = table.Column<int>(type: "int", nullable: false),
                     title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     excerpt = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     content = table.Column<string>(type: "longtext", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     layout_id = table.Column<int>(type: "int", nullable: true),
                     template_id = table.Column<int>(type: "int", nullable: true),
                     image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_keywords = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     published_date_time = table.Column<DateTime>(type: "datetime", nullable: true),
                     mix_database_name = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -1047,10 +1047,10 @@ namespace Mix.Database.Migrations.Cms.MySql
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     class_name = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     page_size = table.Column<int>(type: "int", nullable: true),
                     type = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
                     created_by = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -1059,36 +1059,36 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_public = table.Column<sbyte>(type: "tinyint", nullable: false),
                     parent_id = table.Column<int>(type: "int", nullable: false),
                     mix_culture_id = table.Column<int>(type: "int", nullable: false),
                     title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     excerpt = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     content = table.Column<string>(type: "longtext", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     layout_id = table.Column<int>(type: "int", nullable: true),
                     template_id = table.Column<int>(type: "int", nullable: true),
                     image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_keywords = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     published_date_time = table.Column<DateTime>(type: "datetime", nullable: true),
                     mix_database_name = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -1119,7 +1119,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     class_name = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     mix_post_content_id = table.Column<int>(type: "int", nullable: true),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -1129,39 +1129,39 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_public = table.Column<sbyte>(type: "tinyint", nullable: false),
                     parent_id = table.Column<int>(type: "int", nullable: false),
                     mix_culture_id = table.Column<int>(type: "int", nullable: false),
                     title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     excerpt = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     content = table.Column<string>(type: "longtext", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     layout_id = table.Column<int>(type: "int", nullable: true),
                     template_id = table.Column<int>(type: "int", nullable: true),
                     image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_keywords = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     published_date_time = table.Column<DateTime>(type: "datetime", nullable: true),
                     mix_database_name = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     mix_db_id = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -1195,21 +1195,21 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     content = table.Column<string>(type: "longtext", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     extension = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     file_folder = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     file_name = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     folder_type = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     scripts = table.Column<string>(type: "longtext", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     styles = table.Column<string>(type: "longtext", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     mix_theme_name = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     mix_theme_id = table.Column<int>(type: "int", nullable: false),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -1219,7 +1219,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false)
                 },
                 constraints: table =>
@@ -1241,9 +1241,9 @@ namespace Mix.Database.Migrations.Cms.MySql
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     simple_data_columns = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     value = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     mix_module_content_id = table.Column<int>(type: "int", nullable: false),
                     created_date_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     last_modified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -1253,36 +1253,36 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_public = table.Column<sbyte>(type: "tinyint", nullable: false),
                     parent_id = table.Column<int>(type: "int", nullable: false),
                     mix_culture_id = table.Column<int>(type: "int", nullable: false),
                     title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     excerpt = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     content = table.Column<string>(type: "longtext", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     layout_id = table.Column<int>(type: "int", nullable: true),
                     template_id = table.Column<int>(type: "int", nullable: true),
                     image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_description = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_keywords = table.Column<string>(type: "varchar(2000)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     seo_title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     published_date_time = table.Column<DateTime>(type: "datetime", nullable: true)
                 },
                 constraints: table =>
@@ -1318,7 +1318,7 @@ namespace Mix.Database.Migrations.Cms.MySql
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     priority = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8"),
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_deleted = table.Column<sbyte>(type: "tinyint", nullable: false),
                     tenant_id = table.Column<int>(type: "int", nullable: false),
                     parent_id = table.Column<int>(type: "int", nullable: false),

@@ -5,7 +5,7 @@
 
         string IDatabaseConstants.DatabaseCollation => "utf8_unicode_ci";
 
-        string IDatabaseConstants.CharSet => "utf8";
+        string IDatabaseConstants.CharSet => "utf8mb4";
 
         string IDatabaseConstants.SmallLength => "(50)";
 

@@ -12,6 +12,7 @@ namespace Mix.Shared.Models.Configurations
     {
         public AppSettingsModel() { }
         public MixDatabaseProvider DatabaseProvider { get; set; } = MixDatabaseProvider.SQLITE;
+        public string BaseUrl { get; set; }
         public bool IsInit { get; set; }
         public bool IsHttps { get; set; }
         public string AesKey { get; set; }

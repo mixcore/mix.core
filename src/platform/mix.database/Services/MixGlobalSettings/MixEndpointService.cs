@@ -2,6 +2,7 @@
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Settings;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Linq;
 
 namespace Mix.Database.Services.MixGlobalSettings
@@ -10,23 +11,6 @@ namespace Mix.Database.Services.MixGlobalSettings
     {
         public MixEndpointService(IConfiguration configuration, MixGlobalSetting settings) : base(configuration, settings)
         {
-        }
-
-        public void SetDefaultDomain(string domain)
-        {
-            Messenger ??= domain;
-            MixMq ??= domain;
-            Mixcore ??= domain;
-        }
-        
-        public void InitDomain(string domain)
-        {
-            DefaultBaseUrl ??= domain;
-            Account ??= domain;
-            Mixcore ??= domain;
-            Messenger ??= domain;
-            MixMq ??= domain;
-            SaveSettings();
         }
 
         protected override void LoadAppSettings()
@@ -44,8 +28,7 @@ namespace Mix.Database.Services.MixGlobalSettings
 
         public string DefaultBaseUrl
         {
-            get => GetConfig<string>(MixModuleNames.Default);
-            set => SetConfig(MixModuleNames.Default, value);
+            get => GetConfig<string?>(MixModuleNames.Default) ?? _configuration.GetValue<string>("BaseUrl");
         }
         public string MixMq
         {

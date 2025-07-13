@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.Extensions.Logging;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.UnitOfWork;
+using Mix.Lib.Interfaces;
 using ModelContextProtocol;
 using ModelContextProtocol.Server;
 using System;
@@ -15,11 +16,12 @@ namespace Mix.MCP.Lib.Tools
     public abstract class BaseMcpTool
     {
         protected readonly ILogger _logger;
+        
         protected readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private const int DEFAULT_TIMEOUT_SECONDS = 300;
 
         protected BaseMcpTool(UnitOfWorkInfo<MixCmsContext> cmsUow, ILogger logger)
-        {
+        {            
             _cmsUow = cmsUow;
             _logger = logger;
         }

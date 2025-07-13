@@ -25,7 +25,7 @@ namespace Mix.MCP.Lib.Extensions
             builder.Services.TryAddSingleton<ChatAgent>();
             builder.Services.TryAddSingleton<RoutingAgent>();
             builder.Services.TryAddSingleton<PlanningAgent>();
-            //builder.Services.AddHostedService<LLMChatHostedService>();
+            builder.Services.AddHostedService<LLMChatHostedService>();
             return builder;
         }
     }

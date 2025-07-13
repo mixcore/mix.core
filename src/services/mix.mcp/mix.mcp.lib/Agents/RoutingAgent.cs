@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using Mix.Database.Services;
 using Mix.MCP.Lib.Services.LLM;
 using System.Text.Json;
 using System.Threading;
@@ -12,12 +13,13 @@ namespace Mix.MCP.Lib.Agents
         private readonly PlanningAgent _planningAgent;
 
         public RoutingAgent(
+            AppSettingsService appSettingsService,
             ILlmServiceFactory llmServiceFactory,
             ILogger<RoutingAgent> logger,
             ChatAgent chatAgent,
             PlanningAgent planningAgent,
             TimeSpan? defaultTimeout = null)
-            : base(llmServiceFactory, logger, defaultTimeout)
+            : base(appSettingsService,llmServiceFactory, logger, defaultTimeout)
         {
             _chatAgent = chatAgent;
             _planningAgent = planningAgent;

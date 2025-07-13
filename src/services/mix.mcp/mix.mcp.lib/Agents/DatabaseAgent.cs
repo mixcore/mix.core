@@ -54,11 +54,11 @@ namespace Mix.MCP.Lib.Agents
             _llmServiceFactory = llmServiceFactory ?? throw new ArgumentNullException(nameof(llmServiceFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _sessionMemory = new ConcurrentDictionary<string, Dictionary<string, object>>();
-            
+            string mcpServer = appSettingsService.AppSettings.McpSettings.BaseUrl ?? $"{appSettingsService.AppSettings.BaseUrl}/mcp/sse";
             // Initialize MCP client
             var clientTransport = new SseClientTransport(new SseClientTransportOptions()
             {
-                Endpoint = new Uri(appSettingsService.AppSettings.McpSettings.BaseUrl),
+                Endpoint = new Uri(mcpServer),
                 Name = "MixDatabaseAgentClient"
             });
             _mcpClient = McpClientFactory.CreateAsync(clientTransport).GetAwaiter().GetResult();

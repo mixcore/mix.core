@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using Mix.Database.Services;
 using Mix.MCP.Lib.Services.LLM;
 using Mix.MCP.Lib.Tools;
 using ModelContextProtocol.Client;
@@ -22,16 +23,16 @@ namespace Mix.MCP.Lib.Agents
         private const int MaxTaskHistory = 20;
 
         private readonly Dictionary<string, Func<TaskState, string, Task<string>>> _commandHandlers;
-        private IMcpClient _mcpClient;
-
+        
         /// <summary>
         /// Initializes a new instance of the TaskAgent class
         /// </summary>
         public TaskAgent(
+            AppSettingsService appSettingsService,
             ILlmServiceFactory llmServiceFactory,
-            ILogger<TaskAgent> logger,
+            ILogger<PlanningAgent> logger,
             TimeSpan? defaultTimeout = null)
-            : base(llmServiceFactory, logger, defaultTimeout)
+            : base(appSettingsService, llmServiceFactory, logger, defaultTimeout)
         {
             _commandHandlers = new Dictionary<string, Func<TaskState, string, Task<string>>>(StringComparer.OrdinalIgnoreCase)
             {
@@ -53,8 +54,6 @@ namespace Mix.MCP.Lib.Agents
         {
             try
             {
-                EnsureMcpClientInitialized();
-
                 ValidateInput(userInput, sessionId);
                 _logger.LogInformation("Processing task input for session {SessionId}: {UserInput}", sessionId, userInput);
 
@@ -90,18 +89,6 @@ namespace Mix.MCP.Lib.Agents
             {
                 return HandleException(ex, userInput);
             }
-        }
-
-        private void EnsureMcpClientInitialized()
-        {
-            if (_mcpClient != null) return;
-
-            var clientTransport = new SseClientTransport(new SseClientTransportOptions
-            {
-                Endpoint = new Uri("http://localhost:5011/mcp/sse"),
-                Name = "MixTaskAgentClient"
-            });
-            _mcpClient = McpClientFactory.CreateAsync(clientTransport).GetAwaiter().GetResult();
         }
 
         private static void AddToTaskHistory(List<TaskHistoryEntry> history, string command, string arguments, string response)

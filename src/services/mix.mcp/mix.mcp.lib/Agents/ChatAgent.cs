@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using Mix.Database.Services;
 using Mix.MCP.Lib.Models;
 using Mix.MCP.Lib.Services.LLM;
 using System;
@@ -19,10 +20,11 @@ namespace Mix.MCP.Lib.Agents
         /// Initializes a new instance of the ChatAgent class
         /// </summary>
         public ChatAgent(
+            AppSettingsService appSettingsService,
             ILlmServiceFactory llmServiceFactory,
             ILogger<ChatAgent> logger,
             TimeSpan? defaultTimeout = null)
-            : base(llmServiceFactory, logger, defaultTimeout)
+            : base(appSettingsService, llmServiceFactory, logger, defaultTimeout)
         {
         }
 

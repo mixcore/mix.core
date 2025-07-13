@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Mix.Constant.Constants;
 using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.Extensions;
 using Mix.MCP.Lib.Models;
 using Mix.Mq.Lib.Models;
 using Mix.Mqtt.Lib.Helpers;
@@ -44,6 +45,7 @@ namespace Mix.MCP.Lib.Messenger
                .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce)
                .Build();
             var queueSetting = configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:MQTT").Get<MQTTSetting>();
+            queueSetting.HostName ??= configuration.BaseUrl();
             _mqttFactory = new MqttClientFactory();
             _mqttClient = _mqttFactory.CreateMqttClient();
             _mqttClientOptions = MqttHelper.GetClientOptions(queueSetting);

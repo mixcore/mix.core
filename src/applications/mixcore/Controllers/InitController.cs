@@ -82,16 +82,8 @@ namespace Mixcore.Controllers
         private void InitEndpoints()
         {
             string endpoint = $"{Request.Scheme}://{Request.Host}";
+            _appSettingsService.AppSettings.BaseUrl = endpoint;
             _appSettingsService.AppSettings.McpSettings.BaseUrl = $"{endpoint}/mcp/sse";
-            _mixEndpointService.Messenger = endpoint;
-            _mixEndpointService.Portal = endpoint;
-            _mixEndpointService.Grpc = endpoint;
-            _mixEndpointService.Scheduler = endpoint;
-            _mixEndpointService.Theme = endpoint;
-            _mixEndpointService.Account = endpoint;
-            _mixEndpointService.Common = endpoint;
-            _mixEndpointService.Mixcore = endpoint;
-            _mixEndpointService.SaveSettings();
         }
     }
 }

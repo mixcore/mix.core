@@ -8,6 +8,8 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Mix.Shared.Services;
+using Mix.Database.Services;
 
 namespace Mix.MCP.Lib.Agents
 {
@@ -18,11 +20,12 @@ namespace Mix.MCP.Lib.Agents
 
         public PlanningAgent(
             IConfiguration configuration,
+            AppSettingsService appSettingsService,
             ILlmServiceFactory llmServiceFactory,
             ILogger<PlanningAgent> logger,
             TaskAgent taskAgent,
             TimeSpan? defaultTimeout = null)
-            : base(llmServiceFactory, logger, defaultTimeout)
+            : base(appSettingsService, llmServiceFactory, logger, defaultTimeout)
         {
             _taskAgent = taskAgent;
             _mqttMessageService = new MqttMessageService(configuration);

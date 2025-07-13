@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging;
+using Mix.Heart.Helpers;
 using Mix.MCP.Lib.Resources;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
-using System.Text.Json;
 
 namespace Mix.MCP.Lib.Tools
 {
@@ -52,7 +52,7 @@ namespace Mix.MCP.Lib.Tools
         {
             _logger.LogInformation("Getting all resources for section {Section}", section);
             var sectionData = _resourceLoader.GetSection(section);
-            return JsonSerializer.Serialize(sectionData);
+            return ReflectionHelper.ParseObject(sectionData).ToString(Newtonsoft.Json.Formatting.None);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Mix.MCP.Lib.Tools
         {
             _logger.LogInformation("Listing all resource sections");
             var sections = _resourceLoader.GetSections().ToArray();
-            return JsonSerializer.Serialize(sections);
+            return ReflectionHelper.ParseObject(sections).ToString(Newtonsoft.Json.Formatting.None);
         }
 
         /// <summary>

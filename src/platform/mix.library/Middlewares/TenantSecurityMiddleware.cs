@@ -46,7 +46,6 @@ namespace Mix.Lib.Middlewares
                         currentTenant = mixTenantService.GetTenant(context.Request.Headers.Host);
                         context.Session.SetInt32(MixRequestQueryKeywords.TenantId, currentTenant.Id);
                         context.Session.Put(MixRequestQueryKeywords.Tenant, currentTenant);
-                        mixEndpointService.SetDefaultDomain($"https://{currentTenant.PrimaryDomain}");
                     }
 
                     if (configService.Configs == null)

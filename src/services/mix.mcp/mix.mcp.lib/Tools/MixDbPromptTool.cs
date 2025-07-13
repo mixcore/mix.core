@@ -1,27 +1,19 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
-using Mix.Lib.ViewModels;
 using Mix.MCP.Lib.Services.LLM;
 using Mix.Mixdb.Interfaces;
-using Mix.Mixdb.ViewModels;
 using Mix.Service.Interfaces;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.RegularExpressions;
-using Mix.Heart.Extensions;
-using Mix.Mixdb.Services;
 using Mix.MCP.Lib.Helpers;
-using Mix.MCP.Lib.Models;
-using System.Threading;
 using Microsoft.AspNetCore.Http.Timeouts;
 using ModelContextProtocol;
+using Mix.Heart.Helpers;
 
 namespace Mix.MCP.Lib.Tools
 {
@@ -99,7 +91,7 @@ namespace Mix.MCP.Lib.Tools
                     mixDatabaseContextId);
                 if (database == null)
                     throw new McpException($"Failed to create database: {systemName}. Please check the logs for more details.");
-                return JsonSerializer.Serialize(new
+                return ReflectionHelper.ParseObject(new
                 {
                     Success = true,
                     Message = $"Database '{displayName}' created successfully with {columns.Count} custom columns",
@@ -110,7 +102,7 @@ namespace Mix.MCP.Lib.Tools
                         Type = c.DataType.ToString(),
                         IsRequired = c.IsRequired,
                     }).ToList()
-                });
+                }).ToString(Newtonsoft.Json.Formatting.None);
             }, "CreateDatabaseFromPrompt");
         }
         
@@ -145,11 +137,11 @@ namespace Mix.MCP.Lib.Tools
                     sourceColumnName,
                     destinateColumnName,
                     relationshipType);
-                return JsonSerializer.Serialize(new
+                return ReflectionHelper.ParseObject(new
                 {
                     Success = true,
                     Message = $"Relationship '{sourceTableName}' and {destinateTableName} created successfully"
-                });
+                }).ToString(Newtonsoft.Json.Formatting.None);
             }, "CreateDatabaseFromPrompt");
         }
 
@@ -198,12 +190,12 @@ namespace Mix.MCP.Lib.Tools
                     });
                     if (success) successCount++;
                 }
-                return JsonSerializer.Serialize(new
+                return ReflectionHelper.ParseObject(new
                 {
                     Success = successCount > 0,
                     Message = $"Added {successCount} of {columns.Count} columns to database '{databaseSystemName}'",
                     Columns = results
-                });
+                }).ToString(Newtonsoft.Json.Formatting.None);
             }, "AddColumnToDatabase", timeoutSeconds);
         }
 
@@ -254,12 +246,12 @@ namespace Mix.MCP.Lib.Tools
                         });
                         if (success) successCount++;
                     }
-                    return JsonSerializer.Serialize(new
+                    return ReflectionHelper.ParseObject(new
                     {
                         Success = successCount > 0,
                         Message = $"Updated {successCount} of {columns.Count} columns in database '{databaseSystemName}'",
                         Columns = results
-                    });
+                    }).ToString(Newtonsoft.Json.Formatting.None);
                 }, "UpdateDatabaseColumn", timeoutSeconds);
             }
             catch (McpException ex)
@@ -317,12 +309,12 @@ namespace Mix.MCP.Lib.Tools
                     });
                     if (success) successCount++;
                 }
-                return JsonSerializer.Serialize(new
+                return ReflectionHelper.ParseObject(new
                 {
                     Success = successCount > 0,
                     Message = $"Deleted {successCount} of {columns.Count} columns from database '{databaseSystemName}'",
                     Columns = results
-                });
+                }).ToString(Newtonsoft.Json.Formatting.None);
             }, "DeleteDatabaseColumn", timeoutSeconds);
         }
     }

@@ -1,5 +1,8 @@
 using Microsoft.Extensions.Logging;
+using Mix.Database.Services;
 using Mix.MCP.Lib.Services.LLM;
+using ModelContextProtocol.Client;
+using ModelContextProtocol.Protocol.Transport;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
@@ -16,11 +19,12 @@ namespace Mix.MCP.Lib.Agents
         protected readonly ILogger _logger;
         protected readonly ConcurrentDictionary<string, AgentMemory> _sessionMemories;
         protected readonly TimeSpan _defaultTimeout;
-
+        protected readonly IMcpClient _mcpClient;
         /// <summary>
         /// Initializes a new instance of the BaseAgent class
         /// </summary>
         protected BaseAgent(
+            AppSettingsService appSettingsService,
             ILlmServiceFactory llmServiceFactory,
             ILogger logger,
             TimeSpan? defaultTimeout = null)
@@ -29,6 +33,15 @@ namespace Mix.MCP.Lib.Agents
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _sessionMemories = new ConcurrentDictionary<string, AgentMemory>();
             _defaultTimeout = defaultTimeout ?? TimeSpan.FromSeconds(120);
+
+            string mcpServer = appSettingsService.AppSettings.McpSettings.BaseUrl ?? $"{appSettingsService.AppSettings.BaseUrl}/mcp/sse";
+            // Initialize MCP client
+            var clientTransport = new SseClientTransport(new SseClientTransportOptions()
+            {
+                Endpoint = new Uri(mcpServer),
+                Name = "MixDatabaseAgentClient"
+            });
+            _mcpClient = McpClientFactory.CreateAsync(clientTransport).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -40,6 +53,23 @@ namespace Mix.MCP.Lib.Agents
             string sessionId = "default",
             LLMServiceType serviceType = LLMServiceType.DeepSeek,
             CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Helper method to call database tools through MCP client
+        /// </summary>
+        protected async Task<string> CallDatabaseToolAsync(string toolName, Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var result = await _mcpClient.CallToolAsync(toolName, parameters, cancellationToken: cancellationToken);
+                return result.Content.FirstOrDefault(c => c.Type == "text")?.Text ?? "No response received from tool.";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error calling database tool {ToolName}: {ErrorMessage}", toolName, ex.Message);
+                throw;
+            }
+        }
 
         /// <summary>
         /// Gets or creates a memory store for the specified session

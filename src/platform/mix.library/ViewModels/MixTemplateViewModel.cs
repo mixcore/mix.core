@@ -12,8 +12,8 @@ namespace Mix.Lib.ViewModels
         public string FileFolder { get; set; }
         public string FileName { get; set; }
         public MixTemplateFolderType FolderType { get; set; }
-        public string Scripts { get; set; }
-        public string Styles { get; set; }
+        public string Scripts { get; set; } = string.Empty;
+        public string Styles { get; set; } = string.Empty;
 
         public string MixThemeName { get; set; }
         public int MixThemeId { get; set; }
