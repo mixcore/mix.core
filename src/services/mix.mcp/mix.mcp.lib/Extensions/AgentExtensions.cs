@@ -4,6 +4,9 @@ using Microsoft.Extensions.Hosting;
 using Mix.MCP.Lib.Agents;
 using Mix.MCP.Lib.Messenger;
 using Mix.MCP.Lib.Resources;
+using Mix.MCP.Lib.Services.Knowledge;
+using Mix.MCP.Lib.Services.Search;
+using Mix.MCP.Lib.Services.Cache;
 
 namespace Mix.MCP.Lib.Extensions
 {
@@ -13,19 +16,27 @@ namespace Mix.MCP.Lib.Extensions
     public static class AgentExtensions
     {
         /// <summary>
-        /// Register ResourceLoader to DI container
+        /// Register agents and supporting services to DI container
         /// </summary>
-        /// <param name="services">Service collection</param>
-        /// <returns>Updated service collection</returns>
+        /// <param name="builder">Host application builder</param>
+        /// <returns>Updated host application builder</returns>
         public static IHostApplicationBuilder AddAgents(this IHostApplicationBuilder builder)
         {
-            // Register ResourceLoader as singleton
+            // Register knowledge and search services
+            builder.Services.TryAddSingleton<IKnowledgeBaseService, KnowledgeBaseService>();
+            builder.Services.TryAddSingleton<ISemanticSearchService, SemanticSearchService>();
+            builder.Services.TryAddSingleton<IResourceCacheService, ResourceCacheService>();
+
+            // Register agents with knowledge service injection
             builder.Services.TryAddSingleton<DatabaseAgent>();
             builder.Services.TryAddSingleton<TaskAgent>();
             builder.Services.TryAddSingleton<ChatAgent>();
             builder.Services.TryAddSingleton<RoutingAgent>();
             builder.Services.TryAddSingleton<PlanningAgent>();
+            
+            // Register hosted services
             builder.Services.AddHostedService<LLMChatHostedService>();
+            
             return builder;
         }
     }

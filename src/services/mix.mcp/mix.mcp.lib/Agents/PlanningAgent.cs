@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Mix.MCP.Lib.Services.LLM;
 using Mix.MCP.Lib.Messenger;
 using Mix.MCP.Lib.Models;
+using Mix.MCP.Lib.Services.Knowledge;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
@@ -25,8 +26,9 @@ namespace Mix.MCP.Lib.Agents
             ILlmServiceFactory llmServiceFactory,
             ILogger<PlanningAgent> logger,
             TaskAgent taskAgent,
+            IKnowledgeBaseService? knowledgeBaseService = null,
             TimeSpan? defaultTimeout = null)
-            : base(appSettingsService, llmServiceFactory, logger, defaultTimeout)
+            : base(appSettingsService, llmServiceFactory, logger, knowledgeBaseService, defaultTimeout)
         {
             _taskAgent = taskAgent;
             _mqttMessageService = new MqttMessageService(configuration);
@@ -112,23 +114,38 @@ namespace Mix.MCP.Lib.Agents
             CancellationToken cancellationToken)
         {
             var llmService = _llmServiceFactory.CreateService(serviceType);
+            
+            // Get contextual knowledge before planning
+            var knowledgeContext = await GetKnowledgeContextAsync(userInput, "planning", cancellationToken);
+            
             // Get supported MCP tools and format for prompt
             var supportedActions = Mix.MCP.Lib.Tools.ToolDiscovery.SupportedPromptToolActions;
             var toolList = string.Join("\n", supportedActions.Select(a => $"- {a.MethodName}: {a.Description}"));
 
-            var prompt = $@"
-You are a planning assistant. Analyze the following user request and break it down into a list of actionable prompts.
+            var promptBuilder = new System.Text.StringBuilder();
+            promptBuilder.AppendLine("You are a planning assistant. Analyze the following user request and break it down into a list of actionable prompts.");
+            promptBuilder.AppendLine();
+            
+            // Add knowledge context if available
+            if (!string.IsNullOrWhiteSpace(knowledgeContext))
+            {
+                promptBuilder.AppendLine("Relevant context and guidance:");
+                promptBuilder.AppendLine(knowledgeContext);
+                promptBuilder.AppendLine();
+            }
+            
+            promptBuilder.AppendLine("Here is a list of supported MCP tools you can use:");
+            promptBuilder.AppendLine(toolList);
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine("Respond in this JSON array format:");
+            promptBuilder.AppendLine("[");
+            promptBuilder.AppendLine("  \"First prompt as a string.\",");
+            promptBuilder.AppendLine("  \"Second prompt as a string.\"");
+            promptBuilder.AppendLine("]");
+            promptBuilder.AppendLine($"User request: \"{userInput}\"");
 
-Here is a list of supported MCP tools you can use:
-{toolList}
-
-Respond in this JSON array format:
-[
-  ""First prompt as a string."",
-  ""Second prompt as a string.""
-]
-User request: ""{userInput}""
-";
+            var prompt = promptBuilder.ToString();
+            
             var response = await llmService.ChatAsync(prompt, "deepseek-chat", 0.2, -1, cancellationToken);
             var content = response?.choices?[0]?.Message?.Content;
 
@@ -150,6 +167,7 @@ User request: ""{userInput}""
                     PropertyNameCaseInsensitive = true
                 }) ?? new List<string>();
 
+                _logger.LogInformation("Extracted {Count} prompts with knowledge context for user input", prompts.Count);
                 return prompts;
             }
             catch

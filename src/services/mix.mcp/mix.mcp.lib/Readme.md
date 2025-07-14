@@ -1,8 +1,39 @@
-# Mix MCP Lib: Agentic MCP Server Overview
+# Mix MCP Lib: Enhanced Agentic MCP Server
 
 ## Architecture Overview
 
-The Mix MCP Lib implements an agentic server architecture for handling user requests, planning, task execution, and conversational interactions. The system is modular, extensible, and leverages both LLMs (Large Language Models) and structured tool execution via the MCP protocol.
+The Mix MCP Lib implements an advanced agentic server architecture for handling user requests, planning, task execution, and conversational interactions. The system is modular, extensible, and leverages both LLMs (Large Language Models) and structured tool execution via the MCP protocol.
+
+---
+
+## ?? Latest Enhancements (v2.0)
+
+### Knowledge & Resource Enrichment Features
+
+#### 1. **Knowledge Base Integration**
+- **IKnowledgeBaseService** and **KnowledgeBaseService**: Pluggable knowledge base for documentation, FAQs, and domain-specific information
+- **Features:**
+  - Contextual search for relevant information
+  - Category-based knowledge organization (tools, planning, database, content)
+  - Planning context generation for agents
+  - Cached results for performance optimization
+  - Default knowledge entries for Mix CMS operations
+
+#### 2. **Semantic Search Capabilities**
+- **ISemanticSearchService** and **SemanticSearchService**: Advanced search capabilities for documents and content
+- **Features:**
+  - Semantic similarity search using text analysis algorithms
+  - Document indexing and retrieval
+  - Similarity-based recommendations
+  - **New MCP Tool:** `SemanticSearchTool` for direct access via MCP protocol
+
+#### 3. **Enhanced Resource Caching**
+- **IResourceCacheService**: Intelligent caching with statistics and pattern-based invalidation
+- **Features:**
+  - Cache statistics and performance monitoring
+  - Pattern-based cache invalidation
+  - Async factory functions for cache-miss scenarios
+  - Configurable cache expiry policies
 
 ---
 
@@ -11,37 +42,54 @@ The Mix MCP Lib implements an agentic server architecture for handling user requ
 ### RoutingAgent
 - **Role:** Entry point for user requests. Classifies intent (chat vs. plan) using LLM and routes to the appropriate agent.
 - **Logic:**
-  - Uses LLM to classify user input as either a normal conversation or a planning/multi-step request.
-  - Delegates to ChatAgent or PlanningAgent accordingly.
+  - Uses LLM to classify user input as either a normal conversation or a planning/multi-step request
+  - Delegates to ChatAgent or PlanningAgent accordingly
+  - **Enhanced:** Now supports knowledge base integration for better intent classification
 
 ### PlanningAgent
-- **Role:** Handles multi-step/planning requests.
+- **Role:** Handles multi-step/planning requests with enhanced knowledge integration.
 - **Logic:**
-  - Uses LLM to break down user input into actionable prompts, considering available MCP tools.
-  - Executes each prompt sequentially via TaskAgent, passing context/results between steps.
-  - Publishes progress/results via MQTT.
-  - Returns a summary of the plan execution.
+  - Uses LLM to break down user input into actionable prompts, considering available MCP tools
+  - **Enhanced:** Queries knowledge base for relevant context before planning
+  - Executes each prompt sequentially via TaskAgent, passing context/results between steps
+  - Publishes progress/results via MQTT
+  - Returns a summary of the plan execution
 
 ### TaskAgent
 - **Role:** Executes individual tasks, including direct tool invocation and command handling.
 - **Logic:**
-  - Analyzes input to determine if it maps to an MCP tool or a command (start, status, complete, etc.).
-  - If a tool is identified, calls the MCP tool and logs the result.
-  - Maintains task state and history.
-  - Falls back to LLM for general responses if no tool/command matches.
+  - Analyzes input to determine if it maps to an MCP tool or a command (start, status, complete, etc.)
+  - If a tool is identified, calls the MCP tool and logs the result
+  - Maintains task state and history with enhanced memory management
+  - **Enhanced:** Can access knowledge base for better tool selection
+  - Falls back to LLM for general responses if no tool/command matches
 
 ### ChatAgent
-- **Role:** Handles conversational (non-planning) interactions.
+- **Role:** Handles conversational (non-planning) interactions with knowledge integration.
 - **Logic:**
-  - Maintains conversation history.
-  - Builds prompts for LLM based on conversation context.
-  - Returns LLM-generated responses.
+  - Maintains conversation history
+  - **Enhanced:** Can search knowledge base for relevant information
+  - Builds prompts for LLM based on conversation context
+  - Returns LLM-generated responses
+
+---
+
+## Enhanced MCP Tools
+
+### SemanticSearchTool
+- **SearchAsync:** Performs semantic search with configurable similarity thresholds
+- **FindSimilarAsync:** Finds documents similar to provided text
+- **IndexDocumentAsync:** Adds new documents to the search index
+- **Features:** JSON-formatted responses, error handling, parameter validation
+
+### Knowledge-Enhanced Planning
+- Agents now leverage knowledge base for better context understanding
+- Planning decisions include relevant documentation and best practices
+- Improved tool selection based on historical knowledge and patterns
 
 ---
 
 ## Conceptual Visualization
-
-```
 +-------------------+
 |   User Request    |
 +-------------------+
@@ -53,30 +101,106 @@ The Mix MCP Lib implements an agentic server architecture for handling user requ
    |             |
    v             v
 +--------+   +-------------+
-|ChatAgent|   |PlanningAgent|
+|ChatAgent|   |PlanningAgent|  <-- Enhanced with Knowledge Base
 +--------+   +-------------+
-                 |
-                 v
-           +-------------+
-           |  TaskAgent  |  <-- Executes tasks, calls MCP tools, manages state/history
-           +-------------+
-```
-
-- **RoutingAgent**: Decides if the request is a chat or a plan.
-- **ChatAgent**: Handles chat, maintains context.
-- **PlanningAgent**: Decomposes complex requests, orchestrates multi-step plans, uses TaskAgent for execution.
-- **TaskAgent**: Executes atomic tasks, invokes MCP tools, manages task lifecycle.
+   |             |
+   v             v
++----------+ +-------------+
+|Knowledge |  |  TaskAgent  |  <-- Executes tasks, calls MCP tools
+|Base      |  +-------------+
++----------+       |
+   |               v
+   v         +-------------+
++----------+  | Semantic    |
+|Resource  |  | Search      |
+|Cache     |  | Service     |
++----------+  +-------------+
+- **RoutingAgent**: Decides if the request is a chat or a plan
+- **ChatAgent**: Handles chat with knowledge integration
+- **PlanningAgent**: Decomposes complex requests with contextual knowledge
+- **TaskAgent**: Executes atomic tasks, invokes MCP tools
+- **Knowledge Base**: Provides contextual information for better decision making
+- **Semantic Search**: Advanced search capabilities for content discovery
+- **Resource Cache**: Intelligent caching for performance optimization
 
 ---
 
 ## Key Concepts
 
-- **Agentic Orchestration**: Modular agents, each with a clear responsibility.
-- **LLM Integration**: Used for intent classification, prompt decomposition, and conversational responses.
-- **MCP Tool Discovery/Execution**: TaskAgent and PlanningAgent leverage available MCP tools for actionable tasks.
-- **State & History Management**: Each agent maintains relevant state (e.g., conversation history, task state/history).
-- **Extensibility**: New tools and agent types can be added with minimal changes to the routing/orchestration logic.
+- **Agentic Orchestration**: Modular agents, each with a clear responsibility
+- **LLM Integration**: Used for intent classification, prompt decomposition, and conversational responses
+- **MCP Tool Discovery/Execution**: TaskAgent and PlanningAgent leverage available MCP tools for actionable tasks
+- **Knowledge-Driven Planning**: Agents use contextual knowledge for better decision making
+- **Semantic Understanding**: Advanced search and similarity matching capabilities
+- **Intelligent Caching**: Performance optimization through smart resource caching
+- **State & History Management**: Each agent maintains relevant state with enhanced context
+- **Extensibility**: New tools, knowledge sources, and agent types can be added with minimal changes
 
 ---
 
-This architecture enables flexible, intelligent handling of both simple and complex user requests, leveraging both LLMs and structured tool execution.
+## Technical Implementation
+
+### Service Registration// Enhanced service registration in AgentExtensions.cs
+builder.Services.TryAddSingleton<IKnowledgeBaseService, KnowledgeBaseService>();
+builder.Services.TryAddSingleton<ISemanticSearchService, SemanticSearchService>();
+builder.Services.TryAddSingleton<IResourceCacheService, ResourceCacheService>();
+### Knowledge Base Usage// Agents automatically get knowledge context
+var context = await GetKnowledgeContextAsync(userInput, "planning");
+
+// Search for specific information
+var knowledge = await SearchKnowledgeAsync("database operations", 5);
+### Semantic Search via MCP// Via MCP tool
+var results = await semanticSearchTool.SearchAsync("content management", 10, 0.7);
+
+// Direct service usage
+var similar = await semanticSearchService.FindSimilarAsync(documentContent, 5);
+### Resource Caching// Get or create with factory
+var expensiveData = await cacheService.GetOrCreateAsync(
+    "expensive_computation", 
+    async ct => await ComputeExpensiveData(ct),
+    TimeSpan.FromMinutes(30));
+---
+
+## Benefits
+
+### ?? **Performance Improvements**
+- **Intelligent Caching**: Reduces API calls and database queries
+- **Optimized Memory Management**: Enhanced session memory with statistics
+- **Async Operations**: Non-blocking knowledge and search operations
+
+### ?? **Enhanced Intelligence**
+- **Context-Aware Planning**: Better task decomposition with domain knowledge
+- **Semantic Understanding**: Advanced content discovery and similarity matching
+- **Knowledge-Driven Decisions**: Agents leverage historical patterns and best practices
+
+### ?? **Developer Experience**
+- **Extensible Architecture**: Easy to add new knowledge sources and tools
+- **Comprehensive Logging**: Detailed monitoring and debugging capabilities
+- **Type Safety**: Full nullable reference type support with .NET 9
+
+### ?? **Mix CMS Integration**
+- **Multi-Tenant Aware**: All services respect tenant isolation
+- **MixDb Patterns**: Consistent with existing database patterns
+- **Content Management**: Specialized knowledge for pages, posts, modules, and templates
+
+---
+
+## Getting Started
+
+1. **Service Registration**: Services are automatically registered via `AddAgents()` extension
+2. **Knowledge Base**: Pre-populated with Mix CMS operational knowledge
+3. **Semantic Search**: Ready-to-use with sample documents
+4. **MCP Tools**: Available immediately via MCP protocol
+
+---
+
+## Future Enhancements
+
+- **Vector Database Integration**: Replace text-based similarity with proper embeddings
+- **Advanced Analytics**: Enhanced metrics and performance monitoring
+- **Machine Learning**: Adaptive knowledge base with user feedback loops
+- **Multi-Language Support**: Internationalization for knowledge base content
+
+---
+
+This enhanced architecture enables more intelligent, context-aware handling of user requests, leveraging knowledge bases, semantic search, and intelligent caching for improved performance and accuracy in Mix CMS operations.

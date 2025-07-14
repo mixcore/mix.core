@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Mix.Database.Services;
 using Mix.MCP.Lib.Services.LLM;
+using Mix.MCP.Lib.Services.Knowledge;
 using Mix.MCP.Lib.Tools;
 using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol.Transport;
@@ -30,9 +31,10 @@ namespace Mix.MCP.Lib.Agents
         public TaskAgent(
             AppSettingsService appSettingsService,
             ILlmServiceFactory llmServiceFactory,
-            ILogger<PlanningAgent> logger,
+            ILogger<TaskAgent> logger,
+            IKnowledgeBaseService? knowledgeBaseService = null,
             TimeSpan? defaultTimeout = null)
-            : base(appSettingsService, llmServiceFactory, logger, defaultTimeout)
+            : base(appSettingsService, llmServiceFactory, logger, knowledgeBaseService, defaultTimeout)
         {
             _commandHandlers = new Dictionary<string, Func<TaskState, string, Task<string>>>(StringComparer.OrdinalIgnoreCase)
             {

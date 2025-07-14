@@ -19,16 +19,26 @@ namespace Mix.MCP.Lib.Messenger
         {
             var queueSetting = configuration.GetSection("MessageQueueSettings:MQTT").Get<MQTTSetting>();
             var factory = new MqttClientFactory();
-            queueSetting.HostName ??= configuration.BaseUrl();
+            if (string.IsNullOrEmpty(queueSetting.HostName))
+            {
+                queueSetting.HostName = configuration.WebSocketUrl();
+            }
             _mqttClient = factory.CreateMqttClient();
             _mqttClientOptions = MqttHelper.GetClientOptions(queueSetting);
         }
 
         public async Task ConnectAsync(CancellationToken cancellationToken = default)
         {
-            if (!_mqttClient.IsConnected)
+            try
             {
-                await _mqttClient.ConnectAsync(_mqttClientOptions, cancellationToken);
+                if (!_mqttClient.IsConnected)
+                {
+                    await _mqttClient.ConnectAsync(_mqttClientOptions, cancellationToken);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
             }
         }
 

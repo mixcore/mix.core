@@ -46,6 +46,13 @@ namespace Mix.Lib.Extensions
         {
             return configuration["BaseUrl"];
         }
+       
+        public static string? WebSocketUrl(this IConfiguration configuration)
+        {
+            var uri = new Uri(configuration["BaseUrl"]);
+            var scheme = uri.Scheme == "https" ? "wss" : "ws";
+            return $"{scheme}://{uri.Host}:{uri.Port}/mqtt";
+        }
 
         public static string? SettingsConnection(this IConfiguration configuration)
         {

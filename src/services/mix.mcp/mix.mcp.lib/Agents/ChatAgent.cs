@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Mix.Database.Services;
 using Mix.MCP.Lib.Models;
 using Mix.MCP.Lib.Services.LLM;
+using Mix.MCP.Lib.Services.Knowledge;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,8 +24,9 @@ namespace Mix.MCP.Lib.Agents
             AppSettingsService appSettingsService,
             ILlmServiceFactory llmServiceFactory,
             ILogger<ChatAgent> logger,
+            IKnowledgeBaseService? knowledgeBaseService = null,
             TimeSpan? defaultTimeout = null)
-            : base(appSettingsService, llmServiceFactory, logger, defaultTimeout)
+            : base(appSettingsService, llmServiceFactory, logger, knowledgeBaseService, defaultTimeout)
         {
         }
 

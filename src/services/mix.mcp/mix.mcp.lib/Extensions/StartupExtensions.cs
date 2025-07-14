@@ -58,11 +58,12 @@ namespace Mix.MCP.Lib.Extensions
                         Name = MCPResources.ServerDefaults.ServerName,
                         Version = MCPResources.ServerDefaults.ServerVersion
                     };
-                    options.ServerInstructions = "This MCP server provides tools and prompts for Mixcore applications.";
+                    options.ServerInstructions = "This MCP server provides tools and prompts for Mixcore applications with enhanced knowledge and semantic search capabilities.";
                 })
                 .WithHttpTransport()
                 .WithStdioServerTransport()
                 .WithTools<EchoTool>()
+                .WithTools<SemanticSearchTool>()
                 .WithPrompts<GeneratePrompt>()
                 .WithPrompts<ResourcePrompts>()
                 .WithPrompts<MixDbPrompts>()

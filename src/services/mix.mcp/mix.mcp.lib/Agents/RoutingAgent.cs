@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Logging;
 using Mix.Database.Services;
 using Mix.MCP.Lib.Services.LLM;
+using Mix.MCP.Lib.Services.Knowledge;
+using System;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,8 +20,9 @@ namespace Mix.MCP.Lib.Agents
             ILogger<RoutingAgent> logger,
             ChatAgent chatAgent,
             PlanningAgent planningAgent,
+            IKnowledgeBaseService? knowledgeBaseService = null,
             TimeSpan? defaultTimeout = null)
-            : base(appSettingsService,llmServiceFactory, logger, defaultTimeout)
+            : base(appSettingsService, llmServiceFactory, logger, knowledgeBaseService, defaultTimeout)
         {
             _chatAgent = chatAgent;
             _planningAgent = planningAgent;
