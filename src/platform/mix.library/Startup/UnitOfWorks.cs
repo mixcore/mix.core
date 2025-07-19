@@ -16,14 +16,12 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddDbContext<QueueLogDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<MixCmsContext>>();
             services.TryAddScoped<UnitOfWorkInfo<GlobalSettingContext>>();
-            services.TryAddScoped<UnitOfWorkInfo<MixCacheDbContext>>();
             services.TryAddScoped<UnitOfWorkInfo<MixCmsAccountContext>>();
             services.TryAddScoped<UnitOfWorkInfo<AuditLogDbContext>>();
             services.TryAddScoped<UnitOfWorkInfo<QueueLogDbContext>>();
 
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCmsContext>>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<GlobalSettingContext>>();
-            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCacheDbContext>>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCmsAccountContext>>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<AuditLogDbContext>>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<QueueLogDbContext>>();

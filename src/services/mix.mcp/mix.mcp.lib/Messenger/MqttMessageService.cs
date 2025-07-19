@@ -70,7 +70,7 @@ namespace Mix.MCP.Lib.Messenger
             while (string.IsNullOrEmpty(Configuration.BaseUrl()))
             {
                 Console.WriteLine("Base URL is not set in configuration. Waiting for it to be available...");
-                await Task.Delay(1000, cancellationToken); // Wait for 1 second before retrying
+                await Task.Delay(5000, cancellationToken); // Wait for 1 second before retrying
             }
 
             var queueSetting = Configuration.GetSection("MessageQueueSettings:MQTT").Get<MQTTSetting>();

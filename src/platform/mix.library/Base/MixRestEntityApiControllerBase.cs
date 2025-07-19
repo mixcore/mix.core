@@ -20,12 +20,11 @@ namespace Mix.Lib.Base
             IConfiguration configuration,
             MixCacheService cacheService,
             MixIdentityService mixIdentityService,
-            MixCacheDbContext cacheDbContext,
             TDbContext context,
             IMemoryQueueService<MessageQueueModel> queueService,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration,
-                  cacheService, mixIdentityService, context, queueService, cacheDbContext, mixTenantService)
+                  cacheService, mixIdentityService, context, queueService, mixTenantService)
         {
         }
 

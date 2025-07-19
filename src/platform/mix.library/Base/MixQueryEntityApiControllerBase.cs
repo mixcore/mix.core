@@ -22,7 +22,6 @@ namespace Mix.Lib.Base
         protected readonly TDbContext Context;
         protected UnitOfWorkInfo Uow;
         protected UnitOfWorkInfo CacheUow;
-        protected MixCacheDbContext CacheDbContext;
 
         public MixQueryEntityApiControllerBase(
             IHttpContextAccessor httpContextAccessor,
@@ -30,7 +29,7 @@ namespace Mix.Lib.Base
             MixCacheService cacheService,
             MixIdentityService mixIdentityService,
             TDbContext context,
-            IMemoryQueueService<MessageQueueModel> queueService, MixCacheDbContext cacheDbContext,
+            IMemoryQueueService<MessageQueueModel> queueService,
             IMixTenantService mixTenantService)
             : base(httpContextAccessor,
                   configuration, cacheService, mixIdentityService, queueService, mixTenantService)
@@ -38,8 +37,6 @@ namespace Mix.Lib.Base
             Context = context;
             Uow = new(Context);
             Repository = new(Uow);
-            CacheDbContext = cacheDbContext;
-            CacheUow = new(CacheDbContext);
         }
 
         #region Overrides
@@ -55,7 +52,6 @@ namespace Mix.Lib.Base
             {
                 CacheUow.Complete();
             }
-            CacheDbContext.Dispose();
             base.OnActionExecuted(context);
         }
         #endregion

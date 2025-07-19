@@ -144,18 +144,6 @@ namespace Mix.Database.Services.MixGlobalSettings
             };
         }
 
-        public MixCacheDbContext GetCacheDbContext()
-        {
-            return DatabaseProvider switch
-            {
-                MixDatabaseProvider.SQLSERVER => new SqlServerCacheDbContext(_configuration),
-                MixDatabaseProvider.MySQL => new MySqlCacheDbContext(_configuration),
-                MixDatabaseProvider.SQLITE => new SqliteCacheDbContext(_configuration),
-                MixDatabaseProvider.PostgreSQL => new PostgresCacheDbContext(_configuration),
-                _ => null,
-            };
-        }
-
         public void InitConnectionStrings(string connectionString,
             MixDatabaseProvider databaseProvider)
         {
