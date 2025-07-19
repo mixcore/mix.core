@@ -1,6 +1,7 @@
 ﻿using Google.Apis.Util;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -12,7 +13,9 @@ using Mix.MCP.Lib.Prompts;
 using Mix.MCP.Lib.Resources;
 using Mix.MCP.Lib.Services;
 using Mix.MCP.Lib.Services.LLM;
+using Mix.MCP.Lib.Services.Knowledge;
 using Mix.MCP.Lib.Tools;
+
 namespace Mix.MCP.Lib.Extensions
 {
     public static class StartupExtensions
@@ -49,6 +52,17 @@ namespace Mix.MCP.Lib.Extensions
             // Register MCP resources
             builder.Services.AddMCPResources();
 
+            // Register KnowledgeBaseService and ensure it loads resources
+            builder.Services.AddSingleton<IKnowledgeBaseService, KnowledgeBaseService>(provider =>
+            {
+                var cache = provider.GetRequiredService<IMemoryCache>();
+                var logger = provider.GetRequiredService<ILogger<KnowledgeBaseService>>();
+                var resourceLoader = provider.GetRequiredService<ResourceLoader>();
+                var service = new KnowledgeBaseService(cache, logger, resourceLoader);
+                // KnowledgeBaseService will load knowledge into resources in its constructor
+                return service;
+            });
+
             // Register MCP services
             builder.Services
                 .AddMcpServer(options =>
@@ -62,16 +76,6 @@ namespace Mix.MCP.Lib.Extensions
                 })
                 .WithHttpTransport()
                 .WithStdioServerTransport()
-                .WithTools<EchoTool>()
-                .WithTools<SemanticSearchTool>()
-                .WithPrompts<GeneratePrompt>()
-                .WithPrompts<ResourcePrompts>()
-                .WithPrompts<MixDbPrompts>()
-                .WithTools<MixDbPromptTool>()
-                .WithTools<DatabaseAgent>()
-                //.WithTools<LLMTools>()
-                //.WithTools<ResourceTool>()
-                //.WithTools<MixDbDataTool>()
                 .WithToolsFromAssembly();
 
             // Register other services

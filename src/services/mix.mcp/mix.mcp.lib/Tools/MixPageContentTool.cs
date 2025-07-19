@@ -20,7 +20,7 @@ namespace Mix.MCP.Lib.Tools
     [McpServerToolType]
     public class MixPageContentTool : BaseMcpTool
     {
-        private AppSettingsService _appSettingsService;
+
         /// <summary>
         /// Initializes a new instance of the MixPageContentTool class
         /// </summary>
@@ -28,9 +28,8 @@ namespace Mix.MCP.Lib.Tools
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             ILogger<MixPageContentTool> logger,
             AppSettingsService appSettingsService)
-            : base(cmsUow, logger)
+            : base(appSettingsService, cmsUow, logger)
         {
-            _appSettingsService = appSettingsService;
         }
 
         /// <summary>

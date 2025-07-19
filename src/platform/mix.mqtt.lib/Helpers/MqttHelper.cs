@@ -14,8 +14,11 @@ namespace Mix.Mqtt.Lib.Helpers
     {
         public static MqttClientOptions? GetClientOptions(MQTTSetting? queueSetting)
         {
-            queueSetting ??= new MQTTSetting();
-
+            if (string.IsNullOrEmpty(queueSetting?.HostName))
+            {
+                return default;
+            }
+            
             MqttClientOptionsBuilder builder = new MqttClientOptionsBuilder();
             if (queueSetting.UseTls)
             {
@@ -34,7 +37,7 @@ namespace Mix.Mqtt.Lib.Helpers
             {
                 builder.WithWebSocketServer(config =>
                 {
-                    config.WithUri(queueSetting.HostName);
+                    config.WithUri(queueSetting.WebSocketUrl);
                 });
             }
             else

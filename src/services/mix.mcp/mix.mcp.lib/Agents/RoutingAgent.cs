@@ -6,6 +6,7 @@ using System;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Mix.MCP.Lib.Models;
 
 namespace Mix.MCP.Lib.Agents
 {
@@ -28,7 +29,7 @@ namespace Mix.MCP.Lib.Agents
             _planningAgent = planningAgent;
         }
 
-        public override async Task<string> ProcessInputAsync(
+        public override async Task<AgentProcessResult> ProcessInputAsync(
             string userInput,
             string deviceId,
             string sessionId = "default",
@@ -44,7 +45,7 @@ namespace Mix.MCP.Lib.Agents
                 case "plan":
                     return await _planningAgent.ProcessInputAsync(userInput, deviceId, sessionId, serviceType, cancellationToken);
                 default:
-                    return "Sorry, I could not route your request.";
+                    return new AgentProcessResult(false, "Sorry, I could not route your request.");
             }
         }
 

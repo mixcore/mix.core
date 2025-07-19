@@ -7,6 +7,8 @@ using Mix.MCP.Lib.Resources;
 using Mix.MCP.Lib.Services.Knowledge;
 using Mix.MCP.Lib.Services.Search;
 using Mix.MCP.Lib.Services.Cache;
+using Microsoft.Extensions.Configuration;
+using Mix.Lib.Extensions;
 
 namespace Mix.MCP.Lib.Extensions
 {
@@ -33,10 +35,13 @@ namespace Mix.MCP.Lib.Extensions
             builder.Services.TryAddSingleton<ChatAgent>();
             builder.Services.TryAddSingleton<RoutingAgent>();
             builder.Services.TryAddSingleton<PlanningAgent>();
-            
+
             // Register hosted services
-            builder.Services.AddHostedService<LLMChatHostedService>();
-            
+            if (!string.IsNullOrEmpty(builder.Configuration.BaseUrl()))
+            {
+                builder.Services.AddHostedService<LLMChatHostedService>();
+            }
+
             return builder;
         }
     }

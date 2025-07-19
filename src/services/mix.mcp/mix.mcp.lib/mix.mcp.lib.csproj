@@ -34,6 +34,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\modules\mix.portal\mix.portal.csproj" />
     <ProjectReference Include="..\..\..\platform\mix.library\mix.library.csproj" />
     <ProjectReference Include="..\..\core\mix-databases\mix.services.databases.lib\mix.services.databases.lib.csproj" />

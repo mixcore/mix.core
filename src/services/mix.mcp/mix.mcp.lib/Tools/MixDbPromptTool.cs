@@ -14,6 +14,7 @@ using Mix.MCP.Lib.Helpers;
 using Microsoft.AspNetCore.Http.Timeouts;
 using ModelContextProtocol;
 using Mix.Heart.Helpers;
+using Mix.Database.Services;
 
 namespace Mix.MCP.Lib.Tools
 {
@@ -35,6 +36,7 @@ namespace Mix.MCP.Lib.Tools
         /// Initializes a new instance of the MixDbPromptTool class
         /// </summary>
         public MixDbPromptTool(
+            AppSettingsService appSettingsService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IMixdbStructure mixDbService,
             IMixMemoryCacheService memoryCache,
@@ -42,7 +44,7 @@ namespace Mix.MCP.Lib.Tools
             DatabaseService databaseService,
             ILlmServiceFactory llmServiceFactory,
             ILogger<MixDbPromptTool> logger)
-            : base(cmsUow, logger)
+            : base(appSettingsService, cmsUow, logger)
         {
             _mixDbStructureService = mixDbService;
             _memoryCache = memoryCache;

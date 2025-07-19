@@ -95,7 +95,39 @@ namespace Mix.Lib.Middlewares
                 }
             }
 
+            // Ensure connection is closed/disposed
+            try
+            {
+                var dbContext = uow.ActiveDbContext;
+                if (dbContext != null)
+                {
+                    var connection = dbContext.Database.GetDbConnection();
+                    await SafeCloseConnectionAsync(connection);
+                }
+            }
+            catch (Exception ex)
+            {
+                await MixLogService.LogExceptionAsync(ex, message: "Error closing DB connection in UnitOfWorkMiddleware");
+            }
+
             uow.Dispose();
+        }
+
+        private static async Task SafeCloseConnectionAsync(DbConnection? connection)
+        {
+            if (connection == null) return;
+            try
+            {
+                if (connection.State != System.Data.ConnectionState.Closed)
+                {
+                    await connection.CloseAsync();
+                }
+                connection.Dispose();
+            }
+            catch (Exception ex)
+            {
+                await MixLogService.LogExceptionAsync(ex, message: "Error disposing DB connection");
+            }
         }
     }
 }

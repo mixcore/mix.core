@@ -1,7 +1,9 @@
 ﻿using Grpc.Core;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Helpers;
+using Mix.Lib.Extensions;
 using Mix.Mq;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Interfaces;
@@ -20,6 +22,7 @@ namespace Mix.Queue.Engines.MixQueue
         public string SubscriptionId { get; set; }
         public bool IsProcessing { get; private set; }
         private readonly string _subscriptionId;
+        private readonly IConfiguration _configuration;
         private readonly MixQueueSetting? _queueSetting;
         private readonly Func<T, Task> _messageHandler;
         private readonly IMemoryQueueService<MessageQueueModel> _memQueues;
@@ -28,19 +31,20 @@ namespace Mix.Queue.Engines.MixQueue
         private SubscribeRequest _subscribeRequest;
         private AsyncServerStreamingCall<SubscribeReply> _call;
         public MixQueueSubscriber(
-            MixQueueSetting? queueSetting,
+            IConfiguration configuration,
             string topicId,
             string subscriptionId,
             Func<T, Task> messageHandler,
             IMemoryQueueService<MessageQueueModel> memQueues,
             MixEndpointService mixEndpointService)
         {
-            _queueSetting = queueSetting;
+            this._configuration = configuration;
+            _queueSetting = configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:Mix").Get<MixQueueSetting>();
             _subscriptionId = subscriptionId;
             _messageHandler = messageHandler;
             _memQueues = memQueues;
             _mixEndpointService = mixEndpointService;
-            _mixMqSubscriber = new GrpcChannelModel<MixMq.MixMqClient>(_mixEndpointService.MixMq);
+
             _subscribeRequest = new SubscribeRequest()
             {
                 TopicId = topicId,
@@ -56,7 +60,7 @@ namespace Mix.Queue.Engines.MixQueue
         {
             try
             {
-                _call = _mixMqSubscriber.Client.Subscribe(_subscribeRequest);
+                await SubscribeTopic(cancellationToken);
                 while (await _call.ResponseStream.MoveNext())
                 {
                     if (!IsProcessing)
@@ -80,6 +84,18 @@ namespace Mix.Queue.Engines.MixQueue
             {
                 throw;
             }
+        }
+
+        private async Task SubscribeTopic(CancellationToken cancellationToken)
+        {
+            // wait for init BaseURL on init CMS
+            while (string.IsNullOrEmpty(_configuration.BaseUrl()))
+            {
+                await Task.Delay(1000);
+            }
+
+            _mixMqSubscriber = new GrpcChannelModel<MixMq.MixMqClient>(_mixEndpointService.MixMq);
+            _call = _mixMqSubscriber.Client.Subscribe(_subscribeRequest);
         }
 
         public async Task Disconnect(CancellationToken cancellationToken = default)

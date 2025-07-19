@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Mix.Heart.Enums;
 using Mix.Shared.Models.Configurations;
 using System;
@@ -47,9 +48,14 @@ namespace Mix.Lib.Extensions
             return configuration["BaseUrl"];
         }
        
-        public static string? WebSocketUrl(this IConfiguration configuration)
+        public static string? MqttWebSocketUrl(this IConfiguration configuration)
         {
-            var uri = new Uri(configuration["BaseUrl"]);
+            var baseUrl = configuration["BaseUrl"];
+            if (string.IsNullOrEmpty(baseUrl))
+            {
+                return null;
+            }
+            var uri = new Uri(baseUrl);
             var scheme = uri.Scheme == "https" ? "wss" : "ws";
             return $"{scheme}://{uri.Host}:{uri.Port}/mqtt";
         }

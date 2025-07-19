@@ -36,7 +36,7 @@ namespace Mix.MCP.Lib.Messenger
         public async Task Handler(LLMMessage msg, CancellationToken cancellationToken)
         {
             var result = await _routingAgent.ProcessInputAsync(msg.Data.Content, msg.DeviceId, msg.SessionId, msg.ServiceType, cancellationToken);
-            await SendMessage(msg.DeviceId, result, cancellationToken);
+            await SendMessage(msg.DeviceId, result.Response, cancellationToken);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

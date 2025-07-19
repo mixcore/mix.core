@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 
@@ -25,6 +26,12 @@ namespace Mix.Lib.Middlewares
         {
             if (configuration.GetValue<InitStep>("InitStatus") == InitStep.Blank)
             {
+                if (string.IsNullOrEmpty(configuration.BaseUrl()))
+                {
+                    var request = context.Request;
+                    var baseUrl = $"{request.Scheme}://{request.Host}{request.PathBase}";
+                    configuration["BaseUrl"] = baseUrl;
+                }
                 await _next.Invoke(context);
             }
             else

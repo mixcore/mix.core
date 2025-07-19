@@ -10,28 +10,23 @@ namespace Mix.MCP.Lib.Messenger
 {
     public class MqttMessageService : IMqttMessageService
     {
-        private readonly IMqttClient _mqttClient;
-        private readonly MqttClientOptions _mqttClientOptions;
+        private IMqttClient _mqttClient;
+        private MqttClientOptions _mqttClientOptions;
 
-        public bool IsConnected => _mqttClient.IsConnected;
+        public bool IsConnected => _mqttClient?.IsConnected ?? false;
+
+        public IConfiguration Configuration { get; }
 
         public MqttMessageService(IConfiguration configuration)
         {
-            var queueSetting = configuration.GetSection("MessageQueueSettings:MQTT").Get<MQTTSetting>();
-            var factory = new MqttClientFactory();
-            if (string.IsNullOrEmpty(queueSetting.HostName))
-            {
-                queueSetting.HostName = configuration.WebSocketUrl();
-            }
-            _mqttClient = factory.CreateMqttClient();
-            _mqttClientOptions = MqttHelper.GetClientOptions(queueSetting);
+            Configuration = configuration;
         }
 
         public async Task ConnectAsync(CancellationToken cancellationToken = default)
         {
             try
             {
-                if (!_mqttClient.IsConnected)
+                if (_mqttClient != null && !_mqttClient.IsConnected)
                 {
                     await _mqttClient.ConnectAsync(_mqttClientOptions, cancellationToken);
                 }
@@ -44,6 +39,11 @@ namespace Mix.MCP.Lib.Messenger
 
         public async Task SubscribeAsync(string topic, Func<string, Task> messageHandler, CancellationToken cancellationToken = default)
         {
+            await InitMqttClient(cancellationToken);
+            if (string.IsNullOrEmpty(topic) || messageHandler == null)
+            {
+                throw new ArgumentException("Topic and message handler must be provided.");
+            }
             await ConnectAsync(cancellationToken);
             var topicFilter = new MqttTopicFilterBuilder()
                 .WithTopic(topic)
@@ -59,7 +59,31 @@ namespace Mix.MCP.Lib.Messenger
                 }
             };
 
-            await _mqttClient.SubscribeAsync(topicFilter, cancellationToken);
+            if (_mqttClient.IsConnected)
+            {
+                await _mqttClient.SubscribeAsync(topicFilter, cancellationToken);
+            }
+        }
+
+        private async Task InitMqttClient(CancellationToken cancellationToken)
+        {
+            while (string.IsNullOrEmpty(Configuration.BaseUrl()))
+            {
+                Console.WriteLine("Base URL is not set in configuration. Waiting for it to be available...");
+                await Task.Delay(1000, cancellationToken); // Wait for 1 second before retrying
+            }
+
+            var queueSetting = Configuration.GetSection("MessageQueueSettings:MQTT").Get<MQTTSetting>();
+            if (string.IsNullOrEmpty(queueSetting?.HostName))
+            {
+                queueSetting = new MQTTSetting(Configuration.MqttWebSocketUrl());
+            }
+            var factory = new MqttClientFactory();
+            if (!string.IsNullOrEmpty(queueSetting.HostName))
+            {
+                _mqttClient = factory.CreateMqttClient();
+                _mqttClientOptions = MqttHelper.GetClientOptions(queueSetting);
+            }
         }
 
         public async Task PublishAsync(string topic, string payload, CancellationToken cancellationToken = default)

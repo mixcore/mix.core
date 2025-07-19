@@ -33,15 +33,18 @@
 
         public override Task<MixModuleContent> ParseEntity(CancellationToken cancellationToken = default)
         {
-            var columns = Columns
-                .OrderBy(c => c.Priority)
-                .Where(c => !string.IsNullOrEmpty(c.SystemName));
+            if (Columns != null && Columns.Count > 0)
+            {
+                var columns = Columns
+                    .OrderBy(c => c.Priority)
+                    .Where(c => !string.IsNullOrEmpty(c.SystemName));
 
-            var arrField = Columns != null ?
-                JArray.Parse(JsonConvert.SerializeObject(columns))
-                : new JArray();
+                var arrField = Columns != null ?
+                    JArray.Parse(JsonConvert.SerializeObject(columns))
+                    : new JArray();
 
-            SimpleDataColumns = arrField.ToString(Formatting.None);
+                SimpleDataColumns = arrField.ToString(Formatting.None);
+            }
 
             return base.ParseEntity(cancellationToken);
         }

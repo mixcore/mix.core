@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Mix.Database.Services;
+using Mix.MCP.Lib.Models;
 using Mix.MCP.Lib.Services.LLM;
 using Mix.MCP.Lib.Services.Knowledge;
 using ModelContextProtocol.Client;
@@ -65,7 +66,7 @@ namespace Mix.MCP.Lib.Agents
         /// <summary>
         /// Processes a user input and returns a response
         /// </summary>
-        public abstract Task<string> ProcessInputAsync(
+        public abstract Task<AgentProcessResult> ProcessInputAsync(
             string userInput,
             string deviceId,
             string sessionId = "default",
@@ -201,10 +202,10 @@ namespace Mix.MCP.Lib.Agents
         /// <summary>
         /// Handles exceptions that occur during agent processing
         /// </summary>
-        protected virtual string HandleException(Exception ex, string userInput)
+        protected virtual AgentProcessResult HandleException(Exception ex, string userInput)
         {
             _logger.LogError(ex, "Error processing input: {UserInput}", userInput);
-            return "I apologize, but I encountered an error while processing your request. Please try again.";
+            return new AgentProcessResult(false, "I apologize, but I encountered an error while processing your request. Please try again.");
         }
     }
 

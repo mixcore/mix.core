@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.Extensions.Logging;
 using Mix.Database.Entities.Cms;
+using Mix.Database.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Interfaces;
 using ModelContextProtocol;
@@ -16,14 +17,17 @@ namespace Mix.MCP.Lib.Tools
     public abstract class BaseMcpTool
     {
         protected readonly ILogger _logger;
-        
+        protected AppSettingsService _appSettingsService;
+        protected readonly List<MixCulture> _cultures;
         protected readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private const int DEFAULT_TIMEOUT_SECONDS = 300;
 
-        protected BaseMcpTool(UnitOfWorkInfo<MixCmsContext> cmsUow, ILogger logger)
+        protected BaseMcpTool(AppSettingsService appSettingsService, UnitOfWorkInfo<MixCmsContext> cmsUow, ILogger logger)
         {            
+            _appSettingsService = appSettingsService;
             _cmsUow = cmsUow;
             _logger = logger;
+            _cultures = _cmsUow.DbContext.MixCulture.ToList();
         }
 
         protected async Task<T> ExecuteWithExceptionHandlingAsync<T>(Func<CancellationToken, Task<T>> action, string operationName, int? timeoutSeconds = null)

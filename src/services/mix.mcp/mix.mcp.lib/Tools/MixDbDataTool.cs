@@ -13,6 +13,7 @@ using Mix.Shared.Dtos;
 using Mix.Constant.Constants;
 using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Helpers;
+using Mix.Database.Services;
 
 namespace Mix.MCP.Lib.Tools
 {
@@ -29,11 +30,12 @@ namespace Mix.MCP.Lib.Tools
         /// Initializes a new instance of the MixDbDataTool class
         /// </summary>
         public MixDbDataTool(
+            AppSettingsService appSettingsService,
             DatabaseService databaseService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IMixDbDataServiceFactory mixDbDataSrvFactory,
             ILogger<MixDbDataTool> logger)
-            : base(cmsUow, logger)
+            : base(appSettingsService, cmsUow, logger)
         {
             _mixDbService = mixDbDataSrvFactory.Create(databaseService.DatabaseProvider, databaseService.GetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION))!;
             _databaseHelper = new MixDbHelper(cmsUow, null, logger);

@@ -4,6 +4,8 @@ using Mix.MCP.Lib.Models;
 using Mix.MCP.Lib.Services.LLM;
 using Mix.MCP.Lib.Services.Knowledge;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,7 +35,7 @@ namespace Mix.MCP.Lib.Agents
         /// <summary>
         /// Processes user input and generates a response while maintaining conversation context
         /// </summary>
-        public override async Task<string> ProcessInputAsync(
+        public override async Task<AgentProcessResult> ProcessInputAsync(
             string userInput,
             string deviceId,
             string sessionId = "default",
@@ -71,12 +73,12 @@ namespace Mix.MCP.Lib.Agents
                 var assistantResponse = response.choices.First().Message.Content;
 
                 // Add assistant response to history
-                conversationHistory.Add(new LLMMessage { SessionId = sessionId, Data = { Role = "user", Content = userInput } });
+                conversationHistory.Add(new LLMMessage { SessionId = sessionId, Data = { Role = "assistant", Content = assistantResponse } });
 
                 // Update memory with new history
                 memory.SetValue(CONVERSATION_HISTORY_KEY, conversationHistory);
 
-                return assistantResponse;
+                return new AgentProcessResult(true, assistantResponse);
             }
             catch (Exception ex)
             {
@@ -118,6 +120,4 @@ namespace Mix.MCP.Lib.Agents
             return prompt.ToString();
         }
     }
-
-
 }

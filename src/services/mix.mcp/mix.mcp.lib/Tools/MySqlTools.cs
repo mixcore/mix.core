@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Mix.Database.Entities.Cms;
+using Mix.Database.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.MCP.Lib.Models;
 using Mix.MCP.Lib.Services;
@@ -17,7 +18,7 @@ namespace Mix.MCP.Lib.Tools
     {
         private readonly IDatabaseService _databaseService;
 
-        public MySqlTools(IDatabaseService databaseService, UnitOfWorkInfo<MixCmsContext> cmsUow, ILogger<MySqlTools> logger) : base(cmsUow, logger)
+        public MySqlTools(AppSettingsService appSettingsService, IDatabaseService databaseService, UnitOfWorkInfo<MixCmsContext> cmsUow, ILogger<MySqlTools> logger) : base(appSettingsService, cmsUow, logger)
         {
             _databaseService = databaseService;
         }

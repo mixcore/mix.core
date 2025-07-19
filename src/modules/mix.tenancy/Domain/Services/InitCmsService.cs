@@ -24,6 +24,7 @@ namespace Mix.Tenancy.Domain.Services
         private readonly TenantUserManager _userManager;
         private readonly RoleManager<MixRole> _roleManager;
         private readonly DatabaseService _databaseService;
+        private readonly AuthConfigService _authConfigService;
         private readonly MixCmsContext _context;
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         protected readonly IConfiguration _configuration;
@@ -35,7 +36,8 @@ namespace Mix.Tenancy.Domain.Services
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IMixTenantService mixTenantService,
             AppSettingsService appSettingsService,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            AuthConfigService authConfigService)
         {
             _userManager = userManager;
             _identityService = identityService;
@@ -45,6 +47,7 @@ namespace Mix.Tenancy.Domain.Services
             _databaseService = databaseService;
             _appSettingsService = appSettingsService;
             _configuration = configuration;
+            _authConfigService = authConfigService;
         }
 
 
@@ -54,6 +57,7 @@ namespace Mix.Tenancy.Domain.Services
             _appSettingsService.SetConfig(nameof(AppSettingsModel.DefaultCulture), model.Culture.Specificulture);
             _appSettingsService.SetConfig(nameof(AppSettingsModel.DatabaseProvider), model.DatabaseProvider.ToString(), true);
             _configuration[nameof(AppSettingsModel.DatabaseProvider)] = model.DatabaseProvider.ToString();
+            _authConfigService.SetConfig(nameof(MixAuthenticationConfigurations.SecretKey), Guid.NewGuid().ToString("N"), true);
             _databaseService.InitConnectionStrings(model.ConnectionString, model.DatabaseProvider);
             _databaseService.UpdateMixCmsContext();
             _databaseService.SaveSettings();

@@ -1,21 +1,23 @@
 using Microsoft.Extensions.Logging;
+using Mix.Constant.Enums;
+using Mix.Database.Entities.Cms;
+using Mix.Database.Services;
+using Mix.Heart.Enums;
+using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.ViewModels;
 using ModelContextProtocol;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
-using Mix.Database.Entities.Cms;
-using Mix.Constant.Enums;
-using Mix.Heart.Enums;
-using Mix.Heart.Helpers;
+using System.Text.RegularExpressions;
 
 namespace Mix.MCP.Lib.Tools
 {
     [McpServerToolType]
     public class MixPostContentTool : BaseMcpTool
     {
-        public MixPostContentTool(UnitOfWorkInfo<MixCmsContext> cmsUow, ILogger<MixPostContentTool> logger)
-            : base(cmsUow, logger) { }
+        public MixPostContentTool(AppSettingsService appSettingsService, UnitOfWorkInfo<MixCmsContext> cmsUow, ILogger<MixPostContentTool> logger)
+            : base(appSettingsService, cmsUow, logger) { }
 
         [McpServerTool, Description("Create a new post content")]
         public async Task<string> CreatePostContent(
@@ -23,6 +25,7 @@ namespace Mix.MCP.Lib.Tools
             [Description("Post content body")] string content,
             [Description("SEO name for the post")] string seoName,
             [Description("Post excerpt/description")] string? excerpt = null,
+            [Description("Culture code (e.g., 'en-us')")] string? culture = null,
             [Description("Tenant ID")] int tenantId = 1,
             CancellationToken cancellationToken = default)
         {
@@ -42,6 +45,7 @@ namespace Mix.MCP.Lib.Tools
                     SeoName = seoName,
                     Excerpt = excerpt ?? string.Empty,
                     TenantId = tenantId,
+                    Specificulture = culture ?? _appSettingsService.AppSettings.DefaultCulture,
                     CreatedDateTime = DateTime.UtcNow,
                     LastModified = DateTime.UtcNow,
                     Status = MixContentStatus.Published
@@ -75,7 +79,7 @@ namespace Mix.MCP.Lib.Tools
             [Description("New post content body")] string? content = null,
             [Description("New SEO name")] string? seoName = null,
             [Description("New post excerpt/description")] string? excerpt = null,
-            [Description("New content status (0=Preview, 1=Published, 2=Draft)")] int? status = null,
+            [Description("New content status (0=Preview, 1=Published, 2=Draft)")] MixContentStatus? status = null,
             CancellationToken cancellationToken = default)
         {
             if (id <= 0) throw new McpException("ID must be greater than 0.");
@@ -94,7 +98,7 @@ namespace Mix.MCP.Lib.Tools
                 if (!string.IsNullOrWhiteSpace(content)) vm.Content = content;
                 if (!string.IsNullOrWhiteSpace(seoName)) vm.SeoName = seoName;
                 if (excerpt != null) vm.Excerpt = excerpt;
-                if (status.HasValue) vm.Status = (MixContentStatus)status.Value;
+                if (status.HasValue) vm.Status = status.Value;
                 vm.LastModified = DateTime.UtcNow;
                 await vm.SaveAsync(ct);
                 await vm.ExpandView(ct);

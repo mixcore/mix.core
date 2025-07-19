@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Mix.Constant.Constants;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
+using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.Helpers;
 using Mix.Heart.Models;
@@ -24,11 +25,12 @@ namespace Mix.MCP.Lib.Tools
         private IThemeService _themeService;
         protected readonly IMixTenantService _mixTenantService;
         public MixTemplateTool(
+            AppSettingsService appSettingsService,
             IMixTenantService mixTenantService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             ILogger<MixTemplateTool> logger,
             IThemeService themeService)
-            : base(cmsUow, logger)
+            : base(appSettingsService, cmsUow, logger)
         {
             _mixTenantService = mixTenantService;
             _themeService = themeService;

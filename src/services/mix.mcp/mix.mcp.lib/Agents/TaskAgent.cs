@@ -1,7 +1,8 @@
 using Microsoft.Extensions.Logging;
 using Mix.Database.Services;
-using Mix.MCP.Lib.Services.LLM;
+using Mix.MCP.Lib.Models;
 using Mix.MCP.Lib.Services.Knowledge;
+using Mix.MCP.Lib.Services.LLM;
 using Mix.MCP.Lib.Tools;
 using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol.Transport;
@@ -24,7 +25,7 @@ namespace Mix.MCP.Lib.Agents
         private const int MaxTaskHistory = 20;
 
         private readonly Dictionary<string, Func<TaskState, string, Task<string>>> _commandHandlers;
-        
+
         /// <summary>
         /// Initializes a new instance of the TaskAgent class
         /// </summary>
@@ -47,7 +48,7 @@ namespace Mix.MCP.Lib.Agents
         }
 
         /// <inheritdoc />
-        public override async Task<string> ProcessInputAsync(
+        public override async Task<AgentProcessResult> ProcessInputAsync(
             string userInput,
             string deviceId,
             string sessionId = "default",
@@ -70,7 +71,7 @@ namespace Mix.MCP.Lib.Agents
                     var toolResult = await CallMcpToolAsync(toolName, toolParams, cancellationToken);
                     AddToTaskHistory(taskHistory, $"tool:{toolName}", FormatToolArguments(toolParams), toolResult);
                     memory.SetValue(TaskHistoryKey, taskHistory);
-                    return toolResult;
+                    return new AgentProcessResult(true, toolResult);
                 }
 
                 var (command, args) = ParseCommand(userInput);
@@ -82,10 +83,10 @@ namespace Mix.MCP.Lib.Agents
                     TrimTaskHistory(taskHistory);
                     memory.SetValue(TaskStateKey, taskState);
                     memory.SetValue(TaskHistoryKey, taskHistory);
-                    return response;
+                    return new AgentProcessResult(true, response);
                 }
 
-                return await ProcessWithLlmAsync(userInput, taskState, serviceType, cancellationToken);
+                return new AgentProcessResult(true, await ProcessWithLlmAsync(userInput, taskState, serviceType, cancellationToken));
             }
             catch (Exception ex)
             {
@@ -163,32 +164,24 @@ namespace Mix.MCP.Lib.Agents
             var toolList = string.Join("\n", supportedActions.Select(a => $"- {a.MethodName}: {a.Description}"));
 
             // Compose a prompt that includes the context
-            var prompt = string.Format(
-                """
-                You are an AI assistant for a database platform.
-                Read the following context before deciding how to handle the user's request.
+            var prompt = $@"
+    You are an AI assistant for a database platform.
+    Read the following context before deciding how to handle the user's request.
 
-                Context:
-                - { 0}
-            -Last result: { 1}
+    Context:
+    - {stateSummary}
+    - Last result: {lastResult}
 
-            Classify the user's request into one of these supported mcp tools:
-                { 2}
-            User message: "{3}"
-                Respond in this JSON format:
-                {
-                {
-                    "type": "tool" | "chat",
-                  "toolName": "...", // Only if type is tool
-                  "parameters": { { ... } } // Only if type is tool
-                }
-            }
-            """,
-                stateSummary,
-                lastResult,
-                toolList,
-                userInput
-            );
+    Classify the user's request into one of these supported mcp tools:
+    {toolList}
+    User message: ""{userInput}""
+    Respond in this JSON format:
+    {{
+        ""type"": ""tool"" | ""chat"",
+        ""toolName"": ""..."", // Only if type is tool
+        ""parameters"": {{ ... }} // Only if type is tool
+    }}
+";
 
             var llmService = _llmServiceFactory.CreateService(serviceType);
             var response = await llmService.ChatAsync(prompt, "deepseek-chat", 0.2, -1, cancellationToken);

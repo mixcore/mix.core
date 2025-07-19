@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Mix.MCP.Lib.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +17,20 @@ namespace Mix.MCP.Lib.Services.Knowledge
         private readonly IMemoryCache _cache;
         private readonly ILogger<KnowledgeBaseService> _logger;
         private readonly List<KnowledgeEntry> _knowledgeBase;
+        private readonly ResourceLoader _resourceLoader;
         private const string CACHE_PREFIX = "knowledge_";
         private const int CACHE_DURATION_MINUTES = 30;
 
-        public KnowledgeBaseService(IMemoryCache cache, ILogger<KnowledgeBaseService> logger)
+        public KnowledgeBaseService(IMemoryCache cache, ILogger<KnowledgeBaseService> logger, ResourceLoader resourceLoader)
         {
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _resourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
             _knowledgeBase = new List<KnowledgeEntry>();
             
             // Initialize with default knowledge entries
             InitializeDefaultKnowledge();
+            LoadKnowledgeBaseToResources();
         }
 
         public async Task<IEnumerable<KnowledgeEntry>> SearchAsync(
@@ -213,11 +217,55 @@ namespace Mix.MCP.Lib.Services.Knowledge
                     Content = "Content in Mix CMS includes pages, posts, modules, and templates. Each content type has specific workflows and validation rules. Use appropriate content tools for each type.",
                     Category = "content",
                     Source = "system"
+                },
+                new KnowledgeEntry
+                {
+                    Id = "mix_constant_enums",
+                    Title = "Mix.Constant Enums Overview",
+                    Content = "Mix.Constant contains enums for system-wide types, such as: MixTemplateFolderType (Layouts, Pages, Modules, Forms, Edms, Posts, Widgets, Masters), MixContentType (User, Post, Page, Module, Data, Configuration, Language), MixUserStatus (Active, Deactive), MixDbTableType (System, Service, GuidService, AdditionalData, GuidAdditionalData, Association), MixModuleType (Content, Data, ListPost), MixResponseStatus (Ok, BadRequest, UnAuthorized, Forbidden, ServerError), MixQueueProvider (GOOGLE, RABBITMQ, AWS, AZURE, MIX, MQTT), MixDbCommandQueueAction (POST, PUT, PATCH, DELETE, GET), MixPageType (System, Home, Article, ListPost), MixDataType (Integer, Long, Guid, Double, String, Boolean, DateTime, DateTimeLocal, Date, Time, Duration, PhoneNumber, Text, Html, MultilineText, EmailAddress, Password, Url, ImageUrl, CreditCard, PostalCode, Upload, Color, Reference, Custom, Icon, VideoYoutube, TuiEditor, QRCode, BarCode, Tag, Json, Array, ArrayMedia, ArrayRadio), MixMenuItemType (Page, Module, Post, Database, Uri, Home, ListPost), MixStructureType (Page, Module, Post, Database), MixRestStatus (Success, Fail), MixStorageProvider (AZURE_STORAGE_BLOB, CLOUDFLARE, MIX, AWS, GCS), MixAppConfigEnums (Global, Redis, Log, RateLimit, Authentication, Portal, EPPlus, IPSecurity, MixHeart, Quartz, Azure, Ocelot, Queue, Storage, Smtp, Endpoint, Payments, Google, GoogleCredential), MixDbTableParentType (MixDatabse, Post, Page, Module, User, Role), MixQueueMessageLogState (ACK, NACK, DEADLETTER, FAILED), MixCalculateOperatorKind (Add, Subtract, Multiply, Divide, Modulo, Has), MixLogicalOperatorKind (Or, And), MixEncryptType (AES, RSA), MixRestAction (Get, Post, Put, Patch, Delete), MixDbTableRelationshipType (OneToMany, ManyToMany).",
+                    Category = "reference",
+                    Source = "system"
+                },
+                new KnowledgeEntry
+                {
+                    Id = "mix_constant_constants",
+                    Title = "Mix.Constant Constants Overview",
+                    Content = "Mix.Constant provides system-wide constants, such as connection string keys (e.g., CONST_AUDIT_LOG_CONNECTION, CONST_QUEUE_LOG_CONNECTION), file paths (e.g., CONST_FILE_CONFIGURATIONS, CONST_FILE_ATTRIBUTE_SETS), section names (e.g., CONST_SECTION_LOGGING), default values (e.g., CONST_DEFAULT_AVATAR, CONST_DEFAULT_PAGESIZE), environment keys (SERVICE_NAME, API_ENCRYPT_KEY, DEFAULT_CULTURE, etc.), global setting names (Endpoint, Portal, Authentication, Smtp, Database, Heart, Ip, Translator, Google, FirebaseCredential, GcsCredential), template folders (Masters, Layouts, Pages, Posts, Modules, Forms, Edms), and default template names (Master, Page, Post, Module).",
+                    Category = "reference",
+                    Source = "system"
+                },
+                new KnowledgeEntry
+                {
+                    Id = "mix_app_settings_section",
+                    Title = "MixAppSettingsSection Constants",
+                    Content = "MixAppSettingsSection defines configuration section names: MessageQueueSettings, Database, MixConfigurations, Authentication, IpSecuritySettings, GlobalSettings, Smtp, MixHeart, Google, GoogleStorageCredential, Payments, Azure, LogSettings, ConnectionStrings, Redis.",
+                    Category = "reference",
+                    Source = "system"
+                },
+                new KnowledgeEntry
+                {
+                    Id = "mix_app_config_file_paths",
+                    Title = "MixAppConfigFilePaths Constants",
+                    Content = "MixAppConfigFilePaths provides file path constants for app configs: Authentication, AppConfigs, Shared, IdentityRSAKey, Database, Culture, ConnectionString, MixConfigurations, Translator, Configration, Global, Portal, EPPlus, IPSecurity, MixHeart, Quartz, Smtp, Endpoint, Azure, Ocelot, Storage, Queue, Payments, Redis, Log, RateLimit, Google, GoogleCredential.",
+                    Category = "reference",
+                    Source = "system"
                 }
             };
 
             _knowledgeBase.AddRange(defaultEntries);
             _logger.LogInformation("Initialized knowledge base with {Count} default entries", defaultEntries.Length);
+        }
+
+        private void LoadKnowledgeBaseToResources()
+        {
+            // Add all knowledge entries to the ResourceLoader under a section "KnowledgeBase"
+            var section = "KnowledgeBase";
+            foreach (var entry in _knowledgeBase)
+            {
+                // Use entry.Id as key, entry.Title + ": " + entry.Content as value
+                _resourceLoader.AddOrUpdateResource(section, entry.Id, $"{entry.Title}: {entry.Content}");
+            }
+            _logger.LogInformation("Loaded {Count} knowledge entries into MCP resources", _knowledgeBase.Count);
         }
 
         private static double CalculateRelevance(KnowledgeEntry entry, string queryLower)

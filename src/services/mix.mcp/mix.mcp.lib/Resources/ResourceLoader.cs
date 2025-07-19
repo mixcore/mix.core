@@ -84,6 +84,22 @@ namespace Mix.MCP.Lib.Resources
             return string.Format(template, args);
         }
 
+        /// <summary>
+        /// Add or update a resource value in a section at runtime
+        /// </summary>
+        /// <param name="section">Section name</param>
+        /// <param name="key">Resource key</param>
+        /// <param name="value">Resource value</param>
+        public void AddOrUpdateResource(string section, string key, string value)
+        {
+            if (!_resources.ContainsKey(section))
+            {
+                _resources[section] = new Dictionary<string, string>();
+            }
+            _resources[section][key] = value;
+            _logger.LogDebug("Resource added/updated: {Section}.{Key}", section, key);
+        }
+
         private void LoadResourcesFromEmbeddedFile()
         {
             try

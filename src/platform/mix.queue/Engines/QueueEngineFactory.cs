@@ -74,7 +74,7 @@ namespace Mix.Queue.Engines
                     subscriber = new GoogleQueueSubscriber<T>(configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:GoogleQueueSetting").Get<GoogleQueueSetting>(), topicId, subscriptionId, handler);
                     break;
                 case MixQueueProvider.MIX:
-                    subscriber = new MixQueueSubscriber<T>(configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:Mix").Get<MixQueueSetting>(), topicId, subscriptionId, handler, memQueues, mixEndpointService);
+                    subscriber = new MixQueueSubscriber<T>(configuration, topicId, subscriptionId, handler, memQueues, mixEndpointService);
                     break;
                 case MixQueueProvider.MQTT:
                     subscriber = new MqttSubscriber<T>(configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:MQTT").Get<MQTTSetting>(), topicId, handler);

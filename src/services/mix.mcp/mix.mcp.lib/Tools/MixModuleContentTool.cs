@@ -1,28 +1,30 @@
 using Microsoft.Extensions.Logging;
-using Mix.Heart.UnitOfWork;
-using System.ComponentModel;
-using Mix.Database.Entities.Cms;
 using Mix.Constant.Enums;
+using Mix.Database.Entities.Cms;
+using Mix.Database.Services;
 using Mix.Heart.Enums;
-using Mix.Portal.Domain.ViewModels;
-using ModelContextProtocol.Server;
-using ModelContextProtocol;
 using Mix.Heart.Helpers;
+using Mix.Heart.UnitOfWork;
+using Mix.Portal.Domain.ViewModels;
+using ModelContextProtocol;
+using ModelContextProtocol.Server;
+using System.ComponentModel;
 
 namespace Mix.MCP.Lib.Tools
 {
     [McpServerToolType]
     public class MixModuleContentTool : BaseMcpTool
     {
-        public MixModuleContentTool(UnitOfWorkInfo<MixCmsContext> cmsUow, ILogger<MixModuleContentTool> logger)
-            : base(cmsUow, logger) { }
+        public MixModuleContentTool(AppSettingsService appSettingsService, UnitOfWorkInfo<MixCmsContext> cmsUow, ILogger<MixModuleContentTool> logger)
+            : base(appSettingsService, cmsUow, logger) { }
 
         [McpServerTool, Description("Create a new module content")]
         public async Task<string> CreateModuleContent(
             [Description("Module title")] string title,
             [Description("System name")] string systemName,
             [Description("Module excerpt/description")] string? excerpt = null,
-            [Description("Module type")] int type = 0,
+            [Description("Module type")] MixModuleType type = 0,
+            [Description("Culture code (e.g., 'en-us')")] string? culture = null,
             [Description("Page size")] int? pageSize = null,
             [Description("Tenant ID")] int tenantId = 1,
             CancellationToken cancellationToken = default)
@@ -42,7 +44,8 @@ namespace Mix.MCP.Lib.Tools
                     Excerpt = excerpt ?? string.Empty,
                     TenantId = tenantId,
                     PageSize = pageSize,
-                    Type = (MixModuleType)type,
+                    Type = type,
+                    Specificulture = culture ?? _appSettingsService.AppSettings.DefaultCulture,
                     CreatedDateTime = DateTime.UtcNow,
                     LastModified = DateTime.UtcNow,
                     Status = MixContentStatus.Published
