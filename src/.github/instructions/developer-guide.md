@@ -1,9 +1,9 @@
-# Senior C# Developer Prompt for Mix CMS MCP Tools
+# Mix CMS Developer Guide
 
-## Context
-You are a senior C# developer working on Mix CMS, a Razor Pages application built with .NET 9 and C# 13.0. You're developing MCP (Model Context Protocol) tools for CRUD operations and content management.
+## Overview
+Technical guide for C# developers working on Mix CMS, focusing on .NET 9, Razor Pages, and MCP tool development.
 
-## Current Tech Stack
+## Technology Stack
 - **Framework**: ASP.NET Core Razor Pages (.NET 9)
 - **Language**: C# 13.0 with nullable reference types
 - **Database**: MySQL with Entity Framework Core
@@ -13,14 +13,14 @@ You are a senior C# developer working on Mix CMS, a Razor Pages application buil
 
 ## Development Guidelines
 
-### Code Style
+### Code Standards
 - Use nullable reference types consistently
 - Prefer `string.Empty` over `null` for string properties
 - Follow Mix naming conventions (Mix prefix for enums)
 - Use proper validation attributes on models
 - Implement robust error handling and logging
 
-### Razor Pages Patterns
+### Razor Pages Best Practices
 - Create PageModel classes with proper model binding
 - Use `[BindProperty]` for form data
 - Implement proper validation with `ModelState`
@@ -48,15 +48,71 @@ You are a senior C# developer working on Mix CMS, a Razor Pages application buil
 - Add search and filtering capabilities
 - Include bulk operations where appropriate
 
-## Example Structure Requests
-When asking for code, specify:
+## MCP Tools Implemented
+
+### Core Content Tools
+- **MixPageContentTool**: CRUD operations for pages with SEO and layout support
+- **MixTemplateTool**: Template management with file handling and theme support
+- **MixPostContentTool**: Blog post management with status and categorization
+- **MixModuleContentTool**: Reusable component management
+
+### Data Management Tools
+- **MixDbDataTool**: Dynamic database operations with query building
+- **MixDbPromptTool**: AI-powered schema creation from natural language
+
+### All tools feature:
+- Async/await patterns with proper error handling
+- Tenant-aware architecture
+- Comprehensive logging and validation
+- Consistent API patterns
+- Integration-ready design
+
+## Code Examples
+
+### Basic MCP Tool Structure
+```csharp
+[McpServerToolType]
+public class ExampleTool : BaseTool
+{
+    [McpServerTool, Description("Tool description")]
+    public async Task<string> ExampleMethod(
+        [Description("Parameter description")] string parameter)
+    {
+        return await ExecuteWithExceptionHandlingAsync(async (ct) =>
+        {
+            // Implementation
+            return result;
+        }, "ExampleMethod");
+    }
+}
+```
+
+### ViewModel Pattern
+```csharp
+public class ExampleViewModel : ViewModelBase<ExampleEntity>
+{
+    // Business logic here
+    public override async Task<bool> SaveModelAsync(
+        bool isSaveSubModels = false, 
+        CancellationToken cancellationToken = default)
+    {
+        // Custom save logic
+        return await base.SaveModelAsync(isSaveSubModels, cancellationToken);
+    }
+}
+```
+
+## Request Structure Examples
+
+When requesting code, specify:
 - "Create a Razor Page for [specific function]"
 - "Build an MCP tool for [specific CRUD operation]"
 - "Implement a service class for [specific functionality]"
 - "Add validation for [specific model/scenario]"
 - "Create entity configuration for [specific entity]"
 
-## Focus Areas
+## Development Focus Areas
+
 1. **Performance**: Optimize database queries and async operations
 2. **Security**: Implement proper authorization and input validation
 3. **Maintainability**: Follow SOLID principles and clean architecture

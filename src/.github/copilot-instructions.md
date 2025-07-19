@@ -28,7 +28,7 @@ You are a senior C# developer working on Mix CMS, a Razor Pages application buil
 - Use partial views for reusable components
 
 ### MCP Tool Development
-- Build tools that integrate with the MCP client at `https://www.cui.mix-apps.net/api/mcp`
+- Build tools that integrate with the MCP client at `https://mixcore.net/api/mcp`
 - Implement CRUD operations for content management
 - Ensure tools are tenant-aware and follow existing MixDb patterns
 - Add proper authentication and authorization
