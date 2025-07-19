@@ -135,14 +135,17 @@ If your page has a list of similar items, don't hard-code them. Create a databas
     @using Mix.Shared.Models
     @using Mix.Shared.Dtos
     @using Mix.Constant.Enums
+    @using Mix.Constant.Constants
     ```
 2.  **Inject the service** after the using statements:
     ```razor
-    @inject IMixDbDataService MixDbDataService
+    @inject Mix.Database.Services.MixGlobalSettings.DatabaseService dbSrv;
+    @inject IMixDbDataServiceFactory mixDbDataServiceFactory
     ```
 3.  **Fetch the data** inside a code block:
     ```csharp
     @{
+        var mixDbDataService = mixDbDataServiceFactory.Create(dbSrv.DatabaseProvider, dbSrv.GetConnectionString(MixConstants.CONST_CMS_CONNECTION));
         var request = new SearchMixDbRequestModel
         {
             TableName = "mix_menu_items",
@@ -151,7 +154,7 @@ If your page has a list of similar items, don't hard-code them. Create a databas
                 new MixQueryField { FieldName = "is_featured", Value = true, CompareOperator = MixCompareOperator.Equal }
             }
         };
-        var menuItems = await MixDbDataService.GetListByAsync(request);
+        var menuItems = await mixDbDataServiceFactory.GetListByAsync(request);
     }
     ```
     
@@ -207,8 +210,14 @@ If your page has a list of similar items, don't hard-code them. Create a databas
 
 ## 4. Best Practices & Key Reminders
 
+-   **Check MCP Tool Support First:** Before executing any task, check if there's an existing MCP tool that can help accomplish it. Use `ListSections` to explore available tools and resources.
+-   **Database Schema Documentation:** When creating new tables, document the schema in your project's `DATABASE_SCHEMA.md` file. Include table name, columns, data types, and relationships. Use `GetTableSchema` to retrieve schema details.
+-   **Schema Verification for Content Rendering:** Before creating content that loads data from MixDb, always check the database schema using `GetTableSchema` to ensure you understand the structure. This ensures you use the correct field names when rendering data in templates.
 -   **Master Layouts First:** Always create your `folderType: 7` Master Layout before creating pages.
--   **Template Extensions:** All template files must use the `.cshtml` extension (e.g., `"HomePage.cshtml"`, `"MasterLayout.cshtml"`).
+-   **Template Naming:**
+    - The `extension` parameter must be `.cshtml` (e.g., `".cshtml"`)
+    - The `fileName` parameter should NOT include `.cshtml` (e.g., `"HomePage"`, not `"HomePage.cshtml"`)
+    - The system will automatically combine them to create the full filename
 -   **Required Using Statements:** When using MixDb data in templates, always include these using statements at the top:
     ```razor
     @using Mix.Mixdb.Interfaces
@@ -236,6 +245,7 @@ If your page has a list of similar items, don't hard-code them. Create a databas
 -   **Page is missing header/footer:** You likely forgot to assign the `layoutId` when you created the page with `CreatePageContent`. You can fix this with `UpdatePageContent`.
 -   **Styles look broken:** Make sure your Master Layout includes the required Razor sections mentioned above.
 -   **Data not displaying:** Check that you have the correct using statements, service injection, and that your `SearchMixDbRequestModel` uses the right property names (`FieldName`, `CompareOperator`).
+-   **Incorrect field names in templates:** If you're seeing null values or errors when rendering data, verify the database schema using `GetTableSchema` to ensure you're using the correct field names. Field names are case-sensitive.
 -   **Wrong comparison operator:** Use `MixCompareOperator.Equal`, `MixCompareOperator.Like`, `MixCompareOperator.LessThan`, etc. (not `ExpressionMethod`).
 
 ### MCP Response Format
