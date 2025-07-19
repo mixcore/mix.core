@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Exceptions;
+using Mix.Lib.Extensions;
 using Mix.Mq.Lib.Models;
 using Mix.Mqtt.Lib.Models;
 using Mix.Queue.Engines.RabbitMQ;
@@ -52,6 +53,10 @@ namespace Mix.Queue.Engines
         {
             try
             {
+                if (string.IsNullOrEmpty(Configuration.BaseUrl()))
+                {
+                    return default;
+                }
                 var queuePublishers = new List<IQueuePublisher<MessageQueueModel>>();
                 var providerSetting = Configuration[$"{MixAppSettingsSection.MessageQueueSettings}:Provider"];
                 if (string.IsNullOrEmpty(providerSetting))

@@ -62,3 +62,56 @@ When asking for code, specify:
 3. **Maintainability**: Follow SOLID principles and clean architecture
 4. **Testing**: Include unit tests and integration tests
 5. **Documentation**: Add XML comments and clear method signatures
+
+## Git Commit Guidelines
+
+### Commit Message Header
+
+```
+<type>(<scope>): <short summary>
+  │       │             │
+  │       │             └─⫸ Summary in present tense. Not capitalized. No period at the end.
+  │       │
+  │       └─⫸ Commit Scope: repo|misc|release|<app-name>|<lib-name>
+  │
+  └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|style|test
+```
+
+The `<type>` and `<summary>` fields are mandatory, the `(<scope>)` field is optional.
+
+### Type
+
+Must be one of the following:
+
+* **build**: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+* **ci**: Changes to our CI configuration files and scripts (example scopes: Circle, BrowserStack, SauceLabs)
+* **docs**: Documentation only changes
+* **feat**: A new feature
+* **fix**: A bug fix
+* **perf**: A code change that improves performance
+* **refactor**: A code change that neither fixes a bug nor adds a feature
+* **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+* **test**: Adding missing tests or correcting existing tests
+
+### Scope
+
+The scope should be the name of the npm package affected (as perceived by the person reading the changelog generated from commit messages).
+
+Common scopes for this project:
+* **mcp**: MCP tools and services
+* **mixdb**: Database operations and entities
+* **portal**: Admin portal functionality
+* **auth**: Authentication and authorization
+* **templates**: Template system
+* **content**: Content management
+* **api**: API endpoints
+
+### Examples
+
+```
+feat(mcp): add database creation tool with LLM integration
+fix(mixdb): resolve tenant isolation issue in data queries
+docs(instructions): update MCP tool reference documentation
+refactor(portal): simplify page creation workflow
+test(auth): add unit tests for role-based authorization
+```

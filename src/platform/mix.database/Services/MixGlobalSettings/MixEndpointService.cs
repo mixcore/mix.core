@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Settings;
+using Mix.Lib.Extensions;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mix.Database.Services.MixGlobalSettings
 {
@@ -16,7 +18,7 @@ namespace Mix.Database.Services.MixGlobalSettings
         protected override void LoadAppSettings()
         {
             base.LoadAppSettings();
-            Endpoints = AppSettings.Properties().Select(m => m.Value.ToString()).ToArray();
+            Endpoints = AppSettings.Properties().Select(m => m.Value.ToString()).ToArray();           
         }
 
         public string[] Endpoints;
@@ -28,7 +30,7 @@ namespace Mix.Database.Services.MixGlobalSettings
 
         public string DefaultBaseUrl
         {
-            get => GetConfig<string?>(MixModuleNames.Default) ?? _configuration.GetValue<string>("BaseUrl");
+            get => GetConfig<string?>(MixModuleNames.Default) ?? _configuration.BaseUrl();
         }
         public string MixMq
         {

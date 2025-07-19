@@ -1,24 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Mix.Shared.Extensions;
+using Microsoft.Extensions.Hosting.Internal;
+using Mix.Auth.Constants;
+using Mix.Auth.Models;
+using Mix.Database.Services;
+using Mix.Database.Services.MixGlobalSettings;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
+using Mix.Mq.Lib.Models;
+using Mix.Quartz.Interfaces;
 using Mix.Queue.Interfaces;
+using Mix.Service.Models;
+using Mix.Shared.Extensions;
+using Mix.Shared.Models.Configurations;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
 using Mix.Tenancy.Domain.Dtos;
+using Mix.Tenancy.Domain.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Mix.Lib.Interfaces;
-using Mix.Tenancy.Domain.Interfaces;
-using Mix.Quartz.Interfaces;
-using Mix.Auth.Models;
-using Mix.Auth.Constants;
-using Mix.Mq.Lib.Models;
-using Mix.Shared.Models.Configurations;
-using Mix.Database.Services.MixGlobalSettings;
-using Mix.Service.Models;
-using Mix.Database.Services;
 
 namespace Mix.Tenancy.Controllers
 {
@@ -27,7 +28,7 @@ namespace Mix.Tenancy.Controllers
     public class InitApiController : MixTenantApiControllerBase
     {
         private readonly AppSettingsService _appSettingsService;
-        private readonly GlobalSettingsService _globalSettingsService;
+        private readonly AuthConfigService _authConfigService;
         private readonly DatabaseService _databaseService;
         private readonly MixEndpointService _mixEndpointService;
         private readonly IMixTenantService _mixTenantService;
@@ -39,7 +40,7 @@ namespace Mix.Tenancy.Controllers
         private readonly UnitOfWorkInfo<MixCmsContext> _uow;
 
         protected readonly IHubContext<MixThemeHub> HubContext;
-
+        private readonly ApplicationLifetime _applicationLifetime;
         public InitApiController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -57,7 +58,8 @@ namespace Mix.Tenancy.Controllers
             UnitOfWorkInfo<MixCmsContext> uow = null,
             DatabaseService databaseService = null,
             AppSettingsService appSettingsService = null,
-            GlobalSettingsService globalSettingsService = null)
+            AuthConfigService authConfigService = null,
+            ApplicationLifetime applicationLifetime = null)
             : base(httpContextAccessor, configuration,
                   cacheService, mixIdentityService, queueService, mixTenantService)
         {
@@ -73,7 +75,8 @@ namespace Mix.Tenancy.Controllers
             _uow = uow;
             _databaseService = databaseService;
             _appSettingsService = appSettingsService;
-            _globalSettingsService = globalSettingsService;
+            _authConfigService = authConfigService;
+            _applicationLifetime = applicationLifetime;
         }
 
         #region Routes
@@ -107,6 +110,7 @@ namespace Mix.Tenancy.Controllers
                 _appSettingsService.SetConfig(nameof(AppSettingsModel.DatabaseProvider), model.DatabaseProvider.ToString());
                 _appSettingsService.SetConfig(nameof(AppSettingsModel.InitStatus), InitStep.InitAccount);
                 _appSettingsService.SaveSettings();
+                _authConfigService.SaveSettings();
                 return Ok();
             }
             catch (Exception ex)
@@ -221,6 +225,8 @@ namespace Mix.Tenancy.Controllers
             await _configService.Reload(CurrentTenant.Id, _uow);
             _appSettingsService.SetConfig(nameof(AppSettingsModel.InitStatus), InitStep.Done);
             _appSettingsService.SetConfig(nameof(AppSettingsModel.IsInit), false, true);
+            // force restart application to init hosted services
+            _applicationLifetime.StopApplication();
             return Ok(result);
         }
 

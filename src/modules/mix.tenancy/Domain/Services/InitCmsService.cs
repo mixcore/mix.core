@@ -27,7 +27,7 @@ namespace Mix.Tenancy.Domain.Services
         private readonly AuthConfigService _authConfigService;
         private readonly MixCmsContext _context;
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
-        protected readonly IConfiguration _configuration;
+        protected IConfiguration _configuration;
         public InitCmsService(
             TenantUserManager userManager,
             MixIdentityService identityService,
@@ -53,10 +53,11 @@ namespace Mix.Tenancy.Domain.Services
 
         public Task InitDbContext(InitCmsDto model)
         {
+            _configuration[nameof(AppSettingsModel.DatabaseProvider)] = model.DatabaseProvider.ToString();
+            _configuration.GetSection(nameof(AppSettingsModel.ConnectionStrings))[MixConstants.CONST_SETTINGS_CONNECTION] = model.ConnectionString;
             _appSettingsService.SetConnnectionString(MixConstants.CONST_SETTINGS_CONNECTION, model.ConnectionString);
             _appSettingsService.SetConfig(nameof(AppSettingsModel.DefaultCulture), model.Culture.Specificulture);
             _appSettingsService.SetConfig(nameof(AppSettingsModel.DatabaseProvider), model.DatabaseProvider.ToString(), true);
-            _configuration[nameof(AppSettingsModel.DatabaseProvider)] = model.DatabaseProvider.ToString();
             _authConfigService.SetConfig(nameof(MixAuthenticationConfigurations.SecretKey), Guid.NewGuid().ToString("N"), true);
             _databaseService.InitConnectionStrings(model.ConnectionString, model.DatabaseProvider);
             _databaseService.UpdateMixCmsContext();

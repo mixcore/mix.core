@@ -7,6 +7,7 @@ using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Services;
+using Mix.Lib.Extensions;
 using Mix.Mq.Lib.Models;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Engines.RabbitMQ;
@@ -62,6 +63,11 @@ namespace Mix.Queue.Engines
             cancellationToken.ThrowIfCancellationRequested();
 
             _subscriber = CreateSubscriber(_topicId, $"{_topicId}.{_moduleName}");
+            
+            if(string.IsNullOrEmpty(_configuration.BaseUrl()))
+            {
+                return;
+            }
 
             if (_subscriber == null)
             {
