@@ -34,7 +34,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Creating module content with title: {Title}, SystemName: {SystemName}", title, systemName);
-                var repo = MixModuleContentViewModel.GetRepository(_cmsUow, null);
+                var repo = MixModuleContentViewModel.GetRepository(_cmsUow, _cacheService);
                 var exists = repo.GetListQuery(m => m.SystemName == systemName && m.TenantId == tenantId, ct).Any();
                 if (exists) throw new McpException($"A module with system name '{systemName}' already exists.");
                 var vm = new MixModuleContentViewModel(_cmsUow)
@@ -65,7 +65,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Retrieving module content with ID: {Id}", id);
-                var vm = await MixModuleContentViewModel.GetRepository(_cmsUow, null).GetFirstAsync(m => m.Id == id, ct);
+                var vm = await MixModuleContentViewModel.GetRepository(_cmsUow, _cacheService).GetFirstAsync(m => m.Id == id, ct);
                 if (vm == null) throw new McpException($"Module content with ID {id} not found.");
                 await vm.ExpandView(ct);
                 return ReflectionHelper.ParseObject(new { Success = true, Data = vm }).ToString(Newtonsoft.Json.Formatting.None);
@@ -87,11 +87,11 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Updating module content with ID: {Id}", id);
-                var vm = await MixModuleContentViewModel.GetRepository(_cmsUow, null).GetFirstAsync(m => m.Id == id, ct);
+                var vm = await MixModuleContentViewModel.GetRepository(_cmsUow, _cacheService).GetFirstAsync(m => m.Id == id, ct);
                 if (vm == null) throw new McpException($"Module content with ID {id} not found.");
                 if (!string.IsNullOrWhiteSpace(systemName) && systemName != vm.SystemName)
                 {
-                    var repo = MixModuleContentViewModel.GetRepository(_cmsUow, null);
+                    var repo = MixModuleContentViewModel.GetRepository(_cmsUow, _cacheService);
                     var exists = repo.GetListQuery(m => m.SystemName == systemName && m.TenantId == vm.TenantId && m.Id != id, ct).Any();
                     if (exists) throw new McpException($"A module with system name '{systemName}' already exists.");
                 }
@@ -119,7 +119,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Deleting module content with ID: {Id}", id);
-                var repo = MixModuleContentViewModel.GetRepository(_cmsUow, null);
+                var repo = MixModuleContentViewModel.GetRepository(_cmsUow, _cacheService);
                 var vm = await repo.GetFirstAsync(m => m.Id == id, ct);
                 if (vm == null) throw new McpException($"Module content with ID {id} not found.");
                 await repo.DeleteAsync(id, ct);
@@ -141,7 +141,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Listing module contents with keyword: {Keyword}, type: {Type}", keyword, type);
-                var repo = MixModuleContentViewModel.GetRepository(_cmsUow, null);
+                var repo = MixModuleContentViewModel.GetRepository(_cmsUow, _cacheService);
                 var query = repo.GetListQuery(m => true, ct);
                 if (!string.IsNullOrWhiteSpace(keyword))
                     query = query.Where(m => m.Title.Contains(keyword) || m.SystemName.Contains(keyword));
