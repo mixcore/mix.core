@@ -33,7 +33,7 @@ This process is designed to align with the specialized documentation provided in
 **Process:**
 1.  **Follow Step-by-Step Workflows:** Use the detailed workflows in **`mix-ai-agent.md`** to perform tasks like creating databases, defining content structures, and generating pages.
 2.  **Utilize MCP Commands:** Execute MCP commands to interact with the CMS programmatically. This is the primary method for AI-driven development.
-3.  **Handle Repetitive Content Dynamically:** When modules contain repetitive items (like product lists, team members, testimonials, or menu items), create a MixDb table instead of hard-coding the data. Use `CreateDatabaseFromPrompt` to define the structure and render the data dynamically in your templates.
+3.  **Handle Repetitive Content Dynamically:** When modules contain repetitive items (like product lists, team members, testimonials, or service offerings), create a MixDb table instead of hard-coding the data. Use `CreateDatabaseFromPrompt` to define the structure and render the data dynamically in your templates.
 4.  **Troubleshoot and Refine:** Use the troubleshooting guide within the AI agent documentation to resolve common issues.
 
 **Key Document:**
@@ -83,7 +83,7 @@ This process is designed to align with the specialized documentation provided in
 - Product listings
 - Team member profiles
 - Testimonials or reviews
-- Menu items (restaurant, navigation, etc.)
+- Service offerings (navigation, feature lists, etc.)
 - Service offerings
 - Portfolio items
 - FAQ entries

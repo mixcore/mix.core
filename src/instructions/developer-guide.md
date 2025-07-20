@@ -28,7 +28,7 @@ Technical guide for C# developers working on Mix CMS, focusing on .NET 9, Razor 
 - Use partial views for reusable components
 
 ### MCP Tool Development
-- Build tools that integrate with the MCP client at `https://mixcore.net/api/mcp`
+- Build tools that integrate with the MCP client infrastructure
 - Implement CRUD operations for content management
 - Ensure tools are tenant-aware and follow existing MixDb patterns
 - Add proper authentication and authorization
@@ -105,11 +105,11 @@ public class ExampleViewModel : ViewModelBase<ExampleEntity>
 ## Request Structure Examples
 
 When requesting code, specify:
-- "Create a Razor Page for [specific function]"
-- "Build an MCP tool for [specific CRUD operation]"
-- "Implement a service class for [specific functionality]"
-- "Add validation for [specific model/scenario]"
-- "Create entity configuration for [specific entity]"
+- "Create a Razor Page for [functionality]"
+- "Build an MCP tool for [CRUD operation]"
+- "Implement a service class for [business logic]"
+- "Add validation for [data model/scenario]"
+- "Create entity configuration for [database entity]"
 
 ## Development Focus Areas
 

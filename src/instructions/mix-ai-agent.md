@@ -14,13 +14,13 @@ Templates define how your content looks. Think of them as reusable blueprints. W
 
 -   **Master Layouts (`folderType: 7`):** The main skeleton of your site. This is where your site-wide header, footer, and navigation live. **Every page needs one.**
 -   **Page Templates (`folderType: 1`):** The layout for a specific type of page, like a blog post or a contact page. It defines the content area within the Master Layout.
--   **Modules (`folderType: 2`):** Reusable blocks of content, like a "Contact Us" form or an image gallery that can be placed on any page.
+-   **Modules (`folderType: 2`):** Reusable blocks of content, like a contact form or an image gallery that can be placed on any page.
 
 ### Content: The Information on Your Pages
 
--   **Pages (`CreatePageContent`):** The actual webpages that your visitors see, like "Home" or "About Us". Each page uses a Page Template and a Master Layout to display its content. The `content` parameter should include HTML that will be rendered in the template.
+-   **Pages (`CreatePageContent`):** The actual webpages that your visitors see, like "Home" or "About". Each page uses a Page Template and a Master Layout to display its content. The `content` parameter should include HTML that will be rendered in the template.
 -   **Posts (`CreatePostContent`):** Used for blog entries or news articles. The `content` parameter should include HTML for the post body that will be rendered in the template.
--   **Custom Data (`CreateDatabaseFromPrompt`):** For lists of things, like menu items, products, or staff profiles. Instead of hard-coding them into a page, you can store them in a database table and display them dynamically.
+-   **Custom Data (`CreateDatabaseFromPrompt`):** For lists of things, like products, team members, or service offerings. Instead of hard-coding them into a page, you can store them in a database table and display them dynamically.
 
 ---
 
@@ -53,7 +53,7 @@ You have a set of powerful tools (MCP commands) to create and manage your site.
 ### For Managing Data
 
 -   `CreateDatabaseFromPrompt`: Create a new database table from a simple description.
--   `CreateManyMixDbData`: Add multiple records (e.g., menu items) to a table at once.
+-   `CreateManyMixDbData`: Add multiple records (e.g., products, services) to a table at once.
 -   `GetListMidxDbData`: Fetch data from a table to display on a page.
 
 ---
@@ -88,40 +88,103 @@ Follow these three steps to create a fully functional webpage.
 
 -   **Tool:** `CreatePageContent`
 -   **Parameters:**
-    -   `title`: "Welcome to our Restaurant"
-    -   `content`: The HTML content that will be rendered in the template (e.g., `"<h1>Welcome</h1><p>Our restaurant serves amazing food...</p>"`)
+    -   `title`: "Welcome to Our Website"
+    -   `content`: The HTML content that will be rendered in the template (e.g., `"<h1>Welcome</h1><p>Our company provides excellent services...</p>"`)
     -   `seoName`: "home" (this becomes the URL, e.g., `yoursite.com/home`)
     -   `templateId`: The ID of the **Page Template** from Step 2.
     -   `layoutId`: The ID of the **Master Layout** from Step 1.
     -   `tenantId: 1`
 
-### How to Create Reusable Modules
+### How to Create Reusable Modules with Dynamic Data
 
-For reusable components like contact forms, image galleries, or content blocks:
+For reusable components that display dynamic content from database tables:
 
-**Step 1: Create the Module Template**
--   **Tool:** `CreateTemplate`
--   **Parameters:**
-    -   `folderType: 2` (Modules)
-    -   `fileName`: "ContactForm.cshtml"
-    -   `mixThemeId: 1`
-    -   `content`: Start with `@model Mixcore.Domain.ViewModels.ModuleContentViewModel` and add your module HTML
+**Step 1: Create Database Table**
+```csharp
+CreateDatabaseFromPrompt(
+    displayName: "Services",
+    schemaDescription: "A table for services with fields: name (text), description (text), icon (text)"
+)
+```
 
-**Step 2: Create the Module Content**
--   **Tool:** `CreateModuleContent`
--   **Parameters:**
-    -   `title`: "Contact Form"
-    -   `excerpt`: The HTML content that will be rendered in the module template (e.g., `"<form><input type='email' placeholder='Your email'><button>Submit</button></form>"`)
-    -   `systemName`: "contact_form"
-    -   `tenantId: 1`
+**Step 1.1: Document Database Schema**
+After creating the database, always document the schema in `database-schema.md`:
+```markdown
+## mix_services
+- **objId** (int) - Primary key, auto-increment
+- **name** (nvarchar) - Service name
+- **description** (nvarchar) - Service description  
+- **icon** (nvarchar) - CSS icon class
+- **createdDateTime** (datetime) - Record creation timestamp
+- **modifiedDateTime** (datetime) - Last modification timestamp
+```
+Use `GetTableSchema` to verify the exact column names and data types before documenting.
 
-**Step 3: Use in Page Templates**
-Reference modules in your page templates:
+**Step 2: Create Module Template**
+- **Tool:** `CreateTemplate`
+- **Parameters:**
+  - `folderType: 2` (Modules)
+  - `fileName`: "ServiceCard"
+  - `mixThemeId: 1`
+  - `content`: Use this pattern:
 ```razor
- var highlighMdl = Model.GetModule("productHighlight");
- @if(highlighMdl != null){
-    @await Html.PartialAsync(highlighMdl.Template.FilePath, highlighMdl, null);
- }
+@using Mix.Lib.ViewModels
+@using Mix.Mixdb.Interfaces
+@using Mix.Shared.Models
+@using Mix.Shared.Dtos
+@using Mix.Constant.Enums
+@using Mix.Constant.Constants
+
+@inject Mix.Database.Services.MixGlobalSettings.DatabaseService dbSrv;
+@inject IMixDbDataServiceFactory mixDbDataServiceFactory
+@{
+    var mixDbDataService = mixDbDataServiceFactory.Create(dbSrv.DatabaseProvider, dbSrv.GetConnectionString(MixConstants.CONST_CMS_CONNECTION));
+    var request = new SearchMixDbRequestModel
+    {
+        TableName = "mix_services",
+        Queries = new List<MixQueryField>()
+    };
+    var services = await mixDbDataService.GetListByAsync(request);
+}
+@foreach (var service in services)
+{
+  <div class="card">
+    <div class="card-body">
+      <i class="@service["icon"]"></i>
+      <h3>@service["name"]</h3>
+      <p>@service["description"]</p>
+    </div>
+  </div>
+}
+```
+
+**Step 3: Include Module in Page Template**
+```razor
+@await Html.PartialAsync("../Modules/ServiceCard.cshtml")
+```
+
+**Complete Example: Services Page**
+```razor
+@using Mix.Lib.ViewModels
+@model dynamic
+
+<div class="container">
+    <!-- Services Section -->
+    <section>
+        <h2>Our Services</h2>
+        <div class="grid">
+            @await Html.PartialAsync("../Modules/ServiceCard.cshtml")
+        </div>
+    </section>
+    
+    <!-- Testimonials Section --> 
+    <section>
+        <h2>Testimonials</h2>
+        <div class="grid">
+            @await Html.PartialAsync("../Modules/Testimonial.cshtml")
+        </div>
+    </section>
+</div>
 ```
 
 ### How to Create Blog Posts
@@ -139,26 +202,40 @@ For blog entries or news articles:
 **Step 2: Create the Post Content**
 -   **Tool:** `CreatePostContent`
 -   **Parameters:**
-    -   `title`: "My First Blog Post"
-    -   `content`: The HTML content for the post body (e.g., `"<p>This is the main content of my blog post...</p>"`)
+    -   `title`: "Getting Started with Our Platform"
+    -   `content`: The HTML content for the post body (e.g., `"<p>This is the main content of our post...</p>"`)
     -   `excerpt`: Brief HTML summary for the post (e.g., `"<p>A short summary of this post...</p>"`)
-    -   `seoName`: "my-first-blog-post" (this becomes the URL)
+    -   `seoName`: "getting-started-platform" (this becomes the URL)
     -   `tenantId: 1`
 
-### How to Handle Lists of Items (e.g., a Food Menu)
+### How to Handle Lists of Items (e.g., Product Catalogs)
 
 If your page has a list of similar items, don't hard-code them. Create a database table for them.
 
 **Step 1: Create a Database Table** Use a simple prompt to define the structure of your data.
 
 -   **Tool:** `CreateDatabaseFromPrompt`
--   **Example:** `CreateDatabaseFromPrompt(displayName: "Menu Items", schemaDescription: "A table for menu items with fields for name (text), description (text), and price (decimal)")`
+-   **Example:** `CreateDatabaseFromPrompt(displayName: "Products", schemaDescription: "A table for products with fields for name (text), description (text), and price (decimal)")`
+
+**Step 1.1: Document the Database Schema** After creating the database, always document the schema in `database-schema.md` to ensure you have the correct column names for templates:
+
+```markdown
+## mix_products
+- **objId** (int) - Primary key, auto-increment
+- **name** (nvarchar) - Product name
+- **description** (nvarchar) - Product description
+- **price** (decimal) - Product price
+- **createdDateTime** (datetime) - Record creation timestamp
+- **modifiedDateTime** (datetime) - Last modification timestamp
+```
+
+Use `GetTableSchema(tableName: "mix_products")` to verify the exact column names and data types before documenting.
 
 **Step 2: Add Your Data** Populate the table with your items.
 
 -   **Tool:** `CreateManyMixDbData`
 -   **Parameters:**
-    -   `databaseSystemName`: "mix_menu_items" (the name from Step 1)
+    -   `databaseSystemName`: "mix_products" (the name from Step 1)
     -   `dataJson`: A JSON array of your items.
 
 **Step 3: Display the Data in a Template** Modify your Page or Module template to fetch and display the data.
@@ -182,60 +259,60 @@ If your page has a list of similar items, don't hard-code them. Create a databas
         var mixDbDataService = mixDbDataServiceFactory.Create(dbSrv.DatabaseProvider, dbSrv.GetConnectionString(MixConstants.CONST_CMS_CONNECTION));
         var request = new SearchMixDbRequestModel
         {
-            TableName = "mix_menu_items",
+            TableName = "mix_products",
             Queries = new List<MixQueryField>
             {
                 new MixQueryField { FieldName = "is_featured", Value = true, CompareOperator = MixCompareOperator.Equal }
             }
         };
-        var menuItems = await mixDbDataServiceFactory.GetListByAsync(request);
+        var products = await mixDbDataServiceFactory.GetListByAsync(request);
     }
     ```
     
     **Common Query Examples:**
     ```csharp
     // Get all items (no filter)
-    var request = new SearchMixDbRequestModel { TableName = "mix_menu_items" };
+    var request = new SearchMixDbRequestModel { TableName = "mix_products" };
     
     // Filter by category
     var request = new SearchMixDbRequestModel
     {
-        TableName = "mix_menu_items",
+        TableName = "mix_products",
         Queries = new List<MixQueryField>
         {
-            new MixQueryField { FieldName = "category", Value = "appetizer", CompareOperator = MixCompareOperator.Equal }
+            new MixQueryField { FieldName = "category", Value = "electronics", CompareOperator = MixCompareOperator.Equal }
         }
     };
     
     // Search by name (contains)
     var request = new SearchMixDbRequestModel
     {
-        TableName = "mix_menu_items",
+        TableName = "mix_products",
         Queries = new List<MixQueryField>
         {
-            new MixQueryField { FieldName = "name", Value = "chicken", CompareOperator = MixCompareOperator.Like }
+            new MixQueryField { FieldName = "name", Value = "smartphone", CompareOperator = MixCompareOperator.Like }
         }
     };
     
     // Multiple conditions (AND)
     var request = new SearchMixDbRequestModel
     {
-        TableName = "mix_menu_items",
+        TableName = "mix_products",
         Queries = new List<MixQueryField>
         {
             new MixQueryField { FieldName = "is_featured", Value = true, CompareOperator = MixCompareOperator.Equal },
-            new MixQueryField { FieldName = "price", Value = 20, CompareOperator = MixCompareOperator.LessThan }
+            new MixQueryField { FieldName = "price", Value = 100, CompareOperator = MixCompareOperator.LessThan }
         }
     };
     ```
 4.  **Loop through and display** the data:
     ```razor
-    @foreach(var item in menuItems)
+    @foreach(var item in products)
     {
-        <div class="menu-item">
-            <h3>@item["name"]</h3>
-            <p>@item["description"]</p>
-            <span>$@item["price"]</span>
+        <div class="product-item">
+            <h3>@(item.Value<string>("name"))</h3>
+            <p>@(item.Value<string>("description"))</p>
+            <span>$@(item.Value<string>("price"))</span>
         </div>
     }
     ```
@@ -245,8 +322,8 @@ If your page has a list of similar items, don't hard-code them. Create a databas
 ## 4. Best Practices & Key Reminders
 
 -   **Check MCP Tool Support First:** Before executing any task, check if there's an existing MCP tool that can help accomplish it. Use `ListSections` to explore available tools and resources.
--   **Database Schema Documentation:** When creating new tables, document the schema in your project's `DATABASE_SCHEMA.md` file. Include table name, columns, data types, and relationships. Use `GetTableSchema` to retrieve schema details.
--   **Schema Verification for Content Rendering:** Before creating content that loads data from MixDb, always check the database schema using `GetTableSchema` to ensure you understand the structure. This ensures you use the correct field names when rendering data in templates.
+-   **Database Schema Documentation:** When creating new tables with MCP tools, ALWAYS document the schema in your project's `database-schema.md` file immediately after creation. Include table name, columns, data types, and relationships. Use `GetTableSchema` to retrieve exact schema details and verify column names before documenting. This ensures you use the correct field names when rendering data in templates.
+-   **Schema Verification for Content Rendering:** Before creating content that loads data from MixDb, always check the database schema using `GetTableSchema` or refer to your `database-schema.md` documentation to ensure you understand the structure. This ensures you use the correct field names when rendering data in templates.
 -   **Master Layouts First:** Always create your `folderType: 7` Master Layout before creating pages.
 -   **Template Naming:**
     - The `extension` parameter must be `.cshtml` (e.g., `".cshtml"`) - always include the dot
@@ -256,13 +333,13 @@ If your page has a list of similar items, don't hard-code them. Create a databas
     - Always create module content first using `CreateModuleContent`
     - Then create template with `.cshtml` extension
     - Associate posts/content using `CreateModulePostAssociation`
-    - Render in templates using:
+    - Render in templates using the naming pattern `$"../{folderType}/{templateName}.cshtml"`:
       ```razor
       @{
           var module = Model.GetModule("moduleSystemName");
       }
       @if(module != null){
-          @await Html.PartialAsync(module.Template.FilePath, module, null);
+          @await Html.PartialAsync($"../2/{module.Template.FileName}.cshtml", module, null);
       }
       ```
 -   **Required Using Statements:** When using MixDb data in templates, always include these using statements at the top:
@@ -272,6 +349,18 @@ If your page has a list of similar items, don't hard-code them. Create a databas
     @using Mix.Shared.Dtos
     @using Mix.Constant.Enums
     @inject IMixDbDataService MixDbDataService
+    ```
+-   **Partial Rendering Pattern:** When rendering partial templates, always follow the naming pattern `$"../{folderType}/{templateName}.cshtml"`:
+    - **Modules (folderType: 2):** `$"../2/{templateName}.cshtml"`
+    - **Pages (folderType: 1):** `$"../1/{templateName}.cshtml"`
+    - **Posts (folderType: 5):** `$"../5/{templateName}.cshtml"`
+    - **Master Layouts (folderType: 7):** `$"../7/{templateName}.cshtml"`
+    ```razor
+    // Example for modules
+    @await Html.PartialAsync($"../2/{module.Template.FileName}.cshtml", module, null);
+    
+    // Example for posts
+    @await Html.PartialAsync($"../5/{post.Template.FileName}.cshtml", post, null);
     ```
 -   **Public Image URLs:** When using images in templates, always use full, public URLs (e.g., from Unsplash). Do not use local file paths.
 -   **Required Razor Sections:** Your Master Layout template **must** include these lines for styles and scripts to work correctly:
@@ -373,8 +462,9 @@ When you create content using MCP commands (like `CreatePageContent`, `CreatePos
 
 ### Example Workflow:
 1. **MCP Command:** `CreateDatabaseFromPrompt` to create a "products" table
-2. **MCP Command:** `CreateManyMixDbData` to add product records
-3. **Template Code:** Use `SearchMixDbRequestModel` and `IMixDbDataService` in your `.cshtml` file to display the products
+2. **Documentation:** Use `GetTableSchema` and document the schema in `database-schema.md`
+3. **MCP Command:** `CreateManyMixDbData` to add product records
+4. **Template Code:** Use `SearchMixDbRequestModel` and `IMixDbDataService` in your `.cshtml` file to display the products, referencing the documented column names
 
 ---
 
