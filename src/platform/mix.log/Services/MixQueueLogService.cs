@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.QueueLog;
 using Mix.Database.Services.MixGlobalSettings;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
+using Mix.Lib.Extensions;
 using Mix.Log.Lib.Interfaces;
 using Mix.Mq.Lib.Models;
 using Mix.Service.Services;
@@ -14,14 +16,16 @@ namespace Mix.Log.Lib.Services
 {
     public class MixQueueLogService : IMixQueueLog
     {
+        private IConfiguration _configuration;
         private QueueLogDbContext _dbContext;
         private readonly DatabaseService _databaseService;
         private MixQueueMessages<MessageQueueModel> _mixQueueService;
         public int TenantId { get; set; }
-        public MixQueueLogService(DatabaseService databaseService)
+        public MixQueueLogService(DatabaseService databaseService, IConfiguration configuration)
         {
             _mixQueueService = new();
             _databaseService = databaseService;
+            _configuration = configuration;
         }
 
 
@@ -163,6 +167,11 @@ namespace Mix.Log.Lib.Services
 
         private void InitDbContext()
         {
+            while (_configuration.IsInit())
+            {
+                Console.WriteLine($"{nameof(MixQueueLogService)}: Waiting for init CMS ...");
+                Task.Delay(5000);
+            }
             if (_dbContext.Database.GetPendingMigrations().Any())
             {
                 _dbContext.Database.Migrate();

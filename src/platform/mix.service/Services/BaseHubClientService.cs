@@ -1,20 +1,23 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Mix.Constant.Constants;
+using Mix.Heart.Extensions;
+using Mix.Heart.Helpers;
+using Mix.Lib.Extensions;
 using Mix.Service.Models;
+using Mix.Shared.Extensions;
 using Mix.Shared.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Enums;
+using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
 using System;
-using System.Threading.Tasks;
-using Mix.Shared.Extensions;
 using System.Drawing.Printing;
-using Microsoft.Extensions.Hosting;
-using Mix.SignalR.Interfaces;
-using Mix.Heart.Helpers;
-using Mix.Heart.Extensions;
-using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace Mix.Service.Services
 {
@@ -23,15 +26,18 @@ namespace Mix.Service.Services
         public HubConnection Connection { get; set; }
         protected string HubEndpoint;
         protected ILogger _logger;
+        protected IConfiguration _configuration;
+        protected string _hub;
+        protected string _endpoint;
         protected string AccessToken;
         public bool IsStarting = false;
-        protected BaseHubClientService(string hub, string endpoint, ILogger logger)
+        protected BaseHubClientService(string hub, string endpoint, ILogger logger, IConfiguration configuration)
         {
-            if (!string.IsNullOrEmpty(endpoint))
-            {
-                HubEndpoint = $"{endpoint.TrimEnd('/')}/{hub.TrimStart('/')}";
-                _logger = logger;
-            }
+            _logger = logger;
+            _hub = hub;
+            _endpoint = endpoint;
+
+            _configuration = configuration;
         }
 
         public Task SendMessageAsync(string title, string description, object data, MessageType messageType = MessageType.Info)
@@ -121,11 +127,8 @@ namespace Mix.Service.Services
         {
             while (Connection == null)
             {
+                await Task.Delay(5000);
                 Init();
-                if (Connection == null)
-                {
-                    await Task.Delay(5000);
-                }
             }
 
             while (Connection != null && Connection.State != HubConnectionState.Connected)
@@ -150,8 +153,13 @@ namespace Mix.Service.Services
 
         private void Init()
         {
-            if (!string.IsNullOrEmpty(HubEndpoint))
+            if (!string.IsNullOrEmpty(_configuration.BaseUrl()))
             {
+                if (string.IsNullOrEmpty(_endpoint))
+                {
+                    _endpoint = _configuration.BaseUrl()!;
+                }
+                HubEndpoint = $"{_endpoint.TrimEnd('/')}/{_hub.TrimStart('/')}";
                 Connection = new HubConnectionBuilder()
                    .WithUrl(HubEndpoint, options =>
                    {
@@ -159,7 +167,7 @@ namespace Mix.Service.Services
                    })
                    .WithAutomaticReconnect()
                    .Build();
-                
+
                 Connection.Closed += async (error) =>
                 {
                     await Task.Delay(new Random().Next(0, 5) * 1000);

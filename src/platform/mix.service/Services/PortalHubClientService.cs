@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Cms;
@@ -24,11 +25,12 @@ namespace Mix.Service.Services
         private readonly IServiceProvider _serviceProvider;
         private readonly IMixTenantService _mixTenantService;
         public PortalHubClientService(
+            IConfiguration configuration,
             IServiceProvider serviceProvider,
             MixEndpointService mixEndpointService,
             IMixTenantService mixTenantService,
             ILogger<PortalHubClientService> logger)
-            : base(HubEndpoints.PortalHub, mixEndpointService.MixMq, logger)
+            : base(HubEndpoints.PortalHub, mixEndpointService.MixMq, logger, configuration)
         {
             _serviceProvider = serviceProvider;
             _mixTenantService = mixTenantService;

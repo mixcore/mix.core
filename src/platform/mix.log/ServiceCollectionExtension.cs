@@ -47,12 +47,10 @@ namespace Mix.Log.Lib
             services.AddDbContext<QueueLogDbContext>();
             
             services.TryAddSingleton<IAuditLogService, AuditLogService>();
-            if (!configuration.IsInit())
-            {
-                services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
-                services.TryAddSingleton<IMixQueueLog, MixQueueLogService>();
-                services.AddHostedService<MixLogSubscriber>();
-            }
+            
+            services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
+            services.TryAddSingleton<IMixQueueLog, MixQueueLogService>();
+            services.AddHostedService<MixLogSubscriber>();
             return services;
         }
 

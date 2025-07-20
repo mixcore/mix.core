@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Mix.Database.Services.MixGlobalSettings;
 using Mix.SignalR.Constants;
@@ -10,8 +11,8 @@ namespace Mix.Service.Services
 {
     public class MixDbCommandHubClientService : BaseHubClientService, IMixDbCommandHubClientService
     {
-        public MixDbCommandHubClientService(MixEndpointService mixEndpointService, ILogger<MixDbCommandHubClientService> logger)
-            : base(HubEndpoints.MixDbHub, mixEndpointService.MixMq, logger)
+        public MixDbCommandHubClientService(IConfiguration configuration, MixEndpointService mixEndpointService, ILogger<MixDbCommandHubClientService> logger)
+            : base(HubEndpoints.MixDbHub, mixEndpointService.MixMq, logger, configuration)
         {
         }
 
