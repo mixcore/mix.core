@@ -1,5 +1,15 @@
 # Mix CMS AI Agent: Your Content Creation Assistant
 
+> **📢 IMPORTANT UPDATE:** This documentation has been restructured into focused, topic-specific guides for better usability. 
+> 
+> **👉 Start here:** [ai-getting-started.md](./ai-getting-started.md) for core concepts and overview  
+> **📖 Full structure:** See [README.md](./README.md) for the complete guide organization  
+> **🔄 Migration help:** Check [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) if you're looking for specific content
+>
+> This file is preserved for reference but the new modular structure provides a better learning experience.
+
+---
+
 Welcome! You're working with an AI assistant designed to help you build and manage websites using Mix CMS. This guide will walk you through the essential concepts and tools you'll need.
 
 ---
@@ -339,7 +349,7 @@ Use `GetTableSchema(tableName: "mix_products")` to verify the exact column names
           var module = Model.GetModule("moduleSystemName");
       }
       @if(module != null){
-          @await Html.PartialAsync($"../2/{module.Template.FileName}.cshtml", module, null);
+          @await Html.PartialAsync($"../{module.Template.FolderType.ToString()}/{module.Template.FileName}.cshtml", module, null);
       }
       ```
 -   **Required Using Statements:** When using MixDb data in templates, always include these using statements at the top:
@@ -351,16 +361,16 @@ Use `GetTableSchema(tableName: "mix_products")` to verify the exact column names
     @inject IMixDbDataService MixDbDataService
     ```
 -   **Partial Rendering Pattern:** When rendering partial templates, always follow the naming pattern `$"../{folderType}/{templateName}.cshtml"`:
-    - **Modules (folderType: 2):** `$"../2/{templateName}.cshtml"`
-    - **Pages (folderType: 1):** `$"../1/{templateName}.cshtml"`
-    - **Posts (folderType: 5):** `$"../5/{templateName}.cshtml"`
-    - **Master Layouts (folderType: 7):** `$"../7/{templateName}.cshtml"`
+    - **Modules (FolderType.Modules):** `$"../{template.FolderType.ToString()}/{templateName}.cshtml"`
+    - **Pages (FolderType.Pages):** `$"../{template.FolderType.ToString()}/{templateName}.cshtml"`
+    - **Posts (FolderType.Posts):** `$"../{template.FolderType.ToString()}/{templateName}.cshtml"`
+    - **Master Layouts (FolderType.Masters):** `$"../{template.FolderType.ToString()}/{templateName}.cshtml"`
     ```razor
-    // Example for modules
-    @await Html.PartialAsync($"../2/{module.Template.FileName}.cshtml", module, null);
+    // Example for modules (renders as "../Modules/{templateName}.cshtml")
+    @await Html.PartialAsync($"../{module.Template.FolderType.ToString()}/{module.Template.FileName}.cshtml", module, null);
     
-    // Example for posts
-    @await Html.PartialAsync($"../5/{post.Template.FileName}.cshtml", post, null);
+    // Example for posts (renders as "../Posts/{templateName}.cshtml")
+    @await Html.PartialAsync($"../{post.Template.FolderType.ToString()}/{post.Template.FileName}.cshtml", post, null);
     ```
 -   **Public Image URLs:** When using images in templates, always use full, public URLs (e.g., from Unsplash). Do not use local file paths.
 -   **Required Razor Sections:** Your Master Layout template **must** include these lines for styles and scripts to work correctly:

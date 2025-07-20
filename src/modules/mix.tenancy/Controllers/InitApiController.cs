@@ -19,7 +19,6 @@ using Mix.Tenancy.Domain.Dtos;
 using Mix.Tenancy.Domain.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ApplicationLifetime = Microsoft.Extensions.Hosting.IHostApplicationLifetime;
 
 namespace Mix.Tenancy.Controllers
 {
@@ -41,7 +40,6 @@ namespace Mix.Tenancy.Controllers
 
         protected readonly IHubContext<MixThemeHub> HubContext;
         // Update the field declaration to use the correct interface
-        private IHostApplicationLifetime _applicationLifetime;
         public InitApiController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -59,8 +57,7 @@ namespace Mix.Tenancy.Controllers
             UnitOfWorkInfo<MixCmsContext> uow = null,
             DatabaseService databaseService = null,
             AppSettingsService appSettingsService = null,
-            AuthConfigService authConfigService = null,
-            IHostApplicationLifetime applicationLifetime = null)
+            AuthConfigService authConfigService = null)
             : base(httpContextAccessor, configuration,
                   cacheService, mixIdentityService, queueService, mixTenantService)
         {
@@ -77,7 +74,6 @@ namespace Mix.Tenancy.Controllers
             _databaseService = databaseService;
             _appSettingsService = appSettingsService;
             _authConfigService = authConfigService;
-            _applicationLifetime = applicationLifetime;
         }
 
         #region Routes
@@ -226,8 +222,6 @@ namespace Mix.Tenancy.Controllers
             await _configService.Reload(CurrentTenant.Id, _uow);
             _appSettingsService.SetConfig(nameof(AppSettingsModel.InitStatus), InitStep.Done);
             _appSettingsService.SetConfig(nameof(AppSettingsModel.IsInit), false, true);
-            // force restart application to init hosted services
-            _applicationLifetime.StopApplication();
             return Ok(result);
         }
 
