@@ -215,9 +215,22 @@ If your page has a list of similar items, don't hard-code them. Create a databas
 -   **Schema Verification for Content Rendering:** Before creating content that loads data from MixDb, always check the database schema using `GetTableSchema` to ensure you understand the structure. This ensures you use the correct field names when rendering data in templates.
 -   **Master Layouts First:** Always create your `folderType: 7` Master Layout before creating pages.
 -   **Template Naming:**
-    - The `extension` parameter must be `.cshtml` (e.g., `".cshtml"`)
+    - The `extension` parameter must be `.cshtml` (e.g., `".cshtml"`) - always include the dot
     - The `fileName` parameter should NOT include `.cshtml` (e.g., `"HomePage"`, not `"HomePage.cshtml"`)
     - The system will automatically combine them to create the full filename
+-   **Module Rendering Pattern:**
+    - Always create module content first using `CreateModuleContent`
+    - Then create template with `.cshtml` extension
+    - Associate posts/content using `CreateModulePostAssociation`
+    - Render in templates using:
+      ```razor
+      @{
+          var module = Model.GetModule("moduleSystemName");
+      }
+      @if(module != null){
+          @await Html.PartialAsync(module.Template.FilePath, module, null);
+      }
+      ```
 -   **Required Using Statements:** When using MixDb data in templates, always include these using statements at the top:
     ```razor
     @using Mix.Mixdb.Interfaces

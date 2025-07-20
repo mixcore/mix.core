@@ -42,7 +42,7 @@ namespace Mix.MCP.Lib.Tools
             [Description("Template content")] string content,
             [Description("Theme ID")] int mixThemeId,
             [Description("Folder type (0=Layouts, 1=Pages, 2=Modules, 3=Forms, 4=Edms, 5=Posts, 6=Widgets, 7=Masters)")] int folderType = 1,
-            [Description("Extension")] string extension = "cshtml",
+            [Description("Extension")] string extension = ".cshtml",
             [Description("Tenant ID")] int tenantId = 1,
             CancellationToken cancellationToken = default)
         {
