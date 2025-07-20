@@ -11,6 +11,7 @@ using System.ComponentModel;
 using Mix.Constant.Enums;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
+using Mix.Heart.Services;   
 
 namespace Mix.MCP.Lib.Tools
 {
@@ -25,10 +26,11 @@ namespace Mix.MCP.Lib.Tools
         /// Initializes a new instance of the MixPageContentTool class
         /// </summary>
         public MixPageContentTool(
+            AppSettingsService appSettingsService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             ILogger<MixPageContentTool> logger,
-            AppSettingsService appSettingsService)
-            : base(appSettingsService, cmsUow, logger)
+            MixCacheService cacheService)
+            : base(appSettingsService, cmsUow, logger, cacheService)
         {
         }
 
@@ -63,7 +65,7 @@ namespace Mix.MCP.Lib.Tools
                 _logger.LogInformation("Creating page content with title: {Title}, SEO name: {SeoName}", title, seoName);
 
                 // Check if SEO name already exists
-                var existing = await MixPageContentViewModel.GetRepository(_cmsUow, null)
+                var existing = await MixPageContentViewModel.GetRepository(_cmsUow, _cacheService)
                     .GetFirstAsync(m => m.SeoName == seoName && m.TenantId == tenantId, ct);
                 if (existing != null)
                     throw new McpException($"A page with SEO name '{seoName}' already exists.");
@@ -112,7 +114,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Retrieving page content with ID: {Id}", id);
-                var viewModel = await MixPageContentViewModel.GetRepository(_cmsUow, null)
+                var viewModel = await MixPageContentViewModel.GetRepository(_cmsUow, _cacheService)
                     .GetFirstAsync(m => m.Id == id, ct);
                 if (viewModel == null)
                     throw new McpException($"Page content with ID {id} not found.");
@@ -136,7 +138,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Retrieving page content with SEO name: {SeoName}", seoName);
-                var viewModel = await MixPageContentViewModel.GetRepository(_cmsUow, null)
+                var viewModel = await MixPageContentViewModel.GetRepository(_cmsUow, _cacheService)
                     .GetFirstAsync(m => m.SeoName == seoName && m.TenantId == tenantId, ct);
                 if (viewModel == null)
                     throw new McpException($"Page content with SEO name '{seoName}' not found.");
@@ -164,13 +166,13 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Updating page content with ID: {Id}", id);
-                var viewModel = await MixPageContentViewModel.GetRepository(_cmsUow, null)
+                var viewModel = await MixPageContentViewModel.GetRepository(_cmsUow, _cacheService)
                     .GetFirstAsync(m => m.Id == id, ct);
                 if (viewModel == null)
                     throw new McpException($"Page content with ID {id} not found.");
                 if (!string.IsNullOrWhiteSpace(seoName) && seoName != viewModel.SeoName)
                 {
-                    var repo = MixPageContentViewModel.GetRepository(_cmsUow, null);
+                    var repo = MixPageContentViewModel.GetRepository(_cmsUow, _cacheService);
                     var exists = repo.GetListQuery(m => m.SeoName == seoName && m.TenantId == viewModel.TenantId && m.Id != id).Any();
                     if (exists)
                         throw new McpException($"A page with SEO name '{seoName}' already exists.");
@@ -204,11 +206,11 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Deleting page content with ID: {Id}", id);
-                var viewModel = await MixPageContentViewModel.GetRepository(_cmsUow, null)
+                var viewModel = await MixPageContentViewModel.GetRepository(_cmsUow, _cacheService)
                     .GetFirstAsync(m => m.Id == id, ct);
                 if (viewModel == null)
                     throw new McpException($"Page content with ID {id} not found.");
-                await MixPageContentViewModel.GetRepository(_cmsUow, null).DeleteAsync(id, ct);
+                await MixPageContentViewModel.GetRepository(_cmsUow, _cacheService).DeleteAsync(id, ct);
                 return ReflectionHelper.ParseObject(new { Success = true, Message = $"Page content with ID {id} deleted successfully", Id = id }).ToString(Newtonsoft.Json.Formatting.None);
             }, "DeletePageContent");
         }
@@ -233,7 +235,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Listing page contents with keyword: {Keyword}, status: {Status}", keyword, status);
-                var repo = MixPageContentViewModel.GetRepository(_cmsUow, null);
+                var repo = MixPageContentViewModel.GetRepository(_cmsUow, _cacheService);
                 var query = repo.GetListQuery(m => true, ct);
                 if (!string.IsNullOrWhiteSpace(keyword))
                 {

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Hosting.Internal;
 using Mix.Auth.Constants;
 using Mix.Auth.Models;
 using Mix.Database.Services;
@@ -20,6 +19,7 @@ using Mix.Tenancy.Domain.Dtos;
 using Mix.Tenancy.Domain.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ApplicationLifetime = Microsoft.Extensions.Hosting.IHostApplicationLifetime;
 
 namespace Mix.Tenancy.Controllers
 {
@@ -40,7 +40,8 @@ namespace Mix.Tenancy.Controllers
         private readonly UnitOfWorkInfo<MixCmsContext> _uow;
 
         protected readonly IHubContext<MixThemeHub> HubContext;
-        private readonly ApplicationLifetime _applicationLifetime;
+        // Update the field declaration to use the correct interface
+        private IHostApplicationLifetime _applicationLifetime;
         public InitApiController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -59,7 +60,7 @@ namespace Mix.Tenancy.Controllers
             DatabaseService databaseService = null,
             AppSettingsService appSettingsService = null,
             AuthConfigService authConfigService = null,
-            ApplicationLifetime applicationLifetime = null)
+            IHostApplicationLifetime applicationLifetime = null)
             : base(httpContextAccessor, configuration,
                   cacheService, mixIdentityService, queueService, mixTenantService)
         {

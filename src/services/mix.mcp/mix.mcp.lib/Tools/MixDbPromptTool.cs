@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Http.Timeouts;
 using ModelContextProtocol;
 using Mix.Heart.Helpers;
 using Mix.Database.Services;
+using Mix.Heart.Services;
 
 namespace Mix.MCP.Lib.Tools
 {
@@ -44,7 +45,7 @@ namespace Mix.MCP.Lib.Tools
             DatabaseService databaseService,
             ILlmServiceFactory llmServiceFactory,
             ILogger<MixDbPromptTool> logger)
-            : base(appSettingsService, cmsUow, logger)
+            : base(appSettingsService, cmsUow, logger, cacheService)
         {
             _mixDbStructureService = mixDbService;
             _memoryCache = memoryCache;
