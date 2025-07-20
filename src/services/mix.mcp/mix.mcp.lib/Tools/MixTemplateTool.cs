@@ -29,9 +29,8 @@ namespace Mix.MCP.Lib.Tools
             IMixTenantService mixTenantService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             ILogger<MixTemplateTool> logger,
-            IThemeService themeService,
-            MixCacheService cacheService)
-            : base(appSettingsService, cmsUow, logger, cacheService)
+            IThemeService themeService)
+            : base(appSettingsService, cmsUow, logger)
         {
             _mixTenantService = mixTenantService;
             _themeService = themeService;
@@ -40,7 +39,7 @@ namespace Mix.MCP.Lib.Tools
         [McpServerTool, Description("Create a new template")] 
         public async Task<string> CreateTemplate(
             [Description("Template file name")] string fileName,
-            [Description("Template content html document")] string content,
+            [Description("Template content")] string content,
             [Description("Theme ID")] int mixThemeId,
             [Description("Folder type (0=Layouts, 1=Pages, 2=Modules, 3=Forms, 4=Edms, 5=Posts, 6=Widgets, 7=Masters)")] int folderType = 1,
             [Description("Extension")] string extension = ".cshtml",
@@ -52,7 +51,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Creating template: {FileName}", fileName);
-                var repo = MixTemplateViewModel.GetRepository(_cmsUow, _cacheService);
+                var repo = MixTemplateViewModel.GetRepository(_cmsUow, null);
                 var exists = repo.GetListQuery(m => m.FileName == fileName && m.MixThemeId == mixThemeId && (int)m.FolderType == folderType, ct).Any();
                 if (exists) throw new McpException($"A template with file name '{fileName}' already exists in this theme/folder.");
                 var currentTenant = _mixTenantService.GetDefaultTenant().GetAwaiter().GetResult();
@@ -87,7 +86,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Retrieving template with ID: {Id}", id);
-                var vm = await MixTemplateViewModel.GetRepository(_cmsUow, _cacheService).GetFirstAsync(m => m.Id == id, ct);
+                var vm = await MixTemplateViewModel.GetRepository(_cmsUow, null).GetFirstAsync(m => m.Id == id, ct);
                 if (vm == null) throw new McpException($"Template with ID {id} not found.");
                 await vm.ExpandView(ct);
                 return ReflectionHelper.ParseObject(new { Success = true, Data = vm }).ToString(Newtonsoft.Json.Formatting.None);
@@ -108,7 +107,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Updating template with ID: {Id}", id);
-                var vm = await MixTemplateViewModel.GetRepository(_cmsUow, _cacheService).GetFirstAsync(m => m.Id == id, ct);
+                var vm = await MixTemplateViewModel.GetRepository(_cmsUow, null).GetFirstAsync(m => m.Id == id, ct);
                 if (vm == null) throw new McpException($"Template with ID {id} not found.");
                 if (!string.IsNullOrWhiteSpace(fileName)) vm.FileName = fileName;
                 if (!string.IsNullOrWhiteSpace(content)) vm.Content = content;
@@ -133,7 +132,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Deleting template with ID: {Id}", id);
-                var repo = MixTemplateViewModel.GetRepository(_cmsUow, _cacheService);
+                var repo = MixTemplateViewModel.GetRepository(_cmsUow, null);
                 var vm = await repo.GetFirstAsync(m => m.Id == id, ct);
                 if (vm == null) throw new McpException($"Template with ID {id} not found.");
                 await repo.DeleteAsync(id, ct);
@@ -155,7 +154,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Listing templates with keyword: {Keyword}", keyword);
-                var repo = MixTemplateViewModel.GetRepository(_cmsUow, _cacheService);
+                var repo = MixTemplateViewModel.GetRepository(_cmsUow, null);
                 var query = repo.GetListQuery(m => true, ct);
                 if (!string.IsNullOrWhiteSpace(keyword))
                     query = query.Where(m => m.FileName.Contains(keyword) || m.Content.Contains(keyword));

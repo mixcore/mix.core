@@ -4,7 +4,6 @@ using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.Helpers;
-using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.ViewModels;
 using ModelContextProtocol;
@@ -17,8 +16,8 @@ namespace Mix.MCP.Lib.Tools
     [McpServerToolType]
     public class MixPostContentTool : BaseMcpTool
     {
-        public MixPostContentTool(AppSettingsService appSettingsService, UnitOfWorkInfo<MixCmsContext> cmsUow, ILogger<MixPostContentTool> logger, MixCacheService cacheService)
-            : base(appSettingsService, cmsUow, logger, cacheService) { }
+        public MixPostContentTool(AppSettingsService appSettingsService, UnitOfWorkInfo<MixCmsContext> cmsUow, ILogger<MixPostContentTool> logger)
+            : base(appSettingsService, cmsUow, logger) { }
 
         [McpServerTool, Description("Create a new post content")]
         public async Task<string> CreatePostContent(
@@ -36,7 +35,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Creating post content with title: {Title}, SEO name: {SeoName}", title, seoName);
-                var repo = MixPostContentViewModel.GetRepository(_cmsUow, _cacheService);
+                var repo = MixPostContentViewModel.GetRepository(_cmsUow, null);
                 var exists = repo.GetListQuery(m => m.SeoName == seoName && m.TenantId == tenantId, ct).Any();
                 if (exists) throw new McpException($"A post with SEO name '{seoName}' already exists.");
                 var vm = new MixPostContentViewModel(_cmsUow)
@@ -66,7 +65,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Retrieving post content with ID: {Id}", id);
-                var vm = await MixPostContentViewModel.GetRepository(_cmsUow, _cacheService).GetFirstAsync(m => m.Id == id, ct);
+                var vm = await MixPostContentViewModel.GetRepository(_cmsUow, null).GetFirstAsync(m => m.Id == id, ct);
                 if (vm == null) throw new McpException($"Post content with ID {id} not found.");
                 await vm.ExpandView(ct);
                 return ReflectionHelper.ParseObject(new { Success = true, Data = vm }).ToString(Newtonsoft.Json.Formatting.None);
@@ -87,11 +86,11 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Updating post content with ID: {Id}", id);
-                var vm = await MixPostContentViewModel.GetRepository(_cmsUow, _cacheService).GetFirstAsync(m => m.Id == id, ct);
+                var vm = await MixPostContentViewModel.GetRepository(_cmsUow, null).GetFirstAsync(m => m.Id == id, ct);
                 if (vm == null) throw new McpException($"Post content with ID {id} not found.");
                 if (!string.IsNullOrWhiteSpace(seoName) && seoName != vm.SeoName)
                 {
-                    var repo = MixPostContentViewModel.GetRepository(_cmsUow, _cacheService);
+                    var repo = MixPostContentViewModel.GetRepository(_cmsUow, null);
                     var exists = repo.GetListQuery(m => m.SeoName == seoName && m.TenantId == vm.TenantId && m.Id != id, ct).Any();
                     if (exists) throw new McpException($"A post with SEO name '{seoName}' already exists.");
                 }
@@ -118,7 +117,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Deleting post content with ID: {Id}", id);
-                var repo = MixPostContentViewModel.GetRepository(_cmsUow, _cacheService);
+                var repo = MixPostContentViewModel.GetRepository(_cmsUow, null);
                 var vm = await repo.GetFirstAsync(m => m.Id == id, ct);
                 if (vm == null) throw new McpException($"Post content with ID {id} not found.");
                 await repo.DeleteAsync(id, ct);
@@ -140,7 +139,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async (ct) =>
             {
                 _logger.LogInformation("Listing post contents with keyword: {Keyword}, status: {Status}", keyword, status);
-                var repo = MixPostContentViewModel.GetRepository(_cmsUow, _cacheService);
+                var repo = MixPostContentViewModel.GetRepository(_cmsUow, null);
                 var query = repo.GetListQuery(m => true, ct);
                 if (!string.IsNullOrWhiteSpace(keyword))
                     query = query.Where(m => m.Title.Contains(keyword) || m.Content.Contains(keyword) || m.SeoName.Contains(keyword));

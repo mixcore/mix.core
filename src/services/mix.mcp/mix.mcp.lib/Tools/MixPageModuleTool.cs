@@ -121,7 +121,7 @@ namespace Mix.MCP.Lib.Tools
             {
                 _logger.LogInformation("Updating page-module association {AssociationId}", associationId);
 
-                var viewModel = await MixPageModuleViewModel.GetRepository(_cmsUow, _cacheService)
+                var viewModel = await MixPageModuleViewModel.GetRepository(_cmsUow, null)
                     .GetFirstAsync(m => m.Id == associationId, ct);
                 if (viewModel == null)
                     throw new McpException($"Page-module association with ID {associationId} not found.");
@@ -156,7 +156,7 @@ namespace Mix.MCP.Lib.Tools
             {
                 _logger.LogInformation("Deleting page-module association {AssociationId}", associationId);
 
-                var repo = MixPageModuleViewModel.GetRepository(_cmsUow, _cacheService);
+                var repo = MixPageModuleViewModel.GetRepository(_cmsUow, null);
                 var exists = await repo.GetFirstAsync(m => m.Id == associationId, ct);
                 if (exists == null)
                     throw new McpException($"Page-module association with ID {associationId} not found.");
