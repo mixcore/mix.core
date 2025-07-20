@@ -18,8 +18,8 @@ Templates define how your content looks. Think of them as reusable blueprints. W
 
 ### Content: The Information on Your Pages
 
--   **Pages (`CreatePageContent`):** The actual webpages that your visitors see, like "Home" or "About Us". Each page uses a Page Template and a Master Layout to display its content.
--   **Posts (`CreatePostContent`):** Used for blog entries or news articles.
+-   **Pages (`CreatePageContent`):** The actual webpages that your visitors see, like "Home" or "About Us". Each page uses a Page Template and a Master Layout to display its content. The `content` parameter should include HTML that will be rendered in the template.
+-   **Posts (`CreatePostContent`):** Used for blog entries or news articles. The `content` parameter should include HTML for the post body that will be rendered in the template.
 -   **Custom Data (`CreateDatabaseFromPrompt`):** For lists of things, like menu items, products, or staff profiles. Instead of hard-coding them into a page, you can store them in a database table and display them dynamically.
 
 ---
@@ -38,9 +38,17 @@ You have a set of powerful tools (MCP commands) to create and manage your site.
 ### For Managing Content
 
 -   `CreatePageContent`: Create a new webpage.
+-   `CreatePostContent`: Create a new blog post or article.
+-   `CreateModuleContent`: Create a new reusable module.
 -   `ListPageContents`: See all your pages.
+-   `ListPostContents`: See all your posts.
+-   `ListModuleContents`: See all your modules.
 -   `UpdatePageContent`: Change a page's content or settings.
+-   `UpdatePostContent`: Change a post's content or settings.
+-   `UpdateModuleContent`: Change a module's content or settings.
 -   `DeletePageContent`: Remove a page.
+-   `DeletePostContent`: Remove a post.
+-   `DeleteModuleContent`: Remove a module.
 
 ### For Managing Data
 
@@ -81,6 +89,7 @@ Follow these three steps to create a fully functional webpage.
 -   **Tool:** `CreatePageContent`
 -   **Parameters:**
     -   `title`: "Welcome to our Restaurant"
+    -   `content`: The HTML content that will be rendered in the template (e.g., `"<h1>Welcome</h1><p>Our restaurant serves amazing food...</p>"`)
     -   `seoName`: "home" (this becomes the URL, e.g., `yoursite.com/home`)
     -   `templateId`: The ID of the **Page Template** from Step 2.
     -   `layoutId`: The ID of the **Master Layout** from Step 1.
@@ -96,20 +105,45 @@ For reusable components like contact forms, image galleries, or content blocks:
     -   `folderType: 2` (Modules)
     -   `fileName`: "ContactForm.cshtml"
     -   `mixThemeId: 1`
-    -   `content`: Start with `@model dynamic` and add your module HTML
+    -   `content`: Start with `@model Mixcore.Domain.ViewModels.ModuleContentViewModel` and add your module HTML
 
 **Step 2: Create the Module Content**
 -   **Tool:** `CreateModuleContent`
 -   **Parameters:**
     -   `title`: "Contact Form"
+    -   `excerpt`: The HTML content that will be rendered in the module template (e.g., `"<form><input type='email' placeholder='Your email'><button>Submit</button></form>"`)
     -   `systemName`: "contact_form"
     -   `tenantId: 1`
 
 **Step 3: Use in Page Templates**
 Reference modules in your page templates:
 ```razor
-@await Html.PartialAsync("Modules/ContactForm")
+ var highlighMdl = Model.GetModule("productHighlight");
+ @if(highlighMdl != null){
+    @await Html.PartialAsync(highlighMdl.Template.FilePath, highlighMdl, null);
+ }
 ```
+
+### How to Create Blog Posts
+
+For blog entries or news articles:
+
+**Step 1: Create a Post Template**
+-   **Tool:** `CreateTemplate`
+-   **Parameters:**
+    -   `folderType: 5` (Posts)
+    -   `fileName`: "BlogPost.cshtml"
+    -   `mixThemeId: 1`
+    -   `content`: Start with `@model Mixcore.Domain.ViewModels.PostContentViewModel` and add your post layout HTML
+
+**Step 2: Create the Post Content**
+-   **Tool:** `CreatePostContent`
+-   **Parameters:**
+    -   `title`: "My First Blog Post"
+    -   `content`: The HTML content for the post body (e.g., `"<p>This is the main content of my blog post...</p>"`)
+    -   `excerpt`: Brief HTML summary for the post (e.g., `"<p>A short summary of this post...</p>"`)
+    -   `seoName`: "my-first-blog-post" (this becomes the URL)
+    -   `tenantId: 1`
 
 ### How to Handle Lists of Items (e.g., a Food Menu)
 
@@ -276,6 +310,53 @@ Always check the `id` in the response - you'll need these IDs to link templates 
 **MCP Commands** are the tools you use to create and manage your site structure (like `CreateTemplate`, `CreatePageContent`, `GetListMidxDbData`). These are called through the AI assistant.
 
 **Template Code** is the Razor/C# code you write inside your `.cshtml` templates to display data dynamically. This code uses the Mix CMS services directly.
+
+### Template Models
+
+Each template type has a specific model that provides access to content and data:
+
+- **Page Templates:** Use `@model Mixcore.Domain.ViewModels.PageContentViewModel`
+- **Module Templates:** Use `@model Mixcore.Domain.ViewModels.ModuleContentViewModel` 
+- **Post Templates:** Use `@model Mixcore.Domain.ViewModels.PostContentViewModel`
+
+These models provide access to the content properties, metadata, and related data for each content type.
+
+### Rendering Content in Templates
+
+When you create content using MCP commands (like `CreatePageContent`, `CreatePostContent`, `CreateModuleContent`), the `content` parameter should contain HTML that will be rendered in your templates:
+
+**Page Templates:**
+```razor
+@model Mixcore.Domain.ViewModels.PageContentViewModel
+
+<div class="page-content">
+    <h1>@Model.Title</h1>
+    @Html.Raw(Model.Content)  <!-- This renders the HTML content -->
+</div>
+```
+
+**Module Templates:**
+```razor
+@model Mixcore.Domain.ViewModels.ModuleContentViewModel
+
+<div class="module-content">
+    <h2>@Model.Title</h2>
+    @Html.Raw(Model.Excerpt)  <!-- This renders the HTML content for modules -->
+</div>
+```
+
+**Post Templates:**
+```razor
+@model Mixcore.Domain.ViewModels.PostContentViewModel
+
+<article class="post-content">
+    <h1>@Model.Title</h1>
+    <div class="post-excerpt">@Html.Raw(Model.Excerpt)</div>
+    <div class="post-body">@Html.Raw(Model.Content)</div>
+</article>
+```
+
+**Important:** Use `@Html.Raw(Model.Content)` to render HTML content, or `@Model.Content` for plain text display.
 
 ### When to Use Which:
 

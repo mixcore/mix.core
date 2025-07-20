@@ -33,7 +33,8 @@ This process is designed to align with the specialized documentation provided in
 **Process:**
 1.  **Follow Step-by-Step Workflows:** Use the detailed workflows in **`mix-ai-agent.md`** to perform tasks like creating databases, defining content structures, and generating pages.
 2.  **Utilize MCP Commands:** Execute MCP commands to interact with the CMS programmatically. This is the primary method for AI-driven development.
-3.  **Troubleshoot and Refine:** Use the troubleshooting guide within the AI agent documentation to resolve common issues.
+3.  **Handle Repetitive Content Dynamically:** When modules contain repetitive items (like product lists, team members, testimonials, or menu items), create a MixDb table instead of hard-coding the data. Use `CreateDatabaseFromPrompt` to define the structure and render the data dynamically in your templates.
+4.  **Troubleshoot and Refine:** Use the troubleshooting guide within the AI agent documentation to resolve common issues.
 
 **Key Document:**
 - **[mix-ai-agent.md](./mix-ai-agent.md)**: Your complete guide for building and content creation.
@@ -69,6 +70,39 @@ This process is designed to align with the specialized documentation provided in
 
 **Key Document:**
 - **[mcp-tools-reference.md](./mcp-tools-reference.md)**: Your go-to for quick, consolidated tool information.
+
+---
+
+## Key Best Practices
+
+### Dynamic Content Over Static Hard-coding
+
+**Principle:** Always use MixDb tables for repetitive or list-based content instead of hard-coding data directly into templates.
+
+**When to Apply:**
+- Product listings
+- Team member profiles
+- Testimonials or reviews
+- Menu items (restaurant, navigation, etc.)
+- Service offerings
+- Portfolio items
+- FAQ entries
+- Any content that might need frequent updates
+
+**Benefits:**
+- **Maintainability:** Update content through the CMS without touching code
+- **Scalability:** Easily add/remove items without template changes
+- **Consistency:** Ensure uniform data structure across all items
+- **Future-proofing:** Enable features like search, filtering, and pagination
+
+**Implementation:**
+1. Use `CreateDatabaseFromPrompt` to define the data structure
+2. Use `CreateManyMixDbData` to populate initial data
+3. Use `SearchMixDbRequestModel` in templates to fetch and display data dynamically
+
+**Example:** Instead of hard-coding team members in a module template, create a "team_members" table with fields for name, position, bio, and photo_url, then render them dynamically.
+
+---
 
 ## Summary Workflow
 
