@@ -4,6 +4,56 @@ This directory contains comprehensive documentation for working with Mix CMS acr
 
 ## File Organization
 
+### 🎯 **QUICK START - Essential Patterns**
+
+**Key Service Usage (Critical for Success):**
+- Use `IMixDbDataServiceFactory` with dependency injection for data access
+- Access fields with typed methods: `@item.Value<string>("fieldName")`
+- Include required namespaces and inject services
+- Use `SearchMixDbRequestModel` for data queries
+- **Images:** Always use full, public URLs (e.g., `https://images.unsplash.com/photo-...`) never local paths
+- **Documentation:** After each successful task, document it in markdown files for team collaboration
+
+**Working Template Pattern (Based on Real Examples):**
+```razor
+@model dynamic  <!-- Use for database-driven templates -->
+@using Mix.Mixdb.Interfaces
+@using Mix.Shared.Models
+@using Mix.Shared.Dtos
+@using Mix.Constant.Enums
+@using Mix.Constant.Constants
+
+@inject Mix.Database.Services.MixGlobalSettings.DatabaseService dbSrv;
+@inject IMixDbDataServiceFactory mixDbDataServiceFactory
+
+@{
+    var mixDbDataService = mixDbDataServiceFactory.Create(dbSrv.DatabaseProvider, dbSrv.GetConnectionString(MixConstants.CONST_CMS_CONNECTION));
+    var request = new SearchMixDbRequestModel
+    {
+        TableName = "your_table_name",
+        Queries = new List<MixQueryField>()
+    };
+    var data = await mixDbDataService.GetListByAsync(request);
+}
+
+@foreach (var item in data)
+{
+    <div>@item.Value<string>("fieldName")</div>
+}
+```
+
+**Content Template Pattern (For Pages/Posts/Modules):**
+```razor
+@model Mixcore.Domain.ViewModels.PageContentViewModel  <!-- Use appropriate ViewModel -->
+
+<div class="content">
+    <h1>@Model.Title</h1>
+    @Html.Raw(Model.Content)
+</div>
+```
+
+---
+
 ### 🤖 For AI Agents & Content Creators
 
 #### Getting Started

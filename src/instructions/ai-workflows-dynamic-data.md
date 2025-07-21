@@ -26,8 +26,18 @@ CreateDatabaseFromPrompt(
 - **icon** (nvarchar) - CSS icon class
 - **createdDateTime** (datetime) - Record creation timestamp
 - **modifiedDateTime** (datetime) - Last modification timestamp
+
+## Completed Tasks
+### 2025-01-XX - Services Database Created
+- Created `mix_services` table with fields: name, description, icon
+- Added sample data with 5 service records
+- Created ServiceCard.cshtml template in Modules folder
+- Template renders services in card layout with icons
+- **Status:** ✅ Complete - Ready for use in pages
 ```
 Use `GetTableSchema` to verify the exact column names and data types before documenting.
+
+**Note:** Always update the "Completed Tasks" section after successful task execution to help other team members understand what's been implemented.
 
 ### Step 2: Create Module Template
 - **Tool:** `CreateTemplate`
@@ -36,10 +46,10 @@ Use `GetTableSchema` to verify the exact column names and data types before docu
   - `fileName`: "ServiceCard"
   - `extension`: ".cshtml"
   - `mixThemeId: 1`
-  - `content`: Use this pattern:
+  - `content`: Use this pattern for database-driven module templates:
 
 ```razor
-@using Mix.Lib.ViewModels
+@model dynamic
 @using Mix.Mixdb.Interfaces
 @using Mix.Shared.Models
 @using Mix.Shared.Dtos
@@ -48,6 +58,7 @@ Use `GetTableSchema` to verify the exact column names and data types before docu
 
 @inject Mix.Database.Services.MixGlobalSettings.DatabaseService dbSrv;
 @inject IMixDbDataServiceFactory mixDbDataServiceFactory
+
 @{
     var mixDbDataService = mixDbDataServiceFactory.Create(dbSrv.DatabaseProvider, dbSrv.GetConnectionString(MixConstants.CONST_CMS_CONNECTION));
     var request = new SearchMixDbRequestModel
@@ -57,15 +68,16 @@ Use `GetTableSchema` to verify the exact column names and data types before docu
     };
     var services = await mixDbDataService.GetListByAsync(request);
 }
+
 @foreach (var service in services)
 {
-  <div class="card">
-    <div class="card-body">
-      <i class="@service["icon"]"></i>
-      <h3>@service["name"]</h3>
-      <p>@service["description"]</p>
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+            <i class="@service.Value<string>("icon")"></i>
+            <h3 class="card-title">@service.Value<string>("name")</h3>
+            <p>@service.Value<string>("description")</p>
+        </div>
     </div>
-  </div>
 }
 ```
 
@@ -97,6 +109,14 @@ After creating the database, always document the schema in `database-schema.md` 
 - **price** (decimal) - Product price
 - **createdDateTime** (datetime) - Record creation timestamp
 - **modifiedDateTime** (datetime) - Last modification timestamp
+
+## Completed Tasks
+### 2025-01-XX - Products Database & Templates
+- Created `mix_products` table with name, description, price fields
+- Added 10 sample products with proper image URLs
+- Created ProductCard.cshtml template for product display
+- Integrated products into homepage
+- **Status:** ✅ Complete - Products displaying correctly
 ```
 
 Use `GetTableSchema(tableName: "mix_products")` to verify the exact column names and data types before documenting.
@@ -105,9 +125,28 @@ Use `GetTableSchema(tableName: "mix_products")` to verify the exact column names
 Populate the table with your items.
 
 -   **Tool:** `CreateManyMixDbData`
+-   **Image URLs:** When using images in sample data, always use full, public URLs (e.g., from Unsplash like `https://images.unsplash.com/photo-...`). Do not use local file paths like `/images/photo.jpg` or relative paths.
 -   **Parameters:**
     -   `databaseSystemName`: "mix_products" (the name from Step 1)
-    -   `dataJson`: A JSON array of your items.
+    -   `dataJson`: A JSON array of your items with full image URLs.
+
+**Example with proper image URLs:**
+```json
+[
+  {
+    "name": "Wireless Headphones",
+    "description": "High-quality wireless headphones",
+    "price": 99.99,
+    "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e"
+  },
+  {
+    "name": "Smart Watch",
+    "description": "Feature-rich smartwatch",
+    "price": 199.99,
+    "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30"
+  }
+]
+```
 
 ### Step 3: Display the Data in a Template
 Modify your Page or Module template to fetch and display the data.
@@ -143,7 +182,7 @@ Modify your Page or Module template to fetch and display the data.
                 new MixQueryField { FieldName = "is_featured", Value = true, CompareOperator = MixCompareOperator.Equal }
             }
         };
-        var products = await mixDbDataServiceFactory.GetListByAsync(request);
+        var products = await mixDbDataService.GetListByAsync(request);
     }
     ```
 
@@ -190,12 +229,18 @@ var request = new SearchMixDbRequestModel
     @foreach(var item in products)
     {
         <div class="product-item">
+            @if(!string.IsNullOrEmpty(item.Value<string>("image")))
+            {
+                <img src="@item.Value<string>("image")" alt="@item.Value<string>("name")" class="product-image" />
+            }
             <h3>@(item.Value<string>("name"))</h3>
             <p>@(item.Value<string>("description"))</p>
             <span>$@(item.Value<string>("price"))</span>
         </div>
     }
     ```
+
+**Note:** Always include null checks for optional fields like images, and use full URLs for image sources.
 
 ---
 
@@ -220,7 +265,7 @@ var request = new SearchMixDbRequestModel
 
 ### Complete Example: Services Page
 ```razor
-@using Mix.Lib.ViewModels
+@using Mixcore.Domain.ViewModels
 @model dynamic
 
 <div class="container">
@@ -252,10 +297,53 @@ var request = new SearchMixDbRequestModel
 - Use `GetTableSchema` to retrieve exact schema details and verify column names before documenting
 - This ensures you use the correct field names when rendering data in templates
 
+### Task Completion Documentation
+**CRITICAL:** After successfully executing any task, always document it in the appropriate markdown file:
+
+**Required Documentation Format:**
+```markdown
+## Completed Tasks
+### YYYY-MM-DD - [Task Description]
+- **Action:** Brief description of what was done
+- **Tables Created:** List any database tables
+- **Templates Created:** List template files and their purpose
+- **Data Added:** Summary of sample data added
+- **Integration:** Where the feature was integrated
+- **Status:** ✅ Complete / ⚠️ Needs Testing / ❌ Issues Found
+- **Notes:** Any important details for future reference
+```
+
+**Why Documentation Matters:**
+- Enables team collaboration and knowledge sharing
+- Prevents duplicate work and conflicts
+- Provides context for future modifications
+- Helps troubleshooting when issues arise
+- Maintains project history and decision tracking
+
 ### Schema Verification for Content Rendering
 - Before creating content that loads data from MixDb, always check the database schema using `GetTableSchema` or refer to your `database-schema.md` documentation
 - Ensure you understand the structure and use correct field names when rendering data in templates
 - Field names are case-sensitive
+
+### Image URL Best Practices
+**Always use full, public URLs for images in sample data:**
+
+✅ **Correct - Full public URLs:**
+- `https://images.unsplash.com/photo-1505740420928-5e560c06d30e`
+- `https://picsum.photos/300/200`
+- `https://via.placeholder.com/300x200`
+
+❌ **Incorrect - Local or relative paths:**
+- `/images/photo.jpg`
+- `./assets/image.png`
+- `images/team-member.jpg`
+- `photo.jpg`
+
+**Why full URLs matter:**
+- Templates render correctly in all environments
+- No broken image links
+- Content works immediately without file uploads
+- Easier testing and development
 
 ### When to Use Dynamic Data
 Always use MixDb tables for repetitive or list-based content instead of hard-coding data directly into templates:
@@ -277,6 +365,7 @@ Always use MixDb tables for repetitive or list-based content instead of hard-cod
 -   **Data not displaying:** Check that you have the correct using statements, service injection, and that your `SearchMixDbRequestModel` uses the right property names (`FieldName`, `CompareOperator`).
 -   **Incorrect field names in templates:** If you're seeing null values or errors when rendering data, verify the database schema using `GetTableSchema` to ensure you're using the correct field names. Field names are case-sensitive.
 -   **Wrong comparison operator:** Use `MixCompareOperator.Equal`, `MixCompareOperator.Like`, `MixCompareOperator.LessThan`, etc. (not `ExpressionMethod`).
+-   **Broken images:** Always use full, public URLs (e.g., `https://images.unsplash.com/photo-...`) instead of local paths (`/images/photo.jpg`). Include null checks for optional image fields.
 
 ### Required Using Statements
 When using MixDb data in templates, always include these using statements at the top:

@@ -77,7 +77,7 @@ You have a set of powerful tools (MCP commands) to create and manage your site.
 ### For Managing Data
 
 -   `CreateDatabaseFromPrompt`: Create a new database table from a simple description.
--   `CreateManyMixDbData`: Add multiple records (e.g., products, services) to a table at once.
+-   `CreateManyMixDbData`: Add multiple records (e.g., products, services) to a table at once. **Always use full, public URLs for images, photos, pictures, ...** (e.g., `https://images.unsplash.com/photo-...`).
 -   `GetListMidxDbData`: Fetch data from a table to display on a page.
 
 ---
@@ -99,6 +99,59 @@ Now that you understand the basics, here are the next steps:
 ### 📖 **Additional Resources**
 - **[Developer Guide](./developer-guide.md)** - Technical guide for C# developers
 - **[Website Building Best Practices](./website-building-best-practices.md)** - Project workflow and methodology
+
+---
+
+## Key Development Patterns
+
+### Service Usage (Critical)
+- **Data Access:** Use `IMixDbDataServiceFactory` with dependency injection
+- **Field Access:** Use typed methods: `@item.Value<string>("fieldName")`
+- **Required Setup:** Include namespaces and inject services
+- **Query Pattern:** Use `SearchMixDbRequestModel` for data queries
+- **Template Models:** Use correct model based on template type:
+  - Pages: `@model Mixcore.Domain.ViewModels.PageContentViewModel`
+  - Posts: `@model Mixcore.Domain.ViewModels.PostContentViewModel`
+  - Modules: `@model Mixcore.Domain.ViewModels.ModuleContentViewModel` or `@model dynamic`
+  - Database-driven: `@model dynamic`
+
+### Template Structure
+```razor
+@using Mix.Mixdb.Interfaces
+@using Mix.Shared.Models
+@using Mix.Shared.Dtos
+@using Mix.Constant.Enums
+@using Mix.Constant.Constants
+
+@inject Mix.Database.Services.MixGlobalSettings.DatabaseService dbSrv;
+@inject IMixDbDataServiceFactory mixDbDataServiceFactory
+
+@{
+    var mixDbDataService = mixDbDataServiceFactory.Create(dbSrv.DatabaseProvider, dbSrv.GetConnectionString(MixConstants.CONST_CMS_CONNECTION));
+    var request = new SearchMixDbRequestModel
+    {
+        TableName = "table_name",
+        Queries = new List<MixQueryField>()
+    };
+    var items = await mixDbDataService.GetListByAsync(request);
+}
+
+@foreach (var item in items)
+{
+    <div>@item.Value<string>("name")</div>
+}
+```
+
+### Partial Rendering
+- Use relative paths: `"../Modules/TemplateName.cshtml"` (must start with "../" and end with ".cshtml")
+- Follow enum pattern: `$"../{template.FolderType.ToString()}/FileName.cshtml"`
+
+### Task Documentation (CRITICAL)
+**After every successful task execution, you MUST document it in markdown files:**
+- Update `database-schema.md` for any database changes
+- Update `project-progress.md` for completed features
+- Include date, description, status, and notes for team collaboration
+- This ensures others can work in the same context and build upon your work
 
 ---
 

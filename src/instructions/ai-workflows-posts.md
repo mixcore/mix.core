@@ -228,6 +228,28 @@ Set the appropriate status when creating or updating posts.
 - **Content not rendering**: Use `@Html.Raw(Model.Content)` to render HTML content
 - **Styling problems**: Include proper CSS classes and structure in your template
 
+### Task Documentation (CRITICAL)
+**After successfully completing blog/post setup, document it in your project's `project-progress.md` file:**
+
+```markdown
+## Completed Tasks
+### 2025-01-XX - Blog System Setup
+- **Post Template:** Created BlogPost.cshtml (folderType: 5)
+- **Initial Posts:** Created 3 sample blog posts with proper SEO names
+- **Content Status:** All posts set to Published (status: 1)
+- **Templates:** Blog listing and individual post pages working
+- **Status:** ✅ Complete - Blog system fully functional
+- **Notes:** Uses PostContentViewModel, includes meta information and excerpts
+
+### 2025-01-XX - News Section Addition  
+- **Post Template:** Created NewsArticle.cshtml for news content
+- **Content:** Added 5 news articles with recent dates
+- **Integration:** Added news section to homepage
+- **Status:** ✅ Complete - News section displaying correctly
+```
+
+This documentation helps team members understand what blog functionality is available and how it's configured.
+
 ---
 
 ## Next Steps

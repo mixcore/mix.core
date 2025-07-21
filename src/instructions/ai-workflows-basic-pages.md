@@ -161,6 +161,26 @@ MCP commands return JSON responses. Successful operations typically include:
 
 Always check the `id` in the response - you'll need these IDs to link templates and pages together.
 
+### Task Documentation (CRITICAL)
+**After successfully completing any page creation task, document it in your project's `project-progress.md` file:**
+
+```markdown
+## Completed Tasks
+### 2025-01-XX - Homepage Creation
+- **Master Layout:** Created MasterLayout.cshtml (folderType: 7)
+- **Page Template:** Created HomePage.cshtml (folderType: 1) 
+- **Page Content:** Created "Welcome" page with templateId: X, layoutId: Y
+- **Status:** ✅ Complete - Homepage accessible and styled correctly
+- **Notes:** Uses TailwindCSS, includes hero section and features grid
+
+### 2025-01-XX - Contact Page Setup
+- **Page Template:** Created ContactPage.cshtml (folderType: 1)
+- **Page Content:** Created "Contact Us" page 
+- **Status:** ✅ Complete - Contact form ready for integration
+```
+
+This documentation ensures other team members can build upon your work and understand the current project state.
+
 ---
 
 ## Next Steps

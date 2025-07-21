@@ -138,34 +138,23 @@ Use `GetTableSchema` to verify the exact column names and data types before docu
   - `mixThemeId: 1`
   - `content`: Use this pattern:
 ```razor
-@using Mix.Lib.ViewModels
-@using Mix.Mixdb.Interfaces
-@using Mix.Shared.Models
-@using Mix.Shared.Dtos
-@using Mix.Constant.Enums
-@using Mix.Constant.Constants
-
-@inject Mix.Database.Services.MixGlobalSettings.DatabaseService dbSrv;
-@inject IMixDbDataServiceFactory mixDbDataServiceFactory
+@model dynamic
 @{
-    var mixDbDataService = mixDbDataServiceFactory.Create(dbSrv.DatabaseProvider, dbSrv.GetConnectionString(MixConstants.CONST_CMS_CONNECTION));
-    var request = new SearchMixDbRequestModel
+    var services = await Mix.Cms.GetListMixDbDataAsync("mix_services");
+}
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    @foreach (var service in services)
     {
-        TableName = "mix_services",
-        Queries = new List<MixQueryField>()
-    };
-    var services = await mixDbDataService.GetListByAsync(request);
-}
-@foreach (var service in services)
-{
-  <div class="card">
-    <div class="card-body">
-      <i class="@service["icon"]"></i>
-      <h3>@service["name"]</h3>
-      <p>@service["description"]</p>
-    </div>
-  </div>
-}
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <i class="@service.icon"></i>
+                <h3 class="card-title">@service.name</h3>
+                <p>@service.description</p>
+            </div>
+        </div>
+    }
+</div>
 ```
 
 **Step 3: Include Module in Page Template**
@@ -175,7 +164,7 @@ Use `GetTableSchema` to verify the exact column names and data types before docu
 
 **Complete Example: Services Page**
 ```razor
-@using Mix.Lib.ViewModels
+@using Mixcore.Domain.ViewModels
 @model dynamic
 
 <div class="container">
