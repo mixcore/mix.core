@@ -80,6 +80,12 @@ You have a set of powerful tools (MCP commands) to create and manage your site.
 -   `CreateManyMixDbData`: Add multiple records (e.g., products, services) to a table at once. **Always use full, public URLs for images, photos, pictures, ...** (e.g., `https://images.unsplash.com/photo-...`).
 -   `GetListMidxDbData`: Fetch data from a table to display on a page.
 
+### For Managing Relationships
+
+-   `CreateMixDbRelationshipFromPrompt`: Create relationships between different content types (e.g., pages with modules, posts with categories).
+-   **Use Cases:** Connect pages with nested modules, organize posts by categories, create content hierarchies.
+-   **Important:** Always use `loadNestedData: true` when querying content with relationships.
+
 ---
 
 ## Getting Started Resources
@@ -88,17 +94,20 @@ Now that you understand the basics, here are the next steps:
 
 ### 📚 **Step-by-Step Guides**
 - **[Creating Basic Pages](./ai-workflows-basic-pages.md)** - Learn how to create webpages, templates, and layouts
+- **[Creating Basic Modules](./ai-workflows-basic-modules.md)** - Learn how to create and manage reusable modules
 - **[Working with Dynamic Data](./ai-workflows-dynamic-data.md)** - Handle databases, modules, and data-driven content
 - **[Creating Blog Posts](./ai-workflows-posts.md)** - Set up blog posts and news articles
+- **[Creating Database Relationships](./ai-workflows-relationships.md)** - Learn when and how to create relationships between content types
 
 ### 🛠️ **Technical References**
 - **[Template Patterns & Best Practices](./ai-template-patterns.md)** - Template code patterns, rendering, and troubleshooting
 - **[Mix CMS Reference](./mix-cms-reference.md)** - Enums, constants, and technical reference guide
-- **[MCP Tools Reference](./mcp-tools-reference.md)** - Complete MCP command documentation
+- **[MCP Tools Reference](./mcp-tools-reference.md)** - Complete MCP command documentation and enhanced agentic server architecture
 
 ### 📖 **Additional Resources**
 - **[Developer Guide](./developer-guide.md)** - Technical guide for C# developers
 - **[Website Building Best Practices](./website-building-best-practices.md)** - Project workflow and methodology
+- **[MixDb Lessons Learned](./mixdb-lessons-learned.md)** - Database best practices and common pitfalls
 
 ---
 
@@ -171,11 +180,29 @@ Now that you understand the basics, here are the next steps:
 1. Add dynamic content using database tables
 2. Create reusable modules for common components
 3. Set up blog posts if needed
+4. Create relationships between content types when building complex layouts
+5. Use the MCP Tools for CRUD operations on all content types
+
+---
+
+## Important Notes for Complex Websites
+
+### When to Use Relationships
+- **Page-Module Relationships:** When pages need multiple nested modules (header, hero, content, footer)
+- **Post-Category Relationships:** When organizing blog content by topics or tags
+- **Custom Content Relationships:** When connecting business data (e.g., appointments to services)
+
+### MCP Tools Best Practices
+- Always check existing templates with `ListTemplates` before creating new ones
+- Use `loadNestedData: true` when querying content with relationships
+- Document all relationships in `database-schema.md` and `project-progress.md`
+- Follow the proper `folderType` values for template creation
 
 ---
 
 ## Need Help?
 
 - **Troubleshooting:** Check the [Template Patterns & Best Practices](./ai-template-patterns.md) guide
+- **Relationships:** Consult [Creating Database Relationships](./ai-workflows-relationships.md) for complex content connections
 - **Command Reference:** Use [MCP Tools Reference](./mcp-tools-reference.md) for specific tool parameters
 - **Technical Issues:** Consult the [Developer Guide](./developer-guide.md) for advanced topics

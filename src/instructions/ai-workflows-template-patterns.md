@@ -267,7 +267,7 @@ CreateTemplate(
     fileName: "ProductGrid",
     extension: ".cshtml",
     mixThemeId: 1,
-    content: "@model dynamic\n@using Mix.Mixdb.Interfaces\n@inject IMixDbDataServiceFactory mixDbDataServiceFactory\n<!-- Database query and display code here -->"
+    content: "@model Mixcore.Domain.ViewModels.ModuleContentViewModel\n<!-- Dynamic Content Loading / Database query and display code here -->"
 )
 ```
 

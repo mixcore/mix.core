@@ -121,7 +121,7 @@ CreateDatabaseFromPrompt(
 After creating the database, always document the schema in `database-schema.md`:
 ```markdown
 ## mix_services
-- **objId** (int) - Primary key, auto-increment
+- **id** (int) - Primary key, auto-increment
 - **name** (nvarchar) - Service name
 - **description** (nvarchar) - Service description  
 - **icon** (nvarchar) - CSS icon class
@@ -220,7 +220,7 @@ If your page has a list of similar items, don't hard-code them. Create a databas
 
 ```markdown
 ## mix_products
-- **objId** (int) - Primary key, auto-increment
+- **id** (int) - Primary key, auto-increment
 - **name** (nvarchar) - Product name
 - **description** (nvarchar) - Product description
 - **price** (decimal) - Product price
