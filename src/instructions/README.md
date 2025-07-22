@@ -1,53 +1,91 @@
 # Mix CMS Instructions Directory
 
-This directory contains comprehensive documentation for working with Mix CMS across different use cases and audiences.
+This directory provides focused, organized documentation for AI agents working with Mix CMS. All content is structured for maximum accessibility and task-oriented execution.
 
-## File Organization
+---
 
-### 🎯 **QUICK START - Essential Patterns**
+## 🚀 Quick Start for AI Agents
 
-**Key Service Usage (Critical for Success):**
-- Use `IMixDbDataServiceFactory` with dependency injection for data access
-- Access fields with typed methods: `@item.Value<string>("fieldName")`
-- Include required namespaces and inject services
-- Use `SearchMixDbRequestModel` for data queries
-- **Images:** Always use full, public URLs (e.g., `https://images.unsplash.com/photo-...`) never local paths
-- **Documentation:** After each successful task, document it in markdown files for team collaboration
+### Primary Entry Point
+**[🎯 AI Workflows Complete Guide](./workflows/ai-workflows-complete.md)** - Start here for all common development tasks
 
-**Working Template Pattern (Based on Real Examples):**
-```razor
-@model dynamic  <!-- Use for database-driven templates -->
-@using Mix.Mixdb.Interfaces
-@using Mix.Shared.Models
-@using Mix.Shared.Dtos
-@using Mix.Constant.Enums
-@using Mix.Constant.Constants
+### Key Navigation Paths
+- **New to Mix CMS?** → [Getting Started Guide](./ai-getting-started.md)
+- **Need specific patterns?** → [Template Patterns](./patterns/)
+- **Technical reference?** → [Reference Documentation](./reference/)
 
-@inject Mix.Database.Services.MixGlobalSettings.DatabaseService dbSrv;
-@inject IMixDbDataServiceFactory mixDbDataServiceFactory
+---
 
-@{
-    var mixDbDataService = mixDbDataServiceFactory.Create(dbSrv.DatabaseProvider, dbSrv.GetConnectionString(MixConstants.CONST_CMS_CONNECTION));
-    var request = new SearchMixDbRequestModel
-    {
-        TableName = "your_table_name",
-        Queries = new List<MixQueryField>()
-    };
-    var data = await mixDbDataService.GetListByAsync(request);
-}
+## 📁 Directory Structure
 
-@foreach (var item in data)
-{
-    <div>@item.Value<string>("fieldName")</div>
-}
+### `/workflows/` - Task-Oriented Guides
+- **[ai-workflows-complete.md](./workflows/ai-workflows-complete.md)** - Comprehensive workflow guide (PRIMARY REFERENCE)
+
+### `/patterns/` - Template & Design Patterns  
+- **[template-patterns-overview.md](./patterns/template-patterns-overview.md)** - Template pattern index
+- **[template-patterns-masters.md](./patterns/template-patterns-masters.md)** - Master layout patterns
+- **[template-patterns-pages.md](./patterns/template-patterns-pages.md)** - Page template patterns
+- **[template-patterns-modules.md](./patterns/template-patterns-modules.md)** - Module patterns
+- **[template-patterns-posts.md](./patterns/template-patterns-posts.md)** - Blog/post patterns
+- **[template-patterns-forms.md](./patterns/template-patterns-forms.md)** - Form patterns
+- **[template-patterns-widgets.md](./patterns/template-patterns-widgets.md)** - Widget patterns
+
+### `/reference/` - Technical Documentation
+- **[mcp-tools-reference.md](./reference/mcp-tools-reference.md)** - Complete MCP command reference
+- **[developer-guide.md](./reference/developer-guide.md)** - C# development guidelines
+- **[mix-cms-reference.md](./reference/mix-cms-reference.md)** - Mix CMS technical reference
+
+### Root Level - Core Guides
+- **[ai-getting-started.md](./ai-getting-started.md)** - Introduction and core concepts
+- **[mix-ai-agent.md](./mix-ai-agent.md)** - Legacy agent guide (preserved for reference)
+- **[mixdb-lessons-learned.md](./mixdb-lessons-learned.md)** - Best practices and troubleshooting
+- **[website-building-best-practices.md](./website-building-best-practices.md)** - Project methodology
+
+---
+
+## 🎯 AI Agent Usage Recommendations
+
+### For Task Execution
+1. **Start with**: [ai-workflows-complete.md](./workflows/ai-workflows-complete.md) - Contains all common workflows
+2. **Reference patterns**: Use `/patterns/` for specific template examples
+3. **Technical details**: Check `/reference/` for API documentation
+
+### For Learning & Understanding
+1. **Core concepts**: [ai-getting-started.md](./ai-getting-started.md)
+2. **Best practices**: [website-building-best-practices.md](./website-building-best-practices.md)
+3. **Lessons learned**: [mixdb-lessons-learned.md](./mixdb-lessons-learned.md)
+
+### For Troubleshooting
+1. **Common issues**: Check the troubleshooting sections in workflow guides
+2. **Technical reference**: [reference/mcp-tools-reference.md](./reference/mcp-tools-reference.md)
+3. **Development issues**: [reference/developer-guide.md](./reference/developer-guide.md)
+
+---
+
+## 🔥 Essential Quick Reference
+
+### Folder Types (Critical)
+```csharp
+Masters = 7     // Master layouts (create first)
+Pages = 1       // Page templates  
+Modules = 2     // Reusable modules
+Posts = 5       // Blog templates
+Forms = 3       // Form templates
+Widgets = 6     // Widget components
 ```
 
-**Content Template Pattern (For Pages/Posts/Modules):**
+### Template Models
 ```razor
-@model Mixcore.Domain.ViewModels.PageContentViewModel  <!-- Use appropriate ViewModel -->
+@model Mixcore.Domain.ViewModels.PageContentViewModel     // Pages
+@model Mixcore.Domain.ViewModels.ModuleContentViewModel   // Modules  
+@model Mixcore.Domain.ViewModels.PostContentViewModel     // Posts
+@model dynamic                                            // Database-driven content
+```
 
-<div class="content">
-    <h1>@Model.Title</h1>
+### Essential Services
+```razor
+@inject Mix.Database.Services.MixGlobalSettings.DatabaseService dbSrv;
+@inject IMixDbDataServiceFactory mixDbDataServiceFactory
     @Html.Raw(Model.Content)
 </div>
 ```
