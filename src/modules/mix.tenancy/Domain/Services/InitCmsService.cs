@@ -58,7 +58,6 @@ namespace Mix.Tenancy.Domain.Services
             _appSettingsService.SetConnnectionString(MixConstants.CONST_SETTINGS_CONNECTION, model.ConnectionString);
             _appSettingsService.SetConfig(nameof(AppSettingsModel.DefaultCulture), model.Culture.Specificulture);
             _appSettingsService.SetConfig(nameof(AppSettingsModel.DatabaseProvider), model.DatabaseProvider.ToString(), true);
-            _authConfigService.SetConfig(nameof(MixAuthenticationConfigurations.SecretKey), Guid.NewGuid().ToString("N"), true);
             _databaseService.InitConnectionStrings(model.ConnectionString, model.DatabaseProvider);
             _databaseService.UpdateMixCmsContext();
             _databaseService.SaveSettings();

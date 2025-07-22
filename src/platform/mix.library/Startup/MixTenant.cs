@@ -16,19 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddMixTenant(this IServiceCollection services, IConfiguration configuration)
         {
-            var authConfigService = services.GetService<AuthConfigService>();
             services.AddMixCache(configuration);
-            services.AddSession(
-                options =>
-                {
-                    options.IdleTimeout = TimeSpan.FromMinutes(authConfigService.AppSettings.AccessTokenExpiration);
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                    options.Cookie.SameSite = SameSiteMode.Strict;
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.Name = authConfigService.AppSettings.Issuer;
-                }
-            );
-
             services.TryAddSingleton<IMixTenantService, MixTenantService>();
             return services;
         }

@@ -97,7 +97,7 @@ When you create content using MCP commands (like `CreatePageContent`, `CreatePos
 ### Service Usage (CRITICAL)
 
 -   **Use IMixDbDataServiceFactory:** Always use `IMixDbDataServiceFactory` with dependency injection for data access
--   **Field Access:** Use typed methods `@item.Value<string>("fieldName")` with injected services
+-   **Field Access:** Use typed methods `@(item.Value<string>("fieldName"))` with injected services
 -   **Template Models:** Use correct view models based on template type:
     - **Page Templates:** `@model Mixcore.Domain.ViewModels.PageContentViewModel`
     - **Module Templates:** `@model Mixcore.Domain.ViewModels.ModuleContentViewModel`
@@ -200,10 +200,10 @@ When you create content using MCP commands (like `CreatePageContent`, `CreatePos
     <div class="card">
         @if(!string.IsNullOrEmpty(item.Value<string>("image")))
         {
-            <img src="@item.Value<string>("image")" alt="@item.Value<string>("name")" class="card-image" />
+            <img src="@(item.Value<string>("image"))" alt="@(item.Value<string>("name"))" class="card-image" />
         }
-        <h3>@item.Value<string>("name")</h3>
-        <p>@item.Value<string>("description")</p>
+        <h3>@(item.Value<string>("name"))</h3>
+        <p>@(item.Value<string>("description"))</p>
     </div>
 }
 ```
@@ -211,10 +211,10 @@ When you create content using MCP commands (like `CreatePageContent`, `CreatePos
 ### Template with Image Handling
 ```razor
 <div class="team-member">
-    <img src="@item.Value<string>("photo")" alt="@item.Value<string>("name")" class="profile-photo" />
-    <h3>@item.Value<string>("name")</h3>
-    <p class="position">@item.Value<string>("position")</p>
-    <p>@item.Value<string>("bio")</p>
+    <img src="@(item.Value<string>("photo"))" alt="@(item.Value<string>("name"))" class="profile-photo" />
+    <h3>@(item.Value<string>("name"))</h3>
+    <p class="position">@(item.Value<string>("position"))</p>
+    <p>@(item.Value<string>("bio"))</p>
 </div>
 ```
 
@@ -294,7 +294,7 @@ CreateTemplate(
 - **Issue:** "Service not registered"
   - **Solution:** Ensure you inject both `Mix.Database.Services.MixGlobalSettings.DatabaseService` and `IMixDbDataServiceFactory`
 - **Issue:** Field access returns null
-  - **Solution:** Use typed methods: `@item.Value<string>("fieldName")` or `@item.Value<int>("fieldName")`
+  - **Solution:** Use typed methods: `@(item.Value<string>("fieldName"))` or `@(item.Value<int>("fieldName"))`
 - **Issue:** Connection issues
   - **Solution:** Use `dbSrv.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)` for connection string
 

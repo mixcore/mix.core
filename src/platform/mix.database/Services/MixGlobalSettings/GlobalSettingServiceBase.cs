@@ -55,6 +55,7 @@ namespace Mix.Database.Services.MixGlobalSettings
             {
                 SaveSettings();
             }
+            LoadAppSettings(RawSettings);
         }
 
         public virtual void SaveSettings()
@@ -72,14 +73,22 @@ namespace Mix.Database.Services.MixGlobalSettings
             }
         }
 
-        protected virtual void LoadAppSettings()
+        protected virtual void LoadAppSettings(JObject? rawSettings = default)
         {
-            var content = _settings.IsEncrypt ? AesEncryptionHelper.DecryptString(_settings.Settings, _aesKey)
-            : _settings.Settings;
-            RawSettings = JObject.Parse(content);
-            AppSettings = string.IsNullOrEmpty(_sectionName) 
+            if (rawSettings == default)
+            {
+                var content = _settings.IsEncrypt ? AesEncryptionHelper.DecryptString(_settings.Settings, _aesKey)
+                : _settings.Settings;
+                RawSettings = JObject.Parse(content);
+            }
+            else
+            {
+                RawSettings = rawSettings;
+            }
+
+            AppSettings = string.IsNullOrEmpty(_sectionName)
                             ? RawSettings.ToObject<TAppSetting>()
-                            :RawSettings[_sectionName].ToObject<TAppSetting>();
+                            : RawSettings[_sectionName].ToObject<TAppSetting>();
         }
 
         protected GlobalSettingContext GetSettingDbContext()

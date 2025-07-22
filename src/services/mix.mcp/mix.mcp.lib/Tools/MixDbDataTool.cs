@@ -48,7 +48,7 @@ namespace Mix.MCP.Lib.Tools
         public async Task<string> GetMixDbDataById(
             [Description("System name of the database (e.g., mix_products)")] string databaseSystemName,
             [Description("ID of the record to retrieve")] int id,
-            [Description("Comma-separated list of columns to select (e.g., 'objId,name,price')")] string selectColumns = null)
+            [Description("Comma-separated list of columns to select (e.g., 'id,name,price')")] string selectColumns = null)
         {
             if (string.IsNullOrWhiteSpace(databaseSystemName))
                 return "Database system name cannot be empty.";
@@ -79,7 +79,7 @@ namespace Mix.MCP.Lib.Tools
             [Description("System name of the database (e.g., mix_products)")] string databaseSystemName,
             [Description("Query conditions in JSON format (e.g., '[{\"Field\":\"name\",\"Value\":\"Product 1\",\"Method\":\"Equal\"}]')")] string queryJson,
             [Description("Sort conditions in JSON format (e.g., '[{\"Field\":\"name\",\"Direction\":\"Ascending\"}]')")] string sortJson = null,
-            [Description("Comma-separated list of columns to select (e.g., 'objId,name,price')")] string selectColumns = null,
+            [Description("Comma-separated list of columns to select (e.g., 'id,name,price')")] string selectColumns = null,
             [Description("Whether to load nested data")] bool loadNestedData = false)
         {
             if (string.IsNullOrWhiteSpace(databaseSystemName))
@@ -294,7 +294,7 @@ namespace Mix.MCP.Lib.Tools
             [Description("Page size")] int pageSize = 10,
             [Description("Query conditions in JSON format (e.g., '[{\"Field\":\"name\",\"Value\":\"Product\",\"Method\":\"Contains\"}]')")] string queryJson = null,
             [Description("Sort conditions in JSON format (e.g., '[{\"Field\":\"name\",\"Direction\":\"Ascending\"}]')")] string sortJson = null,
-            [Description("Comma-separated list of columns to select (e.g., 'objId,name,price')")] string selectColumns = null)
+            [Description("Comma-separated list of columns to select (e.g., 'id,name,price')")] string selectColumns = null)
         {
             if (string.IsNullOrWhiteSpace(databaseSystemName))
                 return "Database system name cannot be empty.";

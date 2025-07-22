@@ -15,9 +15,9 @@ namespace Mix.Database.Services.MixGlobalSettings
         {
         }
 
-        protected override void LoadAppSettings()
+        protected override void LoadAppSettings(JObject? rawSettings = default)
         {
-            base.LoadAppSettings();
+            base.LoadAppSettings(rawSettings);
             Endpoints = AppSettings.Properties().Select(m => m.Value.ToString()).ToArray();           
         }
 

@@ -9,6 +9,7 @@ using Mix.Database.Services;
 using Mix.Database.Services.MixGlobalSettings;
 using Mix.Lib.Extensions;
 using Mix.Lib.Services;
+using Mix.Shared.Models.Configurations;
 using System.Text;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -53,10 +54,15 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
                 if (settings.Any(m => m.SystemName == "authentication"))
                 {
-                    builder.Services.TryAddSingleton(
-                        m => new AuthConfigService(
+                    var authConfig = settings.First(m => m.SystemName == "authentication");
+                    var srv = new AuthConfigService(
                             builder.Configuration,
-                            settings.First(m => m.SystemName == "authentication")));
+                            settings.First(m => m.SystemName == "authentication"));
+                    if (srv.AppSettings.SecretKey == null)
+                    {
+                        srv.SetConfig(nameof(MixAuthenticationConfigurations.SecretKey), Guid.NewGuid().ToString("N"), true);
+                    }
+                    builder.Services.TryAddSingleton(srv);
                 }
                 if (settings.Any(m => m.SystemName == "global"))
                 {

@@ -1,12 +1,12 @@
-# AI Workflows: Working with Dynamic Data
+# AI Workflows: Working with MixDb Data
 
-This guide covers creating and working with database-driven content, modules, and dynamic data in Mix CMS.
+This guide covers creating and working with database-driven content, modules, and mixdb data in Mix CMS.
 
 ---
 
-## Creating Reusable Modules with Dynamic Data
+## Creating Reusable Modules with MixDb Data
 
-For reusable components that display dynamic content from database tables:
+For reusable components that display mixdb content from database tables:
 
 ### Step 1: Create Database Table
 ```csharp
@@ -20,7 +20,7 @@ CreateDatabaseFromPrompt(
 **CRITICAL:** After creating the database, always document the schema in `database-schema.md`:
 ```markdown
 ## mix_services
-- **objId** (int) - Primary key, auto-increment
+- **id** (int) - Primary key, auto-increment
 - **name** (nvarchar) - Service name
 - **description** (nvarchar) - Service description  
 - **icon** (nvarchar) - CSS icon class
@@ -49,7 +49,7 @@ Use `GetTableSchema` to verify the exact column names and data types before docu
   - `content`: Use this pattern for database-driven module templates:
 
 ```razor
-@model dynamic
+@model mixdb
 @using Mix.Mixdb.Interfaces
 @using Mix.Shared.Models
 @using Mix.Shared.Dtos
@@ -73,9 +73,9 @@ Use `GetTableSchema` to verify the exact column names and data types before docu
 {
     <div class="card bg-base-100 shadow-xl">
         <div class="card-body">
-            <i class="@service.Value<string>("icon")"></i>
-            <h3 class="card-title">@service.Value<string>("name")</h3>
-            <p>@service.Value<string>("description")</p>
+            <i class="@(service.Value<string>("icon")")></i>
+            <h3 class="card-title">@(service.Value<string>("name"))</h3>
+            <p>@(service.Value<string>("description"))</p>
         </div>
     </div>
 }
@@ -103,7 +103,7 @@ After creating the database, always document the schema in `database-schema.md` 
 
 ```markdown
 ## mix_products
-- **objId** (int) - Primary key, auto-increment
+- **id** (int) - Primary key, auto-increment
 - **name** (nvarchar) - Product name
 - **description** (nvarchar) - Product description
 - **price** (decimal) - Product price
@@ -128,7 +128,7 @@ Populate the table with your items.
 -   **Image URLs:** When using images in sample data, always use full, public URLs (e.g., from Unsplash like `https://images.unsplash.com/photo-...`). Do not use local file paths like `/images/photo.jpg` or relative paths.
 -   **Parameters:**
     -   `databaseSystemName`: "mix_products" (the name from Step 1)
-    -   `dataJson`: A JSON array of your items with full image URLs.
+    -   `dataJson`: A JSON array of your items with full image URLs. (single line)
 
 **Example with proper image URLs:**
 ```json
@@ -266,7 +266,7 @@ var request = new SearchMixDbRequestModel
 ### Complete Example: Services Page
 ```razor
 @using Mixcore.Domain.ViewModels
-@model dynamic
+@model mixdb
 
 <div class="container">
     <!-- Services Section -->
@@ -289,7 +289,7 @@ var request = new SearchMixDbRequestModel
 
 ---
 
-## Best Practices for Dynamic Content
+## Best Practices for MixDb Content
 
 ### Database Schema Documentation
 - When creating new tables with MCP tools, **ALWAYS** document the schema in your project's `database-schema.md` file immediately after creation
@@ -345,7 +345,7 @@ var request = new SearchMixDbRequestModel
 - Content works immediately without file uploads
 - Easier testing and development
 
-### When to Use Dynamic Data
+### When to Use MixDb Data
 Always use MixDb tables for repetitive or list-based content instead of hard-coding data directly into templates:
 
 - Product listings
@@ -358,7 +358,7 @@ Always use MixDb tables for repetitive or list-based content instead of hard-cod
 
 ---
 
-## Troubleshooting Dynamic Data
+## Troubleshooting MixDb Data
 
 ### Common Issues
 
@@ -381,7 +381,7 @@ When using MixDb data in templates, always include these using statements at the
 
 ## Next Steps
 
-Once you've mastered dynamic data:
+Once you've mastered mixdb data:
 - **[Creating Blog Posts](./ai-workflows-posts.md)** - Set up blog functionality
 - **[Template Patterns & Best Practices](./ai-template-patterns.md)** - Advanced template techniques
 - **[Mix CMS Reference](./mix-cms-reference.md)** - Enums, constants, and technical reference

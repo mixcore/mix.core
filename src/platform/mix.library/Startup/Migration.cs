@@ -12,9 +12,9 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             if (!configuration.IsInit())
             {
-                var mixDatabaseService = services.GetService<DatabaseService>();
+                using var serviceProvider = services.BuildServiceProvider();
+                var mixDatabaseService = serviceProvider.GetRequiredService<DatabaseService>();
                 mixDatabaseService.UpdateMixCmsContext();
-
             }
         }
     }
