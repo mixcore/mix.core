@@ -17,6 +17,73 @@
 > <span>@(item.Value<decimal>("price"))</span>
 > <span>@(item.Value<DateTime>("published_date"))</span>
 > ```
+
+---
+
+## PostContentViewModel Reference
+
+`PostContentViewModel` is the main ViewModel for blog posts and articles in Mix CMS. It extends `ExtraColumnMultilingualSEOContentViewModelBase` and provides:
+
+- **Properties:**
+  - `ClassName`: Custom class name for the post.
+  - `DetailUrl`: SEO-friendly URL for the post (`/post/{Id}/{SeoName}`).
+  - `AdditionalData`: Holds extra data fields (dynamic columns, JSON).
+  - `PostMetadata`: List of metadata objects for the post.
+- **Methods:**
+  - `Property<T>(string fieldName)`: Get a strongly-typed value from `AdditionalData` by field name.
+  - `LoadAdditionalDataAsync(...)`: Loads extra data and metadata for the post.
+
+**Sample Usage:**
+
+```razor
+@model Mixcore.Domain.ViewModels.PostContentViewModel
+
+<h1>@(Model.Title)</h1>
+<p>@(Model.DetailUrl)</p>
+<p>@(Model.Property<string>("custom_field"))</p>
+<p>@(Model.AdditionalData?["another_field"])</p>
+```
+
+> **Note:** Always use `@(...)` when rendering standalone values in Razor.
+
+> **Rendering PostContentViewModel Data:**
+> ```razor
+> <h1>@(Model.Title)</h1>
+> <span>@(Model.Property<string>("custom_field"))</span>
+> <span>@(Model.AdditionalData?["another_field"])</span>
+> ```
+
+---
+
+## Loading Related Posts
+
+To load related posts (e.g., for a "Related Articles" section), use the `Mixcore.Domain.Services.MixcorePostService`.
+
+**Sample Usage in Razor Page or Controller:**
+
+```csharp
+@using Mixcore.Domain.Services
+@inject MixcorePostService postService
+
+@{
+    // Example: Get latest 3 published posts except the current one
+    var relatedPosts = await postService.GetRelatedPosts(Model.Id);
+}
+
+<div class="related-posts">
+    <h4>Related Posts</h4>
+    <ul>
+    @foreach (var post in relatedPosts)
+    {
+        <li>
+            <a href="@(post.DetailUrl)">@(post.Title)</a>
+        </li>
+    }
+    </ul>
+</div>
+```
+
+> **Note:** Inject `Mixcore.Domain.Services.MixcorePostService` in your Razor view or controller to access post loading methods. Adjust the query as needed for your scenario.
 # Workflow 3: Creating Blog Posts in Mix CMS
 
 This workflow covers creating blog posts and articles, including post templates and content management.

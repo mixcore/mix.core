@@ -19,6 +19,39 @@
 > <span>@(item.Value<DateTime>("published_date"))</span>
 > ```
 
+---
+
+## ModuleContentViewModel Reference
+
+`ModuleContentViewModel` is the main ViewModel for reusable modules in Mix CMS. It provides:
+
+- **Properties:**
+  - `Title`: The module title.
+  - `Excerpt`: Short summary or description.
+  - `Content`: Main HTML content of the module.
+  - `AdditionalData`: Holds extra data fields (dynamic columns, JSON).
+- **Methods:**
+  - `Property<T>(string fieldName)`: Get a strongly-typed value from `AdditionalData` by field name.
+
+**Sample Usage:**
+
+```razor
+@model Mixcore.Domain.ViewModels.ModuleContentViewModel
+
+<h2>@(Model.Title)</h2>
+<p>@(Model.Property<string>("custom_field"))</p>
+<p>@(Model.AdditionalData?["another_field"])</p>
+```
+
+> **Note:** Always use `@(...)` when rendering standalone values in Razor.
+
+> **Rendering ModuleContentViewModel Data:**
+> ```razor
+> <h2>@(Model.Title)</h2>
+> <span>@(Model.Property<string>("custom_field"))</span>
+> <span>@(Model.AdditionalData?["another_field"])</span>
+> ```
+
 This workflow covers creating reusable module components that can be embedded in pages, posts, or other modules.
 
 ---

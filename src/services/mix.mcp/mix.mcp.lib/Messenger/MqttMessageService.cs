@@ -75,7 +75,7 @@ namespace Mix.MCP.Lib.Messenger
             }
 
             var queueSetting = Configuration.GetSection("MessageQueueSettings:MQTT").Get<MQTTSetting>();
-            if (queueSetting.UseWebSocket)
+            if (string.IsNullOrEmpty(queueSetting?.HostName))
             {
                 queueSetting = new MQTTSetting(Configuration.MqttWebSocketUrl());
             }

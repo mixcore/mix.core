@@ -19,6 +19,41 @@
 > <span>@(item.Value<DateTime>("published_date"))</span>
 > ```
 
+---
+
+## PageContentViewModel Reference
+
+`PageContentViewModel` is the main ViewModel for static and dynamic pages in Mix CMS. It provides:
+
+- **Properties:**
+  - `Title`: The page title.
+  - `DetailUrl`: SEO-friendly URL for the page (`/page/{Id}/{SeoName}`).
+  - `Excerpt`: Short summary or description.
+  - `Content`: Main HTML content of the page.
+  - `AdditionalData`: Holds extra data fields (dynamic columns, JSON).
+- **Methods:**
+  - `Property<T>(string fieldName)`: Get a strongly-typed value from `AdditionalData` by field name.
+
+**Sample Usage:**
+
+```razor
+@model Mixcore.Domain.ViewModels.PageContentViewModel
+
+<h1>@(Model.Title)</h1>
+<p>@(Model.DetailUrl)</p>
+<p>@(Model.Property<string>("custom_field"))</p>
+<p>@(Model.AdditionalData?["another_field"])</p>
+```
+
+> **Note:** Always use `@(...)` when rendering standalone values in Razor.
+
+> **Rendering PageContentViewModel Data:**
+> ```razor
+> <h1>@(Model.Title)</h1>
+> <span>@(Model.Property<string>("custom_field"))</span>
+> <span>@(Model.AdditionalData?["another_field"])</span>
+> ```
+
 This workflow covers the complete process of creating pages in Mix CMS, including templates and content.
 
 ---

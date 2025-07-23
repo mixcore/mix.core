@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Converters;
+﻿using Mix.Portal.Domain.Services;
+using Newtonsoft.Json.Converters;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -15,13 +16,13 @@ namespace Microsoft.Extensions.DependencyInjection
               {
                   options.SerializerSettings.Converters.Add(new StringEnumConverter());
               });
-
+            services.AddScoped<MixcorePostService>();
             services.AddSingleton<MixSEORouteTransformer>();
         }
 
         public static void UseMixMVCEndpoints(this IEndpointRouteBuilder routes)
         {
-            string notStartWithPattern = "regex(^(?!(metrics|mixcontent|mix-app|graph|app|init|page|post|security|portal|api|vue|error|swagger|graphql|ReDoc|OpenAPI|.+Hub))(.+)$)";
+            string notStartWithPattern = "regex(^(?!((hub|mqtt|mcp|metrics|mixcontent|mix-app|graph|app|init|page|post|security|portal|api|vue|error|swagger|graphql|ReDoc|OpenAPI|.+Hub)\\/))(.+)$)";
             //string urlPathPattern = @"regex((([A-z0-9\-\%]+\/)*[A-z0-9\-\%]+$)?)";
             
             routes.MapDynamicControllerRoute<MixSEORouteTransformer>(

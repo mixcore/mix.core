@@ -14,6 +14,8 @@ Form templates (`folderType: 3`) are specialized for creating interactive forms,
 - **Usage:** Embedded in pages or standalone forms
 - **Features:** Validation, submission handling, data processing
 
+- **Razor Data Rendering:** When rendering data to a Razor View, always use brackets for standalone values (e.g., `@(Model.Title)`). This ensures correct output and prevents encoding issues.
+
 ---
 
 ## Creating Form Templates
