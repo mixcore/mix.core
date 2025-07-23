@@ -4,59 +4,74 @@ This reference guide contains important enums and constants used throughout Mix 
 
 ---
 
-## Template Folder Types
 
-The `folderType` parameter in template creation corresponds to the `MixTemplateFolderType` enum:
+## Template Folder Types (MixTemplateFolderType)
 
+The `folderType` parameter is required when creating or updating templates. It determines the template's category and rendering path. Use the correct value from the `MixTemplateFolderType` enum:
+
+| FolderType Value | Enum Name  | Description                        | Typical Usage Example           |
+|------------------|------------|------------------------------------|---------------------------------|
+| 0                | Layouts    | Layout templates (base layouts)    | Shared layout for all pages     |
+| 1                | Pages      | Page templates                     | Home, About, Contact            |
+| 2                | Modules    | Module templates (reusable blocks) | ServiceCard, FeatureList        |
+| 3                | Forms      | Form templates                     | ContactForm, SignupForm         |
+| 4                | Edms       | Document management templates      | DocumentList, FileViewer        |
+| 5                | Posts      | Post/blog templates                | BlogPost, NewsArticle           |
+| 6                | Widgets    | Widget templates                   | SidebarWidget, FooterWidget     |
+| 7                | Masters    | Master layout templates            | MasterLayout (main site shell)  |
+
+**Enum Definition:**
 ```csharp
 public enum MixTemplateFolderType
 {
-    Layouts = 0,    // Layout templates
-    Pages = 1,      // Page templates  
-    Modules = 2,    // Module templates
-    Forms = 3,      // Form templates
+    Layouts = 0,    // Shared layout templates (base for all pages)
+    Pages = 1,      // Page templates (full pages)
+    Modules = 2,    // Module templates (reusable content blocks)
+    Forms = 3,      // Form templates (user input forms)
     Edms = 4,       // Document management templates
-    Posts = 5,      // Post/blog templates
-    Widgets = 6,    // Widget templates
-    Masters = 7,    // Master layout templates
+    Posts = 5,      // Post/blog templates (articles, news)
+    Widgets = 6,    // Widget templates (small UI components)
+    Masters = 7,    // Master layout templates (site-wide shell)
 }
 ```
 
-### Usage Examples
+### How to Use Folder Types
 
-When creating templates using MCP commands:
+When creating templates with MCP commands, always set the correct `folderType`:
 
 ```csharp
-// Master Layout (most common)
+// Master Layout (site shell)
 CreateTemplate(content, fileName: "MasterLayout", extension: ".cshtml", folderType: 7, mixThemeId: 1)
 
-// Page Template
+// Page Template (full page)
 CreateTemplate(content, fileName: "HomePage", extension: ".cshtml", folderType: 1, mixThemeId: 1)
 
-// Module Template
+// Module Template (reusable block)
 CreateTemplate(content, fileName: "ServiceCard", extension: ".cshtml", folderType: 2, mixThemeId: 1)
 
-// Post Template
+// Post Template (blog/news)
 CreateTemplate(content, fileName: "BlogPost", extension: ".cshtml", folderType: 5, mixThemeId: 1)
 ```
 
-### Template Rendering Paths
+### Template Rendering Path Patterns
 
-The folder type determines the rendering path pattern:
+The folder type controls where the template is rendered from:
 
 ```razor
-// Modules (FolderType.Modules) - renders as "../Modules/ServiceCard.cshtml"
-@await Html.PartialAsync($"../{template.FolderType.ToString()}/ServiceCard.cshtml", model)
+// Module (folderType: 2)
+@await Html.PartialAsync("../Modules/ServiceCard.cshtml", model)
 
-// Pages (FolderType.Pages) - renders as "../Pages/HomePage.cshtml"
-@await Html.PartialAsync($"../{template.FolderType.ToString()}/HomePage.cshtml", model)
+// Page (folderType: 1)
+@await Html.PartialAsync("../Pages/HomePage.cshtml", model)
 
-// Posts (FolderType.Posts) - renders as "../Posts/BlogPost.cshtml"
-@await Html.PartialAsync($"../{template.FolderType.ToString()}/BlogPost.cshtml", model)
+// Post (folderType: 5)
+@await Html.PartialAsync("../Posts/BlogPost.cshtml", model)
 
-// Master Layouts (FolderType.Masters) - renders as "../Masters/MasterLayout.cshtml"
-@await Html.PartialAsync($"../{template.FolderType.ToString()}/MasterLayout.cshtml", model)
+// Master Layout (folderType: 7)
+@await Html.PartialAsync("../Masters/MasterLayout.cshtml", model)
 ```
+
+> **Tip:** Always match the folder type to the template's intended use. This ensures correct rendering and organization.
 
 ---
 

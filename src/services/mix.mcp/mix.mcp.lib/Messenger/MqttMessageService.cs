@@ -33,6 +33,7 @@ namespace Mix.MCP.Lib.Messenger
             }
             catch (Exception ex)
             {
+                await Task.Delay(2000);
                 Console.Error.WriteLine(ex.Message);
             }
         }
@@ -74,7 +75,7 @@ namespace Mix.MCP.Lib.Messenger
             }
 
             var queueSetting = Configuration.GetSection("MessageQueueSettings:MQTT").Get<MQTTSetting>();
-            if (string.IsNullOrEmpty(queueSetting?.HostName))
+            if (queueSetting.UseWebSocket)
             {
                 queueSetting = new MQTTSetting(Configuration.MqttWebSocketUrl());
             }

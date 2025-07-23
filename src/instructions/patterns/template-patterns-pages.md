@@ -532,6 +532,11 @@ else
 
 ## Best Practices
 
+### Template Architecture
+- **RenderBody() Usage:** Only call RenderBody() in master layout templates (folderType: 7)
+- **Content Pages:** Should only define their specific content sections, not structural elements
+- **Layout Inheritance:** Ensure proper hierarchy (master layout → page template → content)
+
 ### Content Structure
 - **Semantic HTML:** Use proper heading hierarchy (h1, h2, h3)
 - **Responsive Design:** Test on mobile devices

@@ -41,10 +41,11 @@ Widgets = 6     // Widget components
 
 ### Step 1: Check Prerequisites
 ```markdown
-// Check existing templates
+// Check existing templates and verify folderTypes
 ListTemplates()
 
 // Required: Master Layout (folderType: 7) and Page Template (folderType: 1)
+// Verify templateId has correct folderType before using in CreatePageContent
 ```
 
 ### Step 2: Create Templates (if needed)
@@ -74,10 +75,16 @@ CreatePageContent(
     title: "Welcome",
     content: "<h1>Welcome</h1><p>Your content here...</p>",
     seoName: "welcome",
-    templateId: {page_template_id},
+    templateId: {page_template_id},    // MUST be template with folderType: 1 (Pages)
+    layoutId: {master_layout_id},      // MUST be template with folderType: 7 (Masters)
     tenantId: 1
 )
 ```
+
+**CRITICAL**: 
+- The `templateId` must reference a template with `folderType: 1` (Pages)
+- The `layoutId` must reference a template with `folderType: 7` (Masters)
+- Use `ListTemplates()` to verify template folderType before creating page content.
 
 ### Step 4: Document Success
 Update `project-progress.md`:
@@ -117,6 +124,8 @@ CreateTemplate(
 )
 ```
 
+**CRITICAL**: When linking module content to a template, the `templateId` must reference a template with `folderType: 2` (Modules).
+
 ### Step 3: Use Module in Pages
 ```razor
 @await Html.PartialAsync("../Modules/FeaturedProducts.cshtml", moduleModel)
@@ -144,9 +153,12 @@ CreatePostContent(
     content: "<p>This post explains how to get started...</p>",
     excerpt: "<p>A comprehensive guide to getting started...</p>",
     seoName: "getting-started-guide",
+    templateId: {post_template_id},    // MUST be template with folderType: 5 (Posts)
     tenantId: 1
 )
 ```
+
+**CRITICAL**: The `templateId` must reference a template with `folderType: 5` (Posts). Use `ListTemplates()` to verify template folderType before creating post content.
 
 ### Step 3: Manage Post Status
 - **0 = Preview**: For drafts and previews
@@ -261,6 +273,36 @@ GetPageContent(id: 1, loadNestedData: true)
 - `extension`: Always ".cshtml" (include the dot)
 - `fileName`: Never include ".cshtml" (e.g., "HomePage", not "HomePage.cshtml")
 
+### Page Content Template Requirements
+⚠️ **CRITICAL**: When creating page content with `CreatePageContent()` or `UpdatePageContent()`:
+- The `templateId` parameter MUST reference a template with `folderType: 1` (Pages)
+- The `layoutId` parameter MUST reference a template with `folderType: 7` (Masters)
+- Use `ListTemplates()` to verify the template's folderType before using
+- Page content cannot use templates with other folderTypes (Modules, Posts, etc.)
+
+### Post Content Template Requirements
+⚠️ **CRITICAL**: When creating post content with `CreatePostContent()` or `UpdatePostContent()`:
+- The `templateId` parameter MUST reference a template with `folderType: 5` (Posts)
+- Use `ListTemplates()` to verify the template's folderType before using
+- Post content cannot use templates with other folderTypes (Pages, Modules, etc.)
+
+### Module Content Template Requirements
+⚠️ **CRITICAL**: When creating module content with `CreateModuleContent()` or `UpdateModuleContent()`:
+- The `templateId` parameter MUST reference a template with `folderType: 2` (Modules)
+- Use `ListTemplates()` to verify the template's folderType before using
+- Module content cannot use templates with other folderTypes (Pages, Posts, etc.)
+
+**Example Verification:**
+```markdown
+// First, check template folderType
+ListTemplates()
+// Look for templates with correct folderType:
+// - folderType: 1 for Pages (templateId in CreatePageContent)
+// - folderType: 7 for Masters (layoutId in CreatePageContent)
+// - folderType: 5 for Posts (templateId in CreatePostContent)
+// - folderType: 2 for Modules (templateId in CreateModuleContent)
+```
+
 ### Image URLs
 ✅ **Always use full public URLs:**
 - `https://images.unsplash.com/photo-...`
@@ -318,16 +360,23 @@ GetPageContent(id: 1, loadNestedData: true)
 ### Common Issues:
 - **"Template already exists"**: Use `ListTemplates` to check first
 - **Missing layout**: Ensure Master Layout (folderType: 7) exists
+- **Wrong template type for pages**: Verify templateId has folderType: 1 (Pages) and layoutId has folderType: 7 (Masters)
+- **Wrong template type for posts**: Verify templateId has folderType: 5 (Posts) for post content
+- **Wrong template type for modules**: Verify templateId has folderType: 2 (Modules) for module content
 - **Data not displaying**: Check using statements and service injection
 - **Broken images**: Use full URLs, include null checks
 - **Relationship issues**: Verify `loadNestedData: true` parameter
 
 ### Verification Steps:
 1. Check prerequisites with `ListTemplates`, `GetTables`
-2. Verify schema with `GetTableSchema`
-3. Test creation with appropriate MCP tools
-4. Validate rendering in templates
-5. Document success and record IDs
+2. **Verify template folderType**: 
+   - Pages: templateId folderType: 1, layoutId folderType: 7
+   - Posts: templateId folderType: 5
+   - Modules: templateId folderType: 2
+3. Verify schema with `GetTableSchema`
+4. Test creation with appropriate MCP tools
+5. Validate rendering in templates
+6. Document success and record IDs
 
 ---
 
@@ -340,9 +389,12 @@ GetPageContent(id: 1, loadNestedData: true)
 - `DeleteTemplate(id, confirmDelete: "YES")` - Remove
 
 ### Content Management
-- `CreatePageContent()` - New webpage
-- `CreatePostContent()` - New blog post
-- `CreateModuleContent()` - New module
+- `CreatePageContent()` - New webpage (templateId: folderType 1, layoutId: folderType 7)
+- `UpdatePageContent()` - Update webpage (templateId: folderType 1, layoutId: folderType 7)
+- `CreatePostContent()` - New blog post (templateId: folderType 5)
+- `UpdatePostContent()` - Update blog post (templateId: folderType 5)
+- `CreateModuleContent()` - New module (templateId: folderType 2)
+- `UpdateModuleContent()` - Update module (templateId: folderType 2)
 - `ListPageContents()` - See all pages
 - `GetPageContent(id)` - Get specific page
 
