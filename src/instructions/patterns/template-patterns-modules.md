@@ -473,37 +473,7 @@ CreateTemplate(
 </style>
 ```
 
----
 
-## Creating Module Content
-
-### MCP Command Workflow
-1. **Create the Module Template:**
-```csharp
-CreateTemplate(
-    folderType: 2,
-    fileName: "ServicesGrid",
-    extension: ".cshtml",
-    mixThemeId: 1,
-    content: "<!-- module template content -->"
-)
-```
-
-2. **Create the Module Content:**
-```csharp
-CreateModuleContent(
-    title: "Our Services",
-    excerpt: "<p>Comprehensive solutions for your business needs</p>",
-    systemName: "services-grid",
-    templateId: moduleTemplateId
-)
-```
-
-3. **Associate with Pages (if needed):**
-```csharp
-// This depends on your specific implementation
-// Modules can be embedded directly in page templates
-```
 
 ---
 
@@ -605,96 +575,28 @@ CreateModuleContent(
 
 ---
 
-## Best Practices
+## Template Structure Reference
 
-### Design Principles
-- **Reusability:** Design modules to work in multiple contexts
-- **Self-contained:** Include all necessary styles and scripts
-- **Responsive:** Ensure modules work on all devices
-- **Performance:** Optimize database queries and caching
+### Basic Model Usage
+```razor
+@model Mixcore.Domain.ViewModels.ModuleContentViewModel
 
-### Code Organization
-- **Modular CSS:** Use scoped styles within modules
-- **Error Handling:** Include null checks and fallbacks
-- **Documentation:** Comment complex modules clearly
-- **Testing:** Test modules in different contexts
+<!-- Access standard properties -->
+@Model.Title
+@Model.Excerpt
+@Model.Status
+@Model.CreatedDateTime
+```
 
-### Data Management
-- **Efficient Queries:** Use specific database queries
-- **Caching:** Cache frequently accessed data
-- **Pagination:** Implement for large datasets
-- **Filtering:** Allow content filtering when appropriate
+### Dynamic Model Usage
+```razor
+@model dynamic
 
----
-
-## Troubleshooting
-
-### Common Issues
-
-**Module not rendering:**
-- Check partial path: `$"../{folderType}/{fileName}.cshtml"`
-- Verify module template exists with correct `folderType: 2`
-- Ensure template content is valid Razor syntax
-
-**Database data not loading:**
-- Verify table name and column names in `SearchMixDbRequestModel`
-- Check using statements and service injection
-- Test database connection and query syntax
-
-**Styling conflicts:**
-- Use scoped CSS or unique class names
-- Test module in different page contexts
-- Check for CSS inheritance issues
-
-**Performance issues:**
-- Optimize database queries
-- Implement caching for expensive operations
-- Review and minimize external resource loading
-
-### Debugging Tips
-- Test modules individually before embedding
-- Use browser developer tools to inspect generated HTML
-- Check Mix CMS logs for template errors
-- Start with simple modules and add complexity gradually
-
----
-
-## Module Types by Use Case
-
-### Content Display Modules
-- News/Blog listings
-- Product showcases
-- Team member grids
-- Portfolio galleries
-
-### Interactive Modules
-- Contact forms
-- Search boxes
-- Newsletter signup
-- Social media feeds
-
-### Navigation Modules
-- Breadcrumbs
-- Sidebar navigation
-- Footer links
-- Site search
-
-### Utility Modules
-- Contact information
-- Business hours
-- Social media links
-- Call-to-action banners
-
----
-
-## Next Steps
-
-After creating module templates:
-
-1. **Create Module Content** - Use `CreateModuleContent`
-2. **Embed in Pages** - Add modules to page templates
-3. **Test Responsiveness** - Verify mobile compatibility
-4. **Optimize Performance** - Cache and optimize queries
+<!-- For database-driven modules -->
+@{
+    var data = await GetDataAsync();
+}
+```
 
 ---
 

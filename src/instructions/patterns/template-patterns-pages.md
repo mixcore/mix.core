@@ -480,19 +480,6 @@ CreateTemplate(
     content: "<!-- template content -->"
 )
 ```
-
-2. **Create the Page Content:**
-```csharp
-CreatePageContent(
-    title: "Welcome to Our Website",
-    content: "<h2>Your content here</h2><p>Page content...</p>",
-    excerpt: "Welcome message for our homepage",
-    seoName: "home",
-    templateId: templateId,      // Use the template ID from step 1
-    layoutId: masterLayoutId     // Use the master layout ID
-)
-```
-
 ---
 
 ## Advanced Page Patterns
@@ -566,11 +553,6 @@ else
 ## Troubleshooting
 
 ### Common Issues
-
-**Page not displaying:**
-- Verify `templateId` and `layoutId` are correct
-- Check that master layout exists (`folderType: 7`)
-- Ensure template content is valid Razor syntax
 
 **Content not rendering:**
 - Check `@Html.Raw(Model.Content)` vs `@Model.Content`

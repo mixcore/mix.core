@@ -75,7 +75,6 @@ CreatePageContent(
     content: "<h1>Welcome</h1><p>Your content here...</p>",
     seoName: "welcome",
     templateId: {page_template_id},
-    layoutId: {master_layout_id},
     tenantId: 1
 )
 ```
@@ -83,11 +82,12 @@ CreatePageContent(
 ### Step 4: Document Success
 Update `project-progress.md`:
 ```markdown
-### 2025-07-22 - Welcome Page Created
+### 2025-07-23 - Welcome Page Created
 - **Master Layout**: MasterLayout.cshtml (ID: {layout_id})
 - **Page Template**: StandardPage.cshtml (ID: {template_id})
 - **Page Content**: "Welcome" page (ID: {page_id})
 - **Status**: ✅ Complete - Page accessible at /welcome
+- **Note**: Layout is automatically loaded by CMS based on theme settings
 ```
 
 ---

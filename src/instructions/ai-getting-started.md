@@ -42,8 +42,8 @@ public enum MixTemplateFolderType
 
 ### Content: The Information on Your Pages
 
--   **Pages (`CreatePageContent`):** The actual webpages that your visitors see, like "Home" or "About". Each page uses a Page Template and a Master Layout to display its content. The `content` parameter should include HTML that will be rendered in the template.
--   **Posts (`CreatePostContent`):** Used for blog entries or news articles. The `content` parameter should include HTML for the post body that will be rendered in the template.
+-   **Pages (`CreatePageContent`):** The actual webpages that your visitors see, like "Home" or "About". Each page uses a Page Template to display its content. The `content` parameter should include HTML that will be rendered in the template. The Master Layout is automatically loaded by the CMS based on theme settings.
+-   **Posts (`CreatePostContent`):** Used for blog entries or news articles. The `content` parameter should include HTML for the post body that will be rendered in the template. The layout is automatically determined by the CMS.
 -   **Custom Data (`CreateDatabaseFromPrompt`):** For lists of things, like products, team members, or service offerings. Instead of hard-coding them into a page, you can store them in a database table and display them dynamically.
 
 ---
@@ -100,9 +100,9 @@ Now that you understand the basics, here are the next steps:
 - **[Creating Database Relationships](./ai-workflows-relationships.md)** - Learn when and how to create relationships between content types
 
 ### 🛠️ **Technical References**
-- **[Template Patterns & Best Practices](./ai-template-patterns.md)** - Template code patterns, rendering, and troubleshooting
-- **[Mix CMS Reference](./mix-cms-reference.md)** - Enums, constants, and technical reference guide
-- **[MCP Tools Reference](./mcp-tools-reference.md)** - Complete MCP command documentation and enhanced agentic server architecture
+- **[Template Patterns & Best Practices](./patterns/template-patterns-overview.md)** - Template code patterns, rendering, and troubleshooting
+- **[Mix CMS Reference](./reference/mix-cms-reference.md)** - Enums, constants, and technical reference guide
+- **[MCP Tools Reference](./reference/mcp-tools-reference.md)** - Complete MCP command documentation and enhanced agentic server architecture
 
 ### 📖 **Additional Resources**
 - **[Developer Guide](./developer-guide.md)** - Technical guide for C# developers
@@ -173,8 +173,8 @@ Now that you understand the basics, here are the next steps:
 
 ✅ **Your first website:**
 1. Create a Master Layout template (`folderType: 7`)
-2. Create a Page Template (`folderType: 1`)
-3. Create your first page content that uses both templates
+2. Create a Page Template (`folderType: 1`)  
+3. Create your first page content that uses the page template (layout is automatically assigned by CMS)
 
 ✅ **Next steps:**
 1. Add dynamic content using database tables
@@ -202,7 +202,7 @@ Now that you understand the basics, here are the next steps:
 
 ## Need Help?
 
-- **Troubleshooting:** Check the [Template Patterns & Best Practices](./ai-template-patterns.md) guide
+- **Troubleshooting:** Check the [Template Patterns & Best Practices](./patterns/template-patterns-overview.md) guide
 - **Relationships:** Consult [Creating Database Relationships](./ai-workflows-relationships.md) for complex content connections
-- **Command Reference:** Use [MCP Tools Reference](./mcp-tools-reference.md) for specific tool parameters
-- **Technical Issues:** Consult the [Developer Guide](./developer-guide.md) for advanced topics
+- **Command Reference:** Use [MCP Tools Reference](./reference/mcp-tools-reference.md) for specific tool parameters
+- **Technical Issues:** Consult the [Developer Guide](./reference/developer-guide.md) for advanced topics

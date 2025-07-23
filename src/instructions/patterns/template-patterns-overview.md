@@ -54,6 +54,7 @@ public enum MixTemplateFolderType
 ### Template Naming Conventions
 - The `extension` parameter must be `.cshtml` (e.g., `".cshtml"`) - always include the dot
 - The `fileName` parameter do NOT include `.cshtml` (e.g., `"HomePage"`, not `"HomePage.cshtml"`)
+- The `content` parameter do NOT include `Layout = "..."`
 - The system will automatically combine them to create the full filename
 
 ### Partial Rendering Pattern
