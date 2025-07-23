@@ -1,4 +1,23 @@
+
 # Workflow 2: Creating Modules in Mix CMS
+
+> **MixDb Data Value Rendering Instruction:**
+> When rendering MixDb data values in templates, always use the following pattern:
+>
+> ```razor
+> @(item.Value<[dataType]>("[column_system_name]"))
+> ```
+>
+> - Replace `[dataType]` with the correct .NET type (e.g., `string`, `int`, `decimal`, `bool`, `DateTime`).
+> - Replace `[column_system_name]` with the exact system name of the column.
+> - The entire expression must be inside brackets `@(...)` when used standalone.
+>
+> **Example:**
+> ```razor
+> <span>@(item.Value<string>("name"))</span>
+> <span>@(item.Value<decimal>("price"))</span>
+> <span>@(item.Value<DateTime>("published_date"))</span>
+> ```
 
 This workflow covers creating reusable module components that can be embedded in pages, posts, or other modules.
 

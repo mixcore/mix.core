@@ -1,7 +1,7 @@
 ﻿@model Mixcore.Domain.ViewModels.PostContentViewModel
 @{
-    Layout = Model.Layout.FilePath;
     ViewData["Title"] = Model.SeoTitle;
+    Layout = Model.Layout?.FilePath;
 }
 
 <input type="hidden" id="view-type" value="Post" />

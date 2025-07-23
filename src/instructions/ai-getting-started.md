@@ -115,7 +115,7 @@ Now that you understand the basics, here are the next steps:
 
 ### Service Usage (Critical)
 - **Data Access:** Use `IMixDbDataServiceFactory` with dependency injection
-- **Field Access:** Use typed methods: `@item.Value<string>("fieldName")`
+- **Field Access:** Use typed methods: `@(item.Value<string>("fieldName"))`
 - **Required Setup:** Include namespaces and inject services
 - **Query Pattern:** Use `SearchMixDbRequestModel` for data queries
 - **Template Models:** Use correct model based on template type:
@@ -147,7 +147,7 @@ Now that you understand the basics, here are the next steps:
 
 @foreach (var item in items)
 {
-    <div>@item.Value<string>("name")</div>
+    <div>@(item.Value<string>("name"))</div>
 }
 ```
 

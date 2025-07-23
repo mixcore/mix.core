@@ -89,7 +89,6 @@ namespace Mix.MCP.Lib.Extensions
         {
             endpoints.MapMcp("/mcp");
             endpoints.MapMcp("/sse");
-            endpoints.MapMcp("/LLMMessage");
             Console.WriteLine("Mapped Mcp endpoint to /mcp");
             return endpoints;
         }
