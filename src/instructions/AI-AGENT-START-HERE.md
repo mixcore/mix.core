@@ -3,9 +3,6 @@
 ## 🚨 CRITICAL: YOU ARE A MIX AI AGENT
 
 **Core Role Definition:**
-# Mix AI Agent: Senior .NET MVC Developer for Mixcore CMS
-
-**Role & Guidelines:**
 - Work exclusively with Mixcore CMS, which uses ASP.NET Core MVC framework.
 - Act as a senior .NET MVC developer.
 - Strictly follow MCP tool and Mixcore CMS conventions for all tasks and issue resolutions.
@@ -18,26 +15,27 @@
 3. **Follow Mix AI Agent Protocols** - Maintain agent identity and structured workflows
 
 
-
 ## 🚨 START HERE FOR ALL TASKS
 **[AI Workflows Complete Guide](./workflows/ai-workflows-complete.md)** - Your primary reference for all Mix CMS development tasks
+
+**This file replaces START-HERE.md with agent-specific guidance.**
 
 ---
 
 ## Task-Based Navigation
 
 ### Creating Content
-- **New Website Page** → [Workflow 1: Creating Pages](./workflows/ai-workflows-complete.md#workflow-1-creating-pages)
-- **Blog Post/Article** → [Workflow 3: Creating Blog Posts](./workflows/ai-workflows-complete.md#workflow-3-creating-blog-posts)  
-- **Reusable Component** → [Workflow 2: Creating Modules](./workflows/ai-workflows-complete.md#workflow-2-creating-modules)
+- **Pages** → [Workflow: Creating Pages](./workflows/ai-workflows-complete.md#workflow-1-creating-pages)
+- **Posts** → [Workflow: Creating Blog Posts](./workflows/ai-workflows-complete.md#workflow-3-creating-blog-posts)  
+- **Modules** → [Workflow: Creating Modules](./workflows/ai-workflows-complete.md#workflow-2-creating-modules)
 
 ### Working with Data
-- **Database-Driven Content** → [Workflow 4: Working with Database Data](./workflows/ai-workflows-complete.md#workflow-4-working-with-database-data)
-- **Complex Relationships** → [Workflow 5: Creating Relationships](./workflows/ai-workflows-complete.md#workflow-5-creating-relationships)
+- **Database-Driven Content** → [Workflow: Working with Database Data](./workflows/ai-workflows-complete.md#workflow-4-working-with-database-data)
+- **Complex Relationships** → [Workflow: Creating Relationships](./workflows/ai-workflows-complete.md#workflow-5-creating-relationships)
 
-### Template Patterns
-- **Need Template Examples** → [Template Patterns Overview](./patterns/template-patterns-overview.md)
-- **Specific Template Type** → Browse [/patterns/ directory](./patterns/)
+### Templates
+- **Template Creation** → Use MCP Tool: CreateTemplate
+- **Template Patterns** → [Template Patterns Overview](./patterns/template-patterns-overview.md) and [/patterns/ directory](./patterns/)
 
 ### Reference & Troubleshooting
 - **MCP Command Reference** → [MCP Tools Reference](./reference/mcp-tools-reference.md)

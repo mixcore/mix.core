@@ -1,16 +1,20 @@
 # Mixcore CMS AI Documentation Summary
 
 ## 📚 Documentation Structure
-1. **START-HERE.md** - Unified entry point with quick navigation
-2. **Workflow Guides** - Task-specific instructions
+1. **Entry Points**:
+   - **START-HERE.md**: General user/developer entry point
+   - **AI-AGENT-START-HERE.md**: Agent-specific guidance with MCP protocols
+2. **Overview**:
+   - **MIXCORE-CMS-OVERVIEW.md**: Comprehensive system architecture and features
+3. **Workflow Guides** - Task-specific instructions
    - Creating Content (pages, modules, posts)
    - Working with Data (database operations)
    - Managing Relationships
-3. **Reference Documentation**
+4. **Reference Documentation**
    - MCP Tools Reference
    - Developer Guide
-4. **Template Patterns** - Examples and best practices
-5. **Archived Documentation** - Historical reference
+5. **Content Types** - Templates, pages, modules, posts
+6. **Archived Documentation** - Historical reference
 
 ## 🚀 Key Improvements
 1. **Unified Starting Point** - Single entry document (START-HERE.md)
@@ -22,10 +26,11 @@
 ## ✅ Documentation Status
 | Category | Files | Status |
 |----------|-------|--------|
-| Core Documentation | 3 | ✅ Complete |
+| Core Documentation | 4 | ✅ Complete |
+| Overview | 1 | ✅ Complete |
 | Workflows | 5 | ✅ Complete |
 | Reference | 2 | ✅ Complete |
-| Patterns | 6 | ✅ Complete |
+| Content Types | 6 | ✅ Complete |
 | Archived | 1 | ✅ Complete |
 
 ## 🔑 Essential References
@@ -48,3 +53,12 @@ After every task:
 3. Document MCP tools used
 4. Verify agent identity maintained
 5. Update this summary file
+
+### July 24, 2025
+
+#### Documentation Updates
+- Created comprehensive system overview (MIXCORE-CMS-OVERVIEW.md)
+- Added overview to documentation index
+- Clarified terminology: Templates are content types processed via MCP tools
+- Updated navigation to emphasize MCP tool usage for templates
+- Ensured consistent terminology across all documentation

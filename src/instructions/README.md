@@ -44,6 +44,7 @@ This directory provides focused, organized documentation for **Mix AI Agents** w
 - **[mix-cms-reference.md](./reference/mix-cms-reference.md)** - Mix CMS technical reference
 
 ### Root Level - Core Guides
+- **[MIXCORE-CMS-OVERVIEW.md](./MIXCORE-CMS-OVERVIEW.md)** - Comprehensive system overview
 - **[ai-getting-started.md](./ai-getting-started.md)** - Introduction and core concepts
 - **[mix-ai-agent.md](./mix-ai-agent.md)** - Legacy agent guide (preserved for reference)
 - **[mixdb-lessons-learned.md](./mixdb-lessons-learned.md)** - Best practices and troubleshooting
