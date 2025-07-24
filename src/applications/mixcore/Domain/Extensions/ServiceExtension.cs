@@ -5,6 +5,8 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceExtension
     {
+        static string notStartWith = "mixmq\\.MixMq|admin|hub|mqtt|mcp|metrics|mixcontent|mix-app|graph|app|init|page|post|security|portal|api|vue|error|swagger|graphql|ReDoc|OpenAPI|.+Hub";
+        static string notEndWith = "jpg|jpeg|png|gif|bmp|pdf|docx?|xlsx?|pptx?|txt|csv|exe|zip|rar|json|js|css|webmanifest|ico|svg|webm|mp3|mp4|wmv|otf|ttf";
         #region Routes
 
         public static void AddMixRoutes(this IServiceCollection services)
@@ -22,7 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static void UseMixMVCEndpoints(this IEndpointRouteBuilder routes)
         {
-            string notStartWithPattern = "regex(^(?!((hub|mqtt|mcp|metrics|mixcontent|mix-app|graph|app|init|page|post|security|portal|api|vue|error|swagger|graphql|ReDoc|OpenAPI|.+Hub)\\/))(.+)$)";
+            string notStartWithPattern = $"regex(^(?!\\/?({notStartWith})(\\/|$))(?!.*\\.({notEndWith})$).+$)";
             //string urlPathPattern = @"regex((([A-z0-9\-\%]+\/)*[A-z0-9\-\%]+$)?)";
             
             routes.MapDynamicControllerRoute<MixSEORouteTransformer>(

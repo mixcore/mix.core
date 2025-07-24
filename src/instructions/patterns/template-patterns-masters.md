@@ -1,36 +1,40 @@
 # Master Layout Templates (folderType: 7)
 
-Master layouts define the overall structure and design of your website. They provide the HTML framework that all other pages will use.
+Master layouts define the overall HTML structure for your website, including the `<html>`, `<head>`, and `<body>` tags. All other page templates are rendered within a master layout.
 
 ---
 
-## Overview
-
-Master layouts (`folderType: 7`) are the foundation of your Mix CMS website. They contain the `<html>`, `<head>`, and `<body>` structure that wraps all other content.
-
-### Key Characteristics
-- **Purpose:** Site-wide layout and structure
+## Key Characteristics
+- **Purpose:** Site-wide layout and structure.
 - **Model:** `@model Mixcore.Domain.ViewModels.PageContentViewModel`
-- **Usage:** Referenced by pages via `layoutId`
-- **Priority:** **Always create first** before any pages
+- **Usage:** Referenced by pages via the `layoutId` property when creating page content.
+- **Priority:** **Always create your master layout first**, before creating any pages that will use it.
 
 ---
 
-## Creating Master Layouts
+## Creating a Master Layout
 
 ### MCP Command
+
+Use the `CreateTemplate` command to create a new master layout.
+
 ```csharp
 CreateTemplate(
     folderType: 7,
     fileName: "MainLayout",
     extension: ".cshtml",
-    mixThemeId: 1,
-    content: "<!-- Master layout HTML structure -->"
+    mixThemeId: 1, // Or your specific theme ID
+    content: @"
+        <!-- Paste the full master layout code here -->
+    "
 )
 ```
 
-### Required Structure
-Master layouts must include these essential elements:
+### Master Layout Requirements
+
+A master layout **must** contain the following structure, including the specified `@RenderSection` calls. These sections are critical for SEO, styling, and script management.
+
+**Example `MainLayout.cshtml`:**
 
 ```razor
 @model Mixcore.Domain.ViewModels.PageContentViewModel
@@ -39,61 +43,62 @@ Master layouts must include these essential elements:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@Model.Title</title>
-    
-    <!-- Required Razor Sections -->
-    @RenderSection("Schema", false)     
-    @RenderSection("Seo", false)     
-    <!--[STYLES]-->
-    @RenderSection("Styles", false)   
-</head>
-<body>
-    <header>
-        <!-- Navigation and site header -->
-    </header>
-    
-    <main>
-        @RenderBody()  <!-- This renders the page content -->
-    </main>
-    
-    <footer>
-        <!-- Site footer -->
-    </footer>
-    
-    <!-- Required Scripts Section -->
-    @RenderSection("Scripts", false)
-</body>
-</html>
-```
-
----
-
-## Complete Master Layout Example
-
-```razor
-@model Mixcore.Domain.ViewModels.PageContentViewModel
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@(!string.IsNullOrEmpty(Model.Title) ? Model.Title + " - " : "")My Website</title>
+    <title>@(!string.IsNullOrEmpty(Model.Title) ? Model.Title + " - " : "")My Awesome Site</title>
     <meta name="description" content="@Model.Excerpt">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- Required Razor Sections -->
-    @RenderSection("Schema", false)     
-    @RenderSection("Seo", false)     
+    <!-- REQUIRED SECTIONS -->
+    @RenderSection("Schema", required: false)
+    @RenderSection("Seo", required: false)
     <!--[STYLES]-->
-    @RenderSection("Styles", false)   
+    @RenderSection("Styles", required: false)
     
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .navbar-brand { font-weight: bold; }
-        footer { background-color: #f8f9fa; margin-top: 50px; }
+        footer { background-color: #f8f9fa; padding: 20px 0; margin-top: 50px; }
     </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="/">My Awesome Site</a>
+            </div>
+        </nav>
+    </header>
+    
+    <main class="container mt-4">
+        @RenderBody()  <!-- This renders the specific page content -->
+    </main>
+    
+    <footer class="text-center">
+        <p>&copy; @DateTime.Now.Year My Awesome Site. All Rights Reserved.</p>
+    </footer>
+    
+    <!-- REQUIRED SCRIPT SECTION -->
+    @RenderSection("Scripts", required: false)
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+```
+
+### Explanation of Required Sections
+
+-   `@RenderSection("Schema", false)`: Used for structured data (e.g., JSON-LD) to improve search engine understanding.
+-   `@RenderSection("Seo", false)`: For additional SEO meta tags specific to a page.
+-   `@RenderSection("Styles", false)`: Allows individual pages to inject their own CSS stylesheets into the `<head>`. The `<!--[STYLES]-->` marker is a placeholder for system-injected styles.
+-   `@RenderSection("Scripts", false)`: Allows pages to add JavaScript files or inline scripts at the end of the `<body>`.
+
+---
+
+## Using the Master Layout
+
+When you create a page using `CreatePageContent`, specify the `layoutId` of your master layout template. The system will then render that page's content inside the `@RenderBody()` section of your master layout.
 </head>
 <body>
     <!-- Navigation -->

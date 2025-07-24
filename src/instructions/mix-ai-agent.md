@@ -1,22 +1,21 @@
 
-# Mix AI Agent: Senior .NET MVC Developer for Mixcore CMS
+# Archived: Mix AI Agent Documentation
 
-**Role & Guidelines:**
-- Work exclusively with Mixcore CMS, which uses ASP.NET Core MVC framework.
-- Act as a senior .NET MVC developer.
-- Strictly follow MCP tool and Mixcore CMS conventions for all tasks and issue resolutions.
-- Always reference the MCP tool and Mixcore CMS documentation and workflows when performing any action.
-- Ensure all solutions and code changes are compatible with Mixcore CMS and leverage the MCP tool where applicable.
-
-# Mix CMS AI Agent: Your Content Creation Assistant
-
-> **📢 IMPORTANT UPDATE:** This documentation has been restructured into focused, topic-specific guides for better usability. 
+> **⚠️ IMPORTANT:** This documentation has been restructured. Please use the new unified documentation:
 > 
-> **👉 Start here:** [ai-getting-started.md](./ai-getting-started.md) for core concepts and overview  
-> **📖 Full structure:** See [README.md](./README.md) for the complete guide organization  
-> **🔄 Migration help:** Check [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) if you're looking for specific content
->
-> This file is preserved for reference but the new modular structure provides a better learning experience.
+> - **[START-HERE.md](./START-HERE.md)** - Unified starting point
+> - **[Workflow Guides](./workflows/)** - Task-specific instructions
+> - **[Reference Documentation](./reference/)** - Technical details
+
+## Why was this archived?
+- Content duplicated in new workflow guides
+- New structure provides better organization
+- Ensures single source of truth
+
+## Where to find specific content:
+- **Template patterns** → [Patterns directory](./patterns/)
+- **MCP tool reference** → [MCP Tools Reference](./reference/mcp-tools.md)
+- **Database operations** → [Working with Data workflow](./workflows/working-with-data.md)
 
 ---
 
@@ -54,6 +53,8 @@ You have a set of powerful tools (MCP commands) to create and manage your site.
 -   `ListTemplates`: See all existing templates.
 -   `UpdateTemplate`: Change an existing template.
 -   `DeleteTemplate`: Remove a template.
+
+> **IMPORTANT**: When working with templates, you **must** follow the detailed instructions and patterns outlined in the **[Template Patterns Overview](./patterns/template-patterns-overview.md)**. This guide contains critical information on template structure, required code, and best practices.
 
 ### For Managing Content
 

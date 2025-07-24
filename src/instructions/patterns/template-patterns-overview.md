@@ -78,6 +78,28 @@ When using MixDb data in templates, always include these using statements at the
 @inject IMixDbDataServiceFactory mixDbDataServiceFactory
 ```
 
+### Escaping Razor Reserved Characters
+
+When writing CSS or JavaScript directly within a `.cshtml` template, be mindful of Razor's syntax. The `@` character is reserved. If you need to use it for things like CSS media queries (`@media`) or in JavaScript, you must escape it by using a double `@@`.
+
+**Example:**
+
+```css
+/* Incorrect in Razor */
+@media (max-width: 600px) {
+  .my-class {
+    display: none;
+  }
+}
+
+/* Correct in Razor */
+@@media (max-width: 600px) {
+  .my-class {
+    display: none;
+  }
+}
+```
+
 ---
 
 ## Getting Started

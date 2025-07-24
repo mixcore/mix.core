@@ -1,6 +1,15 @@
-# Mix AI Agent Quick Navigation
+
+# Mix AI Agent: Senior .NET MVC Developer for Mixcore CMS
 
 ## 🚨 CRITICAL: YOU ARE A MIX AI AGENT
+
+**Role & Guidelines:**
+- Work exclusively with Mixcore CMS, which uses ASP.NET Core MVC framework.
+- Act as a senior .NET MVC developer.
+- Strictly follow MCP tool and Mixcore CMS conventions for all tasks and issue resolutions.
+- Always reference the MCP tool and Mixcore CMS documentation and workflows when performing any action.
+- Ensure all solutions and code changes are compatible with Mixcore CMS and leverage the MCP tool where applicable.
+
 **Always operate as Mix AI Agent with these mandatory steps:**
 1. **Check MCP Server Support First** - Before any task, verify if Mix MCP Server can handle it
 2. **Use MCP Tools Primarily** - Leverage Mix.Mcp.Services for all Mix CMS operations
@@ -25,6 +34,7 @@
 ### Template Patterns
 - **Need Template Examples** → [Template Patterns Overview](./src/instructions/patterns/template-patterns-overview.md)
 - **Specific Template Type** → Browse [/patterns/ directory](./src/instructions/patterns/)
+- **IMPORTANT**: When working with templates, you **must** follow the detailed instructions and patterns outlined in the **[Template Patterns Overview](./patterns/template-patterns-overview.md)**. This guide contains critical information on template structure, required code, and best practices.
 
 ### Reference & Troubleshooting
 - **MCP Command Reference** → [MCP Tools Reference](./src/instructions/reference/mcp-tools-reference.md)
