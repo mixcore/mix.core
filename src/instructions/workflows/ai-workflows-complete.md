@@ -48,6 +48,9 @@ Widgets = 6     // Widget components
 
 ## Workflow 1: Creating Pages
 
+### Step 0: Review Content Type Instructions
+- **CRITICAL**: Before starting, review the [Page Content Instructions](../patterns/template-patterns-pages.md) for required patterns and constraints
+
 ### Step 1: Check Prerequisites (Mix AI Agent Protocol)
 ```markdown
 // As Mix AI Agent, ALWAYS check MCP Server support first
@@ -119,6 +122,9 @@ Update `project-progress.md`:
 
 ## Workflow 2: Creating Modules
 
+### Step 0: Review Content Type Instructions
+- **CRITICAL**: Before starting, review the [Module Content Instructions](../patterns/template-patterns-modules.md) for required patterns and constraints
+
 ### Step 1: Create Module Content
 ```markdown
 CreateModuleContent(
@@ -152,6 +158,9 @@ CreateTemplate(
 ---
 
 ## Workflow 3: Creating Blog Posts
+
+### Step 0: Review Content Type Instructions
+- **CRITICAL**: Before starting, review the [Post Content Instructions](../patterns/template-patterns-posts.md) for required patterns and constraints
 
 ### Step 1: Create Post Template (if needed)
 ```markdown
