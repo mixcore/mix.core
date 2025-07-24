@@ -38,6 +38,7 @@ namespace Mix.Service.Services
             _endpoint = endpoint;
 
             _configuration = configuration;
+            InitEndpoint();
         }
 
         public Task SendMessageAsync(string title, string description, object data, MessageType messageType = MessageType.Info)
@@ -89,7 +90,7 @@ namespace Mix.Service.Services
             {
                 if (!string.IsNullOrEmpty(HubEndpoint))
                 {
-                    await StartConnection();
+
                     await Connection.InvokeAsync(HubMethods.SendMessage, message);
                 }
                 else
@@ -135,7 +136,7 @@ namespace Mix.Service.Services
             {
                 try
                 {
-                    if (!IsStarting && Connection.State == HubConnectionState.Disconnected)
+                    if (!IsStarting)
                     {
                         IsStarting = true;
                         await Connection.StartAsync();
@@ -153,59 +154,65 @@ namespace Mix.Service.Services
 
         private void Init()
         {
-            if (!string.IsNullOrEmpty(_configuration.BaseUrl()))
+
+            Connection = new HubConnectionBuilder()
+               .WithUrl(HubEndpoint, options =>
+               {
+                   options.AccessTokenProvider = async () => await Task.FromResult(AccessToken);
+               })
+               .WithKeepAliveInterval(TimeSpan.FromSeconds(2))
+               .WithStatefulReconnect()
+               .WithAutomaticReconnect()
+               .Build();
+
+            Connection.Closed += async (error) =>
             {
-                if (string.IsNullOrEmpty(_endpoint))
+                await Task.Delay(new Random().Next(0, 5) * 1000);
+                await Connection.StartAsync();
+            };
+
+            Connection.On(HubMethods.ReceiveMethod, async (string message) =>
+            {
+                if (message.IsJsonString())
                 {
-                    _endpoint = _configuration.BaseUrl()!;
+                    var obj = ReflectionHelper.ParseStringToObject<SignalRMessageModel>(message);
+                    await HandleMessage(obj);
                 }
-                HubEndpoint = $"{_endpoint.TrimEnd('/')}/{_hub.TrimStart('/')}";
-                Connection = new HubConnectionBuilder()
-                   .WithUrl(HubEndpoint, options =>
-                   {
-                       options.AccessTokenProvider = async () => await Task.FromResult(AccessToken);
-                   })
-                   .WithAutomaticReconnect()
-                   .Build();
+            });
 
-                Connection.Closed += async (error) =>
-                {
-                    await Task.Delay(new Random().Next(0, 5) * 1000);
-                    await Connection.StartAsync();
-                };
+            Connection.Reconnecting += error =>
+            {
+                Console.WriteLine(Connection.State);
 
-                Connection.On(HubMethods.ReceiveMethod, async (string message) =>
-                {
-                    if (message.IsJsonString())
-                    {
-                        var obj = ReflectionHelper.ParseStringToObject<SignalRMessageModel>(message);
-                        await HandleMessage(obj);
-                    }
-                });
+                // Notify users the connection was lost and the client is reconnecting.
+                // Start queuing or dropping messages.
 
-                Connection.Reconnecting += error =>
-                {
-                    Console.WriteLine(Connection.State);
+                return Task.CompletedTask;
+            };
 
-                    // Notify users the connection was lost and the client is reconnecting.
-                    // Start queuing or dropping messages.
+            Connection.Reconnected += msg =>
+            {
+                Console.WriteLine(Connection.State);
 
-                    return Task.CompletedTask;
-                };
+                // Notify users the connection was lost and the client is reconnecting.
+                // Start queuing or dropping messages.
 
-                Connection.Reconnected += msg =>
-                {
-                    Console.WriteLine(Connection.State);
-
-                    // Notify users the connection was lost and the client is reconnecting.
-                    // Start queuing or dropping messages.
-
-                    return Task.CompletedTask;
-                };
-
-            }
+                return Task.CompletedTask;
+            };
         }
+        private void InitEndpoint()
+        {
+            while (string.IsNullOrEmpty(_configuration.BaseUrl()))
+            {
+                Console.WriteLine("Waiting for init endpoint");
+            }
 
+            if (string.IsNullOrEmpty(_endpoint))
+            {
+                _endpoint = _configuration.BaseUrl()!;
+            }
+            HubEndpoint = $"{_endpoint.TrimEnd('/')}/{_hub.TrimStart('/')}";
+        }
         protected abstract Task HandleMessage(SignalRMessageModel message);
 
     }

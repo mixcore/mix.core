@@ -164,7 +164,7 @@ namespace Mixcore.Controllers
                             break;
                     }
                 }
-                return Redirect("/");
+                return NotFound();
             }
             catch (Exception ex)
             {

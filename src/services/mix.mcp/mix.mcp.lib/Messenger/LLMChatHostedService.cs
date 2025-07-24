@@ -59,7 +59,7 @@ namespace Mix.MCP.Lib.Messenger
                     if (tmp > 4)
                     {
                         _logger.LogError(ex, $"Error in LLMChatHostedService. Retrying in 5 seconds ({tmp} times)...");
-                        _logger.LogError(ex, $"Stopping LLMChatHostedService ...");
+                        _logger.LogError($"Stopping LLMChatHostedService ...");
                         break;
                     }
                     tmp++;

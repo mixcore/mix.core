@@ -66,15 +66,7 @@ namespace Mix.Lib.Services
 
             data.SetUowInfo(Uow, CacheService);
             var id = await data.SaveAsync(cancellationToken);
-            await PortalHub.SendMessageAsync(new SignalRMessageModel()
-            {
-                Action = MessageAction.NewQueueMessage,
-                Title = MixQueueTopics.MixViewModelChanged,
-                Message = ViewModelAction.Create.ToString(),
-                Data = ReflectionHelper.ParseObject(data).ToString(),
-                Type = MessageType.Success,
-            });
-
+           
             QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), data);
             return id;
         }
@@ -93,14 +85,7 @@ namespace Mix.Lib.Services
             data.SetUowInfo(Uow, CacheService);
             await data.SaveAsync(cancellationToken);
             await CacheService.RemoveCacheAsync(id, Repository.CacheFolder, cancellationToken);
-            await PortalHub.SendMessageAsync(new SignalRMessageModel()
-            {
-                Action = MessageAction.NewQueueMessage,
-                Title = MixQueueTopics.MixViewModelChanged,
-                Message = ViewModelAction.Update.ToString(),
-                Data = ReflectionHelper.ParseObject(data).ToString(),
-                Type = MessageType.Success,
-            });
+           
             QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Put.ToString(), data);
         }
 
