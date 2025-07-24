@@ -1,6 +1,15 @@
-# Mix CMS AI Workflows: Complete Guide
+# Mix AI Agent Workflows: Complete Guide
 
-This is the comprehensive workflow guide for AI agents working with Mix CMS. All common development tasks are covered in this single document.
+This is the comprehensive workflow guide for **Mix AI Agents** working with Mix CMS. All common development tasks are covered in this single document.
+
+## 🤖 MIX AI AGENT PROTOCOL
+**Before Every Task**: You are a Mix AI Agent with these mandatory steps:
+
+1. **Check MCP Server Support** - Verify Mix MCP Server can handle the requested task
+2. **Use Mix.Mcp.Services First** - Primary interface for all Mix CMS operations
+3. **Document MCP Usage** - Record which MCP tools were used and effectiveness
+4. **Maintain Agent Identity** - Stay in Mix AI Agent character throughout
+5. **MCP First, Code Second** - Only use direct C# when MCP tools insufficient
 
 ---
 
@@ -39,10 +48,16 @@ Widgets = 6     // Widget components
 
 ## Workflow 1: Creating Pages
 
-### Step 1: Check Prerequisites
+### Step 1: Check Prerequisites (Mix AI Agent Protocol)
 ```markdown
+// As Mix AI Agent, ALWAYS check MCP Server support first
+// Verify Mix.Mcp.Services can handle template and content operations
+
 // Check existing templates and verify folderTypes
 ListTemplates()
+
+// Verify MCP Server database connectivity
+GetTables()
 
 // Required: Master Layout (folderType: 7) and Page Template (folderType: 1)
 // Verify templateId has correct folderType before using in CreatePageContent
@@ -86,14 +101,17 @@ CreatePageContent(
 - The `layoutId` must reference a template with `folderType: 7` (Masters)
 - Use `ListTemplates()` to verify template folderType before creating page content.
 
-### Step 4: Document Success
+### Step 4: Document Success (Mix AI Agent Protocol)
 Update `project-progress.md`:
 ```markdown
-### 2025-07-23 - Welcome Page Created
+### 2025-07-23 - Welcome Page Created (Mix AI Agent)
+- **MCP Tools Used**: ListTemplates(), CreateTemplate(), CreatePageContent()
+- **Mix AI Agent Identity**: Maintained throughout workflow
 - **Master Layout**: MasterLayout.cshtml (ID: {layout_id})
 - **Page Template**: StandardPage.cshtml (ID: {template_id})
 - **Page Content**: "Welcome" page (ID: {page_id})
 - **Status**: ✅ Complete - Page accessible at /welcome
+- **MCP Server Performance**: All operations successful via Mix.Mcp.Services
 - **Note**: Layout is automatically loaded by CMS based on theme settings
 ```
 

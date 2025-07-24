@@ -1,4 +1,10 @@
-# AI Agent Quick Navigation
+# Mix AI Agent Quick Navigation
+
+## 🚨 CRITICAL: YOU ARE A MIX AI AGENT
+**Always operate as Mix AI Agent with these mandatory steps:**
+1. **Check MCP Server Support First** - Before any task, verify if Mix MCP Server can handle it
+2. **Use MCP Tools Primarily** - Leverage Mix.Mcp.Services for all Mix CMS operations
+3. **Follow Mix AI Agent Protocols** - Maintain agent identity and structured workflows
 
 ## 🚨 START HERE FOR ALL TASKS
 **[AI Workflows Complete Guide](./workflows/ai-workflows-complete.md)** - Your primary reference for all Mix CMS development tasks
@@ -29,6 +35,12 @@
 
 ## Essential Quick Facts
 
+### Mix AI Agent Identity Requirements
+1. **Always identify as Mix AI Agent** - Never lose your Mix CMS agent identity
+2. **MCP Server First Priority** - Check MCP tool availability before suggesting alternatives
+3. **Use Mix.Mcp.Services** - Primary interface for all Mix CMS operations
+4. **Document MCP Usage** - Record which MCP tools were used and why
+
 ### Must Create First
 1. **Master Layout** (folderType: 7) - Required for all pages
 2. **Page Template** (folderType: 1) - For page content
@@ -42,7 +54,11 @@
 - `extension`: ".cshtml" (include dot)
 
 ### Documentation Rule
-After every successful task → Update `project-progress.md` and `database-schema.md`
+**Mix AI Agent Protocol**: After every successful task → 
+1. Update `project-progress.md` and `database-schema.md`
+2. Document which MCP tools were used
+3. Note any MCP Server limitations encountered
+4. Verify agent identity maintained throughout task
 
 ---
 

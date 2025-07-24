@@ -33,18 +33,18 @@ namespace Mix.MCP.Lib.Messenger
             }
             catch (Exception ex)
             {
-                await Task.Delay(2000);
                 Console.Error.WriteLine(ex.Message);
+                throw new InvalidOperationException("Failed to connect to MQTT broker. Please check your configuration.", ex);
             }
         }
 
         public async Task SubscribeAsync(string topic, Func<string, Task> messageHandler, CancellationToken cancellationToken = default)
         {
-            await InitMqttClient(cancellationToken);
             if (string.IsNullOrEmpty(topic) || messageHandler == null)
             {
                 throw new ArgumentException("Topic and message handler must be provided.");
             }
+            await InitMqttClient(cancellationToken);
             await ConnectAsync(cancellationToken);
             var topicFilter = new MqttTopicFilterBuilder()
                 .WithTopic(topic)

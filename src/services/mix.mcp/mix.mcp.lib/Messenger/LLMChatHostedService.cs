@@ -42,7 +42,7 @@ namespace Mix.MCP.Lib.Messenger
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("LLMChatHostedService is starting.");
-
+            int tmp = 0;
             while (!stoppingToken.IsCancellationRequested)
             {
                 try
@@ -56,7 +56,14 @@ namespace Mix.MCP.Lib.Messenger
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error in LLMChatHostedService. Retrying in 5 seconds...");
+                    if (tmp > 4)
+                    {
+                        _logger.LogError(ex, $"Error in LLMChatHostedService. Retrying in 5 seconds ({tmp} times)...");
+                        _logger.LogError(ex, $"Stopping LLMChatHostedService ...");
+                        break;
+                    }
+                    tmp++;
+                    _logger.LogError(ex, $"Error in LLMChatHostedService. Retrying in 5 seconds ({tmp} times)...");
                     _isSubscribed = false;
                     await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
                 }

@@ -1,0 +1,59 @@
+# AI Agent Quick Navigation
+
+## 🚨 START HERE FOR ALL TASKS
+**[AI Workflows Complete Guide](../instructions/workflows/ai-workflows-complete.md)** - Your primary reference for all Mix CMS development tasks
+
+---
+
+## Task-Based Navigation
+
+### Creating Content
+- **New Website Page** → [Workflow 1: Creating Pages](../instructions/workflows/ai-workflows-complete.md#workflow-1-creating-pages)
+- **Blog Post/Article** → [Workflow 3: Creating Blog Posts](../instructions/workflows/ai-workflows-complete.md#workflow-3-creating-blog-posts)  
+- **Reusable Component** → [Workflow 2: Creating Modules](../instructions/workflows/ai-workflows-complete.md#workflow-2-creating-modules)
+
+### Working with Data
+- **Database-Driven Content** → [Workflow 4: Working with Database Data](../instructions/workflows/ai-workflows-complete.md#workflow-4-working-with-database-data)
+- **Complex Relationships** → [Workflow 5: Creating Relationships](../instructions/workflows/ai-workflows-complete.md#workflow-5-creating-relationships)
+
+### Template Patterns
+- **Need Template Examples** → [Template Patterns Overview](../instructions/patterns/template-patterns-overview.md)
+- **Specific Template Type** → Browse [/patterns/ directory](../instructions/patterns/)
+
+### Reference & Troubleshooting
+- **MCP Command Reference** → [MCP Tools Reference](../instructions/reference/mcp-tools-reference.md)
+- **C# Development** → [Developer Guide](../instructions/reference/developer-guide.md)
+- **System Issues** → Check troubleshooting sections in workflow guides
+
+---
+
+## Essential Quick Facts
+
+### Must Create First
+1. **Master Layout** (folderType: 7) - Required for all pages
+2. **Page Template** (folderType: 1) - For page content
+
+### Image URLs
+✅ Use: `https://images.unsplash.com/photo-...`  
+❌ Never: `/images/photo.jpg` or local paths
+
+### Template Naming
+- `fileName`: "HomePage" (no .cshtml)
+- `extension`: ".cshtml" (include dot)
+
+### Documentation Rule
+After every successful task → Update `project-progress.md` and `database-schema.md`
+
+---
+
+## Directory Map
+```
+/instructions/
+├── 🎯 workflows/ai-workflows-complete.md    ← PRIMARY GUIDE
+├── 📚 patterns/                             ← Template examples
+├── 📖 reference/                            ← Technical docs
+├── ai-getting-started.md                    ← Core concepts
+└── README.md                                ← This overview
+```
+
+**Remember**: The complete workflow guide contains everything you need for 95% of Mix CMS development tasks.

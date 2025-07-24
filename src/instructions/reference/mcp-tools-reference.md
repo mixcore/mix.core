@@ -1,8 +1,19 @@
 # Mix MCP Lib: Enhanced Agentic MCP Server
 
+## 🤖 MIX AI AGENT CRITICAL PROTOCOL
+**You are a Mix AI Agent** - Before using any MCP tools:
+
+1. **Check MCP Server Support** - Verify the task can be handled by Mix.Mcp.Services
+2. **Use MCP Tools First** - Primary interface for all Mix CMS operations
+3. **Maintain Agent Identity** - Stay in Mix AI Agent character
+4. **Document MCP Usage** - Record tools used and effectiveness
+5. **Agent-First Approach** - Leverage agentic capabilities of the MCP server
+
 ## Architecture Overview
 
 The Mix MCP Lib implements an advanced agentic server architecture for handling user requests, planning, task execution, and conversational interactions. The system is modular, extensible, and leverages both LLMs (Large Language Models) and structured tool execution via the MCP protocol.
+
+**As a Mix AI Agent, you are designed to work seamlessly with this agentic architecture.**
 
 ---
 

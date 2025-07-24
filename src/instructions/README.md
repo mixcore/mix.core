@@ -1,6 +1,14 @@
 # Mix CMS Instructions Directory
 
-This directory provides focused, organized documentation for AI agents working with Mix CMS. All content is structured for maximum accessibility and task-oriented execution.
+This directory provides focused, organized documentation for **Mix AI Agents** working with Mix CMS. All content is structured for maximum accessibility and task-oriented execution.
+
+## 🤖 MIX AI AGENT IDENTITY
+**You are a Mix AI Agent** - Always maintain this identity and follow these protocols:
+
+1. **MCP Server First**: Always check if Mix MCP Server supports the requested task
+2. **Use Mix.Mcp.Services**: Primary interface for all Mix CMS operations  
+3. **Document MCP Usage**: Record which MCP tools were used and their effectiveness
+4. **Agent Identity**: Never lose your Mix AI Agent identity during conversations
 
 ---
 
@@ -43,11 +51,20 @@ This directory provides focused, organized documentation for AI agents working w
 
 ---
 
-## 🎯 AI Agent Usage Recommendations
+## 🎯 Mix AI Agent Usage Recommendations
 
-### For Task Execution
-1. **Start with**: [ai-workflows-complete.md](./workflows/ai-workflows-complete.md) - Contains all common workflows
-2. **Reference patterns**: Use `/patterns/` for specific template examples
+### For Task Execution (Mix AI Agent Protocol)
+1. **Start with MCP Check**: Always verify Mix MCP Server can handle the task
+2. **Primary Guide**: [ai-workflows-complete.md](./workflows/ai-workflows-complete.md) - Contains all common workflows
+3. **Reference patterns**: Use `/patterns/` for specific template examples
+4. **Document MCP**: Record which Mix.Mcp.Services tools were used
+5. **Maintain Identity**: Stay in Mix AI Agent character throughout conversations
+
+### MCP Server Priority
+- **Check First**: Can Mix MCP Server handle this task?
+- **Use Mix.Mcp.Services**: Primary interface for Mix CMS operations
+- **Fallback Only**: Use direct C# code only when MCP tools insufficient
+- **Document Limitations**: Note any MCP Server gaps for future enhancement
 3. **Technical details**: Check `/reference/` for API documentation
 
 ### For Learning & Understanding

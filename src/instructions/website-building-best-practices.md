@@ -1,6 +1,14 @@
 # Best Practices for Building Websites with Mix CMS
 
-This guide outlines a structured, best-practice workflow for planning, building, and developing websites using the Mix CMS platform. By following these phases, your team can leverage the full potential of the platform, from AI-driven content creation to deep custom development.
+This guide outlines a structured, best-practice workflow for planning, building, and developing websites using the Mix CMS platform. By following these phases, your team can leverage the full potential of the platform, from **Mix AI Agent-driven content creation** to deep custom development.
+
+## 🤖 MIX AI AGENT METHODOLOGY
+**This process is designed for Mix AI Agents** with these core principles:
+
+1. **MCP Server First**: Always check Mix MCP Server capabilities before suggesting alternatives
+2. **Agent Identity**: Maintain Mix AI Agent character throughout all phases
+3. **Mix.Mcp.Services Primary**: Use MCP tools as the primary interface
+4. **Document MCP Usage**: Record which tools were effective in each phase
 
 This process is designed to align with the specialized documentation provided in this directory.
 
@@ -8,36 +16,40 @@ This process is designed to align with the specialized documentation provided in
 
 ## The Development Workflow: A Phased Approach
 
-### Phase 1: Planning and Foundation
+### Phase 1: Planning and Foundation (Mix AI Agent)
 
-**Goal:** Define the project's vision, scope, and structure. Understand the core capabilities of Mix CMS.
+**Goal:** Define the project's vision, scope, and structure. Understand the core capabilities of Mix CMS and MCP Server.
 
-**Audience:** Project Managers, AI Agents, Lead Developers.
+**Audience:** Project Managers, **Mix AI Agents**, Lead Developers.
 
-**Process:**
+**Mix AI Agent Process:**
 1.  **Define Project Requirements:** Clearly outline the website's purpose, target audience, key features, and overall goals.
-2.  **Understand the Platform:** Before building, review the **`mix-ai-agent.md`** guide to understand the fundamental concepts and architecture of Mix CMS. This knowledge is crucial for effective planning and for knowing what the AI can build out-of-the-box.
-3.  **Create a Sitemap and Feature List:** Map out the website's pages, user flows, and required functionalities.
+2.  **Check MCP Server Capabilities:** Before planning, verify which tasks can be handled by Mix.Mcp.Services
+3.  **Understand the Platform:** Review the **Mix AI Agent documentation** to understand fundamental concepts and MCP architecture.
+4.  **Create a Sitemap and Feature List:** Map out the website's pages, user flows, and required functionalities.
+5.  **Verify MCP Support**: Ensure planned features align with available MCP tools
 
 **Key Document:**
-- **[mix-ai-agent.md](./mix-ai-agent.md)**: Start here to grasp core concepts.
+- **[AI-AGENT-START-HERE.md](./AI-AGENT-START-HERE.md)**: Primary entry point for Mix AI Agents
 
 ---
 
-### Phase 2: AI-Powered Site Construction
+### Phase 2: Mix AI Agent-Powered Site Construction
 
-**Goal:** Rapidly build the core website structure, pages, and content using the AI assistant and MCP (Model-driven Content Protocol) tools.
+**Goal:** Rapidly build the core website structure, pages, and content using the **Mix AI Agent** and MCP (Model Context Protocol) tools.
 
-**Audience:** AI Agents, Content Creators.
+**Audience:** **Mix AI Agents**, Content Creators.
 
-**Process:**
-1.  **Follow Step-by-Step Workflows:** Use the detailed workflows in **`mix-ai-agent.md`** to perform tasks like creating databases, defining content structures, and generating pages.
-2.  **Utilize MCP Commands:** Execute MCP commands to interact with the CMS programmatically. This is the primary method for AI-driven development.
-3.  **Handle Repetitive Content Dynamically:** When modules contain repetitive items (like product lists, team members, testimonials, or service offerings), create a MixDb table instead of hard-coding the data. Use `CreateDatabaseFromPrompt` to define the structure and render the data dynamically in your templates.
-4.  **Troubleshoot and Refine:** Use the troubleshooting guide within the AI agent documentation to resolve common issues.
+**Mix AI Agent Process:**
+1.  **Follow MCP-First Protocol:** Always check MCP Server support before suggesting alternatives
+2.  **Use Step-by-Step Workflows:** Leverage detailed workflows in **AI Workflows Complete Guide**
+3.  **Execute MCP Commands:** Use Mix.Mcp.Services as primary interface for CMS operations
+4.  **Handle Dynamic Content:** Create MixDb tables for repetitive content using `CreateDatabaseFromPrompt`
+5.  **Document MCP Usage:** Record which MCP tools were used and their effectiveness
+6.  **Maintain Agent Identity:** Stay in Mix AI Agent character throughout
 
 **Key Document:**
-- **[mix-ai-agent.md](./mix-ai-agent.md)**: Your complete guide for building and content creation.
+- **[ai-workflows-complete.md](./workflows/ai-workflows-complete.md)**: Complete guide for Mix AI Agent workflows
 
 ---
 
