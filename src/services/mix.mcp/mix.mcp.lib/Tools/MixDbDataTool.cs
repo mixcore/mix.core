@@ -176,7 +176,7 @@ namespace Mix.MCP.Lib.Tools
                 }).ToString(Newtonsoft.Json.Formatting.None);
             }, "CreateManyMixDbData");
         }
-        
+
         /// <summary>
         /// CreateMixDbData multiple records
         /// </summary>

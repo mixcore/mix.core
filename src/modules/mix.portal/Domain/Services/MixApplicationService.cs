@@ -16,16 +16,16 @@ namespace Mix.Portal.Domain.Services
     public sealed class MixApplicationService : TenantServiceBase, IMixApplicationService
     {
         #region Constants and Fields
-        
+
         private static readonly string[] ExcludeFileNames = { "jquery", "index" };
         private static readonly string AllowExtensionsPattern = "json|js|css|webmanifest|ico|png|jpg|jpeg|gif|svg|webm|mp3|mp4|wmv|otf|ttf";
-        
+
         // Compiled regex patterns for better performance
         private static readonly Regex AssetPathRegex = new($@"(\""|\\'|\()([\.])?(\/)?([[a-zA-z\/\-0-9]+)((\.)({AllowExtensionsPattern}))(\""|\\'|\))", RegexOptions.Compiled);
         private static readonly Regex BasePathRegex = new(@"(\[\[?basePath\]\]?/?)", RegexOptions.Compiled);
         private static readonly Regex ApiEndpointRegex = new(@"(\[\[?apiEndpoint\]\]?/?)", RegexOptions.Compiled);
         private static readonly Regex BaseHrefRegex = new(@"(base href=(\""?)([^\"",',`]+)(\""?))", RegexOptions.Compiled);
-        
+
         private readonly IMemoryQueueService<MessageQueueModel> _queueService;
         private readonly IThemeService _themeService;
         private readonly IMixThemeImportService _importService;
@@ -33,11 +33,11 @@ namespace Mix.Portal.Domain.Services
         private readonly IHubContext<MixThemeHub> _hubContext;
         private readonly HttpService _httpService;
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
-        
+
         #endregion
 
         #region Constructor
-        
+
         public MixApplicationService(
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
@@ -59,34 +59,34 @@ namespace Mix.Portal.Domain.Services
             _queueService = queueService ?? throw new ArgumentNullException(nameof(queueService));
             _importService = importService ?? throw new ArgumentNullException(nameof(importService));
         }
-        
+
         #endregion
 
         #region Public Methods
-        
+
         public async Task<MixApplicationViewModel> Install(MixApplicationViewModel app, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(app);
-            
+
             try
             {
                 var name = SeoHelper.GetSEOString(app.DisplayName);
                 var deployUrl = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{name}";
-                
+
                 await NotifyStatusAsync("Downloading package...");
                 var filePath = await DownloadPackageAsync(name, app.PackageFilePath, deployUrl, cancellationToken);
-                
+
                 await NotifyStatusAsync($"Extracting package {filePath}...");
                 MixFileHelper.UnZipFile(filePath, deployUrl);
-                
+
                 await NotifyStatusAsync("Importing schema...");
                 await ImportSchemaAsync($"{deployUrl}/schema", app.CreatedBy, cancellationToken);
-                
+
                 await NotifyStatusAsync("Saving template...");
                 app.TemplateId = await SaveTemplateAsync(app.TemplateId, name, deployUrl, app.BaseHref, cancellationToken);
-                
+
                 await SetupApplicationAsync(app, deployUrl, filePath, cancellationToken);
-                
+
                 await NotifyStatusAsync("Installation completed!", isFinished: true);
                 return app;
             }
@@ -101,23 +101,23 @@ namespace Mix.Portal.Domain.Services
         {
             ArgumentNullException.ThrowIfNull(app);
             ArgumentException.ThrowIfNullOrWhiteSpace(packageFileUrl);
-            
+
             try
             {
                 var name = SeoHelper.GetSEOString(app.DisplayName);
                 var packages = app.AppSettings.Value<JArray>("packages") ?? new JArray();
                 var deployUrl = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{name}";
-                
+
                 var package = await DownloadPackageAsync(name, app.PackageFilePath, deployUrl, cancellationToken);
                 MixFileHelper.UnZipFile(package, deployUrl);
-                
+
                 await ImportSchemaAsync($"{deployUrl}/schema", app.CreatedBy, cancellationToken);
                 await SaveTemplateAsync(app.TemplateId, name, deployUrl, app.BaseHref, cancellationToken);
-                
+
                 packages.Add(package);
                 app.AppSettings["activePackage"] = package;
                 app.AppSettings["packages"] = packages;
-                
+
                 return app;
             }
             catch (MixException)
@@ -133,26 +133,26 @@ namespace Mix.Portal.Domain.Services
         public async Task<MixApplicationViewModel> RestorePackage(RestoreMixApplicationPackageDto dto, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(dto);
-            
+
             try
             {
                 await NotifyStatusAsync($"Restoring package {dto.PackageFilePath}...");
-                
+
                 var app = await GetApplicationAsync(dto.AppId, cancellationToken);
                 ValidatePackageFile(dto.PackageFilePath);
-                
+
                 var name = SeoHelper.GetSEOString(app.DisplayName);
                 var deployUrl = $"{MixFolders.StaticFiles}/{MixFolders.MixApplications}/{name}";
-                
+
                 MixFileHelper.UnZipFile(dto.PackageFilePath, deployUrl);
                 await NotifyStatusAsync($"Package extracted successfully");
-                
+
                 await ImportSchemaAsync($"{deployUrl}/schema", app.CreatedBy, cancellationToken);
                 await SaveTemplateAsync(app.TemplateId, name, deployUrl, app.BaseHref, cancellationToken);
-                
+
                 app.AppSettings["activePackage"] = dto.PackageFilePath;
                 await app.SaveAsync(cancellationToken);
-                
+
                 return app;
             }
             catch (MixException)
@@ -164,7 +164,7 @@ namespace Mix.Portal.Domain.Services
                 throw new MixException(MixErrorStatus.Badrequest, ex);
             }
         }
-        
+
         #endregion
 
         #region Private Methods
@@ -173,7 +173,7 @@ namespace Mix.Portal.Domain.Services
         {
             var app = await MixApplicationViewModel.GetRepository(_cmsUow, CacheService)
                 .GetSingleAsync(m => m.Id == appId, cancellationToken);
-            
+
             return app ?? throw new MixException(MixErrorStatus.NotFound, "App Not Found");
         }
 
@@ -192,13 +192,13 @@ namespace Mix.Portal.Domain.Services
             app.TenantId = CurrentTenant.Id;
             app.AppSettings["activePackage"] = filePath;
             app.AppSettings["packages"] = new JArray { filePath };
-            
+
             await app.SaveAsync(cancellationToken);
         }
 
         private async Task ImportSchemaAsync(string schemaFolder, string requestedBy, CancellationToken cancellationToken)
         {
-            if (!Directory.Exists(schemaFolder)) 
+            if (!Directory.Exists(schemaFolder))
                 return;
 
             var schema = await _importService.LoadSchema(schemaFolder);
@@ -207,7 +207,7 @@ namespace Mix.Portal.Domain.Services
             {
                 schema.ThemeId = themeId.Value;
             }
-            
+
             if (schema?.IsValid == true)
             {
                 await _importService.ImportSelectedItemsAsync(schema, requestedBy, cancellationToken);
@@ -220,10 +220,10 @@ namespace Mix.Portal.Domain.Services
             {
                 var folders = MixFileHelper.GetTopDirectories(deployUrl);
                 var topFolderPattern = string.Join('|', folders);
-                
+
                 templateId = await ProcessIndexFileAsync(templateId, name, deployUrl, baseHref, cancellationToken);
                 await ProcessFilesAndFoldersAsync(deployUrl, deployUrl, topFolderPattern, cancellationToken);
-                
+
                 return templateId;
             }
             catch (Exception ex)
@@ -238,12 +238,12 @@ namespace Mix.Portal.Domain.Services
             var folders = MixFileHelper.GetTopDirectories(currentFolder);
 
             var supportedExtensions = new[] { MixFileExtensions.Js, MixFileExtensions.Css, MixFileExtensions.Html, MixFileExtensions.Json };
-            
+
             foreach (var file in files.Where(f => supportedExtensions.Contains(f.Extension)))
             {
                 await ProcessFileContentAsync(file, topFolderPattern, deployUrl);
             }
-            
+
             foreach (var folder in folders)
             {
                 await ProcessFilesAndFoldersAsync(deployUrl, $"{currentFolder}/{folder}", topFolderPattern, cancellationToken);
@@ -264,13 +264,13 @@ namespace Mix.Portal.Domain.Services
 
                 var webPath = GetWebPath(deployUrl);
                 var processedContent = ProcessIndexContent(indexFile.Content, webPath, baseHref);
-                
+
                 var template = await CreateOrUpdateTemplateAsync(templateId, name, processedContent, cancellationToken);
-                
+
                 // Save the processed index file
                 indexFile.Content = processedContent;
                 MixFileHelper.SaveFile(indexFile);
-                
+
                 await NotifyStatusAsync($"Successfully processed {name}.cshtml");
                 return template.Id;
             }
@@ -284,16 +284,16 @@ namespace Mix.Portal.Domain.Services
         {
             // Replace asset paths
             content = AssetPathRegex.Replace(content, $"$1/{webPath}/$4$5$8");
-            
+
             // Replace base href if present
             if (content.Contains("base href", StringComparison.OrdinalIgnoreCase))
             {
                 content = BaseHrefRegex.Replace(content, $"base href=\"{baseHref}\"");
             }
-            
+
             // Replace base path placeholders
             content = BasePathRegex.Replace(content, $"/{webPath}/");
-            
+
             return content;
         }
 
@@ -317,9 +317,9 @@ namespace Mix.Portal.Domain.Services
 
             template.Content = ProcessTemplateContent(content);
             await template.SaveAsync(cancellationToken);
-            
+
             _queueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), template);
-            
+
             return template;
         }
 
@@ -337,22 +337,22 @@ namespace Mix.Portal.Domain.Services
             try
             {
                 await NotifyStatusAsync($"Processing {file.Filename}{file.Extension}...");
-                
+
                 var webPath = GetWebPath(deployUrl);
                 var content = file.Content;
-                
+
                 // Process asset paths
                 content = ProcessAssetPaths(content, webPath);
-                
+
                 // Process folder-specific paths
                 if (!string.IsNullOrEmpty(folders))
                 {
                     content = ProcessFolderPaths(content, folders, webPath);
                 }
-                
+
                 // Replace placeholders
                 content = ReplaceContentPlaceholders(content, webPath);
-                
+
                 file.Content = content;
                 MixFileHelper.SaveFile(file);
             }
@@ -393,7 +393,7 @@ namespace Mix.Portal.Domain.Services
             {
                 var progress = new Progress<int>();
                 var lastPercent = 0;
-                
+
                 progress.ProgressChanged += async (_, value) =>
                 {
                     if (value > lastPercent)
@@ -405,9 +405,9 @@ namespace Mix.Portal.Domain.Services
 
                 var fileName = $"{name}-{DateTime.UtcNow:dd-MM-yyyy-HH-mm-ss}";
                 var filePath = $"{appFolder}/{fileName}{MixFileExtensions.Zip}";
-                
+
                 await _httpService.DownloadAsync(packageUrl, appFolder, fileName, MixFileExtensions.Zip, progress, cancellationToken);
-                
+
                 return filePath;
             }
             catch (Exception ex)

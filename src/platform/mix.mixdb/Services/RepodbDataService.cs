@@ -371,7 +371,7 @@ namespace Mix.Mixdb.Services
             try
             {
                 var mixDb = await GetMixDb(request.TableName);
-                if (mixDb==null)
+                if (mixDb == null)
                 {
                     throw new Exception($"Error when getting paging data from table {request.TableName}: table not found");
                 }

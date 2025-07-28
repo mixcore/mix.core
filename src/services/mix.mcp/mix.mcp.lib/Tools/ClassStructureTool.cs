@@ -28,20 +28,23 @@ namespace Mix.MCP.Lib.Tools
                 return ReflectionHelper.ParseObject(new { Success = false, Message = $"Class '{className}' not found." }).ToString(Newtonsoft.Json.Formatting.None);
             }
             var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Select(p => new {
+                .Select(p => new
+                {
                     Name = p.Name,
                     Type = p.PropertyType.Name,
                     Attributes = p.GetCustomAttributes().Select(a => a.GetType().Name).ToList()
                 }).ToList();
             var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => !m.IsSpecialName)
-                .Select(m => new {
+                .Select(m => new
+                {
                     Name = m.Name,
                     ReturnType = m.ReturnType.Name,
                     Parameters = m.GetParameters().Select(param => new { param.Name, Type = param.ParameterType.Name }).ToList(),
                     Attributes = m.GetCustomAttributes().Select(a => a.GetType().Name).ToList()
                 }).ToList();
-            var result = new {
+            var result = new
+            {
                 Success = true,
                 ClassName = type.FullName,
                 Properties = properties,

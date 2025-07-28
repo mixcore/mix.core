@@ -115,7 +115,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<IOAuthCodeStoreService, OAuthCodeStoreService>();
             services.TryAddScoped<IOAuthTokenService, OAuthTokenService>();
             services.TryAddScoped<IOAuthTokenRevocationService, OAuthTokenRevocationService>();
-            
+
             return services;
         }
 

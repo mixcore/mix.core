@@ -19,8 +19,8 @@ namespace Mix.MCP.Lib.Services.Search
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of search results</returns>
         Task<IEnumerable<SearchResult>> SearchAsync(
-            string query, 
-            int maxResults = 10, 
+            string query,
+            int maxResults = 10,
             double threshold = 0.7,
             CancellationToken cancellationToken = default);
 
@@ -46,8 +46,8 @@ namespace Mix.MCP.Lib.Services.Search
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of similar documents</returns>
         Task<IEnumerable<SearchResult>> FindSimilarAsync(
-            string text, 
-            int maxResults = 5, 
+            string text,
+            int maxResults = 5,
             CancellationToken cancellationToken = default);
     }
 

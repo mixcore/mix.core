@@ -26,7 +26,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             string notStartWithPattern = $"regex(^(?!\\/?({notStartWith})(\\/|$))(?!.*\\.({notEndWith})$).+$)";
             //string urlPathPattern = @"regex((([A-z0-9\-\%]+\/)*[A-z0-9\-\%]+$)?)";
-            
+
             routes.MapDynamicControllerRoute<MixSEORouteTransformer>(
                 pattern: "{seoName:" + notStartWithPattern + "}");
             routes.MapDynamicControllerRoute<MixSEORouteTransformer>(

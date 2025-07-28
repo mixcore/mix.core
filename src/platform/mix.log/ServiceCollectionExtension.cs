@@ -45,9 +45,9 @@ namespace Mix.Log.Lib
 
             services.AddDbContext<AuditLogDbContext>();
             services.AddDbContext<QueueLogDbContext>();
-            
+
             services.TryAddSingleton<IAuditLogService, AuditLogService>();
-            
+
             services.TryAddSingleton<IPortalHubClientService, PortalHubClientService>();
             services.TryAddSingleton<IMixQueueLog, MixQueueLogService>();
             services.AddHostedService<MixLogSubscriber>();

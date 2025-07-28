@@ -42,12 +42,12 @@ namespace Mix.Lib.Extensions
         {
             return configuration["AesKey"];
         }
-        
+
         public static string? BaseUrl(this IConfiguration configuration)
         {
             return configuration["BaseUrl"];
         }
-       
+
         public static string? MqttWebSocketUrl(this IConfiguration configuration)
         {
             var baseUrl = configuration["BaseUrl"];

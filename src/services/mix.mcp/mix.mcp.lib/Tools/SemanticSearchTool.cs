@@ -56,7 +56,7 @@ namespace Mix.MCP.Lib.Tools
                     threshold = 0.7;
                 }
 
-                _logger.LogInformation("Performing semantic search with query: {Query}, maxResults: {MaxResults}, threshold: {Threshold}", 
+                _logger.LogInformation("Performing semantic search with query: {Query}, maxResults: {MaxResults}, threshold: {Threshold}",
                     query, maxResults, threshold);
 
                 var results = await _searchService.SearchAsync(query, maxResults, threshold, cancellationToken);
@@ -113,7 +113,7 @@ namespace Mix.MCP.Lib.Tools
                     maxResults = 3;
                 }
 
-                _logger.LogInformation("Finding similar documents for text (length: {Length}), maxResults: {MaxResults}", 
+                _logger.LogInformation("Finding similar documents for text (length: {Length}), maxResults: {MaxResults}",
                     text.Length, maxResults);
 
                 var results = await _searchService.FindSimilarAsync(text, maxResults, cancellationToken);

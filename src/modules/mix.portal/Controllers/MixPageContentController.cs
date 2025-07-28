@@ -26,7 +26,7 @@ namespace Mix.Portal.Controllers
             : base(MixContentType.Page, identityService, userManager,
                   httpContextAccessor, configuration, cacheService, mixIdentityService, cmsUow, queueService, portalHub, mixTenantService)
         {
-            
+
         }
 
         #region Routes

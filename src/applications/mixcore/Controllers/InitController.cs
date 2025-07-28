@@ -42,7 +42,7 @@ namespace Mixcore.Controllers
                 {
                     var newKey = AesEncryptionHelper.GenerateCombinedKeys();
                     _appSettingsService.SetConfig("AesKey", newKey);
-                    Configuration["AesKey"] = newKey;                    
+                    Configuration["AesKey"] = newKey;
                 }
                 page ??= "";
                 switch (Configuration.InitStep())

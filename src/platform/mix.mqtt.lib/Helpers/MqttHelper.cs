@@ -18,7 +18,7 @@ namespace Mix.Mqtt.Lib.Helpers
             {
                 return default;
             }
-            
+
             MqttClientOptionsBuilder builder = new MqttClientOptionsBuilder();
             if (queueSetting.UseTls)
             {

@@ -25,19 +25,19 @@ namespace Mix.MCP.Lib.Services.Search
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _documents = new List<SearchDocument>();
-            
+
             // Initialize with sample documents
             InitializeSampleDocuments();
         }
 
         public async Task<IEnumerable<SearchResult>> SearchAsync(
-            string query, 
-            int maxResults = 10, 
-            double threshold = 0.7, 
+            string query,
+            int maxResults = 10,
+            double threshold = 0.7,
             CancellationToken cancellationToken = default)
         {
             var cacheKey = $"{CACHE_PREFIX}query_{query}_{maxResults}_{threshold}";
-            
+
             if (_cache.TryGetValue(cacheKey, out IEnumerable<SearchResult>? cachedResults))
             {
                 _logger.LogDebug("Retrieved search results from cache for query: {Query}", query);
@@ -109,7 +109,7 @@ namespace Mix.MCP.Lib.Services.Search
                 {
                     _documents.RemoveAt(index);
                     _logger.LogInformation("Removed document from search index: {Id}", documentId);
-                    
+
                     // Clear cache since index changed
                     ClearSearchCache();
                 }
@@ -117,12 +117,12 @@ namespace Mix.MCP.Lib.Services.Search
         }
 
         public async Task<IEnumerable<SearchResult>> FindSimilarAsync(
-            string text, 
-            int maxResults = 5, 
+            string text,
+            int maxResults = 5,
             CancellationToken cancellationToken = default)
         {
             var cacheKey = $"{CACHE_PREFIX}similar_{text.GetHashCode()}_{maxResults}";
-            
+
             if (_cache.TryGetValue(cacheKey, out IEnumerable<SearchResult>? cachedResults))
             {
                 return cachedResults!;
@@ -204,13 +204,13 @@ namespace Mix.MCP.Lib.Services.Search
         {
             var tokens1 = TokenizeText(text1.ToLowerInvariant());
             var tokens2 = TokenizeText(text2.ToLowerInvariant());
-            
+
             return CalculateJaccardSimilarity(tokens1, tokens2);
         }
 
         private static string[] TokenizeText(string text)
         {
-            return text.Split(new[] { ' ', '\t', '\n', '\r', '.', ',', ';', ':', '!', '?' }, 
+            return text.Split(new[] { ' ', '\t', '\n', '\r', '.', ',', ';', ':', '!', '?' },
                 StringSplitOptions.RemoveEmptyEntries);
         }
 

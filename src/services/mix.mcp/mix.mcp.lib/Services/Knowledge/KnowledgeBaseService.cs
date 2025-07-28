@@ -27,19 +27,19 @@ namespace Mix.MCP.Lib.Services.Knowledge
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _resourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
             _knowledgeBase = new List<KnowledgeEntry>();
-            
+
             // Initialize with default knowledge entries
             InitializeDefaultKnowledge();
             LoadKnowledgeBaseToResources();
         }
 
         public async Task<IEnumerable<KnowledgeEntry>> SearchAsync(
-            string query, 
-            int maxResults = 5, 
+            string query,
+            int maxResults = 5,
             CancellationToken cancellationToken = default)
         {
             var cacheKey = $"{CACHE_PREFIX}search_{query}_{maxResults}";
-            
+
             if (_cache.TryGetValue(cacheKey, out IEnumerable<KnowledgeEntry>? cachedResults))
             {
                 _logger.LogDebug("Retrieved search results from cache for query: {Query}", query);
@@ -52,7 +52,7 @@ namespace Mix.MCP.Lib.Services.Knowledge
             {
                 var queryLower = query.ToLowerInvariant();
                 return _knowledgeBase
-                    .Where(entry => 
+                    .Where(entry =>
                         entry.Title.ToLowerInvariant().Contains(queryLower) ||
                         entry.Content.ToLowerInvariant().Contains(queryLower) ||
                         entry.Category.ToLowerInvariant().Contains(queryLower))
@@ -80,11 +80,11 @@ namespace Mix.MCP.Lib.Services.Knowledge
         }
 
         public async Task<IEnumerable<KnowledgeEntry>> GetByCategoryAsync(
-            string category, 
+            string category,
             CancellationToken cancellationToken = default)
         {
             var cacheKey = $"{CACHE_PREFIX}category_{category}";
-            
+
             if (_cache.TryGetValue(cacheKey, out IEnumerable<KnowledgeEntry>? cachedResults))
             {
                 _logger.LogDebug("Retrieved category results from cache for: {Category}", category);
@@ -135,12 +135,12 @@ namespace Mix.MCP.Lib.Services.Knowledge
         }
 
         public async Task<string> GetContextForPlanningAsync(
-            string userInput, 
-            string agentType = "planning", 
+            string userInput,
+            string agentType = "planning",
             CancellationToken cancellationToken = default)
         {
             var cacheKey = $"{CACHE_PREFIX}context_{agentType}_{userInput.GetHashCode()}";
-            
+
             if (_cache.TryGetValue(cacheKey, out string? cachedContext))
             {
                 return cachedContext!;
@@ -150,12 +150,12 @@ namespace Mix.MCP.Lib.Services.Knowledge
 
             // Search for relevant knowledge
             var relevantEntries = await SearchAsync(userInput, 3, cancellationToken);
-            
+
             // Also get entries specific to the agent type
             var agentSpecificEntries = await GetByCategoryAsync($"agent_{agentType}", cancellationToken);
 
             var contextBuilder = new List<string>();
-            
+
             if (relevantEntries.Any())
             {
                 contextBuilder.Add("Relevant documentation:");
@@ -175,7 +175,7 @@ namespace Mix.MCP.Lib.Services.Knowledge
             }
 
             var context = string.Join("\n", contextBuilder);
-            
+
             // Cache the context
             _cache.Set(cacheKey, context, TimeSpan.FromMinutes(CACHE_DURATION_MINUTES));
 

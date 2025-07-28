@@ -30,9 +30,9 @@ namespace Mix.MCP.Lib.Services.Cache
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Cached or newly created resource</returns>
         Task<T> GetOrCreateAsync<T>(
-            string key, 
-            Func<CancellationToken, Task<T>> factory, 
-            TimeSpan? expiry = null, 
+            string key,
+            Func<CancellationToken, Task<T>> factory,
+            TimeSpan? expiry = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -124,9 +124,9 @@ namespace Mix.MCP.Lib.Services.Cache
         }
 
         public async Task<T> GetOrCreateAsync<T>(
-            string key, 
-            Func<CancellationToken, Task<T>> factory, 
-            TimeSpan? expiry = null, 
+            string key,
+            Func<CancellationToken, Task<T>> factory,
+            TimeSpan? expiry = null,
             CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(key))
@@ -258,7 +258,7 @@ namespace Mix.MCP.Lib.Services.Cache
         public void Clear()
         {
             var keysToRemove = new List<string>();
-            
+
             lock (_lockObject)
             {
                 keysToRemove.AddRange(_cacheKeys);

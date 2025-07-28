@@ -107,7 +107,7 @@ namespace Mix.MCP.Lib.Tools
                 }).ToString(Newtonsoft.Json.Formatting.None);
             }, "CreateDatabaseFromPrompt");
         }
-        
+
         /// <summary>
         /// CreateMixDbData a Mix Database with columns based on a prompt description
         /// </summary>

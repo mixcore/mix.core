@@ -63,8 +63,8 @@ namespace Mix.Queue.Engines
             cancellationToken.ThrowIfCancellationRequested();
 
             _subscriber = CreateSubscriber(_topicId, $"{_topicId}.{_moduleName}");
-            
-            if(string.IsNullOrEmpty(_configuration.BaseUrl()))
+
+            if (string.IsNullOrEmpty(_configuration.BaseUrl()))
             {
                 return;
             }

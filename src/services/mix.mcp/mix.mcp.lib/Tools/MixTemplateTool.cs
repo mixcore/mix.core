@@ -36,7 +36,7 @@ namespace Mix.MCP.Lib.Tools
             _themeService = themeService;
         }
 
-        [McpServerTool, Description("Create a new template")] 
+        [McpServerTool, Description("Create a new template")]
         public async Task<string> CreateTemplate(
             [Description("Template file name")] string fileName,
             [Description("Template content")] string content,
@@ -70,10 +70,12 @@ namespace Mix.MCP.Lib.Tools
                 await vm.ExpandView(ct);
                 SaveTemplateFile(vm);
                 return ReflectionHelper.ParseObject(
-                    new { 
-                            Success = true, 
-                            Message = $"Template '{fileName}' created successfully", 
-                            Data = vm }).ToString(Newtonsoft.Json.Formatting.None);
+                    new
+                    {
+                        Success = true,
+                        Message = $"Template '{fileName}' created successfully",
+                        Data = vm
+                    }).ToString(Newtonsoft.Json.Formatting.None);
             }, "CreateTemplate");
         }
 

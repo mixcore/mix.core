@@ -18,8 +18,8 @@ namespace Mix.MCP.Lib.Services.Knowledge
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of relevant knowledge entries</returns>
         Task<IEnumerable<KnowledgeEntry>> SearchAsync(
-            string query, 
-            int maxResults = 5, 
+            string query,
+            int maxResults = 5,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Mix.MCP.Lib.Services.Knowledge
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of knowledge entries in the category</returns>
         Task<IEnumerable<KnowledgeEntry>> GetByCategoryAsync(
-            string category, 
+            string category,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -47,8 +47,8 @@ namespace Mix.MCP.Lib.Services.Knowledge
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Contextual information for the agent</returns>
         Task<string> GetContextForPlanningAsync(
-            string userInput, 
-            string agentType = "planning", 
+            string userInput,
+            string agentType = "planning",
             CancellationToken cancellationToken = default);
     }
 

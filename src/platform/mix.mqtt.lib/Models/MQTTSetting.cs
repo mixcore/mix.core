@@ -7,7 +7,7 @@ namespace Mix.Mqtt.Lib.Models
     {
         public MQTTSetting()
         {
-                
+
         }
         public MQTTSetting(string webSocketUrl)
         {

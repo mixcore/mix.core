@@ -46,7 +46,7 @@ namespace Mix.Lib.Services
         #region Command Handlers
 
         public virtual async Task<TPrimaryKey> CreateHandlerAsync(
-            TView data, 
+            TView data,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -66,14 +66,14 @@ namespace Mix.Lib.Services
 
             data.SetUowInfo(Uow, CacheService);
             var id = await data.SaveAsync(cancellationToken);
-           
+
             QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Post.ToString(), data);
             return id;
         }
 
         public virtual async Task UpdateHandler(
-            TPrimaryKey id, 
-            TView data, 
+            TPrimaryKey id,
+            TView data,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -85,7 +85,7 @@ namespace Mix.Lib.Services
             data.SetUowInfo(Uow, CacheService);
             await data.SaveAsync(cancellationToken);
             await CacheService.RemoveCacheAsync(id, Repository.CacheFolder, cancellationToken);
-           
+
             QueueService.PushMemoryQueue(CurrentTenant.Id, MixQueueTopics.MixViewModelChanged, MixRestAction.Put.ToString(), data);
         }
 
@@ -107,9 +107,9 @@ namespace Mix.Lib.Services
         }
 
         public virtual async Task PatchHandler(
-            TPrimaryKey id, 
-            TView data, 
-            IEnumerable<EntityPropertyModel> properties, 
+            TPrimaryKey id,
+            TView data,
+            IEnumerable<EntityPropertyModel> properties,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
