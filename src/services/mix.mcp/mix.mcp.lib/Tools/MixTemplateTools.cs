@@ -41,17 +41,17 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async cancellationToken =>
             {
                 var query = _cmsUow.Repository<MixTemplate>().GetModelListBy(m => true);
-                
+
                 if (themeId.HasValue)
                 {
                     query = query.Where(m => m.MixThemeId == themeId.Value);
                 }
-                
+
                 if (folderType.HasValue)
                 {
                     query = query.Where(m => m.FolderType == (MixTemplateFolderType)folderType.Value);
                 }
-                
+
                 if (!string.IsNullOrEmpty(keyword))
                 {
                     query = query.Where(m => m.FileName.Contains(keyword) || m.Content.Contains(keyword));
@@ -107,7 +107,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async cancellationToken =>
             {
                 var template = await _cmsUow.Repository<MixTemplate>().GetSingleAsync(m => m.Id == id, cancellationToken);
-                
+
                 if (template == null)
                 {
                     throw new Exception($"Template with ID {id} not found");
@@ -163,7 +163,7 @@ namespace Mix.MCP.Lib.Tools
                 };
 
                 var result = await template.SaveAsync(cancellationToken);
-                
+
                 if (result <= 0)
                 {
                     throw new Exception("Failed to create template");
@@ -192,7 +192,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async cancellationToken =>
             {
                 var entity = await _cmsUow.Repository<MixTemplate>().GetSingleAsync(m => m.Id == id, cancellationToken);
-                
+
                 if (entity == null)
                 {
                     throw new Exception($"Template with ID {id} not found");
@@ -232,7 +232,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async cancellationToken =>
             {
                 var entity = await _cmsUow.Repository<MixTemplate>().GetSingleAsync(m => m.Id == id, cancellationToken);
-                
+
                 if (entity == null)
                 {
                     throw new Exception($"Template with ID {id} not found");
@@ -259,7 +259,7 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async cancellationToken =>
             {
                 var entity = await _cmsUow.Repository<MixTemplate>().GetSingleAsync(m => m.Id == id, cancellationToken);
-                
+
                 if (entity == null)
                 {
                     throw new Exception($"Template with ID {id} not found");
@@ -323,25 +323,25 @@ namespace Mix.MCP.Lib.Tools
             return await ExecuteWithExceptionHandlingAsync(async cancellationToken =>
             {
                 var criteria = JsonConvert.DeserializeObject<dynamic>(searchCriteria);
-                
+
                 if (criteria == null)
                 {
                     throw new Exception("Invalid search criteria format");
                 }
 
                 var query = _cmsUow.Repository<MixTemplate>().GetModelListBy(m => true);
-                
+
                 // Apply filters based on criteria
                 if (criteria.themeId != null)
                 {
                     query = query.Where(m => m.MixThemeId == (int)criteria.themeId);
                 }
-                
+
                 if (criteria.folderType != null)
                 {
                     query = query.Where(m => m.FolderType == (MixTemplateFolderType)(int)criteria.folderType);
                 }
-                
+
                 if (criteria.keyword != null && !string.IsNullOrEmpty((string)criteria.keyword))
                 {
                     string keyword = (string)criteria.keyword;
