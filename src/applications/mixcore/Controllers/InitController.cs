@@ -78,7 +78,10 @@ namespace Mixcore.Controllers
             _appSettingsService.AppSettings.BaseUrl = endpoint;
             _appSettingsService.AppSettings.McpSettings.BaseUrl = $"{endpoint}/mcp/sse";
             _appSettingsService.SetConfig(nameof(AppSettingsModel.BaseUrl), endpoint);
-            _appSettingsService.SetConfig("AesKey", AesEncryptionHelper.GenerateCombinedKeys());
+            if (string.IsNullOrEmpty(Configuration.AesKey()))
+            {
+                _appSettingsService.SetConfig("AesKey", AesEncryptionHelper.GenerateCombinedKeys());
+            }
             _appSettingsService.SaveSettings();
         }
     }

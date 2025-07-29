@@ -1,11 +1,14 @@
 ﻿using Cassandra.Mapping;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Database.Base;
 using Mix.Database.Entities.MixDb;
 using Mix.Database.Services.MixGlobalSettings;
+using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Mixdb.Helpers;
 using Mix.Mixdb.Interfaces;
@@ -46,6 +49,7 @@ namespace Mix.Lib.Services
         }
         private MixTenantSystemModel _currentTenant;
         private MixCulture _currentCulture;
+        private IConfiguration _configuration;
         #region Dictionaries
 
         private readonly Dictionary<int, int> _dicAliasIds = new();
@@ -64,11 +68,13 @@ namespace Mix.Lib.Services
         private readonly Dictionary<int, int> _dicMixDbDatabaseIds = new();
 
         public MixThemeImportService(
+            IConfiguration configuration,
             IHttpContextAccessor httpContext,
             DatabaseService databaseService,
             IServiceProvider serviceProvider,
             MixCacheService cacheService)
         {
+            _configuration = configuration;
             _cts = new CancellationTokenSource();
             _session = httpContext.HttpContext?.Session;
             _cacheService = cacheService;
@@ -491,7 +497,7 @@ namespace Mix.Lib.Services
                         item.CreatedBy = _siteData.CreatedBy;
                         item.CreatedDateTime = DateTime.UtcNow;
                         item.DatabaseProvider = _databaseService.DatabaseProvider;
-                        item.ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+                        item.ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION).Encrypt(_configuration.AesKey());
                         context.Entry(item).State = EntityState.Added;
                         await context.SaveChangesAsync(_cts.Token);
                         _dicMixDbDatabaseIds.Add(oldId, item.Id);
@@ -539,6 +545,7 @@ namespace Mix.Lib.Services
                         currentDb.MixDbDatabaseId = currentDbContext?.Id;
                         currentDb.CreatedBy = _siteData.CreatedBy;
                         currentDb.CreatedDateTime = DateTime.UtcNow;
+                        currentDb.LastModified = DateTime.UtcNow;
                         context.Entry(currentDb).State = EntityState.Added;
                         await context.SaveChangesAsync(_cts.Token);
                         _dicMixDbTableIds.Add(oldId, currentDb.Id);
@@ -586,6 +593,7 @@ namespace Mix.Lib.Services
                         obj.Id = 0;
                         obj.CreatedBy = _siteData.CreatedBy;
                         obj.CreatedDateTime = DateTime.UtcNow;
+                        obj.LastModified = DateTime.UtcNow;
                         obj.MixDbTableId = database.Id;
                         obj.MixDbTableName = database.SystemName;
                         context.MixDbColumn.Add(obj);
