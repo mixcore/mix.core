@@ -38,18 +38,12 @@ namespace Mixcore.Controllers
             }
             else
             {
-                if (string.IsNullOrEmpty(Configuration.AesKey()))
-                {
-                    var newKey = AesEncryptionHelper.GenerateCombinedKeys();
-                    _appSettingsService.SetConfig("AesKey", newKey);
-                    Configuration["AesKey"] = newKey;
-                }
                 page ??= "";
                 switch (Configuration.InitStep())
                 {
                     case InitStep.Blank:
                     case InitStep.InitTenant:
-                        InitEndpoints();
+                        InitialDefaultCmsConfiguration();
                         if (!string.IsNullOrEmpty(page.ToLower()))
                         {
                             return Redirect(InitRoutePath.Default);
@@ -74,16 +68,18 @@ namespace Mixcore.Controllers
                         }
                         break;
                 }
-                _appSettingsService.SaveSettings();
                 return View();
             }
         }
 
-        private void InitEndpoints()
+        private void InitialDefaultCmsConfiguration()
         {
             string endpoint = $"{Request.Scheme}://{Request.Host}";
             _appSettingsService.AppSettings.BaseUrl = endpoint;
             _appSettingsService.AppSettings.McpSettings.BaseUrl = $"{endpoint}/mcp/sse";
+            _appSettingsService.SetConfig(nameof(AppSettingsModel.BaseUrl), endpoint);
+            _appSettingsService.SetConfig("AesKey", AesEncryptionHelper.GenerateCombinedKeys());
+            _appSettingsService.SaveSettings();
         }
     }
 }

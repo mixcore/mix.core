@@ -10,41 +10,30 @@ namespace Mix.MCP.Lib.Messenger
 {
     public class MqttMessageService : IMqttMessageService
     {
-        private IMqttClient _mqttClient;
-        private MqttClientOptions _mqttClientOptions;
+        private readonly IMqttClient _mqttClient;
+        private readonly MqttClientOptions _mqttClientOptions;
 
-        public bool IsConnected => _mqttClient?.IsConnected ?? false;
-
-        public IConfiguration Configuration { get; }
+        public bool IsConnected => _mqttClient.IsConnected;
 
         public MqttMessageService(IConfiguration configuration)
         {
-            Configuration = configuration;
+            var queueSetting = configuration.GetSection("MessageQueueSettings:MQTT").Get<MQTTSetting>();
+            var factory = new MqttClientFactory();
+            queueSetting.HostName ??= configuration.BaseUrl();
+            _mqttClient = factory.CreateMqttClient();
+            _mqttClientOptions = MqttHelper.GetClientOptions(queueSetting);
         }
 
         public async Task ConnectAsync(CancellationToken cancellationToken = default)
         {
-            try
+            if (!_mqttClient.IsConnected)
             {
-                if (_mqttClient != null && !_mqttClient.IsConnected)
-                {
-                    await _mqttClient.ConnectAsync(_mqttClientOptions, cancellationToken);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine(ex.Message);
-                throw new InvalidOperationException("Failed to connect to MQTT broker. Please check your configuration.", ex);
+                await _mqttClient.ConnectAsync(_mqttClientOptions, cancellationToken);
             }
         }
 
         public async Task SubscribeAsync(string topic, Func<string, Task> messageHandler, CancellationToken cancellationToken = default)
         {
-            if (string.IsNullOrEmpty(topic) || messageHandler == null)
-            {
-                throw new ArgumentException("Topic and message handler must be provided.");
-            }
-            await InitMqttClient(cancellationToken);
             await ConnectAsync(cancellationToken);
             var topicFilter = new MqttTopicFilterBuilder()
                 .WithTopic(topic)
@@ -60,31 +49,7 @@ namespace Mix.MCP.Lib.Messenger
                 }
             };
 
-            if (_mqttClient.IsConnected)
-            {
-                await _mqttClient.SubscribeAsync(topicFilter, cancellationToken);
-            }
-        }
-
-        private async Task InitMqttClient(CancellationToken cancellationToken)
-        {
-            while (string.IsNullOrEmpty(Configuration.BaseUrl()))
-            {
-                Console.WriteLine("Base URL is not set in configuration. Waiting for it to be available...");
-                await Task.Delay(5000, cancellationToken); // Wait for 1 second before retrying
-            }
-
-            var queueSetting = Configuration.GetSection("MessageQueueSettings:MQTT").Get<MQTTSetting>();
-            if (string.IsNullOrEmpty(queueSetting?.HostName))
-            {
-                queueSetting = new MQTTSetting(Configuration.MqttWebSocketUrl());
-            }
-            var factory = new MqttClientFactory();
-            if (!string.IsNullOrEmpty(queueSetting.HostName))
-            {
-                _mqttClient = factory.CreateMqttClient();
-                _mqttClientOptions = MqttHelper.GetClientOptions(queueSetting);
-            }
+            await _mqttClient.SubscribeAsync(topicFilter, cancellationToken);
         }
 
         public async Task PublishAsync(string topic, string payload, CancellationToken cancellationToken = default)

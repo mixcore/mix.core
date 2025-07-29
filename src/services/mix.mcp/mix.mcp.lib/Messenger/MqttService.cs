@@ -45,10 +45,7 @@ namespace Mix.MCP.Lib.Messenger
                .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce)
                .Build();
             var queueSetting = configuration.GetSection($"{MixAppSettingsSection.MessageQueueSettings}:MQTT").Get<MQTTSetting>();
-            if (string.IsNullOrEmpty(queueSetting.HostName))
-            {
-                queueSetting.HostName = configuration.MqttWebSocketUrl();
-            }
+            queueSetting.HostName ??= configuration.BaseUrl();
             _mqttFactory = new MqttClientFactory();
             _mqttClient = _mqttFactory.CreateMqttClient();
             _mqttClientOptions = MqttHelper.GetClientOptions(queueSetting);

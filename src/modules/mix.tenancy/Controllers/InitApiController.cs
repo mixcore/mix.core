@@ -97,13 +97,11 @@ namespace Mix.Tenancy.Controllers
 
             try
             {
-                model.PrimaryDomain ??= Request.Headers.Host;
                 await _initCmsService.InitDbContext(model);
                 await _initCmsService.InitTenantAsync(model);
                 await _quartzService.LoadScheduler();
                 await _uow.CompleteAsync();
                 await _mixTenantService.Reload();
-                _appSettingsService.SetConfig(nameof(AppSettingsModel.BaseUrl), $"https://{model.PrimaryDomain}");
                 _appSettingsService.SetConfig(nameof(AppSettingsModel.DatabaseProvider), model.DatabaseProvider.ToString());
                 _appSettingsService.SetConfig(nameof(AppSettingsModel.InitStatus), InitStep.InitAccount);
                 _appSettingsService.SaveSettings();

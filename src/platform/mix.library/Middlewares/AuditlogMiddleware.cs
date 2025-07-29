@@ -26,7 +26,7 @@ namespace Mix.Lib.Middlewares
 
         public async Task InvokeAsync(HttpContext context, AuditLogDataModel auditLogData)
         {
-            var logConfigurations = _configuration.GetSection(MixAppSettingsSection.LogSettings).Get<LogConfigurations>();
+            
             var isLog = CheckAuditLogPath(context.Request.Path);
             if (!isLog)
             {
@@ -35,6 +35,7 @@ namespace Mix.Lib.Middlewares
 
             else
             {
+                var logConfigurations = _configuration.GetSection(MixAppSettingsSection.LogSettings).Get<LogConfigurations>();
                 //Copy a pointer to the original response body stream
                 await LogRequest(context, auditLogData);
 
@@ -62,13 +63,13 @@ namespace Mix.Lib.Middlewares
                         _auditlogService.QueueRequest(auditLogData);
                     }
                 }
-            }
 
-            auditLogData.StatusCode = context.Response.StatusCode;
-            if (logConfigurations.IsLogStream && isLog)
-            {
-                await _auditlogService.LogStream(auditLogData.Endpoint, auditLogData.Exception ?? auditLogData.Body, isSuccess: auditLogData.StatusCode < 300);
-            }
+                auditLogData.StatusCode = context.Response.StatusCode;
+                if (logConfigurations.IsLogStream && isLog)
+                {
+                    await _auditlogService.LogStream(auditLogData.Endpoint, auditLogData.Exception ?? auditLogData.Body, isSuccess: auditLogData.StatusCode < 300);
+                }
+            }            
         }
 
         private bool CheckAuditLogPath(string path)

@@ -38,7 +38,7 @@ namespace Mix.Service.Services
             _endpoint = endpoint;
 
             _configuration = configuration;
-            InitEndpoint();
+            _ = Task.Run(StartConnection);
         }
 
         public Task SendMessageAsync(string title, string description, object data, MessageType messageType = MessageType.Info)
@@ -126,6 +126,7 @@ namespace Mix.Service.Services
 
         public async Task StartConnection()
         {
+            await InitEndpoint();
             while (Connection == null)
             {
                 await Task.Delay(5000);
@@ -200,11 +201,12 @@ namespace Mix.Service.Services
                 return Task.CompletedTask;
             };
         }
-        private void InitEndpoint()
+        private async Task InitEndpoint()
         {
             while (string.IsNullOrEmpty(_configuration.BaseUrl()))
             {
                 Console.WriteLine("Waiting for init endpoint");
+                await Task.Delay(2000);
             }
 
             if (string.IsNullOrEmpty(_endpoint))
