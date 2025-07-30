@@ -9,7 +9,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class ServiceCollectionExtensions
     {
         public static IEndpointRouteBuilder UseMixSignalRApp(this IEndpointRouteBuilder endpoints)
-        {
+        {            
             endpoints.MapHub<PortalHub>(HubEndpoints.PortalHub);
             endpoints.MapHub<MixDbHub>(HubEndpoints.MixDbHub);
             endpoints.MapHub<LogStreamHub>(HubEndpoints.LogStreamHub);

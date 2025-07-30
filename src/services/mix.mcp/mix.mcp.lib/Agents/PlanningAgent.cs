@@ -1,17 +1,20 @@
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Mix.MCP.Lib.Services.LLM;
+using Mix.Database.Services;
+using Mix.MCP.Lib.Hubs;
 using Mix.MCP.Lib.Messenger;
 using Mix.MCP.Lib.Models;
 using Mix.MCP.Lib.Services.Knowledge;
+using Mix.MCP.Lib.Services.LLM;
+using Mix.Shared.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Mix.Shared.Services;
-using Mix.Database.Services;
-using System.Linq;
 
 namespace Mix.MCP.Lib.Agents
 {
@@ -24,11 +27,12 @@ namespace Mix.MCP.Lib.Agents
             IConfiguration configuration,
             AppSettingsService appSettingsService,
             ILlmServiceFactory llmServiceFactory,
+            IHubContext<LLMHub> hubContext,
             ILogger<PlanningAgent> logger,
             TaskAgent taskAgent,
             IKnowledgeBaseService? knowledgeBaseService = null,
             TimeSpan? defaultTimeout = null)
-            : base(appSettingsService, llmServiceFactory, logger, knowledgeBaseService, defaultTimeout)
+            : base(appSettingsService, llmServiceFactory, hubContext, logger, knowledgeBaseService, defaultTimeout)
         {
             _taskAgent = taskAgent;
             _mqttMessageService = new MqttMessageService(configuration);
@@ -53,7 +57,9 @@ namespace Mix.MCP.Lib.Agents
                 var promptsContent = prompts.Count == 0
                     ? "No actionable prompts were found in your request."
                     : $"Prompts extracted: {string.Join('\n', prompts)}";
-                await SendMqttMessageAsync(deviceId, sessionId, serviceType, promptsContent, cancellationToken);
+                //await SendMqttMessageAsync(deviceId, sessionId, serviceType, promptsContent, cancellationToken);
+
+                await NotifyResult(deviceId, new AgentProcessResult(true, promptsContent));
 
                 if (prompts.Count == 0)
                     return new AgentProcessResult(true, "No actionable prompts were found in your request.");
@@ -120,7 +126,7 @@ namespace Mix.MCP.Lib.Agents
                         results.Add(executionResult);
 
                         // Publish the failure message
-                        await SendMqttMessageAsync(deviceId, sessionId, serviceType, executionResult.Message, cancellationToken);
+                        await NotifyResult(deviceId, new AgentProcessResult(true, executionResult.Message));
 
                         // FAIL-FAST: Stop execution immediately when any task fails
                         _logger.LogWarning("Stopping execution due to task failure. {RemainingTasks} remaining tasks will not be executed",
@@ -130,7 +136,7 @@ namespace Mix.MCP.Lib.Agents
 
                     results.Add(executionResult);
                     // Publish each successful task result to device
-                    await SendMqttMessageAsync(deviceId, sessionId, serviceType, executionResult.Message, cancellationToken);
+                    await NotifyResult(deviceId, new AgentProcessResult(true, executionResult.Message));
                 }
 
                 // 3. Build and return summary with proper status indication
@@ -143,9 +149,7 @@ namespace Mix.MCP.Lib.Agents
                         results.Count, prompts.Count);
 
                     // Publish final summary to device
-                    await SendMqttMessageAsync(deviceId, sessionId, serviceType,
-                        $"? Plan execution stopped due to failure. {results.Count}/{prompts.Count} tasks completed.",
-                        cancellationToken);
+                    await NotifyResult(deviceId, new AgentProcessResult(false, $"? Plan execution stopped due to failure. {results.Count}/{prompts.Count} tasks completed."), false);
                 }
                 else
                 {
@@ -153,9 +157,7 @@ namespace Mix.MCP.Lib.Agents
                         prompts.Count);
 
                     // Publish success summary to device
-                    await SendMqttMessageAsync(deviceId, sessionId, serviceType,
-                        $"? Plan execution completed successfully. All {prompts.Count} tasks completed.",
-                        cancellationToken);
+                    await NotifyResult(deviceId, new AgentProcessResult(true, $"? Plan execution completed successfully. All {prompts.Count} tasks completed."));
                 }
 
                 return new AgentProcessResult(true, summary);

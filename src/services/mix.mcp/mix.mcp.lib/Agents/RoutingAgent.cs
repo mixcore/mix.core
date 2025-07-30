@@ -1,12 +1,14 @@
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Mix.Database.Services;
-using Mix.MCP.Lib.Services.LLM;
+using Mix.MCP.Lib.Hubs;
+using Mix.MCP.Lib.Models;
 using Mix.MCP.Lib.Services.Knowledge;
+using Mix.MCP.Lib.Services.LLM;
 using System;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Mix.MCP.Lib.Models;
 
 namespace Mix.MCP.Lib.Agents
 {
@@ -19,11 +21,12 @@ namespace Mix.MCP.Lib.Agents
             AppSettingsService appSettingsService,
             ILlmServiceFactory llmServiceFactory,
             ILogger<RoutingAgent> logger,
+            IHubContext<LLMHub> hubContext,
             ChatAgent chatAgent,
             PlanningAgent planningAgent,
             IKnowledgeBaseService? knowledgeBaseService = null,
             TimeSpan? defaultTimeout = null)
-            : base(appSettingsService, llmServiceFactory, logger, knowledgeBaseService, defaultTimeout)
+            : base(appSettingsService, llmServiceFactory, hubContext, logger, knowledgeBaseService, defaultTimeout)
         {
             _chatAgent = chatAgent;
             _planningAgent = planningAgent;

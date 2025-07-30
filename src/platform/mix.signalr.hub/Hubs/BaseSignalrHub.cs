@@ -20,6 +20,7 @@ namespace Mix.SignalR.Hubs
     public abstract class BaseSignalRHub : Hub
     {
         protected IMixTenantService MixTenantService;
+        public List<HubUserModel> ConnectedUsers = new List<HubUserModel>();
         protected HubUserModel? CurrentUser;
         protected int? TenantId;
 
@@ -174,11 +175,21 @@ namespace Mix.SignalR.Hubs
 
         public override async Task OnConnectedAsync()
         {
+            var user = GetCurrentUser();
+            if (user != null)
+            {
+                await AddUserToRoom(user.UserName);
+            }
             await base.OnConnectedAsync().ConfigureAwait(false);
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
+            var user = GetCurrentUser();
+            if (user != null && ConnectedUsers.Any(m => m.UserName == user.UserName))
+            {
+                ConnectedUsers.Remove(user);
+            }
             await RemoveUserFromGroups();
             await base.OnDisconnectedAsync(exception).ConfigureAwait(false);
         }

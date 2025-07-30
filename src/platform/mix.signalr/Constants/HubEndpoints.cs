@@ -9,5 +9,6 @@
         public const string EditFileHub = "/hub/editFileHub";
         public const string HighFrequencyHub = "/hub/highFrequencyHub";
         public const string VideoCallHub = "/hub/videoChatHub";
+        public const string LLMHub = "/hub/llm_chat";
     }
 }

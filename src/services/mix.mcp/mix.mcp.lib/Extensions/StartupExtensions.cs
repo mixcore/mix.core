@@ -9,12 +9,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Mix.Heart.Services;
 using Mix.MCP.Lib.Agents;
+using Mix.MCP.Lib.Hubs;
 using Mix.MCP.Lib.Prompts;
 using Mix.MCP.Lib.Resources;
 using Mix.MCP.Lib.Services;
-using Mix.MCP.Lib.Services.LLM;
 using Mix.MCP.Lib.Services.Knowledge;
+using Mix.MCP.Lib.Services.LLM;
 using Mix.MCP.Lib.Tools;
+using Mix.SignalR.Constants;
 
 namespace Mix.MCP.Lib.Extensions
 {
@@ -87,6 +89,7 @@ namespace Mix.MCP.Lib.Extensions
 
         public static IEndpointRouteBuilder MapMCPEndpoints(this IEndpointRouteBuilder endpoints, bool isDevelop)
         {
+            endpoints.MapHub<LLMHub>(HubEndpoints.LLMHub);
             endpoints.MapMcp("/mcp");
             endpoints.MapMcp("/sse");
             Console.WriteLine("Mapped Mcp endpoint to /mcp");

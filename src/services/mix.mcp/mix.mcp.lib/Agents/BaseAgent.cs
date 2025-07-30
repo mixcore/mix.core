@@ -1,8 +1,13 @@
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Mix.Database.Services;
+using Mix.MCP.Lib.Hubs;
 using Mix.MCP.Lib.Models;
-using Mix.MCP.Lib.Services.LLM;
 using Mix.MCP.Lib.Services.Knowledge;
+using Mix.MCP.Lib.Services.LLM;
+using Mix.SignalR.Constants;
+using Mix.SignalR.Hubs;
+using Mix.SignalR.Models;
 using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol.Transport;
 using System;
@@ -24,17 +29,19 @@ namespace Mix.MCP.Lib.Agents
         protected readonly AppSettingsService _appSettingsService;
         protected readonly ConcurrentDictionary<string, AgentMemory> _sessionMemories;
         protected readonly TimeSpan _defaultTimeout;
-        protected IMcpClient _mcpClient
+        protected IHubContext<LLMHub> _hubContext;
+        protected IMcpClient _mcpClient;
+        protected IMcpClient McpClient
         {
             get
             {
                 if (_mcpClient == null)
                 {
-                    string mcpServer = _appSettingsService.AppSettings.McpSettings.BaseUrl ?? $"{_appSettingsService.AppSettings.BaseUrl}/mcp/sse";
+                    string mcpServerBaseUrl = _appSettingsService.AppSettings.McpSettings.BaseUrl ?? _appSettingsService.AppSettings.BaseUrl;
                     // Initialize MCP client
                     var clientTransport = new SseClientTransport(new SseClientTransportOptions()
                     {
-                        Endpoint = new Uri(mcpServer),
+                        Endpoint = new Uri($"{mcpServerBaseUrl}/mcp/sse"),
                         Name = "MixDatabaseAgentClient"
                     });
                     _mcpClient = McpClientFactory.CreateAsync(clientTransport).GetAwaiter().GetResult();
@@ -51,6 +58,7 @@ namespace Mix.MCP.Lib.Agents
         protected BaseAgent(
             AppSettingsService appSettingsService,
             ILlmServiceFactory llmServiceFactory,
+            IHubContext<LLMHub> hubContext,
             ILogger logger,
             IKnowledgeBaseService? knowledgeBaseService = null,
             TimeSpan? defaultTimeout = null)
@@ -61,6 +69,7 @@ namespace Mix.MCP.Lib.Agents
             _defaultTimeout = defaultTimeout ?? TimeSpan.FromSeconds(120);
             _knowledgeBaseService = knowledgeBaseService;
             _appSettingsService = appSettingsService ?? throw new ArgumentNullException(nameof(appSettingsService));
+            _hubContext = hubContext;
         }
 
         /// <summary>
@@ -73,6 +82,16 @@ namespace Mix.MCP.Lib.Agents
             LLMServiceType serviceType = LLMServiceType.DeepSeek,
             CancellationToken cancellationToken = default);
 
+        protected async Task NotifyResult(string userName, AgentProcessResult message, bool isSuccess = true)
+        {
+            await _hubContext.Clients.Group(userName).SendAsync(HubMethods.ReceiveMethod, new SignalRMessageModel()
+            {
+                Action = SignalR.Enums.MessageAction.NewMessage,
+                Data = message,
+                Type = isSuccess? SignalR.Enums.MessageType.Success: SignalR.Enums.MessageType.Error
+            });
+        }
+
         /// <summary>
         /// Helper method to call database tools through MCP client
         /// </summary>
@@ -80,7 +99,7 @@ namespace Mix.MCP.Lib.Agents
         {
             try
             {
-                var result = await _mcpClient.CallToolAsync(toolName, parameters, cancellationToken: cancellationToken);
+                var result = await McpClient.CallToolAsync(toolName, parameters, cancellationToken: cancellationToken);
                 return result.Content.FirstOrDefault(c => c.Type == "text")?.Text ?? "No response received from tool.";
             }
             catch (Exception ex)

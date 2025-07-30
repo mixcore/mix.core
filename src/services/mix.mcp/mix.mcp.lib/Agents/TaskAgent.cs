@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Mix.Database.Services;
+using Mix.MCP.Lib.Hubs;
 using Mix.MCP.Lib.Models;
 using Mix.MCP.Lib.Services.Knowledge;
 using Mix.MCP.Lib.Services.LLM;
@@ -32,10 +34,11 @@ namespace Mix.MCP.Lib.Agents
         public TaskAgent(
             AppSettingsService appSettingsService,
             ILlmServiceFactory llmServiceFactory,
+            IHubContext<LLMHub> hubContext,
             ILogger<TaskAgent> logger,
             IKnowledgeBaseService? knowledgeBaseService = null,
             TimeSpan? defaultTimeout = null)
-            : base(appSettingsService, llmServiceFactory, logger, knowledgeBaseService, defaultTimeout)
+            : base(appSettingsService, llmServiceFactory, hubContext, logger, knowledgeBaseService, defaultTimeout)
         {
             _commandHandlers = new Dictionary<string, Func<TaskState, string, Task<string>>>(StringComparer.OrdinalIgnoreCase)
             {
@@ -71,6 +74,8 @@ namespace Mix.MCP.Lib.Agents
                     var toolResult = await CallMcpToolAsync(toolName, toolParams, cancellationToken);
                     AddToTaskHistory(taskHistory, $"tool:{toolName}", FormatToolArguments(toolParams), toolResult);
                     memory.SetValue(TaskHistoryKey, taskHistory);
+                    
+                    await NotifyResult(deviceId, new AgentProcessResult(true, toolResult));
                     return new AgentProcessResult(true, toolResult);
                 }
 
@@ -83,10 +88,13 @@ namespace Mix.MCP.Lib.Agents
                     TrimTaskHistory(taskHistory);
                     memory.SetValue(TaskStateKey, taskState);
                     memory.SetValue(TaskHistoryKey, taskHistory);
+
+                    await NotifyResult(deviceId, new AgentProcessResult(true, response));
                     return new AgentProcessResult(true, response);
                 }
-
-                return new AgentProcessResult(true, await ProcessWithLlmAsync(userInput, taskState, serviceType, cancellationToken));
+                var llmResponse = await ProcessWithLlmAsync(userInput, taskState, serviceType, cancellationToken);
+                await NotifyResult(deviceId, new AgentProcessResult(true, llmResponse));
+                return new AgentProcessResult(true, llmResponse);
             }
             catch (Exception ex)
             {
@@ -217,7 +225,7 @@ namespace Mix.MCP.Lib.Agents
         {
             try
             {
-                var result = await _mcpClient.CallToolAsync(toolName, parameters, cancellationToken: cancellationToken);
+                var result = await McpClient?.CallToolAsync(toolName, parameters, cancellationToken: cancellationToken);
                 return result.Content.FirstOrDefault(c => c.Type == "text")?.Text ?? "No response received from tool.";
             }
             catch (Exception ex)

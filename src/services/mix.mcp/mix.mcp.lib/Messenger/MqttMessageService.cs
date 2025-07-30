@@ -18,10 +18,13 @@ namespace Mix.MCP.Lib.Messenger
         public MqttMessageService(IConfiguration configuration)
         {
             var queueSetting = configuration.GetSection("MessageQueueSettings:MQTT").Get<MQTTSetting>();
-            var factory = new MqttClientFactory();
-            queueSetting.HostName ??= configuration.BaseUrl();
-            _mqttClient = factory.CreateMqttClient();
-            _mqttClientOptions = MqttHelper.GetClientOptions(queueSetting);
+            if (queueSetting != null)
+            {
+                var factory = new MqttClientFactory();
+                queueSetting.HostName ??= configuration.BaseUrl();
+                _mqttClient = factory.CreateMqttClient();
+                _mqttClientOptions = MqttHelper.GetClientOptions(queueSetting);
+            }
         }
 
         public async Task ConnectAsync(CancellationToken cancellationToken = default)

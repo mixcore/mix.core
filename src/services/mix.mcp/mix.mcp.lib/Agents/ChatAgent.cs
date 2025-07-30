@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Mix.Database.Services;
+using Mix.MCP.Lib.Hubs;
 using Mix.MCP.Lib.Models;
-using Mix.MCP.Lib.Services.LLM;
 using Mix.MCP.Lib.Services.Knowledge;
+using Mix.MCP.Lib.Services.LLM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,10 +27,11 @@ namespace Mix.MCP.Lib.Agents
         public ChatAgent(
             AppSettingsService appSettingsService,
             ILlmServiceFactory llmServiceFactory,
+            IHubContext<LLMHub> hubContext,
             ILogger<ChatAgent> logger,
             IKnowledgeBaseService? knowledgeBaseService = null,
             TimeSpan? defaultTimeout = null)
-            : base(appSettingsService, llmServiceFactory, logger, knowledgeBaseService, defaultTimeout)
+            : base(appSettingsService, llmServiceFactory, hubContext, logger, knowledgeBaseService, defaultTimeout)
         {
         }
 
@@ -71,6 +74,8 @@ namespace Mix.MCP.Lib.Agents
                 }
 
                 var assistantResponse = response.choices.First().Message.Content;
+
+                await NotifyResult(deviceId, new AgentProcessResult(true, assistantResponse));
 
                 // Add assistant response to history
                 conversationHistory.Add(new LLMMessage { SessionId = sessionId, Data = { Role = "assistant", Content = assistantResponse } });

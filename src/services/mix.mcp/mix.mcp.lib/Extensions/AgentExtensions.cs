@@ -36,11 +36,11 @@ namespace Mix.MCP.Lib.Extensions
             builder.Services.TryAddSingleton<RoutingAgent>();
             builder.Services.TryAddSingleton<PlanningAgent>();
 
-            // Register hosted services
-            if (!string.IsNullOrEmpty(builder.Configuration.BaseUrl()))
-            {
-                builder.Services.AddHostedService<LLMChatHostedService>();
-            }
+            //// Register hosted services
+            //if (!string.IsNullOrEmpty(builder.Configuration.BaseUrl()))
+            //{
+            //    builder.Services.AddHostedService<LLMChatHostedService>();
+            //}
 
             return builder;
         }
