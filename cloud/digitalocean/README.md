@@ -6,36 +6,60 @@ This directory contains deployment configurations and documentation for deployin
 
 Choose the configuration that best fits your needs:
 
-### Basic Configuration (~$27/month)
-[![Deploy Basic](https://www.deploytodo.com/do-btn-blue-ghost.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/mixcore/mix.core&refcode=4d26c2aaade2&app_spec_path=.do/deploy-basic.yaml)
-- **Database**: MySQL 8.0
-- **Cache**: None
-- **Best for**: Small websites, blogs, testing
-- **Performance**: Good for low-medium traffic
-
-### Development Configuration (~$32/month)
-[![Deploy Development](https://www.deploytodo.com/do-btn-blue-ghost.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/mixcore/mix.core&refcode=4d26c2aaade2&app_spec_path=.do/deploy-dev.yaml)
-- **Database**: MySQL 8.0
-- **Cache**: Redis 7.0
-- **Best for**: Development, staging environments
-- **Performance**: Optimized for development workflows
-
 ### Standard Configuration (~$42/month) - **Recommended**
-[![Deploy Standard](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/mixcore/mix.core&refcode=4d26c2aaade2&app_spec_path=.do/deploy-standard.yaml)
+[![Deploy Standard](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/mixcore/mix.core&refcode=4d26c2aaade2)
 - **Database**: MySQL 8.0
 - **Cache**: Redis 7.0
 - **Best for**: Production websites, e-commerce
 - **Performance**: Excellent for most use cases
 
-### PostgreSQL Configuration (~$42/month)
-[![Deploy PostgreSQL](https://www.deploytodo.com/do-btn-blue-ghost.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/mixcore/mix.core&refcode=4d26c2aaade2&app_spec_path=.do/deploy-postgresql.yaml)
+### Alternative Configurations
+
+For other configurations, use the manual deployment method:
+
+#### Quick Deploy Instructions for Alternative Configurations
+
+**For Basic Configuration (~$27/month):**
+1. Fork this repository: [Fork mixcore/mix.core](https://github.com/mixcore/mix.core/fork)
+2. In your fork, replace `.do/app.yaml` with `.do/deploy-basic.yaml` content
+3. Deploy: [![Deploy](https://www.deploytodo.com/do-btn-blue-ghost.svg)](https://cloud.digitalocean.com/apps/new?refcode=4d26c2aaade2)
+
+**For Development Configuration (~$32/month):**
+1. Fork this repository: [Fork mixcore/mix.core](https://github.com/mixcore/mix.core/fork)
+2. In your fork, replace `.do/app.yaml` with `.do/deploy-dev.yaml` content
+3. Deploy: [![Deploy](https://www.deploytodo.com/do-btn-blue-ghost.svg)](https://cloud.digitalocean.com/apps/new?refcode=4d26c2aaade2)
+
+**For PostgreSQL Configuration (~$42/month):**
+1. Fork this repository: [Fork mixcore/mix.core](https://github.com/mixcore/mix.core/fork)
+2. In your fork, replace `.do/app.yaml` with `.do/deploy-postgresql.yaml` content
+3. Deploy: [![Deploy](https://www.deploytodo.com/do-btn-blue-ghost.svg)](https://cloud.digitalocean.com/apps/new?refcode=4d26c2aaade2)
+
+**For Production Configuration (~$84/month):**
+1. Fork this repository: [Fork mixcore/mix.core](https://github.com/mixcore/mix.core/fork)
+2. In your fork, replace `.do/app.yaml` with `.do/deploy-production.yaml` content
+3. Deploy: [![Deploy](https://www.deploytodo.com/do-btn-blue-ghost.svg)](https://cloud.digitalocean.com/apps/new?refcode=4d26c2aaade2)
+
+### Configuration Details
+
+#### Basic Configuration (~$27/month)
+- **Database**: MySQL 8.0
+- **Cache**: None
+- **Best for**: Small websites, blogs, testing
+- **Performance**: Good for low-medium traffic
+
+#### Development Configuration (~$32/month)
+- **Database**: MySQL 8.0
+- **Cache**: Redis 7.0
+- **Best for**: Development, staging environments
+- **Performance**: Optimized for development workflows
+
+#### PostgreSQL Configuration (~$42/month)
 - **Database**: PostgreSQL 15
 - **Cache**: Redis 7.0
 - **Best for**: Advanced SQL features, analytics
 - **Performance**: Great for complex queries
 
-### Production Configuration (~$84/month)
-[![Deploy Production](https://www.deploytodo.com/do-btn-blue-ghost.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/mixcore/mix.core&refcode=4d26c2aaade2&app_spec_path=.do/deploy-production.yaml)
+#### Production Configuration (~$84/month)
 - **Database**: PostgreSQL 15 (2 vCPU, 4GB RAM)
 - **Cache**: Redis 7.0 (1 vCPU, 2GB RAM)
 - **Best for**: High-traffic websites, enterprise

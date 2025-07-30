@@ -44,11 +44,9 @@ Deploy Mixcore CMS instantly to the cloud with multiple configuration options:
 
 | Configuration | Database | Cache | Cost/Month | Best For | Deploy |
 |---------------|----------|-------|------------|----------|---------|
-| **Basic** | MySQL | - | ~$27 | Small sites, testing | [![Deploy](https://www.deploytodo.com/do-btn-blue-ghost.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/mixcore/mix.core&refcode=4d26c2aaade2&app_spec_path=.do/deploy-basic.yaml) |
-| **Development** | MySQL | Redis | ~$32 | Development, staging | [![Deploy](https://www.deploytodo.com/do-btn-blue-ghost.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/mixcore/mix.core&refcode=4d26c2aaade2&app_spec_path=.do/deploy-dev.yaml) |
-| **Standard** | MySQL | Redis | ~$42 | Production sites | [![Deploy](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/mixcore/mix.core&refcode=4d26c2aaade2&app_spec_path=.do/deploy-standard.yaml) |
-| **PostgreSQL** | PostgreSQL | Redis | ~$42 | Advanced features | [![Deploy](https://www.deploytodo.com/do-btn-blue-ghost.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/mixcore/mix.core&refcode=4d26c2aaade2&app_spec_path=.do/deploy-postgresql.yaml) |
-| **Production** | PostgreSQL | Redis | ~$84 | High-traffic sites | [![Deploy](https://www.deploytodo.com/do-btn-blue-ghost.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/mixcore/mix.core&refcode=4d26c2aaade2&app_spec_path=.do/deploy-production.yaml) |
+| **Standard** | MySQL | Redis | ~$42 | Production sites (Recommended) | [![Deploy](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/mixcore/mix.core&refcode=4d26c2aaade2) |
+
+*Alternative configurations available in the [DigitalOcean documentation](cloud/digitalocean/README.md)*
 
 *All configurations include managed databases and automatic scaling*
 
