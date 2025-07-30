@@ -40,7 +40,7 @@ docker-compose up --build
 Deploy Mixcore CMS instantly to the cloud:
 
 ### DigitalOcean App Platform
-[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/mixcore/mix.core/tree/develop)
+[![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=4d26c2aaade2&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 
 *Includes managed MySQL database and Redis cache*
 
