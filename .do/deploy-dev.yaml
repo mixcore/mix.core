@@ -1,0 +1,62 @@
+# DigitalOcean App Platform deployment template for Mixcore CMS - Development Configuration
+# Deploy to: https://cloud.digitalocean.com/apps/new?refcode=4d26c2aaade2
+# Configuration: Mixcore + MySQL + Redis (Smallest instances for development/testing)
+# Estimated cost: ~$32/month
+spec:
+  name: mixcore-cms-dev
+  region: nyc1
+  
+  # Database services
+  databases:
+    - name: mixcore-mysql
+      engine: MYSQL
+      version: "8"
+      size: db-s-1vcpu-1gb
+      num_nodes: 1
+      
+    - name: mixcore-redis
+      engine: REDIS
+      version: "7"
+      size: db-s-1vcpu-1gb
+      num_nodes: 1
+  
+  # Main application service
+  services:
+    - name: mixcore-web
+      environment_slug: docker
+      git:
+        branch: develop
+        repo_clone_url: https://github.com/mixcore/mix.core
+      dockerfile_path: Dockerfile
+      http_port: 80
+      instance_count: 1
+      instance_size_slug: apps-s-1vcpu-512mb
+      
+      health_check:
+        http_path: /health
+        initial_delay_seconds: 60
+        period_seconds: 30
+        timeout_seconds: 10
+        success_threshold: 1
+        failure_threshold: 3
+      
+      routes:
+        - path: /
+      
+      # Environment variables
+      envs:
+        - key: ASPNETCORE_ENVIRONMENT
+          value: Development
+          scope: RUN_TIME
+        - key: ASPNETCORE_URLS
+          value: http://+:80
+          scope: RUN_TIME
+        - key: ConnectionStrings__MixDbContext
+          value: ${mixcore-mysql.DATABASE_URL}
+          scope: RUN_TIME
+        - key: Redis__ConnectionString
+          value: ${mixcore-redis.DATABASE_URL}
+          scope: RUN_TIME
+        - key: ASPNETCORE_FORWARDEDHEADERS_ENABLED
+          value: "true"
+          scope: RUN_TIME
