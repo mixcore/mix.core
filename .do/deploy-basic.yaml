@@ -1,15 +1,9 @@
-# DigitalOcean App Platform deployment template for Mixcore CMS - Standard Configuration
+# DigitalOcean App Platform deployment template for Mixcore CMS - Basic Configuration
 # Deploy to: https://cloud.digitalocean.com/apps/new
-# Configuration: Mixcore + MySQL + Redis (Recommended for most use cases)
-# Estimated cost: ~$42/month
-# 
-# For other configurations, see:
-# - deploy-basic.yaml (MySQL only, ~$27/month)
-# - deploy-dev.yaml (Development/testing, ~$32/month)
-# - deploy-postgresql.yaml (PostgreSQL + Redis, ~$42/month)
-# - deploy-production.yaml (High-performance, ~$84/month)
+# Configuration: Mixcore + MySQL (No Redis cache)
+# Estimated cost: ~$27/month
 spec:
-  name: mixcore-cms-standard
+  name: mixcore-cms-basic
   region: nyc1
   
   # Database services
@@ -17,12 +11,6 @@ spec:
     - name: mixcore-mysql
       engine: MYSQL
       version: "8"
-      size: db-s-1vcpu-1gb
-      num_nodes: 1
-      
-    - name: mixcore-redis
-      engine: REDIS
-      version: "7"
       size: db-s-1vcpu-1gb
       num_nodes: 1
   
@@ -59,9 +47,6 @@ spec:
           scope: RUN_TIME
         - key: ConnectionStrings__MixDbContext
           value: ${mixcore-mysql.DATABASE_URL}
-          scope: RUN_TIME
-        - key: Redis__ConnectionString
-          value: ${mixcore-redis.DATABASE_URL}
           scope: RUN_TIME
         - key: ASPNETCORE_FORWARDEDHEADERS_ENABLED
           value: "true"
