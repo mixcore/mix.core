@@ -35,6 +35,20 @@ docker-compose up --build
 # Access the application at http://localhost:5000
 ```
 
+## 🚀 One-Click Deployment
+
+Deploy Mixcore CMS instantly to the cloud:
+
+### DigitalOcean App Platform
+[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/mixcore/mix.core/tree/develop)
+
+*Includes managed MySQL database and Redis cache*
+
+### Other Cloud Platforms
+- **AWS**: Use our [EKS deployment template](cloud/aws/eks-cluster.yaml)
+- **Azure**: Use our [AKS deployment template](cloud/azure/aks-cluster.bicep) 
+- **Google Cloud**: Use our [GKE deployment template](cloud/gcp/gke-cluster.yaml)
+
 ## 🛠️ Key Features
 
 - **Modern Tech Stack**: .NET 9.0, ASP.NET Core, SignalR, GraphQL
