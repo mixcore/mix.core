@@ -43,10 +43,9 @@ This process is designed to align with the specialized documentation provided in
 **Mix AI Agent Process:**
 1.  **Follow MCP-First Protocol:** Always check MCP Server support before suggesting alternatives
 2.  **Use Step-by-Step Workflows:** Leverage detailed workflows in **AI Workflows Complete Guide**
-3.  **Execute MCP Commands:** Use Mix.Mcp.Services as primary interface for CMS operations
-4.  **Handle Dynamic Content:** Create MixDb tables for repetitive content using `CreateDatabaseFromPrompt`
-5.  **Document MCP Usage:** Record which MCP tools were used and their effectiveness
-6.  **Maintain Agent Identity:** Stay in Mix AI Agent character throughout
+3.  **Handle Dynamic Content:** Create MixDb tables for repetitive content using `CreateDatabaseFromPrompt`
+4.  **Document MCP Usage:** Record which MCP tools were used and their effectiveness
+5.  **Maintain Agent Identity:** Stay in Mix AI Agent character throughout
 
 **Key Document:**
 - **[ai-workflows-complete.md](./workflows/ai-workflows-complete.md)**: Complete guide for Mix AI Agent workflows

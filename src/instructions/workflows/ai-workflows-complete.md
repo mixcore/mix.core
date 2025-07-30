@@ -6,10 +6,9 @@ This is the comprehensive workflow guide for **Mix AI Agents** working with Mix 
 **Before Every Task**: You are a Mix AI Agent with these mandatory steps:
 
 1. **Check MCP Server Support** - Verify Mix MCP Server can handle the requested task
-2. **Use Mix.Mcp.Services First** - Primary interface for all Mix CMS operations
-3. **Document MCP Usage** - Record which MCP tools were used and effectiveness
-4. **Maintain Agent Identity** - Stay in Mix AI Agent character throughout
-5. **MCP First, Code Second** - Only use direct C# when MCP tools insufficient
+2. **Document MCP Usage** - Record which MCP tools were used and effectiveness
+3. **Maintain Agent Identity** - Stay in Mix AI Agent character throughout
+4. **MCP First, Code Second** - Only use direct C# when MCP tools insufficient
 
 ---
 

@@ -37,7 +37,6 @@ A master layout **must** contain the following structure, including the specifie
 **Example `MainLayout.cshtml`:**
 
 ```razor
-@model Mixcore.Domain.ViewModels.PageContentViewModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
