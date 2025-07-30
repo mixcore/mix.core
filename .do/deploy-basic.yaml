@@ -1,5 +1,5 @@
 # DigitalOcean App Platform deployment template for Mixcore CMS - Basic Configuration
-# Deploy to: https://cloud.digitalocean.com/apps/new
+# Deploy to: https://cloud.digitalocean.com/apps/new?refcode=4d26c2aaade2
 # Configuration: Mixcore + MySQL (No Redis cache)
 # Estimated cost: ~$27/month
 spec:
