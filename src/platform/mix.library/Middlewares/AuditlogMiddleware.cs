@@ -26,7 +26,7 @@ namespace Mix.Lib.Middlewares
 
         public async Task InvokeAsync(HttpContext context, AuditLogDataModel auditLogData)
         {
-            
+
             var isLog = CheckAuditLogPath(context.Request.Path);
             if (!isLog)
             {
@@ -69,7 +69,7 @@ namespace Mix.Lib.Middlewares
                 {
                     await _auditlogService.LogStream(auditLogData.Endpoint, auditLogData.Exception ?? auditLogData.Body, isSuccess: auditLogData.StatusCode < 300);
                 }
-            }            
+            }
         }
 
         private bool CheckAuditLogPath(string path)
