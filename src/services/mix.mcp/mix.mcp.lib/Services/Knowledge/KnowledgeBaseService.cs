@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Mix.MCP.Lib.Resources;
+using Mix.MCP.Lib.Services.Search;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,15 +19,21 @@ namespace Mix.MCP.Lib.Services.Knowledge
         private readonly ILogger<KnowledgeBaseService> _logger;
         private readonly List<KnowledgeEntry> _knowledgeBase;
         private readonly ResourceLoader _resourceLoader;
+        private readonly ISemanticSearchService? _semanticSearchService;
         private const string CACHE_PREFIX = "knowledge_";
         private const int CACHE_DURATION_MINUTES = 30;
 
-        public KnowledgeBaseService(IMemoryCache cache, ILogger<KnowledgeBaseService> logger, ResourceLoader resourceLoader)
+        public KnowledgeBaseService(
+            IMemoryCache cache,
+            ILogger<KnowledgeBaseService> logger,
+            ResourceLoader resourceLoader,
+            ISemanticSearchService? semanticSearchService = null)
         {
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _resourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
             _knowledgeBase = new List<KnowledgeEntry>();
+            _semanticSearchService = semanticSearchService;
 
             // Initialize with default knowledge entries
             InitializeDefaultKnowledge();
@@ -48,6 +55,33 @@ namespace Mix.MCP.Lib.Services.Knowledge
 
             _logger.LogInformation("Searching knowledge base for query: {Query}", query);
 
+            // Prefer semantic search if available
+            if (_semanticSearchService != null)
+            {
+                try
+                {
+                    var semanticResults = await _semanticSearchService.SearchAsync(query, maxResults, 0.7, cancellationToken);
+                    var mapped = semanticResults.Select(r => new KnowledgeEntry
+                    {
+                        Id = r.Id,
+                        Title = r.Title,
+                        Content = r.Content,
+                        Category = r.Category,
+                        Source = r.Source,
+                        LastUpdated = DateTime.UtcNow, // Vector DB may not provide this
+                        Metadata = r.Metadata,
+                        Relevance = r.Score
+                    }).ToList();
+                    _cache.Set(cacheKey, mapped, TimeSpan.FromMinutes(CACHE_DURATION_MINUTES));
+                    return mapped;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Semantic search failed, falling back to in-memory search.");
+                }
+            }
+
+            // Fallback: in-memory search
             var results = await Task.Run(() =>
             {
                 var queryLower = query.ToLowerInvariant();

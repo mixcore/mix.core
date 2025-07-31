@@ -45,6 +45,8 @@ namespace Mix.MCP.Lib.Agents
             LLMServiceType serviceType = LLMServiceType.DeepSeek,
             CancellationToken cancellationToken = default)
         {
+            // Ensure knowledge is loaded and system instructions are set before planning
+            await EnsureKnowledgeLoadedAsync(userInput, sessionId, "planning", cancellationToken);
             try
             {
                 ValidateInput(userInput, sessionId);
@@ -191,8 +193,6 @@ namespace Mix.MCP.Lib.Agents
             LLMServiceType serviceType,
             CancellationToken cancellationToken)
         {
-            var llmService = _llmServiceFactory.CreateService(serviceType);
-
             // Get contextual knowledge before planning
             var knowledgeContext = await GetKnowledgeContextAsync(userInput, "planning", cancellationToken);
 
@@ -227,7 +227,7 @@ namespace Mix.MCP.Lib.Agents
 
             var prompt = promptBuilder.ToString();
 
-            var response = await llmService.ChatAsync(prompt, "deepseek-chat", 0.2, -1, cancellationToken);
+            var response = await AskAIAsync(prompt, "planning", serviceType, "deepseek-chat", 0.2, -1, cancellationToken, "planning");
             var content = response?.choices?[0]?.Message?.Content;
 
             if (string.IsNullOrWhiteSpace(content))

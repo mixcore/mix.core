@@ -47,7 +47,7 @@ namespace Mix.MCP.Lib.Services.Search
         /// <returns>List of similar documents</returns>
         Task<IEnumerable<SearchResult>> FindSimilarAsync(
             string text,
-            int maxResults = 5,
+            ulong maxResults = 5,
             CancellationToken cancellationToken = default);
     }
 
@@ -57,6 +57,7 @@ namespace Mix.MCP.Lib.Services.Search
     public class SearchDocument
     {
         public string Id { get; set; } = string.Empty;
+        public string Collection { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
         public string Category { get; set; } = string.Empty;

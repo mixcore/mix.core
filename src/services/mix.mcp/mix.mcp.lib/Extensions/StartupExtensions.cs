@@ -17,6 +17,7 @@ using Mix.MCP.Lib.Services.Knowledge;
 using Mix.MCP.Lib.Services.LLM;
 using Mix.MCP.Lib.Tools;
 using Mix.SignalR.Constants;
+using Mix.MCP.Lib.Services.Search;
 
 namespace Mix.MCP.Lib.Extensions
 {
@@ -53,6 +54,16 @@ namespace Mix.MCP.Lib.Extensions
 
             // Register MCP resources
             builder.Services.AddMCPResources();
+            builder.Services.TryAddSingleton<QdrantService>();
+            builder.Services.AddSingleton<ISemanticSearchService, SemanticSearchService>(provider =>
+            {
+                var cache = provider.GetRequiredService<IMemoryCache>();
+                var llm = provider.GetRequiredService<ILlmServiceFactory>();
+                var qdrantService = provider.GetRequiredService<QdrantService>();
+                var logger = provider.GetRequiredService<ILogger<SemanticSearchService>>();
+                var configuration = provider.GetService<IConfiguration>();
+                return new SemanticSearchService(cache, logger, qdrantService, llm);
+            });
 
             // Register KnowledgeBaseService and ensure it loads resources
             builder.Services.AddSingleton<IKnowledgeBaseService, KnowledgeBaseService>(provider =>
@@ -60,7 +71,8 @@ namespace Mix.MCP.Lib.Extensions
                 var cache = provider.GetRequiredService<IMemoryCache>();
                 var logger = provider.GetRequiredService<ILogger<KnowledgeBaseService>>();
                 var resourceLoader = provider.GetRequiredService<ResourceLoader>();
-                var service = new KnowledgeBaseService(cache, logger, resourceLoader);
+                var semanticSearchService = provider.GetService<ISemanticSearchService>();
+                var service = new KnowledgeBaseService(cache, logger, resourceLoader, semanticSearchService);
                 // KnowledgeBaseService will load knowledge into resources in its constructor
                 return service;
             });

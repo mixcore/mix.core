@@ -116,7 +116,7 @@ namespace Mix.MCP.Lib.Tools
                 _logger.LogInformation("Finding similar documents for text (length: {Length}), maxResults: {MaxResults}",
                     text.Length, maxResults);
 
-                var results = await _searchService.FindSimilarAsync(text, maxResults, cancellationToken);
+                var results = await _searchService.FindSimilarAsync(text, (ulong)maxResults, cancellationToken);
 
                 var response = new
                 {
@@ -171,6 +171,7 @@ namespace Mix.MCP.Lib.Tools
                 {
                     Id = Guid.NewGuid().ToString(),
                     Title = title,
+                    Collection = "Mixcore",
                     Content = content,
                     Category = category ?? "",
                     Source = source ?? "user",

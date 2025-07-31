@@ -56,13 +56,14 @@ namespace Mix.MCP.Lib.Agents
                 // Add user input to history
                 conversationHistory.Add(new LLMMessage { SessionId = sessionId, Data = { Role = "user", Content = userInput } });
 
-                // Prepare the prompt with conversation history
-                var prompt = BuildPrompt(conversationHistory);
+                // Prepare the prompt with conversation history (system instructions will be appended by AskAIAsync)
+                var prompt = BuildPrompt(conversationHistory, memory, includeSystemInstructions: false);
 
-                // Get response from LLM
-                var llmService = _llmServiceFactory.CreateService(serviceType);
-                var response = await llmService.ChatAsync(
+                // Use AskAIAsync to get response from LLM (system prompts appended automatically)
+                var response = await AskAIAsync(
                     prompt,
+                    sessionId,
+                    serviceType,
                     "deepseek-chat",
                     0.7,
                     -1,
@@ -106,15 +107,27 @@ namespace Mix.MCP.Lib.Agents
         }
 
         /// <summary>
-        /// Builds a prompt from the conversation history
+        /// Builds a prompt from the conversation history and appends system instructions if present
         /// </summary>
-        private string BuildPrompt(List<LLMMessage> conversationHistory)
+        private string BuildPrompt(List<LLMMessage> conversationHistory, AgentMemory memory, bool includeSystemInstructions = true)
         {
             var prompt = new System.Text.StringBuilder();
 
             // Add system message
             prompt.AppendLine("You are a helpful AI assistant. Please respond to the user's message based on the conversation history:");
             prompt.AppendLine();
+
+            // Optionally append system custom instructions
+            if (includeSystemInstructions)
+            {
+                var systemInstructions = memory.GetValue<string>("system_custom_instructions");
+                if (!string.IsNullOrWhiteSpace(systemInstructions))
+                {
+                    prompt.AppendLine("System Instructions:");
+                    prompt.AppendLine(systemInstructions);
+                    prompt.AppendLine();
+                }
+            }
 
             // Add conversation history
             foreach (var message in conversationHistory.TakeLast(MAX_HISTORY_LENGTH))

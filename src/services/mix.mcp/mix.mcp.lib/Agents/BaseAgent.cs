@@ -5,6 +5,7 @@ using Mix.MCP.Lib.Hubs;
 using Mix.MCP.Lib.Models;
 using Mix.MCP.Lib.Services.Knowledge;
 using Mix.MCP.Lib.Services.LLM;
+using Mix.MCP.Lib.Services.Search;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
 using Mix.SignalR.Models;
@@ -81,6 +82,36 @@ namespace Mix.MCP.Lib.Agents
             string sessionId = "default",
             LLMServiceType serviceType = LLMServiceType.DeepSeek,
             CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Ensures knowledge is loaded and added to system custom instructions before processing input
+        /// Loads context from vector DB if available
+        /// </summary>
+        protected async Task EnsureKnowledgeLoadedAsync(string userInput, string sessionId, string agentType = "general", CancellationToken cancellationToken = default)
+        {
+            if (_knowledgeBaseService != null)
+            {
+                // Try to get context from vector DB first (if supported by the service)
+                string context = string.Empty;
+                if (_knowledgeBaseService is ISemanticSearchService vectorService)
+                {
+                    // Use semantic search for best context
+                    var results = await vectorService.SearchAsync(userInput, 1, 0.5, cancellationToken);
+                    context = results?.FirstOrDefault()?.Content ?? string.Empty;
+                }
+                // Fallback to default context retrieval if vector DB not available or no result
+                if (string.IsNullOrWhiteSpace(context))
+                {
+                    context = await GetKnowledgeContextAsync(userInput, agentType, cancellationToken);
+                }
+                var memory = GetOrCreateMemory(sessionId);
+                if (!string.IsNullOrWhiteSpace(context))
+                {
+                    memory.SetValue("system_custom_instructions", context);
+                    _logger.LogDebug("System custom instructions set for session {SessionId}", sessionId);
+                }
+            }
+        }
 
         protected async Task NotifyResult(string userName, AgentProcessResult message, bool isSuccess = true)
         {
@@ -225,6 +256,53 @@ namespace Mix.MCP.Lib.Agents
         {
             _logger.LogError(ex, "Error processing input: {UserInput}", userInput);
             return new AgentProcessResult(false, "I apologize, but I encountered an error while processing your request. Please try again.");
+        }
+
+        protected ILlmService GetLlmService(LLMServiceType serviceType)
+        {
+            return _llmServiceFactory.CreateService(serviceType);
+        }
+
+        /// <summary>
+        /// Asks the LLM, appending system prompts loaded from the vector DB/knowledge base
+        /// </summary>
+        /// <param name="prompt">The user prompt (without system instructions)</param>
+        /// <param name="sessionId">Session ID for memory/context</param>
+        /// <param name="serviceType">LLM service type</param>
+        /// <param name="model">Model name</param>
+        /// <param name="temperature">Sampling temperature</param>
+        /// <param name="maxTokens">Max tokens</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>LLMChatResponse</returns>
+        protected async Task<LLMChatResponse> AskAIAsync(
+            string prompt,
+            string sessionId,
+            LLMServiceType serviceType = LLMServiceType.DeepSeek,
+            string model = "deepseek-chat",
+            double temperature = 0.7,
+            int maxTokens = -1,
+            CancellationToken cancellationToken = default,
+            string agentType = "general")
+        {
+            // Always ensure system instructions are loaded from vector DB/knowledge base
+            await EnsureKnowledgeLoadedAsync(prompt, sessionId, agentType, cancellationToken);
+
+            var memory = GetOrCreateMemory(sessionId);
+            var systemInstructions = memory.GetValue<string>("system_custom_instructions");
+            var promptBuilder = new System.Text.StringBuilder();
+
+            // Always prepend system message if present
+            if (!string.IsNullOrWhiteSpace(systemInstructions))
+            {
+                promptBuilder.AppendLine("System Instructions:");
+                promptBuilder.AppendLine(systemInstructions);
+                promptBuilder.AppendLine();
+            }
+
+            promptBuilder.AppendLine(prompt);
+
+            var llmService = GetLlmService(serviceType);
+            return await llmService.ChatAsync(promptBuilder.ToString(), model, temperature, maxTokens, cancellationToken);
         }
     }
 

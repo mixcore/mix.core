@@ -31,6 +31,7 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
     <PackageReference Include="OllamaSharp" Version="5.1.14" />
     <PackageReference Include="OllamaSharp.ModelContextProtocol" Version="5.1.14" />
+    <PackageReference Include="Qdrant.Client" Version="1.15.0" />
   </ItemGroup>
 
   <ItemGroup>

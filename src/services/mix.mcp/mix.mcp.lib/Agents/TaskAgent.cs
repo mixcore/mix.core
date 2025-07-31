@@ -92,7 +92,8 @@ namespace Mix.MCP.Lib.Agents
                     await NotifyResult(deviceId, new AgentProcessResult(true, response));
                     return new AgentProcessResult(true, response);
                 }
-                var llmResponse = await ProcessWithLlmAsync(userInput, taskState, serviceType, cancellationToken);
+                // Append system instructions if present
+                var llmResponse = await ProcessWithLlmAsync(userInput, taskState, serviceType, memory, cancellationToken);
                 await NotifyResult(deviceId, new AgentProcessResult(true, llmResponse));
                 return new AgentProcessResult(true, llmResponse);
             }
@@ -164,35 +165,32 @@ namespace Mix.MCP.Lib.Agents
             var taskState = GetTaskState(memory);
             var taskHistory = GetTaskHistory(memory);
 
-            // You can customize what context to include. Here, we include the last task result and current state.
             string lastResult = taskHistory.LastOrDefault()?.Response ?? "";
             string stateSummary = $"Current task: {taskState.CurrentTask}, Status: {taskState.Status}";
 
             var supportedActions = ToolDiscovery.SupportedPromptToolActions;
             var toolList = string.Join("\n", supportedActions.Select(a => $"- {a.MethodName}: {a.Description}"));
 
-            // Compose a prompt that includes the context
             var prompt = $@"
-    You are an AI assistant for a database platform.
-    Read the following context before deciding how to handle the user's request.
+                You are an AI assistant for a database platform.
+                Read the following context before deciding how to handle the user's request.
 
-    Context:
-    - {stateSummary}
-    - Last result: {lastResult}
+                Context:
+                - {stateSummary}
+                - Last result: {lastResult}
 
-    Classify the user's request into one of these supported mcp tools:
-    {toolList}
-    User message: ""{userInput}""
-    Respond in this JSON format:
-    {{
-        ""type"": ""tool"" | ""chat"",
-        ""toolName"": ""..."", // Only if type is tool
-        ""parameters"": {{ ... }} // Only if type is tool
-    }}
-";
+                Classify the user's request into one of these supported mcp tools:
+                {toolList}
+                User message: ""{userInput}""
+                Respond in this JSON format:
+                {{
+                    ""type"": ""tool"" | ""chat"",
+                    ""toolName"": ""..."", // Only if type is tool
+                    ""parameters"": {{ ... }} // Only if type is tool
+                }}
+            ";
 
-            var llmService = _llmServiceFactory.CreateService(serviceType);
-            var response = await llmService.ChatAsync(prompt, "deepseek-chat", 0.2, -1, cancellationToken);
+            var response = await AskAIAsync(prompt, "task", serviceType, "deepseek-chat", 0.2, -1, cancellationToken, "task");
             var content = response?.choices?.FirstOrDefault()?.Message?.Content;
             if (string.IsNullOrWhiteSpace(content))
                 return (false, null, null);
@@ -205,7 +203,7 @@ namespace Mix.MCP.Lib.Agents
                     return (false, null, null);
 
                 var json = content.Substring(jsonStart, jsonEnd - jsonStart + 1);
-                var doc = JObject.Parse(json);
+                var doc = Newtonsoft.Json.Linq.JObject.Parse(json);
                 var type = doc.Value<string>("type");
                 if (type == "tool")
                 {
@@ -272,18 +270,16 @@ namespace Mix.MCP.Lib.Agents
             return actions;
         }
 
-        private async Task<string> ProcessWithLlmAsync(string input, TaskState taskState, LLMServiceType serviceType, CancellationToken cancellationToken)
+        private async Task<string> ProcessWithLlmAsync(string input, TaskState taskState, LLMServiceType serviceType, AgentMemory memory, CancellationToken cancellationToken)
         {
-            var llmService = _llmServiceFactory.CreateService(serviceType);
-            var prompt = $"Current task state: {taskState.Status}\nUser input: {input}\nPlease provide a helpful response.";
+            var promptBuilder = new System.Text.StringBuilder();
+            promptBuilder.AppendLine($"Current task state: {taskState.Status}");
+            promptBuilder.AppendLine($"User input: {input}");
+            promptBuilder.AppendLine("Please provide a helpful response.");
 
-            var response = await llmService.ChatAsync(
-                prompt,
-                "deepseek-chat",
-                0.7,
-                -1,
-                cancellationToken);
+            var prompt = promptBuilder.ToString();
 
+            var response = await AskAIAsync(prompt, "task", serviceType, "deepseek-chat", 0.7, -1, cancellationToken, "task");
             return response?.choices?.FirstOrDefault()?.Message?.Content
                 ?? "I apologize, but I couldn't process your request.";
         }

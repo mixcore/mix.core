@@ -39,6 +39,9 @@ namespace Mix.MCP.Lib.Agents
             LLMServiceType serviceType = LLMServiceType.DeepSeek,
             CancellationToken cancellationToken = default)
         {
+            // Ensure knowledge is loaded and system instructions are set before processing
+            await EnsureKnowledgeLoadedAsync(userInput, sessionId, "general", cancellationToken);
+
             var intent = await ClassifyIntentAsync(userInput, serviceType, cancellationToken);
 
             switch (intent)
@@ -57,14 +60,12 @@ namespace Mix.MCP.Lib.Agents
             LLMServiceType serviceType,
             CancellationToken cancellationToken)
         {
-            var llmService = _llmServiceFactory.CreateService(serviceType);
             var prompt = $@"
 You are an AI assistant. Classify the following user request as either a normal conversation or a planning/multi-step request.
 Respond in this JSON format:
 {{ ""type"": ""chat"" | ""plan"" }}
-User request: ""{userInput}""
-";
-            var response = await llmService.ChatAsync(prompt, "deepseek-chat", 0.2, -1, cancellationToken);
+User request: ""{userInput}""";
+            var response = await AskAIAsync(prompt, "routing", serviceType, "deepseek-chat", 0.2, -1, cancellationToken, "routing");
             var content = response?.choices?[0]?.Message?.Content;
 
             if (string.IsNullOrWhiteSpace(content))
