@@ -272,9 +272,25 @@ namespace Mix.MCP.Lib.Agents
 
         private async Task<string> ProcessWithLlmAsync(string input, TaskState taskState, LLMServiceType serviceType, AgentMemory memory, CancellationToken cancellationToken)
         {
+            // 1. Search Qdrant for relevant knowledge/context using IKnowledgeBaseService
+            string context = string.Empty;
+            if (_knowledgeBaseService != null)
+            {
+                var results = await _knowledgeBaseService.SearchAsync(input, 1, cancellationToken);
+                context = results?.FirstOrDefault()?.Content ?? string.Empty;
+            }
+
+            // 2. Build prompt with context
             var promptBuilder = new System.Text.StringBuilder();
             promptBuilder.AppendLine($"Current task state: {taskState.Status}");
             promptBuilder.AppendLine($"User input: {input}");
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine("Context from knowledge base:");
+            if (!string.IsNullOrWhiteSpace(context))
+                promptBuilder.AppendLine(context);
+            else
+                promptBuilder.AppendLine("(No relevant context found.)");
+            promptBuilder.AppendLine();
             promptBuilder.AppendLine("Please provide a helpful response.");
 
             var prompt = promptBuilder.ToString();

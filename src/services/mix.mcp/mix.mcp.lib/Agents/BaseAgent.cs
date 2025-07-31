@@ -14,6 +14,7 @@ using ModelContextProtocol.Protocol.Transport;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -295,7 +296,7 @@ namespace Mix.MCP.Lib.Agents
 
             // Build RAG metaprompt as per best practices
             var promptBuilder = new System.Text.StringBuilder();
-            promptBuilder.AppendLine("You are a software architect.");
+            promptBuilder.AppendLine(AiGettingStartedPrompt);
             promptBuilder.AppendLine("Answer the following question using the provided context.");
             promptBuilder.AppendLine("If you can't find the answer, do not pretend you know it, but answer \"I don't know\".");
             promptBuilder.AppendLine();
@@ -316,6 +317,17 @@ namespace Mix.MCP.Lib.Agents
             var llmService = GetLlmService(serviceType);
             return await llmService.ChatAsync(promptBuilder.ToString(), model, temperature, maxTokens, cancellationToken);
         }
+
+        protected static string AiGettingStartedPrompt => _aiGettingStartedPrompt.Value;
+        private static readonly Lazy<string> _aiGettingStartedPrompt = new Lazy<string>(() =>
+        {
+            var path = Path.Combine(AppContext.BaseDirectory, "Documents", "ai-getting-started.md");
+            if (File.Exists(path))
+            {
+                return File.ReadAllText(path);
+            }
+            return "[Mix AI Agent system prompt not found: ai-getting-started.md]";
+        });
     }
 
     /// <summary>

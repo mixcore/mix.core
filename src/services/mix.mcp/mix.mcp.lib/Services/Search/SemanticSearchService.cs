@@ -57,8 +57,6 @@ namespace Mix.MCP.Lib.Services.Search
             double threshold = 0.7,
             CancellationToken cancellationToken = default)
         {
-            await EnsureLoadDocumentsFromVectorDb(cancellationToken);
-
             var cacheKey = $"{CACHE_PREFIX}query_{query}_{maxResults}_{threshold}";
 
             if (_cache.TryGetValue(cacheKey, out IEnumerable<SearchResult>? cachedResults))
@@ -67,33 +65,24 @@ namespace Mix.MCP.Lib.Services.Search
                 return cachedResults!;
             }
 
-            _logger.LogInformation("Performing semantic search for query: {Query}", query);
+            _logger.LogInformation("Performing vector search for query: {Query}", query);
 
-            var results = await Task.Run(() =>
-            {
-                return _documents
-                    .Select(doc => new SearchResult
-                    {
-                        Id = doc.Id,
-                        Title = doc.Title,
-                        Content = doc.Content,
-                        Category = doc.Category,
-                        Source = doc.Source,
-                        Metadata = doc.Metadata,
-                        Score = CalculateSimilarity(query, doc),
-                        Snippet = GenerateSnippet(doc.Content, query)
-                    })
-                    .Where(result => result.Score >= threshold)
-                    .OrderByDescending(result => result.Score)
-                    .Take(maxResults)
-                    .ToList();
-            }, cancellationToken);
+            // Generate embedding for the query
+            float[] queryVector = await GetVectorForTextAsync(query, cancellationToken);
+            // Search Qdrant for similar documents
+            var results = await _qdrantService.SearchAsync(queryVector, limit: (ulong)maxResults);
+            // Optionally filter by threshold if Qdrant returns a score
+            var filteredResults = results
+                .Where(r => r.Score >= threshold)
+                .OrderByDescending(r => r.Score)
+                .Take(maxResults)
+                .ToList();
 
             // Cache results
-            _cache.Set(cacheKey, results, TimeSpan.FromMinutes(CACHE_DURATION_MINUTES));
+            _cache.Set(cacheKey, filteredResults, TimeSpan.FromMinutes(CACHE_DURATION_MINUTES));
 
-            _logger.LogInformation("Found {Count} search results for query: {Query}", results.Count(), query);
-            return results;
+            _logger.LogInformation("Found {Count} vector search results for query: {Query}", filteredResults.Count(), query);
+            return filteredResults;
         }
 
         public void IndexInstructionsOnLoad()
