@@ -16,7 +16,7 @@ namespace Mix.MCP.Lib.Extensions
         public static IServiceCollection AddMCPResources(this IServiceCollection services)
         {
             // Register ResourceLoader as singleton
-            services.AddSingleton<ResourceLoader>();
+            //services.AddSingleton<ResourceLoader>();
 
             return services;
         }

@@ -264,7 +264,10 @@ namespace Mix.MCP.Lib.Agents
         }
 
         /// <summary>
-        /// Asks the LLM, appending system prompts loaded from the vector DB/knowledge base
+        /// Asks the LLM using a RAG (Retrieval-Augmented Generation) metaprompt, following best practices:
+        /// - Retrieves context from the vector DB/knowledge base
+        /// - Constructs a metaprompt with role, context, and strict instructions
+        /// - Sends the metaprompt to the LLM
         /// </summary>
         /// <param name="prompt">The user prompt (without system instructions)</param>
         /// <param name="sessionId">Session ID for memory/context</param>
@@ -284,22 +287,31 @@ namespace Mix.MCP.Lib.Agents
             CancellationToken cancellationToken = default,
             string agentType = "general")
         {
-            // Always ensure system instructions are loaded from vector DB/knowledge base
+            // Always ensure system instructions (context) are loaded from vector DB/knowledge base
             await EnsureKnowledgeLoadedAsync(prompt, sessionId, agentType, cancellationToken);
 
             var memory = GetOrCreateMemory(sessionId);
-            var systemInstructions = memory.GetValue<string>("system_custom_instructions");
+            var context = memory.GetValue<string>("system_custom_instructions");
+
+            // Build RAG metaprompt as per best practices
             var promptBuilder = new System.Text.StringBuilder();
-
-            // Always prepend system message if present
-            if (!string.IsNullOrWhiteSpace(systemInstructions))
+            promptBuilder.AppendLine("You are a software architect.");
+            promptBuilder.AppendLine("Answer the following question using the provided context.");
+            promptBuilder.AppendLine("If you can't find the answer, do not pretend you know it, but answer \"I don't know\".");
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine($"Question: {prompt.Trim()}");
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine("Context:");
+            if (!string.IsNullOrWhiteSpace(context))
             {
-                promptBuilder.AppendLine("System Instructions:");
-                promptBuilder.AppendLine(systemInstructions);
-                promptBuilder.AppendLine();
+                promptBuilder.AppendLine(context.Trim());
             }
-
-            promptBuilder.AppendLine(prompt);
+            else
+            {
+                promptBuilder.AppendLine("(No relevant context found.)");
+            }
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine("Answer:");
 
             var llmService = GetLlmService(serviceType);
             return await llmService.ChatAsync(promptBuilder.ToString(), model, temperature, maxTokens, cancellationToken);

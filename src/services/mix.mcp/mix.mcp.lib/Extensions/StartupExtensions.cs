@@ -70,9 +70,8 @@ namespace Mix.MCP.Lib.Extensions
             {
                 var cache = provider.GetRequiredService<IMemoryCache>();
                 var logger = provider.GetRequiredService<ILogger<KnowledgeBaseService>>();
-                var resourceLoader = provider.GetRequiredService<ResourceLoader>();
                 var semanticSearchService = provider.GetService<ISemanticSearchService>();
-                var service = new KnowledgeBaseService(cache, logger, resourceLoader, semanticSearchService);
+                var service = new KnowledgeBaseService(cache, logger, semanticSearchService);
                 // KnowledgeBaseService will load knowledge into resources in its constructor
                 return service;
             });

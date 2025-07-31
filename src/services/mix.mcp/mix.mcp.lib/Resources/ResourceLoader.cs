@@ -1,10 +1,11 @@
+using Microsoft.Extensions.Logging;
+using Mix.MCP.Lib.Services.Search;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Logging;
 
 namespace Mix.MCP.Lib.Resources
 {
@@ -100,58 +101,66 @@ namespace Mix.MCP.Lib.Resources
             _logger.LogDebug("Resource added/updated: {Section}.{Key}", section, key);
         }
 
+        /// <summary>
+        /// Loads resources from embedded markdown files in the "instructions" directory.
+        /// Each section in the markdown file starts with "## SectionName".
+        /// Each resource entry is in the format "Key = Value" under its section.
+        /// Ignores lines that are empty or start with "# " (top-level headers).
+        /// </summary>
         private void LoadResourcesFromEmbeddedFile()
         {
             try
             {
-                var assembly = Assembly.GetExecutingAssembly();
-                var resourceName = "Mix.MCP.Lib.Resources.MixCoreResources.txt";
-
-                using var stream = assembly.GetManifestResourceStream(resourceName);
-                if (stream == null)
+                // Build the path to the "instructions" directory relative to the application's base directory
+                var instructionsDir = Path.Combine(AppContext.BaseDirectory, "instructions");
+                // Get all markdown files recursively in the instructions directory
+                var mdFiles = Directory.GetFiles(instructionsDir, "*.md", SearchOption.AllDirectories);
+                foreach (var file in mdFiles)
                 {
-                    _logger.LogError("Embedded resource not found: {ResourceName}", resourceName);
-                    return;
+                    using var reader = new StreamReader(file);
+                    var currentSection = string.Empty;
+
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine()?.Trim();
+                        // Skip empty lines and top-level headers
+                        if (string.IsNullOrEmpty(line) || line.StartsWith("# "))
+                        {
+                            continue;
+                        }
+
+                        // Detect section headers (lines starting with "## ")
+                        if (line.StartsWith("## "))
+                        {
+                            currentSection = line.Substring(2).Trim();
+                            if (!_resources.ContainsKey(currentSection))
+                            {
+                                _resources[currentSection] = new Dictionary<string, string>();
+                            }
+                            continue;
+                        }
+
+                        // If inside a section, parse key-value pairs separated by '='
+                        if (!string.IsNullOrEmpty(currentSection))
+                        {
+                            var parts = line.Split(new[] { '=' }, 2);
+                            if (parts.Length == 2)
+                            {
+                                var key = parts[0].Trim();
+                                var value = parts[1].Trim();
+                                _resources[currentSection][key] = value;
+                            }
+                        }
+                    }
                 }
 
-                using var reader = new StreamReader(stream);
-                var currentSection = string.Empty;
-
-                while (!reader.EndOfStream)
-                {
-                    var line = reader.ReadLine()?.Trim();
-                    if (string.IsNullOrEmpty(line) || line.StartsWith('#'))
-                    {
-                        continue;
-                    }
-
-                    if (line.StartsWith("##"))
-                    {
-                        currentSection = line.Substring(2).Trim();
-                        if (!_resources.ContainsKey(currentSection))
-                        {
-                            _resources[currentSection] = new Dictionary<string, string>();
-                        }
-                        continue;
-                    }
-
-                    if (!string.IsNullOrEmpty(currentSection))
-                    {
-                        var parts = line.Split(new[] { '=' }, 2);
-                        if (parts.Length == 2)
-                        {
-                            var key = parts[0].Trim();
-                            var value = parts[1].Trim();
-                            _resources[currentSection][key] = value;
-                        }
-                    }
-                }
-
+                // Log the number of loaded sections and total resource items
                 _logger.LogInformation("Loaded {SectionCount} resource sections with a total of {ResourceCount} items",
                     _resources.Count, _resources.Sum(section => section.Value.Count));
             }
             catch (Exception ex)
             {
+                // Log any errors encountered during resource loading
                 _logger.LogError(ex, "Error loading resources from embedded file");
             }
         }

@@ -81,11 +81,11 @@ namespace Mix.MCP.Lib.Services.LLM
         }
 
         /// <summary>
-        /// CreateMixDbData embeddings using DeepSeek API
+        /// embeddings using DeepSeek API
         /// </summary>
         public override async Task<LLMEmbeddingResponse> CreateEmbeddingsAsync(
             string input,
-            string model = "deepseek-embedding",
+            string model = "deepseek-chat",
             CancellationToken cancellationToken = default)
         {
             var request = new

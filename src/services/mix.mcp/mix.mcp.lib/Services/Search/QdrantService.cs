@@ -34,14 +34,14 @@ namespace Mix.MCP.Lib.Services.Search
             );
         }
 
-        public async Task<List<SearchDocument>> GetAllDocumentsAsync()
+        public async Task<List<SearchDocument>> GetAllDocumentsAsync(CancellationToken cancellationToken = default)
         {
             var docs = new List<SearchDocument>();
             var collections = await _client.ListCollectionsAsync();
 
             foreach (var collection in collections)
             {
-                var response = await _client.ScrollAsync(collection, null, 1000, null, true, false);
+                var response = await _client.ScrollAsync(collection, null, 1000, null, true, false, cancellationToken: cancellationToken);
                 foreach (var point in response.Result)
                 {
                     if (point.Payload != null && point.Payload.TryGetValue("document", out var docPayload))

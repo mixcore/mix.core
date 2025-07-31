@@ -35,31 +35,30 @@ namespace Mix.MCP.Lib.Services.Search
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _llmServiceFactory = llmServiceFactory;
             _qdrantService = qdrantService ?? throw new ArgumentNullException(nameof(qdrantService));
-            _documents = new List<SearchDocument>();
-            IndexInstructionsOnLoad();
-            LoadDocumentsFromVectorDb();
         }
-
-        private void LoadDocumentsFromVectorDb()
+        private async Task EnsureLoadDocumentsFromVectorDb(CancellationToken cancellationToken = default)
         {
             try
             {
-                _documents = _qdrantService.GetAllDocumentsAsync().GetAwaiter().GetResult();
-                _logger.LogInformation("[SemanticSearchService] Loaded {Count} documents from Qdrant vector DB", _documents.Count);
+                if (_documents == null)
+                {
+                    _documents = await _qdrantService.GetAllDocumentsAsync(cancellationToken);
+                    _logger.LogInformation("[SemanticSearchService] Loaded {Count} documents from Qdrant vector DB", _documents.Count);
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogWarning(ex, "Failed to load documents from Qdrant vector DB. No documents loaded.");
             }
         }
-
-       
         public async Task<IEnumerable<SearchResult>> SearchAsync(
             string query,
             int maxResults = 10,
             double threshold = 0.7,
             CancellationToken cancellationToken = default)
         {
+            await EnsureLoadDocumentsFromVectorDb(cancellationToken);
+
             var cacheKey = $"{CACHE_PREFIX}query_{query}_{maxResults}_{threshold}";
 
             if (_cache.TryGetValue(cacheKey, out IEnumerable<SearchResult>? cachedResults))
@@ -97,11 +96,47 @@ namespace Mix.MCP.Lib.Services.Search
             return results;
         }
 
+        public void IndexInstructionsOnLoad()
+        {
+            try
+            {
+                var instructionsDir = Path.Combine(AppContext.BaseDirectory, "instructions");
+                if (!Directory.Exists(instructionsDir))
+                {
+                    _logger.LogWarning("Instructions directory not found: {Dir}", instructionsDir);
+                    return;
+                }
+                _qdrantService.UpsertCollectionAsync("mixcore").GetAwaiter().GetResult();
+                var mdFiles = Directory.GetFiles(instructionsDir, "*.md", SearchOption.AllDirectories);
+                foreach (var file in mdFiles)
+                {
+                    var content = File.ReadAllText(file);
+                    var doc = new SearchDocument
+                    {
+                        Id = Guid.NewGuid().ToString("N"),
+                        Collection = "mixcore",
+                        Title = Path.GetFileNameWithoutExtension(file),
+                        Content = content,
+                        Category = "instructions",
+                        Source = "instructions",
+                        CreatedAt = File.GetCreationTimeUtc(file),
+                        Metadata = new Dictionary<string, object> { { "path", file } }
+                    };
+                    // Fire and forget, or you can await if you want to block
+                    IndexDocumentAsync(doc).GetAwaiter().GetResult();
+                }
+                _logger.LogInformation("Indexed {Count} markdown documents from instructions folder", mdFiles.Length);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to index instructions markdown documents on load");
+            }
+        }
+
         public async Task IndexDocumentAsync(SearchDocument document, CancellationToken cancellationToken = default)
         {
             if (document == null) throw new ArgumentNullException(nameof(document));
-            // TODO: You must provide a vector for the document to upsert
-            float[] vector = GetVectorForDocument(document); // Implement this method as needed
+            float[] vector = await GetVectorForDocumentAsync(document, cancellationToken);
             await _qdrantService.UpsertDocumentAsync(document, vector);
             _documents = await _qdrantService.GetAllDocumentsAsync();
             ClearSearchCache();
@@ -126,8 +161,7 @@ namespace Mix.MCP.Lib.Services.Search
                 return cachedResults!;
             }
 
-            // TODO: You must provide a vector for the text to search
-            float[] queryVector = GetVectorForText(text); // Implement this method as needed
+            float[] queryVector = await GetVectorForTextAsync(text, cancellationToken);
             var results = await _qdrantService.SearchAsync(queryVector, limit: maxResults);
             _cache.Set(cacheKey, results, TimeSpan.FromMinutes(CACHE_DURATION_MINUTES));
             return results;
@@ -197,67 +231,42 @@ namespace Mix.MCP.Lib.Services.Search
             _logger.LogDebug("Search cache cleared due to index changes");
         }
 
-        // Placeholder: You must implement vectorization logic for your use case
-        private float[] GetVectorForDocument(SearchDocument document)
+        // Use LLM to get vector for document content+title
+        private async Task<float[]> GetVectorForDocumentAsync(SearchDocument document, CancellationToken cancellationToken = default)
         {
             var llmService = _llmServiceFactory.CreateService(LLMServiceType.DeepSeek);
-            // Simple deterministic vectorization using hash codes of content and title
-            return GetVectorForText(document.Content + " " + document.Title);
+            var text = document.Content + " " + document.Title;
+            var response = await llmService.CreateEmbeddingsAsync(text, "deepseek-embedding", cancellationToken);
+            if (response?.data != null && response.data is IEnumerable<dynamic> dataEnum && dataEnum.Any())
+            {
+                var first = dataEnum.First();
+                if (first.embedding is float[] arr)
+                    return arr;
+                if (first.embedding is IEnumerable<float> arrEnum)
+                    return arrEnum.ToArray();
+            }
+            _logger.LogWarning("LLM embedding service returned no data for document: {Id}", document.Id);
+            return new float[100]; // fallback
         }
 
-        private float[] GetVectorForText(string text)
+        // Use LLM to get vector for text
+        private async Task<float[]> GetVectorForTextAsync(string text, CancellationToken cancellationToken = default)
         {
             var llmService = _llmServiceFactory.CreateService(LLMServiceType.DeepSeek);
-            // Simple deterministic vectorization: hash each char, fill vector
-            const int vectorSize = 100;
-            var vector = new float[vectorSize];
-            if (string.IsNullOrEmpty(text)) return vector;
-            int hash = text.GetHashCode();
-            for (int i = 0; i < vectorSize; i++)
+            var response = await llmService.CreateEmbeddingsAsync(text, "deepseek-embedding", cancellationToken);
+            if (response?.data != null && response.data is IEnumerable<dynamic> dataEnum && dataEnum.Any())
             {
-                int charIndex = i % text.Length;
-                vector[i] = ((text[charIndex] + hash + i) % 1000) / 1000f;
+                var first = dataEnum.First();
+                if (first.embedding is float[] arr)
+                    return arr;
+                if (first.embedding is IEnumerable<float> arrEnum)
+                    return arrEnum.ToArray();
             }
-            return vector;
+            _logger.LogWarning("LLM embedding service returned no data for text: {Text}", text);
+            return new float[100]; // fallback
         }
 
 
-        private void IndexInstructionsOnLoad()
-        {
-            try
-            {
-                var instructionsDir = Path.Combine(AppContext.BaseDirectory, "instructions");
-                if (!Directory.Exists(instructionsDir))
-                {
-                    _logger.LogWarning("Instructions directory not found: {Dir}", instructionsDir);
-                    return;
-                }
-                _qdrantService.UpsertCollectionAsync("mixcore").GetAwaiter().GetResult();
-                var mdFiles = Directory.GetFiles(instructionsDir, "*.md", SearchOption.AllDirectories);
-                foreach (var file in mdFiles)
-                {
-                    var content = File.ReadAllText(file);
-                    var doc = new SearchDocument
-                    {
-                        Id = Guid.NewGuid().ToString("N"),
-                        Collection = "mixcore",
-                        Title = Path.GetFileNameWithoutExtension(file),
-                        Content = content,
-                        Category = "instructions",
-                        Source = "instructions",
-                        CreatedAt = File.GetCreationTimeUtc(file),
-                        Metadata = new Dictionary<string, object> { { "path", file } }
-                    };
-                    // Fire and forget, or you can await if you want to block
-                    IndexDocumentAsync(doc).GetAwaiter().GetResult();
-                }
-                _logger.LogInformation("Indexed {Count} markdown documents from instructions folder", mdFiles.Length);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to index instructions markdown documents on load");
-            }
-        }
 
     }
 }
