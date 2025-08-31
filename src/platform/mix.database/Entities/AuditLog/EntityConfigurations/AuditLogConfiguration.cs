@@ -73,6 +73,27 @@ namespace Mix.Database.Entities.AuditLog.EntityConfigurations
              .IsRequired(false)
              .HasColumnName("exception")
              .HasColumnType(Config.Text);
+
+            // HIPAA/GDPR Compliance Enhancement Fields
+            builder.Property(e => e.CorrelationId)
+                .HasColumnName("correlation_id")
+                .HasColumnType($"{Config.String}{Config.MediumLength}");
+
+            builder.Property(e => e.TenantId)
+                .HasColumnName("tenant_id")
+                .HasColumnType(Config.Integer);
+
+            builder.Property(e => e.PhiAccessFlag)
+                .HasColumnName("phi_access_flag")
+                .HasColumnType(Config.Boolean);
+
+            builder.Property(e => e.UserAgent)
+                .HasColumnName("user_agent")
+                .HasColumnType($"{Config.String}{Config.MaxLength}");
+
+            builder.Property(e => e.SessionId)
+                .HasColumnName("session_id")
+                .HasColumnType($"{Config.String}{Config.MediumLength}");
         }
     }
 }

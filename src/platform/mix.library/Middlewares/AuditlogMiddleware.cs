@@ -6,6 +6,7 @@ using Mix.Lib.Services;
 using Mix.Log.Lib.Interfaces;
 using Mix.Log.Lib.Models;
 using Mix.Shared.Models.Configurations;
+using Mix.Constant.Constants;
 using System.Text;
 
 namespace Mix.Lib.Middlewares
@@ -86,6 +87,12 @@ namespace Mix.Lib.Middlewares
             auditLogData.Method = context.Request.Method;
             auditLogData.QueryString = context.Request.QueryString.ToString();
             auditLogData.Body = request.IsJsonString() ? JObject.Parse(request) : new JObject(new JProperty("data", request));
+            
+            // HIPAA/GDPR Compliance Enhancement - Set tenant from session
+            auditLogData.TenantId = context.Session.GetInt32(MixRequestQueryKeywords.TenantId);
+            
+            // Set correlation ID in response header for traceability
+            context.Response.Headers.Add("X-Correlation-ID", auditLogData.CorrelationId);
         }
 
         private async Task LogResponse(HttpContext context, AuditLogDataModel auditLogData)

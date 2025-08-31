@@ -24,9 +24,18 @@ namespace Mix.Log.Lib.Models
         public JObject Exception { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
+        
+        // HIPAA/GDPR Compliance Enhancement Fields
+        public string CorrelationId { get; set; }
+        public int? TenantId { get; set; }
+        public bool PhiAccessFlag { get; set; }
+        public string UserAgent { get; set; }
+        public string SessionId { get; set; }
 
         public AuditLogDataModel()
         {
+            CorrelationId = Guid.NewGuid().ToString();
+            CreatedAt = DateTime.UtcNow;
         }
 
         public void InitRequest(string createdBy, HttpContext context)
@@ -36,6 +45,21 @@ namespace Mix.Log.Lib.Models
             Endpoint = context.Request.Path;
             Method = context.Request.Method;
             Body = GetBodyAsync(context.Request);
+            
+            // Set compliance enhancement fields
+            UserAgent = context.Request.Headers["User-Agent"].FirstOrDefault();
+            SessionId = context.Session?.Id;
+            
+            // Detect PHI access based on endpoint patterns
+            PhiAccessFlag = DetectPhiAccess(context.Request.Path);
+        }
+
+        private bool DetectPhiAccess(string endpoint)
+        {
+            // Basic PHI detection based on endpoint patterns
+            // This should be enhanced based on specific application endpoints
+            var phiPatterns = new[] { "/health", "/medical", "/patient", "/diagnosis", "/treatment" };
+            return phiPatterns.Any(pattern => endpoint.IndexOf(pattern, StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
         private JObject? GetBodyAsync(HttpRequest request)
