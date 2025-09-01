@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Compliance;
 using Mix.Database.Services.MixGlobalSettings;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mix.Lib.Services.Compliance
 {
@@ -55,7 +59,7 @@ namespace Mix.Lib.Services.Compliance
             return existingAssessment;
         }
 
-        public async Task<DataProtectionImpactAssessment> GetAssessment(int tenantId, int assessmentId)
+        public async Task<DataProtectionImpactAssessment?> GetAssessment(int tenantId, int assessmentId)
         {
             using var context = _databaseService.GetDbContext();
             
@@ -65,7 +69,7 @@ namespace Mix.Lib.Services.Compliance
                 .FirstOrDefaultAsync(x => x.Id == assessmentId && x.TenantId == tenantId);
         }
 
-        public async Task<IEnumerable<DataProtectionImpactAssessment>> GetAssessments(int tenantId, string status = null)
+        public async Task<IEnumerable<DataProtectionImpactAssessment>> GetAssessments(int tenantId, string? status = null)
         {
             using var context = _databaseService.GetDbContext();
             
@@ -146,7 +150,7 @@ namespace Mix.Lib.Services.Compliance
             
             var risk = await context.Set<DpiaRisk>()
                 .Include(r => r.Dpia)
-                .FirstOrDefaultAsync(x => x.Id == riskId && x.Dpia.TenantId == tenantId);
+                .FirstOrDefaultAsync(x => x.Id == riskId && x.Dpia!.TenantId == tenantId);
 
             if (risk == null)
                 throw new InvalidOperationException("DPIA risk not found");
@@ -191,7 +195,7 @@ namespace Mix.Lib.Services.Compliance
                 .Include(x => x.Risks)
                 .ToListAsync();
 
-            var risks = assessments.SelectMany(a => a.Risks).ToList();
+            var risks = assessments.SelectMany(a => a.Risks ?? new List<DpiaRisk>()).ToList();
 
             var report = new DpiaReport
             {
@@ -204,9 +208,9 @@ namespace Mix.Lib.Services.Compliance
                     x.CreatedDateTime < DateTime.UtcNow.AddDays(-30)),
                 HighRiskAssessments = assessments.Count(x => x.RiskScore >= 8),
                 AssessmentsByStatus = assessments.GroupBy(x => x.Status)
-                    .ToDictionary(g => g.Key, g => g.Count()),
-                RisksByCategory = risks.GroupBy(x => x.Category)
                     .ToDictionary(g => g.Key ?? "Unknown", g => g.Count()),
+                RisksByCategory = risks.GroupBy(x => x.Category)
+                    .ToDictionary(g => g.Key.ToString(), g => g.Count()),
                 AverageRiskScore = assessments.Any() ? assessments.Average(x => x.RiskScore) : 0,
                 GeneratedAt = DateTime.UtcNow,
                 ReportPeriodStart = fromDate.Value,

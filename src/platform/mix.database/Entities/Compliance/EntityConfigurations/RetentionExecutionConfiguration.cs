@@ -1,4 +1,4 @@
-using Mix.Database.EntityConfigurations.Base;
+using Mix.Database.Base.Cms;
 using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Compliance.EntityConfigurations

@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mix.Database.EntityConfigurations.Base;
+using Mix.Database.Base.Cms;
 using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Compliance.EntityConfigurations
 {
-    public class BreakGlassAuditConfiguration : EntityBaseConfiguration<BreakGlassAudit, int>
+    public class BreakGlassAuditConfiguration : TenantEntityBaseConfiguration<BreakGlassAudit, int>
     {
         public BreakGlassAuditConfiguration(DatabaseService databaseService) : base(databaseService)
         {
@@ -28,22 +28,28 @@ namespace Mix.Database.Entities.Compliance.EntityConfigurations
                 .HasColumnType($"{Config.String}(100)");
 
             builder.Property(e => e.EntityType)
-                .IsRequired()
                 .HasColumnName("entity_type")
                 .HasColumnType($"{Config.String}(100)");
 
             builder.Property(e => e.EntityId)
-                .IsRequired()
                 .HasColumnName("entity_id")
                 .HasColumnType($"{Config.String}(100)");
 
-            builder.Property(e => e.PhiAccessed)
-                .HasColumnName("phi_accessed")
-                .HasColumnType(Config.Boolean);
+            builder.Property(e => e.Details)
+                .HasColumnName("details")
+                .HasColumnType($"{Config.String}(1000)");
 
             builder.Property(e => e.ActionTimestamp)
                 .HasColumnName("action_timestamp")
                 .HasColumnType(Config.DateTime);
+
+            builder.Property(e => e.IpAddress)
+                .HasColumnName("ip_address")
+                .HasColumnType($"{Config.String}(45)");
+
+            builder.Property(e => e.PhiAccessed)
+                .HasColumnName("phi_accessed")
+                .HasColumnType(Config.Boolean);
 
             // Foreign key relationship
             builder.HasOne(e => e.BreakGlassAccess)

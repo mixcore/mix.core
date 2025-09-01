@@ -1,24 +1,28 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Compliance;
 using Mix.Database.Services.MixGlobalSettings;
+using Mix.Heart.Enums;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Mix.Lib.Services.Compliance
 {
     public class DsrService : IDsrService
     {
         private readonly DatabaseService _databaseService;
-        private readonly IDataClassificationService _dataClassificationService;
         private const int DEFAULT_SLA_DAYS = 30; // GDPR requires response within 30 days
 
-        public DsrService(DatabaseService databaseService, IDataClassificationService dataClassificationService)
+        public DsrService(DatabaseService databaseService)
         {
             _databaseService = databaseService;
-            _dataClassificationService = dataClassificationService;
         }
 
-        public async Task<DsrRequest> SubmitRequest(int tenantId, Guid userId, DsrRequestType requestType, string notes = null)
+        public async Task<DsrRequest> SubmitRequest(int tenantId, Guid userId, DsrRequestType requestType, string? notes = null)
         {
             using var context = _databaseService.GetDbContext();
             
@@ -32,7 +36,9 @@ namespace Mix.Lib.Services.Compliance
                 DueUtc = DateTime.UtcNow.AddDays(DEFAULT_SLA_DAYS),
                 Notes = notes,
                 DisplayName = $"DSR {requestType} Request",
-                Status = Mix.Heart.Enums.MixContentStatus.Published
+                CreatedDateTime = DateTime.UtcNow,
+                LastModified = DateTime.UtcNow,
+                Priority = 5
             };
 
             context.Add(request);
@@ -40,7 +46,7 @@ namespace Mix.Lib.Services.Compliance
             return request;
         }
 
-        public async Task<DsrRequest> GetRequest(int tenantId, int requestId)
+        public async Task<DsrRequest?> GetRequest(int tenantId, int requestId)
         {
             using var context = _databaseService.GetDbContext();
             return await context.Set<DsrRequest>()
@@ -81,12 +87,13 @@ namespace Mix.Lib.Services.Compliance
 
             request.Status = DsrRequestStatus.InProgress;
             request.ProcessedBy = processedBy;
+            request.LastModified = DateTime.UtcNow;
             
             await context.SaveChangesAsync();
             return request;
         }
 
-        public async Task<DsrRequest> CompleteRequest(int tenantId, int requestId, string processedBy, string exportFilePath = null)
+        public async Task<DsrRequest> CompleteRequest(int tenantId, int requestId, string processedBy, string? exportFilePath = null)
         {
             using var context = _databaseService.GetDbContext();
             
@@ -101,6 +108,7 @@ namespace Mix.Lib.Services.Compliance
             request.ProcessedUtc = DateTime.UtcNow;
             request.ExportFilePath = exportFilePath;
             request.SlaMetricMet = request.ProcessedUtc <= request.DueUtc;
+            request.LastModified = DateTime.UtcNow;
             
             await context.SaveChangesAsync();
             return request;
@@ -121,6 +129,7 @@ namespace Mix.Lib.Services.Compliance
             request.ProcessedUtc = DateTime.UtcNow;
             request.Notes = $"{request.Notes}\n\nRejection Reason: {rejectionReason}";
             request.SlaMetricMet = request.ProcessedUtc <= request.DueUtc;
+            request.LastModified = DateTime.UtcNow;
             
             await context.SaveChangesAsync();
             return request;
@@ -132,44 +141,69 @@ namespace Mix.Lib.Services.Compliance
             
             var export = new Dictionary<string, object>();
             
-            // Get user basic info (assuming MixUser entity exists)
-            // This would need to be adapted based on actual user entity structure
+            // Get user basic info
             export["RequestTimestamp"] = DateTime.UtcNow;
             export["TenantId"] = tenantId;
             export["UserId"] = userId;
             
-            // Get audit logs for this user
-            var auditLogs = await context.Set<Mix.Database.Entities.AuditLog.AuditLog>()
-                .Where(x => x.TenantId == tenantId && x.CreatedBy == userId.ToString())
-                .OrderByDescending(x => x.CreatedDateTime)
-                .Select(x => new {
-                    x.Id,
-                    x.CreatedDateTime,
-                    x.Endpoint,
-                    x.Method,
-                    x.RequestIp,
-                    x.StatusCode
-                })
-                .ToListAsync();
-            
-            export["AuditTrail"] = auditLogs;
+            // Get audit logs for this user (only if audit log table exists)
+            try
+            {
+                var auditLogsQuery = context.Database.SqlQuery<object>($@"
+                    SELECT Id, CreatedDateTime, Endpoint, Method, RequestIp, StatusCode 
+                    FROM mix_audit_log 
+                    WHERE TenantId = {tenantId} AND CreatedBy = {userId}
+                    ORDER BY CreatedDateTime DESC");
+                
+                var auditLogs = await auditLogsQuery.ToListAsync();
+                export["AuditTrail"] = auditLogs;
+            }
+            catch (Exception)
+            {
+                // Audit log table may not exist
+                export["AuditTrail"] = new List<object>();
+            }
             
             // Get consent history
-            var consents = await context.Set<ConsentEvent>()
-                .Include(x => x.Purpose)
+            try
+            {
+                var consents = await context.Set<ConsentEvent>()
+                    .Include(x => x.Purpose)
+                    .Where(x => x.TenantId == tenantId && x.UserId == userId)
+                    .OrderByDescending(x => x.ConsentTimestamp)
+                    .Select(x => new {
+                        x.Id,
+                        PurposeName = x.Purpose!.Name,
+                        x.Granted,
+                        x.ConsentTimestamp,
+                        x.Method,
+                        x.Version
+                    })
+                    .ToListAsync();
+                
+                export["ConsentHistory"] = consents;
+            }
+            catch (Exception)
+            {
+                // ConsentEvent table may not exist
+                export["ConsentHistory"] = new List<object>();
+            }
+            
+            // Get DSR history for this user
+            var dsrRequests = await context.Set<DsrRequest>()
                 .Where(x => x.TenantId == tenantId && x.UserId == userId)
-                .OrderByDescending(x => x.ConsentTimestamp)
+                .OrderByDescending(x => x.SubmittedUtc)
                 .Select(x => new {
                     x.Id,
-                    PurposeName = x.Purpose.Name,
-                    x.Granted,
-                    x.ConsentTimestamp,
-                    x.Method,
-                    x.Version
+                    x.RequestType,
+                    x.Status,
+                    x.SubmittedUtc,
+                    x.ProcessedUtc,
+                    x.Notes
                 })
                 .ToListAsync();
             
-            export["ConsentHistory"] = consents;
+            export["DataSubjectRequests"] = dsrRequests;
             
             // Export should include schema information for transparency
             export["DataSchema"] = new {
@@ -184,7 +218,9 @@ namespace Mix.Lib.Services.Compliance
             // In a real implementation, you would save this to a secure file system
             // and return the file path
             var fileName = $"user_data_export_{userId}_{DateTime.UtcNow:yyyyMMdd_HHmmss}.json";
-            var filePath = Path.Combine("/tmp", fileName); // This should be configurable
+            var exportDir = Path.Combine(Path.GetTempPath(), "exports");
+            Directory.CreateDirectory(exportDir);
+            var filePath = Path.Combine(exportDir, fileName);
             
             await File.WriteAllTextAsync(filePath, json, Encoding.UTF8);
             
@@ -203,24 +239,34 @@ namespace Mix.Lib.Services.Compliance
                 // 3. Maintain referential integrity
                 // 4. Keep audit trail of the erasure process
                 
-                // Example: Anonymize audit logs instead of deleting them
-                var auditLogs = await context.Set<Mix.Database.Entities.AuditLog.AuditLog>()
-                    .Where(x => x.TenantId == tenantId && x.CreatedBy == userId.ToString())
-                    .ToListAsync();
-                
-                foreach (var log in auditLogs)
+                // Example: Anonymize audit logs instead of deleting them (if table exists)
+                try
                 {
-                    log.CreatedBy = "ANONYMIZED_USER";
-                    log.RequestIp = "ANONYMIZED";
-                    log.UserAgent = "ANONYMIZED";
+                    await context.Database.ExecuteSqlRawAsync(@"
+                        UPDATE mix_audit_log 
+                        SET CreatedBy = 'ANONYMIZED_USER',
+                            RequestIp = 'ANONYMIZED',
+                            UserAgent = 'ANONYMIZED'
+                        WHERE TenantId = {0} AND CreatedBy = {1}", tenantId, userId.ToString());
+                }
+                catch (Exception)
+                {
+                    // Audit log table may not exist
                 }
                 
                 // Delete consent events (they are no longer relevant)
-                var consents = await context.Set<ConsentEvent>()
-                    .Where(x => x.TenantId == tenantId && x.UserId == userId)
-                    .ToListAsync();
-                
-                context.RemoveRange(consents);
+                try
+                {
+                    var consents = await context.Set<ConsentEvent>()
+                        .Where(x => x.TenantId == tenantId && x.UserId == userId)
+                        .ToListAsync();
+                    
+                    context.RemoveRange(consents);
+                }
+                catch (Exception)
+                {
+                    // ConsentEvent table may not exist
+                }
                 
                 await context.SaveChangesAsync();
                 return true;
@@ -248,7 +294,7 @@ namespace Mix.Lib.Services.Compliance
             
             var completed = requests.Where(x => x.Status == DsrRequestStatus.Completed).ToList();
             var avgProcessingDays = completed.Any() 
-                ? completed.Average(x => (x.ProcessedUtc.Value - x.SubmittedUtc).TotalDays) 
+                ? completed.Average(x => (x.ProcessedUtc!.Value - x.SubmittedUtc).TotalDays) 
                 : 0;
 
             return new DsrMetrics

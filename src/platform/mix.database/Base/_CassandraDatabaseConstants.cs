@@ -20,6 +20,8 @@
 
         string IDatabaseConstants.Integer => "int";
 
+        string IDatabaseConstants.Decimal => "decimal";
+
         string IDatabaseConstants.Long => "BigInt";
 
         string IDatabaseConstants.String => "varchar";

@@ -1,4 +1,7 @@
 using Mix.Database.Entities.Compliance;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Mix.Lib.Services.Compliance
 {
@@ -6,8 +9,8 @@ namespace Mix.Lib.Services.Compliance
     {
         Task<DataProtectionImpactAssessment> CreateAssessment(int tenantId, DataProtectionImpactAssessment assessment);
         Task<DataProtectionImpactAssessment> UpdateAssessment(int tenantId, int assessmentId, DataProtectionImpactAssessment assessment);
-        Task<DataProtectionImpactAssessment> GetAssessment(int tenantId, int assessmentId);
-        Task<IEnumerable<DataProtectionImpactAssessment>> GetAssessments(int tenantId, string status = null);
+        Task<DataProtectionImpactAssessment?> GetAssessment(int tenantId, int assessmentId);
+        Task<IEnumerable<DataProtectionImpactAssessment>> GetAssessments(int tenantId, string? status = null);
         Task<DataProtectionImpactAssessment> ApproveAssessment(int tenantId, int assessmentId, string approvedBy);
         Task<DataProtectionImpactAssessment> RejectAssessment(int tenantId, int assessmentId, string rejectedBy, string rejectionReason);
         Task AddRisk(int tenantId, int assessmentId, DpiaRisk risk);
@@ -27,8 +30,8 @@ namespace Mix.Lib.Services.Compliance
         public int RejectedAssessments { get; set; }
         public int OverdueAssessments { get; set; }
         public int HighRiskAssessments { get; set; }
-        public Dictionary<string, int> AssessmentsByStatus { get; set; }
-        public Dictionary<string, int> RisksByCategory { get; set; }
+        public Dictionary<string, int> AssessmentsByStatus { get; set; } = new();
+        public Dictionary<string, int> RisksByCategory { get; set; } = new();
         public double AverageRiskScore { get; set; }
         public DateTime GeneratedAt { get; set; }
         public DateTime ReportPeriodStart { get; set; }

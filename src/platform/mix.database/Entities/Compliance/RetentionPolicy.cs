@@ -1,4 +1,6 @@
 using Mix.Database.Entities.Base;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Database.Entities.Compliance
@@ -7,11 +9,11 @@ namespace Mix.Database.Entities.Compliance
     {
         [Required]
         [MaxLength(100)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         
         [Required]
         [MaxLength(50)]
-        public string Category { get; set; }
+        public string Category { get; set; } = string.Empty;
         
         public int MaxAgeDays { get; set; }
         
@@ -20,8 +22,8 @@ namespace Mix.Database.Entities.Compliance
         
         public bool IsActive { get; set; } = true;
         
-        public virtual ICollection<DataFieldMetadata> DataFields { get; set; }
-        public virtual ICollection<RetentionExecution> RetentionExecutions { get; set; }
+        public virtual ICollection<DataFieldMetadata>? DataFields { get; set; }
+        public virtual ICollection<RetentionExecution>? RetentionExecutions { get; set; }
     }
     
     public enum RetentionAction

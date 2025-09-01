@@ -1,4 +1,6 @@
 using Mix.Database.Entities.Base;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Database.Entities.Compliance
@@ -7,18 +9,18 @@ namespace Mix.Database.Entities.Compliance
     {
         [Required]
         [MaxLength(100)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         
         [MaxLength(500)]
-        public override string Description { get; set; }
+        public override string Description { get; set; } = string.Empty;
         
         [Required]
         public LawfulBasisType LawfulBasis { get; set; }
         
         public bool IsActive { get; set; } = true;
         
-        public virtual ICollection<DataFieldMetadata> DataFields { get; set; }
-        public virtual ICollection<ConsentEvent> ConsentEvents { get; set; }
+        public virtual ICollection<DataFieldMetadata>? DataFields { get; set; }
+        public virtual ICollection<ConsentEvent>? ConsentEvents { get; set; }
     }
     
     public enum LawfulBasisType

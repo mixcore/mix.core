@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mix.Database.EntityConfigurations.Base;
+using Mix.Database.Base.Cms;
 using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Compliance.EntityConfigurations
@@ -22,58 +22,65 @@ namespace Mix.Database.Entities.Compliance.EntityConfigurations
                 .HasColumnName("user_id")
                 .HasColumnType(Config.Guid);
 
-            builder.Property(e => e.Reason)
+            builder.Property(e => e.AccessReason)
                 .IsRequired()
-                .HasColumnName("reason")
-                .HasColumnType($"{Config.String}(200)");
+                .HasColumnName("access_reason")
+                .HasColumnType($"{Config.String}(100)");
 
             builder.Property(e => e.Justification)
                 .IsRequired()
                 .HasColumnName("justification")
-                .HasColumnType($"{Config.String}(1000)");
-
-            builder.Property(e => e.RequestedAt)
-                .HasColumnName("requested_at")
-                .HasColumnType(Config.DateTime);
+                .HasColumnType($"{Config.String}(500)");
 
             builder.Property(e => e.ApprovedBy)
+                .IsRequired()
                 .HasColumnName("approved_by")
                 .HasColumnType($"{Config.String}(100)");
 
-            builder.Property(e => e.ApprovedAt)
-                .HasColumnName("approved_at")
+            builder.Property(e => e.AccessStartTime)
+                .HasColumnName("access_start_time")
                 .HasColumnType(Config.DateTime);
 
-            builder.Property(e => e.RevokedBy)
-                .HasColumnName("revoked_by")
-                .HasColumnType($"{Config.String}(100)");
-
-            builder.Property(e => e.RevokedAt)
-                .HasColumnName("revoked_at")
+            builder.Property(e => e.AccessEndTime)
+                .HasColumnName("access_end_time")
                 .HasColumnType(Config.DateTime);
 
-            builder.Property(e => e.ExpiresAt)
-                .HasColumnName("expires_at")
+            builder.Property(e => e.ActualEndTime)
+                .HasColumnName("actual_end_time")
                 .HasColumnType(Config.DateTime);
 
             builder.Property(e => e.Status)
                 .IsRequired()
                 .HasColumnName("status")
-                .HasColumnType($"{Config.String}(20)");
+                .HasConversion<int>() // Convert enum to int
+                .HasColumnType(Config.Integer);
 
-            builder.Property(e => e.IsActive)
-                .HasColumnName("is_active")
-                .HasColumnType(Config.Boolean);
+            builder.Property(e => e.IpAddress)
+                .HasColumnName("ip_address")
+                .HasColumnType($"{Config.String}(45)");
+
+            builder.Property(e => e.UserAgent)
+                .HasColumnName("user_agent")
+                .HasColumnType($"{Config.String}(500)");
+
+            // Navigation property configuration
+            builder.HasMany(e => e.AuditTrail)
+                .WithOne(a => a.BreakGlassAccess)
+                .HasForeignKey(a => a.BreakGlassAccessId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Indexes for efficient querying
-            builder.HasIndex(e => new { e.TenantId, e.UserId, e.IsActive })
-                .HasDatabaseName("IX_BreakGlassAccess_Tenant_User_Active");
+            builder.HasIndex(e => new { e.TenantId, e.UserId, e.Status })
+                .HasDatabaseName("IX_BreakGlassAccess_Tenant_User_Status");
 
-            builder.HasIndex(e => e.ExpiresAt)
-                .HasDatabaseName("IX_BreakGlassAccess_ExpiresAt");
+            builder.HasIndex(e => e.AccessStartTime)
+                .HasDatabaseName("IX_BreakGlassAccess_AccessStartTime");
 
-            builder.HasIndex(e => e.RequestedAt)
-                .HasDatabaseName("IX_BreakGlassAccess_RequestedAt");
+            builder.HasIndex(e => e.AccessEndTime)
+                .HasDatabaseName("IX_BreakGlassAccess_AccessEndTime");
+
+            builder.HasIndex(e => e.Status)
+                .HasDatabaseName("IX_BreakGlassAccess_Status");
         }
     }
 }

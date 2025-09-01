@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mix.Database.EntityConfigurations.Base;
+using Mix.Database.Base.Cms;
 using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Compliance.EntityConfigurations
 {
-    public class DpiaRiskConfiguration : EntityBaseConfiguration<DpiaRisk, int>
+    public class DpiaRiskConfiguration : TenantEntityBaseConfiguration<DpiaRisk, int>
     {
         public DpiaRiskConfiguration(DatabaseService databaseService) : base(databaseService)
         {
@@ -25,12 +25,13 @@ namespace Mix.Database.Entities.Compliance.EntityConfigurations
             builder.Property(e => e.RiskDescription)
                 .IsRequired()
                 .HasColumnName("risk_description")
-                .HasColumnType($"{Config.String}(1000)");
+                .HasColumnType($"{Config.String}(200)");
 
             builder.Property(e => e.Category)
                 .IsRequired()
                 .HasColumnName("category")
-                .HasColumnType($"{Config.String}(100)");
+                .HasConversion<int>() // Convert enum to int
+                .HasColumnType(Config.Integer);
 
             builder.Property(e => e.Likelihood)
                 .HasColumnName("likelihood")
@@ -40,10 +41,31 @@ namespace Mix.Database.Entities.Compliance.EntityConfigurations
                 .HasColumnName("impact")
                 .HasColumnType(Config.Integer);
 
-            builder.Property(e => e.RiskLevel)
+            builder.Property(e => e.ExistingControls)
+                .HasColumnName("existing_controls")
+                .HasColumnType($"{Config.String}(1000)");
+
+            builder.Property(e => e.ResidualLikelihood)
+                .HasColumnName("residual_likelihood")
+                .HasColumnType(Config.Integer);
+
+            builder.Property(e => e.ResidualImpact)
+                .HasColumnName("residual_impact")
+                .HasColumnType(Config.Integer);
+
+            builder.Property(e => e.Status)
                 .IsRequired()
-                .HasColumnName("risk_level")
-                .HasColumnType($"{Config.String}(20)");
+                .HasColumnName("status")
+                .HasConversion<int>() // Convert enum to int
+                .HasColumnType(Config.Integer);
+
+            builder.Property(e => e.Owner)
+                .HasColumnName("owner")
+                .HasColumnType($"{Config.String}(100)");
+
+            builder.Property(e => e.TargetDate)
+                .HasColumnName("target_date")
+                .HasColumnType(Config.DateTime);
 
             builder.Property(e => e.IdentifiedAt)
                 .HasColumnName("identified_at")
@@ -55,6 +77,12 @@ namespace Mix.Database.Entities.Compliance.EntityConfigurations
                 .HasForeignKey(e => e.DpiaId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Navigation property for mitigations
+            builder.HasMany(e => e.Mitigations)
+                .WithOne(m => m.Risk)
+                .HasForeignKey(m => m.RiskId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             // Indexes for efficient querying
             builder.HasIndex(e => e.DpiaId)
                 .HasDatabaseName("IX_DpiaRisk_DpiaId");
@@ -62,8 +90,8 @@ namespace Mix.Database.Entities.Compliance.EntityConfigurations
             builder.HasIndex(e => e.Category)
                 .HasDatabaseName("IX_DpiaRisk_Category");
 
-            builder.HasIndex(e => e.RiskLevel)
-                .HasDatabaseName("IX_DpiaRisk_RiskLevel");
+            builder.HasIndex(e => e.Status)
+                .HasDatabaseName("IX_DpiaRisk_Status");
         }
     }
 }

@@ -1,6 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Compliance;
 using Mix.Database.Services.MixGlobalSettings;
+using Mix.Heart.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mix.Lib.Services.Compliance
 {
@@ -13,7 +18,7 @@ namespace Mix.Lib.Services.Compliance
             _databaseService = databaseService;
         }
 
-        public async Task<ConsentEvent> RecordConsent(int tenantId, Guid userId, int purposeId, bool granted, string method, string ipAddress, string userAgent, string version = "1.0")
+        public async Task<ConsentEvent> RecordConsent(int tenantId, Guid userId, int purposeId, bool granted, string method, string? ipAddress, string? userAgent, string version = "1.0")
         {
             using var context = _databaseService.GetDbContext();
             
@@ -29,7 +34,9 @@ namespace Mix.Lib.Services.Compliance
                 Version = version,
                 ConsentTimestamp = DateTime.UtcNow,
                 DisplayName = $"Consent for Purpose {purposeId}",
-                Status = Mix.Heart.Enums.MixContentStatus.Published
+                CreatedDateTime = DateTime.UtcNow,
+                LastModified = DateTime.UtcNow,
+                Priority = 5
             };
 
             context.Add(consentEvent);
@@ -60,7 +67,7 @@ namespace Mix.Lib.Services.Compliance
                 .ToListAsync();
         }
 
-        public async Task<ConsentEvent> WithdrawConsent(int tenantId, Guid userId, int purposeId, string method, string ipAddress)
+        public async Task<ConsentEvent> WithdrawConsent(int tenantId, Guid userId, int purposeId, string method, string? ipAddress)
         {
             return await RecordConsent(tenantId, userId, purposeId, false, method, ipAddress, null);
         }

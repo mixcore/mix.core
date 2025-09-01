@@ -1,4 +1,6 @@
 using Mix.Database.Entities.Base;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Database.Entities.Compliance
@@ -6,11 +8,11 @@ namespace Mix.Database.Entities.Compliance
     public class DpiaRisk : TenantEntityBase<int>
     {
         public int DpiaId { get; set; }
-        public virtual DataProtectionImpactAssessment Dpia { get; set; }
+        public virtual DataProtectionImpactAssessment? Dpia { get; set; }
         
         [Required]
         [MaxLength(200)]
-        public string RiskDescription { get; set; }
+        public string RiskDescription { get; set; } = string.Empty;
         
         [Required]
         public RiskCategory Category { get; set; }
@@ -20,7 +22,7 @@ namespace Mix.Database.Entities.Compliance
         public int InherentRisk => Likelihood * Impact; // Calculated field
         
         [MaxLength(1000)]
-        public string ExistingControls { get; set; }
+        public string? ExistingControls { get; set; }
         
         public int ResidualLikelihood { get; set; }
         public int ResidualImpact { get; set; }
@@ -30,9 +32,13 @@ namespace Mix.Database.Entities.Compliance
         public RiskStatus Status { get; set; }
         
         [MaxLength(100)]
-        public string Owner { get; set; }
+        public string? Owner { get; set; }
         
         public DateTime? TargetDate { get; set; }
+        
+        public DateTime IdentifiedAt { get; set; }
+        
+        public virtual ICollection<DpiaMitigation>? Mitigations { get; set; }
     }
     
     public enum RiskCategory

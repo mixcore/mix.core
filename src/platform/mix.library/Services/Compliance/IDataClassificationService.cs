@@ -1,10 +1,13 @@
 using Mix.Database.Entities.Compliance;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Mix.Lib.Services.Compliance
 {
     public interface IDataClassificationService
     {
-        Task<DataFieldMetadata> GetFieldMetadata(int tenantId, string entityName, string fieldName);
+        Task<DataFieldMetadata?> GetFieldMetadata(int tenantId, string entityName, string fieldName);
         Task<IEnumerable<DataFieldMetadata>> GetEntitiesForClassification(int tenantId, DataClassification classification);
         Task<DataFieldMetadata> SetFieldClassification(int tenantId, string entityName, string fieldName, DataClassification classification, bool encryptionRequired = false);
         Task<bool> IsFieldClassified(int tenantId, string entityName, string fieldName);
@@ -19,8 +22,8 @@ namespace Mix.Lib.Services.Compliance
         public int ClassifiedEntities { get; set; }
         public int UnclassifiedEntities { get; set; }
         public int EncryptedFields { get; set; }
-        public Dictionary<DataClassification, int> ClassificationBreakdown { get; set; }
-        public List<string> UnclassifiedEntityFields { get; set; }
+        public Dictionary<DataClassification, int> ClassificationBreakdown { get; set; } = new();
+        public List<string> UnclassifiedEntityFields { get; set; } = new();
         public DateTime GeneratedAt { get; set; }
     }
 }

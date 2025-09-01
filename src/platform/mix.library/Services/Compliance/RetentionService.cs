@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Mix.Database.Entities.Compliance;
 using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Lib.Services.Compliance

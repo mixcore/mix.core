@@ -21,12 +21,13 @@ namespace Mix.Lib.Services.Compliance
             {
                 TenantId = tenantId,
                 UserId = userId,
-                Reason = reason,
+                AccessReason = reason,
                 Justification = justification,
-                RequestedAt = DateTime.UtcNow,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(durationMinutes),
-                Status = "Pending",
-                IsActive = false
+                AccessStartTime = DateTime.UtcNow,
+                AccessEndTime = DateTime.UtcNow.AddMinutes(durationMinutes),
+                Status = BreakGlassStatus.Requested,
+                DisplayName = $"Emergency Access Request - {reason}",
+                Description = justification
             };
 
             context.Add(access);
@@ -44,13 +45,12 @@ namespace Mix.Lib.Services.Compliance
             if (access == null)
                 throw new InvalidOperationException("Break glass access request not found");
 
-            if (access.ExpiresAt < DateTime.UtcNow)
+            if (access.AccessEndTime < DateTime.UtcNow)
                 throw new InvalidOperationException("Break glass access request has expired");
 
-            access.Status = "Approved";
+            access.Status = BreakGlassStatus.Approved;
             access.ApprovedBy = approvedBy;
-            access.ApprovedAt = DateTime.UtcNow;
-            access.IsActive = true;
+            access.AccessStartTime = DateTime.UtcNow;
 
             await context.SaveChangesAsync();
             return access;
@@ -66,10 +66,8 @@ namespace Mix.Lib.Services.Compliance
             if (access == null)
                 throw new InvalidOperationException("Break glass access not found");
 
-            access.Status = "Revoked";
-            access.RevokedBy = revokedBy;
-            access.RevokedAt = DateTime.UtcNow;
-            access.IsActive = false;
+            access.Status = BreakGlassStatus.Revoked;
+            access.ActualEndTime = DateTime.UtcNow;
 
             await context.SaveChangesAsync();
             return access;
@@ -82,8 +80,8 @@ namespace Mix.Lib.Services.Compliance
             return await context.Set<BreakGlassAccess>()
                 .AnyAsync(x => x.TenantId == tenantId && 
                               x.UserId == userId && 
-                              x.IsActive && 
-                              x.ExpiresAt > DateTime.UtcNow);
+                              (x.Status == BreakGlassStatus.Approved || x.Status == BreakGlassStatus.Active) && 
+                              x.AccessEndTime > DateTime.UtcNow);
         }
 
         public async Task<IEnumerable<BreakGlassAccess>> GetActiveAccesses(int tenantId)
@@ -92,8 +90,8 @@ namespace Mix.Lib.Services.Compliance
             
             return await context.Set<BreakGlassAccess>()
                 .Where(x => x.TenantId == tenantId && 
-                           x.IsActive && 
-                           x.ExpiresAt > DateTime.UtcNow)
+                           (x.Status == BreakGlassStatus.Approved || x.Status == BreakGlassStatus.Active) && 
+                           x.AccessEndTime > DateTime.UtcNow)
                 .ToListAsync();
         }
 
@@ -108,7 +106,9 @@ namespace Mix.Lib.Services.Compliance
                 EntityType = entityType,
                 EntityId = entityId,
                 PhiAccessed = phiAccessed,
-                ActionTimestamp = DateTime.UtcNow
+                ActionTimestamp = DateTime.UtcNow,
+                DisplayName = $"Break Glass Action - {action}",
+                Description = $"Action performed on {entityType}:{entityId}"
             };
 
             context.Add(audit);
@@ -124,8 +124,8 @@ namespace Mix.Lib.Services.Compliance
 
             var accesses = await context.Set<BreakGlassAccess>()
                 .Where(x => x.TenantId == tenantId && 
-                           x.RequestedAt >= fromDate && 
-                           x.RequestedAt <= toDate)
+                           x.CreatedDateTime >= fromDate && 
+                           x.CreatedDateTime <= toDate)
                 .ToListAsync();
 
             var audits = await context.Set<BreakGlassAudit>()
@@ -137,15 +137,15 @@ namespace Mix.Lib.Services.Compliance
             var metrics = new BreakGlassMetrics
             {
                 TotalRequests = accesses.Count,
-                ApprovedRequests = accesses.Count(x => x.Status == "Approved"),
-                RejectedRequests = accesses.Count(x => x.Status == "Rejected"),
-                ActiveSessions = accesses.Count(x => x.IsActive && x.ExpiresAt > DateTime.UtcNow),
+                ApprovedRequests = accesses.Count(x => x.Status == BreakGlassStatus.Approved || x.Status == BreakGlassStatus.Active),
+                RejectedRequests = accesses.Count(x => x.Status == BreakGlassStatus.Revoked),
+                ActiveSessions = accesses.Count(x => (x.Status == BreakGlassStatus.Approved || x.Status == BreakGlassStatus.Active) && x.AccessEndTime > DateTime.UtcNow),
                 PhiAccessEvents = audits.Count(x => x.PhiAccessed),
-                RequestsByReason = accesses.GroupBy(x => x.Reason)
+                RequestsByReason = accesses.GroupBy(x => x.AccessReason)
                     .ToDictionary(g => g.Key, g => g.Count()),
-                AverageSessionDuration = accesses.Where(x => x.ApprovedAt.HasValue && x.RevokedAt.HasValue)
-                    .Any() ? accesses.Where(x => x.ApprovedAt.HasValue && x.RevokedAt.HasValue)
-                    .Average(x => (x.RevokedAt.Value - x.ApprovedAt.Value).TotalMinutes) : 0,
+                AverageSessionDuration = accesses.Where(x => x.Status == BreakGlassStatus.Approved && x.ActualEndTime.HasValue)
+                    .Any() ? accesses.Where(x => x.Status == BreakGlassStatus.Approved && x.ActualEndTime.HasValue)
+                    .Average(x => (x.ActualEndTime.Value - x.AccessStartTime).TotalMinutes) : 0,
                 GeneratedAt = DateTime.UtcNow
             };
 

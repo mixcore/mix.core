@@ -1,5 +1,3 @@
-using Mix.Database.Entities.Compliance;
-
 namespace Mix.Lib.Services.Compliance
 {
     public interface IRetentionService

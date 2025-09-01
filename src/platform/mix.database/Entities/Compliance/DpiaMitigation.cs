@@ -1,19 +1,20 @@
 using Mix.Database.Entities.Base;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Database.Entities.Compliance
 {
     public class DpiaMitigation : TenantEntityBase<int>
     {
-        public int DpiaId { get; set; }
-        public virtual DataProtectionImpactAssessment Dpia { get; set; }
+        public int? DpiaId { get; set; }
+        public virtual DataProtectionImpactAssessment? Dpia { get; set; }
         
-        public int? RiskId { get; set; }
-        public virtual DpiaRisk Risk { get; set; }
+        public int RiskId { get; set; }
+        public virtual DpiaRisk? Risk { get; set; }
         
         [Required]
         [MaxLength(200)]
-        public string MitigationDescription { get; set; }
+        public string MitigationDescription { get; set; } = string.Empty;
         
         [Required]
         public MitigationType Type { get; set; }
@@ -22,13 +23,14 @@ namespace Mix.Database.Entities.Compliance
         public MitigationStatus Status { get; set; }
         
         [MaxLength(100)]
-        public string Owner { get; set; }
+        public string? Owner { get; set; }
         
         public DateTime? TargetDate { get; set; }
         public DateTime? CompletionDate { get; set; }
+        public DateTime ImplementedAt { get; set; }
         
         [MaxLength(1000)]
-        public string ImplementationNotes { get; set; }
+        public string? ImplementationNotes { get; set; }
         
         public decimal? EstimatedCost { get; set; }
         

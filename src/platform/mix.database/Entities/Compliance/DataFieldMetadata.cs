@@ -1,4 +1,5 @@
 using Mix.Database.Entities.Base;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Database.Entities.Compliance
@@ -7,27 +8,27 @@ namespace Mix.Database.Entities.Compliance
     {
         [Required]
         [MaxLength(100)]
-        public string EntityName { get; set; }
+        public string EntityName { get; set; } = string.Empty;
         
         [Required]
         [MaxLength(100)]
-        public string FieldName { get; set; }
+        public string FieldName { get; set; } = string.Empty;
         
         [Required]
         public DataClassification Classification { get; set; }
         
         public int? PurposeId { get; set; }
-        public virtual Purpose Purpose { get; set; }
+        public virtual Purpose? Purpose { get; set; }
         
         public int? RetentionPolicyId { get; set; }
-        public virtual RetentionPolicy RetentionPolicy { get; set; }
+        public virtual RetentionPolicy? RetentionPolicy { get; set; }
         
         public bool EncryptionRequired { get; set; }
         
         public DateTime LastReviewedUtc { get; set; }
         
         [MaxLength(500)]
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
     }
     
     public enum DataClassification

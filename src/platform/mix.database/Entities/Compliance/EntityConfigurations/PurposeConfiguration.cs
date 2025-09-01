@@ -1,4 +1,6 @@
-using Mix.Database.EntityConfigurations.Base;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Mix.Database.Base.Cms;
 using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Compliance.EntityConfigurations
@@ -23,12 +25,24 @@ namespace Mix.Database.Entities.Compliance.EntityConfigurations
             builder.Property(e => e.LawfulBasis)
                 .IsRequired()
                 .HasColumnName("lawful_basis")
+                .HasConversion<int>() // Convert enum to int
                 .HasColumnType(Config.Integer);
 
             builder.Property(e => e.IsActive)
                 .HasColumnName("is_active")
                 .HasColumnType(Config.Boolean)
                 .HasDefaultValue(true);
+
+            // Navigation properties
+            builder.HasMany(e => e.DataFields)
+                .WithOne(d => d.Purpose)
+                .HasForeignKey(d => d.PurposeId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasMany(e => e.ConsentEvents)
+                .WithOne(c => c.Purpose)
+                .HasForeignKey(c => c.PurposeId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Unique constraint for name per tenant
             builder.HasIndex(e => new { e.TenantId, e.Name })

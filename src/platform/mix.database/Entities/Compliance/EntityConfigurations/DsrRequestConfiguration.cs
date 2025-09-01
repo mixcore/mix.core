@@ -1,4 +1,6 @@
-using Mix.Database.EntityConfigurations.Base;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Mix.Database.Base.Cms;
 using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Compliance.EntityConfigurations
@@ -23,11 +25,13 @@ namespace Mix.Database.Entities.Compliance.EntityConfigurations
             builder.Property(e => e.RequestType)
                 .IsRequired()
                 .HasColumnName("request_type")
+                .HasConversion<int>() // Convert enum to int
                 .HasColumnType(Config.Integer);
 
             builder.Property(e => e.Status)
                 .IsRequired()
                 .HasColumnName("status")
+                .HasConversion<int>() // Convert enum to int
                 .HasColumnType(Config.Integer)
                 .HasDefaultValue(DsrRequestStatus.Pending);
 

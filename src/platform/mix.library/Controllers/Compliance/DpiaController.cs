@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mix.Lib.Services.Compliance;
 using Mix.Database.Entities.Compliance;
+using System.Security.Claims;
 
 namespace Mix.Lib.Controllers.Compliance
 {
@@ -69,7 +70,7 @@ namespace Mix.Lib.Controllers.Compliance
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DataProtectionImpactAssessment>>> GetAssessments([FromQuery] string status = null)
+        public async Task<ActionResult<IEnumerable<DataProtectionImpactAssessment>>> GetAssessments([FromQuery] string? status = null)
         {
             var tenantId = GetTenantId();
             var assessments = await _dpiaService.GetAssessments(tenantId, status);
@@ -187,32 +188,33 @@ namespace Mix.Lib.Controllers.Compliance
 
         private int GetTenantId()
         {
-            // This should be extracted from the user's context or JWT token
-            // For now, returning a default value - this needs to be implemented based on your authentication system
-            return 1; // Replace with actual tenant resolution logic
+            var tenantIdClaim = User.FindFirst("TenantId")?.Value;
+            if (int.TryParse(tenantIdClaim, out var tenantId))
+                return tenantId;
+            
+            throw new UnauthorizedAccessException("Tenant ID not found in claims");
         }
 
         private string GetUserName()
         {
-            // This should be extracted from the user's context or JWT token
-            return User?.Identity?.Name ?? "System"; // Replace with actual user name resolution logic
+            return User.FindFirst(ClaimTypes.Name)?.Value ?? "System";
         }
     }
 
     public class RejectAssessmentRequest
     {
-        public string RejectionReason { get; set; }
+        public string RejectionReason { get; set; } = string.Empty;
     }
 
     public class ReviewAssessmentRequest
     {
-        public string ReviewComments { get; set; }
+        public string ReviewComments { get; set; } = string.Empty;
     }
 
     public class DpiaRequirementRequest
     {
-        public string DataTypes { get; set; }
-        public string ProcessingType { get; set; }
+        public string DataTypes { get; set; } = string.Empty;
+        public string ProcessingType { get; set; } = string.Empty;
         public int RiskScore { get; set; }
     }
 }

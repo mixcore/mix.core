@@ -1,4 +1,9 @@
-﻿namespace Mix.Database.EntityConfigurations.Base
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Mix.Database.Entities.Cms;
+using Mix.Database.Base;
+
+namespace Mix.Database.EntityConfigurations.Base
 {
     public abstract class TenantEntityBaseConfiguration<T, TPrimaryKey, TConfig> : EntityBaseConfiguration<T, TPrimaryKey, TConfig>
         where TPrimaryKey : IComparable
@@ -19,8 +24,6 @@
                 .HasColumnType($"{Config.NString}{Config.MaxLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
-
         }
-
     }
 }

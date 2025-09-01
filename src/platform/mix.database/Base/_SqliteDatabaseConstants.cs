@@ -14,13 +14,15 @@
 
         string IDatabaseConstants.DateTime => "datetime";
 
-        string IDatabaseConstants.Date => "datetime";
+        string IDatabaseConstants.Date => "date";
 
-        string IDatabaseConstants.Guid => "uniqueidentifier";
+        string IDatabaseConstants.Guid => "text";
 
         string IDatabaseConstants.Integer => "integer";
 
-        string IDatabaseConstants.Long => "BigInt";
+        string IDatabaseConstants.Decimal => "decimal(18,2)";
+
+        string IDatabaseConstants.Long => "bigint";
 
         string IDatabaseConstants.String => "varchar";
 
@@ -28,13 +30,13 @@
 
         string IDatabaseConstants.Text => "text";
 
-        string IDatabaseConstants.GenerateUUID => "newid()";
+        string IDatabaseConstants.GenerateUUID => "hex(randomblob(16))";
 
         string IDatabaseConstants.Time => "time";
 
-        string IDatabaseConstants.Now => "(DATETIME('now'))";
+        string IDatabaseConstants.Now => "datetime('now')";
 
-        string IDatabaseConstants.Boolean => "INTEGER";
+        string IDatabaseConstants.Boolean => "integer";
 
         string IDatabaseConstants.BacktickOpen => "[";
 

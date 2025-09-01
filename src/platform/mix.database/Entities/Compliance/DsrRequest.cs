@@ -1,4 +1,5 @@
 using Mix.Database.Entities.Base;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Database.Entities.Compliance
@@ -21,12 +22,12 @@ namespace Mix.Database.Entities.Compliance
         public bool SlaMetricMet { get; set; }
         
         [MaxLength(1000)]
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
         
         [MaxLength(500)]
-        public string ProcessedBy { get; set; }
+        public string? ProcessedBy { get; set; }
         
-        public string ExportFilePath { get; set; } // For access requests
+        public string? ExportFilePath { get; set; } // For access requests
     }
     
     public enum DsrRequestType

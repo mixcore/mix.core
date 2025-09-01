@@ -1,4 +1,6 @@
 using Mix.Database.Entities.Base;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Database.Entities.Compliance
@@ -10,15 +12,15 @@ namespace Mix.Database.Entities.Compliance
         
         [Required]
         [MaxLength(100)]
-        public string AccessReason { get; set; }
+        public string AccessReason { get; set; } = string.Empty;
         
         [Required]
         [MaxLength(500)]
-        public string Justification { get; set; }
+        public string Justification { get; set; } = string.Empty;
         
         [Required]
         [MaxLength(100)]
-        public string ApprovedBy { get; set; }
+        public string ApprovedBy { get; set; } = string.Empty;
         
         public DateTime AccessStartTime { get; set; }
         public DateTime AccessEndTime { get; set; }
@@ -28,12 +30,12 @@ namespace Mix.Database.Entities.Compliance
         public BreakGlassStatus Status { get; set; }
         
         [MaxLength(45)]
-        public string IpAddress { get; set; }
+        public string? IpAddress { get; set; }
         
         [MaxLength(500)]
-        public string UserAgent { get; set; }
+        public string? UserAgent { get; set; }
         
-        public virtual ICollection<BreakGlassAudit> AuditTrail { get; set; }
+        public virtual ICollection<BreakGlassAudit>? AuditTrail { get; set; }
     }
     
     public enum BreakGlassStatus

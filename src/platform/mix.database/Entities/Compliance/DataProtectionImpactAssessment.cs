@@ -1,4 +1,6 @@
 using Mix.Database.Entities.Base;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Database.Entities.Compliance
@@ -7,52 +9,56 @@ namespace Mix.Database.Entities.Compliance
     {
         [Required]
         [MaxLength(200)]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
         
         [Required]
         [MaxLength(2000)]
-        public string ProcessingDescription { get; set; }
+        public string ProcessingDescription { get; set; } = string.Empty;
         
         [Required]
         [MaxLength(1000)]
-        public string DataTypes { get; set; }
+        public string DataTypes { get; set; } = string.Empty;
         
         [Required]
         [MaxLength(1000)]
-        public string DataSubjects { get; set; }
+        public string DataSubjects { get; set; } = string.Empty;
         
         [Required]
         [MaxLength(1000)]
-        public string LegalBasis { get; set; }
+        public string LegalBasis { get; set; } = string.Empty;
         
         public int RiskScore { get; set; } // 1-10 scale
         
+        [MaxLength(2000)]
+        public string? RiskAssessment { get; set; }
+        
+        [MaxLength(2000)]
+        public string? Safeguards { get; set; }
+        
         [Required]
-        public DpiaStatus Status { get; set; }
+        [MaxLength(50)]
+        public string Status { get; set; } = "Draft";
         
         [MaxLength(100)]
-        public string AssessedBy { get; set; }
+        public string? ApprovedBy { get; set; }
         
-        public DateTime? AssessmentDate { get; set; }
+        public DateTime? ApprovedAt { get; set; }
         
         [MaxLength(100)]
-        public string ApprovedBy { get; set; }
+        public string? RejectedBy { get; set; }
         
-        public DateTime? ApprovalDate { get; set; }
-        
-        public DateTime? ReviewDate { get; set; }
-        
-        [MaxLength(2000)]
-        public string Risks { get; set; }
-        
-        [MaxLength(2000)]
-        public string Mitigations { get; set; }
+        public DateTime? RejectedAt { get; set; }
         
         [MaxLength(1000)]
-        public string ResidualRisk { get; set; }
+        public string? RejectionReason { get; set; }
         
-        public virtual ICollection<DpiaRisk> IdentifiedRisks { get; set; }
-        public virtual ICollection<DpiaMitigation> PlannedMitigations { get; set; }
+        [MaxLength(2000)]
+        public string? ReviewComments { get; set; }
+        
+        public DateTime? ReviewedAt { get; set; }
+        
+        // Navigation properties
+        public virtual ICollection<DpiaRisk>? Risks { get; set; }
     }
     
     public enum DpiaStatus

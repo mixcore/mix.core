@@ -1,4 +1,6 @@
-using Mix.Database.EntityConfigurations.Base;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Mix.Database.Base.Cms;
 using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Compliance.EntityConfigurations
@@ -28,6 +30,7 @@ namespace Mix.Database.Entities.Compliance.EntityConfigurations
             builder.Property(e => e.Classification)
                 .IsRequired()
                 .HasColumnName("classification")
+                .HasConversion<int>() // Convert enum to int
                 .HasColumnType(Config.Integer);
 
             builder.Property(e => e.PurposeId)

@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mix.Database.EntityConfigurations.Base;
+using Mix.Database.Base.Cms;
 using Mix.Database.Services.MixGlobalSettings;
 
 namespace Mix.Database.Entities.Compliance.EntityConfigurations
 {
-    public class DpiaMitigationConfiguration : EntityBaseConfiguration<DpiaMitigation, int>
+    public class DpiaMitigationConfiguration : TenantEntityBaseConfiguration<DpiaMitigation, int>
     {
         public DpiaMitigationConfiguration(DatabaseService databaseService) : base(databaseService)
         {
@@ -17,6 +17,10 @@ namespace Mix.Database.Entities.Compliance.EntityConfigurations
             
             builder.ToTable("mix_dpia_mitigation");
 
+            builder.Property(e => e.DpiaId)
+                .HasColumnName("dpia_id")
+                .HasColumnType(Config.Integer);
+
             builder.Property(e => e.RiskId)
                 .IsRequired()
                 .HasColumnName("risk_id")
@@ -25,35 +29,54 @@ namespace Mix.Database.Entities.Compliance.EntityConfigurations
             builder.Property(e => e.MitigationDescription)
                 .IsRequired()
                 .HasColumnName("mitigation_description")
-                .HasColumnType($"{Config.String}(1000)");
+                .HasColumnType($"{Config.String}(200)");
 
-            builder.Property(e => e.MitigationType)
+            builder.Property(e => e.Type)
                 .IsRequired()
-                .HasColumnName("mitigation_type")
-                .HasColumnType($"{Config.String}(100)");
+                .HasColumnName("type")
+                .HasConversion<int>() // Convert enum to int
+                .HasColumnType(Config.Integer);
 
-            builder.Property(e => e.ImplementationStatus)
+            builder.Property(e => e.Status)
                 .IsRequired()
-                .HasColumnName("implementation_status")
-                .HasColumnType($"{Config.String}(50)");
+                .HasColumnName("status")
+                .HasConversion<int>() // Convert enum to int
+                .HasColumnType(Config.Integer);
 
-            builder.Property(e => e.ResponsiblePerson)
-                .HasColumnName("responsible_person")
+            builder.Property(e => e.Owner)
+                .HasColumnName("owner")
                 .HasColumnType($"{Config.String}(100)");
 
             builder.Property(e => e.TargetDate)
                 .HasColumnName("target_date")
                 .HasColumnType(Config.DateTime);
 
+            builder.Property(e => e.CompletionDate)
+                .HasColumnName("completion_date")
+                .HasColumnType(Config.DateTime);
+
             builder.Property(e => e.ImplementedAt)
                 .HasColumnName("implemented_at")
                 .HasColumnType(Config.DateTime);
 
-            builder.Property(e => e.EffectivenessScore)
-                .HasColumnName("effectiveness_score")
+            builder.Property(e => e.ImplementationNotes)
+                .HasColumnName("implementation_notes")
+                .HasColumnType($"{Config.String}(1000)");
+
+            builder.Property(e => e.EstimatedCost)
+                .HasColumnName("estimated_cost")
+                .HasColumnType(Config.Decimal);
+
+            builder.Property(e => e.EffectivenessRating)
+                .HasColumnName("effectiveness_rating")
                 .HasColumnType(Config.Integer);
 
-            // Foreign key relationship
+            // Foreign key relationships
+            builder.HasOne(e => e.Dpia)
+                .WithMany()
+                .HasForeignKey(e => e.DpiaId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasOne(e => e.Risk)
                 .WithMany(r => r.Mitigations)
                 .HasForeignKey(e => e.RiskId)
@@ -63,11 +86,11 @@ namespace Mix.Database.Entities.Compliance.EntityConfigurations
             builder.HasIndex(e => e.RiskId)
                 .HasDatabaseName("IX_DpiaMitigation_RiskId");
 
-            builder.HasIndex(e => e.ImplementationStatus)
-                .HasDatabaseName("IX_DpiaMitigation_ImplementationStatus");
+            builder.HasIndex(e => e.Status)
+                .HasDatabaseName("IX_DpiaMitigation_Status");
 
-            builder.HasIndex(e => e.TargetDate)
-                .HasDatabaseName("IX_DpiaMitigation_TargetDate");
+            builder.HasIndex(e => new { e.TenantId, e.Status })
+                .HasDatabaseName("IX_DpiaMitigation_Tenant_Status");
         }
     }
 }

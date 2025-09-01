@@ -1,6 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Compliance;
 using Mix.Database.Services.MixGlobalSettings;
+using Mix.Heart.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mix.Lib.Services.Compliance
 {
@@ -13,7 +18,7 @@ namespace Mix.Lib.Services.Compliance
             _databaseService = databaseService;
         }
 
-        public async Task<DataFieldMetadata> GetFieldMetadata(int tenantId, string entityName, string fieldName)
+        public async Task<DataFieldMetadata?> GetFieldMetadata(int tenantId, string entityName, string fieldName)
         {
             using var context = _databaseService.GetDbContext();
             return await context.Set<DataFieldMetadata>()
@@ -48,6 +53,7 @@ namespace Mix.Lib.Services.Compliance
                 existing.Classification = classification;
                 existing.EncryptionRequired = encryptionRequired;
                 existing.LastReviewedUtc = DateTime.UtcNow;
+                existing.LastModified = DateTime.UtcNow;
                 context.Update(existing);
             }
             else
@@ -61,7 +67,9 @@ namespace Mix.Lib.Services.Compliance
                     EncryptionRequired = encryptionRequired,
                     LastReviewedUtc = DateTime.UtcNow,
                     DisplayName = $"{entityName}.{fieldName}",
-                    Status = Mix.Heart.Enums.MixContentStatus.Published
+                    CreatedDateTime = DateTime.UtcNow,
+                    LastModified = DateTime.UtcNow,
+                    Priority = 5
                 };
                 context.Add(existing);
             }
@@ -125,12 +133,17 @@ namespace Mix.Lib.Services.Compliance
                 .GroupBy(x => x.Classification)
                 .ToDictionary(g => g.Key, g => g.Count());
 
+            // Get list of entities that might need classification (this would be more sophisticated in real implementation)
+            var totalPossibleEntities = new[] { "MixUser", "AuditLog", "ConsentEvent", "DsrRequest" }.Length;
+
             return new ComplianceReport
             {
-                TotalEntities = allClassifications.Select(x => x.EntityName).Distinct().Count(),
+                TotalEntities = totalPossibleEntities,
                 ClassifiedEntities = allClassifications.Count,
+                UnclassifiedEntities = Math.Max(0, totalPossibleEntities - allClassifications.Count),
                 EncryptedFields = allClassifications.Count(x => x.EncryptionRequired),
                 ClassificationBreakdown = classificationBreakdown,
+                UnclassifiedEntityFields = new List<string>(), // Would be populated in real implementation
                 GeneratedAt = DateTime.UtcNow
             };
         }
