@@ -3,7 +3,9 @@
 * Check if appsettings is default or not, if not, set it to default
 * Decrypt database.json, authentication.json
 * Move to mix.database folder
-*  ``` dotnet ef --startup-project ../src/applications/mixcore --project ../src/platform/mix.database migrations add Init --context SqliteMixCmsContext --output-dir Migrations/Cms/Sqlite --verbose```
+*  ``` 
+ * dotnet ef --startup-project ../src/applications/mixcore --project ../src/platform/mix.database migrations add Init --context SqliteMixCmsContext --output-dir Migrations/Cms/Sqlite --verbose
+ * ```
 * ```dotnet ef database update --startup-project ../src/applications/mixcore --project ../src/platform/mix.database --context PostgresSqlAccountContext --verbose```
 
 ### Remove mixcontent folder

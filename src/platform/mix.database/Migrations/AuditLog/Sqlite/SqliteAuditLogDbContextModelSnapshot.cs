@@ -23,11 +23,16 @@ namespace Mix.Database.Migrations.AuditLog.Sqlite
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("hex(randomblob(16))");
 
                     b.Property<string>("Body")
                         .HasColumnType("text")
                         .HasColumnName("body");
+
+                    b.Property<string>("CorrelationId")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("correlation_id");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -46,7 +51,7 @@ namespace Mix.Database.Migrations.AuditLog.Sqlite
                         .HasColumnName("exception");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("integer")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
@@ -60,6 +65,10 @@ namespace Mix.Database.Migrations.AuditLog.Sqlite
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
+
+                    b.Property<bool>("PhiAccessFlag")
+                        .HasColumnType("integer")
+                        .HasColumnName("phi_access_flag");
 
                     b.Property<int>("Priority")
                         .HasColumnType("integer")
@@ -81,6 +90,11 @@ namespace Mix.Database.Migrations.AuditLog.Sqlite
                         .HasColumnType("integer")
                         .HasColumnName("response_time");
 
+                    b.Property<string>("SessionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("session_id");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
@@ -92,11 +106,26 @@ namespace Mix.Database.Migrations.AuditLog.Sqlite
                         .HasColumnName("status_code");
 
                     b.Property<bool>("Success")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("integer")
                         .HasColumnName("success");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("integer")
+                        .HasColumnName("tenant_id");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(4000)")
+                        .HasColumnName("user_agent");
 
                     b.HasKey("Id")
                         .HasName("pk_audit_log");
+
+                    b.HasIndex("CorrelationId")
+                        .HasDatabaseName("IX_AuditLog_CorrelationId");
+
+                    b.HasIndex("TenantId", "PhiAccessFlag")
+                        .HasDatabaseName("IX_AuditLog_Tenant_PHI");
 
                     b.ToTable("mix_audit_log", (string)null);
                 });
