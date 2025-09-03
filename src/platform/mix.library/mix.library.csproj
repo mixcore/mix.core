@@ -15,6 +15,7 @@
 		<Using Include="Mix.Shared.Services" />
 		<Using Include="Mix.Database.Entities.Cms" />
 		<Using Include="Mix.Database.Entities.Base" />
+		<Using Include="Mix.Database.Entities.Compliance" />
 		<Using Include="Mix.Heart.Enums" />
 		<Using Include="Mix.Heart.ViewModel" />
 		<Using Include="Mix.Heart.UnitOfWork" />
@@ -97,6 +98,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\core\mix.mixdb.event\mix.mixdb.event.csproj" />
 		<ProjectReference Include="..\mix.communicator\mix.communicator.csproj" />
+		<ProjectReference Include="..\mix.database\mix.database.csproj" />
 		<ProjectReference Include="..\mix.mixdb\mix.mixdb.csproj" />
 		<ProjectReference Include="..\mix.repodb\mix.repodb.csproj" />
 		<ProjectReference Include="..\mix.scylladb\mix.scylladb.csproj" />

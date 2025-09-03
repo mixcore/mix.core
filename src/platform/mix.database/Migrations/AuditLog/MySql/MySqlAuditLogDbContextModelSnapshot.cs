@@ -34,6 +34,11 @@ namespace Mix.Database.Migrations.AuditLog.MySql
                         .HasColumnType("longtext")
                         .HasColumnName("body");
 
+                    b.Property<string>("CorrelationId")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("correlation_id");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("created_by");
@@ -66,6 +71,10 @@ namespace Mix.Database.Migrations.AuditLog.MySql
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
+                    b.Property<sbyte>("PhiAccessFlag")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("phi_access_flag");
+
                     b.Property<int>("Priority")
                         .HasColumnType("int")
                         .HasColumnName("priority");
@@ -86,6 +95,11 @@ namespace Mix.Database.Migrations.AuditLog.MySql
                         .HasColumnType("int")
                         .HasColumnName("response_time");
 
+                    b.Property<string>("SessionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("session_id");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
@@ -101,8 +115,23 @@ namespace Mix.Database.Migrations.AuditLog.MySql
                         .HasColumnType("tinyint")
                         .HasColumnName("success");
 
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("tenant_id");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(2000)")
+                        .HasColumnName("user_agent");
+
                     b.HasKey("Id")
                         .HasName("pk_audit_log");
+
+                    b.HasIndex("CorrelationId")
+                        .HasDatabaseName("IX_AuditLog_CorrelationId");
+
+                    b.HasIndex("TenantId", "PhiAccessFlag")
+                        .HasDatabaseName("IX_AuditLog_Tenant_PHI");
 
                     b.ToTable("mix_audit_log", (string)null);
                 });

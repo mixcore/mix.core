@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Database.Entities.AuditLog
 {
@@ -14,5 +15,19 @@ namespace Mix.Database.Entities.AuditLog
         public JObject Body { get; set; }
         public JObject Response { get; set; }
         public JObject Exception { get; set; }
+        
+        // HIPAA/GDPR Compliance Enhancement Fields
+        [MaxLength(100)]
+        public string CorrelationId { get; set; }
+        
+        public int? TenantId { get; set; }
+        
+        public bool PhiAccessFlag { get; set; }
+        
+        [MaxLength(500)]
+        public string UserAgent { get; set; }
+        
+        [MaxLength(100)]
+        public string SessionId { get; set; }
     }
 }

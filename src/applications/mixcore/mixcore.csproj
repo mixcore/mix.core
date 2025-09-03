@@ -19,6 +19,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="wwwroot\mixcontent\templates\**" />
+	  <Content Remove="wwwroot\mixcontent\templates\**" />
+	  <EmbeddedResource Remove="wwwroot\mixcontent\templates\**" />
+	  <None Remove="wwwroot\mixcontent\templates\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
 		<ProjectReference Include="..\..\modules\mix.grpc\mix.grpc.csproj" />
 		<ProjectReference Include="..\..\modules\mix.mqtt\mix.mqtt.csproj" />

@@ -1,4 +1,6 @@
-﻿using Mix.Database.Services.MixGlobalSettings;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Mix.Database.Services.MixGlobalSettings;
 using System.Linq;
 using System.Reflection;
 

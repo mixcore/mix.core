@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.AuditLog;
 
@@ -16,23 +15,24 @@ namespace Mix.Database.Migrations.AuditLog.SqlServer
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
 
             modelBuilder.Entity("Mix.Database.Entities.AuditLog.AuditLog", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("TEXT")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("hex(randomblob(16))");
 
                     b.Property<string>("Body")
-                        .HasColumnType("ntext")
+                        .HasColumnType("text")
                         .HasColumnName("body");
+
+                    b.Property<string>("CorrelationId")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("correlation_id");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)")
@@ -43,15 +43,15 @@ namespace Mix.Database.Migrations.AuditLog.SqlServer
                         .HasColumnName("created_date_time");
 
                     b.Property<string>("Endpoint")
-                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnType("varchar(4000)")
                         .HasColumnName("endpoint");
 
                     b.Property<string>("Exception")
-                        .HasColumnType("ntext")
+                        .HasColumnType("text")
                         .HasColumnName("exception");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit")
+                        .HasColumnType("integer")
                         .HasColumnName("is_deleted");
 
                     b.Property<DateTime?>("LastModified")
@@ -59,19 +59,23 @@ namespace Mix.Database.Migrations.AuditLog.SqlServer
                         .HasColumnName("last_modified");
 
                     b.Property<string>("Method")
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("method");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
                         .HasColumnName("modified_by");
 
+                    b.Property<bool>("PhiAccessFlag")
+                        .HasColumnType("integer")
+                        .HasColumnName("phi_access_flag");
+
                     b.Property<int>("Priority")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("priority");
 
                     b.Property<string>("QueryString")
-                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnType("varchar(4000)")
                         .HasColumnName("query_string");
 
                     b.Property<string>("RequestIp")
@@ -79,12 +83,17 @@ namespace Mix.Database.Migrations.AuditLog.SqlServer
                         .HasColumnName("request_ip");
 
                     b.Property<string>("Response")
-                        .HasColumnType("ntext")
+                        .HasColumnType("text")
                         .HasColumnName("response");
 
                     b.Property<int>("ResponseTime")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("response_time");
+
+                    b.Property<string>("SessionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("session_id");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -93,15 +102,30 @@ namespace Mix.Database.Migrations.AuditLog.SqlServer
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("StatusCode")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("status_code");
 
                     b.Property<bool>("Success")
-                        .HasColumnType("bit")
+                        .HasColumnType("integer")
                         .HasColumnName("success");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("integer")
+                        .HasColumnName("tenant_id");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(4000)")
+                        .HasColumnName("user_agent");
 
                     b.HasKey("Id")
                         .HasName("pk_audit_log");
+
+                    b.HasIndex("CorrelationId")
+                        .HasDatabaseName("IX_AuditLog_CorrelationId");
+
+                    b.HasIndex("TenantId", "PhiAccessFlag")
+                        .HasDatabaseName("IX_AuditLog_Tenant_PHI");
 
                     b.ToTable("mix_audit_log", (string)null);
                 });
