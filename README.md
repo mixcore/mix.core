@@ -50,6 +50,10 @@ Deploy Mixcore CMS instantly to the cloud with multiple configuration options:
 
 *All configurations include managed databases and automatic scaling*
 
+### Hostinger
+
+[![Deploy on Hostinger](https://assets.hostinger.com/vps/deploy.svg)](https://www.hostinger.com/vps/docker-hosting?compose_url=https://github.com/mixcore/mix.core/)
+
 ### Other Cloud Platforms
 - **AWS**: Use our [EKS deployment template](cloud/aws/eks-cluster.yaml)
 - **Azure**: Use our [AKS deployment template](cloud/azure/aks-cluster.bicep) 
