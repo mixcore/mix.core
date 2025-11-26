@@ -1,10 +1,94 @@
-version: "3"
+version: "3.8"
+
 services:
     mixcore:
-        image: "mixcore/mix.core:latest"
-        build: .
+        # image: "mixcore/mix.core:develop"
+        build:
+            context: .
+            dockerfile: Dockerfile
         ports:
             - "5000:80"
             - "5001:443"
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:80;https://+:443
+            - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+            - ASPNETCORE_Kestrel__Certificates__Default__Password=P@ssw0rd
+            - ConnectionStrings__MixDbContext=Server=mysql;Database=mixcore;User=mixcore;Password=P@ssw0rd;
+            - Redis__ConnectionString=redis:6379
+        volumes:
+            - ~/.aspnet/https:/https:ro
+        depends_on:
+            - mysql
+            - redis
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+    # sqlserver:
+    #     image: "mcr.microsoft.com/mssql/server:2022-latest"
+    #     environment:
+    #         - SA_PASSWORD=P@ssw0rd
+    #         - ACCEPT_EULA=Y
+    #         - MSSQL_PID=Developer
+    #     ports:
+    #         - "1433:1433"
+    #     volumes:
+    #         - sqlserver_data:/var/opt/mssql
+    #     restart: always
+    #     healthcheck:
+    #         test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "P@ssw0rd", "-Q", "SELECT 1"]
+    #         interval: 30s
+    #         timeout: 10s
+    #         retries: 3
+    redis:
+        image: redis:alpine
+        volumes:
+            - redis_data:/data
+        restart: always
+        ports:
+            - "6379:6379"
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+    mysql:
+        image: mysql:8.0
+        volumes:
+            - mysql_data:/var/lib/mysql
+        restart: always
+        environment:
+            - MYSQL_ROOT_PASSWORD=P@ssw0rd
+            - MYSQL_DATABASE=mixcore
+            - MYSQL_USER=mixcore
+            - MYSQL_PASSWORD=P@ssw0rd
+        ports:
+            - "3306:3306"
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pP@ssw0rd"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+        command: --default-authentication-plugin=mysql_native_password
+    # phpmyadmin
+    phpmyadmin:
+        depends_on:
+            - mysql
+        image: phpmyadmin/phpmyadmin
+        restart: always
+        ports:
+            - '8080:80'
+        environment:
+            - PMA_HOST=mysql
+            - MYSQL_ROOT_PASSWORD=P@ssw0rd
+
 volumes:
-    db_data: {}
+    # sqlserver_data:
+    mysql_data:
+    redis_data:
+
+networks:
+    default:
+        driver: bridge

@@ -1,0 +1,44 @@
+﻿using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Mix.Lib.Controllers;
+using System.Reflection;
+
+namespace Mix.Lib.Providers
+{
+    public class GenericTypeControllerFeatureProvider : IApplicationFeatureProvider<ControllerFeature>
+    {
+        public List<Type> Candidates { get; set; }
+
+        public GenericTypeControllerFeatureProvider(List<Type> candidates)
+        {
+            Candidates = candidates;
+
+        }
+
+        public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
+        {
+            foreach (var candidate in Candidates)
+            {
+                if (candidate.BaseType.IsGenericType)
+                {
+                    var attr = candidate.GetCustomAttribute<GenerateRestApiControllerAttribute>();
+
+                    var baseType =
+                        attr.IsAuthorized
+                        ? attr.QueryOnly
+                            ? typeof(MixAutoGenerateAuthorizedQueryApiController<,,,>)
+                            : typeof(MixAutoGenerateAuthorizedRestApiController<,,,>)
+                        : attr.QueryOnly
+                            ? typeof(MixAutoGenerateQueryApiController<,,,>)
+                            : typeof(MixAutoGenerateRestApiController<,,,>);
+
+                    Type[] types = candidate.BaseType.GenericTypeArguments.Take(3).Prepend(candidate).ToArray();
+                    feature.Controllers.Add(
+                        baseType.MakeGenericType(types)
+                            .GetTypeInfo()
+                    );
+                }
+            }
+        }
+    }
+}

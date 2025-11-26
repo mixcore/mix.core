@@ -1,0 +1,13 @@
+{
+  "MixRateLimit": {
+    "PermitLimit": 30,
+    "Window": 10,
+    "ReplenishmentPeriod": 2,
+    "QueueLimit": 1000,
+    "SegmentsPerWindow": 8,
+    "TokenLimit": 10,
+    "TokenLimit2": 20,
+    "TokensPerPeriod": 4,
+    "AutoReplenishment": false
+  }
+}

@@ -1,0 +1,118 @@
+﻿/* swagger ui customization */
+/*body.swagger-section #header {
+    background-color: white;
+    background: url(your-new-logo.png) no-repeat;
+    background-position-x: 250px;
+    height: 50px;
+}
+
+    body.swagger-section #header .swagger-ui-wrap #logo {
+        display: none;
+    }
+*/
+.topbar{
+    display: none;
+}
+
+/* Improve the API endpoint sections */
+.swagger-ui .opblock-tag {
+    font-size: 18px;
+    margin: 12px 0;
+    padding: 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.swagger-ui .opblock-tag-section {
+    margin-bottom: 16px;
+}
+
+.swagger-ui .opblock {
+    margin: 0 0 15px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Improve the GET, POST, PUT, DELETE method coloring */
+.swagger-ui .opblock-get {
+    border-color: #61affe;
+    background: rgba(97, 175, 254, 0.1);
+}
+
+.swagger-ui .opblock-post {
+    border-color: #49cc90;
+    background: rgba(73, 204, 144, 0.1);
+}
+
+.swagger-ui .opblock-put {
+    border-color: #fca130;
+    background: rgba(252, 161, 48, 0.1);
+}
+
+.swagger-ui .opblock-delete {
+    border-color: #f93e3e;
+    background: rgba(249, 62, 62, 0.1);
+}
+
+/* Improve typography */
+.swagger-ui, .swagger-ui .opblock-tag, .swagger-ui .opblock .opblock-summary-operation-id, 
+.swagger-ui .opblock .opblock-summary-path, .swagger-ui .opblock-description-wrapper p, 
+.swagger-ui .response-col_status, .swagger-ui table thead tr td, 
+.swagger-ui table thead tr th, .swagger-ui .parameter__name, 
+.swagger-ui .tab {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+/* Improve the model schema display */
+.swagger-ui .model-box {
+    padding: 12px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.swagger-ui .model-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Improve the response section */
+.swagger-ui .responses-table {
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.swagger-ui .response-col_status {
+    font-weight: 600;
+}
+
+/* Add hover effects */
+.swagger-ui .opblock:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Improve tag section when open */
+.opblock-tag-section.is-open h3 {
+    color: #fff;
+    background: #333;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+/* Improve the authorize button */
+.swagger-ui .btn.authorize {
+    border-color: #49cc90;
+    color: #49cc90;
+    transition: all 0.3s ease;
+}
+
+.swagger-ui .btn.authorize:hover {
+    background-color: #49cc90;
+    color: #fff;
+}
+
+/* Make operation summaries more readable */
+.swagger-ui .opblock .opblock-summary-description {
+    font-size: 14px;
+    color: #3b4151;
+    padding: 0 8px;
+}

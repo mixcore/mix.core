@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Mix.Services.Databases.Lib</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="ViewModels\**" />
+	  <EmbeddedResource Remove="ViewModels\**" />
+	  <None Remove="ViewModels\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\modules\mix.messenger\mix.messenger.csproj" />
+		<ProjectReference Include="..\..\..\..\platform\mix.mixdb\mix.mixdb.csproj" />
+		<Using Include="Mix.Database.Entities.MixDb" />
+	</ItemGroup>
+
+</Project>

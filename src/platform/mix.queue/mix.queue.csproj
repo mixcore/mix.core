@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<RootNamespace>Mix.Queue</RootNamespace>
+        <Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Protos\mixmq.proto" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Shared.Dtos" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.18.4" />
+		<PackageReference Include="Azure.ResourceManager.ServiceBus" Version="1.1.0" />
+		<PackageReference Include="Google.Api.Gax" Version="4.10.0" />
+		<PackageReference Include="Google.Cloud.PubSub.V1" Version="3.22.0" />
+		<PackageReference Include="Google.Protobuf" Version="3.30.0" />
+		<PackageReference Include="Grpc.Net.Client" Version="2.70.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.70.0" />
+		<PackageReference Include="Grpc.Net.Client.Web" Version="2.70.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.71.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.2" />
+		<PackageReference Include="RabbitMQ.Client" Version="7.1.1" />
+	</ItemGroup>
+    <ItemGroup>
+        <Protobuf Include="Protos\mixmq.proto" GrpcServices="Client" />
+    </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\mix.database\mix.database.csproj" />
+		<ProjectReference Include="..\mix.mqtt.lib\mix.mqtt.lib.csproj" />
+		<ProjectReference Include="..\mix.shared\mix.shared.csproj" />
+	</ItemGroup>
+
+</Project>
