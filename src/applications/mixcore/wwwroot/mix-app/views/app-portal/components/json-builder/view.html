@@ -1,0 +1,103 @@
+<div class="mix-tree-view" ng-init="$ctrl.init()"><div class="row"><select class="form-control form-control-sm" ng-model="$ctrl.editMode"><option value="json">json editor</option><option value="text">text editor</option></select></div><div class="row"><div ng-show="$ctrl.editMode == 'json'" ng-repeat="(zone, items) in $ctrl.dropzones" class="col-md-12"><div class="row"><button type="button" class="btn btn-light" ng-if="$ctrl.rootType=='object'" ng-click="$ctrl.addField()" title="Add column"><span class="fa fa-plus text-primary"></span></button> <button type="button" class="btn btn-light" ng-if="$ctrl.rootType=='array'" ng-click="$ctrl.addString()" title="Add column"><span class="fa fa-plus text-primary"></span></button></div><div class="dropzone box box-yellow"><div dnd-list="items" dnd-allowed-types="list.allowedTypes"><div ng-repeat="item in items" dnd-disable-if="item.type == 'unknown'" dnd-type="item.type" dnd-dragend="$ctrl.parseJsonObject()" dnd-draggable="item" dnd-effect-allowed="move" dnd-moved="items.splice($index, 1)" dnd-selected="$ctrl.selected = item" ng-click="$ctrl.select(item)" ng-class="{selected: $ctrl.selected === item}" class="item"><div is-active-menu><div class="inner"><div class="btn-toolbar justify-content-between pb-1" role="toolbar" aria-label="Toolbar with button groups"><div class="input-group input-group-sm"><span class="input-group-text" style="border-radius: 0; cursor: move"><span class="fa fa-grip-vertical fa-xs text-black-50 text-second"></span></span> <input class="form-control" type="text" ng-if="item.type != 'string' " ng-model="item.name" ng-model-options="{debounce: 1000}" ng-change="$ctrl.parseJsonObject()"> <input ng-if="item.type == 'item' || item.type=='string'" class="form-control" type="text" ng-model-options="{debounce: 1000}" ng-model="item.value" ng-change="$ctrl.parseJsonObject()"><div class="ml-2 row col-12" ng-if="item.type=='object'" ng-include="item.type + '.html'" id="{{item.type}}-{{item.name}}"></div></div><div class="btn-group btn-group-sm me-2"> <button type="button" class="btn btn-light" ng-click="$ctrl.remove($index, items)" title="Delete this"><span class="fas fa-trash-alt text-danger"></span></button></div></div></div></div></div></div></div></div><div ng-show="$ctrl.editMode != 'json'" class="col-md-12"><monaco-editor ng-if="$ctrl.strData" content="$ctrl.strData" update-content="$ctrl.updateJsonContent(content)" ext="'.json'"></monaco-editor></div></div></div><script type="text/ng-template" id="list.html"><div class="perfect-scroll">
+        <div class="list" dnd-list="list.items" dnd-allowed-types="list.allowedTypes">
+            <div class="items" ng-repeat="item in list.items"
+                dnd-dragend="$ctrl.update()"
+                dnd-disable-if="item.type == 'unknown'"
+                dnd-type="item.type"
+                dnd-draggable="item"
+                dnd-effect-allowed="move"
+                dnd-moved="list.items.splice($index, 1)"
+                dnd-selected="$ctrl.selected = item"
+                ng-class="{selected: $ctrl.selected === item}"
+                ng-click="$ctrl.select(item)"
+                >
+
+                <div is-active-menu>
+                <div class="inner">
+                  <div
+                    class="btn-toolbar justify-content-between pb-1"
+                    role="toolbar"
+                    aria-label="Toolbar with button groups"
+                  >
+                    <div class="input-group input-group-sm">
+                      <span
+                        class="input-group-text"
+                        style="border-radius: 0; cursor: move"
+                        ><span
+                          class="fa fa-grip-vertical fa-xs text-black-50 text-second"
+                        ></span
+                      ></span>
+                      <input
+                        class="form-control"
+                        type="text"
+                        ng-if="item.type != 'string' "
+                        ng-model="item.name"
+                        ng-model-options="{debounce: 1000}"
+                        ng-change="$ctrl.parseJsonObject()"
+                      />
+                      <input
+                        ng-if="item.type == 'item' || item.type=='string'"
+                        class="form-control"
+                        type="text"
+                        ng-model-options="{debounce: 1000}"
+                        ng-model="item.value"
+                        ng-change="$ctrl.parseJsonObject()"
+                      />
+                      <pre ng-if="item.type=='object'">
+  {{item|json}}
+                      </pre>
+                      
+                    </div>
+
+                    <div class="btn-group btn-group-sm me-2">
+                      
+                      
+                      <button
+                        type="button"
+                        class="btn btn-light"
+                        ng-click="$ctrl.remove($index, items)"
+                        title="Delete this"
+                      >
+                        <span class="fas fa-trash-alt text-danger"></span>
+                      </button>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar-background"></div></script><script type="text/ng-template" id="object.html"><div class="container object box box-blue">
+      <div class="column" ng-repeat="list in item.columns" ng-include="'list.html'"></div>
+      <div class="clearfix"></div>
+  </div></script><script type="text/ng-template" id="array.html"><div class="container array box box-blue">
+      
+      <div class="column" ng-repeat="list in item.columns" ng-include="'list.html'"></div>
+      <div class="clearfix"></div>
+  </div></script><script type="text/ng-template" id="item.html"><div class="item-columns">
+      <div ng-show="$ctrl.selected == item">
+              <form>
+                  <div class="row pb-2">
+                      <div class="col">
+                          <div class="input-group input-group-sm ">
+                                      <span class="input-group-text" id="basic-addon1">Name</span>
+                              <input class="form-control" type="text" ng-model="item.name"/>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="input-group input-group-sm ">
+                                  <span class="input-group-text" id="basic-addon1">Content Type</span>
+                                  <mix-select model="$ctrl.column.dataType" options="$ctrl.localizeSettings.dataTypes">
+                                  </mix-select>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col">
+                          <mix-value-editor type="item.dataType" string-value="item.value"></mix-value-editor>
+                      </div>
+                  </div>
+              </form>
+      </div>
+  </div></script>
