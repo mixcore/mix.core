@@ -1,0 +1,57 @@
+apiVersion: container.cnrm.cloud.google.com/v1beta1
+kind: ContainerCluster
+metadata:
+  name: mixcore-cluster
+  labels:
+    environment: production
+spec:
+  location: asia-southeast1
+  initialNodeCount: 3
+  minMasterVersion: "1.28"
+  networkRef:
+    name: mixcore-network
+  subnetworkRef:
+    name: mixcore-subnet
+  ipAllocationPolicy:
+    clusterIpv4CidrBlock: "10.0.0.0/16"
+    servicesIpv4CidrBlock: "10.1.0.0/16"
+  nodeConfig:
+    machineType: e2-medium
+    diskSizeGb: 100
+    oauthScopes:
+      - https://www.googleapis.com/auth/cloud-platform
+    tags:
+      - mixcore
+  masterAuthorizedNetworksConfig:
+    cidrBlocks:
+      - displayName: all
+        cidrBlock: 0.0.0.0/0
+  privateClusterConfig:
+    enablePrivateNodes: false
+    enablePrivateEndpoint: false
+  releaseChannel:
+    channel: REGULAR
+---
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeNetwork
+metadata:
+  name: mixcore-network
+spec:
+  routingMode: REGIONAL
+  autoCreateSubnetworks: false
+---
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeSubnetwork
+metadata:
+  name: mixcore-subnet
+spec:
+  networkRef:
+    name: mixcore-network
+  region: asia-southeast1
+  ipCidrRange: 10.0.0.0/22
+  privateIpGoogleAccess: true
+  secondaryIpRanges:
+    - rangeName: pods
+      ipCidrRange: 10.0.4.0/22
+    - rangeName: services
+      ipCidrRange: 10.0.8.0/22 

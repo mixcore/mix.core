@@ -1,0 +1,60 @@
+# Mixcore MCP Resources
+# This file contains text resources used in MCP
+
+## Prompts
+summarize=Summarize the following content: {0}
+analyze=Analyze the {0} of the following data: {1}
+translate=Translate the following content from {0} to {1}: {2}
+extract_entities=Extract entities from the following text: {0}
+generate_sql=Generate SQL statement to {0} based on table description: {1}
+
+## Error Messages
+missing_argument=Missing required parameter: {0}
+invalid_argument_type=Invalid data type for parameter {0}
+tool_not_found=Tool not found: {0}
+prompt_not_found=Prompt not found: {0}
+server_error=Server error: {0}
+
+## Server Settings
+server_name=Mixcore MCP Server
+server_version=1.0.0
+default_timeout=30000
+max_output_tokens=4096
+default_temperature=0.7
+
+## Content Types
+text=Text content
+image=Image content
+audio=Audio content
+video=Video content
+json=JSON data
+
+## MCP Information
+about_mcp=Model Context Protocol (MCP) is an open protocol that standardizes how applications provide context to Large Language Models (LLMs). It enables secure integration between LLMs and various data sources and tools.
+api_doc=https://modelcontextprotocol.github.io/csharp-sdk/api/ModelContextProtocol.html
+spec_doc=https://spec.modelcontextprotocol.io/ 
+
+## Sample Request to create New Mix Database
+fetch("https://mixcore.net/api/v2/rest/mix-portal/mix-database", {
+  "headers": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en-US,en;q=0.9,vi-VN;q=0.8,vi;q=0.7",
+    "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiT3duZXItMSIsIlN1cGVyQWRtaW4iXSwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIxMDljMjYxZi02M2JlLTQ2OTQtOGE2ZS03Y2IyNjA1MDQ4OTIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWl4Y29yZSIsIlRlbmFudElkIjoiMSIsIlJlZnJlc2hUb2tlbiI6ImI1OGM3YWM2LTIwOTAtNDM1My05MTE1LWE0ODc5N2EwYjhhMCIsIkF2YXRhciI6Ii9taXgtYXBwL2Fzc2V0cy9pbWcvdXNlci5wbmciLCJFeHBpcmVBdCI6IjIwMjUtMDUtMDFUMDY6MDk6MDYuMzkxWiIsIm5iZiI6MTc0NjA3ODU0NiwiZXhwIjoxNzQ2MDc5NzQ2LCJpc3MiOiJtaXgtY29yZSIsImF1ZCI6Im1peC1jb3JlIn0.zaEW1lXtu-2HTV_MTqiiS7_vcexGjnu8xLnkqoAMt3c",
+    "cache-control": "no-cache",
+    "content-type": "application/json",
+    "pragma": "no-cache",
+    "priority": "u=1, i",
+    "sec-ch-ua": "\"Google Chrome\";v=\"135\", \"Not-A.Brand\";v=\"8\", \"Chromium\";v=\"135\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin"
+  },
+  "referrer": "https://mixcore.net/admin/mix-database/create?mixDatabaseContextId=1&namingConvention=SnakeCase",
+  "referrerPolicy": "strict-origin-when-cross-origin",
+  "body": "{\"type\":\"Service\",\"selfManaged\":false,\"columns\":[{\"dataType\":\"Integer\",\"mixDatabaseId\":0,\"columnConfigurations\":{\"isUnique\":false,\"isRequire\":true,\"isEncrypt\":false,\"upload\":{\"arrayAccepts\":[],\"accepts\":\"\"}},\"createdDateTime\":\"2025-05-01T05:49:15.6523966Z\",\"lastModified\":\"2025-05-01T05:49:15.6523978Z\",\"priority\":1,\"status\":\"Published\",\"isDeleted\":false,\"id\":0,\"modifiedEntities\":[],\"options\":[],\"displayName\":\"id\",\"systemName\":\"id\"},{\"dataType\":\"String\",\"mixDatabaseId\":0,\"columnConfigurations\":{\"isUnique\":false,\"isRequire\":false,\"isEncrypt\":false,\"upload\":{\"arrayAccepts\":[],\"accepts\":\"\"}},\"createdDateTime\":\"2025-05-01T05:49:15.6523966Z\",\"lastModified\":\"2025-05-01T05:49:15.6523978Z\",\"priority\":2,\"status\":\"Published\",\"isDeleted\":false,\"id\":0,\"modifiedEntities\":[],\"options\":[],\"displayName\":\"created_by\",\"systemName\":\"created_by\"},{\"dataType\":\"DateTime\",\"mixDatabaseId\":0,\"columnConfigurations\":{\"isUnique\":false,\"isRequire\":true,\"isEncrypt\":false,\"upload\":{\"arrayAccepts\":[],\"accepts\":\"\"}},\"createdDateTime\":\"2025-05-01T05:49:15.6523966Z\",\"lastModified\":\"2025-05-01T05:49:15.6523978Z\",\"priority\":3,\"status\":\"Published\",\"isDeleted\":false,\"id\":0,\"modifiedEntities\":[],\"options\":[],\"defaultValue\":\"now()\",\"displayName\":\"created_date_time\",\"systemName\":\"created_date_time\"},{\"dataType\":\"DateTime\",\"mixDatabaseId\":0,\"columnConfigurations\":{\"isUnique\":false,\"isRequire\":true,\"isEncrypt\":false,\"upload\":{\"arrayAccepts\":[],\"accepts\":\"\"}},\"createdDateTime\":\"2025-05-01T05:49:15.6523966Z\",\"lastModified\":\"2025-05-01T05:49:15.6523978Z\",\"priority\":4,\"status\":\"Published\",\"isDeleted\":false,\"id\":0,\"modifiedEntities\":[],\"options\":[],\"defaultValue\":\"now()\",\"displayName\":\"last_modified\",\"systemName\":\"last_modified\"},{\"dataType\":\"Integer\",\"mixDatabaseId\":0,\"columnConfigurations\":{\"isUnique\":false,\"isRequire\":false,\"isEncrypt\":false,\"upload\":{\"arrayAccepts\":[],\"accepts\":\"\"}},\"createdDateTime\":\"2025-05-01T05:49:15.6523966Z\",\"lastModified\":\"2025-05-01T05:49:15.6523978Z\",\"priority\":5,\"status\":\"Published\",\"isDeleted\":false,\"id\":0,\"modifiedEntities\":[],\"options\":[],\"defaultValue\":0,\"displayName\":\"priority\",\"systemName\":\"priority\"},{\"dataType\":\"String\",\"mixDatabaseId\":0,\"columnConfigurations\":{\"isUnique\":false,\"isRequire\":true,\"isEncrypt\":false,\"upload\":{\"arrayAccepts\":[],\"accepts\":\"\"}},\"createdDateTime\":\"2025-05-01T05:49:15.6523966Z\",\"lastModified\":\"2025-05-01T05:49:15.6523978Z\",\"priority\":6,\"status\":\"Published\",\"isDeleted\":false,\"id\":0,\"modifiedEntities\":[],\"options\":[],\"displayName\":\"Title\",\"systemName\":\"title\"},{\"dataType\":\"Text\",\"mixDatabaseId\":0,\"columnConfigurations\":{\"isUnique\":false,\"isRequire\":false,\"isEncrypt\":false,\"upload\":{\"arrayAccepts\":[],\"accepts\":\"\"}},\"createdDateTime\":\"2025-05-01T05:49:15.6523966Z\",\"lastModified\":\"2025-05-01T05:49:15.6523978Z\",\"priority\":7,\"status\":\"Published\",\"isDeleted\":false,\"id\":0,\"modifiedEntities\":[],\"options\":[],\"displayName\":\"Description\",\"systemName\":\"description\"}],\"relationships\":[],\"namingConvention\":\"SnakeCase\",\"tenantId\":0,\"createdDateTime\":\"2025-05-01T05:49:15.3956075Z\",\"lastModified\":\"2025-05-01T05:49:15.3956089Z\",\"priority\":0,\"status\":\"Published\",\"isDeleted\":false,\"id\":0,\"modifiedEntities\":[],\"mixDatabaseContextId\":\"1\",\"displayName\":\"Sample Db\",\"systemName\":\"mix_sample_db\"}",
+  "method": "POST",
+  "mode": "cors",
+  "credentials": "include"
+});

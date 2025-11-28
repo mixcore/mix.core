@@ -1,0 +1,223 @@
+name: Security & Dependency Updates
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Weekly on Monday at 6 AM UTC
+  workflow_dispatch:
+
+jobs:
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore src/Mixcore.sln
+
+      - name: .NET Security Audit
+        run: dotnet list src/Mixcore.sln package --vulnerable --include-transitive
+
+      - name: Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'Mixcore'
+          path: '.'
+          format: 'HTML,JSON,SARIF'
+          out: 'reports'
+
+      - name: Upload Dependency Check Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: reports/
+          retention-days: 30
+
+      - name: Upload SARIF to Security tab
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: reports/dependency-check-report.sarif
+
+      - name: Trivy filesystem scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-fs-results.sarif'
+
+      - name: Upload Trivy scan results
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-fs-results.sarif'
+
+  dependency-update:
+    name: Dependency Update Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install dotnet outdated tool
+        run: dotnet tool install --global dotnet-outdated-tool
+
+      - name: Check for outdated packages
+        id: outdated
+        run: |
+          echo "outdated-packages<<EOF" >> $GITHUB_OUTPUT
+          dotnet outdated src/Mixcore.sln >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Issue for Outdated Dependencies
+        if: steps.outdated.outputs.outdated-packages != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const outdatedPackages = `${{ steps.outdated.outputs.outdated-packages }}`;
+            
+            if (outdatedPackages.trim() !== '') {
+              const issueTitle = '🔄 Weekly Dependency Update Report';
+              const issueBody = `
+            ## Outdated Dependencies Report
+            
+            The following packages have updates available:
+            
+            \`\`\`
+            ${outdatedPackages}
+            \`\`\`
+            
+            ### Recommendations
+            - Review the change logs for breaking changes
+            - Test thoroughly in development environment
+            - Update packages incrementally
+            
+            **Generated on:** ${new Date().toISOString()}
+            **Workflow:** ${{ github.workflow }}
+            **Run:** ${{ github.run_number }}
+              `;
+              
+              const { data: issues } = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                labels: 'dependencies,automated'
+              });
+              
+              const existingIssue = issues.find(issue => issue.title === issueTitle);
+              
+              if (existingIssue) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: existingIssue.number,
+                  body: `## Updated Report\n\n${issueBody}`
+                });
+              } else {
+                await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: issueTitle,
+                  body: issueBody,
+                  labels: ['dependencies', 'automated', 'enhancement']
+                });
+              }
+            }
+
+  docker-security:
+    name: Docker Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image for scanning
+        run: |
+          docker build -t mixcore:security-scan .
+
+      - name: Run Trivy vulnerability scanner on image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'mixcore:security-scan'
+          format: 'sarif'
+          output: 'trivy-image-results.sarif'
+
+      - name: Upload Trivy image scan results
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-image-results.sarif'
+
+      - name: Run Grype vulnerability scanner
+        uses: anchore/scan-action@v3
+        id: grype-scan
+        with:
+          image: 'mixcore:security-scan'
+          fail-build: false
+
+      - name: Upload Grype scan results
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ steps.grype-scan.outputs.sarif }}
+
+  notify:
+    name: Security Notification
+    runs-on: ubuntu-latest
+    needs: [security-audit, dependency-update, docker-security]
+    if: always()
+    
+    steps:
+      - name: Notify security scan completion
+        if: vars.SLACK_WEBHOOK_URL
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {
+              text: "🔒 Weekly Security Scan Completed",
+              attachments: [
+                {
+                  color: "${{ contains(needs.*.result, 'failure') && 'danger' || 'good' }}",
+                  fields: [
+                    {
+                      title: "Security Audit",
+                      value: "${{ needs.security-audit.result }}",
+                      short: true
+                    },
+                    {
+                      title: "Dependency Update Check",
+                      value: "${{ needs.dependency-update.result }}",
+                      short: true
+                    },
+                    {
+                      title: "Docker Security Scan",
+                      value: "${{ needs.docker-security.result }}",
+                      short: true
+                    },
+                    {
+                      title: "Repository",
+                      value: "${{ github.repository }}",
+                      short: true
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ vars.SLACK_WEBHOOK_URL }} 

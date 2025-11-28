@@ -1,0 +1,83 @@
+- mix-portal
+    - tenants
+        - domains
+        - tenants
+        - mappings
+    - cms 
+    ```[tenants & languages]```
+        - dashboard
+        - posts
+            - listing
+                - view modes
+                    - table
+                    - card mode
+                - search / filter
+            - detail
+                - main
+                    - content
+                        - title
+                        - excerpt
+                        - body ```[html | markdown]```
+                        - ```[sysPostDatabase]``` mixdb's fields
+                    - seo
+                        - friendly title
+                        - friendly url
+                        - meta description
+                        - meta keywords
+                    - related posts
+                    - parents
+                        - pages
+                        - modules
+                    - configuration
+                        - general configs
+                        - ```[sysPostDatabase]``` mixdb
+                        - theme
+                            - master template
+                            - page template
+                - sidebar
+                    - general
+                    - languages
+                    - images
+                        - thumbnail
+                        - feature
+                    - url alias
+                    - quick preview
+                        - mobile
+                        - tablet
+                        - desktop
+        - pages
+            - listing
+                - view modes
+                    - table
+                    - card mode
+                - search / filter
+            - detail
+                - main
+                    - content
+                        - title
+                        - excerpt
+                        - body ```[html | markdown]```
+                        - ```[sysPostDatabase]``` mixdb's fields
+                    - seo
+                        - friendly title
+                        - friendly url
+                        - meta description
+                        - meta keywords
+                    - modules
+                    - configuration
+                        - general configs
+                        - ```[sysPostDatabase]``` mixdb
+                        - theme
+                            - master template
+                            - page template
+                - sidebar
+                    - general
+                    - languages
+                    - images
+                        - thumbnail
+                        - feature
+                    - url alias
+                    - quick preview
+                        - mobile
+                        - tablet
+                        - desktop

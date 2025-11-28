@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<RootNamespace>Mix.Shared</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Using Include="Mix.Heart.Constants" />
+		<Using Include="Mix.Heart.Services" />
+		<Using Include="Mix.Heart.Exceptions" />
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.2" />
+		<PackageReference Include="mix.heart" Version="2.0.1" />
+		<PackageReference Include="System.Reactive" Version="6.0.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
+		<PackageReference Include="Azure.Core" Version="1.38.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\mix.constant\mix.constant.csproj" />
+	</ItemGroup>
+
+</Project>

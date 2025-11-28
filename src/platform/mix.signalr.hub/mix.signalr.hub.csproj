@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Mix.Signalr.Hub</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\mix.log\mix.log.lib.csproj" />
+		<ProjectReference Include="..\mix.service\mix.service.csproj" />
+		<Using Include="Mix.Log.Lib.Interfaces" />
+	</ItemGroup>
+
+</Project>

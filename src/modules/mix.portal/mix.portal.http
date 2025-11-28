@@ -1,0 +1,6 @@
+@mix.portal_HostAddress = http://localhost:5007
+
+GET {{mix.portal_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,11 @@
+﻿{
+  "Smtp": {
+    "Server": "",
+    "Port": 587,
+    "SSL": true,
+    "User": "",
+    "Password": "",
+    "From": "support@mixcore.org",
+    "FromName": "mix-core"
+  }
+}

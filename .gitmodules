@@ -1,0 +1,7 @@
+[submodule "src/platform/core/mix-heart"]
+	path = src/platform/core/mix-heart
+	url = https://github.com/mixcore/mix.heart.git
+	branch = develop/v2
+[submodule "docs/wiki"]
+	path = docs/wiki
+	url = https://github.com/mixcore/mix.core.wiki.git
