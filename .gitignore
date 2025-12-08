@@ -3,6 +3,16 @@
 node_modules
 docs/*
 
+# Environment files (contain secrets)
+.env
+.env.local
+.env.*.local
+.env.development
+.env.staging
+.env.production
+*.env
+!.env.example
+
 # User-specific files
 *.suo
 *.user

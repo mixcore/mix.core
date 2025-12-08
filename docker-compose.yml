@@ -7,82 +7,97 @@ services:
             context: .
             dockerfile: Dockerfile
         ports:
-            - "5000:80"
-            - "5001:443"
+            - "${APP_HTTP_PORT:-5000}:80"
+            - "${APP_HTTPS_PORT:-5001}:443"
         environment:
-            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
             - ASPNETCORE_URLS=http://+:80;https://+:443
             - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
-            - ASPNETCORE_Kestrel__Certificates__Default__Password=P@ssw0rd
-            - ConnectionStrings__MixDbContext=Server=mysql;Database=mixcore;User=mixcore;Password=P@ssw0rd;
-            - Redis__ConnectionString=redis:6379
+            - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERT_PASSWORD:-}
+            - ConnectionStrings__MixDbContext=Server=mysql;Database=${MYSQL_DATABASE:-mixcore};User=${MYSQL_USER:-mixcore};Password=${MYSQL_PASSWORD:-changeme};
+            - Redis__ConnectionString=redis:${REDIS_PORT:-6379}
         volumes:
             - ~/.aspnet/https:/https:ro
         depends_on:
-            - mysql
-            - redis
+            mysql:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
         healthcheck:
             test: ["CMD", "curl", "-f", "http://localhost:80/health"]
             interval: 30s
             timeout: 10s
             retries: 3
-    # sqlserver:
-    #     image: "mcr.microsoft.com/mssql/server:2022-latest"
-    #     environment:
-    #         - SA_PASSWORD=P@ssw0rd
-    #         - ACCEPT_EULA=Y
-    #         - MSSQL_PID=Developer
-    #     ports:
-    #         - "1433:1433"
-    #     volumes:
-    #         - sqlserver_data:/var/opt/mssql
-    #     restart: always
-    #     healthcheck:
-    #         test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "P@ssw0rd", "-Q", "SELECT 1"]
-    #         interval: 30s
-    #         timeout: 10s
-    #         retries: 3
+            start_period: 40s
+        restart: unless-stopped
+
     redis:
         image: redis:alpine
         volumes:
             - redis_data:/data
-        restart: always
+        restart: unless-stopped
         ports:
-            - "6379:6379"
+            - "${REDIS_PORT:-6379}:6379"
         healthcheck:
             test: ["CMD", "redis-cli", "ping"]
             interval: 30s
             timeout: 10s
             retries: 3
+        command: >
+            redis-server
+            ${REDIS_PASSWORD:+--requirepass ${REDIS_PASSWORD}}
+
     mysql:
         image: mysql:8.0
         volumes:
             - mysql_data:/var/lib/mysql
-        restart: always
+        restart: unless-stopped
         environment:
-            - MYSQL_ROOT_PASSWORD=P@ssw0rd
-            - MYSQL_DATABASE=mixcore
-            - MYSQL_USER=mixcore
-            - MYSQL_PASSWORD=P@ssw0rd
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-changeme}
+            - MYSQL_DATABASE=${MYSQL_DATABASE:-mixcore}
+            - MYSQL_USER=${MYSQL_USER:-mixcore}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD:-changeme}
         ports:
-            - "3306:3306"
+            - "${MYSQL_PORT:-3306}:3306"
         healthcheck:
-            test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pP@ssw0rd"]
+            test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-changeme}"]
             interval: 30s
             timeout: 10s
             retries: 3
+            start_period: 30s
         command: --default-authentication-plugin=mysql_native_password
-    # phpmyadmin
+
+    # SQL Server (Alternative - uncomment to use)
+    # sqlserver:
+    #     image: "mcr.microsoft.com/mssql/server:2022-latest"
+    #     environment:
+    #         - SA_PASSWORD=${MSSQL_SA_PASSWORD:-changeme}
+    #         - ACCEPT_EULA=Y
+    #         - MSSQL_PID=Developer
+    #     ports:
+    #         - "${MSSQL_PORT:-1433}:1433"
+    #     volumes:
+    #         - sqlserver_data:/var/opt/mssql
+    #     restart: unless-stopped
+    #     healthcheck:
+    #         test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "${MSSQL_SA_PASSWORD:-changeme}", "-Q", "SELECT 1"]
+    #         interval: 30s
+    #         timeout: 10s
+    #         retries: 3
+
+    # phpMyAdmin (Optional - for database management)
     phpmyadmin:
         depends_on:
             - mysql
         image: phpmyadmin/phpmyadmin
-        restart: always
+        restart: unless-stopped
         ports:
-            - '8080:80'
+            - "${PHPMYADMIN_PORT:-8080}:80"
         environment:
             - PMA_HOST=mysql
-            - MYSQL_ROOT_PASSWORD=P@ssw0rd
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-changeme}
+        profiles:
+            - tools
 
 volumes:
     # sqlserver_data:

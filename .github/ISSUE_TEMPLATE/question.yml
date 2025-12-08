@@ -1,0 +1,86 @@
+name: Question
+description: Ask a question about Mixcore CMS
+title: "[Question]: "
+labels: ["question"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have a question about Mixcore CMS? Please check our [documentation](https://github.com/mixcore/mix.core/wiki) and [discussions](https://github.com/mixcore/mix.core/discussions) first.
+
+        For general questions, please consider using [GitHub Discussions](https://github.com/mixcore/mix.core/discussions) instead of opening an issue.
+
+  - type: checkboxes
+    id: existing-answer
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm the following before submitting
+      options:
+        - label: I have searched existing issues and discussions for an answer
+          required: true
+        - label: I have read the [documentation](https://github.com/mixcore/mix.core/wiki)
+          required: true
+
+  - type: dropdown
+    id: question-area
+    attributes:
+      label: Question Area
+      description: Which area does your question relate to?
+      options:
+        - Getting Started / Installation
+        - Configuration
+        - API Usage
+        - Database
+        - Authentication
+        - Deployment
+        - Docker / Kubernetes
+        - Performance
+        - Troubleshooting
+        - Best Practices
+        - Architecture
+        - Contributing
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: What would you like to know?
+      placeholder: |
+        Please be as specific as possible.
+        Include code examples or configuration if relevant.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What are you trying to achieve?
+      placeholder: |
+        Explain the context of your question.
+        What problem are you trying to solve?
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: What have you tried?
+      description: What solutions have you already attempted?
+      placeholder: |
+        - Describe what you've already tried
+        - Include any error messages you've encountered
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment (if relevant)
+      description: Provide details about your environment if it's relevant to the question
+      placeholder: |
+        - Mixcore CMS version:
+        - .NET version:
+        - Database:
+        - Deployment method:

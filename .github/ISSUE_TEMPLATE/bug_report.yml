@@ -1,0 +1,173 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in Mixcore CMS
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the form below to help us diagnose and fix the issue.
+
+  - type: checkboxes
+    id: existing-issue
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm the following before submitting
+      options:
+        - label: I have searched existing issues and this bug has not been reported
+          required: true
+        - label: I have read the [documentation](https://github.com/mixcore/mix.core/wiki)
+          required: true
+        - label: I am using a supported version of Mixcore CMS
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is
+      placeholder: Describe the bug...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: A clear and concise description of what you expected to happen
+      placeholder: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened
+      placeholder: What actually happened?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: version
+    attributes:
+      label: Mixcore CMS Version
+      description: Which version of Mixcore CMS are you using?
+      options:
+        - v2.x (latest)
+        - v1.x
+        - develop branch
+        - master branch
+        - Other (please specify in additional context)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: dotnet-version
+    attributes:
+      label: .NET Version
+      description: Which .NET version are you using?
+      options:
+        - .NET 9.0
+        - .NET 8.0
+        - .NET 7.0
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: database
+    attributes:
+      label: Database Provider
+      description: Which database are you using?
+      options:
+        - MySQL
+        - SQL Server
+        - PostgreSQL
+        - SQLite
+        - ScyllaDB
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: deployment
+    attributes:
+      label: Deployment Environment
+      description: How is Mixcore CMS deployed?
+      options:
+        - Local development (dotnet run)
+        - Docker / Docker Compose
+        - Kubernetes
+        - IIS
+        - Azure App Service
+        - AWS (ECS/EKS)
+        - DigitalOcean App Platform
+        - Other cloud provider
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      description: What OS is the server running on?
+      options:
+        - Windows
+        - Linux (Ubuntu)
+        - Linux (Debian)
+        - Linux (CentOS/RHEL)
+        - Linux (Alpine)
+        - macOS
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs
+      description: Please paste any relevant error logs or stack traces
+      render: shell
+      placeholder: |
+        Paste error logs here...
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain your problem (drag and drop images here)
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here
+      placeholder: |
+        - Browser and version (if frontend issue)
+        - Any custom configuration
+        - Related issues or PRs
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Would you be willing to help fix this bug?
+      options:
+        - label: I would be willing to submit a PR to fix this bug
