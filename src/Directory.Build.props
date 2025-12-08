@@ -1,0 +1,34 @@
+<Project>
+  <PropertyGroup>
+    <!-- Language Version (can be overridden by individual projects) -->
+    <LangVersion>latest</LangVersion>
+
+    <!-- Build Settings -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
+    <!-- Assembly Information -->
+    <Company>Mixcore</Company>
+    <Product>Mixcore CMS</Product>
+    <Copyright>Copyright (c) Mixcore. All rights reserved.</Copyright>
+
+    <!-- Package Information (for NuGet packages) -->
+    <Authors>Mixcore Team</Authors>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/mixcore/mix.core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mixcore/mix.core</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <!-- Deterministic Builds -->
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+
+    <!-- Suppress common warnings -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+</Project>

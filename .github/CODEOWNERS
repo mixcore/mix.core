@@ -1,0 +1,134 @@
+# CODEOWNERS file for Mixcore CMS
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# These owners will be the default owners for everything in the repo.
+# Unless a later match takes precedence, these owners will be requested
+# for review when someone opens a pull request.
+* @mixcore/core-team
+
+# =============================================================================
+# Platform / Infrastructure
+# =============================================================================
+
+# Core platform libraries
+/src/platform/ @mixcore/platform-team
+/src/platform/core/mix-heart/ @mixcore/core-team
+
+# Database layer
+/src/platform/mix.database/ @mixcore/platform-team
+/src/platform/mix.mixdb/ @mixcore/platform-team
+/src/platform/mix.scylladb/ @mixcore/platform-team
+/src/platform/mix.repodb/ @mixcore/platform-team
+
+# Authentication & Identity
+/src/platform/mix.auth/ @mixcore/security-team
+/src/platform/mix.identity/ @mixcore/security-team
+
+# Communication
+/src/platform/mix.signalr/ @mixcore/platform-team
+/src/platform/mix.queue/ @mixcore/platform-team
+/src/platform/mix.communicator/ @mixcore/platform-team
+
+# =============================================================================
+# Modules
+# =============================================================================
+
+/src/modules/ @mixcore/modules-team
+
+# Account module (security sensitive)
+/src/modules/mix.account/ @mixcore/security-team
+
+# Portal module
+/src/modules/mix.portal/ @mixcore/modules-team
+
+# Storage module
+/src/modules/mix.storage/ @mixcore/modules-team
+
+# Multi-tenancy module
+/src/modules/mix.tenancy/ @mixcore/platform-team
+
+# =============================================================================
+# Services / Microservices
+# =============================================================================
+
+/src/services/ @mixcore/services-team
+
+# E-commerce services
+/src/services/core/ecommerces/ @mixcore/ecommerce-team
+
+# GraphQL services
+/src/services/core/graphql/ @mixcore/api-team
+
+# Auth service (security sensitive)
+/src/services/core/mix-auth-service/ @mixcore/security-team
+
+# =============================================================================
+# Applications
+# =============================================================================
+
+/src/applications/ @mixcore/core-team
+
+# Main application
+/src/applications/mixcore/ @mixcore/core-team
+
+# API Gateway
+/src/applications/mixcore.gateway/ @mixcore/platform-team
+
+# Aspire host
+/src/applications/mixcore.host.aspire.AppHost/ @mixcore/devops-team
+
+# =============================================================================
+# DevOps / Infrastructure
+# =============================================================================
+
+# Kubernetes configurations
+/k8s/ @mixcore/devops-team
+
+# Cloud provider configurations
+/cloud/ @mixcore/devops-team
+
+# Docker files
+/Dockerfile @mixcore/devops-team
+/docker-compose.yml @mixcore/devops-team
+/.dockerignore @mixcore/devops-team
+
+# CI/CD workflows
+/.github/workflows/ @mixcore/devops-team
+
+# =============================================================================
+# Documentation
+# =============================================================================
+
+/docs/ @mixcore/docs-team
+/documents/ @mixcore/docs-team
+/README.md @mixcore/core-team
+/CONTRIBUTING.md @mixcore/core-team
+/CODE_OF_CONDUCT.md @mixcore/core-team
+/SECURITY.md @mixcore/security-team
+/CHANGELOG.md @mixcore/core-team
+/CLAUDE.md @mixcore/core-team
+
+# =============================================================================
+# Configuration Files
+# =============================================================================
+
+# Build configuration
+/Directory.Build.props @mixcore/platform-team
+/global.json @mixcore/platform-team
+/.editorconfig @mixcore/platform-team
+
+# Git configuration
+/.gitattributes @mixcore/devops-team
+/.gitignore @mixcore/devops-team
+/.gitmodules @mixcore/devops-team
+
+# Code analysis
+/.deepsource.toml @mixcore/platform-team
+
+# =============================================================================
+# Tests
+# =============================================================================
+
+/src/**/Tests/ @mixcore/qa-team
+/src/**/*.Tests/ @mixcore/qa-team
+/src/**/tests/ @mixcore/qa-team

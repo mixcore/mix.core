@@ -1,0 +1,139 @@
+# Auto detect text files and perform LF normalization
+* text=auto eol=lf
+
+# Source code files
+*.cs text eol=lf diff=csharp
+*.csx text eol=lf diff=csharp
+*.vb text eol=lf
+*.fs text eol=lf
+*.fsx text eol=lf
+
+# Project files
+*.csproj text eol=lf
+*.vbproj text eol=lf
+*.fsproj text eol=lf
+*.dbproj text eol=lf
+*.sln text eol=lf
+*.props text eol=lf
+*.targets text eol=lf
+
+# Configuration files
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.xml text eol=lf
+*.config text eol=lf
+*.toml text eol=lf
+
+# Documentation
+*.md text eol=lf diff=markdown
+*.txt text eol=lf
+*.rst text eol=lf
+
+# Web files
+*.html text eol=lf diff=html
+*.htm text eol=lf diff=html
+*.css text eol=lf diff=css
+*.scss text eol=lf
+*.sass text eol=lf
+*.less text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.vue text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Windows specific files
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Docker
+Dockerfile text eol=lf
+Dockerfile* text eol=lf
+*.dockerfile text eol=lf
+docker-compose*.yml text eol=lf
+.dockerignore text eol=lf
+
+# Git
+.gitattributes text eol=lf
+.gitignore text eol=lf
+.gitmodules text eol=lf
+
+# SQL
+*.sql text eol=lf
+
+# Binary files - do not modify
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.svg text eol=lf
+*.bmp binary
+*.tiff binary
+
+# Fonts
+*.ttf binary
+*.eot binary
+*.woff binary
+*.woff2 binary
+*.otf binary
+
+# Archives
+*.zip binary
+*.tar binary
+*.gz binary
+*.7z binary
+*.rar binary
+
+# Certificates and keys
+*.pfx binary
+*.p12 binary
+*.cer binary
+*.crt binary
+*.key binary
+*.pem text eol=lf
+
+# Documents
+*.pdf binary
+*.doc binary
+*.docx binary
+*.xls binary
+*.xlsx binary
+*.ppt binary
+*.pptx binary
+
+# Video/Audio
+*.mp3 binary
+*.mp4 binary
+*.wav binary
+*.avi binary
+*.mov binary
+*.wmv binary
+
+# .NET specific
+*.dll binary
+*.exe binary
+*.pdb binary
+*.cache binary
+*.nupkg binary
+*.snupkg binary
+
+# Database
+*.db binary
+*.sqlite binary
+*.mdf binary
+*.ldf binary
+
+# Diff settings for specific files
+*.resx text eol=lf diff
+*.Designer.cs text eol=lf diff=csharp linguist-generated=true
+
+# Lock files
+packages.lock.json text eol=lf linguist-generated=true

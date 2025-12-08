@@ -1,0 +1,151 @@
+name: Feature Request
+description: Suggest a new feature or enhancement for Mixcore CMS
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Please fill out the form below to help us understand your request.
+
+  - type: checkboxes
+    id: existing-issue
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm the following before submitting
+      options:
+        - label: I have searched existing issues and this feature has not been requested
+          required: true
+        - label: I have read the [documentation](https://github.com/mixcore/mix.core/wiki) and this feature doesn't exist
+          required: true
+
+  - type: dropdown
+    id: feature-area
+    attributes:
+      label: Feature Area
+      description: Which area of Mixcore CMS does this feature relate to?
+      options:
+        - Core Platform
+        - API / REST
+        - GraphQL
+        - Authentication / Authorization
+        - Database / Data Layer
+        - Admin Portal
+        - E-commerce
+        - Multi-tenancy
+        - SignalR / Real-time
+        - Storage / Media
+        - Scheduling / Jobs
+        - Messaging / Notifications
+        - DevOps / CI/CD
+        - Documentation
+        - Testing
+        - Performance
+        - Security
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: Feature Type
+      description: What type of feature is this?
+      options:
+        - New functionality
+        - Enhancement to existing feature
+        - Developer experience improvement
+        - Performance improvement
+        - API change
+        - UI/UX improvement
+        - Integration with external service
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: Is your feature request related to a problem? Please describe.
+      placeholder: |
+        A clear and concise description of what the problem is.
+        Ex. I'm always frustrated when [...]
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like
+      placeholder: |
+        A clear and concise description of what you want to happen.
+        Include any API designs, UI mockups, or technical details if applicable.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Describe any alternative solutions or features you've considered
+      placeholder: |
+        What other approaches did you consider?
+        Why did you reject them?
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Nice to have
+        - Would improve my workflow
+        - Important for my use case
+        - Critical / Blocking
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: Describe your use case for this feature
+      placeholder: |
+        How would you use this feature?
+        What problem would it solve for you?
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What would make this feature complete?
+      placeholder: |
+        - [ ] Criterion 1
+        - [ ] Criterion 2
+        - [ ] Criterion 3
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any other context, screenshots, mockups, or examples about the feature request
+      placeholder: |
+        - Links to similar features in other projects
+        - Screenshots or mockups
+        - Technical references
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Would you be willing to help implement this feature?
+      options:
+        - label: I would be willing to submit a PR for this feature
+        - label: I would be willing to help test this feature
+        - label: I would be willing to help document this feature

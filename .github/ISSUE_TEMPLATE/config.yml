@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/mixcore/mix.core/wiki
+    about: Check the documentation before opening an issue
+  - name: Community Discussions
+    url: https://github.com/mixcore/mix.core/discussions
+    about: Ask questions and discuss features with the community
+  - name: Security Vulnerabilities
+    url: https://github.com/mixcore/mix.core/security/advisories/new
+    about: Report security vulnerabilities privately (do not open a public issue)
+  - name: Enterprise Support
+    url: mailto:enterprise@mixcore.org
+    about: Contact us for enterprise support and custom solutions
