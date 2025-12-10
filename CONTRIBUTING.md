@@ -1,9 +1,36 @@
-# Contributing
+# Contributing to Mixcore CMS
+
+Thank you for your interest in contributing to Mixcore CMS! We welcome contributions from the community.
 
 When contributing to this repository, please first discuss the change you wish to make via issue,
-email, or any other method with the owners of this repository before making a change. 
+email, or any other method with the owners of this repository before making a change.
 
-Please note we have a code of conduct, please follow it in all your interactions with the project.
+## Contributor License Agreement (CLA)
+
+**Important:** Before your contribution can be accepted, you must agree to our [Contributor License Agreement (CLA)](CLA.md).
+
+### Why We Require a CLA
+
+Mixcore CMS uses a dual-licensing model:
+- **AGPL-3.0** for open-source use
+- **Commercial licenses** for proprietary use
+
+The CLA ensures that:
+1. You have the right to contribute the code
+2. The Mixcore Foundation can continue to offer both licensing options
+3. Your contributions can be included in both open-source and commercial distributions
+4. The project remains legally sustainable
+
+### How to Sign the CLA
+
+**For Individual Contributors:**
+Include the following statement in your first pull request:
+```
+I have read the CLA document and I hereby sign the CLA.
+```
+
+**For Corporate Contributors:**
+Contact [cla@mixcore.org](mailto:cla@mixcore.org) to sign a Corporate CLA.
 
 ## Pull Request Process
 
@@ -90,3 +117,13 @@ available at [http://contributor-covenant.org/version/1/4][version]
 
 [homepage]: http://contributor-covenant.org
 [version]: http://contributor-covenant.org/version/1/4/
+
+## Licensing
+
+By contributing to Mixcore CMS, you agree that your contributions will be licensed under the [AGPL-3.0 License](LICENSE), and you grant the Mixcore Foundation the rights outlined in the [CLA](CLA.md) to also distribute your contributions under commercial licenses.
+
+## Questions?
+
+- **CLA questions:** [cla@mixcore.org](mailto:cla@mixcore.org)
+- **General questions:** [info@mixcore.org](mailto:info@mixcore.org)
+- **Code of Conduct issues:** [conduct@mixcore.org](mailto:conduct@mixcore.org)

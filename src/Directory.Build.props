@@ -8,16 +8,18 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 
     <!-- Assembly Information -->
-    <Company>Mixcore</Company>
+    <Company>Mixcore Foundation</Company>
     <Product>Mixcore CMS</Product>
-    <Copyright>Copyright (c) Mixcore. All rights reserved.</Copyright>
+    <Copyright>Copyright (c) Mixcore Foundation. All rights reserved.</Copyright>
 
     <!-- Package Information (for NuGet packages) -->
-    <Authors>Mixcore Team</Authors>
-    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/mixcore/mix.core</PackageProjectUrl>
+    <Authors>Mixcore Foundation</Authors>
+    <Description>Enterprise-grade .NET CMS and API platform with modular monolith architecture</Description>
+    <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
+    <PackageProjectUrl>https://mixcore.org</PackageProjectUrl>
     <RepositoryUrl>https://github.com/mixcore/mix.core</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageTags>cms;api;dotnet;aspnetcore;mixcore;headless-cms;enterprise</PackageTags>
 
     <!-- Deterministic Builds -->
     <Deterministic>true</Deterministic>
