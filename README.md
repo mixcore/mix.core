@@ -106,11 +106,28 @@ Contact us at [enterprise@mixcore.org](mailto:enterprise@mixcore.org) for more i
 
 ## 📄 License
 
-Mixcore CMS is licensed under the **[GNU General Public License v3.0 (GPL-3.0)](https://github.com/mixcore/mix.core/blob/master/LICENSE)**
+Mixcore CMS is available under a **dual license**:
+
+### Open Source License
+- **[GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE)** - Free for open-source projects
+- Requires source code disclosure for network-distributed modifications
+- See [LICENSE](LICENSE) for full terms
+
+### Commercial License
+- For proprietary/closed-source applications
+- No AGPL-3.0 source code disclosure requirements
+- Priority support and SLAs available
+- See [COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md) for options
+- Contact: [licensing@mixcore.org](mailto:licensing@mixcore.org)
+
+### Trademarks
+Mixcore and the Mixcore logo are trademarks of the Mixcore Foundation. See [TRADEMARKS.md](TRADEMARKS.md) for usage guidelines.
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](https://github.com/mixcore/mix.core/wiki/Contributing) for details.
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+**Important:** By contributing to Mixcore CMS, you agree to our [Contributor License Agreement (CLA)](CLA.md). This allows us to maintain dual licensing while keeping the project open source.
 
 ## 💖 Support
 

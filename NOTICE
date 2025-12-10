@@ -1,0 +1,142 @@
+Mixcore CMS
+Copyright (c) 2017-2024 Mixcore Foundation
+https://mixcore.org
+
+This product is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0).
+See the LICENSE file for the full license text.
+
+Commercial licenses are available. See COMMERCIAL-LICENSE.md for details.
+
+================================================================================
+
+THIRD-PARTY COMPONENTS
+
+This software includes the following third-party components:
+
+--------------------------------------------------------------------------------
+mix-heart (Core Library)
+--------------------------------------------------------------------------------
+Location: /src/platform/core/mix-heart/
+License: MIT License
+Copyright (c) 2019 Mixcore
+Repository: https://github.com/mixcore/mix.heart
+
+--------------------------------------------------------------------------------
+ASP.NET Core
+--------------------------------------------------------------------------------
+License: MIT License
+Copyright (c) .NET Foundation and Contributors
+Repository: https://github.com/dotnet/aspnetcore
+
+--------------------------------------------------------------------------------
+Entity Framework Core
+--------------------------------------------------------------------------------
+License: MIT License
+Copyright (c) .NET Foundation and Contributors
+Repository: https://github.com/dotnet/efcore
+
+--------------------------------------------------------------------------------
+SignalR
+--------------------------------------------------------------------------------
+License: MIT License
+Copyright (c) .NET Foundation and Contributors
+Repository: https://github.com/dotnet/aspnetcore
+
+--------------------------------------------------------------------------------
+Newtonsoft.Json (Json.NET)
+--------------------------------------------------------------------------------
+License: MIT License
+Copyright (c) James Newton-King
+Repository: https://github.com/JamesNK/Newtonsoft.Json
+
+--------------------------------------------------------------------------------
+Quartz.NET
+--------------------------------------------------------------------------------
+License: Apache License 2.0
+Copyright (c) Marko Lahma
+Repository: https://github.com/quartznet/quartznet
+
+--------------------------------------------------------------------------------
+GraphQL for .NET
+--------------------------------------------------------------------------------
+License: MIT License
+Copyright (c) GraphQL Contributors
+Repository: https://github.com/graphql-dotnet/graphql-dotnet
+
+--------------------------------------------------------------------------------
+Ocelot (API Gateway)
+--------------------------------------------------------------------------------
+License: MIT License
+Copyright (c) Tom Pallister
+Repository: https://github.com/ThreeMammals/Ocelot
+
+--------------------------------------------------------------------------------
+StackExchange.Redis
+--------------------------------------------------------------------------------
+License: MIT License
+Copyright (c) Stack Exchange, Inc.
+Repository: https://github.com/StackExchange/StackExchange.Redis
+
+--------------------------------------------------------------------------------
+Serilog
+--------------------------------------------------------------------------------
+License: Apache License 2.0
+Copyright (c) Serilog Contributors
+Repository: https://github.com/serilog/serilog
+
+--------------------------------------------------------------------------------
+AutoMapper
+--------------------------------------------------------------------------------
+License: MIT License
+Copyright (c) Jimmy Bogard
+Repository: https://github.com/AutoMapper/AutoMapper
+
+--------------------------------------------------------------------------------
+FluentValidation
+--------------------------------------------------------------------------------
+License: Apache License 2.0
+Copyright (c) Jeremy Skinner
+Repository: https://github.com/FluentValidation/FluentValidation
+
+--------------------------------------------------------------------------------
+Bootstrap
+--------------------------------------------------------------------------------
+Location: /src/applications/mixcore/wwwroot/mix-app/lib/bootstrap/
+License: MIT License
+Copyright (c) Twitter, Inc. and The Bootstrap Authors
+Repository: https://github.com/twbs/bootstrap
+
+--------------------------------------------------------------------------------
+jQuery
+--------------------------------------------------------------------------------
+Location: /src/applications/mixcore/wwwroot/mix-app/lib/jquery/
+License: MIT License
+Copyright (c) JS Foundation and other contributors
+Repository: https://github.com/jquery/jquery
+
+--------------------------------------------------------------------------------
+jQuery Validation
+--------------------------------------------------------------------------------
+Location: /src/applications/mixcore/wwwroot/mix-app/lib/jquery-validation/
+License: MIT License
+Copyright (c) JS Foundation and other contributors
+Repository: https://github.com/jquery-validation/jquery-validation
+
+--------------------------------------------------------------------------------
+Angular (for SPA)
+--------------------------------------------------------------------------------
+License: MIT License
+Copyright (c) Google LLC
+Repository: https://github.com/angular/angular
+
+================================================================================
+
+ADDITIONAL NOTICES
+
+This product may include other third-party components not listed above. Each
+component is subject to its own license terms, which are included in the
+respective component directories or can be found in the component's repository.
+
+For questions about licensing, please contact: licensing@mixcore.org
+
+================================================================================

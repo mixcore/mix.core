@@ -16,6 +16,18 @@
 		<AnalysisLevel>none</AnalysisLevel>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>$(NoWarn);1591</NoWarn>
+
+		<!-- Package Metadata -->
+		<Authors>Mixcore Foundation</Authors>
+		<Company>Mixcore Foundation</Company>
+		<Product>Mixcore CMS</Product>
+		<Description>Enterprise-grade .NET CMS and API platform with modular monolith architecture</Description>
+		<Copyright>Copyright (c) Mixcore Foundation. All rights reserved.</Copyright>
+		<PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
+		<PackageProjectUrl>https://mixcore.org</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/mixcore/mix.core</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>cms;api;dotnet;aspnetcore;mixcore;headless-cms</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
