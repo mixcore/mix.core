@@ -17,8 +17,8 @@ This software includes the following third-party components:
 mix-heart (Core Library)
 --------------------------------------------------------------------------------
 Location: /src/platform/core/mix-heart/
-License: MIT License
-Copyright (c) 2019 Mixcore
+License: GNU Affero General Public License v3.0 (AGPL-3.0)
+Copyright (c) 2019-2024 Mixcore Foundation
 Repository: https://github.com/mixcore/mix.heart
 
 --------------------------------------------------------------------------------
